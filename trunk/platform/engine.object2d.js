@@ -38,8 +38,8 @@ var Object2D = BaseObject.extend({
    
    constructor: function(name, pos) {
       
-      pos = name instanceof Point ? name : pos;
-      name = name instanceof Point ? "Object2D" : name;
+      pos = name instanceof Point2D ? name : pos;
+      name = name instanceof Point2D ? "Object2D" : name;
       this.base(name);
       
       this.pos = pos || new Point2D(0,0);

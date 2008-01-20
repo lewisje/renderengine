@@ -36,24 +36,33 @@
    
    idRef: 0,
    
+   livingObjects: 0,
+   
    gameObjects: {},
    
    debugMode: false,
    
    defaultContext: null,
    
+   running: false,
+   
    create: function(obj) {
+      Assert((this.running == true), "Cannot create objects when the engine is not running!");
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
       Console.log("Object " + objId + " created");
+      this.livingObjects++;
+      
+      return objId;
    },
    
    destroy: function(obj) {
       var objId = obj.getId();
+      Console.log("Object " + objId + " destroyed");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
-      Console.log("Object " + objId + " destroyed");
+      this.livingObjects--;
    },
    
    getObject: function(id) {
@@ -61,16 +70,25 @@
    },
     
    startup: function(debugMode) {
+      Assert((this.running == false), "An attempt was made to restart the engine!");
+   
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
-      
-      // Create the default context (the document)
-      this.defaultContext = new DocumentContext();
+      this.running = true;
       
       Console.log("Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
+
+      // Create the default context (the document)
+      this.defaultContext = new DocumentContext();
    },
    
    shutdown: function() {
+      if (!this.running) 
+      { 
+         return; 
+      }
+      
+      this.running = false;
       this.downTime = new Date().getTime();
       for (var o in this.gameObjects)
       {
@@ -81,13 +99,14 @@
       this.downTime = new Date().getTime();
 
       Console.log("Engine shutdown.  Runtime: " + (this.downTime - this.upTime));
+      Assert((this.livingObjects == 0), "Object references not cleaned up!");
    },
    
    getDefaultContext: function() {
       return this.defaultContext;
    }
     
- };
+ });
  
  
  /**
