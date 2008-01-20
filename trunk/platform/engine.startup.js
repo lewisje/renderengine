@@ -46,14 +46,14 @@
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
-      Console.log("Object " + oid + " created");
+      Console.log("Object " + objId + " created");
    },
    
    destroy: function(obj) {
-      var oid = obj.getId();
-      this.gameObjects[oid] = null;
-      delete this.gameObjects[oid];
-      Console.log("Object " + oid + " destroyed");
+      var objId = obj.getId();
+      this.gameObjects[objId] = null;
+      delete this.gameObjects[objId];
+      Console.log("Object " + objId + " destroyed");
    },
    
    getObject: function(id) {
