@@ -43,13 +43,15 @@ var Container = BaseObject.extend({
    destroy: function() {
       for (var o in this.objects)
       {
-         objects[o].destroy();
+         this.objects[o].destroy();
       }
+      this.clear();
       this.base();
    },
    
    add: function(obj) {
-      this.objects.push(obj);  
+      this.objects.push(obj);
+      Console.log("Added " + obj.getId() + " to " + this.getId());
    },
    
    remove: function(obj) {
@@ -70,6 +72,7 @@ var Container = BaseObject.extend({
          }
       }
       
+      Console.log("Removed " + obj.getId() + " from " + this.getId());
       this.objects.splice(idx, 1);
    },
    

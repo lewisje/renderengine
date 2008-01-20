@@ -52,6 +52,8 @@ var ConsoleRef = Base.extend({
 });
  
 var Console = Base.extend({
+   constructor: null,
+
    consoleRef: null,
    
    DEBUGLEVEL_ERRORS:      0,
@@ -60,9 +62,11 @@ var Console = Base.extend({
    DEBUGLEVEL_VERBOSE:     3,
    DEBUGLEVEL_NONE:       -1,
       
-   verbosity: DEBUGLEVEL_NONE,
+   verbosity: this.DEBUGLEVEL_NONE,
+   
+   dumpWindow: null,
 
-   constructor: function() {
+   startup: function() {
       if (window.console) {
          this.consoleRef = window.console;
       }
@@ -88,23 +92,27 @@ var Console = Base.extend({
       this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
    },
    
+   setDebugLevel: function(level) {
+      this.verbosity = level; 
+   },
+   
    log: function(msg) {
-      if (Engine.debugMode && this.verbosity <= DEBUGLEVEL_VERBOSE)
+      if (Engine.debugMode && this.verbosity <= this.DEBUGLEVEL_VERBOSE)
          this.consoleRef.debug(msg);
    },
 
    debug: function(msg) {
-      if (Engine.debugMode && this.verbosity <= DEBUGLEVEL_DEBUG)
+      if (Engine.debugMode && this.verbosity <= this.DEBUGLEVEL_DEBUG)
          this.consoleRef.debug(msg);
    },
 
    warn: function(msg) {
-      if (Engine.debugMode && this.verbosity <= DEBUGLEVEL_WARNINGS)
+      if (Engine.debugMode && this.verbosity <= this.DEBUGLEVEL_WARNINGS)
          this.consoleRef.warn(msg);
    },
 
    error: function(msg) {
-      if (Engine.debugMode && this.verbosity <= DEBUGLEVEL_ERRORS)
+      if (Engine.debugMode && this.verbosity <= this.DEBUGLEVEL_ERRORS)
          this.consoleRef.error(msg);
    },
    
@@ -123,7 +131,7 @@ var Console = Base.extend({
       }
       else if (typeof msg === "object")
       {
-         var a += "Object {\n";
+         var a = "Object {\n";
          for (var o in msg)
          {
             a += o + ": " + Console.dump(msg[o]) + "\n";

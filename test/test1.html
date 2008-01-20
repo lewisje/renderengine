@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title>The Render Engine - Testing</title>
+		<script type="text/javascript" src="../libs/base.js"></script>
+		<script type="text/javascript" src="../libs/jquery-1.2.2.min.js"></script>
+
+		<script type="text/javascript" src="../platform/engine.console.js"></script>
+		<script type="text/javascript" src="../platform/engine.startup.js"></script>
+		<script type="text/javascript" src="../platform/engine.baseobject.js"></script>
+		<script type="text/javascript" src="../platform/engine.container.js"></script>
+		<script type="text/javascript" src="../platform/engine.rendercontext.js"></script>
+		<script type="text/javascript" src="../platform/engine.documentcontext.js"></script>
+		<script type="text/javascript" src="../platform/engine.timers.js"></script>
+		<script type="text/javascript" src="../platform/engine.canvascontext.js"></script>
+		<script type="text/javascript" src="../platform/engine.object2d.js"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			Console.startup();
+			Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+
+			Engine.startup(true);
+
+			new Object2D("submarine");
+
+			Engine.getDefaultContext().add(new Object2D("car"));
+			Engine.getDefaultContext().add(new Object2D("boat"));
+			Engine.getDefaultContext().add(new Object2D("plane"));
+
+			Engine.shutdown();
+
+		</script>
+	</body>
+</html>

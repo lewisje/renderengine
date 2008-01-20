@@ -36,12 +36,12 @@ var DocumentContext = RenderContext.extend({
    },
    
    add: function(object) {
-      this.getSurface().appendChild(object.getElement());
+//      this.getSurface().appendChild(object.getElement());
       this.base(object);
    },
    
    remove: function(object) {
-      this.getSurface().removeChild(object.getElement());
+//      this.getSurface().removeChild(object.getElement());
       this.base(object);
    }
 

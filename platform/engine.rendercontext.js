@@ -41,9 +41,9 @@ var RenderContext = Container.extend({
    },
 
    destroy: function() {
-      if (this.surface.parentNode)
+      if (this.surface.parentNode && this.surface != document.body)
       {
-         this.surface.parentNode.removeChild(surface);
+         this.surface.parentNode.removeChild(this.surface);
       }
       this.surface = null;
       

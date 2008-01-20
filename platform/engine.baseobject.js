@@ -37,6 +37,10 @@ var BaseObject = Base.extend({
    
    element: null,
    
+   isRenderEngineObject: function() {
+      return true;
+   },
+   
    constructor: function(name) {
       this.name = name;
       this.id = Engine.create(this);
