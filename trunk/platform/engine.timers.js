@@ -95,7 +95,12 @@ var Timer = BaseObject.extend({
    
    getInterval: function() {
       return this.interval;
+   },
+   
+   getClassName: function() {
+      return "Timer";
    }
+
 
 });
 
@@ -110,6 +115,11 @@ var Timeout = Timer.extend({
       this.setTimer(window.setTimeout(this.getInterval(), this.getCallback()));
    },
    
+   getClassName: function() {
+      return "Timeout";
+   }
+
+   
 });
 
 var Interval = Timer.extend({
@@ -122,5 +132,10 @@ var Interval = Timer.extend({
    restart: function() {
       this.setTimer(window.setInterval(this.getInterval(), this.getCallback()));
    },
+   
+   getClassName: function() {
+      return "Interval";
+   }
+
    
 });

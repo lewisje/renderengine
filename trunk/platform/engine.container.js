@@ -82,6 +82,15 @@ var Container = BaseObject.extend({
    
    getObjects: function() {
       return this.objects;
+   },
+   
+   sort: function(fn) {
+      this.objects.sort(fn);
+   },
+   
+   getClassName: function() {
+      return "Container";
    }
+
 
 });
