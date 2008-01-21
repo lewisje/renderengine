@@ -31,10 +31,20 @@
  
 var DocumentContext = RenderContext.extend({
 
+   /**
+    * Create an instance of a document rendering context.  This context
+    * represents the HTML document body.  Theoretically, only one of these
+    * contexts should ever be created.
+    */
    constructor: function() {
       this.base("DocumentContext", document.body);
    },
    
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
    getClassName: function() {
       return "DocumentContext";
    }

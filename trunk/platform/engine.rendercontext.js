@@ -35,13 +35,28 @@ var RenderContext = Container.extend({
    surface: null,
    
    transformStackDepth: 0,
-    
+   
+   /**
+    * Create an instance of this rendering context and optionally
+    * assign the surface to which all rendering will occur.  This
+    * is a base class and does not have any particular surface associated
+    * with it.  Rendering contexts should extend this class.
+    *
+    * @param contextName {String} The name of this context.  Default: RenderContext
+    * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.
+    * @see CanvasContext
+    * @see DocumentContext
+    */
    constructor: function(contextName, surface) {
       this.base(contextName || "RenderContext");
       this.surface = surface;
       this.setElement(surface);
    },
 
+   /**
+    * Destroy the rendering context, and detach the surface from its
+    * parent container.
+    */
    destroy: function() {
       if (this.surface.parentNode && this.surface != document.body)
       {
@@ -52,14 +67,40 @@ var RenderContext = Container.extend({
       this.base();
    },
    
+   /**
+    * Set the surface element that objects will be rendered to.
+    * 
+    * @param element {HTMLElement} The surface node that all objects will be rendered to.
+    */
    setSurface: function(element) {
       this.surface = element;
    },
    
+   /**
+    * Get the surface node that all objects will be rendered to.
+    * 
+    * @type HTMLElement
+    */
    getSurface: function() {
       return this.surface;
    },
    
+   /**
+    * Update the render context before rendering the objects to the surface.
+    *
+    * @param parentContext {RenderContext} A parent context, or <tt>null</tt>
+    * @param time {Number} The current render time in milliseconds from the engine.
+    */
+   update: function(parentContext, time)
+   {
+      this.render(time);
+   }
+   
+   /**
+    * Called after the update to render all of the objects to the rendering context.
+    *
+    * @param time {Number} The current render time in milliseconds from the engine.
+    */
    render: function(time) {
       // Push the world transform
       this.pushTransform();
@@ -75,15 +116,39 @@ var RenderContext = Container.extend({
       this.popTransform();
    },
    
+   /**
+    * Increment the transform stack counter.
+    */
    pushTransform: function() {
       this.transformStackDepth++;   
    },
    
+   /**
+    * Decrement the transform stack counter and ensure that the stack
+    * is not unbalanced.  An unbalanced stack can be indicative of
+    * objects that do not reset the state after rendering themselves.
+    */
    popTransform: function() {
       this.transformStackDepth--;
       Assert((this.transformStackDepth >= 0), "Unbalanced transform stack!");
    },
    
+   /**
+    * This is a potentially expensive call, and can lead to rendering
+    * errors.  It is recommended against calling this method!
+    */
+   resetTransformStack: function() {
+      while (this.transformStackDepth > 0)
+      {
+         this.popTransform();
+      }
+   }
+   
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
    getClassName: function() {
       return "RenderContext";
    }

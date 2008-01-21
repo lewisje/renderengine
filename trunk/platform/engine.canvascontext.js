@@ -35,6 +35,13 @@ var CanvasContext = RenderContext.extend({
    
    height: 0,
    
+   /**
+    * Create an instance of a 2D rendering context using the canvas element.
+    *
+    * @param contextName {String} The name of this context.  Default: CanvasContext
+    * @param width {Number} The width (in pixels) of the canvas context.
+    * @param height {Number} The height (in pixels) of the canvas context.
+    */
    constructor: function(contextName, width, height) {
       width = contextName instanceof Number ? contextName : width;
       height = contextName instanceof Number ? width : height;
@@ -54,16 +61,27 @@ var CanvasContext = RenderContext.extend({
       this.base(contextName, canvas);
    },
    
+   /**
+    * Push a transform state onto the stack.
+    */
    pushTransform: function() {
       this.base();
       this.getSurface().getContext().save();
    },
    
+   /**
+    * Pop a transform state off the stack.
+    */
    popTransform: function() {
       this.base();
       this.getSurface().getContext().restore();
    },
    
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
    getClassName: function() {
       return "CanvasContext";
    }

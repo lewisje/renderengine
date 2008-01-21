@@ -39,6 +39,15 @@ var BaseComponent = Base.extend({
    
    host: null,
    
+   /**
+    * Create a new instance of this component, setting the type and
+    * update priority of this component compared to all other components
+    * within the host.
+    *
+    * @param name {String} The name of the component
+    * @param type {Number} The type of the component
+    * @param priority {Number} A value between 0.0 and 1.0.  Default: 0.5
+    */
    constructor: function(name, type, priority) {
       Assert((name      
       this.name = name;
@@ -54,19 +63,40 @@ var BaseComponent = Base.extend({
       this.priority = priority || 0.5;
    },
    
+   /**
+    * Get the type of this component.
+    *
+    * @type Number
+    */
    getType: function() {
       return this.type;
    }, 
    
+   /**
+    * Set the execution priority of this component.
+    * 
+    * @param priority {Number} A value between 0.0 and 1.0
+    */
    setPriority: function(priority) {
       this.priority = priority;
       this.getHost().sort();
    },
    
+   /**
+    * Returns the priority of this component.
+    *
+    * @type Number
+    */
    getPriority: function() {
       return this.priority;
    },
    
+   /**
+    * Run the component, updating it.
+    *
+    * @param renderContext {RenderContext} The context the component would render within.
+    * @param time {Number} The global engine time
+    */
    execute: function(renderContext, time) {
       // Does nothing...
    }
