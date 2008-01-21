@@ -79,7 +79,7 @@ var HostObject = Container.extend({
 
    componentSort: function(component1, component2) {
       return ((component1.getType() - component2.getType()) +
-              ((1 / component1.getPriority()) - (1 / component2.getPriority())
+              ((1 / component1.getPriority()) - (1 / component2.getPriority())));
    }
 
 });

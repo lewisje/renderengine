@@ -49,7 +49,7 @@ var BaseComponent = Base.extend({
     * @param priority {Number} A value between 0.0 and 1.0.  Default: 0.5
     */
    constructor: function(name, type, priority) {
-      Assert((name      
+      Assert((name != null), "Components must have an assigned name");      
       this.name = name;
 
       Assert((type != null && (type >= BaseComponent.TYPE_INPUT && type <= BaseComponent.TYPE_RENDERING)), 
@@ -104,7 +104,7 @@ var BaseComponent = Base.extend({
 }, {
    // Component types (main host sorting order)
    TYPE_INPUT:          1,
-   TYPE_LOGIC:          BaseComponent.TYPE_INPUT + 1,
-   TYPE_TRANSFORM:      BaseComponent.TYPE_LOGIC + 1,
-   TYPE_RENDERING:      BaseComponent.TYPE_TRANSFORM + 1
+   TYPE_LOGIC:          2,
+   TYPE_TRANSFORM:      3,
+   TYPE_RENDERING:      4
 });

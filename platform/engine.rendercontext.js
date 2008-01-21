@@ -94,7 +94,7 @@ var RenderContext = Container.extend({
    update: function(parentContext, time)
    {
       this.render(time);
-   }
+   },
    
    /**
     * Called after the update to render all of the objects to the rendering context.
@@ -142,7 +142,7 @@ var RenderContext = Container.extend({
       {
          this.popTransform();
       }
-   }
+   },
    
    /**
     * Get the class name of this object

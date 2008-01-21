@@ -46,18 +46,6 @@ var Container = BaseObject.extend({
    },
    
    /**
-    * Destroy the container, and all objects contained within.
-    */
-   destroy: function() {
-      for (var o in this.objects)
-      {
-         this.objects[o].destroy();
-      }
-      this.clear();
-      this.base();
-   },
-   
-   /**
     * Returns the count of the number of objects within the
     * container.
     *
@@ -114,7 +102,7 @@ var Container = BaseObject.extend({
     * @type BaseObject
     */
    removeAtIndex: function(idx) {
-      Assert((idx < 0 || idx > this objects.length - 1), "Index of out range in Container");
+      Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
       
       var obj = this.objects[idx];
       
