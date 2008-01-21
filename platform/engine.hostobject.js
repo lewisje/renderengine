@@ -33,7 +33,13 @@
  
 var HostObject = Container.extend({
 
-   update: function(renderContext) {
+   /**
+    * Update this object within the render context, and for the specified time.
+    * 
+    * @param renderContext {RenderContext} The context the object will be rendered within.
+    * @param time {Number} The global time within the engine.
+    */
+   update: function(renderContext, time) {
       var components = this.getObjects();
       
       for (var c in components) {
@@ -41,6 +47,11 @@ var HostObject = Container.extend({
       }
    },
    
+   /**
+    * Add a component to the host object.
+    *
+    * @param component {BaseComponent} A component to add to the host
+    */
    add: function(component) {
       component.setHost(this);
 
@@ -48,10 +59,18 @@ var HostObject = Container.extend({
       this.sort();
    },
    
+   /**
+    * Sort components within the host by component type and then by priority.
+    */
    sort: function() {
       this.base(HostObject.componentSort);
    },
    
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
    getClassName: function() {
       return "HostObject";
    }

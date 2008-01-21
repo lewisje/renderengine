@@ -37,37 +37,81 @@ var BaseObject = Base.extend({
    
    element: null,
    
+   /**
+    * Returns <tt>true</tt> if the object is an object within the
+    * Render Engine.  All objects should extend this class.
+    */
    isRenderEngineObject: function() {
       return true;
    },
    
+   /**
+    * Create an instance of this object, assigning a name to it.
+    *
+    * @param name {String} The name of the object from which the Id will be generated.
+    */
    constructor: function(name) {
       this.name = name;
       this.id = Engine.create(this);
    },
 
+   /**
+    * Destroy this object instance (remove it from the Engine).  The object
+    * may still exist as a reference from another object, but will not
+    * be managed by the Engine any longer.  Untracked objects pose the
+    * potential for memory leaks.
+    */
    destroy: function() {
       // Clean up the reference to this object
       Engine.destroy(this);
       this.element = null;
    },
    
+   /**
+    * Get the managed Id of this object within the Engine.
+    *
+    * @return This object's engine Id
+    * @type String
+    */
    getId: function() {
       return this.id;
    },
    
+   /**
+    * Get the original name this object was created with.
+    * 
+    * @return The name used when creating this object
+    * @type String
+    */
    getName: function() {
       return this.name;
    },
    
+   /**
+    * Set the element which will represent this object within
+    * its rendering context.
+    * 
+    * @type element {BaseObject}
+    */
    setElement: function(element) {
       this.element = element;
    },
    
+   /**
+    * Get the element which represents this object within its rendering context.
+    * 
+    * @return The element
+    * @type BaseObject
+    */
    getElement: function() {
       return this.element;
    },
    
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
    getClassName: function() {
       return "BaseObject";
    }

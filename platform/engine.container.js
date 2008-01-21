@@ -36,10 +36,18 @@ var Container = BaseObject.extend({
 
    objects: [],
    
+   /**
+    * Create an instance of a container object.
+    *
+    * @param {String} The name of the container. Default: Container
+    */
    constructor: function(containerName) {
       this.base(containerName || "Container");
    },
    
+   /**
+    * Destroy the container, and all objects contained within.
+    */
    destroy: function() {
       for (var o in this.objects)
       {
@@ -49,11 +57,32 @@ var Container = BaseObject.extend({
       this.base();
    },
    
+   /**
+    * Returns the count of the number of objects within the
+    * container.
+    *
+    * @type Number
+    */
+   size: function() {
+      return this.objects.length;
+   },
+   
+   /**
+    * Add an object to the container.
+    *
+    * @param obj {BaseObject} The object to add to the container.
+    */
    add: function(obj) {
       this.objects.push(obj);
       Console.log("Added " + obj.getId() + " to " + this.getId());
    },
    
+   /**
+    * Remove an object from the container.  The object is
+    * not destroyed when it is removed from the container.
+    *
+    * @param obj {BaseObject} The object to remove from the container.
+    */
    remove: function(obj) {
       var idx = -1;
       if (Array.prototype.indexOf)
@@ -76,21 +105,62 @@ var Container = BaseObject.extend({
       this.objects.splice(idx, 1);
    },
    
+   /**
+    * Remove an object from the container at the specified index.
+    * The object is not destroyed when it is removed.
+    *
+    * @param idx {Number} An index between zero and the size of the container minus 1.
+    * @return The object removed from the container.
+    * @type BaseObject
+    */
+   removeAtIndex: function(idx) {
+      Assert((idx < 0 || idx > this objects.length - 1), "Index of out range in Container");
+      
+      var obj = this.objects[idx];
+      
+      Console.log("Removed " + obj.getId() + " from " + this.getId());
+      this.objects.splice(idx, 1);
+      
+      return obj;
+   },
+   
+   /**
+    * Remove all objects from the container.  None of the objects are
+    * destroyed.
+    */
    clear: function() {
       this.objects.length = 0;   
    },
    
+   /**
+    * Get the array of objects within this container.
+    * 
+    * @type Array
+    */
    getObjects: function() {
       return this.objects;
    },
    
+   /**
+    * Sort the objects within the container, using the provided function.
+    * The function will be provided object A and B.  If the result of the
+    * function is less than zero, A will be sorted before B.  If the result is zero,
+    * A and B retain their order.  If the result is greater than zero, A will
+    * be sorted after B.
+    *
+    * @param fn {Function} The function to sort with.
+    */
    sort: function(fn) {
+      Assert((fn != null), "A function must be provided to sort the Container");
       this.objects.sort(fn);
    },
    
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
    getClassName: function() {
       return "Container";
    }
-
-
 });

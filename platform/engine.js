@@ -1,6 +1,5 @@
 /**
  * The Render Engine
- * Startup library
  * 
  * The startup library is a collection of methods which will
  * simplify the creation of other class files.  It is the starting
@@ -46,6 +45,13 @@
    
    running: false,
    
+   /**
+    * Create an instance of an object, managed by the Engine.
+    *
+    * @param obj {BaseObject} A managed object within the engine
+    * @return The global Id of the object
+    * @type String
+    */
    create: function(obj) {
       Assert((this.running == true), "Cannot create objects when the engine is not running!");
       this.idRef++;
@@ -57,6 +63,11 @@
       return objId;
    },
    
+   /**
+    * Destroys an object instance managed by the Engine.
+    *
+    * @param obj {BaseObject} The object, managed by the engine, to destroy
+    */
    destroy: function(obj) {
       var objId = obj.getId();
       Console.log("Object " + objId + " destroyed");
@@ -65,10 +76,24 @@
       this.livingObjects--;
    },
    
+   /**
+    * Get an object by it's Id that is managed by the Engine.
+    *
+    * @param id {String} The global Id of the object to locate
+    * @return The object
+    * @type BaseObject
+    */
    getObject: function(id) {
       return this.gameObjects[id];
    },
-    
+   
+   /**
+    * Start the engine.  Creates a default context (the HTML document) and
+    * initializes a timer to update the world managed by the engine.
+    *
+    * @param debugMode {Boolean} <tt>true</tt> to set the engine into debug mode
+    *                            which allows the output of messages to the console.
+    */
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
    
@@ -80,13 +105,23 @@
 
       // Create the default context (the document)
       this.defaultContext = new DocumentContext();
+      
+      // Start world timer
+      Engine.globalTimer = window.setTimeout(33, Engine.engineTimer);
    },
    
+   /**
+    * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
+    * objects created and added to the world.
+    */
    shutdown: function() {
       if (!this.running) 
       { 
          return; 
       }
+      
+      // Stop world timer
+      window.cancelTimeout(Engine.globalTimer);
       
       this.running = false;
       this.downTime = new Date().getTime();
@@ -102,10 +137,29 @@
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
    },
    
+   /**
+    * Get the default rendering context for the Engine.
+    *
+    * @return The default rendering context
+    * @type RenderContext
+    */
    getDefaultContext: function() {
       return this.defaultContext;
    }
     
+ }, { // Interface
+   globalTimer: null,
+ 
+   /**
+    * The global engine timer which updates the world.
+    */
+   engineTimer: function() {
+      // Update the world
+      Engine.getDefaultContext().update(null, new Date().time());
+      
+      // Another process interval
+      Engine.globalTimer = window.setTimeout(33, Engine.engineTimer);
+   }
  });
  
  
