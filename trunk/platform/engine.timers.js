@@ -112,7 +112,7 @@ var Timeout = Timer.extend({
    },
    
    restart: function() {
-      this.setTimer(window.setTimeout(this.getInterval(), this.getCallback()));
+      this.setTimer(window.setTimeout(this.getCallback(), this.getInterval()));
    },
    
    getClassName: function() {
@@ -130,7 +130,7 @@ var Interval = Timer.extend({
    },
    
    restart: function() {
-      this.setTimer(window.setInterval(this.getInterval(), this.getCallback()));
+      this.setTimer(window.setInterval(this.getCallback(), this.getInterval()));
    },
    
    getClassName: function() {

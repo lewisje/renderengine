@@ -29,8 +29,166 @@
  * THE SOFTWARE.
  *
  */
+
+/**
+ * @class ConsoleRef
+ * 
+ * A stand-in class when Firebug or Firebug Lite are not installed.
+ */
+var ConsoleRef = Base.extend({
+   constructor: null,
+   
+   fix: function(msg) {
+      return msg.replace(/\\n/g, "<br>").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+   },
+   
+   debug: function(msg) {
+      Console.out("<span class='debug'>" + this.fix(Console.dump(msg)) + "</span>");
+   },
+   
+   warn: function(msg) {
+      Console.out("<span class='warn'>" + this.fix(Console.dump(msg)) + "</span>");
+   },
+   
+   error: function(msg) {
+      Console.out("<span class='error'>" + this.fix(Console.dump(msg)) + "</span>");
+   }
+
+});
  
- var Engine = Base.extend({
+/**
+ * @class Console
+ * 
+ * A class for logging messages.  If the FireBug, or FireBug Lite, extension
+ * is installed, it will be used as an alternative to the console display.
+ */
+var Console = Base.extend({
+   constructor: null,
+
+   consoleRef: null,
+   
+   DEBUGLEVEL_ERRORS:      0,
+   DEBUGLEVEL_WARNINGS:    1,
+   DEBUGLEVEL_DEBUG:       2,
+   DEBUGLEVEL_VERBOSE:     3,
+   DEBUGLEVEL_NONE:       -1,
+      
+   verbosity: this.DEBUGLEVEL_NONE,
+   
+   dumpWindow: null,
+
+   startup: function() {
+      if (window.console) {
+         this.consoleRef = window.console;
+      }
+      else
+      {
+         this.consoleRef = ConsoleRef;
+      }
+   },
+   
+   out: function(msg) {
+      if (this.dumpWindow === null)
+      {
+         this.dumpWindow = window.open("console", "width=640,height=480,resizeable=yes,toolbar=no,location=no,status=no");
+         this.dumpWindow.document.body.innerHTML =
+            "<style> " +
+            "BODY { font-family: 'Lucida Console',Courier; font-size: 10pt; color: black; } " +
+            ".debug { background: white; } " +
+            ".warn { font-style: italics; background: #ffffdd; } " +
+            ".error { color: white; background: red; font-weight: bold; } " +
+            "</style>"
+      }
+      
+      this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
+   },
+   
+   setDebugLevel: function(level) {
+      this.verbosity = level; 
+   },
+   
+   log: function(msg) {
+      if (Engine.debugMode && this.verbosity == this.DEBUGLEVEL_VERBOSE)
+         this.consoleRef.debug("    " + msg);
+   },
+
+   debug: function(msg) {
+      if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_DEBUG)
+         this.consoleRef.debug(msg);
+   },
+
+   warn: function(msg) {
+      if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_WARNINGS)
+         this.consoleRef.warn(msg);
+   },
+
+   error: function(msg) {
+      if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_ERRORS)
+         this.consoleRef.error(msg);
+   },
+   
+   dump: function(msg) {
+      if (msg instanceof Array) 
+      {
+         var a = "[";
+         for (var o in msg) {
+            a += (a.length > 1 ? ", " : "") + Console.dump(msg[o]);
+         }
+         return a + "]";
+      }
+      else if (typeof msg === "function")
+      {
+         return "func[ " + msg.toString().substring(0,30) + "... ]";
+      }
+      else if (typeof msg === "object")
+      {
+         var a = "Object {\n";
+         for (var o in msg)
+         {
+            a += o + ": " + Console.dump(msg[o]) + "\n";
+         }
+         return a + "\n}";
+      }
+      else
+      {
+         return msg;   
+      }
+   }
+});
+
+/**
+ * Halts if the test fails, throwing the error as a result.
+ *
+ * @param test {Boolean} A simple test that should evaluate to <tt>true</tt>
+ * @param error {String} The error to throw if the test fails
+ */
+var Assert = function(test, error) {
+   if (!test)
+   {
+      Engine.shutdown();
+      throw new Error(error);
+   }
+};
+
+/**
+ * Reports a warning if the test fails.
+ *
+ * @param test {Boolean} A simple test that should evaluate to <tt>true</tt>
+ * @param error {String} The warning to display if the test fails
+ */
+var AssertWarn = function(test, warning) {
+   if (!test)
+   {
+      Console.warn(warning);
+   }
+};
+ 
+/**
+ * @class Engine
+ * 
+ * The main engine class.
+ */
+var Engine = Base.extend({
    constructor: null,
    
    idRef: 0,
@@ -45,6 +203,10 @@
    
    running: false,
    
+   loadedScripts: {},
+   
+   engineLocation: null,
+
    /**
     * Create an instance of an object, managed by the Engine.
     *
@@ -101,13 +263,13 @@
       this.debugMode = debugMode ? true : false;
       this.running = true;
       
-      Console.log("Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
+      Console.debug(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
 
       // Create the default context (the document)
       this.defaultContext = new DocumentContext();
       
       // Start world timer
-      Engine.globalTimer = window.setTimeout(33, Engine.engineTimer);
+      Engine.globalTimer = window.setTimeout("Engine.engineTimer", 33);
    },
    
    /**
@@ -120,8 +282,10 @@
          return; 
       }
       
+      Console.debug(">>> Engine shutting down...");
+
       // Stop world timer
-      window.cancelTimeout(Engine.globalTimer);
+      window.clearTimeout(Engine.globalTimer);
       
       this.running = false;
       this.downTime = new Date().getTime();
@@ -133,7 +297,7 @@
       this.defaultContext = null;
       this.downTime = new Date().getTime();
 
-      Console.log("Engine shutdown.  Runtime: " + (this.downTime - this.upTime));
+      Console.debug(">>> Engine shutdown.  Runtime: " + (this.downTime - this.upTime));
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
    },
    
@@ -145,7 +309,54 @@
     */
    getDefaultContext: function() {
       return this.defaultContext;
-   }
+   },
+   
+   /**
+    * Load a script for the engine
+    */
+   load: function(scriptSource) {
+
+      var head = document.getElementsByTagName("head")[0];
+
+      if (this.engineLocation == null)
+      {
+         // Determine the path of the "engine.js" file
+         var scripts = head.getElementsByTagName("script");
+         for (var x = 0; x < scripts.length; x++)
+         {
+            var src = scripts[x].src;
+            if (src != null && src.indexOf("/platform/engine.js") != -1)
+            {
+               // Get the path
+               this.engineLocation = src.match(/(.*)\/platform\/engine\.js/)[1];
+               break;
+            }
+         }
+      }
+
+      var s = scriptSource.replace(/[\/\.]/g,"_");
+      
+      if (this.loadedScripts[s] == null)
+      {
+         this.loadedScripts[s] = scriptSource;
+         var n = document.createElement("script");
+
+         n.src = this.engineLocation + scriptSource;
+         n.type = "text/javascript";
+
+         head.appendChild(n);
+      }
+    },
+    
+    /**
+     * Dump the list of scripts loaded by the Engine.
+     */
+    dumpScripts: function() {
+      for (var f in this.loadedScripts)
+      {
+         Console.debug(this.loadedScripts[f]);
+      }
+    }
     
  }, { // Interface
    globalTimer: null,
@@ -158,7 +369,7 @@
       Engine.getDefaultContext().update(null, new Date().time());
       
       // Another process interval
-      Engine.globalTimer = window.setTimeout(33, Engine.engineTimer);
+      Engine.globalTimer = window.setTimeout("Engine.engineTimer", 33);
    }
  });
  
