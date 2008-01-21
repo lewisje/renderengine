@@ -66,5 +66,10 @@ var BaseObject = Base.extend({
    
    getElement: function() {
       return this.element;
+   },
+   
+   getClassName: function() {
+      return "BaseObject";
    }
+
 });

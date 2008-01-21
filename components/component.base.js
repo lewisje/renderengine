@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * CanvasContext
+ * BaseComponent
  * 
- * A canvas element represented within the engine.
+ * The base component class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -29,42 +29,52 @@
  *
  */
  
-var CanvasContext = RenderContext.extend({
+var BaseComponent = Base.extend({
 
-   width: 0,
+   name: null,
+
+   priority: 0,
    
-   height: 0,
+   type: -1,
    
-   constructor: function(contextName, width, height) {
-      width = contextName instanceof Number ? contextName : width;
-      height = contextName instanceof Number ? width : height;
-      contextName = contextName instanceof Number ? "CanvasContext" : contextName;
+   host: null,
+   
+   constructor: function(name, type, priority) {
+      Assert((name      
+      this.name = name;
+
+      Assert((type != null && (type >= BaseComponent.TYPE_INPUT && type <= BaseComponent.TYPE_RENDERING)), 
+             "You must specify a type for BaseComponent");
+             
+      this.type = type;
       
-      Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
+      Assert((priority != null && (priority >= 0.0 && priority <= 1.0)),
+             "Priority must be between 0.0 and 1.0 for BaseComponent");
       
-      this.width = width;
-      this.height = height;
-      
-      // Create the canvas element
-      var canvas = document.createElement("canvas");
-      canvas.width = this.width;
-      canvas.height = this.height;
-      canvas.id = this.getId();
-      
-      this.base(contextName, canvas);
+      this.priority = priority || 0.5;
    },
    
-   pushTransform: function() {
-      this.base();
-      this.getSurface().getContext().save();
+   getType: function() {
+      return this.type;
+   }, 
+   
+   setPriority: function(priority) {
+      this.priority = priority;
+      this.getHost().sort();
    },
    
-   popTransform: function() {
-      this.base();
-      this.getSurface().getContext().restore();
+   getPriority: function() {
+      return this.priority;
    },
    
-   getClassName: function() {
-      return "CanvasContext";
+   execute: function(renderContext, time) {
+      // Does nothing...
    }
+
+}, {
+   // Component types (main host sorting order)
+   TYPE_INPUT:          1,
+   TYPE_LOGIC:          BaseComponent.TYPE_INPUT + 1,
+   TYPE_TRANSFORM:      BaseComponent.TYPE_LOGIC + 1,
+   TYPE_RENDERING:      BaseComponent.TYPE_TRANSFORM + 1
 });

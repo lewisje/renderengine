@@ -1,11 +1,10 @@
 /**
  * The Render Engine
- * Object2D
+ * HostObject
  * 
- * A 2 dimensional object that represents something that can
- * be rendered within the engine framework.  Game objects have a
- * location in 2D space.  Additionally, a method is provided which
- * will be called to render the object to the game world.
+ * A host object is a container of components which provide some sort
+ * of action, be it rendering, collision detection, effects, or whatever.
+ * This way, an object can be anything, depending on it's components.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -31,28 +30,38 @@
  * THE SOFTWARE.
  *
  */
+ 
+var HostObject = Container.extend({
 
-var Object2D = BaseObject.extend({
+   update: function(renderContext) {
+      var components = this.getObjects();
+      
+      for (var c in components) {
+         components[c].execute(renderContext, time);
+      }
+   },
+   
+   add: function(component) {
+      component.setHost(this);
 
-   pos: null,
-   
-   constructor: function(name, pos) {
-      
-      pos = name instanceof Point2D ? name : pos;
-      name = name instanceof Point2D ? "Object2D" : name;
-      this.base(name);
-      
-      this.pos = pos || new Point2D(0,0);
+      this.base(component);
+      this.sort();
    },
    
-   setPosition: function(pos) {
-      this.pos = pos;
+   sort: function() {
+      this.base(HostObject.componentSort);
    },
    
-   getPosition: function() {
-      return this.pos;
-   },
-   
-   render: function(context) {
+   getClassName: function() {
+      return "HostObject";
    }
+
+}, {  // Interface
+
+   componentSort: function(component1, component2) {
+      return ((component1.getType() - component2.getType()) +
+              ((1 / component1.getPriority()) - (1 / component2.getPriority())
+   }
+
 });
+

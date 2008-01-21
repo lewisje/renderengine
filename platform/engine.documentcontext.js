@@ -35,14 +35,7 @@ var DocumentContext = RenderContext.extend({
       this.base("DocumentContext", document.body);
    },
    
-   add: function(object) {
-//      this.getSurface().appendChild(object.getElement());
-      this.base(object);
-   },
-   
-   remove: function(object) {
-//      this.getSurface().removeChild(object.getElement());
-      this.base(object);
+   getClassName: function() {
+      return "DocumentContext";
    }
-
 });

@@ -32,7 +32,9 @@
  
 var RenderContext = Container.extend({
     
-   surface: null, 
+   surface: null,
+   
+   transformStackDepth: 0,
     
    constructor: function(contextName, surface) {
       this.base(contextName || "RenderContext");
@@ -58,17 +60,32 @@ var RenderContext = Container.extend({
       return this.surface;
    },
    
-   render: function() {
+   render: function(time) {
+      // Push the world transform
+      this.pushTransform();
+
+      // Render the objects into the world
       var objs = this.getObjects();
       for (var o in objs)
       {
-         objs.render(this);
+         objs.update(this, time);
       }
+
+      // Restore the world transform
+      this.popTransform();
    },
    
-   saveTransformState: function() {
+   pushTransform: function() {
+      this.transformStackDepth++;   
    },
    
-   restoreTransformState: function() {
+   popTransform: function() {
+      this.transformStackDepth--;
+      Assert((this.transformStackDepth >= 0), "Unbalanced transform stack!");
+   },
+   
+   getClassName: function() {
+      return "RenderContext";
    }
+
 });
