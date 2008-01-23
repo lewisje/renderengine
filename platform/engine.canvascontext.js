@@ -62,11 +62,18 @@ var CanvasContext = RenderContext.extend({
    },
    
    /**
+    * Gets the surface context upon which all objects are drawn.
+    */
+   get2DContext: function() {
+      return this.getSurface().getContext('2d');
+   },
+   
+   /**
     * Push a transform state onto the stack.
     */
    pushTransform: function() {
       this.base();
-      this.getSurface().getContext().save();
+      this.get2DContext().save();
    },
    
    /**
@@ -74,7 +81,7 @@ var CanvasContext = RenderContext.extend({
     */
    popTransform: function() {
       this.base();
-      this.getSurface().getContext().restore();
+      this.get2DContext().restore();
    },
    
    /**

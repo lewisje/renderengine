@@ -88,9 +88,8 @@ var Container = BaseObject.extend({
             }
          }
       }
-      
-      Console.log("Removed " + obj.getId() + " from " + this.getId());
-      this.objects.splice(idx, 1);
+
+      this.removeAtIndex(idx);      
    },
    
    /**
@@ -110,6 +109,17 @@ var Container = BaseObject.extend({
       this.objects.splice(idx, 1);
       
       return obj;
+   },
+   
+   /**
+    * Get the object at the index specified. If the container has been
+    * sorted, objects might not be in the position you'd expect.
+    *
+    * @param idx {Number} The index of the object to get
+    * @type BaseObject
+    */
+   get: function(idx) {
+      return this.objects[idx];
    },
    
    /**
