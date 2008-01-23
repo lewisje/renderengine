@@ -38,20 +38,38 @@
 var ConsoleRef = Base.extend({
    constructor: null,
    
+   dumpWindow: null,
+   
+   out: function(msg) {
+      if (this.dumpWindow == null)
+      {
+         this.dumpWindow = window.open("", "console", "width=640,height=480,resizeable=yes,toolbar=no,location=no,status=no");
+         this.dumpWindow.document.body.innerHTML =
+            "<style> " +
+            "BODY { font-family: 'Lucida Console',Courier; font-size: 10pt; color: black; } " +
+            ".debug { background: white; } " +
+            ".warn { font-style: italics; background: #ffffdd; } " +
+            ".error { color: white; background: red; font-weight: bold; } " +
+            "</style>"
+      }
+      
+      this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
+   },
+   
    fix: function(msg) {
       return msg.replace(/\\n/g, "<br>").replace(/</g,"&lt;").replace(/>/g,"&gt;");
    },
    
    debug: function(msg) {
-      Console.out("<span class='debug'>" + this.fix(Console.dump(msg)) + "</span>");
+      this.out("<span class='debug'>" + this.fix(Console.dump(msg)) + "</span>");
    },
    
    warn: function(msg) {
-      Console.out("<span class='warn'>" + this.fix(Console.dump(msg)) + "</span>");
+      this.out("<span class='warn'>" + this.fix(Console.dump(msg)) + "</span>");
    },
    
    error: function(msg) {
-      Console.out("<span class='error'>" + this.fix(Console.dump(msg)) + "</span>");
+      this.out("<span class='error'>" + this.fix(Console.dump(msg)) + "</span>");
    }
 
 });
@@ -75,8 +93,6 @@ var Console = Base.extend({
       
    verbosity: this.DEBUGLEVEL_NONE,
    
-   dumpWindow: null,
-
    startup: function() {
       if (window.console) {
          this.consoleRef = window.console;
@@ -85,22 +101,6 @@ var Console = Base.extend({
       {
          this.consoleRef = ConsoleRef;
       }
-   },
-   
-   out: function(msg) {
-      if (this.dumpWindow === null)
-      {
-         this.dumpWindow = window.open("console", "width=640,height=480,resizeable=yes,toolbar=no,location=no,status=no");
-         this.dumpWindow.document.body.innerHTML =
-            "<style> " +
-            "BODY { font-family: 'Lucida Console',Courier; font-size: 10pt; color: black; } " +
-            ".debug { background: white; } " +
-            ".warn { font-style: italics; background: #ffffdd; } " +
-            ".error { color: white; background: red; font-weight: bold; } " +
-            "</style>"
-      }
-      
-      this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
    },
    
    setDebugLevel: function(level) {
@@ -156,6 +156,10 @@ var Console = Base.extend({
    }
 });
 
+// Start the console so logging can take place immediately
+Console.startup();
+
+
 /**
  * Halts if the test fails, throwing the error as a result.
  *
@@ -182,7 +186,8 @@ var AssertWarn = function(test, warning) {
       Console.warn(warning);
    }
 };
- 
+
+
 /**
  * @class Engine
  * 
@@ -374,60 +379,3 @@ var Engine = Base.extend({
  });
  
  
- /**
-  * A simple 2D point class
-  *
-  * @param x The X value of the point
-  * @param y The Y value of the point
-  */
- var Point2D = Base.extend({
- 
-   x: 0,
-   y: 0,
- 
-   constructor: function(x, y) {
-      this.x = x;
-      this.y = y;
-   },
-   
-   set: function(x, y) {
-      this.x = x;
-      this.y = y;
-   },
-   
-   add: function(point) {
-      this.x += point.x;
-      this.y += point.y;
-   },
-   
-   addScalar: function(scalar) {
-      this.add(new Point2D(scalar, scalar));
-   },
-   
-   sub: function(point) {
-      this.x -= point.x;
-      this.y -= point.y;
-   },
-   
-   convolve: function(point) {
-      this.x *= point.x;
-      this.y *= point.y;
-   },
-   
-   convolveInverse: function(point) {
-      Assert((point.x != 0 && point.y != 0), "Division by zero in Point.convolveInverse");
-     
-      this.x /= point.x;
-      this.y /= point.y;
-   },
-   
-   multScalar: function(scalar) {
-      this.convolve(new Point2D(scalar, scalar));
-   },
-   
-   divScalar: function(scalar) {
-      Assert((scalar != 0), "Division by zero in Point.divScalar");
-      this.convolveInverse(new Point2D(scalar, scalar));
-   }
-   
- });

@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * DocumentContext
+ * BaseTransformComponent
  * 
- * A reference to the document.body element as a rendering context.
+ * Base drawing component.  Simple has position, rotation, and scale.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -29,61 +29,51 @@
  *
  */
  
-var DocumentContext = RenderContext.extend({
+var BaseTransformComponent = BaseComponent.extend({
 
-   /**
-    * Create an instance of a document rendering context.  This context
-    * represents the HTML document body.  Theoretically, only one of these
-    * contexts should ever be created.
-    */
-   constructor: function() {
-      this.base("DocumentContext", document.body);
-   },
-
-   /**
-    * Eliminate the elements from the document.
-    */
-   destroy: function() {
-      var objs = this.getObjects();
-      for (var o in objs)
-      {
-         this.getSurface().removeChild(objs[o].getElement());
-      }
-
-      this.base();      
-   },
-
-   add: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().addChild(obj.getElement());
-      }
-      this.base(obj);
+   position: new Point2D(0,0),
+   
+   rotation: 0,
+   
+   scale: 1.0,
+   
+   constructor: function(name) {
+      this.base(name, BaseComponent.TYPE_RENDERING, 1.0);
    },
    
-   remove: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().removeChild(obj.getElement());
-      }
-      this.base(obj);
+   setPosition: function(point) {
+      this.position.set(point);
    },
-
+   
+   getPosition: function() {
+      return this.position;
+   },
+   
+   setRotation: function(rotation) {
+      this.rotation = rotation;
+   },
+   
+   getRotation: function() {
+      return this.rotation;
+   },
+   
+   setScale: function(scale) {
+      this.scale = scale;
+   },
+   
+   getScale: function() {
+      return this.scale;
+   },
+   
    /**
     * Get the class name of this object
     *
     * @type String
     */
    getClassName: function() {
-      return "DocumentContext";
+      return "BaseTransformComponent";
    }
-});
 
-var BaseDOMObject = BaseObject.extend({
    
-   constructor: function(element) {
-      this.setElement(element);
-      this.base("DomObject");
-   },
-   
+
 });

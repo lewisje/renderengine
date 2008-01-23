@@ -49,8 +49,8 @@ var BaseComponent = Base.extend({
     * @param priority {Number} A value between 0.0 and 1.0.  Default: 0.5
     */
    constructor: function(name, type, priority) {
-      Assert((name != null), "Components must have an assigned name");      
-      this.name = name;
+      Assert((name != null), "You must assign a name to every Component.");      
+      this.name = name.toUpperCase();
 
       Assert((type != null && (type >= BaseComponent.TYPE_INPUT && type <= BaseComponent.TYPE_RENDERING)), 
              "You must specify a type for BaseComponent");
@@ -63,6 +63,18 @@ var BaseComponent = Base.extend({
       this.priority = priority || 0.5;
    },
    
+   getName: function() {
+      return this.name;
+   },
+   
+   setHost: function(hostObject) {
+      this.host = hostObject;
+   },
+   
+   getHost: function() {
+      return this.host;
+   },
+   
    /**
     * Get the type of this component.
     *
@@ -73,7 +85,8 @@ var BaseComponent = Base.extend({
    }, 
    
    /**
-    * Set the execution priority of this component.
+    * Set the execution priority of this component with
+    * 1.0 being the highest priority and 0.0 being the lowest.
     * 
     * @param priority {Number} A value between 0.0 and 1.0
     */
@@ -99,12 +112,21 @@ var BaseComponent = Base.extend({
     */
    execute: function(renderContext, time) {
       // Does nothing...
+   },
+   
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "BaseComponent";
    }
+
 
 }, {
    // Component types (main host sorting order)
    TYPE_INPUT:          1,
    TYPE_LOGIC:          2,
-   TYPE_TRANSFORM:      3,
-   TYPE_RENDERING:      4
+   TYPE_RENDERING:      3
 });

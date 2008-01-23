@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * DocumentContext
+ * BaseTransformComponent
  * 
- * A reference to the document.body element as a rendering context.
+ * Base drawing component.  Simple has position, rotation, and scale.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -28,62 +28,30 @@
  * THE SOFTWARE.
  *
  */
- 
-var DocumentContext = RenderContext.extend({
 
-   /**
-    * Create an instance of a document rendering context.  This context
-    * represents the HTML document body.  Theoretically, only one of these
-    * contexts should ever be created.
-    */
-   constructor: function() {
-      this.base("DocumentContext", document.body);
-   },
+var CanvasTransformComponent = BaseTransformComponent.extend({
 
-   /**
-    * Eliminate the elements from the document.
-    */
-   destroy: function() {
-      var objs = this.getObjects();
-      for (var o in objs)
-      {
-         this.getSurface().removeChild(objs[o].getElement());
-      }
+   execute: function(renderContext, time) {
+      // Get the canvas context
+      var ctx = renderContext.get2DContext();
+   
+      renderContext.pushTransform();
 
-      this.base();      
-   },
-
-   add: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().addChild(obj.getElement());
-      }
-      this.base(obj);
+      // Set the transform
+      var pos = this.getPosition();
+      ctx.translate(pos.x, pos.y);
+      ctx.scale(this.scale);
+      ctx.rotate(this.rotation);
    },
    
-   remove: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().removeChild(obj.getElement());
-      }
-      this.base(obj);
-   },
-
    /**
     * Get the class name of this object
     *
     * @type String
     */
    getClassName: function() {
-      return "DocumentContext";
+      return "CanvasTransformComponent";
    }
-});
 
-var BaseDOMObject = BaseObject.extend({
-   
-   constructor: function(element) {
-      this.setElement(element);
-      this.base("DomObject");
-   },
-   
+
 });

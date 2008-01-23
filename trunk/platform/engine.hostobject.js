@@ -53,10 +53,33 @@ var HostObject = Container.extend({
     * @param component {BaseComponent} A component to add to the host
     */
    add: function(component) {
+      
+      // Make sure that the component name is unique within the host
+      var objs = this.getObjects();
+      for (var o in objs) {
+         Assert((component.getName() != objs[o].getName()), "Components must have a unique name within the host");
+      }
+      
       component.setHost(this);
-
       this.base(component);
       this.sort();
+   },
+   
+   /**
+    * Get the component with the specified name.
+    *
+    * @param name {String} The unique name of the component to get
+    * @type BaseComponent
+    */
+   getComponent: function(name) {
+      name = name.toUpperCase();
+      var objs = this.getObjects();
+      for (var o in objs) 
+      {
+         if (objs[o].getName() == name) {
+            return objs[o];
+         }
+      }
    },
    
    /**

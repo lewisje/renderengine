@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * DocumentContext
+ * BaseCanvasComponent
  * 
- * A reference to the document.body element as a rendering context.
+ * Components that are compatible with the canvas.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -29,61 +29,15 @@
  *
  */
  
-var DocumentContext = RenderContext.extend({
-
-   /**
-    * Create an instance of a document rendering context.  This context
-    * represents the HTML document body.  Theoretically, only one of these
-    * contexts should ever be created.
-    */
-   constructor: function() {
-      this.base("DocumentContext", document.body);
-   },
-
-   /**
-    * Eliminate the elements from the document.
-    */
-   destroy: function() {
-      var objs = this.getObjects();
-      for (var o in objs)
-      {
-         this.getSurface().removeChild(objs[o].getElement());
-      }
-
-      this.base();      
-   },
-
-   add: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().addChild(obj.getElement());
-      }
-      this.base(obj);
-   },
-   
-   remove: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().removeChild(obj.getElement());
-      }
-      this.base(obj);
-   },
-
+var BaseCanvasComponent = BaseComponent.extend({
+      
    /**
     * Get the class name of this object
     *
     * @type String
     */
    getClassName: function() {
-      return "DocumentContext";
+      return "BaseCanvasComponent";
    }
-});
 
-var BaseDOMObject = BaseObject.extend({
-   
-   constructor: function(element) {
-      this.setElement(element);
-      this.base("DomObject");
-   },
-   
 });

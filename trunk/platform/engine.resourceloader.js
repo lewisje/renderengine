@@ -1,8 +1,11 @@
 /**
  * The Render Engine
- * DocumentContext
+ * ResourceLoader
  * 
- * A reference to the document.body element as a rendering context.
+ * A resource loader is a generalized interface used by all resource
+ * loaders.  It is designed to provide a common set of routines for
+ * loading resources (fonts, images, game data, etc...) from some
+ * location.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -29,61 +32,33 @@
  *
  */
  
-var DocumentContext = RenderContext.extend({
-
-   /**
-    * Create an instance of a document rendering context.  This context
-    * represents the HTML document body.  Theoretically, only one of these
-    * contexts should ever be created.
-    */
-   constructor: function() {
-      this.base("DocumentContext", document.body);
-   },
-
-   /**
-    * Eliminate the elements from the document.
-    */
-   destroy: function() {
-      var objs = this.getObjects();
-      for (var o in objs)
-      {
-         this.getSurface().removeChild(objs[o].getElement());
-      }
-
-      this.base();      
-   },
-
-   add: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().addChild(obj.getElement());
-      }
-      this.base(obj);
+var ResourceLoader = BaseObject.extend({
+   
+   cache: {},
+   
+   constructor: function(name) {
+      this.base("ResourceLoader");
    },
    
-   remove: function(obj) {
-      if (obj.getElement())
-      {
-         this.getSurface().removeChild(obj.getElement());
-      }
-      this.base(obj);
+   load: function(name, data) {
+      this.cache[name] = data;   
    },
-
-   /**
-    * Get the class name of this object
-    *
-    * @type String
-    */
-   getClassName: function() {
-      return "DocumentContext";
+   
+   unload: function(name) {
+      this.cache[name] = null;
+      delete this.cache[name];
+   },
+   
+   get: function(name) {
+      return this.cache[name];   
+   },
+   
+   clear: function() {
+      for (var o in this.cache) {
+         this.cache(o) = null;
+      }
+      
+      this.cache = {};
    }
-});
-
-var BaseDOMObject = BaseObject.extend({
-   
-   constructor: function(element) {
-      this.setElement(element);
-      this.base("DomObject");
-   },
    
 });
