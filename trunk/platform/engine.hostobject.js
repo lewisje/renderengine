@@ -33,6 +33,9 @@
  
 var HostObject = Container.extend({
 
+   preUpdate: function(renderContext, time) {
+   },
+
    /**
     * Update this object within the render context, and for the specified time.
     * 
@@ -41,10 +44,17 @@ var HostObject = Container.extend({
     */
    update: function(renderContext, time) {
       var components = this.getObjects();
+
+      this.preUpdate(renderContext, time);
       
       for (var c in components) {
          components[c].execute(renderContext, time);
       }
+      
+      this.postUpdate(renderContext, time);
+   },
+   
+   postUpdate: function(renderContext, time) {
    },
    
    /**

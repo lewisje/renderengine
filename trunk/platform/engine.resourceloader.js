@@ -59,6 +59,16 @@ var ResourceLoader = BaseObject.extend({
       }
       
       this.cache = {};
+   },
+   
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "ResourceLoader";
    }
+
    
 });

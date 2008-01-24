@@ -7,10 +7,18 @@ var Asteroid = HostObject.extend({
       this.base("Asteroid");
       
       // Add components to move and draw the asteroid
-      this.add(new Canvas2DMoverComponent("move"));
-      this.add(new CanvasVectorComponent("draw"));
+      this.add(new Mover2DComponent("move"));
+      this.add(new Vector2DComponent("draw"));
    },
-   
+
+   preUpdate: function(renderContext, time) {
+      renderContext.pushTransform();   
+   },
+
+   postUpdate: function(renderContext, time) {
+      renderContext.popTransform();   
+   },
+    
    setup: function(playfieldWidth, playfieldHeight) {
       
       // Randomize the position and velocity
