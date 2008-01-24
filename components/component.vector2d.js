@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * BaseCanvasComponent
+ * VectorDrawComponent
  * 
- * Components that are compatible with the canvas.
+ * A render component that renders its contents from a set of points.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -29,15 +29,67 @@
  *
  */
  
-var BaseCanvasComponent = BaseComponent.extend({
+var Vector2DComponent = BaseComponent.extend({
+   
+   points: null,
+   
+   strokeStyle: "#ffffff",     // Default to white lines
+   
+   lineWidth: 1,
+   
+   fillStyle: "none",          // Default to none
+   
+   constructor: function(name) {
+      this.base(name, BaseComponent.TYPE_RENDERING, 0.1);
+   },
+   
+   setPoints: function(pointArray) {
+      this.points = pointArray;
+   },
+   
+   setStrokeStyle: function(strokeStyle) {
+      this.strokeStyle = strokeStyle;
+   },
+   
+   getStrokeStyle: function() {
+      return this.strokeStyle;
+   },
+   
+   setLineWidth: function(lineWidth) {
+      this.lineWidth = lineWidth;
+   },
+   
+   getLineWidth: function() {
+      return this.lineWidth;
+   },
+   
+   setFillStyle: function(fillStyle) {
+      this.fillStyle = fillStyle;
+   },
+   
+   getFillStyle: function() {
+      return this.fillStyle;
+   },
+   
+   execute: function(renderContext, time) {
+      Assert((points != null), "Points not defined in CanvasVectorComponent");
       
+      // Set the stroke and fill styles
+      renderContext.setStrokeStyle(this.strokeStyle);
+      renderContext.setFillStyle(this.fillStyle);
+      
+      // Render out the points
+      renderContext.drawPolygon(this.points);
+   },
+   
    /**
     * Get the class name of this object
     *
     * @type String
     */
    getClassName: function() {
-      return "BaseCanvasComponent";
+      return "Vector2DComponent";
    }
 
+   
 });

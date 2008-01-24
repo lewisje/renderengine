@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * VectorDrawComponent
+ * BaseTransformComponent
  * 
- * A render component that renders its contents from a set of points.
+ * Base drawing component.  Simple has position, rotation, and scale.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -29,69 +29,48 @@
  *
  */
  
-var CanvasVectorComponent = BaseCanvasComponent.extend({
+var Transform2DComponent = BaseComponent.extend({
+
+   position: new Point2D(0,0),
    
-   points: null,
+   rotation: 0,
    
-   strokeStyle: "#ffffff",     // Default to white lines
-   
-   lineWidth: 1,
-   
-   fillStyle: "none",          // Default to none
+   scale: 1.0,
    
    constructor: function(name) {
-      this.base(name, BaseComponent.TYPE_RENDERING, 0.1);
+      this.base(name, BaseComponent.TYPE_RENDERING, 1.0);
    },
    
-   setPoints: function(pointArray) {
-      this.points = pointArray;
+   setPosition: function(point) {
+      this.position.set(point);
    },
    
-   setStrokeStyle: function(strokeStyle) {
-      this.strokeStyle = strokeStyle;
+   getPosition: function() {
+      return this.position;
    },
    
-   getStrokeStyle: function() {
-      return this.strokeStyle;
+   setRotation: function(rotation) {
+      this.rotation = rotation;
    },
    
-   setLineWidth: function(lineWidth) {
-      this.lineWidth = lineWidth;
+   getRotation: function() {
+      return this.rotation;
    },
    
-   getLineWidth: function() {
-      return this.lineWidth;
+   setScale: function(scale) {
+      this.scale = scale;
    },
    
-   setFillStyle: function(fillStyle) {
-      this.fillStyle = fillStyle;
-   },
-   
-   getFillStyle: function() {
-      return this.fillStyle;
+   getScale: function() {
+      return this.scale;
    },
    
    execute: function(renderContext, time) {
-      Assert((points != null), "Points not defined in CanvasVectorComponent");
       
-      var ctx = renderContext.get2DContext();
-   
-      // Set the stroke and fill styles
-      ctx.strokeStyle(this.strokeStyle);
-      ctx.fillStyle(this.fillStyle);
+      renderContext.setPosition(this.position);
+      renderContext.setRotation(this.rotation);
+      renderContext.setScale(scale, scale);
       
-      // Render out the points
-      ctx.beginPath();
-      ctx.moveTo(this.points[0].x, this.points[0].y);
-      for (var p = 1; p < this.points.length; p++)
-      {
-         ctx.lineTo(this.points[p].x, this.points[p].y);         
-      }
-      ctx.closePath();
-      ctx.stroke();
-      
-      // Pop the transform
-      renderContext.popTransform();
    },
    
    /**
@@ -100,8 +79,9 @@ var CanvasVectorComponent = BaseCanvasComponent.extend({
     * @type String
     */
    getClassName: function() {
-      return "CanvasVectorComponent";
+      return "Transform2DComponent";
    }
 
    
+
 });

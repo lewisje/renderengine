@@ -31,7 +31,7 @@
  *
  */
  
-var 2DMoverComponent = BaseTransformComponent.extend({
+var Mover2DComponent = Transform2DComponent.extend({
    
    lastTime: -1,
    
@@ -94,7 +94,7 @@ var 2DMoverComponent = BaseTransformComponent.extend({
     * @type String
     */
    getClassName: function() {
-      return "2DMoverComponent";
+      return "Mover2DComponent";
    }
    
 });

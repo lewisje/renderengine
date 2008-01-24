@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * BaseTransformComponent
+ * DocumentContext
  * 
- * Base drawing component.  Simple has position, rotation, and scale.
+ * A reference to the document.body element as a rendering context.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -28,30 +28,54 @@
  * THE SOFTWARE.
  *
  */
+ 
+var DocumentContext = RenderContext2D.extend({
 
-var CanvasTransformComponent = BaseTransformComponent.extend({
+   /**
+    * Create an instance of a document rendering context.  This context
+    * represents the HTML document body.  Theoretically, only one of these
+    * contexts should ever be created.
+    */
+   constructor: function() {
+      this.base("DocumentContext", document.body);
+   },
 
-   execute: function(renderContext, time) {
-      // Get the canvas context
-      var ctx = renderContext.get2DContext();
-   
-      renderContext.pushTransform();
+   /**
+    * Eliminate the elements from the document.
+    */
+   destroy: function() {
+      var objs = this.getObjects();
+      for (var o in objs)
+      {
+         this.getSurface().removeChild(objs[o].getElement());
+      }
 
-      // Set the transform
-      var pos = this.getPosition();
-      ctx.translate(pos.x, pos.y);
-      ctx.scale(this.scale);
-      ctx.rotate(this.rotation);
+      this.base();      
+   },
+
+   add: function(obj) {
+      if (obj.getElement())
+      {
+         this.getSurface().addChild(obj.getElement());
+      }
+      this.base(obj);
    },
    
+   remove: function(obj) {
+      if (obj.getElement())
+      {
+         this.getSurface().removeChild(obj.getElement());
+      }
+      this.base(obj);
+   },
+
    /**
     * Get the class name of this object
     *
     * @type String
     */
    getClassName: function() {
-      return "CanvasTransformComponent";
+      return "DocumentContext";
    }
-
-
 });
+
