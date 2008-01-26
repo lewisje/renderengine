@@ -198,6 +198,8 @@ var Engine = Base.extend({
    
    idRef: 0,
    
+   fpsClock: 33,
+   
    livingObjects: 0,
    
    gameObjects: {},
@@ -274,7 +276,7 @@ var Engine = Base.extend({
       this.defaultContext = new DocumentContext();
       
       // Start world timer
-      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, 33);
+      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
    },
    
    /**
@@ -362,7 +364,12 @@ var Engine = Base.extend({
          Console.debug(this.loadedScripts[f]);
       }
    },
-    
+   
+   setFPS: function(fps) {
+      Assert((fps != 0), "You cannot have a framerate of zero!");
+      this.fpsClock = Math.floor(1000 / fps);
+   },
+   
    /**
     * The global engine timer which updates the world.
     */
@@ -371,7 +378,7 @@ var Engine = Base.extend({
       Engine.getDefaultContext().update(null, new Date().getTime());
 
       // Another process interval
-      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, 33);
+      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
    }
 
     
