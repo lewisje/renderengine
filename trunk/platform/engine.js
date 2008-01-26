@@ -213,6 +213,12 @@ var Engine = Base.extend({
    loadedScripts: {},
    
    engineLocation: null,
+   
+   metrics: {},
+   
+   metricDisplay: null,
+   
+   showMetricsWindow: false,
 
    /**
     * Create an instance of an object, managed by the Engine.
@@ -290,6 +296,12 @@ var Engine = Base.extend({
       }
       
       Console.debug(">>> Engine shutting down...");
+
+      if (this.metricDisplay)
+      {
+         this.metricDisplay.remove();
+         this.metricDisplay = null;
+      }
 
       // Stop world timer
       window.clearTimeout(Engine.globalTimer);
@@ -374,13 +386,71 @@ var Engine = Base.extend({
     * The global engine timer which updates the world.
     */
    engineTimer: function() {
+      var b = new Date().getTime();
+      
       // Update the world
       Engine.getDefaultContext().update(null, new Date().getTime());
 
+      var d = new Date().getTime() - b;
+      Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000));
+      Engine.addMetric("rTime", d + "ms");
+      Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100) + "%");
+
+      if (this.showMetricsWindow)
+      {
+         this.updateMetrics();
+      }
+
       // Another process interval
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
-   }
+   },
+   
+   /**
+    * Add a metric to the game engine that can be displayed
+    * while it is running.
+    *
+    * @param metricName {String} The name of the metric to track
+    * @param value {String/Number} The value of the metric
+    */
+   addMetric: function(metricName, value) {
+      this.metrics[metricName] = value;
+   },
+   
+   /**
+    * Remove a metric from the display
+    *
+    * @param metricName {String} The name of the metric to remove
+    */
+   removeMetric: function(metricName) {
+      this.metrics[metricName] = null;
+      delete this.metrics[metricName];
+   },
 
+   toggleMetrics: function() {
+      this.showMetricsWindow = !this.showMetricsWindow;
+
+      if (this.showMetricsWindow && !this.metricDisplay)
+      {
+         this.metricDisplay = jQuery("<div/>").addClass("metrics");
+         this.metricDisplay.appendTo($("body"));
+      }
+      
+      
+      if (!this.showMetricsWindow && this.metricDisplay)
+      {
+         this.metricDisplay.remove();
+         this.metricDisplay = null;
+      }
+   },
+
+   updateMetrics: function() {
+      var h = "";
+      for (var m in this.metrics)
+      {
+         h += m + ": " + this.metrics[m] + "<br/>";
+      }
+      this.metricDisplay.html(h);
+   }
     
  }, { // Interface
    globalTimer: null

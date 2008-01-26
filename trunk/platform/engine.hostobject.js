@@ -38,6 +38,14 @@ var HostObject = Container.extend({
    renderContext: null,
    
    /**
+    * Remove this object from it's render context
+    */
+   destroy: function() {
+      this.getRenderContext().remove(this);
+      this.base();
+   },
+   
+   /**
     * Set the depth at which this object will render to
     * the context.  The lower the z-index, the further
     * away from the front the object will draw.

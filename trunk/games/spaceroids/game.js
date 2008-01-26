@@ -41,23 +41,42 @@ var Spaceroids = Game.extend({
 
    renderContext: null,
    
-   setup: function() {
-      // Create the 2D context
-      renderContext = new CanvasContext(600, 580);
-      Engine.getDefaultContext().add(renderContext);
-      renderContext.setBackgroundColor("black");
+   rocks: [],
+   
+   cleanupPlayfield: function() {
       
-      var pWidth = renderContext.getWidth();
-      var pHeight = renderContext.getHeight();
+      // Remove any rocks still floating around
+      while (this.rocks.length > 0)
+      {
+         this.rocks.shift().destroy();
+      }
       
+   },
+   
+   attractMode: function() {
+   
+      this.cleanupPlayfield();
+   
+      var pWidth = this.renderContext.getWidth();
+      var pHeight = this.renderContext.getHeight();
       
-      // Add some asteroids to it
-      for (var a = 0; a < 6; a++)
+      // Add some asteroids
+      for (var a = 0; a < 10; a++)
       {
          var rock = new Spaceroids.Rock();
-         renderContext.add(rock);
+         this.renderContext.add(rock);
          rock.setup(pWidth, pHeight);
       }
+      
+   },
+   
+   setup: function() {
+      // Create the 2D context
+      this.renderContext = new CanvasContext(600, 580);
+      Engine.getDefaultContext().add(this.renderContext);
+      this.renderContext.setBackgroundColor("black");
+      
+      this.attractMode();
    },
    
    teardown: function() {
