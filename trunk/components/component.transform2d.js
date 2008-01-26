@@ -37,8 +37,8 @@ var Transform2DComponent = BaseComponent.extend({
    
    scale: 1.0,
    
-   constructor: function(name) {
-      this.base(name, BaseComponent.TYPE_RENDERING, 1.0);
+   constructor: function(name, priority) {
+      this.base(name, BaseComponent.TYPE_RENDERING, priority || 1.0);
       this.position = new Point2D(0,0);
    },
    

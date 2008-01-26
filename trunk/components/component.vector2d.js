@@ -31,8 +31,6 @@
  
 var Vector2DComponent = BaseComponent.extend({
    
-   points: null,
-   
    strokeStyle: "#ffffff",     // Default to white lines
    
    lineWidth: 1,
@@ -41,10 +39,12 @@ var Vector2DComponent = BaseComponent.extend({
    
    boundingBox: null,
    
-   fastPoly: null,
+   points: null,
    
-   constructor: function(name) {
-      this.base(name, BaseComponent.TYPE_RENDERING, 0.1);
+   renderState: null,
+   
+   constructor: function(name, priority) {
+      this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
    },
    
    calculateBoundingBox: function() {
@@ -83,8 +83,12 @@ var Vector2DComponent = BaseComponent.extend({
    
    setPoints: function(pointArray) {
       this.points = pointArray;
-      this.fastPoly = null;
+      this.renderState = null;
       this.calculateBoundingBox();
+   },
+
+   buildRenderList: function() {
+      this.renderState = this.getHostObject().getRenderContext().buildRenderList(this.points);
    },
    
    setLineStyle: function(strokeStyle) {
@@ -118,13 +122,8 @@ var Vector2DComponent = BaseComponent.extend({
       renderContext.setLineStyle(this.strokeStyle);
       renderContext.setFillStyle(this.fillStyle);
       
-      if (this.fastPoly == null)
-      {
-         this.fastPoly = renderContext.fastPoly(this.points);
-      }
-      
       // Render out the points
-      renderContext.drawPolygon(this.fastPoly);
+      renderContext.drawPolygon(this.renderState || this.points);
    },
    
    /**

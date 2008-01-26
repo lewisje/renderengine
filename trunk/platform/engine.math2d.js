@@ -42,15 +42,68 @@ var Math2D = Base.extend({
     */
    INV_PI: 0.31831,
 
+   /**
+    * Convert degrees to radians
+    */
    degToRad: function(degrees) {
       // ((Math.PI / 180) * deg);
       return (0.01745 * degrees);
    },
 
+   /**
+    * Convert radians to degrees
+    */
    radToDeg: function(radians) {
       // ((rad * 180) / Math.PI)
       return ((rad * 180) * Math2D.INV_PI);
-   }
+   },
+   
+   /**
+    * Perform AAB to AAB collision testing in world coordinates, returning <code>true</code>
+    * if the two boxes overlap.
+    *
+    * @param box1 {Rectangle} The collision box of object 1
+    * @param offset1 {Point} The position, in world coordinates, of object 1
+    * @param box2 {Rectangle} The collision box of object 2
+    * @param offset2 {Point} The position, in world coordinates, of object 2
+    * @type Boolean
+    */
+   boxBoxCollision: function(box1, offset1, box2, offset2)
+   {
+      return box1.offset(offset1).isOverlapped(box2.offset(offset2));
+   },
+
+   /**
+    * Perform Point to AAB collision testing in world coordinates, returning <code>true</code>
+    * if a collision occurs.
+    *
+    * @param box1 {Rectangle} The collision box of the object
+    * @param offset1 {Point} The position, in world coordinates, of the object
+    * @param p {Point} The point to test, in world coordinates
+    * @type Boolean
+    */
+   boxPointCollision: function(box1, offset1, p)
+   {
+      return box1.offset(offset1).containsPoint(p);
+   },
+
+   /**
+    * A static method used to calculate a direction vector
+    * for the player's heading.
+    * @param origin {Point} The origin of the shape
+    * @param point {Point} The point to create the vector for
+    * @param angle {Number} The rotation in degrees
+    */
+   getDirectionVector = function(origin, point, angle)
+   {
+      var r = MathUtil.degreesToRadians(angle);
+
+      var x = Math.cos(r) * point.x - Math.sin(r) * point.y;
+      var y = Math.sin(r) * point.x + Math.cos(r) * point.y;
+
+      var v = new Point2D(x, y).sub(origin);
+      return v.normalize();
+   };   
 
 });
 
