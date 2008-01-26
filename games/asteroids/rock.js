@@ -1,5 +1,37 @@
+/**
+ * The Render Engine
+ * Example Game: Spaceroids - an Asteroids clone
+ * 
+ * The asteroid object
+ *
+ * @author: Brett Fattori (brettf@renderengine.com)
+ *
+ * @author: $Author$
+ * @version: $Revision$
+ *
+ * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
 
-var Asteroid = HostObject.extend({
+Spaceroids.Rock = HostObject.extend({
 
    size: 10,
    
@@ -7,16 +39,12 @@ var Asteroid = HostObject.extend({
    
    pBox: null,
 
-   constructor: function(pWidth, pHeight) {
+   constructor: function() {
       this.base("Asteroid");
       
       // Add components to move and draw the asteroid
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
-   
-      this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
-   
-      this.setup(pWidth, pHeight);
    },
 
    preUpdate: function(renderContext, time) {
@@ -60,7 +88,10 @@ var Asteroid = HostObject.extend({
       
    },
     
-   setup: function(playfieldWidth, playfieldHeight) {
+   setup: function(pWidth, pHeight) {
+      
+      // Playfield bounding box for quick checks
+      this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
       
       // Randomize the position and velocity
       var c_mover = this.getComponent("move");
@@ -81,6 +112,7 @@ var Asteroid = HostObject.extend({
 
       // Assign the shape to the vector component
       c_draw.setPoints(s);
+      c_draw.buildRenderList();
       c_draw.setLineStyle("silver");
       c_draw.setFillStyle("blue");
 
@@ -89,8 +121,8 @@ var Asteroid = HostObject.extend({
       c_mover.setAngularVelocity( Math.floor(Math.random() * 10) > 5 ? 0.005 : -0.005);
 
       // Set the position
-      var pos = new Point2D( Math.floor(Math.random() * playfieldWidth),
-                             Math.floor(Math.random() * playfieldHeight));
+      var pos = new Point2D( Math.floor(Math.random() * pWidth),
+                             Math.floor(Math.random() * pHeight));
       c_mover.setPosition( pos );
 
       

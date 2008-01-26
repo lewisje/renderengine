@@ -90,7 +90,11 @@ var RenderContext = Container.extend({
     */
    add: function(obj) {
       this.base(obj);
-      this.sort(RenderContext.sortFn);
+      if (obj instanceof HostObject)
+      {
+         obj.setRenderContext(this);
+         this.sort(RenderContext.sortFn);
+      }
    },
    
    /**
@@ -171,6 +175,12 @@ var RenderContext = Container.extend({
     * z-index to the highest z-index.
     */
    sortFn: function(obj1, obj2) {
+      if (obj1 instanceof HostObject ||
+          obj2 instanceof HostObject)
+      {
+         return 0;
+      }
+      
       return obj1.getZIndex() - obj2.getZIndex();
    }
 

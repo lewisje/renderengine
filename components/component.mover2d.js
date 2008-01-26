@@ -41,10 +41,10 @@ var Mover2DComponent = Transform2DComponent.extend({
 
    angularVelocity: 0,
    
-   constructor: function(name) {
+   constructor: function(name, priority) {
       this.velocity = new Vector2D(0,0);
       this.acceleration = new Vector2D(0,0);
-      this.base(name);
+      this.base(name, priority || 1.0);
    },
 
    execute: function(renderContext, time) {

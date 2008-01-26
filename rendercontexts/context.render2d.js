@@ -146,6 +146,18 @@ var RenderContext2D = RenderContext.extend({
 
    drawFilledArc: function(point, radiusX, startAngle, endAngle) {
    },
+
+   /**
+    * Creates a render list which will make inline calls to the
+    * line drawing methods instead of looping over them.  Logically
+    * this method returns a function which will draw the polygon.
+    *
+    * @param pointArray {Array} An array of Point2D objects
+    * @type Function
+    */
+   buildRenderList: function(pointArray) {
+      return null;
+   },
    
    drawPolygon: function(pointArray) {
    },

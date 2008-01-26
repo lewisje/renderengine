@@ -35,6 +35,8 @@ var HostObject = Container.extend({
 
    zIndex: 1,
    
+   renderContext: null,
+   
    /**
     * Set the depth at which this object will render to
     * the context.  The lower the z-index, the further
@@ -50,6 +52,14 @@ var HostObject = Container.extend({
     */
    getZIndex: function() {
       return this.zIndex;
+   },
+   
+   setRenderContext: function(renderContext) {
+      this.renderContext = renderContext;
+   },
+   
+   getRenderContext: function() {
+      return this.renderContext;
    },
    
    preUpdate: function(renderContext, time) {
@@ -91,7 +101,7 @@ var HostObject = Container.extend({
          Assert((component.getName() != objs[o].getName()), "Components must have a unique name within the host");
       }
       
-      component.setHost(this);
+      component.setHostObject(this);
       this.base(component);
       if (this.getObjects().length > 1)
       {

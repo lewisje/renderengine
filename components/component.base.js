@@ -67,14 +67,14 @@ var BaseComponent = BaseObject.extend({
    /**
     * Set the host object this component exists within.
     */
-   setHost: function(hostObject) {
+   setHostObject: function(hostObject) {
       this.host = hostObject;
    },
    
    /**
     * Get the host object this component exists within.
     */
-   getHost: function() {
+   getHostObject: function() {
       return this.host;
    },
    

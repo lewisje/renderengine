@@ -168,7 +168,15 @@ var CanvasContext = RenderContext2D.extend({
       this.endPath();
    },
    
-   fastPoly: function(pointArray) {
+   /**
+    * Creates a render list which will make inline calls to the
+    * line drawing methods instead of looping over them.  Logically
+    * this method returns a function which will draw the polygon.
+    *
+    * @param pointArray {Array} An array of Point2D objects
+    * @type Function
+    */
+   buildRenderList: function(pointArray) {
       var f = "arguments.callee.ctx.startPath(); arguments.callee.ctx.moveTo(arguments.callee.ptArr[0]);";
       for (var p = 1; p < pointArray.length; p++)
       {
@@ -178,11 +186,12 @@ var CanvasContext = RenderContext2D.extend({
       var _fastPoly = new Function(f);
       _fastPoly.ctx = this;
       _fastPoly.ptArr = pointArray;
+      _fastPoly.isRenderList = true;
       return _fastPoly;
    },
    
    drawPolygon: function(pointArray) {
-      if (typeof pointArray == "function")
+      if (pointArray.isRenderList)
       {
          pointArray();
          return;
@@ -193,7 +202,7 @@ var CanvasContext = RenderContext2D.extend({
    },
 
    drawFilledPolygon: function(pointArray) {
-      if (typeof pointArray == "function")
+      if (pointArray.isRenderList)
       {
          pointArray();
       this.fillPath();
