@@ -33,6 +33,25 @@
  
 var HostObject = Container.extend({
 
+   zIndex: 1,
+   
+   /**
+    * Set the depth at which this object will render to
+    * the context.  The lower the z-index, the further
+    * away from the front the object will draw.
+    */
+   setZIndex: function(zIndex) {
+      this.zIndex = zIndex;
+   },
+   
+   /**
+    * Get the depth at which this object will render to
+    * the context.
+    */
+   getZIndex: function() {
+      return this.zIndex;
+   },
+   
    preUpdate: function(renderContext, time) {
    },
 
@@ -64,6 +83,8 @@ var HostObject = Container.extend({
     */
    add: function(component) {
       
+      Assert((component instanceof BaseComponent), "Cannot add a non-component to a HostObject");
+      
       // Make sure that the component name is unique within the host
       var objs = this.getObjects();
       for (var o in objs) {
@@ -72,7 +93,10 @@ var HostObject = Container.extend({
       
       component.setHost(this);
       this.base(component);
-      this.sort();
+      if (this.getObjects().length > 1)
+      {
+         this.sort(HostObject.componentSort);
+      }
    },
    
    /**
@@ -90,13 +114,6 @@ var HostObject = Container.extend({
             return objs[o];
          }
       }
-   },
-   
-   /**
-    * Sort components within the host by component type and then by priority.
-    */
-   sort: function() {
-      this.base(HostObject.componentSort);
    },
    
    /**

@@ -29,7 +29,7 @@
  *
  */
  
-var BaseComponent = Base.extend({
+var BaseComponent = BaseObject.extend({
 
    name: null,
 
@@ -61,16 +61,19 @@ var BaseComponent = Base.extend({
              "Priority must be between 0.0 and 1.0 for BaseComponent");
       
       this.priority = priority || 0.5;
+      this.base(this.name);
    },
-   
-   getName: function() {
-      return this.name;
-   },
-   
+
+   /**
+    * Set the host object this component exists within.
+    */
    setHost: function(hostObject) {
       this.host = hostObject;
    },
    
+   /**
+    * Get the host object this component exists within.
+    */
    getHost: function() {
       return this.host;
    },

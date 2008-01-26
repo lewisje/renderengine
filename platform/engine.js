@@ -274,7 +274,7 @@ var Engine = Base.extend({
       this.defaultContext = new DocumentContext();
       
       // Start world timer
-      Engine.globalTimer = window.setTimeout("Engine.engineTimer", 33);
+      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, 33);
    },
    
    /**
@@ -353,29 +353,31 @@ var Engine = Base.extend({
       }
     },
     
-    /**
-     * Dump the list of scripts loaded by the Engine.
-     */
-    dumpScripts: function() {
+   /**
+   * Dump the list of scripts loaded by the Engine.
+   */
+   dumpScripts: function() {
       for (var f in this.loadedScripts)
       {
          Console.debug(this.loadedScripts[f]);
       }
-    }
+   },
     
- }, { // Interface
-   globalTimer: null,
- 
    /**
     * The global engine timer which updates the world.
     */
    engineTimer: function() {
       // Update the world
-      Engine.getDefaultContext().update(null, new Date().time());
-      
+      Engine.getDefaultContext().update(null, new Date().getTime());
+
       // Another process interval
-      Engine.globalTimer = window.setTimeout("Engine.engineTimer", 33);
+      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, 33);
    }
+
+    
+ }, { // Interface
+   globalTimer: null
+ 
  });
  
  

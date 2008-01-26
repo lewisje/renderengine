@@ -1,8 +1,10 @@
 /**
  * The Render Engine
- * ImageResourceLoader
+ * Game
  * 
- * Loads images and stores the reference to those images.
+ * The game object represents an instance of a game.  It is
+ * the controlling entity for all of a game and is responsible
+ * for setup and teardown of the game.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -25,41 +27,36 @@
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
+ * THE SOFTWARE
  */
  
-var ImageResourceLoader = ResourceLoader.extend({
-   
-   elementStorage: null,
-   
-   load: function(name, location, width, height) {
-   
-      // Create the area if it doesn't exist which will
-      // be used to load the images from their URL
-      var doc = Engine.getDefaultContext().getSurface();
-      var div = jQuery("<div/>");
-      div.css({ display: none; });
-      
-      // Wrap the div in an object so it can be automatically cleaned up
-      if (this.elementStorage == null)
-      {
-         this.elementStorage = new BaseObject("ImgStorage");
-         this.elementStorage.setElement(div[0]);
-         doc.add(elementStorage);
-      }
-      
-   
-      // Create an image element
-      var image = document.createElement("img");
-      image.src = location;
-      image.width = width;
-      image.height = height;
+var Game = Base.extend({
 
-      // Append it to the document so it can load the image
-      elementStorage.getElement().appendChild(image);
-      
-      this.base(name, image);
-   }
+   constructor: null,
+
+   /**
+    * Initialize the game.
+    */
+   setup: function() {
+   },
    
+   /**
+    * Shut down the game.
+    */
+   tearDown: function() {
+   },
+   
+   /**
+    * Get the name of the game
+    */
+   getName: function() {
+      return "Game";
+   },
+   
+   /**
+    * Get the number of players this game supports
+    */
+   getPlayers: function() {
+      return 1;
+   }
 });

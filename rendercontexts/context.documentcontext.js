@@ -56,7 +56,7 @@ var DocumentContext = RenderContext2D.extend({
    add: function(obj) {
       if (obj.getElement())
       {
-         this.getSurface().addChild(obj.getElement());
+         this.getSurface().appendChild(obj.getElement());
       }
       this.base(obj);
    },

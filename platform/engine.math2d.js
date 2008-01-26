@@ -177,6 +177,10 @@ var Point2D = Base.extend({
     */
    isZero: function() {
       return (this.x == 0 && this.y == 0);
+   },
+   
+   toString: function() {
+      return "[" + this.x + "," + this.y + "]";
    }
 
 });
@@ -223,7 +227,7 @@ var Vector2D = Point2D.extend({
     *
     * @param vector {Vector} The vector to perform the angular determination against
     */
-   angleBetween = function(vector)
+   angleBetween: function(vector)
    {
       var p1 = new Vector(this);
       var p2 = new Vector(vector);
@@ -233,4 +237,173 @@ var Vector2D = Point2D.extend({
       return (((Math.acos(p1.dot(p2))) * 180) * Math2D.INV_PI);
    }
 
+});
+
+var Rectangle2D = Base.extend({
+   
+   x: 0,
+   y: 0,
+   width: 0,
+   height: 0,
+   
+   constructor: function(x, y, width, height) {
+      this.x = (x != null ? x : 0.0);
+      this.y = (y != null ? y : 0.0);
+      this.width = (width != null ? width : 0.0);
+      this.height = (height != null ? height : 0.0);
+   },
+
+   /**
+    * Set the values of this rectangle.
+    *
+    * @param x {Float} An optional value to initialize the X coordinate of the rectangle
+    * @param y {Float} An optional value to initialize the Y coordinate of the rectangle
+    * @param width {Float} An optional value to initialize the width of the rectangle
+    * @param height {Float} An optional value to initialize the height of the rectangle
+    */
+   set: function(x, y, width, height)
+   {
+      this.x = (x != "" ? x : 0.0);
+      this.y = (y != "" ? y : 0.0);
+      this.width = (width != "" ? width : 0.0);
+      this.height = (height != "" ? height : 0.0);
+   },
+
+   /**
+    * Offset this rectangle by the given amount in the X and Y axis.  The first parameter
+    * can be either a point, or the value for the X axis.  If the X axis is specified,
+    * the second parameter should be the amount to offset in the Y axis.
+    *
+    * @param offsetPtOrX {Point/int} Either a {@link Point} which contains the offset in X and Y, or an integer
+    *                                representing the offset in the X axis.
+    * @param offsetY {int} If <code>offsetPtOrX</code> is an integer value for the offset in the X axis, this should be
+    *                      the offset along the Y axis.
+    */
+   offset: function(offsetPtOrX, offsetY)
+   {
+      var xOff = 0;
+      var yOff = 0;
+      if (offsetPtOrX instanceof Point2D)
+      {
+         xOff = offsetPtOrX.x;
+         yOff = offsetPtOrX.y;
+      }
+      else
+      {
+         xOff = offsetPtOrX;
+         yOff = offsetY;
+      }
+
+      this.x += xOff;
+      this.y += yOff;
+   },
+
+   /**
+    * Determine if this rectangle overlaps another rectangle.
+    *
+    * @param rect A {@link Rectangle} to compare against
+    * @return <code>true</code> if the two rectangles overlap.
+    * @type Boolean
+    */
+   isOverlapped: function(rect)
+   {
+      if ((rect.x > (this.x + this.width)) ||
+          (rect.y > (this.y + this.height)))
+      {
+         return false;
+      }
+
+      return !((rect.x + rect.width) < this.x ||
+               (rect.y + rect.height) < this.y);
+   },
+
+   /**
+    * Determine if this rectangle is contained within another rectangle.
+    *
+    * @param rect A {@link Rectangle} to compare against
+    * @return <code>true</code> if the this rectangle is fully contained in the specified rectangle.
+    * @type Boolean
+    */
+   isContained: function(rect)
+   {
+      return (this.x >= rect.x) &&
+             (this.y >= rect.y) &&
+             ((this.x + this.width) <= (rect.x + rect.width)) &&
+             ((this.y + this.height) <= (rect.y + rect.height));
+   },
+
+   /**
+    * Returns true if this rectangle contains the specified point.
+    *
+    * @param point {Point} The point to test
+    * @type Boolean
+    */
+   containsPoint: function(point)
+   {
+      return (point.x >= this.x &&
+              point.y >= this.y &&
+              point.x <= this.x + this.width &&
+              point.y <= this.y + this.height);
+   },
+
+   /**
+    * Returns a {@link Point} that contains the center point of this rectangle.
+    *
+    * @type Point
+    */
+   getCenter: function()
+   {
+      return new Point2D(this.x + (this.width * 0.5), this.y + (this.height * 0.5));
+   },
+
+   /**
+    * Returns the positive length of this rectangle, along the X axis.
+    *
+    * @type Number
+    */
+   len_x: function()
+   {
+      return Math.abs(this.width);
+   },
+
+   /**
+    * Returns the positive length of this rectangle, along the Y axis.
+    *
+    * @type Number
+    */
+   len_y: function()
+   {
+      return Math.abs(this.height);
+   },
+
+   /**
+    * Gets a <code>Point</code> representing the top-left corner of this rectangle
+    * in world coordinate space.
+    * @type Point
+    */
+   getTopLeft: function()
+   {
+      return new Point2D(this.x, this.y);
+   },
+
+   /**
+    * Gets a <code>Point</code> representing the bottom-right corner of this rectangle
+    * in world coordinate space.
+    * @type Point
+    */
+   getBottomRight: function()
+   {
+      var p = this.getTopLeft();
+      p.add(new Point2D(this.width, this.height));
+
+      return p;
+   },
+
+   /**
+    * Returns a printable version of this object.
+    */
+   toString: function()
+   {
+      return (this.x + "," + this.y + " [" + this.width + "," + this.height + "]");
+   }
 });

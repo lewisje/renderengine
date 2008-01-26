@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title>The Render Engine - Asteroids</title>
+
+		<!-- Supporting Libraries -->
+		<script type="text/javascript" src="../../libs/base.js"></script>
+		<script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
+
+		<!-- Load the main engine script -->
+		<script type="text/javascript" src="../../platform/engine.js"></script>
+
+		<!-- Loads the basic scripts required by the engine -->
+		<script type="text/javascript" src="../../platform/engine-loader.js"></script>
+
+		<!-- Load the game scripts -->
+		<script type="text/javascript" src="game.js"></script>
+		<script type="text/javascript" src="asteroid.js"></script>
+
+	</head>
+	<body>
+		<script type="text/javascript">
+			Engine.startup(true);
+			//Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+			Asteroids.setup();
+		</script>
+	</body>
+</html>

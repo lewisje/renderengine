@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * Library Loader
+ * ImageResourceLoader
  * 
- * Loads all basic scripts for the engine.
+ * Loads images and stores the reference to those images.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @version: 0.1
@@ -28,28 +28,38 @@
  * THE SOFTWARE.
  *
  */
+ 
+var ImageResourceLoader = ResourceLoader.extend({
+   
+   elementStorage: null,
+   
+   load: function(name, location, width, height) {
+   
+      // Create the area if it doesn't exist which will
+      // be used to load the images from their URL
+      var doc = Engine.getDefaultContext().getSurface();
+      var div = jQuery("<div/>");
+      div.css({ display: none });
+      
+      // Wrap the div in an object so it can be automatically cleaned up
+      if (this.elementStorage == null)
+      {
+         this.elementStorage = new BaseObject("ImgStorage");
+         this.elementStorage.setElement(div[0]);
+         doc.add(elementStorage);
+      }
+      
+   
+      // Create an image element
+      var image = document.createElement("img");
+      image.src = location;
+      image.width = width;
+      image.height = height;
 
-
-// Engine platform
-Engine.load("/platform/engine.math2d.js");
-Engine.load("/platform/engine.game.js");
-Engine.load("/platform/engine.baseobject.js");
-Engine.load("/platform/engine.timers.js");
-Engine.load("/platform/engine.container.js");
-Engine.load("/platform/engine.rendercontext.js");
-Engine.load("/platform/engine.hostobject.js");
-Engine.load("/platform/engine.resourceloader.js");
-
-// Contexts
-Engine.load("/rendercontexts/context.render2d.js");
-Engine.load("/rendercontexts/context.canvascontext.js");
-Engine.load("/rendercontexts/context.documentcontext.js");
-
-// Resource loaders
-Engine.load("/resourceloaders/loader.image.js");
-
-// Object components
-Engine.load("/components/component.base.js");
-Engine.load("/components/component.transform2d.js");
-Engine.load("/components/component.mover2d.js");
-Engine.load("/components/component.vector2d.js");
+      // Append it to the document so it can load the image
+      elementStorage.getElement().appendChild(image);
+      
+      this.base(name, image);
+   }
+   
+});

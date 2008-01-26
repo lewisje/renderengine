@@ -40,31 +40,99 @@ var RenderContext2D = RenderContext.extend({
    
    fillStyle: null,
    
+   lineWidth: 1,
+   
+   position: null,
+   
+   rotation: 0,
+   
+   scaleX: 1,
+   
+   scaleY: 1,
+   
+   backgroundColor: null,
+   
+   reset: function() {
+   },
+   
+   setBackgroundColor: function(color) {
+      this.backgroundColor = color;
+   },
+   
+   getBackgroundColor: function() {
+      return this.backgroundColor;
+   },
+   
    setWidth: function(width) {
+      this.width = width;
+   },
+   
+   getWidth: function() {
+      return this.width;
    },
    
    setHeight: function(height) {
+      this.height = height;
+   },
+   
+   getHeight: function() {
+      return this.height;
    },
    
    setPosition: function(point) {
+      this.position = point;
+   },
+   
+   getPosition: function() {
+      return this.position;
    },
    
    setRotation: function(angle) {
+      this.rotation = angle;
+   },
+   
+   getRotation: function() {
+      return this.rotation;
    },
    
    setScale: function(scaleX, scaleY) {
+      this.scaleX = scaleX;
+      this.scaleY = scaleY;
+   },
+   
+   getScaleX: function() {
+      return this.scaleX;
+   },
+   
+   getScaleY: function() {
+      return this.scaleY;
    },
    
    setTransform: function(matrix) {
    },
    
    setLineStyle: function(lineStyle) {
+      this.lineStyle = lineStyle;
+   },
+   
+   getLineStyle: function() {
+      return this.lineStyle;
    },
    
    setLineWidth: function(width) {
+      this.lineWidth = width;
+   },
+   
+   getLineWidth: function() {
+      return this.lineWidth;
    },
    
    setFillStyle: function(fillStyle) {
+      this.fillStyle = fillStyle;
+   },
+   
+   getFillStyle: function() {
+      return this.fillStyle;
    },
    
    drawRectangle: function(point, width, height) {
