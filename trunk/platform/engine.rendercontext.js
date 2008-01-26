@@ -63,7 +63,6 @@ var RenderContext = Container.extend({
          this.surface.parentNode.removeChild(this.surface);
       }
       this.surface = null;
-      
       this.base();
    },
    
@@ -86,6 +85,15 @@ var RenderContext = Container.extend({
    },
    
    /**
+    * Add a host object to the render list.  Only objects
+    * within the render list will be rendered.
+    */
+   add: function(obj) {
+      this.base(obj);
+      this.sort(RenderContext.sortFn);
+   },
+   
+   /**
     * Update the render context before rendering the objects to the surface.
     *
     * @param parentContext {RenderContext} A parent context, or <tt>null</tt>
@@ -102,6 +110,8 @@ var RenderContext = Container.extend({
     * @param time {Number} The current render time in milliseconds from the engine.
     */
    render: function(time) {
+      this.reset();
+      
       // Push the world transform
       this.pushTransform();
 
@@ -109,11 +119,12 @@ var RenderContext = Container.extend({
       var objs = this.getObjects();
       for (var o in objs)
       {
-         objs.update(this, time);
+         objs[o].update(this, time);
       }
 
       // Restore the world transform
       this.popTransform();
+      
    },
    
    /**
@@ -151,6 +162,16 @@ var RenderContext = Container.extend({
     */
    getClassName: function() {
       return "RenderContext";
+   }
+
+}, { // Static
+
+   /**
+    * Sort the objects to draw from objects with the lowest
+    * z-index to the highest z-index.
+    */
+   sortFn: function(obj1, obj2) {
+      return obj1.getZIndex() - obj2.getZIndex();
    }
 
 });

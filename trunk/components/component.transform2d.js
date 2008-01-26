@@ -31,7 +31,7 @@
  
 var Transform2DComponent = BaseComponent.extend({
 
-   position: new Point2D(0,0),
+   position: null,
    
    rotation: 0,
    
@@ -39,6 +39,7 @@ var Transform2DComponent = BaseComponent.extend({
    
    constructor: function(name) {
       this.base(name, BaseComponent.TYPE_RENDERING, 1.0);
+      this.position = new Point2D(0,0);
    },
    
    setPosition: function(point) {
@@ -69,7 +70,7 @@ var Transform2DComponent = BaseComponent.extend({
       
       renderContext.setPosition(this.position);
       renderContext.setRotation(this.rotation);
-      renderContext.setScale(scale, scale);
+      renderContext.setScale(this.scale, this.scale);
       
    },
    

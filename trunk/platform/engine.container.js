@@ -34,7 +34,7 @@
  
 var Container = BaseObject.extend({
 
-   objects: [],
+   objects: null,
    
    /**
     * Create an instance of a container object.
@@ -43,6 +43,19 @@ var Container = BaseObject.extend({
     */
    constructor: function(containerName) {
       this.base(containerName || "Container");
+      this.objects = [];
+   },
+   
+   /**
+    * Destroy all objects contained within this object.
+    */
+   destroy: function() {
+      while(this.objects.length > 0)
+      {
+         var o = this.objects.shift();
+         o.destroy();
+      }
+      this.base();
    },
    
    /**
@@ -150,6 +163,7 @@ var Container = BaseObject.extend({
     */
    sort: function(fn) {
       Assert((fn != null), "A function must be provided to sort the Container");
+      Console.log("Sorting " + this.getClassName() + " [" + this.getId() + "]");
       this.objects.sort(fn);
    },
    

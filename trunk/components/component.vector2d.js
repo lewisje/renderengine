@@ -37,21 +37,61 @@ var Vector2DComponent = BaseComponent.extend({
    
    lineWidth: 1,
    
-   fillStyle: "none",          // Default to none
+   fillStyle: "#000000",          // Default to none
+   
+   boundingBox: null,
+   
+   fastPoly: null,
    
    constructor: function(name) {
       this.base(name, BaseComponent.TYPE_RENDERING, 0.1);
    },
    
-   setPoints: function(pointArray) {
-      this.points = pointArray;
+   calculateBoundingBox: function() {
+      var x1 = 0;
+      var x2 = 0;
+      var y1 = 0;
+      var y2 = 0;
+      for (var p = 0; p < this.points.length; p++)
+      {
+         var pt = this.points[p];
+
+         if (pt.x < x1)
+         {
+            x1 = pt.x;
+         }
+         if (pt.x > x2)
+         {
+            x2 = pt.x;
+         }
+         if (pt.y < y1)
+         {
+            y1 = pt.y;
+         }
+         if (pt.y > y2)
+         {
+            y2 = pt.y;
+         }
+      }
+
+      this.boundingBox = new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
+   },
+
+   getBoundingBox: function() {
+      return this.boundingBox;
    },
    
-   setStrokeStyle: function(strokeStyle) {
+   setPoints: function(pointArray) {
+      this.points = pointArray;
+      this.fastPoly = null;
+      this.calculateBoundingBox();
+   },
+   
+   setLineStyle: function(strokeStyle) {
       this.strokeStyle = strokeStyle;
    },
    
-   getStrokeStyle: function() {
+   getLineStyle: function() {
       return this.strokeStyle;
    },
    
@@ -72,14 +112,19 @@ var Vector2DComponent = BaseComponent.extend({
    },
    
    execute: function(renderContext, time) {
-      Assert((points != null), "Points not defined in CanvasVectorComponent");
-      
+      Assert((this.points != null), "Points not defined in CanvasVectorComponent");
+     
       // Set the stroke and fill styles
-      renderContext.setStrokeStyle(this.strokeStyle);
+      renderContext.setLineStyle(this.strokeStyle);
       renderContext.setFillStyle(this.fillStyle);
       
+      if (this.fastPoly == null)
+      {
+         this.fastPoly = renderContext.fastPoly(this.points);
+      }
+      
       // Render out the points
-      renderContext.drawPolygon(this.points);
+      renderContext.drawPolygon(this.fastPoly);
    },
    
    /**
