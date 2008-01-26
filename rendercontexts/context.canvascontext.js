@@ -161,10 +161,36 @@ var CanvasContext = RenderContext2D.extend({
    _poly: function(pointArray) {
       this.startPath();
       this.moveTo(pointArray[0]);
+      var p = 1;
+
+      // Using Duff's device
+      switch((pointArray.length - 1) & 0x3)
+      {
+         case 3:
+            this.lineTo(pointArray[p++]);
+         case 2:
+            this.lineTo(pointArray[p++]);
+         case 1:
+            this.lineTo(pointArray[p++]);
+      }
+      
+      if (p < pointArray.length)
+      {
+         do
+         {
+            this.lineTo(pointArray[p++]);
+            this.lineTo(pointArray[p++]);
+            this.lineTo(pointArray[p++]);
+            this.lineTo(pointArray[p++]);
+         } while (p < pointArray.length);
+      }
+      
+      /*
       for (var p = 1; p < pointArray.length; p++)
       {
          this.lineTo(pointArray[p]);
       }
+      */
       this.endPath();
    },
    

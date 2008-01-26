@@ -94,7 +94,7 @@ var Math2D = Base.extend({
     * @param point {Point} The point to create the vector for
     * @param angle {Number} The rotation in degrees
     */
-   getDirectionVector = function(origin, point, angle)
+   getDirectionVector: function(origin, point, angle)
    {
       var r = MathUtil.degreesToRadians(angle);
 
@@ -103,7 +103,7 @@ var Math2D = Base.extend({
 
       var v = new Point2D(x, y).sub(origin);
       return v.normalize();
-   };   
+   }   
 
 });
 

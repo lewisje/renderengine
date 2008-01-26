@@ -40,7 +40,7 @@ Spaceroids.Rock = HostObject.extend({
    pBox: null,
 
    constructor: function() {
-      this.base("Asteroid");
+      this.base("Spaceroid");
       
       // Add components to move and draw the asteroid
       this.add(new Mover2DComponent("move"));
@@ -99,7 +99,7 @@ Spaceroids.Rock = HostObject.extend({
 
       // Pick one of the three shapes
       var tmp = [];
-      tmp = Asteroid.shapes[Math.floor(Math.random() * 3)];
+      tmp = Spaceroids.Rock.shapes[Math.floor(Math.random() * 3)];
 
       // Scale the shape
       var s = [];
@@ -112,7 +112,7 @@ Spaceroids.Rock = HostObject.extend({
 
       // Assign the shape to the vector component
       c_draw.setPoints(s);
-      c_draw.buildRenderList();
+      //c_draw.buildRenderList();
       c_draw.setLineStyle("silver");
       c_draw.setFillStyle("blue");
 

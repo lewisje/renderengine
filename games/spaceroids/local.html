@@ -9,6 +9,7 @@
 
 		<!-- Load the main engine script -->
 		<script type="text/javascript" src="../../platform/engine.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/engine.css" />
 
 		<!-- Loads the basic scripts required by the engine -->
 		<script type="text/javascript" src="../../platform/engine-loader.js"></script>
@@ -22,6 +23,7 @@
 	<body>
 		<script type="text/javascript">
 			Engine.startup(true);
+			Engine.setFPS(24);
 			//Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
 			Spaceroids.setup();
 		</script>
