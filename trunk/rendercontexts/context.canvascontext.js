@@ -5,7 +5,8 @@
  * A canvas element represented within the engine.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @version: 0.1
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  * 
@@ -163,7 +164,7 @@ var CanvasContext = RenderContext2D.extend({
       this.moveTo(pointArray[0]);
       var p = 1;
 
-      // Using Duff's device
+      // Using Duff's device with loop inversion
       switch((pointArray.length - 1) & 0x3)
       {
          case 3:
@@ -184,13 +185,7 @@ var CanvasContext = RenderContext2D.extend({
             this.lineTo(pointArray[p++]);
          } while (p < pointArray.length);
       }
-      
-      /*
-      for (var p = 1; p < pointArray.length; p++)
-      {
-         this.lineTo(pointArray[p]);
-      }
-      */
+
       this.endPath();
    },
    

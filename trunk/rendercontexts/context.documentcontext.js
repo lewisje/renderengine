@@ -5,7 +5,8 @@
  * A reference to the document.body element as a rendering context.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @version: 0.1
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  * 

@@ -39,11 +39,18 @@ var Events: Base.extend({
     *
     * @param target {String/jQuery} The target for the event.  This should either be a
     *                               CSS selector, or a jQuery object.
+    * @param [data] {Array} Optional data to pass to the handler when it is invoked. 
     * @param name {String} The event to handle.  ie: "click" or "mouseover"
     * @param handler {Function} The handler function to assign to the target
     */
-   setHandler: function(target, name, handler) {
-      jQuery(target).bind(name, handler);
+   setHandler: function(target, data, name, handler) {
+      if (typeof data == "string")
+      {
+         handler = name;
+         name = data;
+         data = null;
+      }
+      jQuery(target).bind(name, data || handler, handler);
    },
    
    /**
