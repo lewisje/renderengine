@@ -58,7 +58,7 @@ var Math2D = Base.extend({
       // ((rad * 180) / Math.PI)
       return ((rad * 180) * Math2D.INV_PI);
    },
-   
+
    /**
     * Perform AAB to AAB collision testing in world coordinates, returning <code>true</code>
     * if the two boxes overlap.
@@ -104,8 +104,70 @@ var Math2D = Base.extend({
 
       var v = new Point2D(x, y).sub(origin);
       return v.normalize();
-   }   
+   },
 
+   /**
+    * Check to see if a line intersects another
+    *
+    * @param p1 {Point2D} Start of line 1
+    * @param p2 {Point2D} End of line 1
+    * @param p3 {Point2D} Start of line 2
+    * @param p4 {Point2D} End of line 2
+    * @return <tt>true</tt> if the lines intersect
+    * @type Boolean
+    */
+   lineLineCollision(p1, p2, p3, p4)
+   {
+      var d = ((p4.y - p3.y) * (p2.x - p1.x)) - ((p4.x - p3.x) * (p2.y - p1.y));
+      var n1 = ((p4.x - p3.x) * (p1.y - p3.y)) - ((p4.y - p3.y) * (p1.x - p3.x));
+      var n2 = ((p2.x - p1.x) * (p1.y - p3.y)) - ((p2.y - p1.y) * (p1.x - p3.x));
+
+      if ( d == 0.0 )
+      {
+         if ( n1 == 0.0 && n2 == 0.0 )
+         {
+            return false;  //COINCIDENT;
+         }
+         return false;   // PARALLEL;
+      }
+      var ua = n1 / d;
+      var ub = n2 / d;
+
+      return (ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0);
+   }
+
+
+   /**
+    * Test to see if a line intersects a Rectangle.
+    *
+    * @param p1 {Point2D} The start of the line
+    * @param p2 {Point2D} The end of the line
+    * @param rect {Rectangle} The box to test against
+    * @return <tt>true</tt> if the line intersects the box
+    * @type Boolean
+    */
+   lineBoxCollision(p1, p2, rect)
+   {
+      if (Math2D.boxPointCollision(rect, Point2D.ZERO, p1) &&
+          Math2D.boxPointCollision(rect, Point2D.ZERO, p2))
+      {
+         // line inside
+         return true;
+      }
+
+      // check each line for intersection
+      var topLeft = rect.getTopLeft();
+      var bottomRight = rect.getBottomRight();
+      var topRight = new Point2D(rect.x, rect.y).add(new Point2D(rect.width, 0));
+      var bottomLeft = new Point2D(rect.x, rect.y).add(new Point2D(0, rect.height));
+
+      if (Math2D.lineLineCollision(p1, p2, topLeft, bottomLeft)) return true;
+      if (Math2D.lineLineCollision(p1, p2, topRight, lowerRight)) return true;
+      if (Math2D.lineLineCollision(p1, p2, upperLeft, upperRight)) return true;
+      if (Math2D.lineLineCollision(p1, p2, upperRight, lowerRight)) return true;
+
+      return false;
+   }
 });
 
 /**
@@ -232,11 +294,13 @@ var Point2D = Base.extend({
    isZero: function() {
       return (this.x == 0 && this.y == 0);
    },
-   
+
    toString: function() {
       return "[" + this.x + "," + this.y + "]";
    }
 
+}, {  // Static
+   ZERO: new Point(0,0);
 });
 
 
@@ -294,12 +358,12 @@ var Vector2D = Point2D.extend({
 });
 
 var Rectangle2D = Base.extend({
-   
+
    x: 0,
    y: 0,
    width: 0,
    height: 0,
-   
+
    constructor: function(x, y, width, height) {
       this.x = (x != null ? x : 0.0);
       this.y = (y != null ? y : 0.0);
