@@ -134,7 +134,7 @@ var Math2D = Base.extend({
       var ub = n2 / d;
 
       return (ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0);
-   }
+   },
 
 
    /**
