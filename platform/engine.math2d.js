@@ -299,9 +299,9 @@ var Point2D = Base.extend({
       return "[" + this.x + "," + this.y + "]";
    }
 
-}, {  // Static
-   ZERO: new Point(0,0);
 });
+
+Point2D.ZERO = new Point2D(0,0);
 
 
 /**
