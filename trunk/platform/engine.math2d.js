@@ -116,7 +116,7 @@ var Math2D = Base.extend({
     * @return <tt>true</tt> if the lines intersect
     * @type Boolean
     */
-   lineLineCollision(p1, p2, p3, p4)
+   lineLineCollision: function(p1, p2, p3, p4)
    {
       var d = ((p4.y - p3.y) * (p2.x - p1.x)) - ((p4.x - p3.x) * (p2.y - p1.y));
       var n1 = ((p4.x - p3.x) * (p1.y - p3.y)) - ((p4.y - p3.y) * (p1.x - p3.x));
@@ -146,7 +146,7 @@ var Math2D = Base.extend({
     * @return <tt>true</tt> if the line intersects the box
     * @type Boolean
     */
-   lineBoxCollision(p1, p2, rect)
+   lineBoxCollision: function(p1, p2, rect)
    {
       if (Math2D.boxPointCollision(rect, Point2D.ZERO, p1) &&
           Math2D.boxPointCollision(rect, Point2D.ZERO, p2))
