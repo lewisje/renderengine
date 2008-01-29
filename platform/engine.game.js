@@ -1,7 +1,7 @@
 /**
  * The Render Engine
  * Game
- * 
+ *
  * The game object represents an instance of a game.  It is
  * the controlling entity for all of a game and is responsible
  * for setup and teardown of the game.
@@ -11,17 +11,17 @@
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,30 +30,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE
  */
- 
+
 var Game = Base.extend({
 
+   gameLocation: null,
+
    constructor: null,
+
+   loadedScripts: [],
 
    /**
     * Initialize the game.
     */
    setup: function() {
    },
-   
+
    /**
     * Shut down the game.
     */
    tearDown: function() {
    },
-   
+
    /**
     * Get the name of the game
     */
    getName: function() {
       return "Game";
    },
-   
+
+   /**
+    * Load a script relative to this game
+    */
+   load: function(scriptSource) {
+
+      Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game path");
+
+      var head = document.getElementsByTagName("head")[0];
+      var s = scriptSource.replace(/[\/\.]/g,"_");
+      if (this.loadedScripts[s] == null)
+      {
+         this.loadedScripts[s] = scriptSource;
+         var n = document.createElement("script");
+
+         n.src = (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource;
+         n.type = "text/javascript";
+
+         Console.log("Game loading: " + scriptSource);
+         head.appendChild(n);
+      }
+   },
+
    /**
     * Get the number of players this game supports
     */

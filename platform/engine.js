@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * 
+ *
  * The startup library is a collection of methods which will
  * simplify the creation of other class files.  It is the starting
  * point of all libraries in the engine itself.
@@ -10,17 +10,17 @@
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,14 +33,14 @@
 
 /**
  * @class ConsoleRef
- * 
+ *
  * A stand-in class when Firebug or Firebug Lite are not installed.
  */
 var ConsoleRef = Base.extend({
    constructor: null,
-   
+
    dumpWindow: null,
-   
+
    out: function(msg) {
       if (this.dumpWindow == null)
       {
@@ -53,31 +53,59 @@ var ConsoleRef = Base.extend({
             ".error { color: white; background: red; font-weight: bold; } " +
             "</style>"
       }
-      
+
       this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
    },
-   
+
+   dump: function(msg) {
+      if (msg instanceof Array)
+      {
+         var a = "[";
+         for (var o in msg) {
+            a += (a.length > 1 ? ", " : "") + this.dump(msg[o]);
+         }
+         return a + "]";
+      }
+      else if (typeof msg === "function")
+      {
+         return "func[ " + this.fix(msg.toString().substring(0,30)) + "... ]";
+      }
+      else if (typeof msg === "object")
+      {
+         var a = "Object {\n";
+         for (var o in msg)
+         {
+            a += o + ": " + this.dump(msg[o]) + "\n";
+         }
+         return a + "\n}";
+      }
+      else
+      {
+         return this.fix(msg);
+      }
+   },
+
    fix: function(msg) {
       return msg.replace(/\\n/g, "<br>").replace(/</g,"&lt;").replace(/>/g,"&gt;");
    },
-   
+
    debug: function(msg) {
-      this.out("<span class='debug'>" + this.fix(Console.dump(msg)) + "</span>");
+      this.out("<span class='debug'>" + this.dump(msg) + "</span>");
    },
-   
+
    warn: function(msg) {
-      this.out("<span class='warn'>" + this.fix(Console.dump(msg)) + "</span>");
+      this.out("<span class='warn'>" + this.dump(msg) + "</span>");
    },
-   
+
    error: function(msg) {
-      this.out("<span class='error'>" + this.fix(Console.dump(msg)) + "</span>");
+      this.out("<span class='error'>" + this.dump(msg) + "</span>");
    }
 
 });
- 
+
 /**
  * @class Console
- * 
+ *
  * A class for logging messages.  If the FireBug, or FireBug Lite, extension
  * is installed, it will be used as an alternative to the console display.
  */
@@ -85,15 +113,15 @@ var Console = Base.extend({
    constructor: null,
 
    consoleRef: null,
-   
+
    DEBUGLEVEL_ERRORS:      0,
    DEBUGLEVEL_WARNINGS:    1,
    DEBUGLEVEL_DEBUG:       2,
    DEBUGLEVEL_VERBOSE:     3,
    DEBUGLEVEL_NONE:       -1,
-      
+
    verbosity: this.DEBUGLEVEL_NONE,
-   
+
    startup: function() {
       if (window.console) {
          this.consoleRef = window.console;
@@ -103,11 +131,11 @@ var Console = Base.extend({
          this.consoleRef = ConsoleRef;
       }
    },
-   
+
    setDebugLevel: function(level) {
-      this.verbosity = level; 
+      this.verbosity = level;
    },
-   
+
    log: function(msg) {
       if (Engine.debugMode && this.verbosity == this.DEBUGLEVEL_VERBOSE)
          this.consoleRef.debug("    " + msg);
@@ -124,36 +152,8 @@ var Console = Base.extend({
    },
 
    error: function(msg) {
-      if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_ERRORS)
+      if (this.verbosity >= this.DEBUGLEVEL_ERRORS)
          this.consoleRef.error(msg);
-   },
-   
-   dump: function(msg) {
-      if (msg instanceof Array) 
-      {
-         var a = "[";
-         for (var o in msg) {
-            a += (a.length > 1 ? ", " : "") + Console.dump(msg[o]);
-         }
-         return a + "]";
-      }
-      else if (typeof msg === "function")
-      {
-         return "func[ " + msg.toString().substring(0,30) + "... ]";
-      }
-      else if (typeof msg === "object")
-      {
-         var a = "Object {\n";
-         for (var o in msg)
-         {
-            a += o + ": " + Console.dump(msg[o]) + "\n";
-         }
-         return a + "\n}";
-      }
-      else
-      {
-         return msg;   
-      }
    }
 });
 
@@ -191,34 +191,34 @@ var AssertWarn = function(test, warning) {
 
 /**
  * @class Engine
- * 
+ *
  * The main engine class.
  */
 var Engine = Base.extend({
    constructor: null,
-   
+
    idRef: 0,
-   
+
    fpsClock: 33,
-   
+
    livingObjects: 0,
-   
+
    gameObjects: {},
-   
+
    debugMode: false,
-   
+
    defaultContext: null,
-   
+
    running: false,
-   
+
    loadedScripts: {},
-   
+
    engineLocation: null,
-   
+
    metrics: {},
-   
+
    metricDisplay: null,
-   
+
    showMetricsWindow: false,
 
    /**
@@ -235,10 +235,10 @@ var Engine = Base.extend({
       this.gameObjects[objId] = obj;
       Console.log("Object " + objId + " created");
       this.livingObjects++;
-      
+
       return objId;
    },
-   
+
    /**
     * Destroys an object instance managed by the Engine.
     *
@@ -251,7 +251,7 @@ var Engine = Base.extend({
       delete this.gameObjects[objId];
       this.livingObjects--;
    },
-   
+
    /**
     * Get an object by it's Id that is managed by the Engine.
     *
@@ -262,7 +262,7 @@ var Engine = Base.extend({
    getObject: function(id) {
       return this.gameObjects[id];
    },
-   
+
    /**
     * Start the engine.  Creates a default context (the HTML document) and
     * initializes a timer to update the world managed by the engine.
@@ -272,30 +272,30 @@ var Engine = Base.extend({
     */
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
-   
+
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
       this.running = true;
-      
+
       Console.debug(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
 
       // Create the default context (the document)
       this.defaultContext = new DocumentContext();
-      
+
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
    },
-   
+
    /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
     * objects created and added to the world.
     */
    shutdown: function() {
-      if (!this.running) 
-      { 
-         return; 
+      if (!this.running)
+      {
+         return;
       }
-      
+
       Console.debug(">>> Engine shutting down...");
 
       if (this.metricDisplay)
@@ -306,7 +306,7 @@ var Engine = Base.extend({
 
       // Stop world timer
       window.clearTimeout(Engine.globalTimer);
-      
+
       this.running = false;
       this.downTime = new Date().getTime();
       for (var o in this.gameObjects)
@@ -320,7 +320,7 @@ var Engine = Base.extend({
       Console.debug(">>> Engine shutdown.  Runtime: " + (this.downTime - this.upTime));
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
    },
-   
+
    /**
     * Get the default rendering context for the Engine.
     *
@@ -330,7 +330,7 @@ var Engine = Base.extend({
    getDefaultContext: function() {
       return this.defaultContext;
    },
-   
+
    /**
     * Load a script for the engine
     */
@@ -355,7 +355,7 @@ var Engine = Base.extend({
       }
 
       var s = scriptSource.replace(/[\/\.]/g,"_");
-      
+
       if (this.loadedScripts[s] == null)
       {
          this.loadedScripts[s] = scriptSource;
@@ -363,11 +363,12 @@ var Engine = Base.extend({
 
          n.src = this.engineLocation + scriptSource;
          n.type = "text/javascript";
-
          head.appendChild(n);
+
+         Console.log("Engine loading: " + this.engineLocation + scriptSource);
       }
     },
-    
+
    /**
    * Dump the list of scripts loaded by the Engine.
    */
@@ -377,18 +378,18 @@ var Engine = Base.extend({
          Console.debug(this.loadedScripts[f]);
       }
    },
-   
+
    setFPS: function(fps) {
       Assert((fps != 0), "You cannot have a framerate of zero!");
       this.fpsClock = Math.floor(1000 / fps);
    },
-   
+
    /**
     * The global engine timer which updates the world.
     */
    engineTimer: function() {
       var b = new Date().getTime();
-      
+
       // Update the world
       Engine.getDefaultContext().update(null, new Date().getTime());
 
@@ -405,7 +406,7 @@ var Engine = Base.extend({
       // Another process interval
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
    },
-   
+
    /**
     * Add a metric to the game engine that can be displayed
     * while it is running.
@@ -416,7 +417,7 @@ var Engine = Base.extend({
    addMetric: function(metricName, value) {
       this.metrics[metricName] = value;
    },
-   
+
    /**
     * Remove a metric from the display
     *
@@ -435,8 +436,8 @@ var Engine = Base.extend({
          this.metricDisplay = jQuery("<div/>").addClass("metrics");
          this.metricDisplay.appendTo($("body"));
       }
-      
-      
+
+
       if (!this.showMetricsWindow && this.metricDisplay)
       {
          this.metricDisplay.remove();
@@ -452,10 +453,10 @@ var Engine = Base.extend({
       }
       this.metricDisplay.html(h);
    }
-    
+
  }, { // Interface
    globalTimer: null
- 
+
  });
- 
- 
+
+
