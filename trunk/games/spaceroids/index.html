@@ -49,21 +49,11 @@
 		<!-- Load the main engine script -->
 		<script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/platform/engine.js"></script>
 		<link rel="stylesheet" type="text/css" href="http://renderengine.googlecode.com/svn/trunk/css/engine.css" />
-
-		<!-- Loads the basic scripts required by the engine -->
-		<script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/platform/engine-loader.js"></script>
-
-		<!-- Load the game scripts -->
-		<script type="text/javascript" src="http://renderengine.googlecode.com/svn/games/spaceroids/game.js"></script>
-		<script type="text/javascript" src="http://renderengine.googlecode.com/svn/games/spaceroids/rock.js"></script>
-		<script type="text/javascript" src="http://renderengine.googlecode.com/svn/games/spaceroids/player.js"></script>
-
 	</head>
 	<body>
 		<script type="text/javascript">
-			Engine.startup(true);
-			//Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
-			Spaceroids.setup();
+			// Load the game script
+			Engine.loadGame("http://renderengine.googlecode.com/svn/games/spaceroids/game.js");
 		</script>
 	</body>
 </html>

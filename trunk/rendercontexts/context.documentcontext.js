@@ -79,4 +79,3 @@ var DocumentContext = RenderContext2D.extend({
       return "DocumentContext";
    }
 });
-

@@ -40,6 +40,9 @@ Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.vector2d.js");
+Engine.load("/components/component.vector2d.js");
+Engine.load("/components/component.input.js");
+Engine.load("/components/component.keyboardinput.js");
 
 // Load game objects
 Game.load("/rock.js");
@@ -78,9 +81,15 @@ var Spaceroids = Game.extend({
          rock.setup(pWidth, pHeight);
       }
 
+      var player = new Spaceroids.Player();
+      this.renderContext.add(player);
+      player.setup(pWidth, pHeight);
+
    },
 
    setup: function() {
+      // Set the FPS of the game
+      Engine.setFPS(24);
       // Create the 2D context
       this.renderContext = new CanvasContext(600, 580);
       Engine.getDefaultContext().add(this.renderContext);
@@ -95,4 +104,5 @@ var Spaceroids = Game.extend({
 
 });
 
+setTimeout("Spaceroids.setup();", 500);
 

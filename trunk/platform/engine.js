@@ -196,6 +196,8 @@ var AssertWarn = function(test, warning) {
  */
 var Engine = Base.extend({
    constructor: null,
+   
+   version: "$EngineVersion$",
 
    idRef: 0,
 
@@ -263,6 +265,10 @@ var Engine = Base.extend({
       return this.gameObjects[id];
    },
 
+   setDebugMode: function(mode) {
+      this.debugMode = mode;
+   },
+
    /**
     * Start the engine.  Creates a default context (the HTML document) and
     * initializes a timer to update the world managed by the engine.
@@ -275,12 +281,13 @@ var Engine = Base.extend({
 
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
+
+      // Load the required scripts
+      this.loadEngineScripts();
+
       this.running = true;
 
       Console.debug(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
-
-      // Create the default context (the document)
-      this.defaultContext = new DocumentContext();
 
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
@@ -298,26 +305,25 @@ var Engine = Base.extend({
 
       Console.debug(">>> Engine shutting down...");
 
+      // Stop world timer
+      window.clearTimeout(Engine.globalTimer);
+
       if (this.metricDisplay)
       {
          this.metricDisplay.remove();
          this.metricDisplay = null;
       }
 
-      // Stop world timer
-      window.clearTimeout(Engine.globalTimer);
+      this.downTime = new Date().getTime();
+      Console.debug(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
       this.running = false;
-      this.downTime = new Date().getTime();
       for (var o in this.gameObjects)
       {
          this.gameObjects[o].destroy();
       }
       this.gameObjects = null;
-      this.defaultContext = null;
-      this.downTime = new Date().getTime();
 
-      Console.debug(">>> Engine shutdown.  Runtime: " + (this.downTime - this.upTime));
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
    },
 
@@ -332,15 +338,37 @@ var Engine = Base.extend({
    },
 
    /**
-    * Load a script for the engine
+    * Load a script from the server and append it to
+    * the head element of the browser.
     */
-   load: function(scriptSource) {
+   loadScript: function(scriptPath) {
+      Console.log("Loading script: " + scriptPath);
 
       var head = document.getElementsByTagName("head")[0];
+      var n = document.createElement("script");
 
+      n.src = scriptPath;
+      n.type = "text/javascript";
+      head.appendChild(n);
+   },
+
+   /**
+    * Load a game script
+    */
+   loadGame: function(gameSource) {
+      // Create the default context (the document)
+      this.defaultContext = new DocumentContext();
+      this.loadScript(gameSource);
+   },
+
+   /**
+    * Load an engine script.
+    */
+   load: function(scriptSource) {
       if (this.engineLocation == null)
       {
          // Determine the path of the "engine.js" file
+         var head = document.getElementsByTagName("head")[0];
          var scripts = head.getElementsByTagName("script");
          for (var x = 0; x < scripts.length; x++)
          {
@@ -355,23 +383,41 @@ var Engine = Base.extend({
       }
 
       var s = scriptSource.replace(/[\/\.]/g,"_");
-
       if (this.loadedScripts[s] == null)
       {
          this.loadedScripts[s] = scriptSource;
-         var n = document.createElement("script");
-
-         n.src = this.engineLocation + scriptSource;
-         n.type = "text/javascript";
-         head.appendChild(n);
-
-         Console.log("Engine loading: " + this.engineLocation + scriptSource);
+         this.loadScript(this.engineLocation + scriptSource);
       }
-    },
+   },
+   
+   /**
+    * Load scripts required by the engine to run.
+    * @private
+    */
+   loadEngineScripts: function() {
+      
+      // Engine platform
+      this.load("/platform/engine.math2d.js");
+      this.load("/platform/engine.game.js");
+      this.load("/platform/engine.baseobject.js");
+      this.load("/platform/engine.timers.js");
+      this.load("/platform/engine.container.js");
+      this.load("/platform/engine.rendercontext.js");
+      this.load("/platform/engine.hostobject.js");
+      this.load("/platform/engine.resourceloader.js");
+      this.load("/platform/engine.events.js");
+
+      // Contexts
+      this.load("/rendercontexts/context.render2d.js");
+      this.load("/rendercontexts/context.documentcontext.js");
+
+      // Object components
+      this.load("/components/component.base.js");
+   },
 
    /**
-   * Dump the list of scripts loaded by the Engine.
-   */
+    * Dump the list of scripts loaded by the Engine.
+    */
    dumpScripts: function() {
       for (var f in this.loadedScripts)
       {
@@ -379,6 +425,12 @@ var Engine = Base.extend({
       }
    },
 
+   /**
+    * Set the FPS the engine runs at
+    *
+    * @param fps {Number} The number of frames per second to refresh
+    *                     Engine objects.
+    */
    setFPS: function(fps) {
       Assert((fps != 0), "You cannot have a framerate of zero!");
       this.fpsClock = Math.floor(1000 / fps);
@@ -452,11 +504,20 @@ var Engine = Base.extend({
          h += m + ": " + this.metrics[m] + "<br/>";
       }
       this.metricDisplay.html(h);
+   },
+   
+   /**
+    * Prints the version of the engine
+    */
+   toString: function() {
+      return this.version;
    }
 
  }, { // Interface
    globalTimer: null
 
  });
-
+ 
+// Start the engine
+Engine.startup();
 

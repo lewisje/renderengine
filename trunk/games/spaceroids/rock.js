@@ -114,7 +114,6 @@ Spaceroids.Rock = HostObject.extend({
       c_draw.setPoints(s);
       //c_draw.buildRenderList();
       c_draw.setLineStyle("silver");
-      c_draw.setFillStyle("blue");
 
       // Pick a random rotation and spin speed
       c_mover.setRotation( Math.floor(Math.random() * 360));
@@ -142,3 +141,4 @@ Spaceroids.Rock = HostObject.extend({
             [ [-2, -3], [ 2, -5], [ 5, -1], [ 3,  2], [ 4,  4], [ 0,  5], [-3,  2] ]]
    
 });
+
