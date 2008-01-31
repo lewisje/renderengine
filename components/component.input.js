@@ -35,7 +35,15 @@ var InputComponent = BaseComponent.extend({
 
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_INPUT, priority || 1.0);
-   }
+   },
    
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "KeyboardInputComponent";
+   }
 
 });

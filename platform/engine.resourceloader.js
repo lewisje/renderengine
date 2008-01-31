@@ -37,17 +37,21 @@ var ResourceLoader = BaseObject.extend({
    
    cache: {},
    
+   length: 0,
+   
    constructor: function(name) {
       this.base("ResourceLoader");
    },
    
    load: function(name, data) {
       this.cache[name] = data;   
+      this.length++;
    },
    
    unload: function(name) {
       this.cache[name] = null;
       delete this.cache[name];
+      this.length--;
    },
    
    get: function(name) {
@@ -60,6 +64,7 @@ var ResourceLoader = BaseObject.extend({
       }
       
       this.cache = {};
+      this.length = 0;
    },
    
    /**
@@ -69,6 +74,10 @@ var ResourceLoader = BaseObject.extend({
     */
    getClassName: function() {
       return "ResourceLoader";
+   },
+   
+   toString: function() {
+      return this.base() + " [cached objects: " + this.length + "]";
    }
 
    

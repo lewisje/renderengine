@@ -35,6 +35,10 @@
 Spaceroids.Player = HostObject.extend({
 
    size: 4,
+   
+   rotDir: 0,
+   
+   thrusting: false,
 
    constructor: function() {
       this.base("Player");
@@ -46,9 +50,20 @@ Spaceroids.Player = HostObject.extend({
    },
 
    preUpdate: function(renderContext, time) {
+      var c_mover = this.getComponent("move");
+      c_mover.setRotation(c_mover.getRotation() + this.rotDir);
+
+      if (this.thrusting)
+      {
+         var r = c_mover.getRotation();
+         var tip = new Point2D(0, -1);
+         var dir = Math2D.getDirectionVector(Point2D.ZERO, tip, r);
+         c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.25)));
+      }
+      
       renderContext.pushTransform();   
    },
-
+   
    postUpdate: function(renderContext, time) {
       renderContext.popTransform();
       
@@ -125,22 +140,28 @@ Spaceroids.Player = HostObject.extend({
       var c_mover = this.getComponent("move");
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
-            c_mover.setAngularVelocity(-2);
+            this.rotDir = -10;
             break;
          case EventEngine.KEYCODE_RIGHT_ARROW:
-            c_mover.setAngularVelocity(2);
+            this.rotDir = 10;
+            break;
+         case EventEngine.KEYCODE_UP_ARROW:
+            this.thrusting = true;
             break;
       }
    },
    
    keyUp: function(event) {
       var c_mover = this.getComponent("move");
-      
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
          case EventEngine.KEYCODE_RIGHT_ARROW:
-            c_mover.setAngularVelocity(0);
+            this.rotDir = 0;
             break;
+         case EventEngine.KEYCODE_UP_ARROW:
+            this.thrusting = false;
+            break;
+
       }
    }
 

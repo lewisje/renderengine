@@ -99,12 +99,12 @@ var Math2D = Base.extend({
     */
    getDirectionVector: function(origin, point, angle)
    {
-      var r = MathUtil.degreesToRadians(angle);
+      var r = Math2D.degToRad(angle);
 
       var x = Math.cos(r) * point.x - Math.sin(r) * point.y;
       var y = Math.sin(r) * point.x + Math.cos(r) * point.y;
 
-      var v = new Point2D(x, y).sub(origin);
+      var v = new Vector2D(x, y).sub(origin);
       return v.normalize();
    },
 

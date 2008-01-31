@@ -117,7 +117,7 @@ Spaceroids.Rock = HostObject.extend({
 
       // Pick a random rotation and spin speed
       c_mover.setRotation( Math.floor(Math.random() * 360));
-      c_mover.setAngularVelocity( Math.floor(Math.random() * 10) > 5 ? 0.005 : -0.005);
+      c_mover.setAngularVelocity( Math.floor(Math.random() * 10) > 5 ? 0.5 : -0.5);
 
       // Set the position
       var pos = new Point2D( Math.floor(Math.random() * pWidth),

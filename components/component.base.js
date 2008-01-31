@@ -32,8 +32,6 @@
  
 var BaseComponent = BaseObject.extend({
 
-   name: null,
-
    priority: 0,
    
    type: -1,
@@ -51,7 +49,7 @@ var BaseComponent = BaseObject.extend({
     */
    constructor: function(name, type, priority) {
       Assert((name != null), "You must assign a name to every Component.");      
-      this.name = name.toUpperCase();
+      name = name.toUpperCase();
 
       Assert((type != null && (type >= BaseComponent.TYPE_INPUT && type <= BaseComponent.TYPE_RENDERING)), 
              "You must specify a type for BaseComponent");
@@ -62,7 +60,7 @@ var BaseComponent = BaseObject.extend({
              "Priority must be between 0.0 and 1.0 for BaseComponent");
       
       this.priority = priority || 0.5;
-      this.base(this.name);
+      this.base(name);
    },
 
    /**
@@ -125,6 +123,22 @@ var BaseComponent = BaseObject.extend({
     */
    getClassName: function() {
       return "BaseComponent";
+   },
+   
+   getTypeString: function() {
+      var ts = "";
+      switch (this.getType()) {
+         case BaseComponent.TYPE_INPUT: ts = "TYPE_INPUT"; break;
+         case BaseComponent.TYPE_LOGIC: ts = "TYPE_LOGIC"; break;
+         case BaseComponent.TYPE_RENDERING: ts = "TYPE_RENDERING"; break;
+         default: ts = "TYPE_UNKNOWN";
+      }
+      
+      return ts;
+   },
+   
+   toString: function() {
+      return this.base() + " (" + this.getTypeString() + ")]";
    }
 
 

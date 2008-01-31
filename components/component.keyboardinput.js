@@ -188,6 +188,15 @@ var KeyboardInputComponent = InputComponent.extend({
     */
    _keyPressListener: function(eventObj) {
       this._runList("press", eventObj);
+   },
+   
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "KeyboardInputComponent";
    }
 
 });
