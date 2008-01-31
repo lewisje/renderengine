@@ -143,6 +143,7 @@ var HostObject = Container.extend({
    getClassName: function() {
       return "HostObject";
    }
+   
 
 }, {  // Interface
 

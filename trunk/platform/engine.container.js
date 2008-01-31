@@ -175,5 +175,13 @@ var Container = BaseObject.extend({
     */
    getClassName: function() {
       return "Container";
+   },
+   
+   toString: function() {
+      var s = this.base() + " (\n";
+      for (var o in this.objects) {
+         s += this.objects[o].toString() + "\n";
+      }
+      return s + ")";
    }
 });

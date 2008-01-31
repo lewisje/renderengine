@@ -197,7 +197,7 @@ var AssertWarn = function(test, warning) {
 var Engine = Base.extend({
    constructor: null,
    
-   version: "$EngineVersion$",
+   version: "1.0.0 (alpha)",
 
    idRef: 0,
 
@@ -510,7 +510,7 @@ var Engine = Base.extend({
     * Prints the version of the engine
     */
    toString: function() {
-      return this.version;
+      return "The Render Engine " + this.version;
    }
 
  }, { // Interface

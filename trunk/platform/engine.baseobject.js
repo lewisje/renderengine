@@ -115,6 +115,13 @@ var BaseObject = Base.extend({
     */
    getClassName: function() {
       return "BaseObject";
+   },
+   
+   /**
+    * String representation
+    */
+   toString: function() {
+      return this.getClassName() + ": " + this.getName() + " [" + this.getId() + "]";
    }
 
 });

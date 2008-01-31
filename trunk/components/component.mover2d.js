@@ -38,8 +38,6 @@ var Mover2DComponent = Transform2DComponent.extend({
 
    velocity: null,
 
-   acceleration: null,
-
    angularVelocity: 0,
    
    constructor: function(name, priority) {
@@ -62,8 +60,7 @@ var Mover2DComponent = Transform2DComponent.extend({
       {
          var diff = (time - this.lastTime) * 0.1;
          var vz = new Vector2D(this.velocity).mul(diff);
-         var az = new Vector2D(this.acceleration).mul(0.5).mul(diff * diff);
-         pos.add(vz); //.add(az);
+         pos.add(vz);
          this.setPosition(pos);
 
          this.setRotation(rot + this.angularVelocity * (diff));
@@ -79,14 +76,6 @@ var Mover2DComponent = Transform2DComponent.extend({
 
    getVelocity: function() {
       return this.velocity;
-   },
-
-   setAcceleration: function(vector) {
-      this.acceleration.set(vector);
-   },
-
-   getAcceleration: function() {
-      return this.acceleration;
    },
 
    setAngularVelocity: function(angularVelocity) {
