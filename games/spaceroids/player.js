@@ -34,6 +34,8 @@
 
 Spaceroids.Player = HostObject.extend({
 
+   size: 4,
+
    constructor: function() {
       this.base("Player");
       
@@ -83,8 +85,64 @@ Spaceroids.Player = HostObject.extend({
          c_mover.setPosition(p);
       }
       
-   }
+   },
+    
+   setup: function(pWidth, pHeight) {
+      
+      // Playfield bounding box for quick checks
+      this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
+      
+      // Randomize the position and velocity
+      var c_mover = this.getComponent("move");
+      var c_draw = this.getComponent("draw");
+      var c_input = this.getComponent("input");
 
+      // Pick one of the three shapes
+      var shape = Spaceroids.Player.points;
+
+      // Scale the shape
+      var s = [];
+      for (var p = 0; p < shape.length; p++)
+      {
+         var pt = new Point2D(shape[p][0], shape[p][1]);
+         pt.mul(this.size);
+         s.push(pt);
+      }
+
+      // Assign the shape to the vector component
+      c_draw.setPoints(s);
+      //c_draw.buildRenderList();
+      c_draw.setLineStyle("white");
+
+      // Put us in the middle of the playfield
+      c_mover.setPosition( this.pBox.getCenter() );
+      
+      c_input.addRecipient("keyDown", this, this.keyDown);
+      c_input.addRecipient("keyUp", this, this.keyUp);
+   },
+   
+   keyDown: function(event) {
+      var c_mover = this.getComponent("move");
+      switch (event.keyCode) {
+         case EventEngine.KEYCODE_LEFT_ARROW:
+            c_mover.setAngularVelocity(-2);
+            break;
+         case EventEngine.KEYCODE_RIGHT_ARROW:
+            c_mover.setAngularVelocity(2);
+            break;
+      }
+   },
+   
+   keyUp: function(event) {
+      var c_mover = this.getComponent("move");
+      
+      switch (event.keyCode) {
+         case EventEngine.KEYCODE_LEFT_ARROW:
+         case EventEngine.KEYCODE_RIGHT_ARROW:
+            c_mover.setAngularVelocity(0);
+            break;
+      }
+   }
 
 }, { // Static
 

@@ -62,22 +62,8 @@ var Game = Base.extend({
     * Load a script relative to this game
     */
    load: function(scriptSource) {
-
-      Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game path");
-
-      var head = document.getElementsByTagName("head")[0];
-      var s = scriptSource.replace(/[\/\.]/g,"_");
-      if (this.loadedScripts[s] == null)
-      {
-         this.loadedScripts[s] = scriptSource;
-         var n = document.createElement("script");
-
-         n.src = (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource;
-         n.type = "text/javascript";
-
-         Console.log("Game loading: " + scriptSource);
-         head.appendChild(n);
-      }
+      Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game's path");
+      Engine.loadScript( (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource );
    },
 
    /**

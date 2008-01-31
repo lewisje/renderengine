@@ -31,7 +31,9 @@
  *
  */
  
-var Events: Base.extend({
+var EventEngine = Base.extend({
+
+   constructor: null,
 
    /**
     * Set an event handler on a target.  The handler function will
@@ -113,7 +115,7 @@ var Events: Base.extend({
    KEYCODE_KEYPAD_PLUS: 61,
 
    /** Constant for the "Minus" key **/
-   KEYCODE_KEYPAD_MINUS= 109,
+   KEYCODE_KEYPAD_MINUS: 109,
 
    /** Constant for the "Home" key **/
    KEYCODE_HOME: 36,

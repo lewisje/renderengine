@@ -33,19 +33,3 @@
  *
  */
 
-// Engine platform
-Engine.load("/platform/engine.math2d.js");
-Engine.load("/platform/engine.game.js");
-Engine.load("/platform/engine.baseobject.js");
-Engine.load("/platform/engine.timers.js");
-Engine.load("/platform/engine.container.js");
-Engine.load("/platform/engine.rendercontext.js");
-Engine.load("/platform/engine.hostobject.js");
-Engine.load("/platform/engine.resourceloader.js");
-
-// Contexts
-Engine.load("/rendercontexts/context.render2d.js");
-Engine.load("/rendercontexts/context.documentcontext.js");
-
-// Object components
-Engine.load("/components/component.base.js");

@@ -39,30 +39,24 @@
 -->
 
 <html>
-   <head>
-      <title>The Render Engine - Spaceroids</title>
+	<head>
+		<title>The Render Engine - Spaceroids</title>
 
-      <!-- Supporting Libraries -->
-      <script type="text/javascript" src="../../libs/base.js"></script>
-      <script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
+		<!-- Supporting Libraries -->
+		<script type="text/javascript" src="../../libs/base.js"></script>
+		<script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
 
-      <!-- Load the main engine script -->
-      <script type="text/javascript" src="../../platform/engine.js"></script>
-      <link rel="stylesheet" type="text/css" href="../../css/engine.css" />
+		<!-- Load the main engine script -->
+		<script type="text/javascript" src="../../platform/engine.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/engine.css" />
+	</head>
+	<body>
+		<script type="text/javascript">
+			Engine.setDebugMode(true);
+			Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
 
-      <!-- Loads the basic scripts required by the engine -->
-      <script type="text/javascript" src="../../platform/engine-loader.js"></script>
-
-      <!-- Load the game scripts -->
-      <script type="text/javascript" src="game.js"></script>
-
-   </head>
-   <body>
-      <script type="text/javascript">
-         Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
-         Engine.startup(true);
-         Engine.setFPS(24);
-         Spaceroids.setup();
-      </script>
-   </body>
+			// Load the game script
+			Engine.loadGame("../../games/spaceroids/game.js");
+		</script>
+	</body>
 </html>

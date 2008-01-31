@@ -102,7 +102,7 @@ var CanvasContext = RenderContext2D.extend({
    },
    
    setRotation: function(angle) {
-      this.get2DContext().rotate(angle);
+      this.get2DContext().rotate(Math2D.degToRad(angle));
       this.base(angle);
    },
    
@@ -313,3 +313,4 @@ var CanvasContext = RenderContext2D.extend({
       return "CanvasContext";
    }
 });
+

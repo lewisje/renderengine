@@ -32,6 +32,8 @@
 
 var Math2D = Base.extend({
 
+   constructor: null,
+
    /**
     * An approximation of PI for speedier calculations.
     */
