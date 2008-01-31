@@ -443,16 +443,19 @@ var Engine = Base.extend({
       var b = new Date().getTime();
 
       // Update the world
-      Engine.getDefaultContext().update(null, new Date().getTime());
-
-      var d = new Date().getTime() - b;
-      Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000));
-      Engine.addMetric("rTime", d + "ms");
-      Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100) + "%");
-
-      if (this.showMetricsWindow)
+      if (Engine.getDefaultContext() != null)
       {
-         this.updateMetrics();
+         Engine.getDefaultContext().update(null, new Date().getTime());
+
+         if (this.showMetricsWindow)
+         {
+            var d = new Date().getTime() - b;
+            Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000));
+            Engine.addMetric("rTime", d + "ms");
+            Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100) + "%");
+
+            this.updateMetrics();
+         }
       }
 
       // Another process interval
