@@ -104,5 +104,5 @@ var Spaceroids = Game.extend({
 
 });
 
-setTimeout("Spaceroids.setup();", 500);
+setTimeout("Spaceroids.setup();", 2000);
 
