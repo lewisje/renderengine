@@ -2,7 +2,7 @@
 /**
  * The Render Engine
  * Example Game: Spaceroids - an Asteroids clone
- * 
+ *
  * The player object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -11,17 +11,17 @@
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -35,23 +35,21 @@
 Spaceroids.Player = HostObject.extend({
 
    size: 4,
-   
+
    rotDir: 0,
-   
+
    thrusting: false,
-   
-   bullets: null,
-   
-   bulletVelocity: null,
+
+   bullets: 0,
 
    constructor: function() {
       this.base("Player");
-      
+
       // Add components to move and draw the asteroid
       this.add(new KeyboardInputComponent("input"));
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
-      
+
       // An array to store bullet objects
       this.bullets = [];
       this.bulletVelocity = new Point2D(1, 1);
@@ -68,24 +66,24 @@ Spaceroids.Player = HostObject.extend({
          var dir = Math2D.getDirectionVector(Point2D.ZERO, tip, r);
          c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.25)));
       }
-            
-      renderContext.pushTransform();   
+
+      renderContext.pushTransform();
    },
-   
+
    postUpdate: function(renderContext, time) {
       renderContext.popTransform();
-      
+
       var c_draw = this.getComponent("draw");
       var c_mover = this.getComponent("move");
-      
+
       c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), c_draw.getBoundingBox()));
    },
-    
+
    setup: function(pWidth, pHeight) {
-      
+
       // Playfield bounding box for quick checks
       this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
-      
+
       // Randomize the position and velocity
       var c_mover = this.getComponent("move");
       var c_draw = this.getComponent("draw");
@@ -110,11 +108,23 @@ Spaceroids.Player = HostObject.extend({
 
       // Put us in the middle of the playfield
       c_mover.setPosition( this.pBox.getCenter() );
-      
+
       c_input.addRecipient("keyDown", this, this.keyDown);
       c_input.addRecipient("keyUp", this, this.keyUp);
    },
-   
+
+   shoot: function() {
+      var b = new Spaceroids.Bullet(this);
+      this.getRenderContext().add(b);
+      this.bullets++;
+   },
+
+   removeBullet: function(bullet) {
+      // Clean up
+      bullet.destroy();
+      this.bullets--;
+   },
+
    keyDown: function(event) {
       var c_mover = this.getComponent("move");
       switch (event.keyCode) {
@@ -128,12 +138,13 @@ Spaceroids.Player = HostObject.extend({
             this.thrusting = true;
             break;
          case EventEngine.KEYCODE_SPACE:
-            if (this.bullets.length < 5) {
-               
+            if (this.bullets < 5) {
+               this.shoot();
             }
+            break;
       }
    },
-   
+
    keyUp: function(event) {
       var c_mover = this.getComponent("move");
       switch (event.keyCode) {
