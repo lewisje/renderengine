@@ -39,6 +39,10 @@ Spaceroids.Player = HostObject.extend({
    rotDir: 0,
    
    thrusting: false,
+   
+   bullets: null,
+   
+   bulletVelocity: null,
 
    constructor: function() {
       this.base("Player");
@@ -47,6 +51,10 @@ Spaceroids.Player = HostObject.extend({
       this.add(new KeyboardInputComponent("input"));
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
+      
+      // An array to store bullet objects
+      this.bullets = [];
+      this.bulletVelocity = new Point2D(1, 1);
    },
 
    preUpdate: function(renderContext, time) {
@@ -60,7 +68,7 @@ Spaceroids.Player = HostObject.extend({
          var dir = Math2D.getDirectionVector(Point2D.ZERO, tip, r);
          c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.25)));
       }
-      
+            
       renderContext.pushTransform();   
    },
    
@@ -70,36 +78,7 @@ Spaceroids.Player = HostObject.extend({
       var c_draw = this.getComponent("draw");
       var c_mover = this.getComponent("move");
       
-      // Get XY radius and set new collision box
-      var rX = Math.floor(c_draw.getBoundingBox().len_x() / 2);
-      var rY = Math.floor(c_draw.getBoundingBox().len_y() / 2);
-      var c = c_mover.getPosition();
-
-      // Wrap if it's off the playing field
-      var p = new Point2D(c);
-      if (c.x < this.pBox.x || c.x > this.pBox.x + this.pBox.width ||
-          c.y < this.pBox.y || c.y > this.pBox.y + this.pBox.height)
-      {
-         if (c.x > this.pBox.x + this.pBox.width + rX)
-         {
-            p.x = (this.pBox.x - (rX - 10));
-         }
-         if (c.y > this.pBox.y + this.pBox.height + rY)
-         {
-            p.y = (this.pBox.y - (rY - 10));
-         }
-         if (c.x < this.pBox.x - rX)
-         {
-            p.x = (this.pBox.x + this.pBox.width + (rX - 10));
-         }
-         if (c.y < this.pBox.y - rY)
-         {
-            p.y = (this.pBox.y + this.pBox.height + (rX - 10));
-         }
-         
-         c_mover.setPosition(p);
-      }
-      
+      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), c_draw.getBoundingBox()));
    },
     
    setup: function(pWidth, pHeight) {
@@ -148,6 +127,10 @@ Spaceroids.Player = HostObject.extend({
          case EventEngine.KEYCODE_UP_ARROW:
             this.thrusting = true;
             break;
+         case EventEngine.KEYCODE_SPACE:
+            if (this.bullets.length < 5) {
+               
+            }
       }
    },
    

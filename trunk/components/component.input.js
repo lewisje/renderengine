@@ -2,8 +2,8 @@
  * The Render Engine
  * InputComponent
  * 
- * A component which can read input device and make those inputs
- * available to other components.
+ * A component which can read an input device and make those inputs
+ * available for usage.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -31,7 +31,7 @@
  *
  */
  
-var InputComponent = BaseComponent.extend({
+var InputComponent = NotifierComponent.extend({
 
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_INPUT, priority || 1.0);
@@ -43,7 +43,7 @@ var InputComponent = BaseComponent.extend({
     * @type String
     */
    getClassName: function() {
-      return "KeyboardInputComponent";
+      return "InputComponent";
    }
 
 });
