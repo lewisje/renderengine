@@ -39,7 +39,6 @@ var KeyboardInputComponent = InputComponent.extend({
    
    pressFn: null,
    
-   notifyLists: null,   
    
    /**
     * Create an instance of a keyboard input component.
@@ -52,20 +51,22 @@ var KeyboardInputComponent = InputComponent.extend({
       
       this.downFn = function(eventObj) {
          eventObj.data[0]._keyDownListener(eventObj);
+         return false;
       };
       
       this.upFn = function(eventObj) {
          eventObj.data[0]._keyUpListener(eventObj);
+         return false;
       };
       
       this.pressFn = function(eventObj) {
          eventObj.data[0]._keyPressListener(eventObj);
+         return false;
       };
 
       EventEngine.setHandler(document, [this], "keydown", this.downFn);
       EventEngine.setHandler(document, [this], "keyup", this.upFn);
       EventEngine.setHandler(document, [this], "keypress", this.pressFn);
-      this.notifyLists = { down: [], up: [], press: [] };
    },
    
    /**
@@ -93,9 +94,9 @@ var KeyboardInputComponent = InputComponent.extend({
     */
    addRecipient: function(type, thisObj, fn) {
       type = type.toLowerCase().replace(/key/,"");
-      this.notifyLists[type].push({parent: thisObj, func: fn});
+      this.base(type, thisObj, fn);
    },
-   
+
    /**
     * Remove a recipient function for the event type specified.  The event
     * type should be one of: "keyDown", "keyUp", "keyPress".
@@ -104,90 +105,29 @@ var KeyboardInputComponent = InputComponent.extend({
     * @param fn {Function} The function to remove from the notification list.
     */
    removeRecipient: function(type, thisObj, fn) {
-      var o = {parent: thisObj, func: fn};
       type = type.toLowerCase().replace(/key/,"");
-      var idx = -1;
-      if (Array.prototype.indexof)
-      {
-         idx = this.notifyLists[type].indexOf(o);   
-      }
-      else
-      {
-         for (var i = 0; i < this.notifyLists[type].length; i++)
-         {
-            if (this.notifyLists[type][i] == o)
-            {
-               idx = i;
-               break;
-            }
-         }
-      }
-      
-      this.slice(idx, 1);
-   },
-   
-   /**
-    * Run through the list of recipients functions for the
-    * event type specified.  Optimized for speed if the list
-    * is large.
-    * @private
-    */
-   _runList: function(type, eventObj) {
-      // Using Duff's device with loop inversion
-      var p = 0;
-      var s = null;
-      switch(this.notifyLists[type].length & 0x3)
-      {
-         case 3:
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-         case 2:
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-         case 1:
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-      }
-      
-      if (p < this.notifyLists[type].length)
-      {
-         do
-         {
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-         } while (p < this.notifyLists[type].length);
-      }
+      this.base(type, thisObj, fn);
    },
    
    /**
     * @private
     */
    _keyDownListener: function(eventObj) {
-      this._runList("down", eventObj);
+      this.notifyRecipients("down", eventObj);
    },
    
    /**
     * @private
     */
    _keyUpListener: function(eventObj) {
-      this._runList("up", eventObj);
+      this.notifyRecipients("up", eventObj);
    },
    
    /**
     * @private
     */
    _keyPressListener: function(eventObj) {
-      this._runList("press", eventObj);
+      this.notifyRecipients("press", eventObj);
    },
    
    /**

@@ -41,6 +41,7 @@ Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.vector2d.js");
 Engine.load("/components/component.vector2d.js");
+Engine.load("/components/component.notifier.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
 
@@ -53,6 +54,8 @@ var Spaceroids = Game.extend({
    constructor: null,
 
    renderContext: null,
+   
+   fieldBox: null,
 
    rocks: [],
 
@@ -88,9 +91,12 @@ var Spaceroids = Game.extend({
    },
 
    setup: function() {
+      $("#loading").remove();
+
       // Set the FPS of the game
       Engine.setFPS(24);
       // Create the 2D context
+      this.fieldBox = new Rectangle2D(0, 0, 600, 580);
       this.renderContext = new CanvasContext(600, 580);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
@@ -100,6 +106,38 @@ var Spaceroids = Game.extend({
 
    teardown: function() {
       renderContext.destroy();
+   },
+   
+   wrap: function(pos, bBox) {
+
+      // Get XY radius and set new collision box
+      var rX = Math.floor(bBox.len_x() / 2);
+      var rY = Math.floor(bBox.len_y() / 2);
+
+      // Wrap if it's off the playing field
+      var p = new Point2D(pos);
+      if (pos.x < this.fieldBox.x || pos.x > this.fieldBox.x + this.fieldBox.width ||
+          pos.y < this.fieldBox.y || pos.y > this.fieldBox.y + this.fieldBox.height)
+      {
+         if (pos.x > this.fieldBox.x + this.fieldBox.width + rX)
+         {
+            p.x = (this.fieldBox.x - (rX - 10));
+         }
+         if (pos.y > this.fieldBox.y + this.fieldBox.height + rY)
+         {
+            p.y = (this.fieldBox.y - (rY - 10));
+         }
+         if (pos.x < this.fieldBox.x - rX)
+         {
+            p.x = (this.fieldBox.x + this.fieldBox.width + (rX - 10));
+         }
+         if (pos.y < this.fieldBox.y - rY)
+         {
+            p.y = (this.fieldBox.y + this.fieldBox.height + (rX - 10));
+         }
+      }
+      
+      return p;
    }
 
 });

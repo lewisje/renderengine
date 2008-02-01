@@ -130,6 +130,7 @@ var BaseComponent = BaseObject.extend({
       switch (this.getType()) {
          case BaseComponent.TYPE_INPUT: ts = "TYPE_INPUT"; break;
          case BaseComponent.TYPE_LOGIC: ts = "TYPE_LOGIC"; break;
+         case BaseComponent.TYPE_COLLIDER: ts = "TYPE_COLLIDER"; break;
          case BaseComponent.TYPE_RENDERING: ts = "TYPE_RENDERING"; break;
          default: ts = "TYPE_UNKNOWN";
       }
@@ -146,5 +147,6 @@ var BaseComponent = BaseObject.extend({
    // Component types (main host sorting order)
    TYPE_INPUT:          1,
    TYPE_LOGIC:          2,
-   TYPE_RENDERING:      3
+   TYPE_COLLIDER:       3,
+   TYPE_RENDERING:      4
 });
