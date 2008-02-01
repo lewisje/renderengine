@@ -203,6 +203,15 @@ var Point2D = Base.extend({
    },
 
    /**
+    * Returns true if this point is equal to the specified point.
+    *
+    * @param point {Point2D} The point to compare to
+    */
+   equals: function(point) {
+      return (this.x == point.x && this.y == point.y);
+   },
+
+   /**
     * Set the position of a 2D point.
     *
     * @param x {Point2D/Number} If this arg is a Point2D, its values will be
@@ -387,6 +396,16 @@ var Rectangle2D = Base.extend({
       this.y = (y != "" ? y : 0.0);
       this.width = (width != "" ? width : 0.0);
       this.height = (height != "" ? height : 0.0);
+   },
+
+   /**
+    * Returns true if this rectangle is equal to the specified rectangle.
+    *
+    * @param rect {Rectangle2D} The rectangle to compare to
+    */
+   equals: function(rect) {
+      return (this.x == rect.x && this.y == rect.y &&
+              this.width == rect.width && this.height == rect.height);
    },
 
    /**

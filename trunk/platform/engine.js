@@ -196,7 +196,7 @@ var AssertWarn = function(test, warning) {
  */
 var Engine = Base.extend({
    constructor: null,
-   
+
    version: "1.0.0 (alpha)",
 
    idRef: 0,
@@ -389,14 +389,15 @@ var Engine = Base.extend({
          this.loadScript(this.engineLocation + scriptSource);
       }
    },
-   
+
    /**
     * Load scripts required by the engine to run.
     * @private
     */
    loadEngineScripts: function() {
-      
+
       // Engine platform
+      this.load("/platform/engine.support.js");
       this.load("/platform/engine.math2d.js");
       this.load("/platform/engine.game.js");
       this.load("/platform/engine.baseobject.js");
@@ -508,7 +509,7 @@ var Engine = Base.extend({
       }
       this.metricDisplay.html(h);
    },
-   
+
    /**
     * Prints the version of the engine
     */
@@ -520,7 +521,7 @@ var Engine = Base.extend({
    globalTimer: null
 
  });
- 
+
 // Start the engine
 Engine.startup();
 

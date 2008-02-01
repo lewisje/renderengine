@@ -1,7 +1,7 @@
 /**
  * The Render Engine
  * Container
- * 
+ *
  * A container is a logical collection of objects.  A container
  * is responsible for maintaining the list of objects within it.
  * When a container is destroyed, all objects within the container
@@ -12,17 +12,17 @@
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -32,11 +32,11 @@
  * THE SOFTWARE.
  *
  */
- 
+
 var Container = BaseObject.extend({
 
    objects: null,
-   
+
    /**
     * Create an instance of a container object.
     *
@@ -46,7 +46,7 @@ var Container = BaseObject.extend({
       this.base(containerName || "Container");
       this.objects = [];
    },
-   
+
    /**
     * Destroy all objects contained within this object.
     */
@@ -58,7 +58,7 @@ var Container = BaseObject.extend({
       }
       this.base();
    },
-   
+
    /**
     * Returns the count of the number of objects within the
     * container.
@@ -68,7 +68,7 @@ var Container = BaseObject.extend({
    size: function() {
       return this.objects.length;
    },
-   
+
    /**
     * Add an object to the container.
     *
@@ -78,7 +78,7 @@ var Container = BaseObject.extend({
       this.objects.push(obj);
       Console.log("Added " + obj.getId() + " to " + this.getId());
    },
-   
+
    /**
     * Remove an object from the container.  The object is
     * not destroyed when it is removed from the container.
@@ -86,26 +86,10 @@ var Container = BaseObject.extend({
     * @param obj {BaseObject} The object to remove from the container.
     */
    remove: function(obj) {
-      var idx = -1;
-      if (Array.prototype.indexOf)
-      {
-         idx = this.objects.indexOf(obj);   
-      }
-      else
-      {
-         for (var i = 0; i < this.objects.length; i++)
-         {
-            if (this.objects[i] == obj)
-            {
-               idx = i;
-               break;
-            }
-         }
-      }
-
-      this.removeAtIndex(idx);      
+      Console.log("Removed " + obj.getId() + " from " + this.getId());
+      EngineSupport.arrayRemove(this.objects, obj);
    },
-   
+
    /**
     * Remove an object from the container at the specified index.
     * The object is not destroyed when it is removed.
@@ -116,15 +100,15 @@ var Container = BaseObject.extend({
     */
    removeAtIndex: function(idx) {
       Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
-      
+
       var obj = this.objects[idx];
-      
+
       Console.log("Removed " + obj.getId() + " from " + this.getId());
       this.objects.splice(idx, 1);
-      
+
       return obj;
    },
-   
+
    /**
     * Get the object at the index specified. If the container has been
     * sorted, objects might not be in the position you'd expect.
@@ -135,24 +119,24 @@ var Container = BaseObject.extend({
    get: function(idx) {
       return this.objects[idx];
    },
-   
+
    /**
     * Remove all objects from the container.  None of the objects are
     * destroyed.
     */
    clear: function() {
-      this.objects.length = 0;   
+      this.objects.length = 0;
    },
-   
+
    /**
     * Get the array of objects within this container.
-    * 
+    *
     * @type Array
     */
    getObjects: function() {
       return this.objects;
    },
-   
+
    /**
     * Sort the objects within the container, using the provided function.
     * The function will be provided object A and B.  If the result of the
@@ -167,7 +151,7 @@ var Container = BaseObject.extend({
       Console.log("Sorting " + this.getClassName() + " [" + this.getId() + "]");
       this.objects.sort(fn);
    },
-   
+
    /**
     * Get the class name of this object
     *
@@ -176,7 +160,7 @@ var Container = BaseObject.extend({
    getClassName: function() {
       return "Container";
    },
-   
+
    toString: function() {
       var s = this.base() + " (\n";
       for (var o in this.objects) {

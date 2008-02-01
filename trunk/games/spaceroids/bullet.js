@@ -1,19 +1,8 @@
-      if (this.bullets.length > 0)
-      {
-         for (var b in this.bullets) {
-            this.bullets[b].convolve(this.bulletVelocity);
-            renderContext.setLineStyle("white");
-            renderContext.setLineWidth(2);
-            renderContext.drawPoint(this.bullets[b]);
-         }
-      }
-
-
 
 /**
  * The Render Engine
  * Example Game: Spaceroids - an Asteroids clone
- * 
+ *
  * The player object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -22,17 +11,17 @@
  * @version: $Revision: 42 $
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -45,59 +34,56 @@
 
 Spaceroids.Bullet = HostObject.extend({
 
+   player: null,
+
    constructor: function(player) {
       this.base("Bullet");
-      
+
+      // Track the player that created us
+      this.player = player;
+
       // Add components to move and draw the asteroid
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
+
+      // Get the player's position and rotation,
+      // then position this at the tip of the ship
+      // moving away from it
+      var p_mover = this.player.getComponent("move");
+      var c_mover = this.getComponent("move");
+      var c_draw = this.getComponent("draw");
+
+      c_draw.setPoints(Spaceroids.Bullet.shape);
+      c_draw.setLineStyle("white");
+
+      var r = p_mover.getRotation();
+      var tip = new Point2D(0, -1);
+      var dir = Math2D.getDirectionVector(Point2D.ZERO, tip, r);
+
+      var p = new Point2D(p_mover.getPosition());
+
+      c_mover.setPosition(p.add(new Point2D(dir).mul(10)));
+      c_mover.setVelocity(dir.mul(3));
    },
 
    preUpdate: function(renderContext, time) {
-      renderContext.pushTransform();   
+      renderContext.pushTransform();
    },
-   
+
    postUpdate: function(renderContext, time) {
       renderContext.popTransform();
-      
-      var c_draw = this.getComponent("draw");
       var c_mover = this.getComponent("move");
-      
-      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), c_draw.getBoundingBox());
-   },
-    
-   setup: function(pWidth, pHeight) {
-      
-      // Playfield bounding box for quick checks
-      this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
-      
-      // Randomize the position and velocity
-      var c_mover = this.getComponent("move");
-      var c_draw = this.getComponent("draw");
-      var c_input = this.getComponent("input");
 
-      // Pick one of the three shapes
-      var shape = Spaceroids.Player.points;
-
-      // Scale the shape
-      var s = [];
-      for (var p = 0; p < shape.length; p++)
+      // Is this bullet in field any more?
+      var p = c_mover.getPosition();
+      var bBox = new Rectangle2D(p.x, p.y, 2, 2);
+      if (!Spaceroids.inField(p, bBox))
       {
-         var pt = new Point2D(shape[p][0], shape[p][1]);
-         pt.mul(this.size);
-         s.push(pt);
+         this.player.removeBullet(this);
       }
-
-      // Assign the shape to the vector component
-      c_draw.setPoints(s);
-      //c_draw.buildRenderList();
-      c_draw.setLineStyle("white");
-
-      // Put us in the middle of the playfield
-      c_mover.setPosition( this.pBox.getCenter() );
-      
-      c_input.addRecipient("keyDown", this, this.keyDown);
-      c_input.addRecipient("keyUp", this, this.keyUp);
    }
 
+}, {
+   shape: [ new Point2D(-1, -1), new Point2D( 1, -1),
+            new Point2D( 1,  1), new Point2D(-1,  1)]
 });

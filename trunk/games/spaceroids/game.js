@@ -48,13 +48,14 @@ Engine.load("/components/component.keyboardinput.js");
 // Load game objects
 Game.load("/rock.js");
 Game.load("/player.js");
+Game.load("/bullet.js");
 
 var Spaceroids = Game.extend({
 
    constructor: null,
 
    renderContext: null,
-   
+
    fieldBox: null,
 
    rocks: [],
@@ -77,7 +78,7 @@ var Spaceroids = Game.extend({
       var pHeight = this.renderContext.getHeight();
 
       // Add some asteroids
-      for (var a = 0; a < 10; a++)
+      for (var a = 0; a < 5; a++)
       {
          var rock = new Spaceroids.Rock();
          this.renderContext.add(rock);
@@ -96,8 +97,8 @@ var Spaceroids = Game.extend({
       // Set the FPS of the game
       Engine.setFPS(24);
       // Create the 2D context
-      this.fieldBox = new Rectangle2D(0, 0, 600, 580);
-      this.renderContext = new CanvasContext(600, 580);
+      this.fieldBox = new Rectangle2D(0, 0, 500, 580);
+      this.renderContext = new CanvasContext(500, 580);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
 
@@ -107,7 +108,12 @@ var Spaceroids = Game.extend({
    teardown: function() {
       renderContext.destroy();
    },
-   
+
+   inField: function(pos, bBox) {
+      var newPos = this.wrap(pos, bBox);
+      return newPos.equals(pos);
+   },
+
    wrap: function(pos, bBox) {
 
       // Get XY radius and set new collision box
@@ -136,7 +142,7 @@ var Spaceroids = Game.extend({
             p.y = (this.fieldBox.y + this.fieldBox.height + (rX - 10));
          }
       }
-      
+
       return p;
    }
 
