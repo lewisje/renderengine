@@ -161,6 +161,9 @@ var Container = BaseObject.extend({
       return "Container";
    },
 
+   /**
+    * String representation
+    */
    toString: function() {
       var s = this.base() + " (\n";
       for (var o in this.objects) {

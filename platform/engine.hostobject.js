@@ -38,8 +38,11 @@ var HostObject = Container.extend({
 
    renderContext: null,
 
+   bBox: null,
+
    /**
-    * Remove this object from it's render context
+    * Destroy all of the components within this object and
+    * remove this object from it's render context.
     */
    destroy: function() {
       this.getRenderContext().remove(this);
@@ -47,9 +50,30 @@ var HostObject = Container.extend({
    },
 
    /**
+    * Set the bounding box of this object
+    *
+    * @param rect {Rectangle2D} The rectangle that completely encompasses
+    *                           this object.
+    */
+   setBoundingBox: function(rect) {
+      this.bBox = rect;
+   },
+
+   /**
+    * Get the bounding box of this object
+    *
+    * @type Rectangle2D
+    */
+   getBoundingBox: function() {
+      return this.bBox;
+   },
+
+   /**
     * Set the depth at which this object will render to
     * the context.  The lower the z-index, the further
     * away from the front the object will draw.
+    *
+    * @param zIndex {Number} The z-index of this object
     */
    setZIndex: function(zIndex) {
       this.zIndex = zIndex;
@@ -58,19 +82,39 @@ var HostObject = Container.extend({
    /**
     * Get the depth at which this object will render to
     * the context.
+    *
+    * @type Number
     */
    getZIndex: function() {
       return this.zIndex;
    },
 
+   /**
+    * Set the rendering context this object will be drawn upon.
+    *
+    * @param renderContext {RenderContext} The context
+    */
    setRenderContext: function(renderContext) {
       this.renderContext = renderContext;
    },
 
+   /**
+    * Get the rendering context this object will be drawn upon.
+    *
+    * @type RenderContext
+    */
    getRenderContext: function() {
       return this.renderContext;
    },
 
+   /**
+    * Allows the object a chance to perform setup before all of
+    * its components are executed.  Usually used to push the
+    * render context's transform.
+    *
+    * @param renderContext {RenderContext} The context the object will be rendered within.
+    * @param time {Number} The global time within the engine.
+    */
    preUpdate: function(renderContext, time) {
    },
 
@@ -92,11 +136,28 @@ var HostObject = Container.extend({
       this.postUpdate(renderContext, time);
    },
 
+   /**
+    * Allows the object a chance to perform actions after all of
+    * its components have been executed.  Usually used to pop the
+    * transformations this object performed.
+    *
+    * @param renderContext {RenderContext} The context the object will be rendered within.
+    * @param time {Number} The global time within the engine.
+    */
    postUpdate: function(renderContext, time) {
    },
 
    /**
-    * Add a component to the host object.
+    * Add a component to the host object.  The components will be
+    * sorted based on their type, and priority within that type.
+    * Components with a higher priority will be sorted before components
+    * with a lower priority.  The sorting order for type is:
+    * <ul>
+    * <li>Input</li>
+    * <li>Logic</li>
+    * <li>Collision</li>
+    * <li>Rendering</li>
+    * </ul>
     *
     * @param component {BaseComponent} A component to add to the host
     */
@@ -119,7 +180,7 @@ var HostObject = Container.extend({
    },
 
    /**
-    * Get the component with the specified name.
+    * Get the component with the specified name from this object.
     *
     * @param name {String} The unique name of the component to get
     * @type BaseComponent
@@ -147,6 +208,11 @@ var HostObject = Container.extend({
 
 }, {  // Interface
 
+   /**
+    * Sort components within this object based upon their component
+    * type, and the priority within that type.  Components with a higher
+    * priority will be sorted before components with a lower priority.
+    */
    componentSort: function(component1, component2) {
       return ((component1.getType() - component2.getType()) +
               ((1 / component1.getPriority()) - (1 / component2.getPriority())));

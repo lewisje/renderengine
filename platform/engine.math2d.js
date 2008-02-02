@@ -344,10 +344,28 @@ var Vector2D = Point2D.extend({
     * Get the dot product of two vectors.
     * @param vector {Vector} The Point to perform the operation against.
     */
-   dot: function(vector)
-   {
+   dot: function(vector) {
       return (this.x * vector.x) + (this.y * vector.y);
    },
+
+   /**
+    * Get the cross product of two vectors.
+    * @param vector {Vector2D} The vector to perform the operation against.
+   cross: function(vector) {
+      var swap = [];
+      for(var i = 0; i < 3; i++)
+      {
+         swap[i] = this[(i+1)%3] * v[(i+2)%3] - this[(i+2)%3] * v[(i+1)%3];
+      }
+
+      for(var i = 0; i < 3; i++)
+      {
+         this[i] = swap[i];
+      }
+
+      return this;
+   },
+    */
 
    /**
     * Returns the angle (in degrees) between two vectors.  This assumes that the
@@ -356,8 +374,7 @@ var Vector2D = Point2D.extend({
     *
     * @param vector {Vector} The vector to perform the angular determination against
     */
-   angleBetween: function(vector)
-   {
+   angleBetween: function(vector) {
       var p1 = new Vector(this);
       var p2 = new Vector(vector);
       p1.normalize();
