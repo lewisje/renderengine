@@ -122,6 +122,9 @@ var Console = Base.extend({
 
    verbosity: this.DEBUGLEVEL_NONE,
 
+   /**
+    * Start up the console.
+    */
    startup: function() {
       if (window.console) {
          this.consoleRef = window.console;
@@ -132,25 +135,61 @@ var Console = Base.extend({
       }
    },
 
+   /**
+    * Set the debug output level of the console.  The available levels are:
+    * <ul>
+    * <li>Console.DEBUGLEVEL_ERRORS = 0</li>
+    * <li>Console.DEBUGLEVEL_WARNINGS = 1</li>
+    * <li>Console.DEBUGLEVEL_DEBUG = 2</li>
+    * <li>Console.DEBUGLEVEL_VERBOSE = 3</li>
+    * <li>Console.DEBUGLEVEL_NONE = -1</li>
+    * </ul>
+    * Messages of the same (or lower) level as the specified level will be logged.
+    * For instance, if you set the level to DEBUGLEVEL_DEBUG, errors and warnings
+    * will also be logged.  The engine must also be in debug mode for warnings,
+    * debug, and log messages to be output.
+    *
+    * @param level {Number} One of the debug levels.  Defaults to DEBUGLEVEL_NONE.
+    */
    setDebugLevel: function(level) {
       this.verbosity = level;
    },
 
+   /**
+    * Outputs a log message.  These messages will only show when DEBUGLEVEL_VERBOSE is the level.
+    *
+    * @param msg {String} The message to output
+    */
    log: function(msg) {
       if (Engine.debugMode && this.verbosity == this.DEBUGLEVEL_VERBOSE)
          this.consoleRef.debug("    " + msg);
    },
 
+   /**
+    * Outputs a debug message.  These messages will only show when DEBUGLEVEL_DEBUG is the level.
+    *
+    * @param msg {String} The message to output
+    */
    debug: function(msg) {
       if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_DEBUG)
          this.consoleRef.debug(msg);
    },
 
+   /**
+    * Outputs a warning message.  These messages will only show when DEBUGLEVEL_WARNINGS is the level.
+    *
+    * @param msg {String} The message to output
+    */
    warn: function(msg) {
       if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_WARNINGS)
          this.consoleRef.warn(msg);
    },
 
+   /**
+    * Output an error message.  These messages will only show when DEBUGLEVEL_ERRORS is the level.
+    *
+    * @param msg {String} The message to output
+    */
    error: function(msg) {
       if (this.verbosity >= this.DEBUGLEVEL_ERRORS)
          this.consoleRef.error(msg);
@@ -162,7 +201,7 @@ Console.startup();
 
 
 /**
- * Halts if the test fails, throwing the error as a result.
+ * Halts the engine if the test fails, throwing the error as a result.
  *
  * @param test {Boolean} A simple test that should evaluate to <tt>true</tt>
  * @param error {String} The error to throw if the test fails
@@ -265,13 +304,28 @@ var Engine = Base.extend({
       return this.gameObjects[id];
    },
 
+   /**
+    * Set the debug mode of the engine.  Affects message ouput and
+    * can be queried for additional debugging operations.
+    *
+    * @param mode {Boolean} <tt>true</tt> to debug the engine
+    */
    setDebugMode: function(mode) {
       this.debugMode = mode;
    },
 
    /**
-    * Start the engine.  Creates a default context (the HTML document) and
-    * initializes a timer to update the world managed by the engine.
+    * Query the debugging mode of the engine.
+    *
+    * @type Boolean
+    */
+   getDebugMode: function() {
+      return this.debugMode;
+   },
+
+   /**
+    * Starts the engine and initializes the timer to update the
+    * world managed by the engine.
     *
     * @param debugMode {Boolean} <tt>true</tt> to set the engine into debug mode
     *                            which allows the output of messages to the console.
@@ -295,7 +349,7 @@ var Engine = Base.extend({
 
    /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
-    * objects created and added to the world.
+    * objects that have been created and added to the world.
     */
    shutdown: function() {
       if (!this.running)
@@ -339,21 +393,37 @@ var Engine = Base.extend({
 
    /**
     * Load a script from the server and append it to
-    * the head element of the browser.
+    * the head element of the browser.  Script names are
+    * cached so they will not be loaded again.
+    *
+    * @param scriptPath {String} The URL of a script to load.
     */
    loadScript: function(scriptPath) {
       Console.log("Loading script: " + scriptPath);
 
-      var head = document.getElementsByTagName("head")[0];
-      var n = document.createElement("script");
+      var s = scriptPath.replace(/[\/\.]/g,"_");
+      if (this.loadedScripts[s] == null)
+      {
+         jQuery.getScript(scriptPath);
 
-      n.src = scriptPath;
-      n.type = "text/javascript";
-      head.appendChild(n);
+         /*
+         var head = document.getElementsByTagName("head")[0];
+         var n = document.createElement("script");
+         n.src = scriptPath;
+         n.type = "text/javascript";
+         head.appendChild(n);
+         */
+
+         // Store the request in the cache
+         this.loadedScripts[s] = scriptPath;
+      }
    },
 
    /**
-    * Load a game script
+    * Load a game script.  Creates the default rendering context
+    * also.
+    *
+    * @param gameSource {String} The URL of the game script.
     */
    loadGame: function(gameSource) {
       // Create the default context (the document)
@@ -362,7 +432,9 @@ var Engine = Base.extend({
    },
 
    /**
-    * Load an engine script.
+    * Load a script relative to the engine path.
+    *
+    * @param scriptSource {String} A URL to load that is relative to the engine path.
     */
    load: function(scriptSource) {
       if (this.engineLocation == null)
@@ -382,16 +454,11 @@ var Engine = Base.extend({
          }
       }
 
-      var s = scriptSource.replace(/[\/\.]/g,"_");
-      if (this.loadedScripts[s] == null)
-      {
-         this.loadedScripts[s] = scriptSource;
-         this.loadScript(this.engineLocation + scriptSource);
-      }
+      this.loadScript(this.engineLocation + scriptSource);
    },
 
    /**
-    * Load scripts required by the engine to run.
+    * Load the scripts required for the engine to run.
     * @private
     */
    loadEngineScripts: function() {
@@ -417,13 +484,23 @@ var Engine = Base.extend({
    },
 
    /**
-    * Dump the list of scripts loaded by the Engine.
+    * Output the list of scripts loaded by the Engine to the console.
     */
    dumpScripts: function() {
       for (var f in this.loadedScripts)
       {
          Console.debug(this.loadedScripts[f]);
       }
+   },
+
+   /**
+    * Clears the script name cache.  Allows scripts to be loaded
+    * again.  Use this method with caution, as it is not recommended
+    * to load a script if the object is in use.  May cause unexpected
+    * results.
+    */
+   clearScriptCache: function() {
+      this.loadedScripts = {};
    },
 
    /**
@@ -439,6 +516,7 @@ var Engine = Base.extend({
 
    /**
     * The global engine timer which updates the world.
+    * @private
     */
    engineTimer: function() {
       var b = new Date().getTime();
@@ -484,6 +562,10 @@ var Engine = Base.extend({
       delete this.metrics[metricName];
    },
 
+   /**
+    * Toggle the display of the metrics window.  Any metrics
+    * that are being tracked will be reported in this window.
+    */
    toggleMetrics: function() {
       this.showMetricsWindow = !this.showMetricsWindow;
 
@@ -501,6 +583,10 @@ var Engine = Base.extend({
       }
    },
 
+   /**
+    * Updates the display of the metrics window.
+    * @private
+    */
    updateMetrics: function() {
       var h = "";
       for (var m in this.metrics)
@@ -511,7 +597,7 @@ var Engine = Base.extend({
    },
 
    /**
-    * Prints the version of the engine
+    * Prints the version of the engine.
     */
    toString: function() {
       return "The Render Engine " + this.version;

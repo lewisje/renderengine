@@ -1,12 +1,11 @@
 /**
  * The Render Engine
- * Game
+ * EngineSupport
  *
- * The game object represents an instance of a game.  It is
- * the controlling entity for all of a game and is responsible
- * for setup and teardown of the game.
+ * Miscellaneous methods that don't fit elsewhere.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
+ *
  * @author: $Author$
  * @version: $Revision$
  *
@@ -28,49 +27,31 @@
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE
+ * THE SOFTWARE.
+ *
  */
 
-var Game = Base.extend({
-
+var EngineSupport = Base.extend({
    constructor: null,
 
-   /**
-    * Initialize the game.
-    */
-   setup: function() {
-   },
-
-   /**
-    * Shut down the game.
-    */
-   tearDown: function() {
-   },
-
-   /**
-    * Get the display name of the game.
-    */
-   getName: function() {
-      return "Game";
-   },
-
-   /**
-    * Load a script relative to this game.  Scripts cannot be specified
-    * with an absolute URL.
-    *
-    * @param scriptSource {String} The relative path to the script to load.
-    */
-   load: function(scriptSource) {
-      Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game's path");
-      Engine.loadScript( (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource );
-   },
-
-   /**
-    * Get the number of players this game supports.
-    *
-    * @type Number
-    */
-   getPlayers: function() {
-      return 1;
+   arrayRemove: function(array, obj) {
+      var idx = -1;
+      if (Array.prototype.indexOf) {
+         idx = array.indexOf(obj);
+      }
+      else
+      {
+         for (var o in array) {
+            if (array[o] == obj) {
+               idx = o;
+               break;
+            }
+         }
+      }
+      if (idx != -1)
+      {
+         array.splice(idx, 1);
+      }
    }
+
 });
