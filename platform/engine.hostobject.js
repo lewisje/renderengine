@@ -68,6 +68,7 @@ var HostObject = Container.extend({
       return this.bBox;
    },
 
+
    /**
     * Set the depth at which this object will render to
     * the context.  The lower the z-index, the further

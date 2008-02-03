@@ -248,9 +248,14 @@ var CanvasContext = RenderContext2D.extend({
       this.base(point);
    },
 
-   drawImage: function(point, resource) {
-      this.get2DContext().drawImage(resource, point.x, point.y);
-      this.base(point, resource);
+   drawImage: function(point, imageData) {
+      this.get2DContext().putImageData(imageData, point.x, point.y);
+      this.base(point, imageData);
+   },
+
+   getImage: function(rect) {
+      this.base()
+      return this.get2DContext().getImageData(rect.x, rect.y, rect.width, rect.height);
    },
 
    drawText: function(point, text) {

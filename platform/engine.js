@@ -404,15 +404,21 @@ var Engine = Base.extend({
       var s = scriptPath.replace(/[\/\.]/g,"_");
       if (this.loadedScripts[s] == null)
       {
-         jQuery.getScript(scriptPath);
-
-         /*
-         var head = document.getElementsByTagName("head")[0];
-         var n = document.createElement("script");
-         n.src = scriptPath;
-         n.type = "text/javascript";
-         head.appendChild(n);
-         */
+         // A hack to allow us to do filesystem testing
+         if (!window.localDebugMode)
+         {
+            jQuery.getScript(scriptPath);
+         }
+         else
+         {
+            // If we're running locally, don't use jQuery.  This
+            // allows us to see the loaded scripts.
+            var head = document.getElementsByTagName("head")[0];
+            var n = document.createElement("script");
+            n.src = scriptPath;
+            n.type = "text/javascript";
+            head.appendChild(n);
+         }
 
          // Store the request in the cache
          this.loadedScripts[s] = scriptPath;
