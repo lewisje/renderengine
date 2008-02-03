@@ -39,25 +39,29 @@
 -->
 
 <html>
-	<head>
-		<title>The Render Engine - Spaceroids</title>
+   <head>
+      <title>The Render Engine - Spaceroids</title>
 
-		<!-- Supporting Libraries -->
-		<script type="text/javascript" src="../../libs/base.js"></script>
-		<script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
+		<!-- Set this here so we get alternate JS loading -->
+		<script type="text/javascript">window.localDebugMode = true</script>
 
-		<!-- Load the main engine script -->
-		<script type="text/javascript" src="../../platform/engine.js"></script>
-		<link rel="stylesheet" type="text/css" href="../../css/engine.css" />
-	</head>
-	<body>
-		<span id="loading">Loading Spaceroids...</span>
-		<script type="text/javascript">
-			Engine.setDebugMode(true);
-			Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+      <!-- Supporting Libraries -->
+      <script type="text/javascript" src="../../libs/base.js"></script>
+      <script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
+		<script type="text/javascript" src="../../libs/sylvester.js"></script>
 
-			// Load the game script
-			Engine.loadGame("../../games/spaceroids/game.js");
-		</script>
-	</body>
+      <!-- Load the main engine script -->
+      <script type="text/javascript" src="../../platform/engine.js"></script>
+      <link rel="stylesheet" type="text/css" href="../../css/engine.css" />
+   </head>
+   <body>
+      <span id="loading">Loading Spaceroids...</span>
+      <script type="text/javascript">
+         Engine.setDebugMode(true);
+         Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+
+         // Load the game script
+         Engine.loadGame("../../games/spaceroids/game.js");
+      </script>
+   </body>
 </html>

@@ -40,7 +40,6 @@ Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.vector2d.js");
-Engine.load("/components/component.vector2d.js");
 Engine.load("/components/component.notifier.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
@@ -48,13 +47,14 @@ Engine.load("/components/component.keyboardinput.js");
 // Load game objects
 Game.load("/rock.js");
 Game.load("/player.js");
+Game.load("/bullet.js");
 
 var Spaceroids = Game.extend({
 
    constructor: null,
 
    renderContext: null,
-   
+
    fieldBox: null,
 
    rocks: [],
@@ -77,7 +77,7 @@ var Spaceroids = Game.extend({
       var pHeight = this.renderContext.getHeight();
 
       // Add some asteroids
-      for (var a = 0; a < 10; a++)
+      for (var a = 0; a < 5; a++)
       {
          var rock = new Spaceroids.Rock();
          this.renderContext.add(rock);
@@ -96,8 +96,8 @@ var Spaceroids = Game.extend({
       // Set the FPS of the game
       Engine.setFPS(24);
       // Create the 2D context
-      this.fieldBox = new Rectangle2D(0, 0, 600, 580);
-      this.renderContext = new CanvasContext(600, 580);
+      this.fieldBox = new Rectangle2D(0, 0, 500, 580);
+      this.renderContext = new CanvasContext(500, 580);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
 
@@ -107,7 +107,12 @@ var Spaceroids = Game.extend({
    teardown: function() {
       renderContext.destroy();
    },
-   
+
+   inField: function(pos, bBox) {
+      var newPos = this.wrap(pos, bBox);
+      return newPos.equals(pos);
+   },
+
    wrap: function(pos, bBox) {
 
       // Get XY radius and set new collision box
@@ -116,27 +121,29 @@ var Spaceroids = Game.extend({
 
       // Wrap if it's off the playing field
       var p = new Point2D(pos);
+      var x = p.x;
+      var y = p.y;
       if (pos.x < this.fieldBox.x || pos.x > this.fieldBox.x + this.fieldBox.width ||
           pos.y < this.fieldBox.y || pos.y > this.fieldBox.y + this.fieldBox.height)
       {
          if (pos.x > this.fieldBox.x + this.fieldBox.width + rX)
          {
-            p.x = (this.fieldBox.x - (rX - 10));
+            x = (this.fieldBox.x - (rX - 10));
          }
          if (pos.y > this.fieldBox.y + this.fieldBox.height + rY)
          {
-            p.y = (this.fieldBox.y - (rY - 10));
+            y = (this.fieldBox.y - (rY - 10));
          }
          if (pos.x < this.fieldBox.x - rX)
          {
-            p.x = (this.fieldBox.x + this.fieldBox.width + (rX - 10));
+            x = (this.fieldBox.x + this.fieldBox.width + (rX - 10));
          }
          if (pos.y < this.fieldBox.y - rY)
          {
-            p.y = (this.fieldBox.y + this.fieldBox.height + (rX - 10));
+            y = (this.fieldBox.y + this.fieldBox.height + (rX - 10));
          }
+         p.set(x,y);
       }
-      
       return p;
    }
 
