@@ -2,7 +2,9 @@
  * The Render Engine
  * Math2D
  *
- * A simple 2D math library.
+ * A simple 2D math library.  The objects exposed in this library wrap
+ * the functionality provided by the Sylvester library.  I did this because
+ * a lot of the code is currently in use within the engine.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -177,6 +179,8 @@ var Math2D = Base.extend({
  */
 var Point2D = Base.extend({
 
+   _vec: null,
+
    x: 0,
    y: 0,
 
@@ -189,17 +193,11 @@ var Point2D = Base.extend({
     *                   was a number.
     */
    constructor: function(x, y) {
-      if (x instanceof Point2D)
-      {
-         this.x = x.x;
-         this.y = x.y;
-      }
-      else
-      {
-         AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
-         this.x = x;
-         this.y = y || 0;
-      }
+      this.set(x, y);
+   },
+
+   upd: function() {
+      this.x = this._vec.e(1); this.y = this._vec.e(2);
    },
 
    /**
@@ -222,68 +220,59 @@ var Point2D = Base.extend({
    set: function(x, y) {
       if (x instanceof Point2D)
       {
-         this.x = x.x;
-         this.y = x.y;
+         this._vec = x._vec.dup();
       }
       else
       {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
-         this.x = x;
-         this.y = y || 0;
+         this._vec = $V([x, y || 0]);
       }
-
+      this.upd();
       return this;
    },
 
    add: function(point) {
-      this.x += point.x;
-      this.y += point.y;
-
+      this._vec = this._vec.add(point._vec);
+      this.upd();
       return this;
    },
 
    addScalar: function(scalar) {
-      this.x += scalar;
-      this.y += scalar;
-
+      this._vec = this._vec.map(function(x) { return x + scalar; });
+      this.upd();
       return this;
    },
 
    sub: function(point) {
-      this.x -= point.x;
-      this.y -= point.y;
-
+      this._vec.subtract(point._vec);
+      this.upd();
       return this;
    },
 
    convolve: function(point) {
-      this.x *= point.x;
-      this.y *= point.y;
-
+      this._vec = this._vec.map(function(x, i) { return x * (i == 1 ? point.x : point.y); });
+      this.upd();
       return this;
    },
 
    convolveInverse: function(point) {
       Assert((point.x != 0 && point.y != 0), "Division by zero in Point.convolveInverse");
-
-      this.x /= point.x;
-      this.y /= point.y;
-
+      this._vec = this._vec.map(function(x, i) { return x / (i == 1 ? point.x : point.y); });
+      this.upd();
       return this;
    },
 
    mul: function(scalar) {
-      this.x *= scalar;
-      this.y *= scalar;
-
+      this._vec = this._vec.map(function(x) { return x * scalar; });
+      this.upd();
       return this;
    },
 
    div: function(scalar) {
       Assert((scalar != 0), "Division by zero in Point.divScalar");
-      this.x /= scalar;
-      this.y /= scalar;
 
+      this._vec = this._vec.map(function(x) { return x / scalar; });
+      this.upd();
       return this;
    },
 
@@ -292,9 +281,8 @@ var Point2D = Base.extend({
     *
     */
    neg: function() {
-      this.x = -this.x;
-      this.y = -this.y;
-
+      this._vec.setElements([ -this._vec.e(1), -this._vec.e(2) ]);
+      this.upd();
       return this;
    },
 
@@ -303,11 +291,11 @@ var Point2D = Base.extend({
     *
     */
    isZero: function() {
-      return (this.x == 0 && this.y == 0);
+      return this._vec.eql(Vector.Zero);
    },
 
    toString: function() {
-      return "[" + this.x + "," + this.y + "]";
+      return this._vec.inspect();
    }
 
 });
@@ -324,10 +312,8 @@ var Vector2D = Point2D.extend({
     * Normalize the vector.  Returning its unit length, not including the actual length of the vector.
     */
    normalize: function() {
-      var factor = 1.0 / this.len();
-      this.x *= factor;
-      this.y *= factor;
-
+      this._vec = this._vec.toUnitVector();
+      this.upd();
       return this;
    },
 
@@ -337,7 +323,7 @@ var Vector2D = Point2D.extend({
     * @returns a value representing the length (magnitude) of the point.
     */
    len: function() {
-      return Math.sqrt((this.x*this.x) + (this.y*this.y));
+      return this._vec.modulus();
    },
 
    /**
@@ -345,27 +331,18 @@ var Vector2D = Point2D.extend({
     * @param vector {Vector} The Point to perform the operation against.
     */
    dot: function(vector) {
-      return (this.x * vector.x) + (this.y * vector.y);
+      return this._vec.dot(vector._vec);
    },
 
    /**
     * Get the cross product of two vectors.
     * @param vector {Vector2D} The vector to perform the operation against.
+    */
    cross: function(vector) {
-      var swap = [];
-      for(var i = 0; i < 3; i++)
-      {
-         swap[i] = this[(i+1)%3] * v[(i+2)%3] - this[(i+2)%3] * v[(i+1)%3];
-      }
-
-      for(var i = 0; i < 3; i++)
-      {
-         this[i] = swap[i];
-      }
-
+      this._vec = this._vec.cross(vector._vec);
+      this.upd();
       return this;
    },
-    */
 
    /**
     * Returns the angle (in degrees) between two vectors.  This assumes that the
@@ -375,12 +352,7 @@ var Vector2D = Point2D.extend({
     * @param vector {Vector} The vector to perform the angular determination against
     */
    angleBetween: function(vector) {
-      var p1 = new Vector(this);
-      var p2 = new Vector(vector);
-      p1.normalize();
-      p2.normalize();
-      // (((Math.acos(p1.dot(p2))) * 180) / Math2D.PI);
-      return (((Math.acos(p1.dot(p2))) * 180) * Math2D.INV_PI);
+      return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
    }
 
 });
@@ -393,10 +365,7 @@ var Rectangle2D = Base.extend({
    height: 0,
 
    constructor: function(x, y, width, height) {
-      this.x = (x != null ? x : 0.0);
-      this.y = (y != null ? y : 0.0);
-      this.width = (width != null ? width : 0.0);
-      this.height = (height != null ? height : 0.0);
+      this.set(x,y,width,height);
    },
 
    /**
@@ -409,10 +378,19 @@ var Rectangle2D = Base.extend({
     */
    set: function(x, y, width, height)
    {
-      this.x = (x != "" ? x : 0.0);
-      this.y = (y != "" ? y : 0.0);
-      this.width = (width != "" ? width : 0.0);
-      this.height = (height != "" ? height : 0.0);
+      if (x instanceof Rectangle2D) {
+         this.x = x.x;
+         this.y = x.y;
+         this.width = x.width;
+         this.height = x.height;
+      }
+      else
+      {
+         this.x = (x != null ? x : 0.0);
+         this.y = (y != null ? y : 0.0);
+         this.width = (width != null ? width : 0.0);
+         this.height = (height != null ? height : 0.0);
+      }
    },
 
    /**
@@ -452,6 +430,24 @@ var Rectangle2D = Base.extend({
 
       this.x += xOff;
       this.y += yOff;
+   },
+
+   /**
+    * Set the width of the rectangle.
+    *
+    * @param width {Number} The new width of the rectangle
+    */
+   setWidth: function(width) {
+      this.width = width;
+   },
+
+   /**
+    * Set the height of the rectangle
+    *
+    * @param height {Number} The new height of the rectangle
+    */
+   setHeight: function(height) {
+      this.height = height;
    },
 
    /**

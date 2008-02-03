@@ -76,7 +76,7 @@ Spaceroids.Player = HostObject.extend({
       var c_draw = this.getComponent("draw");
       var c_mover = this.getComponent("move");
 
-      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), c_draw.getBoundingBox()));
+      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
    },
 
    setup: function(pWidth, pHeight) {

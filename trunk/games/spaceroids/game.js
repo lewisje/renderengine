@@ -40,7 +40,6 @@ Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.vector2d.js");
-Engine.load("/components/component.vector2d.js");
 Engine.load("/components/component.notifier.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
@@ -122,27 +121,29 @@ var Spaceroids = Game.extend({
 
       // Wrap if it's off the playing field
       var p = new Point2D(pos);
+      var x = p.x;
+      var y = p.y;
       if (pos.x < this.fieldBox.x || pos.x > this.fieldBox.x + this.fieldBox.width ||
           pos.y < this.fieldBox.y || pos.y > this.fieldBox.y + this.fieldBox.height)
       {
          if (pos.x > this.fieldBox.x + this.fieldBox.width + rX)
          {
-            p.x = (this.fieldBox.x - (rX - 10));
+            x = (this.fieldBox.x - (rX - 10));
          }
          if (pos.y > this.fieldBox.y + this.fieldBox.height + rY)
          {
-            p.y = (this.fieldBox.y - (rY - 10));
+            y = (this.fieldBox.y - (rY - 10));
          }
          if (pos.x < this.fieldBox.x - rX)
          {
-            p.x = (this.fieldBox.x + this.fieldBox.width + (rX - 10));
+            x = (this.fieldBox.x + this.fieldBox.width + (rX - 10));
          }
          if (pos.y < this.fieldBox.y - rY)
          {
-            p.y = (this.fieldBox.y + this.fieldBox.height + (rX - 10));
+            y = (this.fieldBox.y + this.fieldBox.height + (rX - 10));
          }
+         p.set(x,y);
       }
-
       return p;
    }
 
