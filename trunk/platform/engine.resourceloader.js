@@ -74,11 +74,5 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     */
    getClassName: function() {
       return "ResourceLoader";
-   },
-
-   toString: function() {
-      return this.base() + " [cached objects: " + this.length + "]";
    }
-
-
 });

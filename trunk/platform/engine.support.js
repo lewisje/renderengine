@@ -52,6 +52,89 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       {
          array.splice(idx, 1);
       }
-   }
+   },
+
+   /**
+    * Returns specified object as a JavaScript Object Notation (JSON) string.
+    *
+    * Code to handle "undefined" type was delibrately not implemented, being that it is not part of JSON.
+    * "undefined" type is casted to "null".
+    *
+    * @param object {Object} Must not be undefined or contain undefined types and variables.
+    * @return String
+    */
+   toJSONString: function(o)
+   {
+      if(o == null)
+      {
+         return "null";
+      }
+
+      switch(o.constructor)
+      {
+         case Array:
+            var a = [], i;
+            for(i = 0; i < o.length; i++)
+            {
+               a[i] = EngineSupport.toJSONString(o[i]);
+            }
+            return "[" + a.join() + "]";
+         case String:
+            return EngineSupport.quoteString(o);
+         case Boolean:
+         case Number:
+            return o.toString();
+         default:
+            var a = [], i;
+            for(i in o)
+            {
+               if(o[i] == null)
+               {
+                  a.push(i.quote() + ":null");
+               }
+               else if(o[i].constructor != Function)
+               {
+                  a.push(i.quote() + ':' + EngineSupport.toJSONString(o[i]));
+               }
+            }
+            return '{' + a.join() + '}';
+      }
+   },
+
+   /**
+    * Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
+    *
+    * @param jsonString
+    * @return Object
+    * @see http://www.json.org
+    */
+   parseJSONString: function(jsonString)
+   {
+      var obj = null;
+      eval.call(arguments.callee, 'obj = (function(){return ' + jsonString + ';})();');
+      return obj;
+   },
+
+   /**
+    * Return a string, enclosed in quotes.
+    *
+    * @param string
+    * @type String
+    */
+   quoteString: function(o)
+   {
+      return '"'+this.replace(/[\\"\r\n]/g, function(s)
+         {
+            switch(s)
+            {
+               case "\\":return "\\\\";
+               case "\r":return "\\r";
+               case "\n":return "\\n";
+               case '"':return '\\"';
+            }
+         }
+      )+'"';
+   },
+
 
 });

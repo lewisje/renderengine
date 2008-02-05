@@ -42,7 +42,7 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    host: null,
 
    /**
-    * Create a new instance of this component, setting the type and
+    * Create a new instance of a component, setting the name, type, and
     * update priority of this component compared to all other components
     * within the host.
     *
@@ -68,6 +68,8 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
 
    /**
     * Set the host object this component exists within.
+    *
+    * @param hostObject {HostObject} The object which hosts this component
     */
    setHostObject: function(hostObject) {
       this.host = hostObject;
@@ -75,13 +77,16 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
 
    /**
     * Get the host object this component exists within.
+    *
+    * @type HostObject
     */
    getHostObject: function() {
       return this.host;
    },
 
    /**
-    * Get the type of this component.
+    * Get the type of this component.  Will be one of:
+    * {@link #TYPE_INPUT}, {@link #TYPE_LOGIC}, {@link #TYPE_COLLIDER}, {@link #TYPE_RENDERING}
     *
     * @type Number
     */
@@ -91,7 +96,8 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
 
    /**
     * Set the execution priority of this component with
-    * 1.0 being the highest priority and 0.0 being the lowest.
+    * 1.0 being the highest priority and 0.0 being the lowest.  Components
+    * within a host object are sorted by type, and then priority.
     *
     * @param priority {Number} A value between 0.0 and 1.0
     */
@@ -110,9 +116,11 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    },
 
    /**
-    * Run the component, updating it.
+    * Run the component, updating its state.  Not all components will need an execute
+    * method.  However, it is important to include one if you need to run caculations
+    * or update the state of the component each engine cycle.
     *
-    * @param renderContext {RenderContext} The context the component would render within.
+    * @param renderContext {RenderContext} The context the component will render within.
     * @param time {Number} The global engine time
     */
    execute: function(renderContext, time) {
@@ -129,7 +137,9 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    },
 
    /**
-    * Gets the type name as a string.
+    * Converts the type name to a string.
+    *
+    * @type String
     */
    getTypeString: function() {
       var ts = "";
@@ -142,13 +152,6 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
       }
 
       return ts;
-   },
-
-   /**
-    * Stringify the component
-    */
-   toString: function() {
-      return this.base() + " (" + this.getTypeString() + ")]";
    }
 
 
