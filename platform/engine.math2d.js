@@ -32,7 +32,7 @@
  *
  */
 
-var Math2D = Base.extend({
+var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
    constructor: null,
 
@@ -177,7 +177,7 @@ var Math2D = Base.extend({
 /**
  * 2D point class
  */
-var Point2D = Base.extend({
+var Point2D = Base.extend(/** @scope Point2D.prototype */{
 
    _vec: null,
 
@@ -306,7 +306,7 @@ Point2D.ZERO = new Point2D(0,0);
 /**
  * 2D vector class
  */
-var Vector2D = Point2D.extend({
+var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
    /**
     * Normalize the vector.  Returning its unit length, not including the actual length of the vector.
@@ -357,7 +357,7 @@ var Vector2D = Point2D.extend({
 
 });
 
-var Rectangle2D = Base.extend({
+var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
 
    x: 0,
    y: 0,

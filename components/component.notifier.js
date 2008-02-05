@@ -2,8 +2,6 @@
  * The Render Engine
  * InputComponent
  *
- * A component which can read an input device and make those inputs
- * available for usage.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
@@ -31,10 +29,18 @@
  *
  */
 
-var NotifierComponent = BaseComponent.extend({
+/**
+ * @class A component which notifies objects when an action occurs.
+ * @extends BaseComponent
+ */
+var NotifierComponent = BaseComponent.extend(/** @scope NotifierComponent.prototype */{
 
    notifyLists: null,
 
+   /**
+    * @constructor
+    * @memberOf NotifierComponent
+    */
    constructor: function(name, type, priority) {
       this.base(name, type, priority || 1.0);
       this.notifyLists = {};
@@ -46,6 +52,7 @@ var NotifierComponent = BaseComponent.extend({
     *
     * @param type {String} The type name of the event list.
     * @param fn {Function} The function to call when the event triggers.
+    * @memberOf NotifierComponent
     */
    addRecipient: function(type, thisObj, fn) {
       if (this.notifyLists[type] == null) {
@@ -59,6 +66,7 @@ var NotifierComponent = BaseComponent.extend({
     *
     * @param type {String} The type name of the event list.
     * @param fn {Function} The function to remove from the notification list.
+    * @memberOf NotifierComponent
     */
    removeRecipient: function(type, thisObj, fn) {
       var o = {parent: thisObj, func: fn};
@@ -69,6 +77,7 @@ var NotifierComponent = BaseComponent.extend({
     * Run through the list of recipients functions for the
     * event type specified.  Optimized for speed if the list
     * is large.
+    * @memberOf NotifierComponent
     */
    notifyRecipients: function(type, eventObj) {
       if (this.notifyLists[type] == null)
@@ -117,6 +126,7 @@ var NotifierComponent = BaseComponent.extend({
     * Get the class name of this object
     *
     * @type String
+    * @memberOf NotifierComponent
     */
    getClassName: function() {
       return "NotifierComponent";

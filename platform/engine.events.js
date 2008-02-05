@@ -1,7 +1,7 @@
 /**
  * The Render Engine
  * Events
- * 
+ *
  * Event handling
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -10,17 +10,17 @@
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,7 +30,7 @@
  * THE SOFTWARE.
  *
  */
- 
+
 var EventEngine = Base.extend({
 
    constructor: null,
@@ -41,7 +41,7 @@ var EventEngine = Base.extend({
     *
     * @param target {String/jQuery} The target for the event.  This should either be a
     *                               CSS selector, or a jQuery object.
-    * @param [data] {Array} Optional data to pass to the handler when it is invoked. 
+    * @param [data] {Array} Optional data to pass to the handler when it is invoked.
     * @param name {String} The event to handle.  ie: "click" or "mouseover"
     * @param handler {Function} The handler function to assign to the target
     */
@@ -54,7 +54,7 @@ var EventEngine = Base.extend({
       }
       jQuery(target).bind(name, data || handler, handler);
    },
-   
+
    /**
     * Clear an event handler that was previously assigned to the target.  If no
     * specific handler is assigned, all event handlers will be removed from the target.
@@ -63,7 +63,7 @@ var EventEngine = Base.extend({
     *                               CSS selector, or a jQuery object.
     * @param name {String} The event to handle.  ie: "click" or "mouseover"
     * @param handler {Function} The handler function to unassign from the target
-    */    
+    */
    clearHandler: function(target, name, handler) {
       jQuery(target).unbind(name, handler);
    },
@@ -71,6 +71,9 @@ var EventEngine = Base.extend({
 
    //====================================================================================================================
    // MOUSE BUTTON CONSTANTS
+
+   /** No mouse button pressed. **/
+   MOUSE_NO_BUTTON: 0,
 
    /** Left mouse button. **/
    MOUSE_LEFT_BUTTON: 1,
@@ -164,5 +167,5 @@ var EventEngine = Base.extend({
 
    /** Constant for the "Windows" key (Windows) **/
    KEYCODE_WINDOW: 91
-   
+
 });

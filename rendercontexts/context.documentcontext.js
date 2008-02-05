@@ -1,25 +1,24 @@
 /**
  * The Render Engine
  * DocumentContext
- * 
- * A reference to the document.body element as a rendering context.
+ *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,13 +28,19 @@
  * THE SOFTWARE.
  *
  */
- 
-var DocumentContext = RenderContext2D.extend({
+
+/**
+ * @class A reference to the document.body element as a rendering context.
+ * @extends RenderContext2D
+ */
+var DocumentContext = RenderContext2D.extend(/** @scope DocumentContext.prototype */{
 
    /**
     * Create an instance of a document rendering context.  This context
     * represents the HTML document body.  Theoretically, only one of these
     * contexts should ever be created.
+    * @memberOf DocumentContext
+    * @constructor
     */
    constructor: function() {
       this.base("DocumentContext", document.body);
@@ -43,6 +48,7 @@ var DocumentContext = RenderContext2D.extend({
 
    /**
     * Eliminate the elements from the document.
+    * @memberOf DocumentContext
     */
    destroy: function() {
       var objs = this.getObjects();
@@ -51,9 +57,12 @@ var DocumentContext = RenderContext2D.extend({
          this.getSurface().removeChild(objs[o].getElement());
       }
 
-      this.base();      
+      this.base();
    },
 
+   /**
+    * @memberOf DocumentContext
+    */
    add: function(obj) {
       if (obj.getElement())
       {
@@ -61,7 +70,10 @@ var DocumentContext = RenderContext2D.extend({
       }
       this.base(obj);
    },
-   
+
+   /**
+    * @memberOf DocumentContext
+    */
    remove: function(obj) {
       if (obj.getElement())
       {
@@ -74,6 +86,7 @@ var DocumentContext = RenderContext2D.extend({
     * Get the class name of this object
     *
     * @type String
+    * @memberOf DocumentContext
     */
    getClassName: function() {
       return "DocumentContext";

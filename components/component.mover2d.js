@@ -2,9 +2,6 @@
  * The Render Engine
  * 2DMoverComponent
  *
- * A simple mover component that adjusts the translation of a component
- * over time.  This component handles velocity, acceleration, and
- * deceleration.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -32,7 +29,13 @@
  *
  */
 
-var Mover2DComponent = Transform2DComponent.extend({
+/**
+ * @class A simple mover component that adjusts the translation of a component
+ * over time.  This component handles velocity, acceleration, and
+ * deceleration.
+ * @extends Transform2DComponent
+ */
+var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.prototype */{
 
    lastTime: -1,
 
@@ -40,12 +43,19 @@ var Mover2DComponent = Transform2DComponent.extend({
 
    angularVelocity: 0,
 
+   /**
+    * @constructor
+    * @memberOf Mover2DComponent
+    */
    constructor: function(name, priority) {
       this.velocity = new Vector2D(0,0);
       this.acceleration = new Vector2D(0,0);
       this.base(name, priority || 1.0);
    },
 
+   /**
+    * @memberOf Mover2DComponent
+    */
    execute: function(renderContext, time) {
       var pos = this.getPosition();
       var rot = this.getRotation();
@@ -70,18 +80,30 @@ var Mover2DComponent = Transform2DComponent.extend({
       this.lastTime = time;
    },
 
+   /**
+    * @memberOf Mover2DComponent
+    */
    setVelocity: function(vector) {
       this.velocity.set(vector);
    },
 
+   /**
+    * @memberOf Mover2DComponent
+    */
    getVelocity: function() {
       return this.velocity;
    },
 
+   /**
+    * @memberOf Mover2DComponent
+    */
    setAngularVelocity: function(angularVelocity) {
       this.angularVelocity = angularVelocity;
    },
 
+   /**
+    * @memberOf Mover2DComponent
+    */
    getAngularVelocity: function() {
       return this.angularVelocity;
    },
@@ -90,6 +112,7 @@ var Mover2DComponent = Transform2DComponent.extend({
     * Get the class name of this object
     *
     * @type String
+    * @memberOf Mover2DComponent
     */
    getClassName: function() {
       return "Mover2DComponent";

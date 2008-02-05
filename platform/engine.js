@@ -36,7 +36,7 @@
  *
  * A stand-in class when Firebug or Firebug Lite are not installed.
  */
-var ConsoleRef = Base.extend({
+var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    constructor: null,
 
    dumpWindow: null,
@@ -109,7 +109,7 @@ var ConsoleRef = Base.extend({
  * A class for logging messages.  If the FireBug, or FireBug Lite, extension
  * is installed, it will be used as an alternative to the console display.
  */
-var Console = Base.extend({
+var Console = Base.extend(/** @scope Console.prototype */{
    constructor: null,
 
    consoleRef: null,
@@ -233,7 +233,7 @@ var AssertWarn = function(test, warning) {
  *
  * The main engine class.
  */
-var Engine = Base.extend({
+var Engine = Base.extend(/** @scope Engine.prototype */{
    constructor: null,
 
    version: "1.0.0 (alpha)",
@@ -268,6 +268,7 @@ var Engine = Base.extend({
     * @param obj {BaseObject} A managed object within the engine
     * @return The global Id of the object
     * @type String
+    * @memberOf Engine
     */
    create: function(obj) {
       Assert((this.running == true), "Cannot create objects when the engine is not running!");
@@ -284,6 +285,7 @@ var Engine = Base.extend({
     * Destroys an object instance managed by the Engine.
     *
     * @param obj {BaseObject} The object, managed by the engine, to destroy
+    * @memberOf Engine
     */
    destroy: function(obj) {
       var objId = obj.getId();
@@ -299,6 +301,7 @@ var Engine = Base.extend({
     * @param id {String} The global Id of the object to locate
     * @return The object
     * @type BaseObject
+    * @memberOf Engine
     */
    getObject: function(id) {
       return this.gameObjects[id];
@@ -309,6 +312,7 @@ var Engine = Base.extend({
     * can be queried for additional debugging operations.
     *
     * @param mode {Boolean} <tt>true</tt> to debug the engine
+    * @memberOf Engine
     */
    setDebugMode: function(mode) {
       this.debugMode = mode;
@@ -318,6 +322,7 @@ var Engine = Base.extend({
     * Query the debugging mode of the engine.
     *
     * @type Boolean
+    * @memberOf Engine
     */
    getDebugMode: function() {
       return this.debugMode;
@@ -329,6 +334,7 @@ var Engine = Base.extend({
     *
     * @param debugMode {Boolean} <tt>true</tt> to set the engine into debug mode
     *                            which allows the output of messages to the console.
+    * @memberOf Engine
     */
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
@@ -350,6 +356,7 @@ var Engine = Base.extend({
    /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
     * objects that have been created and added to the world.
+    * @memberOf Engine
     */
    shutdown: function() {
       if (!this.running)
@@ -386,6 +393,7 @@ var Engine = Base.extend({
     *
     * @return The default rendering context
     * @type RenderContext
+    * @memberOf Engine
     */
    getDefaultContext: function() {
       return this.defaultContext;
@@ -397,6 +405,7 @@ var Engine = Base.extend({
     * cached so they will not be loaded again.
     *
     * @param scriptPath {String} The URL of a script to load.
+    * @memberOf Engine
     */
    loadScript: function(scriptPath) {
       Console.log("Loading script: " + scriptPath);
@@ -430,6 +439,7 @@ var Engine = Base.extend({
     * also.
     *
     * @param gameSource {String} The URL of the game script.
+    * @memberOf Engine
     */
    loadGame: function(gameSource) {
       // Create the default context (the document)
@@ -441,6 +451,7 @@ var Engine = Base.extend({
     * Load a script relative to the engine path.
     *
     * @param scriptSource {String} A URL to load that is relative to the engine path.
+    * @memberOf Engine
     */
    load: function(scriptSource) {
       if (this.engineLocation == null)
@@ -466,6 +477,7 @@ var Engine = Base.extend({
    /**
     * Load the scripts required for the engine to run.
     * @private
+    * @memberOf Engine
     */
    loadEngineScripts: function() {
 
@@ -476,8 +488,10 @@ var Engine = Base.extend({
       this.load("/platform/engine.baseobject.js");
       this.load("/platform/engine.timers.js");
       this.load("/platform/engine.container.js");
+      this.load("/platform/engine.hashcontainer.js");
       this.load("/platform/engine.rendercontext.js");
       this.load("/platform/engine.hostobject.js");
+      this.load("/platform/engine.object2d.js");
       this.load("/platform/engine.resourceloader.js");
       this.load("/platform/engine.events.js");
 
@@ -491,6 +505,7 @@ var Engine = Base.extend({
 
    /**
     * Output the list of scripts loaded by the Engine to the console.
+    * @memberOf Engine
     */
    dumpScripts: function() {
       for (var f in this.loadedScripts)
@@ -504,6 +519,7 @@ var Engine = Base.extend({
     * again.  Use this method with caution, as it is not recommended
     * to load a script if the object is in use.  May cause unexpected
     * results.
+    * @memberOf Engine
     */
    clearScriptCache: function() {
       this.loadedScripts = {};
@@ -514,6 +530,7 @@ var Engine = Base.extend({
     *
     * @param fps {Number} The number of frames per second to refresh
     *                     Engine objects.
+    * @memberOf Engine
     */
    setFPS: function(fps) {
       Assert((fps != 0), "You cannot have a framerate of zero!");
@@ -523,6 +540,7 @@ var Engine = Base.extend({
    /**
     * The global engine timer which updates the world.
     * @private
+    * @memberOf Engine
     */
    engineTimer: function() {
       var b = new Date().getTime();
@@ -553,6 +571,7 @@ var Engine = Base.extend({
     *
     * @param metricName {String} The name of the metric to track
     * @param value {String/Number} The value of the metric
+    * @memberOf Engine
     */
    addMetric: function(metricName, value) {
       this.metrics[metricName] = value;
@@ -562,6 +581,7 @@ var Engine = Base.extend({
     * Remove a metric from the display
     *
     * @param metricName {String} The name of the metric to remove
+    * @memberOf Engine
     */
    removeMetric: function(metricName) {
       this.metrics[metricName] = null;
@@ -571,6 +591,7 @@ var Engine = Base.extend({
    /**
     * Toggle the display of the metrics window.  Any metrics
     * that are being tracked will be reported in this window.
+    * @memberOf Engine
     */
    toggleMetrics: function() {
       this.showMetricsWindow = !this.showMetricsWindow;
@@ -592,6 +613,7 @@ var Engine = Base.extend({
    /**
     * Updates the display of the metrics window.
     * @private
+    * @memberOf Engine
     */
    updateMetrics: function() {
       var h = "";
@@ -604,6 +626,7 @@ var Engine = Base.extend({
 
    /**
     * Prints the version of the engine.
+    * @memberOf Engine
     */
    toString: function() {
       return "The Render Engine " + this.version;

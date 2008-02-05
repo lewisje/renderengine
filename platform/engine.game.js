@@ -31,24 +31,35 @@
  * THE SOFTWARE
  */
 
-var Game = Base.extend({
+/**
+ * @class The game object represents an instance of a game.  It is
+ * the controlling entity for all of a game and is responsible
+ * for setup and teardown of the game.
+ */
+var Game = Base.extend(/** @scope Game.prototype */{
 
    constructor: null,
 
    /**
     * Initialize the game.
+    * @memberOf Game
+    * @static
     */
    setup: function() {
    },
 
    /**
     * Shut down the game.
+    * @memberOf Game
+    * @static
     */
    tearDown: function() {
    },
 
    /**
     * Get the display name of the game.
+    * @memberOf Game
+    * @static
     */
    getName: function() {
       return "Game";
@@ -59,6 +70,8 @@ var Game = Base.extend({
     * with an absolute URL.
     *
     * @param scriptSource {String} The relative path to the script to load.
+    * @memberOf Game
+    * @static
     */
    load: function(scriptSource) {
       Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game's path");
@@ -69,6 +82,8 @@ var Game = Base.extend({
     * Get the number of players this game supports.
     *
     * @type Number
+    * @memberOf Game
+    * @static
     */
    getPlayers: function() {
       return 1;
