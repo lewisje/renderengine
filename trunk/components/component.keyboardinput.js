@@ -1,26 +1,23 @@
 /**
  * The Render Engine
  * KeyboardInputComponent
- * 
- * A component which responds to keyboard events and notifies
- * a list of functions by passing the event to them.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -31,109 +28,137 @@
  *
  */
 
-var KeyboardInputComponent = InputComponent.extend({
+/**
+ * @class A component which responds to keyboard events and notifies
+ * its host object by calling one of three methods.  The host object
+ * should implement any of the following methods to receive the corresponding event:
+ * <ul>
+ * <li>onKeyDown - A key was pressed down</li>
+ * <li>onKeyUp - A key was released</li>
+ * <li>onKeyPress - A key was pressed and released</li>
+ * </ul>
+ *
+ * @extends InputComponent
+ */
+var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputComponent.prototype */{
 
    downFn: null,
-   
+
    upFn: null,
-   
+
    pressFn: null,
-   
-   
+
    /**
     * Create an instance of a keyboard input component.
     *
     * @param name {String} The unique name of the component.
     * @param priority {Number} The priority of the component among other input components.
+    * @constructor
     */
    constructor: function(name, priority) {
       this.base(name, priority);
-      
+   },
+
+   /**
+    * Set the host object this component exists within.
+    */
+   setHostObject: function(hostObject) {
+      this.base(hostObject);
+
       this.downFn = function(eventObj) {
-         eventObj.data[0]._keyDownListener(eventObj);
-         return false;
-      };
-      
-      this.upFn = function(eventObj) {
-         eventObj.data[0]._keyUpListener(eventObj);
-         return false;
-      };
-      
-      this.pressFn = function(eventObj) {
-         eventObj.data[0]._keyPressListener(eventObj);
+         eventObj.data.owner._keyDownListener(eventObj);
          return false;
       };
 
-      EventEngine.setHandler(document, [this], "keydown", this.downFn);
-      EventEngine.setHandler(document, [this], "keyup", this.upFn);
-      EventEngine.setHandler(document, [this], "keypress", this.pressFn);
+      this.upFn = function(eventObj) {
+         eventObj.data.owner._keyUpListener(eventObj);
+         return false;
+      };
+
+      this.pressFn = function(eventObj) {
+         eventObj.data.owner._keyPressListener(eventObj);
+         return false;
+      };
+
+      var context = this.getHostObject().getRenderContext();
+      if (this.getHostObject().onKeyDown)
+      {
+         EventEngine.setHandler(context, {owner: this}, "keydown", this.downFn);
+      }
+
+      if (this.getHostObject().onKeyUp)
+      {
+         EventEngine.setHandler(context, {owner: this}, "keyup", this.upFn);
+      }
+
+      if (this.getHostObject().onKeyPress)
+      {
+         EventEngine.setHandler(context, {owner: this}, "keypress", this.pressFn);
+      }
    },
-   
+
    /**
     * Destroy this instance and remove all references.
     */
    destroy: function() {
-      EventEngine.clearHandler(document, "keydown", this.downFn);
-      EventEngine.clearHandler(document, "keyup", this.upFn);
-      EventEngine.clearHandler(document, "keypress", this.pressFn);
+      var context = this.getHostObject().getRenderContext();
+      if (this.getHostObject().onKeyDown)
+      {
+         EventEngine.clearHandler(context, "keydown", this.downFn);
+      }
+
+      if (this.getHostObject().onKeyUp)
+      {
+         EventEngine.clearHandler(context, "keyup", this.upFn);
+      }
+
+      if (this.getHostObject().onKeyPress)
+      {
+         EventEngine.clearHandler(context, "keypress", this.pressFn);
+      }
       this.notifyLists = null;
       this.downFn = null;
       this.upFn = null;
       this.pressFn = null;
-      
+
       this.base();
    },
-   
-   /**
-    * Add a recipient function for the event type specified.  The event
-    * type should be one of: "keyDown", "keyUp", "keyPress".  The function
-    * will be passed the event object as its only parameter.
-    *
-    * @param type {String} One of the three types.
-    * @param fn {Function} The function to call when the event triggers.
-    */
-   addRecipient: function(type, thisObj, fn) {
-      type = type.toLowerCase().replace(/key/,"");
-      this.base(type, thisObj, fn);
-   },
 
-   /**
-    * Remove a recipient function for the event type specified.  The event
-    * type should be one of: "keyDown", "keyUp", "keyPress".
-    *
-    * @param type {String} One of the three types.
-    * @param fn {Function} The function to remove from the notification list.
-    */
-   removeRecipient: function(type, thisObj, fn) {
-      type = type.toLowerCase().replace(/key/,"");
-      this.base(type, thisObj, fn);
-   },
-   
    /**
     * @private
     */
    _keyDownListener: function(eventObj) {
-      this.notifyRecipients("down", eventObj);
+      if (this.getHostObject().onKeyDown)
+      {
+         this.getHostObject().onKeyDown.call(this.getHostObject(), eventObj);
+      }
    },
-   
+
    /**
     * @private
     */
    _keyUpListener: function(eventObj) {
-      this.notifyRecipients("up", eventObj);
+      if (this.getHostObject().onKeyUp)
+      {
+         this.getHostObject().onKeyUp.call(this.getHostObject(), eventObj);
+      }
    },
-   
+
    /**
     * @private
     */
    _keyPressListener: function(eventObj) {
-      this.notifyRecipients("press", eventObj);
+      if (this.getHostObject().onKeyPress)
+      {
+         this.getHostObject().onKeyPress.call(this.getHostObject(), eventObj);
+      }
    },
-   
+
    /**
     * Get the class name of this object
     *
     * @type String
+    * @memberOf KeyboardInputComponent
     */
    getClassName: function() {
       return "KeyboardInputComponent";

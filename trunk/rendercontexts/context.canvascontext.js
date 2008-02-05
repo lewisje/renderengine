@@ -2,7 +2,6 @@
  * The Render Engine
  * CanvasContext
  *
- * A canvas element represented within the engine.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -30,9 +29,16 @@
  *
  */
 
-var CanvasContext = RenderContext2D.extend({
+/**
+ * @class A canvas element represented within the engine.
+ *
+ * @extends RenderContext2D
+ */
+var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */{
 
    context2D: null,
+
+   mouseHandler: false,
 
    /**
     * Create an instance of a 2D rendering context using the canvas element.
@@ -40,6 +46,8 @@ var CanvasContext = RenderContext2D.extend({
     * @param contextName {String} The name of this context.  Default: CanvasContext
     * @param width {Number} The width (in pixels) of the canvas context.
     * @param height {Number} The height (in pixels) of the canvas context.
+    * @constructor
+    * @memeberOf CanvasContext
     */
    constructor: function(width, height) {
       Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
@@ -58,6 +66,7 @@ var CanvasContext = RenderContext2D.extend({
 
    /**
     * Gets the surface context upon which all objects are drawn.
+    * @memeberOf CanvasContext
     */
    get2DContext: function() {
       if (this.context2D == null)
@@ -69,6 +78,7 @@ var CanvasContext = RenderContext2D.extend({
 
    /**
     * Push a transform state onto the stack.
+    * @memeberOf CanvasContext
     */
    pushTransform: function() {
       this.base();
@@ -77,6 +87,7 @@ var CanvasContext = RenderContext2D.extend({
 
    /**
     * Pop a transform state off the stack.
+    * @memeberOf CanvasContext
     */
    popTransform: function() {
       this.base();
@@ -86,26 +97,41 @@ var CanvasContext = RenderContext2D.extend({
    //================================================================
    // Drawing functions
 
+   /**
+    * @memeberOf CanvasContext
+    */
    reset: function() {
-      this.get2DContext().clearRect(0,0,this.width,this.height);
+      this.get2DContext().clearRect(0, 0, this.width, this.height);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setBackgroundColor: function(color) {
       jQuery(this.getSurface()).css("background-color", color);
       this.base(color);
    },
 
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setPosition: function(point) {
       this.get2DContext().translate(point.x, point.y);
       this.base(point);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setRotation: function(angle) {
       this.get2DContext().rotate(Math2D.degToRad(angle));
       this.base(angle);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setScale: function(scaleX, scaleY) {
       scaleX = scaleX || 1;
       scaleY = scaleY || scaleX;
@@ -113,52 +139,84 @@ var CanvasContext = RenderContext2D.extend({
       this.base(scaleX, scaleY);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setTransform: function(matrix) {
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setLineStyle: function(lineStyle) {
       this.get2DContext().strokeStyle = lineStyle;
       this.base(lineStyle);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setLineWidth: function(width) {
       this.get2DContext().lineWidth = width * 1.0;
       this.base(width);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    setFillStyle: function(fillStyle) {
       this.get2DContext().fillStyle = fillStyle;
       this.base(fillStyle);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawRectangle: function(point, width, height) {
       this.get2DContext().strokeRect(point.x, point.y, width, height);
       this.base(point, width, height);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawFilledRectangle: function(point, width, height) {
       this.get2DContext().fillRect(point.x, point.y, width, height);
       this.base(point, width, height);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    * @private
+    */
    _arc: function(point, radiusX, startAngle, endAngle) {
       this.startPath();
       this.get2DContext().arc(point.x, point.y, startAngle, endAngle, true);
       this.endPath();
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawArc: function(point, radiusX, startAngle, endAngle) {
       this._arc(point, radiusX, startAngle, endEngle);
       this.strokePath();
       this.base(point, radiusX, startAngle, endAngle);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawFilledArc: function(point, radiusX, startAngle, endAngle) {
       this._arc(point, radiusX, startAngle, endEngle);
       this.fillPath();
       this.base(point, radiusX, startAngle, endAngle);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    * @private
+    */
    _poly: function(pointArray) {
       this.startPath();
       this.moveTo(pointArray[0]);
@@ -196,6 +254,7 @@ var CanvasContext = RenderContext2D.extend({
     *
     * @param pointArray {Array} An array of Point2D objects
     * @type Function
+    * @memberOf CanvasContext
     */
    buildRenderList: function(pointArray) {
       var f = "arguments.callee.ctx.startPath(); arguments.callee.ctx.moveTo(arguments.callee.ptArr[0]);";
@@ -211,6 +270,9 @@ var CanvasContext = RenderContext2D.extend({
       return _fastPoly;
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawPolygon: function(pointArray) {
       if (pointArray.isRenderList)
       {
@@ -222,6 +284,9 @@ var CanvasContext = RenderContext2D.extend({
       this.base(pointArray);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawFilledPolygon: function(pointArray) {
       if (pointArray.isRenderList)
       {
@@ -234,6 +299,9 @@ var CanvasContext = RenderContext2D.extend({
       this.base(pointArray);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawLine: function(point1, point2) {
       this.startPath();
       this.moveTo(point1.x, point1.y);
@@ -243,66 +311,105 @@ var CanvasContext = RenderContext2D.extend({
       this.base(point1, point2);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawPoint: function(point) {
       this.drawLine(point, point);
       this.base(point);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawImage: function(point, imageData) {
       this.get2DContext().putImageData(imageData, point.x, point.y);
       this.base(point, imageData);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    getImage: function(rect) {
       this.base()
       return this.get2DContext().getImageData(rect.x, rect.y, rect.width, rect.height);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    drawText: function(point, text) {
 
       this.base(point, text);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    startPath: function() {
       this.get2DContext().beginPath();
       this.base();
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    endPath: function() {
       this.get2DContext().closePath();
       this.base();
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    strokePath: function() {
       this.get2DContext().stroke();
       this.base();
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    fillPath: function() {
       this.get2DContext().fill();
       this.base();
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    moveTo: function(point) {
       this.get2DContext().moveTo(point.x, point.y);
       this.base();
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    lineTo: function(point) {
       this.get2DContext().lineTo(point.x, point.y);
       this.base(point);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    quadraticCurveTo: function(cPoint, point) {
       this.get2DContext().quadraticCurveTo(cPoint.x, cPoint.y, point.x, point.y);
       this.base(cPoint, point);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    bezierCurveTo: function(cPoint1, cPoint2, point) {
       this.get2DContext().bezierCurveTo(cPoint1.x, cPoint1.y, cPoint2.x, cPoint2.y, point.x, point.y);
       this.base(cPoint1, cPoint2, point);
    },
 
+   /**
+    * @memeberOf CanvasContext
+    */
    arcTo: function(point1, point2, radius) {
       this.get2DContext().arcTo(point1.x, point1.y, point2.x, point2.y, radius);
       this.base(point1, point2, radius);
@@ -313,6 +420,7 @@ var CanvasContext = RenderContext2D.extend({
     * Get the class name of this object
     *
     * @type String
+    * @memeberOf CanvasContext
     */
    getClassName: function() {
       return "CanvasContext";

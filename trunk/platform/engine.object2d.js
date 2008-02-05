@@ -1,11 +1,11 @@
 /**
  * The Render Engine
- * Transform2DComponent
+ * Object2D
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author$
- * @version: $Revision$
+ * @author: $Author: bfattori $
+ * @version: $Revision: 59 $
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  *
@@ -30,89 +30,95 @@
  */
 
 /**
- * @class A simple component that has position, rotation, and scale.
- * @extends BaseComponent
+ * @class An object for use in a 2D environment.  Methods for getting position, rotation
+ * and scale should be implemented within the extended class.
+ * @extends HostObject
  */
-var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.prototype */{
+var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 
-   position: null,
+   /** @private */
+   zIndex: 1,
 
-   rotation: 0,
-
-   scale: 1.0,
+   /** @private */
+   bBox: null,
 
    /**
-    * @constructor
-    * @memberOf Transform2DComponent
+    * Set the bounding box of this object
+    *
+    * @param rect {Rectangle2D} The rectangle that completely encompasses
+    *                           this object.
+    * @memberOf HostObject
     */
-   constructor: function(name, priority) {
-      this.base(name, BaseComponent.TYPE_RENDERING, priority || 1.0);
-      this.position = new Point2D(0,0);
+   setBoundingBox: function(rect) {
+      this.bBox = rect;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Get the bounding box of this object
+    *
+    * @type Rectangle2D
+    * @memberOf HostObject
     */
+   getBoundingBox: function() {
+      return this.bBox;
+   },
+
    setPosition: function(point) {
-      this.position.set(point);
    },
 
-   /**
-    * @memberOf Transform2DComponent
-    */
    getPosition: function() {
-      return this.position;
+      return Point2D.ZERO;
    },
 
-   /**
-    * @memberOf Transform2DComponent
-    */
-   setRotation: function(rotation) {
-      this.rotation = rotation;
+   setRotation: function(angle) {
    },
 
-   /**
-    * @memberOf Transform2DComponent
-    */
    getRotation: function() {
-      return this.rotation;
+      return 0;
+   },
+
+   setScale: function(scaleX, scaleY) {
+   },
+
+   getScaleX: function() {
+      return 1;
+   },
+
+   getScaleY: function() {
+      return 1;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Set the depth at which this object will render to
+    * the context.  The lower the z-index, the further
+    * away from the front the object will draw.
+    *
+    * @param zIndex {Number} The z-index of this object
+    * @memberOf HostObject
     */
-   setScale: function(scale) {
-      this.scale = scale;
+   setZIndex: function(zIndex) {
+      this.zIndex = zIndex;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Get the depth at which this object will render to
+    * the context.
+    *
+    * @type Number
+    * @memberOf HostObject
     */
-   getScale: function() {
-      return this.scale;
-   },
-
-   /**
-    * @memberOf Transform2DComponent
-    */
-   execute: function(renderContext, time) {
-
-      renderContext.setPosition(this.position);
-      renderContext.setRotation(this.rotation);
-      renderContext.setScale(this.scale, this.scale);
-
+   getZIndex: function() {
+      return this.zIndex;
    },
 
    /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf Transform2DComponent
+    * @memberOf HostObject
     */
    getClassName: function() {
-      return "Transform2DComponent";
+      return "Object2D";
    }
-
-
 
 });

@@ -1,0 +1,161 @@
+/**
+ * The Render Engine
+ * KeyboardInputComponent
+ *
+ *
+ * @author: Brett Fattori (brettf@renderengine.com)
+ * @author: $Author: bfattori $
+ * @version: $Revision: 52 $
+ *
+ * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
+
+/**
+ * @class A component which responds to mouse events and notifies
+ * the host object when one of the events occurs.  The host object should implement
+ * any of the five methods listed below to be notified of the corresponding event:
+ * <ul>
+ * <li>onMouseOver - The mouse moved over the host object</li>
+ * <li>onMouseOut - The mouse moved out of the host object</li>
+ * <li>onMouseDown - A mouse button was depressed over the host object</li>
+ * <li>onMouseUp - A mouse button was released over the host object</li>
+ * <li>onMouseMove - The mouse was moved</li>
+ * </ul>
+ *
+ * @extends InputComponent
+ */
+var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.prototype */{
+
+   /**
+    * Create an instance of a mouse input component.
+    *
+    * @param name {String} The unique name of the component.
+    * @param priority {Number} The priority of the component among other input components.
+    * @constructor
+    */
+   constructor: function(name, priority) {
+      this.base(name, priority);
+
+   },
+
+   /**
+    * Set the host object this component exists within.
+    */
+   setHostObject: function(hostObject) {
+      this.base(hostObject);
+
+      // Set some flags we can check
+      this.getHostObject().MouseInputComponent_mouseOver = false;
+      this.getHostObject().MouseInputComponent_mouseDown = false;
+
+      // Assign handlers to the context, making sure to only add
+      // one handler.  This way we don't have hundreds of mouse move
+      // handlers taking up precious milliseconds
+      var context = this.getHostObject().getRenderContext();
+      if (!context.MouseInputComponent_mouseInfo)
+      {
+         context.MouseInputComponent_mouseInfo = {
+            position: new Point2D(0,0);
+            button: EventEngine.MOUSE_NO_BUTTON,
+            lastOver: null
+         };
+
+         EventEngine.setHandler(context, {owner: this}, "mousemove", function(eventObj) {
+            var mouseInfo = eventObj.data.owner.MouseInputComponent_mouseInfo;
+            mouseInfo.position.set(event.pageX, event.pageY);
+            mouseInfo.button = event.which || EventEngine.MOUSE_NO_BUTTON;
+         });
+
+         EventEngine.setHandler(context, {owner: this}, "mousedown", function(eventObj) {
+            var mouseInfo = eventObj.data.owner.MouseInputComponent_mouseInfo;
+            mouseInfo.button = event.which;
+         });
+
+         EventEngine.setHandler(context, {owner: this}, "mouseup", function(eventObj) {
+            var mouseInfo = eventObj.data.owner.MouseInputComponent_mouseInfo;
+            mouseInfo.button = EventEngine.MOUSE_NO_BUTTON;
+         });
+
+      }
+   },
+
+   /**
+    * @private
+    */
+   execute: function(renderContext, time) {
+      // Objects may be in motion.  If so, we need to call the mouse
+      // methods for just such a case.
+      var mouseInfo = this.getHostObject().getRenderContext().MouseInputComponent_mouseInfo;
+      var bBox = this.getHostObject().getBoundingBox();
+      var pos = this.getHostObject().getPosition();
+      var mouseOver = false;
+      if (this.getHostObject().onMouseOver ||
+          this.getHostObject().onMouseOut ||
+          this.getHostObject().onMouseDown ||
+          this.getHostObject().onMouseUp)
+      {
+         mouseOver = Math2D.boxPointCollision(bBox, pos, mouseInfo.position);
+      }
+
+      if (this.getHostObject().onMouseMove)
+      {
+         this.getHostObject().onMouseMove.call(this.getHostObject(), mouseInfo);
+      }
+
+      if (this.getHostObject().onMouseOver && mouseOver)
+      {
+         this.getHostObject().MouseInputComponent_mouseOver = true;
+         this.getHostObject().onMouseOver.call(this.getHostObject(), mouseInfo);
+      }
+
+      if (this.getHostObject().onMouseOut && !mouseOver &&
+          this.getHostObject().MouseInputComponent_mouseOver == true)
+      {
+         this.getHostObject().MouseInputComponent_mouseOver = false;
+         this.getHostObject().onMouseOut.call(this.getHostObject(), mouseInfo);
+      }
+
+      if (this.getHostObject().onMouseDown && mouseOver)
+      {
+         this.getHostObject().MouseInputComponent_mouseDown = true;
+         this.getHostObject().onMouseDown.call(this.getHostObject(), mouseInfo);
+      }
+
+      if (this.getHostObject().onMouseUp && this.getHostObject().MouseInputComponent_mouseDown)
+      {
+         this.getHostObject().MouseInputComponent_mouseDown = false;
+         this.getHostObject().onMouseUp.call(this.getHostObject(), mouseInfo);
+      }
+
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    * @memberOf KeyboardInputComponent
+    */
+   getClassName: function() {
+      return "MouseInputComponent";
+   }
+
+});

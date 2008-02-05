@@ -2,7 +2,6 @@
  * The Render Engine
  * BaseComponent
  *
- * The base component class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -30,7 +29,11 @@
  *
  */
 
-var BaseComponent = BaseObject.extend({
+/**
+ * @class The base component class
+ * @extends BaseObject
+ */
+var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
 
    priority: 0,
 
@@ -125,6 +128,9 @@ var BaseComponent = BaseObject.extend({
       return "BaseComponent";
    },
 
+   /**
+    * Gets the type name as a string.
+    */
    getTypeString: function() {
       var ts = "";
       switch (this.getType()) {
@@ -138,6 +144,9 @@ var BaseComponent = BaseObject.extend({
       return ts;
    },
 
+   /**
+    * Stringify the component
+    */
    toString: function() {
       return this.base() + " (" + this.getTypeString() + ")]";
    }

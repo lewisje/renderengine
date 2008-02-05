@@ -1,26 +1,24 @@
 /**
  * The Render Engine
  * RenderContext
- * 
- * A base rendering context.  Game objects are rendered to a context
- * during engine runtime.
+ *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,13 +28,18 @@
  * THE SOFTWARE.
  *
  */
- 
-var RenderContext = Container.extend({
-    
+
+/**
+ * @class A base rendering context.  Game objects are rendered to a context
+ * during engine runtime.
+ * @extends Container
+ */
+var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
+
    surface: null,
-   
+
    transformStackDepth: 0,
-   
+
    /**
     * Create an instance of this rendering context and optionally
     * assign the surface to which all rendering will occur.  This
@@ -47,6 +50,8 @@ var RenderContext = Container.extend({
     * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.
     * @see CanvasContext
     * @see DocumentContext
+    * @memberOf RenderContext
+    * @constructor
     */
    constructor: function(contextName, surface) {
       this.base(contextName || "RenderContext");
@@ -57,6 +62,7 @@ var RenderContext = Container.extend({
    /**
     * Destroy the rendering context, and detach the surface from its
     * parent container.
+    * @memberOf RenderContext
     */
    destroy: function() {
       if (this.surface != document.body)
@@ -66,28 +72,31 @@ var RenderContext = Container.extend({
       this.surface = null;
       this.base();
    },
-   
+
    /**
     * Set the surface element that objects will be rendered to.
-    * 
+    *
     * @param element {HTMLElement} The surface node that all objects will be rendered to.
+    * @memberOf RenderContext
     */
    setSurface: function(element) {
       this.surface = element;
    },
-   
+
    /**
     * Get the surface node that all objects will be rendered to.
-    * 
+    *
     * @type HTMLElement
+    * @memberOf RenderContext
     */
    getSurface: function() {
       return this.surface;
    },
-   
+
    /**
     * Add a host object to the render list.  Only objects
     * within the render list will be rendered.
+    * @memberOf RenderContext
     */
    add: function(obj) {
       this.base(obj);
@@ -97,26 +106,28 @@ var RenderContext = Container.extend({
          this.sort(RenderContext.sortFn);
       }
    },
-   
+
    /**
     * Update the render context before rendering the objects to the surface.
     *
     * @param parentContext {RenderContext} A parent context, or <tt>null</tt>
     * @param time {Number} The current render time in milliseconds from the engine.
+    * @memberOf RenderContext
     */
    update: function(parentContext, time)
    {
       this.render(time);
    },
-   
+
    /**
     * Called after the update to render all of the objects to the rendering context.
     *
     * @param time {Number} The current render time in milliseconds from the engine.
+    * @memberOf RenderContext
     */
    render: function(time) {
       this.reset();
-      
+
       // Push the world transform
       this.pushTransform();
 
@@ -124,34 +135,47 @@ var RenderContext = Container.extend({
       var objs = this.getObjects();
       for (var o in objs)
       {
-         objs[o].update(this, time);
+         this.updateObject(objs[o], time);
       }
 
       // Restore the world transform
       this.popTransform();
-      
+
    },
-   
+
+   /**
+    * Update an object in the render context
+    *
+    * @param obj {BaseObject} An object to update
+    * @param time {Number} The current time in milliseconds
+    */
+   updateObject: function(obj, time) {
+      obj.update(this, time);
+   },
+
    /**
     * Increment the transform stack counter.
+    * @memberOf RenderContext
     */
    pushTransform: function() {
-      this.transformStackDepth++;   
+      this.transformStackDepth++;
    },
-   
+
    /**
     * Decrement the transform stack counter and ensure that the stack
     * is not unbalanced.  An unbalanced stack can be indicative of
     * objects that do not reset the state after rendering themselves.
+    * @memberOf RenderContext
     */
    popTransform: function() {
       this.transformStackDepth--;
       Assert((this.transformStackDepth >= 0), "Unbalanced transform stack!");
    },
-   
+
    /**
     * This is a potentially expensive call, and can lead to rendering
     * errors.  It is recommended against calling this method!
+    * @memberOf RenderContext
     */
    resetTransformStack: function() {
       while (this.transformStackDepth > 0)
@@ -159,11 +183,12 @@ var RenderContext = Container.extend({
          this.popTransform();
       }
    },
-   
+
    /**
     * Get the class name of this object
     *
     * @type String
+    * @memberOf RenderContext
     */
    getClassName: function() {
       return "RenderContext";
@@ -174,6 +199,8 @@ var RenderContext = Container.extend({
    /**
     * Sort the objects to draw from objects with the lowest
     * z-index to the highest z-index.
+    * @memberOf RenderContext
+    * @static
     */
    sortFn: function(obj1, obj2) {
       if (obj1 instanceof HostObject ||
@@ -181,7 +208,7 @@ var RenderContext = Container.extend({
       {
          return 0;
       }
-      
+
       return obj1.getZIndex() - obj2.getZIndex();
    }
 

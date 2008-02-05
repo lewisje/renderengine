@@ -2,7 +2,6 @@
  * The Render Engine
  * VectorDrawComponent
  *
- * A render component that renders its contents from a set of points.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -30,7 +29,11 @@
  *
  */
 
-var Vector2DComponent = BaseComponent.extend({
+/**
+ * @class A render component that renders its contents from a set of points.
+ * @extends BaseComponent
+ */
+var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.prototype */{
 
    strokeStyle: "#ffffff",     // Default to white lines
 
@@ -42,10 +45,17 @@ var Vector2DComponent = BaseComponent.extend({
 
    renderState: null,
 
+   /**
+    * @constructor
+    * @memberOf Vector2DComponent
+    */
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    calculateBoundingBox: function() {
       var x1 = 0;
       var x2 = 0;
@@ -76,40 +86,67 @@ var Vector2DComponent = BaseComponent.extend({
       this.getHostObject().setBoundingBox(new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    setPoints: function(pointArray) {
       this.points = pointArray;
       this.renderState = null;
       this.calculateBoundingBox();
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    buildRenderList: function() {
       this.renderState = this.getHostObject().getRenderContext().buildRenderList(this.points);
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    setLineStyle: function(strokeStyle) {
       this.strokeStyle = strokeStyle;
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    getLineStyle: function() {
       return this.strokeStyle;
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    setLineWidth: function(lineWidth) {
       this.lineWidth = lineWidth;
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    getLineWidth: function() {
       return this.lineWidth;
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    setFillStyle: function(fillStyle) {
       this.fillStyle = fillStyle;
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    getFillStyle: function() {
       return this.fillStyle;
    },
 
+   /**
+    * @memberOf Vector2DComponent
+    */
    execute: function(renderContext, time) {
       Assert((this.points != null), "Points not defined in CanvasVectorComponent");
 
@@ -125,6 +162,7 @@ var Vector2DComponent = BaseComponent.extend({
     * Get the class name of this object
     *
     * @type String
+    * @memberOf Vector2DComponent
     */
    getClassName: function() {
       return "Vector2DComponent";

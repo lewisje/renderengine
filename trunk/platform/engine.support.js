@@ -31,7 +31,7 @@
  *
  */
 
-var EngineSupport = Base.extend({
+var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    constructor: null,
 
    arrayRemove: function(array, obj) {
