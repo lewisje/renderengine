@@ -31,7 +31,7 @@
  *
  */
 
-Spaceroids.Rock = HostObject.extend({
+Spaceroids.Rock = Object2D.extend({
 
    size: 10,
 
@@ -57,6 +57,22 @@ Spaceroids.Rock = HostObject.extend({
       var c_mover = this.getComponent("move");
 
       c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
+   },
+
+   getPosition: function() {
+      return this.getComponent("move").getPosition();
+   },
+
+   setPosition: function(point) {
+      this.getComponent("move").setPosition(point);
+   },
+
+   getRotation: function() {
+      return this.getComponent("move").getRotation();
+   },
+
+   setRotation: function(angle) {
+      this.getComponent("move").setRotation(angle);
    },
 
    setup: function(pWidth, pHeight) {

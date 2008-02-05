@@ -32,7 +32,7 @@
  *
  */
 
-Spaceroids.Player = HostObject.extend({
+Spaceroids.Player = Object2D.extend({
 
    size: 4,
 
@@ -79,6 +79,22 @@ Spaceroids.Player = HostObject.extend({
       c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
    },
 
+   getPosition: function() {
+      return this.getComponent("move").getPosition();
+   },
+
+   setPosition: function(point) {
+      this.getComponent("move").setPosition(point);
+   },
+
+   getRotation: function() {
+      return this.getComponent("move").getRotation();
+   },
+
+   setRotation: function(angle) {
+      this.getComponent("move").setRotation(angle);
+   },
+
    setup: function(pWidth, pHeight) {
 
       // Playfield bounding box for quick checks
@@ -108,9 +124,6 @@ Spaceroids.Player = HostObject.extend({
 
       // Put us in the middle of the playfield
       c_mover.setPosition( this.pBox.getCenter() );
-
-      c_input.addRecipient("keyDown", this, this.keyDown);
-      c_input.addRecipient("keyUp", this, this.keyUp);
    },
 
    shoot: function() {
@@ -125,7 +138,7 @@ Spaceroids.Player = HostObject.extend({
       this.bullets--;
    },
 
-   keyDown: function(event) {
+   onKeyDown: function(event) {
       var c_mover = this.getComponent("move");
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
@@ -145,7 +158,7 @@ Spaceroids.Player = HostObject.extend({
       }
    },
 
-   keyUp: function(event) {
+   onKeyUp: function(event) {
       var c_mover = this.getComponent("move");
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:

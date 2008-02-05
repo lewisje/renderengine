@@ -32,7 +32,7 @@
  *
  */
 
-Spaceroids.Bullet = HostObject.extend({
+Spaceroids.Bullet = Object2D.extend({
 
    player: null,
 
@@ -64,6 +64,14 @@ Spaceroids.Bullet = HostObject.extend({
 
       c_mover.setPosition(p.add(new Point2D(dir).mul(10)));
       c_mover.setVelocity(dir.mul(3));
+   },
+
+   getPosition: function() {
+      return this.getComponent("move").getPosition();
+   },
+
+   setPosition: function(point) {
+      this.getComponent("move").setPosition(point);
    },
 
    preUpdate: function(renderContext, time) {
