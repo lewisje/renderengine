@@ -174,17 +174,5 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    getClassName: function() {
       return "Container";
-   },
-
-   /**
-    * String representation
-    * @memberOf Container
-    */
-   toString: function() {
-      var s = this.base() + " (\n";
-      for (var o in this.objects) {
-         s += this.objects[o].toString() + "\n";
-      }
-      return s + ")";
    }
 });

@@ -131,11 +131,12 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
    },
 
    /**
-    * String representation
-    * @memberOf BaseObject
+    * Output the object in JSON format so it can be reconstructed from
+    * a text stream.
+    *
+    * @type String
     */
    toString: function() {
-      return this.getClassName() + ": " + this.getName() + " [" + this.getId() + "]";
+      return EngineSupport.toJSONString(this);
    }
-
 });

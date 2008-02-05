@@ -48,7 +48,9 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    INV_PI: 0.31831,
 
    /**
-    * Convert degrees to radians
+    * Convert degrees to radians.
+    * @param degrees {Number} An angle in degrees
+    * @type Number
     */
    degToRad: function(degrees) {
       // ((Math.PI / 180) * deg);
@@ -56,21 +58,23 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    },
 
    /**
-    * Convert radians to degrees
+    * Convert radians to degrees.
+    * @param radians {Number} An angle in radians
+    * @type Number
     */
    radToDeg: function(radians) {
       // ((rad * 180) / Math.PI)
-      return ((rad * 180) * Math2D.INV_PI);
+      return ((radians * 180) * Math2D.INV_PI);
    },
 
    /**
-    * Perform AAB to AAB collision testing in world coordinates, returning <code>true</code>
+    * Perform AAB (axis-aligned box) to AAB collision testing in world coordinates, returning <code>true</code>
     * if the two boxes overlap.
     *
     * @param box1 {Rectangle} The collision box of object 1
-    * @param offset1 {Point} The position, in world coordinates, of object 1
+    * @param offset1 {Point2D} The position, in world coordinates, of object 1
     * @param box2 {Rectangle} The collision box of object 2
-    * @param offset2 {Point} The position, in world coordinates, of object 2
+    * @param offset2 {Point2D} The position, in world coordinates, of object 2
     * @type Boolean
     */
    boxBoxCollision: function(box1, offset1, box2, offset2)
@@ -79,11 +83,11 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    },
 
    /**
-    * Perform Point to AAB collision testing in world coordinates, returning <code>true</code>
+    * Perform point to AAB collision testing in world coordinates, returning <code>true</code>
     * if a collision occurs.
     *
     * @param box1 {Rectangle} The collision box of the object
-    * @param offset1 {Point} The position, in world coordinates, of the object
+    * @param offset1 {Point2D} The position, in world coordinates, of the object
     * @param p {Point} The point to test, in world coordinates
     * @type Boolean
     */
@@ -95,16 +99,17 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    /**
     * A static method used to calculate a direction vector
     * for the player's heading.
-    * @param origin {Point} The origin of the shape
-    * @param point {Point} The point to create the vector for
+    * @param origin {Point2D} The origin of the shape
+    * @param baseVec {Vector2D} The base vector
     * @param angle {Number} The rotation in degrees
+    * @type Vector2D
     */
-   getDirectionVector: function(origin, point, angle)
+   getDirectionVector: function(origin, baseVec, angle)
    {
       var r = Math2D.degToRad(angle);
 
-      var x = Math.cos(r) * point.x - Math.sin(r) * point.y;
-      var y = Math.sin(r) * point.x + Math.cos(r) * point.y;
+      var x = Math.cos(r) * baseVec.x - Math.sin(r) * baseVec.y;
+      var y = Math.sin(r) * baseVec.x + Math.cos(r) * baseVec.y;
 
       var v = new Vector2D(x, y).sub(origin);
       return v.normalize();
@@ -196,6 +201,10 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
       this.set(x, y);
    },
 
+   /**
+    * Private method used to update underlying object.
+    * @private
+    */
    upd: function() {
       this.x = this._vec.e(1); this.y = this._vec.e(2);
    },
@@ -204,6 +213,7 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
     * Returns true if this point is equal to the specified point.
     *
     * @param point {Point2D} The point to compare to
+    * @type Boolean
     */
    equals: function(point) {
       return (this.x == point.x && this.y == point.y);
@@ -231,30 +241,55 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
       return this;
    },
 
+   /**
+    * Adds the specified point to this point.
+    * @param point {Point2D} A point
+    * @type Point2D
+    */
    add: function(point) {
       this._vec = this._vec.add(point._vec);
       this.upd();
       return this;
    },
 
+   /**
+    * Add the scalar value to each component of the point
+    * @param scalar {Number} A number
+    * @type Point2D
+    */
    addScalar: function(scalar) {
       this._vec = this._vec.map(function(x) { return x + scalar; });
       this.upd();
       return this;
    },
 
+   /**
+    * Subtract the specified point from this point.
+    * @param point {Point2D} a point
+    * @type Point2D
+    */
    sub: function(point) {
       this._vec.subtract(point._vec);
       this.upd();
       return this;
    },
 
+   /**
+    * Multiply the components of two points together.
+    * @param point {Point2D} A point
+    * @type Point2D
+    */
    convolve: function(point) {
       this._vec = this._vec.map(function(x, i) { return x * (i == 1 ? point.x : point.y); });
       this.upd();
       return this;
    },
 
+   /**
+    * Divide the components of two points.  The point cannot contain zeros for its components.
+    * @param point {Point2D} A point
+    * @type Point2D
+    */
    convolveInverse: function(point) {
       Assert((point.x != 0 && point.y != 0), "Division by zero in Point.convolveInverse");
       this._vec = this._vec.map(function(x, i) { return x / (i == 1 ? point.x : point.y); });
@@ -262,12 +297,22 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
       return this;
    },
 
+   /**
+    * Multiply the components of this point by a scalar value.
+    * @param scalar {Number} A number
+    * @type Point2D
+    */
    mul: function(scalar) {
       this._vec = this._vec.map(function(x) { return x * scalar; });
       this.upd();
       return this;
    },
 
+   /**
+    * Divide the components of this point by a scalar value.
+    * @param scalar {Number} A number - cannot be zero
+    * @type Point2D
+    */
    div: function(scalar) {
       Assert((scalar != 0), "Division by zero in Point.divScalar");
 
@@ -277,8 +322,8 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Negate the point.
-    *
+    * Negate the point, inversing it's components.
+    * @type Point2D
     */
    neg: function() {
       this._vec.setElements([ -this._vec.e(1), -this._vec.e(2) ]);
@@ -288,12 +333,15 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
 
    /**
     * Returns true if the point is the zero point.
-    *
+    * @type Boolean
     */
    isZero: function() {
       return this._vec.eql(Vector.Zero);
    },
 
+   /**
+    * Returns a printable version of this object.
+    */
    toString: function() {
       return this._vec.inspect();
    }
@@ -309,7 +357,8 @@ Point2D.ZERO = new Point2D(0,0);
 var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
    /**
-    * Normalize the vector.  Returning its unit length, not including the actual length of the vector.
+    * Normalize the vector, returning its unit length, not including the actual length of the vector.
+    * @type Vector2D
     */
    normalize: function() {
       this._vec = this._vec.toUnitVector();
@@ -320,7 +369,8 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
    /**
     * Get the magnitude/length of the vector.
     *
-    * @returns a value representing the length (magnitude) of the point.
+    * @returns A value representing the length (magnitude) of the point.
+    * @type Number
     */
    len: function() {
       return this._vec.modulus();
@@ -329,6 +379,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
    /**
     * Get the dot product of two vectors.
     * @param vector {Vector} The Point to perform the operation against.
+    * @type Vector2D
     */
    dot: function(vector) {
       return this._vec.dot(vector._vec);
@@ -337,6 +388,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
    /**
     * Get the cross product of two vectors.
     * @param vector {Vector2D} The vector to perform the operation against.
+    * @type Vector2D
     */
    cross: function(vector) {
       this._vec = this._vec.cross(vector._vec);
@@ -350,6 +402,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     * is also a vector.
     *
     * @param vector {Vector} The vector to perform the angular determination against
+    * @type Number
     */
    angleBetween: function(vector) {
       return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
@@ -397,6 +450,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     * Returns true if this rectangle is equal to the specified rectangle.
     *
     * @param rect {Rectangle2D} The rectangle to compare to
+    * @type Boolean
     */
    equals: function(rect) {
       return (this.x == rect.x && this.y == rect.y &&
@@ -501,7 +555,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Returns a {@link Point} that contains the center point of this rectangle.
     *
-    * @type Point
+    * @type Point2D
     */
    getCenter: function()
    {
@@ -531,7 +585,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Gets a <code>Point</code> representing the top-left corner of this rectangle
     * in world coordinate space.
-    * @type Point
+    * @type Point2D
     */
    getTopLeft: function()
    {
@@ -541,7 +595,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Gets a <code>Point</code> representing the bottom-right corner of this rectangle
     * in world coordinate space.
-    * @type Point
+    * @type Point2D
     */
    getBottomRight: function()
    {

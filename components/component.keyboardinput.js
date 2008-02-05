@@ -60,7 +60,12 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    },
 
    /**
-    * Set the host object this component exists within.
+    * Set the host object this component exists within.  Additionally, this
+    * component sets up the event listeners.  Due to key events occurring
+    * less often than mouse events, every component listening for them will
+    * attach a listener.
+    *
+    * @param hostObject {HostObject} The object which hosts this component
     */
    setHostObject: function(hostObject) {
       this.base(hostObject);

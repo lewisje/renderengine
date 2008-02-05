@@ -2,7 +2,6 @@
  * The Render Engine
  * KeyboardInputComponent
  *
- *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
  * @version: $Revision: 52 $
@@ -34,8 +33,8 @@
  * the host object when one of the events occurs.  The host object should implement
  * any of the five methods listed below to be notified of the corresponding event:
  * <ul>
- * <li>onMouseOver - The mouse moved over the host object</li>
- * <li>onMouseOut - The mouse moved out of the host object</li>
+ * <li>onMouseOver - The mouse moved over the host object, or the object moved under the mouse</li>
+ * <li>onMouseOut - The mouse moved out of the host object (after being over it)</li>
  * <li>onMouseDown - A mouse button was depressed over the host object</li>
  * <li>onMouseUp - A mouse button was released over the host object</li>
  * <li>onMouseMove - The mouse was moved</li>
@@ -58,7 +57,11 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
    },
 
    /**
-    * Set the host object this component exists within.
+    * Set the host object this component exists within.  Additionally, this component
+    * sets some readable flags on the host object and establishes (if not already set)
+    * a mouse listener on the render context.
+    *
+    * @param hostObject {HostObject} The object which hosts the component
     */
    setHostObject: function(hostObject) {
       this.base(hostObject);
@@ -75,6 +78,7 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
       {
          context.MouseInputComponent_mouseInfo = {
             position: new Point2D(0,0);
+            lastPosition: new Point2D(0,0);
             button: EventEngine.MOUSE_NO_BUTTON,
             lastOver: null
          };
@@ -99,6 +103,9 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
    },
 
    /**
+    * Perform the checks on the mouse info object, and also perform
+    * intersection tests to be able to call mouse events.
+    *
     * @private
     */
    execute: function(renderContext, time) {
@@ -116,17 +123,21 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
          mouseOver = Math2D.boxPointCollision(bBox, pos, mouseInfo.position);
       }
 
-      if (this.getHostObject().onMouseMove)
+      // Mouse position changed
+      if (this.getHostObject().onMouseMove && !mouseInfo.position.equals(mouseInfo.lastPosition))
       {
          this.getHostObject().onMouseMove.call(this.getHostObject(), mouseInfo);
+         mouseInfo.lastPosition.set(mouseInfo.position);
       }
 
+      // Mouse is over object
       if (this.getHostObject().onMouseOver && mouseOver)
       {
          this.getHostObject().MouseInputComponent_mouseOver = true;
          this.getHostObject().onMouseOver.call(this.getHostObject(), mouseInfo);
       }
 
+      // Mouse was over object
       if (this.getHostObject().onMouseOut && !mouseOver &&
           this.getHostObject().MouseInputComponent_mouseOver == true)
       {
@@ -134,18 +145,20 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
          this.getHostObject().onMouseOut.call(this.getHostObject(), mouseInfo);
       }
 
-      if (this.getHostObject().onMouseDown && mouseOver)
+      // Mouse button clicked and mouse over object
+      if (this.getHostObject().onMouseDown && mouseOver && (mouseInfo.button != EventEngine.MOUSE_NO_BUTTON))
       {
          this.getHostObject().MouseInputComponent_mouseDown = true;
          this.getHostObject().onMouseDown.call(this.getHostObject(), mouseInfo);
       }
 
-      if (this.getHostObject().onMouseUp && this.getHostObject().MouseInputComponent_mouseDown)
+      // Mouse button released (and mouse was down over this object)
+      if (this.getHostObject().onMouseUp && this.getHostObject().MouseInputComponent_mouseDown  &&
+          (mouseInfo.button == EventEngine.MOUSE_NO_BUTTON))
       {
          this.getHostObject().MouseInputComponent_mouseDown = false;
          this.getHostObject().onMouseUp.call(this.getHostObject(), mouseInfo);
       }
-
    },
 
    /**
