@@ -39,7 +39,7 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
 
    lineWidth: 1,
 
-   fillStyle: "#000000",          // Default to none
+   fillStyle: null,          // Default to none
 
    points: null,
 
@@ -151,8 +151,15 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
       Assert((this.points != null), "Points not defined in CanvasVectorComponent");
 
       // Set the stroke and fill styles
-      renderContext.setLineStyle(this.strokeStyle);
-      renderContext.setFillStyle(this.fillStyle);
+      if (this.getLineStyle() != null)
+      {
+         renderContext.setLineStyle(this.strokeStyle);
+      }
+
+      if (this.getFillStyle() != null)
+      {
+         renderContext.setFillStyle(this.fillStyle);
+      }
 
       // Render out the points
       renderContext.drawPolygon(this.renderState || this.points);
