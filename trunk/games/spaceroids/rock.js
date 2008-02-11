@@ -61,6 +61,11 @@ Spaceroids.Rock = Object2D.extend({
       this.setPosition(position);
    },
 
+   destroy: function() {
+      this.ModelData.lastNode.removeObject(this);
+      this.base();
+   },
+
    update: function(renderContext, time) {
 
       var c_mover = this.getComponent("move");
