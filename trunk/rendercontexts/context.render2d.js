@@ -57,173 +57,223 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    backgroundColor: null,
 
    /**
-    * @memberOf RenderContext2D
+    * Reset the context, clearing it and preparing it for drawing.
     */
    reset: function() {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the background color of the context.
+    *
+    * @param color {String} An HTML color
     */
    setBackgroundColor: function(color) {
       this.backgroundColor = color;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the color assigned to the context background.
+    * @type String
     */
    getBackgroundColor: function() {
       return this.backgroundColor;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the width of the context drawing area.
+    *
+    * @param width {Number} The width in pixels
     */
    setWidth: function(width) {
       this.width = width;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the width of the context drawing area.
+    * @type Number
     */
    getWidth: function() {
       return this.width;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the height of the context drawing area
+    *
+    * @param height {Number} The height in pixels
     */
    setHeight: function(height) {
       this.height = height;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the height of the context drawing area.
+    * @type Number
     */
    getHeight: function() {
       return this.height;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the current transform position (translation).
+    *
+    * @param point {Point2D} The translation
     */
    setPosition: function(point) {
       this.position = point;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the current transform position (translation)
+    * @type Point2D
     */
    getPosition: function() {
       return this.position;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the rotation angle of the current transform
+    *
+    * @param angle {Number} An angle in degrees
     */
    setRotation: function(angle) {
       this.rotation = angle;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the current transform rotation.
+    * @type Number
     */
    getRotation: function() {
       return this.rotation;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the scale of the current transform.  Specifying
+    * only the first parameter implies a uniform scale.
+    *
+    * @param scaleX {Number} The X scaling factor, with 1 being 100%
+    * @param scaleY {Number} The Y scaling factor
     */
    setScale: function(scaleX, scaleY) {
       this.scaleX = scaleX;
-      this.scaleY = scaleY;
+      this.scaleY = scaleY || scaleX;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the X scaling factor of the current transform.
+    * @type Number
     */
    getScaleX: function() {
       return this.scaleX;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the Y scaling factor of the current transform.
+    * @type Number
     */
    getScaleY: function() {
       return this.scaleY;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the transformation using a matrix.
+    *
+    * @param matrix {Matrix2D} The transformation matrix
     */
    setTransform: function(matrix) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the line style for the context.
+    *
+    * @param lineStyle {String} An HTML color or <tt>null</tt>
     */
    setLineStyle: function(lineStyle) {
       this.lineStyle = lineStyle;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the current line style for the context.  <tt>null</tt> if
+    * not set.
+    * @type String
     */
    getLineStyle: function() {
       return this.lineStyle;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the line width for drawing paths.
+    *
+    * @param width {Number} The width of lines in pixels
+    * @default 1
     */
    setLineWidth: function(width) {
       this.lineWidth = width;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the current line width for drawing paths.
+    * @type Number
     */
    getLineWidth: function() {
       return this.lineWidth;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Set the fill style of the context.
+    *
+    * @param fillStyle {String} An HTML color, or <tt>null</tt>.
     */
    setFillStyle: function(fillStyle) {
       this.fillStyle = fillStyle;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Get the current fill style of the context.
+    * @type String
     */
    getFillStyle: function() {
       return this.fillStyle;
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw an un-filled rectangle on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle to draw
     */
-   drawRectangle: function(point, width, height) {
+   drawRectangle: function(rect) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw a filled rectangle on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle to draw
     */
-   drawFilledRectangle: function(point, width, height) {
+   drawFilledRectangle: function(rect) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw an un-filled arc on the context.  Arcs are drawn in clockwise
+    * order.
+    *
+    * @param point {Point2D} The point around which the arc will be drawn
+    * @param radius {Number} The radius of the arc in pixels
+    * @param startAngle {Number} The starting angle of the arc in degrees
+    * @param endAngle {Number} The end angle of the arc in degrees
     */
-   drawArc: function(point, radiusX, startAngle, endAngle) {
+   drawArc: function(point, radius, startAngle, endAngle) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw a filled arc on the context.  Arcs are drawn in clockwise
+    * order.
+    *
+    * @param point {Point2D} The point around which the arc will be drawn
+    * @param radius {Number} The radius of the arc in pixels
+    * @param startAngle {Number} The starting angle of the arc in degrees
+    * @param endAngle {Number} The end angle of the arc in degrees
     */
-   drawFilledArc: function(point, radiusX, startAngle, endAngle) {
+   drawFilledArc: function(point, radius, startAngle, endAngle) {
    },
 
    /**
@@ -240,97 +290,131 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw an un-filled polygon on the context.
+    *
+    * @param pointArray {Array} An array of {@link Point2D} objects
     */
    drawPolygon: function(pointArray) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw an filled polygon on the context.
+    *
+    * @param pointArray {Array} An array of {@link Point2D} objects
     */
    drawFilledPolygon: function(pointArray) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw a line on the context.
+    *
+    * @param point1 {Point2D} The start of the line
+    * @param point2 {Point2D} The end of the line
     */
    drawLine: function(point1, point2) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw a point on the context.
+    *
+    * @param point {Point2D} The position to draw the point
     */
    drawPoint: function(point) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw an image on the context.
+    *
+    * @param point {Point2D} The top-left position to draw the image.
+    * @param imageData {Image} The image to draw
     */
    drawImage: function(point, imageData) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Capture an image from the context.
+    *
+    * @param rect {Rectangle2D} The area to capture
+    * @returns Image data capture
+    * @type Image
     */
    getImage: function(rect) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw text on the context.
+    *
+    * @param point {Point2D} The top-left position to draw the image.
+    * @param text {String} The text to draw
     */
    drawText: function(point, text) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Start a path.
     */
    startPath: function() {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * End a path.
     */
    endPath: function() {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Stroke a path using the current line style and width.
     */
    strokePath: function() {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Fill a path using the current fill style.
     */
    fillPath: function() {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Move the current path to the point sepcified.
+    *
+    * @param point {Point2D} The point to move to
     */
    moveTo: function(point) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw a line from the current point to the point specified.
+    *
+    * @param point {Point2D} The point to draw a line to
     */
    lineTo: function(point) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw a quadratic curve from the current point to the specified point.
+    *
+    * @param cPoint {Point2D} The control point
+    * @param point {Point2D} The point to draw to
     */
    quadraticCurveTo: function(cPoint, point) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw a bezier curve from the current point to the specified point.
+    *
+    * @param cPoint1 {Point2D} Control point 1
+    * @param cPoint2 {Point2D} Control point 2
+    * @param point {Point2D} The point to draw to
     */
    bezierCurveTo: function(cPoint1, cPoint2, point) {
    },
 
    /**
-    * @memberOf RenderContext2D
+    * Draw an arc from the current point to the specified point.
+    *
+    * @param point1 {Point2D} Arc point 1
+    * @param point2 {Point2D} Arc point 2
+    * @param radius {Number} The radius of the arc
     */
    arcTo: function(point1, point2, radius) {
    },

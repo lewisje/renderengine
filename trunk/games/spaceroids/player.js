@@ -42,6 +42,8 @@ Spaceroids.Player = Object2D.extend({
 
    bullets: 0,
 
+   tip: null,
+
    constructor: function() {
       this.base("Player");
 
@@ -49,34 +51,30 @@ Spaceroids.Player = Object2D.extend({
       this.add(new KeyboardInputComponent("input"));
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
+      this.add(new ColliderComponent("collider", Spaceroids.collisionModel));
 
-      // An array to store bullet objects
-      this.bullets = [];
-      this.bulletVelocity = new Point2D(1, 1);
+      this.tip = new Point2D(0, -1);
+
    },
 
-   preUpdate: function(renderContext, time) {
+   update: function(renderContext, time) {
+
+      renderContext.pushTransform();
+
       var c_mover = this.getComponent("move");
+      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
       c_mover.setRotation(c_mover.getRotation() + this.rotDir);
 
       if (this.thrusting)
       {
          var r = c_mover.getRotation();
-         var tip = new Point2D(0, -1);
-         var dir = Math2D.getDirectionVector(Point2D.ZERO, tip, r);
+         var dir = Math2D.getDirectionVector(Point2D.ZERO, this.tip, r);
          c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.25)));
       }
 
-      renderContext.pushTransform();
-   },
-
-   postUpdate: function(renderContext, time) {
+      this.base(renderContext, time);
       renderContext.popTransform();
 
-      var c_draw = this.getComponent("draw");
-      var c_mover = this.getComponent("move");
-
-      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
    },
 
    getPosition: function() {
@@ -103,7 +101,6 @@ Spaceroids.Player = Object2D.extend({
       // Randomize the position and velocity
       var c_mover = this.getComponent("move");
       var c_draw = this.getComponent("draw");
-      var c_input = this.getComponent("input");
 
       // Pick one of the three shapes
       var shape = Spaceroids.Player.points;
@@ -119,7 +116,6 @@ Spaceroids.Player = Object2D.extend({
 
       // Assign the shape to the vector component
       c_draw.setPoints(s);
-      //c_draw.buildRenderList();
       c_draw.setLineStyle("white");
 
       // Put us in the middle of the playfield
@@ -134,7 +130,6 @@ Spaceroids.Player = Object2D.extend({
 
    removeBullet: function(bullet) {
       // Clean up
-      bullet.destroy();
       this.bullets--;
    },
 
@@ -170,7 +165,18 @@ Spaceroids.Player = Object2D.extend({
             break;
 
       }
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+
+    */
+   getClassName: function() {
+      return "Player";
    }
+
 
 }, { // Static
 

@@ -39,24 +39,43 @@ Spaceroids.Rock = Object2D.extend({
 
    pBox: null,
 
-   constructor: function() {
+   constructor: function(size, position, pWidth, pHeight) {
       this.base("Spaceroid");
 
       // Add components to move and draw the asteroid
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
+      this.add(new ColliderComponent("collider", Spaceroids.collisionModel));
+
+      // Playfield bounding box for quick checks
+      this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
+
+      // Set size and position
+      this.size = size || 10;
+      if (!position)
+      {
+         // Set the position
+         position = new Point2D( Math.floor(Math.random() * this.pBox.getDims().x),
+                                 Math.floor(Math.random() * this.pBox.getDims().y));
+      }
+      this.setPosition(position);
    },
 
-   preUpdate: function(renderContext, time) {
-      renderContext.pushTransform();
-   },
+   update: function(renderContext, time) {
 
-   postUpdate: function(renderContext, time) {
-      renderContext.popTransform();
-      var c_draw = this.getComponent("draw");
       var c_mover = this.getComponent("move");
-
       c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
+
+      renderContext.pushTransform();
+      this.base(renderContext, time);
+      renderContext.popTransform();
+
+      // Debug the quad node
+      if (renderContext.getContextData(this) && renderContext.getContextData(this).lastNode)
+      {
+         renderContext.setLineStyle("blue");
+         renderContext.drawRectangle(renderContext.getContextData(this).lastNode.rect);
+      }
    },
 
    getPosition: function() {
@@ -75,13 +94,7 @@ Spaceroids.Rock = Object2D.extend({
       this.getComponent("move").setRotation(angle);
    },
 
-   setup: function(pWidth, pHeight) {
-
-      // Playfield bounding box for quick checks
-      this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
-
-      // Randomize the position and velocity
-      var c_mover = this.getComponent("move");
+   setShape: function() {
       var c_draw = this.getComponent("draw");
 
       // Pick one of the three shapes
@@ -99,24 +112,43 @@ Spaceroids.Rock = Object2D.extend({
 
       // Assign the shape to the vector component
       c_draw.setPoints(s);
-      //c_draw.buildRenderList();
       c_draw.setLineStyle("silver");
+   },
+
+   setMotion: function() {
+      // Randomize the position and velocity
+      var c_mover = this.getComponent("move");
 
       // Pick a random rotation and spin speed
       c_mover.setRotation( Math.floor(Math.random() * 360));
       c_mover.setAngularVelocity( Math.floor(Math.random() * 10) > 5 ? 0.5 : -0.5);
 
-      // Set the position
-      var pos = new Point2D( Math.floor(Math.random() * pWidth),
-                             Math.floor(Math.random() * pHeight));
-      c_mover.setPosition( pos );
 
 
       // Set a random motion vector
       var vec = new Vector2D( Math.floor(Math.random() * 10) > 5 ? this.speed : -this.speed,
                               Math.floor(Math.random() * 10) > 5 ? this.speed : -this.speed);
       c_mover.setVelocity(vec);
+   },
+
+   setup: function() {
+
+      this.setShape();
+      this.setMotion();
+
+   },
+
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+
+    */
+   getClassName: function() {
+      return "Rock";
    }
+
 
 }, { // Static Only
 

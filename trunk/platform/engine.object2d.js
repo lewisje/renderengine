@@ -63,6 +63,10 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       return this.bBox;
    },
 
+   getWorldBox: function() {
+      return new Rectangle2D(this.getBoundingBox()).offset(this.getPosition());
+   },
+
    setPosition: function(point) {
    },
 

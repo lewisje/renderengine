@@ -37,10 +37,11 @@
 
 // Load required engine components
 Engine.load("/rendercontexts/context.canvascontext.js");
+Engine.load("/platform/engine.spatialgrid.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.vector2d.js");
-Engine.load("/components/component.notifier.js");
+Engine.load("/components/component.collider.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
 
@@ -57,7 +58,14 @@ var Spaceroids = Game.extend({
 
    fieldBox: null,
 
+   collisionModel: null,
+
    rocks: [],
+
+   fieldWidth: 500,
+   fieldHeight: 580,
+
+   debug: true,
 
    cleanupPlayfield: function() {
 
@@ -73,15 +81,15 @@ var Spaceroids = Game.extend({
 
       this.cleanupPlayfield();
 
-      var pWidth = this.renderContext.getWidth();
-      var pHeight = this.renderContext.getHeight();
+      var pWidth = this.fieldWidth;
+      var pHeight = this.fieldHeight;
 
       // Add some asteroids
       for (var a = 0; a < 5; a++)
       {
-         var rock = new Spaceroids.Rock();
+         var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
-         rock.setup(pWidth, pHeight);
+         rock.setup();
       }
 
       var player = new Spaceroids.Player();
@@ -96,10 +104,13 @@ var Spaceroids = Game.extend({
       // Set the FPS of the game
       Engine.setFPS(24);
       // Create the 2D context
-      this.fieldBox = new Rectangle2D(0, 0, 500, 580);
-      this.renderContext = new CanvasContext(500, 580);
+      this.fieldBox = new Rectangle2D(0, 0, this.fieldWidth, this.fieldHeight);
+      this.renderContext = new CanvasContext(this.fieldWidth, this.fieldHeight);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
+
+      // We'll need something to detect collisions
+      this.collisionModel = new SpatialGrid(this.fieldWidth, this.fieldHeight, 7);
 
       this.attractMode();
    },
@@ -123,24 +134,27 @@ var Spaceroids = Game.extend({
       var p = new Point2D(pos);
       var x = p.x;
       var y = p.y;
-      if (pos.x < this.fieldBox.x || pos.x > this.fieldBox.x + this.fieldBox.width ||
-          pos.y < this.fieldBox.y || pos.y > this.fieldBox.y + this.fieldBox.height)
+      var fTL = this.fieldBox.getTopLeft();
+      var fDM = this.fieldBox.getDims();
+
+      if (pos.x < fTL.x || pos.x > fTL.x + fDM.x ||
+          pos.y < fTL.y || pos.y > fTL.y + fDM.y)
       {
-         if (pos.x > this.fieldBox.x + this.fieldBox.width + rX)
+         if (pos.x > fTL.x + fDM.x + rX)
          {
-            x = (this.fieldBox.x - (rX - 10));
+            x = (fTL.x - (rX - 10));
          }
-         if (pos.y > this.fieldBox.y + this.fieldBox.height + rY)
+         if (pos.y > fTL.y + fDM.y + rY)
          {
-            y = (this.fieldBox.y - (rY - 10));
+            y = (fTL.y - (rY - 10));
          }
-         if (pos.x < this.fieldBox.x - rX)
+         if (pos.x < fTL.x - rX)
          {
-            x = (this.fieldBox.x + this.fieldBox.width + (rX - 10));
+            x = (fTL.x + fDM.x + (rX - 10));
          }
-         if (pos.y < this.fieldBox.y - rY)
+         if (pos.y < fTL.y - rY)
          {
-            y = (this.fieldBox.y + this.fieldBox.height + (rX - 10));
+            y = (fTL.y + fDM.y + (rX - 10));
          }
          p.set(x,y);
       }

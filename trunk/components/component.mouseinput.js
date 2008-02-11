@@ -126,7 +126,7 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
       // Mouse position changed
       if (this.getHostObject().onMouseMove && !mouseInfo.position.equals(mouseInfo.lastPosition))
       {
-         this.getHostObject().onMouseMove.call(this.getHostObject(), mouseInfo);
+         this.getHostObject().onMouseMove(mouseInfo);
          mouseInfo.lastPosition.set(mouseInfo.position);
       }
 
@@ -134,7 +134,7 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
       if (this.getHostObject().onMouseOver && mouseOver)
       {
          this.getHostObject().MouseInputComponent_mouseOver = true;
-         this.getHostObject().onMouseOver.call(this.getHostObject(), mouseInfo);
+         this.getHostObject().onMouseOver(mouseInfo);
       }
 
       // Mouse was over object
@@ -142,14 +142,14 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
           this.getHostObject().MouseInputComponent_mouseOver == true)
       {
          this.getHostObject().MouseInputComponent_mouseOver = false;
-         this.getHostObject().onMouseOut.call(this.getHostObject(), mouseInfo);
+         this.getHostObject().onMouseOut(mouseInfo);
       }
 
       // Mouse button clicked and mouse over object
       if (this.getHostObject().onMouseDown && mouseOver && (mouseInfo.button != EventEngine.MOUSE_NO_BUTTON))
       {
          this.getHostObject().MouseInputComponent_mouseDown = true;
-         this.getHostObject().onMouseDown.call(this.getHostObject(), mouseInfo);
+         this.getHostObject().onMouseDown(mouseInfo);
       }
 
       // Mouse button released (and mouse was down over this object)
@@ -157,7 +157,7 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
           (mouseInfo.button == EventEngine.MOUSE_NO_BUTTON))
       {
          this.getHostObject().MouseInputComponent_mouseDown = false;
-         this.getHostObject().onMouseUp.call(this.getHostObject(), mouseInfo);
+         this.getHostObject().onMouseUp(mouseInfo);
       }
    },
 
