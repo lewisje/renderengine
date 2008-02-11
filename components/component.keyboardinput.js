@@ -135,7 +135,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyDownListener: function(eventObj) {
       if (this.getHostObject().onKeyDown)
       {
-         this.getHostObject().onKeyDown.call(this.getHostObject(), eventObj);
+         this.getHostObject().onKeyDown(eventObj);
       }
    },
 
@@ -145,7 +145,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyUpListener: function(eventObj) {
       if (this.getHostObject().onKeyUp)
       {
-         this.getHostObject().onKeyUp.call(this.getHostObject(), eventObj);
+         this.getHostObject().onKeyUp(eventObj);
       }
    },
 
@@ -155,7 +155,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyPressListener: function(eventObj) {
       if (this.getHostObject().onKeyPress)
       {
-         this.getHostObject().onKeyPress.call(this.getHostObject(), eventObj);
+         this.getHostObject().onKeyPress(eventObj);
       }
    },
 

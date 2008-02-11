@@ -34,6 +34,12 @@
 var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    constructor: null,
 
+   /**
+    * Remove an element from an array.
+    *
+    * @param array {Array} The array to modify
+    * @param obj {Object} The object to remove
+    */
    arrayRemove: function(array, obj) {
       var idx = -1;
       if (Array.prototype.indexOf) {
@@ -48,11 +54,39 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             }
          }
       }
+
       if (idx != -1)
       {
          array.splice(idx, 1);
       }
    },
+
+   /**
+    * Executes a callback for each element within an array.
+    *
+    * @param array {Array} The array to operate on
+    * @param fn {Function} The function to apply to each element
+    * @param [thisp] {Object} An optional "this" pointer to use in the callback
+    */
+   forEach: function(array, fn, thisp) {
+
+      if (Array.prototype.forEach) {
+         array.forEach(fn, thisp);
+      }
+      else
+      {
+         var len = array.length;
+         if (typeof fn != "function")
+            throw new TypeError();
+
+         for (var i = 0; i < len; i++)
+         {
+            if (i in array)
+               fn.call(thisp, array[i], i, array);
+         }
+      }
+   },
+
 
    /**
     * Returns specified object as a JavaScript Object Notation (JSON) string.

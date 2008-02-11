@@ -50,7 +50,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.
     * @see CanvasContext
     * @see DocumentContext
-    * @memberOf RenderContext
     * @constructor
     */
    constructor: function(contextName, surface) {
@@ -62,7 +61,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    /**
     * Destroy the rendering context, and detach the surface from its
     * parent container.
-    * @memberOf RenderContext
     */
    destroy: function() {
       if (this.surface != document.body)
@@ -77,7 +75,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Set the surface element that objects will be rendered to.
     *
     * @param element {HTMLElement} The surface node that all objects will be rendered to.
-    * @memberOf RenderContext
     */
    setSurface: function(element) {
       this.surface = element;
@@ -87,16 +84,16 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Get the surface node that all objects will be rendered to.
     *
     * @type HTMLElement
-    * @memberOf RenderContext
     */
    getSurface: function() {
       return this.surface;
    },
 
    /**
-    * Add a host object to the render list.  Only objects
+    * Add an object to the render list.  Only objects
     * within the render list will be rendered.
-    * @memberOf RenderContext
+    *
+    * @param obj {BaseObject} The object to add to the render list
     */
    add: function(obj) {
       this.base(obj);
@@ -104,7 +101,22 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       {
          obj.setRenderContext(this);
          this.sort(RenderContext.sortFn);
+
+         // Create a structure to hold information that is related to
+         // the render context that keeps it separate from the rest of the object.
+         obj.RenderContext = {};
       }
+   },
+
+   /**
+    * Returns the structure that contains information held about
+    * the rendering context.  This object allows a context to store
+    * extra information on an object that an object wouldn't know about.
+    *
+    * @type Object
+    */
+   getContextData: function(obj) {
+      return obj.RenderContext;
    },
 
    /**
@@ -112,7 +124,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     *
     * @param parentContext {RenderContext} A parent context, or <tt>null</tt>
     * @param time {Number} The current render time in milliseconds from the engine.
-    * @memberOf RenderContext
     */
    update: function(parentContext, time)
    {
@@ -123,7 +134,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Called after the update to render all of the objects to the rendering context.
     *
     * @param time {Number} The current render time in milliseconds from the engine.
-    * @memberOf RenderContext
     */
    render: function(time) {
       this.reset();
@@ -165,7 +175,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Decrement the transform stack counter and ensure that the stack
     * is not unbalanced.  An unbalanced stack can be indicative of
     * objects that do not reset the state after rendering themselves.
-    * @memberOf RenderContext
     */
    popTransform: function() {
       this.transformStackDepth--;
@@ -175,7 +184,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    /**
     * This is a potentially expensive call, and can lead to rendering
     * errors.  It is recommended against calling this method!
-    * @memberOf RenderContext
     */
    resetTransformStack: function() {
       while (this.transformStackDepth > 0)
@@ -185,10 +193,22 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
+    * Get a collection of object Id's that are near the object specified.
+    * The collection is a Javascript object that contains the Id's of the
+    * objects nearby.
+    *
+    * @param obj {Object2D} The object to test against
+    * @returns A collection that contains the names of objects nearby
+    * @type Object
+    */
+   getNearObjects: function(obj) {
+      return {};
+   },
+
+   /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf RenderContext
     */
    getClassName: function() {
       return "RenderContext";

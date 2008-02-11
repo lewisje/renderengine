@@ -32,7 +32,7 @@
  *
  */
 
-var CanvasContext = RenderContext2D.extend({
+var SVGContext = RenderContext2D.extend({
 
    context2D: null,
 

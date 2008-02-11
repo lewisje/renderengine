@@ -31,91 +31,65 @@
  *
  */
 
-var QuadNode = Base.extend({
+/**
+ * @class A collider component handles collisions by updating the
+ *        collision model and checking for possible collisions.
+ *
+ * @param name {String} Name of the component
+ * @param collisionModel {SpatialCollection} The collision model
+ * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
+ */
+var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.prototype */{
 
-   nodes: null,
+   collisionModel: null,
 
-   constructor: function() {
-      nodes = [null, null, null, null];
-   }
-
-});
-
-var ColliderComponent = NotifierComponent.extend({
-
-   potentialColliders: null,
-
-   quadTree: null,
-
-   constructor: function(name, priority) {
+   constructor: function(name, collisionModel, priority) {
       this.base(name, BaseComponent.TYPE_COLLIDER, priority || 1.0);
-      this.potentialColliders = {};
+      this.collisionModel = collisionModel;
    },
 
-   genQuadTree: function() {
+   updateModel: function() {
 
-      quadTree = [];
-
-      // Get our bounding box size
-      var oBox = new Rectangle2D(this.getHostObject().getBoundingBox());
-
-      // Get the render context's dimensions
-      var rc = this.getHostObject().getRenderContext();
-      var wBox = new Rectangle2D(0, 0, rc.getWidth(), rc.getHeight());
-
-      // If the size of the object box is too small, adjust it
-      // to the limit
-      if (oBox.len_x() < ColliderComponent.LOWER_LIMIT)
+      // Get the model data for the object
+      var obj = this.getHostObject();
+      if (!obj.ModelData)
       {
-         oBox.setWidth(ColliderComponent.LOWER_LIMIT);
+         obj.ModelData = { lastNode: null };
       }
 
-      if (oBox.len_y() < ColliderComponent.LOWER_LIMIT)
+      if ( obj.ModelData.lastNode && obj.ModelData.lastNode.getRect().containsPoint(obj.getPosition()) )
       {
-         oBox.setHeight(ColliderComponent.LOWER_LIMIT);
+         // The object is within the same node
+         return;
       }
 
-      // There is also an upper limit that we want to work within
-      if (oBox.len_x() > ColliderComponent.UPPER_LIMIT)
+      // Find the node that contains the object
+      var aNode = this.collisionModel.findNodePoint(obj.getPosition());
+      if (aNode != null)
       {
-         oBox.setWidth(ColliderComponent.UPPER_LIMIT);
-      }
-
-      if (oBox.len_y() > ColliderComponent.UPPER_LIMIT)
-      {
-         oBox.setHeight(ColliderComponent.UPPER_LIMIT);
-      }
-
-      // Now we can divide the playfield into a mesh, with each
-      // sub area being that of the object's box
-      for (var mX = 0; mX < wBox.width; mX += oBox.width)
-      {
-         for (var mY = 0; mY < wBox.height; mY += oBox.height)
+         if (obj.ModelData.lastNode && (obj.ModelData.lastNode.getIndex() != aNode.getIndex()))
          {
-
+            obj.ModelData.lastNode.removeObject(obj);
+            aNode.addObject(obj);
          }
+         obj.ModelData.lastNode = aNode;
       }
    },
 
-   /**
-    * Determine the list of objects that could be colliding
-    * with us.  The list contains the id's of all of the
-    * objects that occupy the same quad that the host object
-    * does.
-    */
-   buildPCL: function() {
+   execute: function(renderContext, time) {
 
-      // Get the visible area of the render context
-      var rc = this.getHost().getRenderContext();
+      // Update the collision model
+      this.updateModel();
 
-      // Using a quadtree to eliminate collisions that don't matter
-      // We're going to subdivide the quadtree up just enough to enclose
-      // our object.  This way, we're not creating a quadtree that is too
-      // dense to be quick.  Additionally, we'll only subdivide to a certain
-      // extent.  But the usage of the bounding box of the object will assist
-      // us in creating a quadtree that can be updated without further divisions.
-
-
+      // If the host object needs to know about collisions...
+      if (this.getHostObject().onCollide)
+      {
+         // Get the PCL and check for collisions
+         var pcl = this.collisionModel.getPCL(this.getHostObject().getPosition());
+         EngineSupport.forEach(pcl, function(obj) {
+            this.getHostObject().onCollide(obj);
+         }, this);
+      }
    },
 
    /**
@@ -126,10 +100,5 @@ var ColliderComponent = NotifierComponent.extend({
    getClassName: function() {
       return "ColliderComponent";
    }
-
-}, {  // Static
-
-   LOWER_LIMIT: 50,
-   UPPER_LIMIT: 400
 
 });

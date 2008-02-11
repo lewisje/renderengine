@@ -68,51 +68,29 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    },
 
    /**
-    * Perform AAB (axis-aligned box) to AAB collision testing in world coordinates, returning <code>true</code>
+    * Perform AAB (axis-aligned box) to AAB collision testing, returning <tt>true</tt>
     * if the two boxes overlap.
     *
-    * @param box1 {Rectangle} The collision box of object 1
-    * @param offset1 {Point2D} The position, in world coordinates, of object 1
-    * @param box2 {Rectangle} The collision box of object 2
-    * @param offset2 {Point2D} The position, in world coordinates, of object 2
+    * @param box1 {Rectangle2D} The collision box of object 1
+    * @param box2 {Rectangle2D} The collision box of object 2
     * @type Boolean
     */
-   boxBoxCollision: function(box1, offset1, box2, offset2)
+   boxBoxCollision: function(box1, box2)
    {
-      return box1.offset(offset1).isOverlapped(box2.offset(offset2));
+      return box1.isOverlapped(box2);
    },
 
    /**
-    * Perform point to AAB collision testing in world coordinates, returning <code>true</code>
+    * Perform point to AAB collision, returning <code>true</code>
     * if a collision occurs.
     *
-    * @param box1 {Rectangle} The collision box of the object
-    * @param offset1 {Point2D} The position, in world coordinates, of the object
-    * @param p {Point} The point to test, in world coordinates
+    * @param box {Rectangle2D} The collision box of the object
+    * @param point {Point2D} The point to test, in world coordinates
     * @type Boolean
     */
-   boxPointCollision: function(box1, offset1, p)
+   boxPointCollision: function(box, point)
    {
-      return box1.offset(offset1).containsPoint(p);
-   },
-
-   /**
-    * A static method used to calculate a direction vector
-    * for the player's heading.
-    * @param origin {Point2D} The origin of the shape
-    * @param baseVec {Vector2D} The base vector
-    * @param angle {Number} The rotation in degrees
-    * @type Vector2D
-    */
-   getDirectionVector: function(origin, baseVec, angle)
-   {
-      var r = Math2D.degToRad(angle);
-
-      var x = Math.cos(r) * baseVec.x - Math.sin(r) * baseVec.y;
-      var y = Math.sin(r) * baseVec.x + Math.cos(r) * baseVec.y;
-
-      var v = new Vector2D(x, y).sub(origin);
-      return v.normalize();
+      return box.containsPoint(point);
    },
 
    /**
@@ -145,7 +123,6 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       return (ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0);
    },
 
-
    /**
     * Test to see if a line intersects a Rectangle.
     *
@@ -176,7 +153,27 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       if (Math2D.lineLineCollision(p1, p2, upperRight, lowerRight)) return true;
 
       return false;
+   },
+
+   /**
+    * A static method used to calculate a direction vector
+    * for the player's heading.
+    * @param origin {Point2D} The origin of the shape
+    * @param baseVec {Vector2D} The base vector
+    * @param angle {Number} The rotation in degrees
+    * @type Vector2D
+    */
+   getDirectionVector: function(origin, baseVec, angle)
+   {
+      var r = Math2D.degToRad(angle);
+
+      var x = Math.cos(r) * baseVec.x - Math.sin(r) * baseVec.y;
+      var y = Math.sin(r) * baseVec.x + Math.cos(r) * baseVec.y;
+
+      var v = new Vector2D(x, y).sub(origin);
+      return v.normalize();
    }
+
 });
 
 /**
@@ -412,12 +409,12 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
 var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
 
-   x: 0,
-   y: 0,
-   width: 0,
-   height: 0,
+   topLeft: null,
+   dims: null,
 
    constructor: function(x, y, width, height) {
+      this.topLeft = new Point2D(0,0);
+      this.dims = new Point2D(0,0);
       this.set(x,y,width,height);
    },
 
@@ -432,17 +429,13 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    set: function(x, y, width, height)
    {
       if (x instanceof Rectangle2D) {
-         this.x = x.x;
-         this.y = x.y;
-         this.width = x.width;
-         this.height = x.height;
+         this.topLeft.set(x.getTopLeft());
+         this.dims.set(x.getDims());
       }
       else
       {
-         this.x = (x != null ? x : 0.0);
-         this.y = (y != null ? y : 0.0);
-         this.width = (width != null ? width : 0.0);
-         this.height = (height != null ? height : 0.0);
+         this.topLeft.set((x != null ? x : 0.0), (y != null ? y : 0.0));
+         this.dims.set((width != null ? width : 0.0), (height != null ? height : 0.0));
       }
    },
 
@@ -453,8 +446,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     * @type Boolean
     */
    equals: function(rect) {
-      return (this.x == rect.x && this.y == rect.y &&
-              this.width == rect.width && this.height == rect.height);
+      return (this.topLeft.equals(rect.getTopLeft()) && this.dims.equals(rect.getDims()));
    },
 
    /**
@@ -469,21 +461,18 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     */
    offset: function(offsetPtOrX, offsetY)
    {
-      var xOff = 0;
-      var yOff = 0;
+      var offs = new Point2D(0,0);
       if (offsetPtOrX instanceof Point2D)
       {
-         xOff = offsetPtOrX.x;
-         yOff = offsetPtOrX.y;
+         offs.set(offsetPtOrX);
       }
       else
       {
-         xOff = offsetPtOrX;
-         yOff = offsetY;
+         offs.set(offsetPtOrX, offsetY);
       }
 
-      this.x += xOff;
-      this.y += yOff;
+      this.topLeft.add(offs);
+      return this;
    },
 
    /**
@@ -492,7 +481,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     * @param width {Number} The new width of the rectangle
     */
    setWidth: function(width) {
-      this.width = width;
+      this.dims.set(width, this.dims.y);
    },
 
    /**
@@ -501,7 +490,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     * @param height {Number} The new height of the rectangle
     */
    setHeight: function(height) {
-      this.height = height;
+      this.dims.set(this.dims.x, height);
    },
 
    /**
@@ -513,29 +502,46 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     */
    isOverlapped: function(rect)
    {
-      if ((rect.x > (this.x + this.width)) ||
-          (rect.y > (this.y + this.height)))
+      var rTL = rect.getTopLeft();
+      if ((rTL.x > (this.topLeft.x + this.dims.x)) ||
+          (rTL.y > (this.topLeft.y + this.dims.y)))
       {
          return false;
       }
 
-      return !((rect.x + rect.width) < this.x ||
-               (rect.y + rect.height) < this.y);
+      return !((rTL.x + rect.dims.x) < this.topLeft.x ||
+               (rTL.y + rect.dims.y) < this.topLeft.y);
    },
 
    /**
-    * Determine if this rectangle is contained within another rectangle.
+    * Determine if this rectangle is contained within the specified rectangle.
     *
-    * @param rect A {@link Rectangle} to compare against
+    * @param rect A {@link Rectangle2D} to compare against
     * @return <code>true</code> if the this rectangle is fully contained in the specified rectangle.
     * @type Boolean
     */
    isContained: function(rect)
    {
-      return (this.x >= rect.x) &&
-             (this.y >= rect.y) &&
-             ((this.x + this.width) <= (rect.x + rect.width)) &&
-             ((this.y + this.height) <= (rect.y + rect.height));
+      return (this.topLeft.x >= rect.topLeft.x) &&
+             (this.topLeft.y >= rect.topLeft.y) &&
+             ((this.topLeft.x + this.dims.x) <= (rect.topLeft.x + rect.dims.x)) &&
+             ((this.topLeft.y + this.dims.y) <= (rect.topLeft.y + rect.dims.y));
+   },
+
+   /**
+    * Determine if this rectangle contains the specified rectangle.
+    *
+    * @param rect A {@link Rectangle2D} to compare against
+    * @return <code>true</code> if the rectangle is fully contained within this rectangle.
+    * @type Boolean
+    */
+   containsRect: function(rect)
+   {
+      return (rect.topLeft.x >= this.topLeft.x) &&
+             (rect.topLeft.y >= this.topLeft.y) &&
+             ((rect.topLeft.x + rect.dims.x) <= (this.topLeft.x + this.dims.x)) &&
+             ((rect.topLeft.y + rect.dims.y) <= (this.topLeft.y + this.dims.y));
+
    },
 
    /**
@@ -546,10 +552,10 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     */
    containsPoint: function(point)
    {
-      return (point.x >= this.x &&
-              point.y >= this.y &&
-              point.x <= this.x + this.width &&
-              point.y <= this.y + this.height);
+      return (point.x >= this.topLeft.x &&
+              point.y >= this.topLeft.y &&
+              point.x <= this.topLeft.x + this.dims.x &&
+              point.y <= this.topLeft.y + this.dims.y);
    },
 
    /**
@@ -559,7 +565,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     */
    getCenter: function()
    {
-      return new Point2D(this.x + (this.width * 0.5), this.y + (this.height * 0.5));
+      return new Point2D(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
    },
 
    /**
@@ -569,7 +575,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     */
    len_x: function()
    {
-      return Math.abs(this.width);
+      return Math.abs(this.dims.x);
    },
 
    /**
@@ -579,28 +585,35 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     */
    len_y: function()
    {
-      return Math.abs(this.height);
+      return Math.abs(this.dims.y);
    },
 
    /**
-    * Gets a <code>Point</code> representing the top-left corner of this rectangle
-    * in world coordinate space.
+    * Gets a point representing the top-left corner of this rectangle.
     * @type Point2D
     */
    getTopLeft: function()
    {
-      return new Point2D(this.x, this.y);
+      return new Point2D(this.topLeft);
    },
 
    /**
-    * Gets a <code>Point</code> representing the bottom-right corner of this rectangle
-    * in world coordinate space.
+    * Gets a point representing the width and height of this rectangle.
+    * @type Point2D
+    */
+   getDims: function()
+   {
+      return new Point2D(this.dims);
+   },
+
+   /**
+    * Gets a point representing the bottom-right corner of this rectangle.
     * @type Point2D
     */
    getBottomRight: function()
    {
-      var p = this.getTopLeft();
-      p.add(new Point2D(this.width, this.height));
+      var p = new Point2D(this.topLeft);
+      p.add(this.dims);
 
       return p;
    },
@@ -610,6 +623,6 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
     */
    toString: function()
    {
-      return (this.x + "," + this.y + " [" + this.width + "," + this.height + "]");
+      return (this.topLeft.x + "," + this.topLeft.y + " [" + this.dims.x + "," + this.dims.y + "]");
    }
 });

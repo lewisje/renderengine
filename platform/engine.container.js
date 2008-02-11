@@ -30,6 +30,54 @@
  */
 
 /**
+ * Create an iterator over a container.
+ *
+ * @param container {Container} The container to iterate over.
+ */
+var Iterator = Base.extend(/** @scope Iterator.prototype */{
+
+   idx: 0,
+
+   c: null,
+
+   constructor: function(container) {
+      this.idx = 0;
+      this.c = container;
+   },
+
+   /**
+    * Get the next element from the iterator.
+    * @type Object
+    */
+   next: function() {
+      if (this.idx < this.c.size())
+      {
+         return this.c.get(this.idx++);
+      }
+      throw new Error("Index out of range!");
+   },
+
+   /**
+    * Returns <tt>true</tt> if the iterator has more elements.
+    * @type Boolean
+    */
+   hasNext: function() {
+      return (this.idx < this.c.size);
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    * @memberOf Container
+    */
+   getClassName: function() {
+      return "Iterator";
+   }
+
+});
+
+/**
  * @class A container is a logical collection of objects.  A container
  * is responsible for maintaining the list of objects within it.
  * When a container is destroyed, all objects within the container

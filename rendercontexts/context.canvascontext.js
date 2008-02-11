@@ -40,7 +40,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
    mouseHandler: false,
 
-   quadTree: null,
 
    /**
     * Create an instance of a 2D rendering context using the canvas element.
@@ -62,7 +61,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       canvas.height = this.height;
       canvas.id = this.getId();
 
-      this.initQuadtree();
       this.base("CanvasContext", canvas);
    },
 
@@ -95,143 +93,31 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.get2DContext().restore();
    },
 
-   //================================================================
-   // Spatial Quadtree
-
-   /**
-    * Build the quadtree that will be used to locate objects quickly within the
-    * 2D world.
-    * @private
-    */
-   initQuadtree: function() {
-
-      var nodeIdx = 1;
-      var smWidth = Math.floor(this.getWidth() / CanvasContext.MAX_QUAD_DIVISIONS);
-
-      function subdivNode(node, rect) {
-         var hW = Math.floor(rect.width / 2);
-         var hH = Math.floor(rect.height / 2);
-
-         if (hW < smWidth)
-         {
-            return;
-         }
-
-         // This node
-         node.idx = nodeIdx++;
-         node.rect = rect;
-         node.objects = {};
-         node.quads = [null, null, null, null];
-
-         // Top-left
-         var n;
-         var r = new Rectangle2D(rect.x, rect.y, hW, hH);
-         node.quads[0] = subdivNode({}, r);
-
-         // Top-right
-         r = new Rectangle2D(rect.x + hW, rect.y, hW, hH);
-         node.quads[1] = subdivNode({}, r);
-
-         // Bottom-left
-         r = new Rectangle2D(rect.x, rect.y + hH, hW, hH);
-         node.quads[2] = subdivNode({}, r);
-
-         // Bottom-right
-         r = new Rectangle2D(rect.x + hW, rect.y + hH, hW, hH);
-         node.quads[3] = subdivNode({}, r);
-
-         return node;
-      }
-
-      // Build the spatial quadtree
-      this.quadTree = {};
-      subdivNode(this.quadTree, new Rectangle2D(0, 0, this.getWidth(), this.getHeight()));
-   },
-
-   /**
-    * Each time an object is updated, make sure to update the quadtree with the
-    * positions of each.
-    * @private
-    */
-   updateObject: function(obj, time) {
-      // First, update the object
-      this.base(obj, time);
-
-      if (obj.RenderContext2D_lastNode && obj.RenderContext2D_lastNode.rect.containsPoint(obj.getPosition()))
-      {
-         // The object is within the same node
-         return;
-      }
-
-      // Find the node with the object
-      var aNode = this.findNode(obj.getPosition(), this.quadTree);
-      if (aNode != null)
-      {
-         var objName = obj.getId();
-
-         // If the object moved out of the last node it was in, update that
-         if (obj.RenderContext2D_lastNode && (obj.RenderContext2D_lastNode.idx != aNode.idx))
-         {
-            delete obj.RenderContext2D_lastNode.objects[objName];
-         }
-
-         aNode.objects[objName] = "true";
-         obj.RenderContext2D_lastNode = aNode;
-      }
-   },
-
-   /**
-    * Find the quadtree node which contains the point specified.
-    * @param point {Point2D} The point to locate
-    * @param node {Object} The node to look within
-    * @type QuadtreeNode
-    */
-   findNode: function(point, node) {
-
-      var sNode = null;
-      if (node && node.rect.containsPoint(point))
-      {
-         if (node.quads[0] == null)
-         {
-            return node;
-         }
-
-         // Check the quads
-         var p = 0;
-         while (sNode == null && p < 4)
-         {
-            sNode = this.findNode(point, node.quads[p++]);
-         }
-      }
-      else
-      {
-         return null;
-      }
-
-      return sNode;
-   },
 
    //================================================================
    // Drawing functions
 
    /**
-
+    * Reset the context, clearing it and preparing it for drawing.
     */
    reset: function() {
       this.get2DContext().clearRect(0, 0, this.width, this.height);
    },
 
    /**
-
+    * Set the background color of the context.
+    *
+    * @param color {String} An HTML color
     */
    setBackgroundColor: function(color) {
       jQuery(this.getSurface()).css("background-color", color);
       this.base(color);
    },
 
-
    /**
-
+    * Set the current transform position (translation).
+    *
+    * @param point {Point2D} The translation
     */
    setPosition: function(point) {
       this.get2DContext().translate(point.x, point.y);
@@ -239,7 +125,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Set the rotation angle of the current transform
+    *
+    * @param angle {Number} An angle in degrees
     */
    setRotation: function(angle) {
       this.get2DContext().rotate(Math2D.degToRad(angle));
@@ -247,7 +135,11 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Set the scale of the current transform.  Specifying
+    * only the first parameter implies a uniform scale.
+    *
+    * @param scaleX {Number} The X scaling factor, with 1 being 100%
+    * @param scaleY {Number} The Y scaling factor
     */
    setScale: function(scaleX, scaleY) {
       scaleX = scaleX || 1;
@@ -257,13 +149,17 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Set the transformation using a matrix.
+    *
+    * @param matrix {Matrix2D} The transformation matrix
     */
    setTransform: function(matrix) {
    },
 
    /**
-
+    * Set the line style for the context.
+    *
+    * @param lineStyle {String} An HTML color or <tt>null</tt>
     */
    setLineStyle: function(lineStyle) {
       this.get2DContext().strokeStyle = lineStyle;
@@ -271,7 +167,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Set the line width for drawing paths.
+    *
+    * @param width {Number} The width of lines in pixels
+    * @default 1
     */
    setLineWidth: function(width) {
       this.get2DContext().lineWidth = width * 1.0;
@@ -279,7 +178,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Set the fill style of the context.
+    *
+    * @param fillStyle {String} An HTML color, or <tt>null</tt>.
     */
    setFillStyle: function(fillStyle) {
       this.get2DContext().fillStyle = fillStyle;
@@ -287,23 +188,30 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw an un-filled rectangle on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle to draw
     */
-   drawRectangle: function(point, width, height) {
-      this.get2DContext().strokeRect(point.x, point.y, width, height);
-      this.base(point, width, height);
+   drawRectangle: function(rect) {
+      var rTL = rect.getTopLeft();
+      var rDM = rect.getDims();
+      this.get2DContext().strokeRect(rTL.x, rTL.y, rDM.x, rDM.y);
+      this.base(rect);
    },
 
    /**
-
+    * Draw a filled rectangle on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle to draw
     */
-   drawFilledRectangle: function(point, width, height) {
-      this.get2DContext().fillRect(point.x, point.y, width, height);
-      this.base(point, width, height);
+   drawFilledRectangle: function(rect) {
+      var rTL = rect.getTopLeft();
+      var rDM = rect.getDims();
+      this.get2DContext().fillRect(rTL.x, rTL.y, rDM.x, rDM.y);
+      this.base(rect);
    },
 
    /**
-
     * @private
     */
    _arc: function(point, radiusX, startAngle, endAngle) {
@@ -313,7 +221,13 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw an un-filled arc on the context.  Arcs are drawn in clockwise
+    * order.
+    *
+    * @param point {Point2D} The point around which the arc will be drawn
+    * @param radius {Number} The radius of the arc in pixels
+    * @param startAngle {Number} The starting angle of the arc in degrees
+    * @param endAngle {Number} The end angle of the arc in degrees
     */
    drawArc: function(point, radiusX, startAngle, endAngle) {
       this._arc(point, radiusX, startAngle, endEngle);
@@ -322,7 +236,13 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw a filled arc on the context.  Arcs are drawn in clockwise
+    * order.
+    *
+    * @param point {Point2D} The point around which the arc will be drawn
+    * @param radius {Number} The radius of the arc in pixels
+    * @param startAngle {Number} The starting angle of the arc in degrees
+    * @param endAngle {Number} The end angle of the arc in degrees
     */
    drawFilledArc: function(point, radiusX, startAngle, endAngle) {
       this._arc(point, radiusX, startAngle, endEngle);
@@ -331,7 +251,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
     * @private
     */
    _poly: function(pointArray) {
@@ -388,7 +307,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw an un-filled polygon on the context.
+    *
+    * @param pointArray {Array} An array of {@link Point2D} objects
     */
    drawPolygon: function(pointArray) {
       if (pointArray.isRenderList)
@@ -397,27 +318,31 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
          return;
       }
       this._poly(pointArray);
-      this.strokePath();
       this.base(pointArray);
+      this.strokePath();
    },
 
    /**
-
+    * Draw an filled polygon on the context.
+    *
+    * @param pointArray {Array} An array of {@link Point2D} objects
     */
    drawFilledPolygon: function(pointArray) {
       if (pointArray.isRenderList)
       {
          pointArray();
-      this.fillPath();
          return;
       }
       this._poly(pointArray);
-      this.fillPath();
       this.base(pointArray);
+      this.fillPath();
    },
 
    /**
-
+    * Draw a line on the context.
+    *
+    * @param point1 {Point2D} The start of the line
+    * @param point2 {Point2D} The end of the line
     */
    drawLine: function(point1, point2) {
       this.startPath();
@@ -429,7 +354,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw a point on the context.
+    *
+    * @param point {Point2D} The position to draw the point
     */
    drawPoint: function(point) {
       this.drawLine(point, point);
@@ -437,7 +364,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw an image on the context.
+    *
+    * @param point {Point2D} The top-left position to draw the image.
+    * @param imageData {Image} The image to draw
     */
    drawImage: function(point, imageData) {
       this.get2DContext().putImageData(imageData, point.x, point.y);
@@ -445,7 +375,11 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Capture an image from the context.
+    *
+    * @param rect {Rectangle2D} The area to capture
+    * @returns Image data capture
+    * @type Image
     */
    getImage: function(rect) {
       this.base()
@@ -453,7 +387,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw text on the context.
+    *
+    * @param point {Point2D} The top-left position to draw the image.
+    * @param text {String} The text to draw
     */
    drawText: function(point, text) {
 
@@ -461,7 +398,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Start a path.
     */
    startPath: function() {
       this.get2DContext().beginPath();
@@ -469,7 +406,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * End a path.
     */
    endPath: function() {
       this.get2DContext().closePath();
@@ -477,7 +414,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Stroke a path using the current line style and width.
     */
    strokePath: function() {
       this.get2DContext().stroke();
@@ -485,7 +422,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Fill a path using the current fill style.
     */
    fillPath: function() {
       this.get2DContext().fill();
@@ -493,7 +430,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Move the current path to the point sepcified.
+    *
+    * @param point {Point2D} The point to move to
     */
    moveTo: function(point) {
       this.get2DContext().moveTo(point.x, point.y);
@@ -501,7 +440,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw a line from the current point to the point specified.
+    *
+    * @param point {Point2D} The point to draw a line to
     */
    lineTo: function(point) {
       this.get2DContext().lineTo(point.x, point.y);
@@ -509,7 +450,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw a quadratic curve from the current point to the specified point.
+    *
+    * @param cPoint {Point2D} The control point
+    * @param point {Point2D} The point to draw to
     */
    quadraticCurveTo: function(cPoint, point) {
       this.get2DContext().quadraticCurveTo(cPoint.x, cPoint.y, point.x, point.y);
@@ -517,7 +461,11 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw a bezier curve from the current point to the specified point.
+    *
+    * @param cPoint1 {Point2D} Control point 1
+    * @param cPoint2 {Point2D} Control point 2
+    * @param point {Point2D} The point to draw to
     */
    bezierCurveTo: function(cPoint1, cPoint2, point) {
       this.get2DContext().bezierCurveTo(cPoint1.x, cPoint1.y, cPoint2.x, cPoint2.y, point.x, point.y);
@@ -525,13 +473,16 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-
+    * Draw an arc from the current point to the specified point.
+    *
+    * @param point1 {Point2D} Arc point 1
+    * @param point2 {Point2D} Arc point 2
+    * @param radius {Number} The radius of the arc
     */
    arcTo: function(point1, point2, radius) {
       this.get2DContext().arcTo(point1.x, point1.y, point2.x, point2.y, radius);
       this.base(point1, point2, radius);
    },
-
 
    /**
     * Get the class name of this object
@@ -542,11 +493,5 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    getClassName: function() {
       return "CanvasContext";
    }
-}, {
-
-   /**
-    * Maximum number of divisions in the spatial tree
-    */
-   MAX_QUAD_DIVISIONS: 8
 });
 

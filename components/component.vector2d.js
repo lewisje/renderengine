@@ -163,6 +163,11 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
 
       // Render out the points
       renderContext.drawPolygon(this.renderState || this.points);
+
+      if (this.fillStyle)
+      {
+         renderContext.drawFilledPolygon(this.renderState || this.points);
+      }
    },
 
    /**

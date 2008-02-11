@@ -494,6 +494,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.load("/platform/engine.object2d.js");
       this.load("/platform/engine.resourceloader.js");
       this.load("/platform/engine.events.js");
+      this.load("/platform/engine.spatialcontainer.js");
 
       // Contexts
       this.load("/rendercontexts/context.render2d.js");
@@ -543,6 +544,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
+
       var b = new Date().getTime();
 
       // Update the world
