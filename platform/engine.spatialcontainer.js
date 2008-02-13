@@ -2,9 +2,8 @@
  * The Render Engine
  * SpatialContainer
  *
- * An abstract class to represent spatial containers.  Spatial containers
- * contain objects and can report on potential objects within a defined
- * space of that container.
+ * @fileoverview Spatial containers maintain a collection objects and can report
+ *               on potential objects within a defined space of that container.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -41,7 +40,7 @@ Engine.NodeIndex = 1;
 
 /**
  * @class A single node within a spatial container.  Has an index for fast node
- *        comparisons, and a list of object Ids contained within the node.
+ *        comparisons, and a list of objects contained within the node.
  */
 var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
 

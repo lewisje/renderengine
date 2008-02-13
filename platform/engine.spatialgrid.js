@@ -37,6 +37,7 @@
  * A single node within a SpatialGrid.
  *
  * @param rect {Rectangle2D} The rectangle which defines this node.
+ * @extends SpatialNode
  */
 var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
 
@@ -59,7 +60,6 @@ var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
     * Get the class name of this object
     *
     * @type String
-    * @memberOf Container
     */
    getClassName: function() {
       return "GridNode";

@@ -1,25 +1,23 @@
 /**
  * The Render Engine
  * ImageResourceLoader
- * 
- * Loads images and stores the reference to those images.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -29,19 +27,31 @@
  * THE SOFTWARE.
  *
  */
- 
-var ImageResourceLoader = ResourceLoader.extend({
-   
+
+/**
+ * @class Loads images and stores the reference to those images.
+ * @extends ResourceLoader
+ */
+var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.prototype */{
+
    elementStorage: null,
-   
+
+   /**
+    * Load an image resource from a URL.
+    *
+    * @param name {String} The name of the resource loader
+    * @param location {String} The URL where the resource is located
+    * @param width {Number} The width of this resource, in pixels
+    * @param height {Number} The height of this resource, in pixels
+    */
    load: function(name, location, width, height) {
-   
+
       // Create the area if it doesn't exist which will
       // be used to load the images from their URL
       var doc = Engine.getDefaultContext().getSurface();
       var div = jQuery("<div/>");
       div.css({ display: none });
-      
+
       // Wrap the div in an object so it can be automatically cleaned up
       if (this.elementStorage == null)
       {
@@ -49,8 +59,8 @@ var ImageResourceLoader = ResourceLoader.extend({
          this.elementStorage.setElement(div[0]);
          doc.add(elementStorage);
       }
-      
-   
+
+
       // Create an image element
       var image = document.createElement("img");
       image.src = location;
@@ -59,8 +69,8 @@ var ImageResourceLoader = ResourceLoader.extend({
 
       // Append it to the document so it can load the image
       elementStorage.getElement().appendChild(image);
-      
+
       this.base(name, image);
    }
-   
+
 });
