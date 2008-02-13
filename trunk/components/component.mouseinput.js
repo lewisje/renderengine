@@ -3,8 +3,8 @@
  * KeyboardInputComponent
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 52 $
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  *

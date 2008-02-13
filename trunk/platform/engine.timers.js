@@ -2,7 +2,7 @@
  * The Render Engine
  * Timers
  *
- * A collection of timer objects
+ * @fileoverview A collection of timer objects.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -30,6 +30,13 @@
  *
  */
 
+/**
+ * @class The base abstract class for all timers.
+ *
+ * @param name {String} The name of the timer
+ * @param interval {Number} The interval for the timer, in milliseconds
+ * @param callback {Function} The function to call when the interval is reached
+ */
 var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
    timer: null,
@@ -49,33 +56,60 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
       this.restart();
    },
 
+   /**
+    * Stop the timer and remove it from the system
+    */
    destroy: function() {
       this.timer = null;
       this.base();
    },
 
+   /**
+    * Get the underlying system timer object.
+    */
    getTimer: function() {
       return this.timer;
    },
 
+   /**
+    * Set the underlying system timer object.
+    *
+    * @param timer {Object} The timer object
+    */
    setTimer: function(timer) {
       this.timer = timer;
    },
 
+   /**
+    * Returns <tt>true</tt> if the timer is currently running.
+    * @type Boolean
+    */
    isRunning: function() {
       return this.running;
    },
 
+   /**
+    * Cancel the timer.
+    */
    cancel: function() {
       this.timer = null;
       this.running = false;
    },
 
+   /**
+    * Cancel the running timer and restart it.
+    */
    restart: function() {
       this.cancel();
       this.running = true;
    },
 
+   /**
+    * Set the callback function for this timer.  If the timer is
+    * currently running, it will be restarted.
+    *
+    * @param callback {Function} A function object to call
+    */
    setCallback: function(callback) {
       Assert((typeof callback == "function"), "Callback must be a function in Timer.setCallback");
       this.callback = callback;
@@ -85,19 +119,37 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
       }
    },
 
+   /**
+    * Get the callback function for this timer.
+    * @type Function
+    */
    getCallback: function() {
       return this.callback;
    },
 
+   /**
+    * Set the interval of this timer.  If the timer is running, it
+    * will be cancelled.
+    *
+    * @param interval {Number} The interval of this timer, in milliseconds
+    */
    setInterval: function(interval) {
       this.cancel();
       this.interval = interval;
    },
 
+   /**
+    * Get the interval of this timer, in milliseconds.
+    * @type Number
+    */
    getInterval: function() {
       return this.interval;
    },
 
+   /**
+    * Get the class name of this object
+    * @type String
+    */
    getClassName: function() {
       return "Timer";
    }
@@ -107,15 +159,25 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
 var Timeout = Timer.extend({
 
+   /**
+    * Cancel this timeout timer.
+    */
    cancel: function() {
       window.clearTimeout(this.getTimer());
       this.base();
    },
 
+   /**
+    * Restart this timeout timer
+    */
    restart: function() {
       this.setTimer(window.setTimeout(this.getCallback(), this.getInterval()));
    },
 
+   /**
+    * Get the class name of this object
+    * @type String
+    */
    getClassName: function() {
       return "Timeout";
    }
@@ -125,18 +187,27 @@ var Timeout = Timer.extend({
 
 var Interval = Timer.extend({
 
+   /**
+    * Cancel this interval timer.
+    */
    cancel: function() {
       window.clearInterval(this.getTimer());
       this.base();
    },
 
+   /**
+    * Restart this interval timer.
+    */
    restart: function() {
       this.setTimer(window.setInterval(this.getCallback(), this.getInterval()));
    },
 
+   /**
+    * Get the class name of this object
+    * @type String
+    */
    getClassName: function() {
       return "Interval";
    }
-
 
 });

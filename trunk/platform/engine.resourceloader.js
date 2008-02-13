@@ -2,11 +2,6 @@
  * The Render Engine
  * ResourceLoader
  *
- * A resource loader is a generalized interface used by all resource
- * loaders.  It is designed to provide a common set of routines for
- * loading resources (fonts, images, game data, etc...) from some
- * location.
- *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$
@@ -33,6 +28,14 @@
  *
  */
 
+/**
+ * @class  A resource loader is a generalized interface used by all resource
+ *         loaders.  It is designed to provide a common set of routines for
+ *         loading resources (fonts, images, game data, etc...) from some
+ *         location.
+ *
+ * @param name {String} The name of the resource loader. Default: ResourceLoader
+ */
 var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
    cache: {},
@@ -43,21 +46,42 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
       this.base("ResourceLoader");
    },
 
+   /**
+    * Load an object via this resource loader, and add it to the cache.
+    *
+    * @param name {String} The name to refer to the loaded object
+    * @param data {Object} The data to store in the cache
+    */
    load: function(name, data) {
       this.cache[name] = data;
       this.length++;
    },
 
+   /**
+    * Unload an object from this resource loader.  Removes the object
+    * from the cache.
+    *
+    * @param name {String} The name of the object to remove
+    */
    unload: function(name) {
       this.cache[name] = null;
       delete this.cache[name];
       this.length--;
    },
 
+   /**
+    * Get the object with the specified name from the cache.
+    *
+    * @param name {String} The name of the object to retrieve
+    * @type Object
+    */
    get: function(name) {
       return this.cache[name];
    },
 
+   /**
+    * Clear the objects contained in the cache.
+    */
    clear: function() {
       for (var o in this.cache) {
          this.cache(o) = null;
