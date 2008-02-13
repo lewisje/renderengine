@@ -1,7 +1,8 @@
 /**
  * The Render Engine
- * Container
  *
+ * @fileoverview A set of objects which can be used to create a collection
+ *               of objects, and to iterate over a container.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -30,7 +31,7 @@
  */
 
 /**
- * Create an iterator over a container.
+ * @class Create an iterator over a container.
  *
  * @param container {Container} The container to iterate over.
  */
@@ -82,27 +83,23 @@ var Iterator = Base.extend(/** @scope Iterator.prototype */{
  * is responsible for maintaining the list of objects within it.
  * When a container is destroyed, all objects within the container
  * are destroyed with it.
+ *
+ * @param {String} The name of the container. Default: Container
  * @extends BaseObject
  */
 var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    objects: null,
 
-   /**
-    * Create an instance of a container object.
-    *
-    * @param {String} The name of the container. Default: Container
-    * @memberOf Container
-    * @constructor
-    */
    constructor: function(containerName) {
       this.base(containerName || "Container");
       this.objects = [];
    },
 
    /**
-    * Destroy all objects contained within this object.
-    * @memberOf Container
+    * Destroy all objects contained within this object.  Calls the
+    * <tt>destroy()</tt> method on each object, giving them a chance
+    * to perform clean up operations.
     */
    destroy: function() {
       while(this.objects.length > 0)
@@ -118,7 +115,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * container.
     *
     * @type Number
-    * @memberOf Container
     */
    size: function() {
       return this.objects.length;
@@ -128,7 +124,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Add an object to the container.
     *
     * @param obj {BaseObject} The object to add to the container.
-    * @memberOf Container
     */
    add: function(obj) {
       this.objects.push(obj);
@@ -140,7 +135,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * not destroyed when it is removed from the container.
     *
     * @param obj {BaseObject} The object to remove from the container.
-    * @memberOf Container
     */
    remove: function(obj) {
       Console.log("Removed " + obj.getId() + " from " + this.getId());
@@ -154,7 +148,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param idx {Number} An index between zero and the size of the container minus 1.
     * @return The object removed from the container.
     * @type BaseObject
-    * @memberOf Container
     */
    removeAtIndex: function(idx) {
       Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
@@ -173,7 +166,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     *
     * @param idx {Number} The index of the object to get
     * @type BaseObject
-    * @memberOf Container
     */
    get: function(idx) {
       return this.objects[idx];
@@ -181,8 +173,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    /**
     * Remove all objects from the container.  None of the objects are
-    * destroyed.
-    * @memberOf Container
+    * destroyed, only removed from this container.
     */
    clear: function() {
       this.objects.length = 0;
@@ -192,7 +183,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Get the array of objects within this container.
     *
     * @type Array
-    * @memberOf Container
     */
    getObjects: function() {
       return this.objects;
@@ -206,7 +196,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * be sorted after B.
     *
     * @param fn {Function} The function to sort with.
-    * @memberOf Container
     */
    sort: function(fn) {
       Assert((fn != null), "A function must be provided to sort the Container");
@@ -218,7 +207,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Get the class name of this object
     *
     * @type String
-    * @memberOf Container
     */
    getClassName: function() {
       return "Container";
