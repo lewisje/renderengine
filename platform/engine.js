@@ -135,8 +135,8 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * @param msg {String} The message to write
     */
    debug: function(msg) {
-      if (opera)
-         opera.postError("[ DEBUG ] " + msg);
+      if (window.opera)
+         window.opera.postError("[ DEBUG ] " + msg);
    },
 
    /**
@@ -144,8 +144,8 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * @param msg {String} The message to write
     */
    warn: function(msg) {
-      if (opera)
-         opera.postError("[ WARN ] " + msg);
+      if (window.opera)
+         window.opera.postError("[ WARN ] " + msg);
    },
 
    /**
@@ -153,8 +153,8 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * @param msg {String} The message to write
     */
    error: function(msg) {
-      if (opera)
-         opera.postError("[!!! ERROR !!!] " + msg);
+      if (window.opera)
+         window.opera.postError("[!!! ERROR !!!] " + msg);
    }
 });
 
@@ -188,7 +188,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
          // Firebug
          this.consoleRef = window.console;
       }
-      else if (opera && opera.postError)
+      else if (window.opera && window.opera.postError)
       {
          // Opera console
          this.consoleRef = OperaConsoleRef;
