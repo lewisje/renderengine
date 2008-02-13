@@ -32,15 +32,16 @@
  */
 
 /**
- * @class ConsoleRef
- *
- * A stand-in class when Firebug or Firebug Lite are not installed.
+ * @class A stand-in class when other debugger output options are not
+ *        available.  This object is created, as necessary, by the
+ *        {@link Console}
  */
 var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    constructor: null,
 
    dumpWindow: null,
 
+   /** @private */
    out: function(msg) {
       if (this.dumpWindow == null)
       {
@@ -54,9 +55,13 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
             "</style>"
       }
 
-      this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
+      // Using jQuery to handle adding new messages
+      $(this.dumpWindow.document.body).append(msg);
+
+      // this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
    },
 
+   /** @private */
    dump: function(msg) {
       if (msg instanceof Array)
       {
@@ -85,18 +90,31 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
       }
    },
 
+   /** @private */
    fix: function(msg) {
       return msg.replace(/\\n/g, "<br>").replace(/</g,"&lt;").replace(/>/g,"&gt;");
    },
 
+   /**
+    * Write a debug message to the console
+    * @param msg {String} The message to write
+    */
    debug: function(msg) {
       this.out("<span class='debug'>" + this.dump(msg) + "</span>");
    },
 
+   /**
+    * Write a warning message to the console
+    * @param msg {String} The message to write
+    */
    warn: function(msg) {
       this.out("<span class='warn'>" + this.dump(msg) + "</span>");
    },
 
+   /**
+    * Write an error message to the console
+    * @param msg {String} The message to write
+    */
    error: function(msg) {
       this.out("<span class='error'>" + this.dump(msg) + "</span>");
    }
@@ -104,10 +122,47 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
 });
 
 /**
- * @class Console
- *
- * A class for logging messages.  If the FireBug, or FireBug Lite, extension
- * is installed, it will be used as an alternative to the console display.
+ * @class An Opera specific implementation which redirects output to the <tt>postError()</tt>
+ *        method of the <tt>opera</tt> object.  This object is created, as necessary, by the
+ *        {@link Console}
+ * @extends ConsoleRef
+ */
+var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
+   constructor: null,
+
+   /**
+    * Write a debug message to the console
+    * @param msg {String} The message to write
+    */
+   debug: function(msg) {
+      opera.postError("[ DEBUG ] " + msg);
+   },
+
+   /**
+    * Write a warning message to the console
+    * @param msg {String} The message to write
+    */
+   warn: function(msg) {
+      opera.postError("[ WARN ] " + msg);
+   },
+
+   /**
+    * Write an error message to the console
+    * @param msg {String} The message to write
+    */
+   error: function(msg) {
+      opera.postError("[!!! ERROR !!!] " + msg);
+   }
+});
+
+/**
+ * @class A class for logging messages to a console reference object.  There are
+ *        currently three supported console references:
+ *        <ul>
+ *        <li>Firebug - logs to the Firebug/Firebug Lite error console</li>
+ *        <li>OperaConsoleRef - logs to the Opera error console</li>
+ *        <li>ConsoleRef - A simple popup window for logging messages</li>
+ *        </ul>
  */
 var Console = Base.extend(/** @scope Console.prototype */{
    constructor: null,
@@ -127,10 +182,17 @@ var Console = Base.extend(/** @scope Console.prototype */{
     */
    startup: function() {
       if (window.console) {
+         // Firebug
          this.consoleRef = window.console;
+      }
+      else if (opera && opera.postError)
+      {
+         // Opera console
+         this.consoleRef = OperaConsoleRef;
       }
       else
       {
+         // Default (simple popup window)
          this.consoleRef = ConsoleRef;
       }
    },
@@ -204,12 +266,25 @@ Console.startup();
  * Halts the engine if the test fails, throwing the error as a result.
  *
  * @param test {Boolean} A simple test that should evaluate to <tt>true</tt>
- * @param error {String} The error to throw if the test fails
+ * @param error {String} The error message to throw if the test fails
  */
 var Assert = function(test, error) {
    if (!test)
    {
       Engine.shutdown();
+/*
+      if (this.caller) {
+         // Try to determine the function name that called this Assert
+         var fRE = /((function\s+([\$_\.\w]+))|(var\s+([\$_\.\w]+)\s+=\s+function)|(function\(.*?\)))/;
+         var m = fRE.exec(this.caller.toString());
+         var funcName = "";
+         if (m)
+         {
+            funcName = (m[3] || m[5] || "anonymous");
+         }
+         error += "\nin function " + funcName;
+      }
+*/
       throw new Error(error);
    }
 };
