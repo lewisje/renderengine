@@ -60,6 +60,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
     * Stop the timer and remove it from the system
     */
    destroy: function() {
+      this.cancel();
       this.timer = null;
       this.base();
    },

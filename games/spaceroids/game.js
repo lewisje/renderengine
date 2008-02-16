@@ -67,16 +67,35 @@ var Spaceroids = Game.extend({
    fieldWidth: 500,
    fieldHeight: 580,
 
+   hiScore: 0,
+   playerScore: 0,
+
    debug: true,
+
+   scoreObj: null,
+   hscoreObj: null,
+   playerObj: null,
+
+   showStart: false,
+
+   onKeyPress: function(event) {
+      if (event.keyCode == EventEngine.KEYCODE_ENTER)
+      {
+         Spaceroids.startGame();
+      }
+   },
 
    cleanupPlayfield: function() {
 
       // Remove any rocks still floating around
-      while (this.rocks.length > 0)
+      var objs = this.renderContext.getObjects();
+      while (objs.length > 0)
       {
-         this.rocks.shift().destroy();
+         objs.shift().destroy();
       }
 
+      this.scoreObj = null;
+      this.hscoreObj = null;
    },
 
    attractMode: function() {
@@ -87,35 +106,125 @@ var Spaceroids = Game.extend({
       var pHeight = this.fieldHeight;
 
       // Add some asteroids
-      for (var a = 0; a < 8; a++)
+      for (var a = 0; a < 3; a++)
       {
          var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
          rock.setup();
       }
 
-/*
-      var player = new Spaceroids.Player();
-      this.renderContext.add(player);
-      player.setup(pWidth, pHeight);
-*/
-
       var title = new Text2D("Asteroids", 2);
       title.setPosition(new Point2D(150, 100));
-      title.setLineStyle("white");
-      title.setLineWidth(2);
+      title.setLineWidth(4);
       this.renderContext.add(title);
 
       var copy = new Text2D("&copy;1979 Atari Games", 1);
       copy.setPosition(new Point2D(145, 130));
-      copy.setLineStyle("white");
       this.renderContext.add(copy);
 
-      var gameOver = new Text2D("Game Over", 3);
-      gameOver.setPosition(new Point2D(100, 300));
-      gameOver.setLineStyle("white");
-      this.renderContext.add(gameOver);
+      var flash = function() {
+         if (!Spaceroids.showStart)
+         {
+            Spaceroids.start = new Text2D("Press =Enter= to Start", 1);
+            Spaceroids.start.setPosition(new Point2D(120, 450));
+            Spaceroids.renderContext.add(Spaceroids.start);
+            Spaceroids.showStart = true;
+            Spaceroids.intv.restart();
+         }
+         else
+         {
+            Spaceroids.renderContext.remove(Spaceroids.start);
+            Spaceroids.showStart = false;
+            Spaceroids.intv.restart();
+         }
+      };
 
+      Spaceroids.intv = new Timeout("startkey", 1000, flash);
+
+      this.addHiScore();
+      this.gameOver();
+
+   },
+
+   addHiScore: function() {
+      this.hscoreObj = new Text2D(this.hiScore, 2);
+      this.hscoreObj.setPosition(new Point2D(430, 20));
+      this.hscoreObj.setAlignment(Text2D.ALIGN_RIGHT);
+      this.renderContext.add(this.hscoreObj);
+   },
+
+   addScore: function() {
+      this.scoreObj = new Text2D(this.playerScore, 2);
+      this.scoreObj.setPosition(new Point2D(230, 20));
+      this.scoreObj.setAlignment(Text2D.ALIGN_RIGHT);
+      this.renderContext.add(this.scoreObj);
+   },
+
+   scorePoints: function(howMany) {
+      this.playerScore += howMany;
+      if (this.playerScore > this.hiScore)
+      {
+         this.hiScore = this.playerScore;
+         this.hscoreObj.setText(this.hiScore);
+      }
+
+      this.scoreObj.setText(this.playerScore);
+   },
+
+   startGame: function() {
+
+      if (this.gameRunning)
+      {
+         return;
+      }
+
+      Spaceroids.intv.destroy();
+
+      this.playerScore = 0;
+      this.cleanupPlayfield();
+
+      var pWidth = this.fieldWidth;
+      var pHeight = this.fieldHeight;
+
+      // Add some asteroids
+      for (var a = 0; a < 5; a++)
+      {
+         var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
+         this.renderContext.add(rock);
+         rock.setup();
+      }
+
+      this.playerObj = new Spaceroids.Player();
+      this.renderContext.add(this.playerObj);
+      this.playerObj.setup(pWidth, pHeight);
+
+      this.addHiScore();
+      this.addScore();
+
+      this.gameRunning = true;
+   },
+
+   gameOver: function() {
+
+      var g = new Text2D("Game Over", 3);
+      g.setPosition(new Point2D(100, 300));
+      this.renderContext.add(g);
+
+      if (!this.gameRunning)
+      {
+         return;
+      }
+
+      this.gameRunning = false;
+
+      // Remove the player
+      if (this.playerObj)
+      {
+         this.renderContext.remove(this.playerObj);
+      }
+
+      // Back to attract mode in 10sec
+      var t = new Timeout("gameover", 10000, function() { Spaceroids.attractMode(); });
    },
 
    setup: function() {
@@ -133,10 +242,17 @@ var Spaceroids = Game.extend({
       // We'll need something to detect collisions
       this.collisionModel = new SpatialGrid(this.fieldWidth, this.fieldHeight, 7);
 
+      EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
+
       this.attractMode();
    },
 
    teardown: function() {
+      this.scoreObj = null
+      this.hscoreObj = null;
+
+      EventEngine.removeHandler(document, "keypress", Spaceroids.onKeyPress);
+
       renderContext.destroy();
    },
 

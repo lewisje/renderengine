@@ -41,6 +41,8 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
 
    text: null,
 
+   scale: 2,
+
    rText: null,
 
    alignRight: false,
@@ -112,8 +114,8 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
     */
    setText: function(text, scale) {
       // We only have uppercase letters
-      this.text = text.toUpperCase();
-      scale = scale || 2;
+      this.text = String(text).toUpperCase();
+      this.scale = scale || 2;
       this.rText = [];
 
       // Replace special chars
@@ -130,7 +132,7 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
             {
                // Point
                var pt = new Point2D(VectorTextComponent.charSet[glyph][p][0], VectorTextComponent.charSet[glyph][p][1]);
-               pt.mul(scale);
+               pt.mul(this.scale);
                ltr.push(pt);
             }
             else
@@ -144,9 +146,17 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
       }
 
       // Calculate spacing of letters based on scale
-      this.spacing = ((scale * 10) + Math.ceil(scale * 1.5));
+      this.spacing = ((this.scale * 10) + Math.ceil(this.scale * 1.5));
 
       this.calculateBoundingBox();
+   },
+
+   getText: function() {
+      return this.text;
+   },
+
+   getTextSize: function() {
+      return this.scale;
    },
 
    /**
@@ -239,10 +249,6 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
 
 
 }, { // Statics
-
-   ALIGN_LEFT: false,
-
-   ALIGN_RIGHT: true,
 
    /**
     * The character set

@@ -86,8 +86,12 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       {
          // Get the PCL and check for collisions
          var pcl = this.collisionModel.getPCL(this.getHostObject().getPosition());
+         var status = ColliderComponent.CONTINUE;
          EngineSupport.forEach(pcl, function(obj) {
-            this.getHostObject().onCollide(obj);
+            if (status == ColliderComponent.CONTINUE)
+            {
+               status = this.getHostObject().onCollide(obj);
+            }
          }, this);
       }
    },
@@ -100,5 +104,23 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    getClassName: function() {
       return "ColliderComponent";
    }
+
+}, { // Statics
+
+   /**
+    * When <tt>onCollide</tt> is called on the host object, it should
+    * return <tt>ColliderComponent.CONTINUE</tt> if it wishes
+    * for additional collisions to be reported.
+    * @memberOf ColliderComponent
+    */
+   CONTINUE: 0,
+
+   /**
+    * When <tt>onCollide</tt> is called on the host object, it should
+    * return <tt>ColliderComponent.STOP</tt> if no more collisions
+    * should be reported.
+    * @memberOf ColliderComponent
+    */
+   STOP: 1
 
 });

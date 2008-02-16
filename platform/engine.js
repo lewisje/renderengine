@@ -371,7 +371,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    destroy: function(obj) {
+      Assert((obj != null), "Trying to destroy non-existent object!");
       var objId = obj.getId();
+      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!");
       Console.log("Object " + objId + " destroyed");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
