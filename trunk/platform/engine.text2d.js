@@ -50,6 +50,18 @@ var Text2D = Object2D.extend({
 
    },
 
+   setText: function(text) {
+      var t = this.getComponent("text");
+      var sz = t.getTextSize();
+      this.getComponent("text").setText(text, sz);
+   },
+
+   setTextSize: function(size) {
+      var t = this.getComponent("text");
+      var txt = t.getText();
+      this.getComponent("text").setText(txt, size);
+   },
+
    getPosition: function() {
       return this.getComponent("text").getPosition();
    },
@@ -110,6 +122,12 @@ var Text2D = Object2D.extend({
       return "Text2D";
    }
 
+
+}, { // Static
+
+   ALIGN_LEFT: false,
+
+   ALIGN_RIGHT: true,
 
 });
 
