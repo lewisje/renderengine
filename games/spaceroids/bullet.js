@@ -7,8 +7,8 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 42 $
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  *
@@ -99,6 +99,7 @@ Spaceroids.Bullet = Object2D.extend({
       if ((obj.getClassName() == "Rock") &&
           (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())))
       {
+         Spaceroids.scorePoints(10);
          if (obj.size - 3 > 3)
          {
             for (var p = 0; p < 3; p++)
@@ -113,7 +114,10 @@ Spaceroids.Bullet = Object2D.extend({
          obj.destroy();
 
          this.player.removeBullet(this);
+         return ColliderComponent.STOP;
       }
+
+      return ColliderComponent.CONTINUE;
    },
 
    /**
