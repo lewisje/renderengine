@@ -45,7 +45,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    out: function(msg) {
       if (this.dumpWindow == null)
       {
-         this.dumpWindow = window.open("", "console", "width=640,height=480,resizeable=yes,toolbar=no,location=no,status=no");
+         this.dumpWindow = window.open("about:blank", "console", "width=640,height=480,resizeable=yes,toolbar=no,location=no,status=no");
          this.dumpWindow.document.body.innerHTML =
             "<style> " +
             "BODY { font-family: 'Lucida Console',Courier; font-size: 10pt; color: black; } " +
@@ -275,19 +275,24 @@ var Assert = function(test, error) {
    if (!test)
    {
       Engine.shutdown();
-/*
       if (this.caller) {
-         // Try to determine the function name that called this Assert
-         var fRE = /((function\s+([\$_\.\w]+))|(var\s+([\$_\.\w]+)\s+=\s+function)|(function\(.*?\)))/;
-         var m = fRE.exec(this.caller.toString());
          var funcName = "";
-         if (m)
+         if (this.caller.name)
          {
-            funcName = (m[3] || m[5] || "anonymous");
+            funcName = this.caller.name;
+         }
+         else
+         {
+            // Try to determine the function name that called this Assert
+            var fRE = /((function\s+([\$_\.\w]+))|(var\s+([\$_\.\w]+)\s+=\s+function)|(function\(.*?\)))/;
+            var m = fRE.exec(this.caller.toString());
+            if (m)
+            {
+               funcName = (m[3] || m[5] || "anonymous");
+            }
          }
          error += "\nin function " + funcName;
       }
-*/
       throw new Error(error);
    }
 };

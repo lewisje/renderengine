@@ -129,10 +129,11 @@ Spaceroids.Rock = Object2D.extend({
       c_mover.setAngularVelocity( Math.floor(Math.random() * 10) > 5 ? 0.5 : -0.5);
 
 
+      var b = new Point2D(0,-1);
+      var vec = Math2D.getDirectionVector(Point2D.ZERO, b, Math.floor(Math.random() * 360));
 
-      // Set a random motion vector
-      var vec = new Vector2D( Math.floor(Math.random() * 10) > 5 ? this.speed : -this.speed,
-                              Math.floor(Math.random() * 10) > 5 ? this.speed : -this.speed);
+      vec.mul(0.3);
+
       c_mover.setVelocity(vec);
    },
 
