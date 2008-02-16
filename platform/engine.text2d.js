@@ -33,7 +33,10 @@
 
 Engine.load("/components/component.vectortext.js");
 
-var Text2D = Object2D.extend({
+/**
+ * @class A 2d text rendering object.
+ */
+var Text2D = Object2D.extend(/** @scope Text2D.prototype */{
 
    constructor: function(text, size) {
       this.base("Text2D");
@@ -50,12 +53,22 @@ var Text2D = Object2D.extend({
 
    },
 
+   /**
+    * Set the text for this object to render.
+    *
+    * @param text {String} The text to render.
+    */
    setText: function(text) {
       var t = this.getComponent("text");
       var sz = t.getTextSize();
       this.getComponent("text").setText(text, sz);
    },
 
+   /**
+    * Set the size of the text to render.
+    *
+    * @param size {Number} Defaults to 2
+    */
    setTextSize: function(size) {
       var t = this.getComponent("text");
       var txt = t.getText();
@@ -123,11 +136,25 @@ var Text2D = Object2D.extend({
    }
 
 
-}, { // Static
+}, /** @scope Text2D.prototype */{ // Static
 
-   ALIGN_LEFT: false,
+   /**
+    * Align text with the left edge of the string at the point specified.
+    * @type Number
+    */
+   ALIGN_LEFT: 0,
 
-   ALIGN_RIGHT: true,
+   /**
+    * Align text with the right edge of the string at the point specified
+    * @type Number
+    */
+   ALIGN_RIGHT: 1,
+
+   /**
+    * Align text with the center of the string at the point specified
+    * @type Number
+    */
+   ALIGN_CENTER: 2
 
 });
 

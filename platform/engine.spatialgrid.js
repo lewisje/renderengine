@@ -34,7 +34,7 @@
  */
 
 /**
- * A single node within a SpatialGrid.
+ * @class A single node within a SpatialGrid.
  *
  * @param rect {Rectangle2D} The rectangle which defines this node.
  * @extends SpatialNode
@@ -128,6 +128,26 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       return this.getRoot()[x + (y * this.divisions)];
    },
 
+   /**
+    * Get the list of objects with respect to the point given.  Objects will
+    * be returned from the cross that makes up the grid node containing
+    * the point, and the four adjacent points.  For example, if you had a
+    * 3x3 grid with the object in the center node, the nodes marked with
+    * asterisks below would be included in the result set:
+    * <pre>
+    *  +---+---+---+
+    *  |   | * |   |
+    *  +---+---+---+
+    *  | * | * | * |
+    *  +---+---+---+
+    *  |   | * |   |
+    *  +---+---+---+
+    * </pre>
+    *
+    * @param point {Point2D} The point to begin the search at.
+    * @returns An array of objects found within the cross
+    * @type Array
+    */
    getPCL: function(point) {
 
       // We'll build our list from the 5 node cross section

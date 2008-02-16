@@ -155,10 +155,29 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    }
 
 
-}, {
-   // Component types (main host sorting order)
+}, /** @scope BaseComponent.prototype */{
+
+   /**
+    * An input component
+    * @type Number
+    */
    TYPE_INPUT:          1,
+
+   /**
+    * A logic component
+    * @type Number
+    */
    TYPE_LOGIC:          2,
+
+   /**
+    * A collider component
+    * @type Number
+    */
    TYPE_COLLIDER:       3,
+
+   /**
+    * A rendering component
+    * @type Number
+    */
    TYPE_RENDERING:      4
 });

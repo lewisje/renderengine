@@ -165,7 +165,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    }
 
 
-}, {  // Interface
+}, /** @scope HostObject.prototype */{  // Interface
 
    /**
     * Sort components within this object based upon their component
