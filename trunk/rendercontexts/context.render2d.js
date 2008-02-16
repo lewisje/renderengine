@@ -277,16 +277,44 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    },
 
    /**
-    * Creates a render list which will make inline calls to the
-    * line drawing methods instead of looping over them.  Logically
-    * this method returns a function which will draw the polygon.
+    * Draw a polygon or polyline using a Duff's device for
+    * efficiency and loop unrolling with inversion for speed.
     *
-    * @param pointArray {Array} An array of Point2D objects
-    * @type Function
-    * @memberOf RenderContext2D
+    * @param pointArray {Array} An array of <tt>Point2D</tt> objects
+    * @param closedLoop {Boolean} <tt>true</tt> to close the polygon
+    * @private
     */
-   buildRenderList: function(pointArray) {
-      return null;
+   _poly: function(pointArray, closedLoop) {
+      this.startPath();
+      this.moveTo(pointArray[0]);
+      var p = 1;
+
+      // Using Duff's device with loop inversion
+      switch((pointArray.length - 1) & 0x3)
+      {
+         case 3:
+            this.lineSeg(pointArray[p++]);
+         case 2:
+            this.lineSeg(pointArray[p++]);
+         case 1:
+            this.lineSeg(pointArray[p++]);
+      }
+
+      if (p < pointArray.length)
+      {
+         do
+         {
+            this.lineSeg(pointArray[p++]);
+            this.lineSeg(pointArray[p++]);
+            this.lineSeg(pointArray[p++]);
+            this.lineSeg(pointArray[p++]);
+         } while (p < pointArray.length);
+      }
+
+      if (closedLoop)
+      {
+         this.endPath();
+      }
    },
 
    /**
@@ -295,6 +323,18 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param pointArray {Array} An array of {@link Point2D} objects
     */
    drawPolygon: function(pointArray) {
+      this._poly(pointArray, true);
+      this.strokePath();
+   },
+
+   /**
+    * Draw a non-closed poly line on the context.
+    *
+    * @param pointArray {Array} An array of {@link Point2D} objects
+    */
+   drawPolyline: function(pointArray) {
+      this._poly(pointArray, false);
+      this.strokePath();
    },
 
    /**
@@ -303,6 +343,8 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param pointArray {Array} An array of {@link Point2D} objects
     */
    drawFilledPolygon: function(pointArray) {
+      this._poly(pointArray, true);
+      this.fillPath();
    },
 
    /**
@@ -388,6 +430,32 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param point {Point2D} The point to draw a line to
     */
    lineTo: function(point) {
+   },
+
+   /**
+    * Used to draw line segments for polylines.  If <tt>point</tt>
+    * is <tt>null</tt>, the context will move to the next point.  Otherwise,
+    * it will draw a line to the point.
+    *
+    * @param point {Point2D} The point to draw a line to, or null.
+    */
+   lineSeg: function(point) {
+      if (point == null) {
+         this.lineSeg.moveTo = true;
+         return;
+      }
+
+      if (this.lineSeg.moveTo)
+      {
+         // Cannot have two subsequent nulls
+         Assert((point != null), "LineSeg repeated null!", this);
+         this.moveTo(point);
+         this.lineSeg.moveTo = false;
+      }
+      else
+      {
+         this.lineTo(point);
+      }
    },
 
    /**

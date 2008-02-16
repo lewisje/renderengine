@@ -98,13 +98,6 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
    /**
     * @memberOf Vector2DComponent
     */
-   buildRenderList: function() {
-      this.renderState = this.getHostObject().getRenderContext().buildRenderList(this.points);
-   },
-
-   /**
-    * @memberOf Vector2DComponent
-    */
    setLineStyle: function(strokeStyle) {
       this.strokeStyle = strokeStyle;
    },
@@ -156,17 +149,19 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
          renderContext.setLineStyle(this.strokeStyle);
       }
 
+      renderContext.setLineWidth(this.lineWidth);
+
       if (this.getFillStyle() != null)
       {
          renderContext.setFillStyle(this.fillStyle);
       }
 
       // Render out the points
-      renderContext.drawPolygon(this.renderState || this.points);
+      renderContext.drawPolygon(this.points);
 
       if (this.fillStyle)
       {
-         renderContext.drawFilledPolygon(this.renderState || this.points);
+         renderContext.drawFilledPolygon(this.points);
       }
    },
 

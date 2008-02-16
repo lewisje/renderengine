@@ -38,6 +38,7 @@
 // Load required engine components
 Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/platform/engine.spatialgrid.js");
+Engine.load("/platform/engine.text2d.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.vector2d.js");
@@ -57,6 +58,7 @@ var Spaceroids = Game.extend({
    renderContext: null,
 
    fieldBox: null,
+   centerPoint: null,
 
    collisionModel: null,
 
@@ -85,16 +87,34 @@ var Spaceroids = Game.extend({
       var pHeight = this.fieldHeight;
 
       // Add some asteroids
-      for (var a = 0; a < 5; a++)
+      for (var a = 0; a < 8; a++)
       {
          var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
          rock.setup();
       }
 
+/*
       var player = new Spaceroids.Player();
       this.renderContext.add(player);
       player.setup(pWidth, pHeight);
+*/
+
+      var title = new Text2D("Asteroids", 2);
+      title.setPosition(new Point2D(150, 100));
+      title.setLineStyle("white");
+      title.setLineWidth(2);
+      this.renderContext.add(title);
+
+      var copy = new Text2D("&copy;1979 Atari Games", 1);
+      copy.setPosition(new Point2D(145, 130));
+      copy.setLineStyle("white");
+      this.renderContext.add(copy);
+
+      var gameOver = new Text2D("Game Over", 3);
+      gameOver.setPosition(new Point2D(100, 300));
+      gameOver.setLineStyle("white");
+      this.renderContext.add(gameOver);
 
    },
 
@@ -105,6 +125,7 @@ var Spaceroids = Game.extend({
       Engine.setFPS(24);
       // Create the 2D context
       this.fieldBox = new Rectangle2D(0, 0, this.fieldWidth, this.fieldHeight);
+      this.centerPoint = this.fieldBox.getCenter();
       this.renderContext = new CanvasContext(this.fieldWidth, this.fieldHeight);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
@@ -159,7 +180,7 @@ var Spaceroids = Game.extend({
          p.set(x,y);
       }
       return p;
-   }
+   },
 
 });
 
