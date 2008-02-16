@@ -45,7 +45,7 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
 
    rText: null,
 
-   alignRight: false,
+   alignment: 0,  // Left aligned
 
    spacing: 0,
 
@@ -162,10 +162,10 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
    /**
     * Set the alignment of the text.
     *
-    * @param alignment {Boolean} One of {@link #ALIGN_LEFT} or {@link #ALIGN_RIGHT}
+    * @param alignment {Number} One of {@link #ALIGN_LEFT} or {@link #ALIGN_RIGHT}
     */
    setAlignment: function(alignment) {
-      this.alignRight = alignment;
+      this.alignment = alignment;
    },
 
    /**
@@ -216,9 +216,9 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
       renderContext.setLineWidth(this.lineWidth);
 
       var lCount = this.rText.length;
-      var letter = (this.alignRight ? this.rText.length - 1 : 0);
-      var kern = new Point2D((this.alignRight ? -this.spacing : this.spacing), 0);
-      var space = new Point2D((this.alignRight ? -this.spacing : this.spacing) * 0.07, 0);
+      var letter = (this.alignment == Text2D.ALIGN_RIGHT ? this.rText.length - 1 : 0);
+      var kern = new Point2D((this.alignment == Text2D.ALIGN_RIGHT ? -this.spacing : this.spacing), 0);
+      var space = new Point2D((this.alignment == Text2D.ALIGN_RIGHT ? -this.spacing : this.spacing) * 0.07, 0);
 
       while (lCount-- > 0)
       {
@@ -235,7 +235,7 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
          renderContext.popTransform();
 
          pC.add(kern);
-         letter += (this.alignRight ? -1 : 1);
+         letter += (this.alignment == Text2D.ALIGN_RIGHT ? -1 : 1);
       }
    },
 

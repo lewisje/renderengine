@@ -32,7 +32,7 @@
  */
 
 /**
- * A single node within a quadtree.  Contains references to sub-nodes.
+ * @class A single node within a quadtree.  Contains references to sub-nodes.
  *
  * @param rect {Rectangle2D} The rectangle which defines the area of this node
  * @extends SpatialNode

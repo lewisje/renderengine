@@ -31,7 +31,7 @@
  *
  */
 
-var EventEngine = Base.extend({
+var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
 
    constructor: null,
 

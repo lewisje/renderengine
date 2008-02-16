@@ -105,13 +105,13 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       return "ColliderComponent";
    }
 
-}, { // Statics
+}, /** @scope ColliderComponent.prototype */{ // Statics
 
    /**
     * When <tt>onCollide</tt> is called on the host object, it should
     * return <tt>ColliderComponent.CONTINUE</tt> if it wishes
     * for additional collisions to be reported.
-    * @memberOf ColliderComponent
+    * @type Number
     */
    CONTINUE: 0,
 
@@ -119,7 +119,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     * When <tt>onCollide</tt> is called on the host object, it should
     * return <tt>ColliderComponent.STOP</tt> if no more collisions
     * should be reported.
-    * @memberOf ColliderComponent
+    * @type Number
     */
    STOP: 1
 

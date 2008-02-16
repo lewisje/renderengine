@@ -214,7 +214,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       return "RenderContext";
    }
 
-}, { // Static
+}, /** @scope RenderContext.prototype */{ // Static
 
    /**
     * Sort the objects to draw from objects with the lowest

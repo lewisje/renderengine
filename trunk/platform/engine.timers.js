@@ -158,7 +158,11 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
 });
 
-var Timeout = Timer.extend({
+/**
+ * @class A timer that wraps the <tt>window.setTimeout</tt> method.
+ * @extends Timer
+ */
+var Timeout = Timer.extend(/** @scope Timeout.prototype */{
 
    /**
     * Cancel this timeout timer.
@@ -186,7 +190,11 @@ var Timeout = Timer.extend({
 
 });
 
-var Interval = Timer.extend({
+/**
+ * @class A timer that wraps the <tt>window.setInterval</tt> method.
+ * @extends Timer
+ */
+var Interval = Timer.extend(/** @scope Interval.prototype */{
 
    /**
     * Cancel this interval timer.
