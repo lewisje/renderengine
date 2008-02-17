@@ -38,7 +38,7 @@
 // Load required engine components
 Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/platform/engine.spatialgrid.js");
-Engine.load("/platform/engine.text2d.js");
+Engine.load("/textrender/text.vector.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.vector2d.js");
@@ -113,27 +113,32 @@ var Spaceroids = Game.extend({
          rock.setup();
       }
 
-      var title = new Text2D("Asteroids", 2);
+      var title = new TextRenderer(new VectorText(), "Asteroids", 2);
       title.setPosition(new Point2D(150, 100));
-      title.setLineWidth(4);
+      title.setTextWeight(1);
+      title.setColor("#ffffff");
       this.renderContext.add(title);
 
-      var copy = new Text2D("&copy;1979 Atari Games", 1);
+      var copy = new TextRenderer(new VectorText(), "&copy;1979 Atari Games", 1);
+      copy.setColor("#ffffff");
       copy.setPosition(new Point2D(145, 130));
       this.renderContext.add(copy);
+
+      Spaceroids.start = new TextRenderer(new VectorText(), "Press =Enter= to Start", 1);
+      Spaceroids.start.setPosition(new Point2D(120, 450));
+      Spaceroids.start.setColor("#ffffff");
+      Spaceroids.renderContext.add(Spaceroids.start);
 
       var flash = function() {
          if (!Spaceroids.showStart)
          {
-            Spaceroids.start = new Text2D("Press =Enter= to Start", 1);
-            Spaceroids.start.setPosition(new Point2D(120, 450));
-            Spaceroids.renderContext.add(Spaceroids.start);
+            Spaceroids.start.setDrawMode(TextRenderer.DRAW_TEXT);
             Spaceroids.showStart = true;
             Spaceroids.intv.restart();
          }
          else
          {
-            Spaceroids.renderContext.remove(Spaceroids.start);
+            Spaceroids.start.setDrawMode(TextRenderer.NO_DRAW);
             Spaceroids.showStart = false;
             Spaceroids.intv.restart();
          }
@@ -147,16 +152,20 @@ var Spaceroids = Game.extend({
    },
 
    addHiScore: function() {
-      this.hscoreObj = new Text2D(this.hiScore, 2);
+      this.hscoreObj = new TextRenderer(new VectorText(), this.hiScore, 2);
       this.hscoreObj.setPosition(new Point2D(430, 20));
-      this.hscoreObj.setAlignment(Text2D.ALIGN_RIGHT);
+      this.hscoreObj.setColor("#ffffff");
+      this.hscoreObj.setTextWeight(0.5);
+      this.hscoreObj.setTextAlignment(AbstractTextRenderer.ALIGN_RIGHT);
       this.renderContext.add(this.hscoreObj);
    },
 
    addScore: function() {
-      this.scoreObj = new Text2D(this.playerScore, 2);
+      this.scoreObj = new TextRenderer(new VectorText(), this.playerScore, 2);
       this.scoreObj.setPosition(new Point2D(230, 20));
-      this.scoreObj.setAlignment(Text2D.ALIGN_RIGHT);
+      this.scoreObj.setColor("#ffffff");
+      this.scoreObj.setTextWeight(0.5);
+      this.scoreObj.setTextAlignment(AbstractTextRenderer.ALIGN_RIGHT);
       this.renderContext.add(this.scoreObj);
    },
 
@@ -206,8 +215,10 @@ var Spaceroids = Game.extend({
 
    gameOver: function() {
 
-      var g = new Text2D("Game Over", 3);
+      var g = new TextRenderer(new VectorText(), "Game Over", 3);
       g.setPosition(new Point2D(100, 300));
+      g.setTextWeight(0.25);
+      g.setColor("#ffffff");
       this.renderContext.add(g);
 
       if (!this.gameRunning)

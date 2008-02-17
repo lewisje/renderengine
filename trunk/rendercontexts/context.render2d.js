@@ -325,6 +325,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    drawPolygon: function(pointArray) {
       this._poly(pointArray, true);
       this.strokePath();
+      this.lineSeg.moveTo = false;
    },
 
    /**
@@ -335,6 +336,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    drawPolyline: function(pointArray) {
       this._poly(pointArray, false);
       this.strokePath();
+      this.lineSeg.moveTo = false;
    },
 
    /**
@@ -345,6 +347,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    drawFilledPolygon: function(pointArray) {
       this._poly(pointArray, true);
       this.fillPath();
+      this.lineSeg.moveTo = false;
    },
 
    /**

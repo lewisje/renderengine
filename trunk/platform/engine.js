@@ -103,6 +103,10 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
       this.out("<span class='debug'>" + this.dump(msg) + "</span>");
    },
 
+   info: function(msg) {
+      this.debug(msg);
+   },
+
    /**
     * Write a warning message to the console
     * @param msg {String} The message to write
@@ -237,7 +241,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     */
    debug: function(msg) {
       if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_DEBUG)
-         this.consoleRef.debug(msg);
+         this.consoleRef.info(msg);
    },
 
    /**
@@ -587,6 +591,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Object components
       this.load("/components/component.base.js");
+
+      // Text rendering
+      this.load("/textrender/text.renderer.js");
+      this.load("/textrender/text.abstractrender.js");
    },
 
    /**
