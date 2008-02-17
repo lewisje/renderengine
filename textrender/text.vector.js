@@ -30,29 +30,18 @@
  */
 
 /**
- * @class A render component that draws text.
- * @extends BaseComponent
+ * @class A text renderer which draws text with simple vectors.
+ * @extends AbstractTextRenderer
  */
-var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.prototype */{
-
-   strokeStyle: "#ffffff",     // Default to white lines
-
-   lineWidth: 1,
-
-   text: null,
-
-   scale: 2,
+var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
    rText: null,
 
-   alignment: 0,  // Left aligned
-
    spacing: 0,
 
-   position: null,
-
-   constructor: function(name, priority) {
-      this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
+   constructor: function() {
+      this.base();
+      this.rText = [];
    },
 
    /**
@@ -60,6 +49,8 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
     * @private
     */
    calculateBoundingBox: function() {
+      return;
+
       var x1 = 0;
       var x2 = 0;
       var y1 = 0;
@@ -90,153 +81,78 @@ var VectorTextComponent = BaseComponent.extend(/** @scope VectorTextComponent.pr
    },
 
    /**
-    * Set the render position of the text.
-    *
-    * @param point {Point2D} The position at which to start drawing the text
-    */
-   setPosition: function(point) {
-      this.position = point;
-   },
-
-   /**
-    * Get the render position of the text.
-    * @type Point2D
-    */
-   getPosition: function() {
-      return this.position;
-   },
-
-   /**
     * Set the text to render.
     *
     * @param text {String} The text to vectorize
-    * @param scale {Number} The size of the text. Default: 2
     */
-   setText: function(text, scale) {
+   setText: function(text) {
       // We only have uppercase letters
-      this.text = String(text).toUpperCase();
-      this.scale = scale || 2;
+      text = String(text).toUpperCase();
+      this.base(text);
       this.rText = [];
+      var spacing = 11.5;
 
       // Replace special chars
-      this.text = this.text.replace(/&COPY;/g,"a").replace(/&REG;/g,"b");
+      text = text.replace(/&COPY;/g,"a").replace(/&REG;/g,"b");
+
+      var lCount = text.length;
+      var align = this.getAlignment();
+      var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
+      var kern = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing), 0);
+      //var space = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing) * 0.07, 0);
+
 
       // Vectorize the text
-      for (var c = 0; c < this.text.length; c++)
+      var pc = new Point2D(0,0);
+      while (lCount-- > 0)
       {
-         var glyph = this.text.charCodeAt(c) - 32;
          var ltr = [];
-         for (var p = 0; p < VectorTextComponent.charSet[glyph].length; p++)
+         var glyph = VectorText.charSet[text.charCodeAt(letter) - 32];
+         if (glyph.length == 0)
          {
-            if (VectorTextComponent.charSet[glyph][p] != null)
+            pc.add(kern);
+         }
+         else
+         {
+            for (var p = 0; p < glyph.length; p++)
             {
-               // Point
-               var pt = new Point2D(VectorTextComponent.charSet[glyph][p][0], VectorTextComponent.charSet[glyph][p][1]);
-               pt.mul(this.scale);
-               ltr.push(pt);
+               if (glyph[p] != null)
+               {
+                  this.rText.push(new Point2D(glyph[p][0], glyph[p][1]).add(pc));
+               }
+               else
+               {
+                  this.rText.push(null);
+               }
             }
-            else
-            {
-               // Line break
-               ltr.push(null);
-            }
+            this.rText.push(null);
+            pc.add(kern);
          }
 
-         this.rText.push(ltr);
+         letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
       }
 
-      // Calculate spacing of letters based on scale
-      this.spacing = ((this.scale * 10) + Math.ceil(this.scale * 1.5));
-
       this.calculateBoundingBox();
-   },
-
-   getText: function() {
-      return this.text;
-   },
-
-   getTextSize: function() {
-      return this.scale;
-   },
-
-   /**
-    * Set the alignment of the text.
-    *
-    * @param alignment {Number} One of {@link #ALIGN_LEFT} or {@link #ALIGN_RIGHT}
-    */
-   setAlignment: function(alignment) {
-      this.alignment = alignment;
-   },
-
-   /**
-    * Set the color or style of the line.
-    *
-    * @param strokeStyle {String} Color
-    */
-   setLineStyle: function(strokeStyle) {
-      this.strokeStyle = strokeStyle;
-   },
-
-   /**
-    * Get the line style
-    * @type String
-    */
-   getLineStyle: function() {
-      return this.strokeStyle;
-   },
-
-   /**
-    * Set the width of the line
-    * @param lineWidth {Number} The width of the line in pixels
-    */
-   setLineWidth: function(lineWidth) {
-      this.lineWidth = lineWidth;
-   },
-
-   /**
-    * Get the width of the line
-    * @type Number
-    */
-   getLineWidth: function() {
-      return this.lineWidth;
    },
 
    /**
     * @private
     */
    execute: function(renderContext, time) {
-      var pC = new Point2D(this.position);
+
+      if (this.rText.length == 0)
+      {
+         return;
+      }
 
       // Set the stroke and fill styles
-      if (this.getLineStyle() != null)
+      if (this.getColor() != null)
       {
-         renderContext.setLineStyle(this.strokeStyle);
+         renderContext.setLineStyle(this.getColor());
       }
 
-      renderContext.setLineWidth(this.lineWidth);
-
-      var lCount = this.rText.length;
-      var letter = (this.alignment == Text2D.ALIGN_RIGHT ? this.rText.length - 1 : 0);
-      var kern = new Point2D((this.alignment == Text2D.ALIGN_RIGHT ? -this.spacing : this.spacing), 0);
-      var space = new Point2D((this.alignment == Text2D.ALIGN_RIGHT ? -this.spacing : this.spacing) * 0.07, 0);
-
-      while (lCount-- > 0)
-      {
-         renderContext.pushTransform()
-         renderContext.setPosition(pC);
-         if (this.rText[letter].length == 0)
-         {
-            pC.add(space);
-         }
-         else
-         {
-            renderContext.drawPolyline(this.rText[letter]);
-         }
-         renderContext.popTransform();
-
-         pC.add(kern);
-         letter += (this.alignment == Text2D.ALIGN_RIGHT ? -1 : 1);
-      }
+      renderContext.setLineWidth(this.getTextWeight());
+      renderContext.drawPolyline(this.rText);
    },
 
    /**
