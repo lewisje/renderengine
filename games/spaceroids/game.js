@@ -39,12 +39,16 @@
 Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/platform/engine.spatialgrid.js");
 Engine.load("/textrender/text.vector.js");
+Engine.load("/textrender/text.bitmap.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
+Engine.load("/components/component.render.js");
 Engine.load("/components/component.vector2d.js");
 Engine.load("/components/component.collider.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
+
+Engine.load("/resourceloaders/loader.bitmapfont.js");
 
 // Load game objects
 Game.load("/rock.js");
@@ -162,7 +166,7 @@ var Spaceroids = Game.extend({
 
    addScore: function() {
       this.scoreObj = new TextRenderer(new VectorText(), this.playerScore, 2);
-      this.scoreObj.setPosition(new Point2D(230, 20));
+      this.scoreObj.setPosition(new Point2D(130, 20));
       this.scoreObj.setColor("#ffffff");
       this.scoreObj.setTextWeight(0.5);
       this.scoreObj.setTextAlignment(AbstractTextRenderer.ALIGN_RIGHT);
@@ -209,11 +213,14 @@ var Spaceroids = Game.extend({
 
       this.addHiScore();
       this.addScore();
+      this.scorePoints(0);
 
       this.gameRunning = true;
    },
 
    gameOver: function() {
+
+      //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 3);
 
       var g = new TextRenderer(new VectorText(), "Game Over", 3);
       g.setPosition(new Point2D(100, 300));
@@ -254,6 +261,10 @@ var Spaceroids = Game.extend({
       this.collisionModel = new SpatialGrid(this.fieldWidth, this.fieldHeight, 7);
 
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
+
+      // Load our font
+//      Spaceroids.fontLoader = new BitmapFontLoader();
+//      Spaceroids.fontLoader.load("lucida", Engine.getEnginePath() + "/fonts/lucida_sans_36.js");
 
       this.attractMode();
    },

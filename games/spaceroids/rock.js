@@ -39,6 +39,8 @@ Spaceroids.Rock = Object2D.extend({
 
    pBox: null,
 
+   scoreValue: 10,
+
    constructor: function(size, position, pWidth, pHeight) {
       this.base("Spaceroid");
 
@@ -52,6 +54,7 @@ Spaceroids.Rock = Object2D.extend({
 
       // Set size and position
       this.size = size || 10;
+      this.scoreValue = Spaceroids.Rock.values[String(this.size)];
       if (!position)
       {
          // Set the position
@@ -88,6 +91,7 @@ Spaceroids.Rock = Object2D.extend({
    },
 
    setPosition: function(point) {
+      this.base(point);
       this.getComponent("move").setPosition(point);
    },
 
@@ -96,6 +100,7 @@ Spaceroids.Rock = Object2D.extend({
    },
 
    setRotation: function(angle) {
+      this.base(angle);
       this.getComponent("move").setRotation(angle);
    },
 
@@ -118,6 +123,7 @@ Spaceroids.Rock = Object2D.extend({
       // Assign the shape to the vector component
       c_draw.setPoints(s);
       c_draw.setLineStyle("silver");
+      c_draw.setLineWidth(0.5);
    },
 
    setMotion: function() {
@@ -163,7 +169,12 @@ Spaceroids.Rock = Object2D.extend({
     */
    shapes: [[ [-4, -2], [-2, -3], [ 0, -5], [ 4, -4], [ 5,  0], [ 3,  4], [-2,  5], [-3,  2], [-5,  1] ],
             [ [-3, -3], [-1, -5], [ 3, -4], [ 2, -2], [ 5, -3], [ 5,  2], [ 1,  5], [-4,  5], [-3,  0] ],
-            [ [-2, -3], [ 2, -5], [ 5, -1], [ 3,  2], [ 4,  4], [ 0,  5], [-3,  2] ]]
+            [ [-2, -3], [ 2, -5], [ 5, -1], [ 3,  2], [ 4,  4], [ 0,  5], [-3,  2] ]],
+
+   /**
+    * The value of each size, in points
+    */
+   values: { "10": 10, "6": 15, "2": 20 }
 
 });
 

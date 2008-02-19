@@ -72,6 +72,7 @@ Spaceroids.Bullet = Object2D.extend({
    },
 
    setPosition: function(point) {
+      this.base(point);
       this.getComponent("move").setPosition(point);
    },
 
@@ -99,12 +100,12 @@ Spaceroids.Bullet = Object2D.extend({
       if ((obj.getClassName() == "Rock") &&
           (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())))
       {
-         Spaceroids.scorePoints(10);
-         if (obj.size - 3 > 3)
+         Spaceroids.scorePoints(obj.scoreValue);
+         if (obj.size - 4 > 1)
          {
             for (var p = 0; p < 3; p++)
             {
-               var rock = new Spaceroids.Rock(obj.size - 3, obj.getPosition());
+               var rock = new Spaceroids.Rock(obj.size - 4, obj.getPosition());
                this.getRenderContext().add(rock);
                rock.setup(obj.pBox.getDims().x, obj.pBox.getDims().y);
             }
