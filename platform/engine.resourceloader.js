@@ -43,7 +43,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
    length: 0,
 
    constructor: function(name) {
-      this.base("ResourceLoader");
+      this.base(name || "ResourceLoader");
    },
 
    /**

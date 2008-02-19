@@ -87,6 +87,16 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
+   /**
+    * Get the path from a fully qualified URL.
+    *
+    * @param url {String} The URL
+    * @type String
+    */
+   getPath: function(url) {
+      var l = url.lastIndexOf("/");
+      return url.substr(0, l);
+   },
 
    /**
     * Returns specified object as a JavaScript Object Notation (JSON) string.

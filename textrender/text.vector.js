@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * VectorTextComponent
+ * VectorText
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -160,7 +160,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
     * @type String
     */
    getClassName: function() {
-      return "VectorTextComponent";
+      return "VectorText";
    }
 
 
@@ -193,7 +193,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       [[ 1,-4],[ 3,-5],[ 3, 5]], // 1
       [[-5,-3],[ 0,-5],[ 5,-3],[-5, 5],[ 5, 5]], // 2
       [[-5,-5],[ 5,-5],[ 0,-1],[ 5, 2],[ 0, 5],[-5, 3]], // 3
-      [[-2,-3],[-5, 0],[ 5, 0],[ 5,-5],[ 5, 5]], // 4
+      [[-2,-3],[-5, 0],[ 5, 0],null   ,[ 5,-5],[ 5, 5]], // 4
       [[ 5,-5],[-5,-5],[-5, 0],[ 3, 0],[ 5, 2],[ 3, 5],[-5, 5]], // 5
       [[-5,-5],[-5, 5],[ 5, 5],[ 5, 0],[-5, 0]], // 6
       [[-5,-5],[ 5,-5],[-2, 5]], // 7
