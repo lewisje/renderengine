@@ -39,13 +39,13 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
    /**
     * Load an image resource from a URL.
     *
-    * @param name {String} The name of the resource loader
+    * @param name {String} The name of the resource
     * @param location {String} The URL where the resource is located
     * @param width {Number} The width of this resource, in pixels
     * @param height {Number} The height of this resource, in pixels
     */
    load: function(name, location, width, height) {
-
+debugger;
       // Create the area if it doesn't exist which will
       // be used to load the images from their URL
       var doc = Engine.getDefaultContext().getSurface();
@@ -62,15 +62,12 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
 
 
       // Create an image element
-      var image = document.createElement("img");
-      image.src = location;
-      image.width = width;
-      image.height = height;
+      var image = $("<img/>").attr("src", location).attr("width", width).attr("height", height);
 
       // Append it to the document so it can load the image
-      elementStorage.getElement().appendChild(image);
+      $(elementStorage.getElement()).append(image);
 
       this.base(name, image);
-   }
+   },
 
 });

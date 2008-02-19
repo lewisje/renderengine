@@ -51,6 +51,7 @@ Spaceroids.Player = Object2D.extend({
       this.add(new KeyboardInputComponent("input"));
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
+      this.add(new Vector2DComponent("thrust"));
       this.add(new ColliderComponent("collider", Spaceroids.collisionModel));
 
       this.tip = new Point2D(0, -1);
@@ -82,6 +83,7 @@ Spaceroids.Player = Object2D.extend({
    },
 
    setPosition: function(point) {
+      this.base(point);
       this.getComponent("move").setPosition(point);
    },
 
@@ -90,6 +92,7 @@ Spaceroids.Player = Object2D.extend({
    },
 
    setRotation: function(angle) {
+      this.base(angle);
       this.getComponent("move").setRotation(angle);
    },
 
@@ -101,8 +104,9 @@ Spaceroids.Player = Object2D.extend({
       // Randomize the position and velocity
       var c_mover = this.getComponent("move");
       var c_draw = this.getComponent("draw");
+      var c_thrust = this.getComponent("thrust");
 
-      // Pick one of the three shapes
+      // The player shapes
       var shape = Spaceroids.Player.points;
 
       // Scale the shape
@@ -117,6 +121,19 @@ Spaceroids.Player = Object2D.extend({
       // Assign the shape to the vector component
       c_draw.setPoints(s);
       c_draw.setLineStyle("white");
+
+      var thrust = Spaceroids.Player.thrust;
+      s = [];
+      for (var p = 0; p < thrust.length; p++)
+      {
+         var pt = new Point2D(thrust[p][0], thrust[p][1]);
+         pt.mul(this.size);
+         s.push(pt);
+      }
+      c_thrust.setPoints(s);
+      c_thrust.setLineStyle("white");
+      c_thrust.setClosed(false);
+      c_thrust.setDrawMode(RenderComponent.NO_DRAW);
 
       // Put us in the middle of the playfield
       c_mover.setPosition( this.pBox.getCenter() );
@@ -134,7 +151,6 @@ Spaceroids.Player = Object2D.extend({
    },
 
    onKeyDown: function(event) {
-      var c_mover = this.getComponent("move");
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
             this.rotDir = -10;
@@ -143,6 +159,7 @@ Spaceroids.Player = Object2D.extend({
             this.rotDir = 10;
             break;
          case EventEngine.KEYCODE_UP_ARROW:
+            this.getComponent("thrust").setDrawMode(RenderComponent.DRAW);
             this.thrusting = true;
             break;
          case EventEngine.KEYCODE_SPACE:
@@ -154,13 +171,13 @@ Spaceroids.Player = Object2D.extend({
    },
 
    onKeyUp: function(event) {
-      var c_mover = this.getComponent("move");
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
          case EventEngine.KEYCODE_RIGHT_ARROW:
             this.rotDir = 0;
             break;
          case EventEngine.KEYCODE_UP_ARROW:
+            this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
             this.thrusting = false;
             break;
 

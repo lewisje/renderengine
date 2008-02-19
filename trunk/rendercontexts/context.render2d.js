@@ -368,12 +368,12 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    },
 
    /**
-    * Draw an image on the context.
+    * Draw a sprite on the context.
     *
     * @param point {Point2D} The top-left position to draw the image.
-    * @param imageData {Image} The image to draw
+    * @param imageData {Image} The sprite to draw
     */
-   drawImage: function(point, imageData) {
+   drawSprite: function(point, sprite) {
    },
 
    /**
@@ -381,9 +381,19 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     *
     * @param rect {Rectangle2D} The area to capture
     * @returns Image data capture
-    * @type Image
+    * @type ImageData
     */
    getImage: function(rect) {
+   },
+
+   /**
+    * Draw an image, captured with {@link #getImage}, to
+    * the context.
+    *
+    * @param imageData {ImageData} Image data captured
+    * @param point {Point2D} The poisition at which to draw the image
+    */
+   putImage: function(imageData, point) {
    },
 
    /**

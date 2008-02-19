@@ -276,14 +276,14 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-    * Draw an image on the context.
+    * Draw a sprite on the context.
     *
     * @param point {Point2D} The top-left position to draw the image.
-    * @param imageData {Image} The image to draw
+    * @param sprite {Image} The sprite to draw
     */
-   drawImage: function(point, imageData) {
-      this.get2DContext().putImageData(imageData, point.x, point.y);
-      this.base(point, imageData);
+   drawSprite: function(point, sprite) {
+      this.get2DContext().drawImage(sprite, point.x, point.y);
+      this.base(point, sprite);
    },
 
    /**
@@ -291,11 +291,40 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     *
     * @param rect {Rectangle2D} The area to capture
     * @returns Image data capture
-    * @type Image
+    * @type ImageData
     */
    getImage: function(rect) {
-      this.base()
-      return this.get2DContext().getImageData(rect.x, rect.y, rect.width, rect.height);
+      this.base();
+
+      // Clamp the rectangle to be within the bounds of the context
+      var p = rect.getTopLeft();
+      var tr = new Point2D((p.x < 0 ? 0 : (p.x > this.getWidth() ? this.getWidth() - 1 : p.x)),
+                           (p.y < 0 ? 0 : (p.y > this.getHeight() ? this.getHeight() - 1 : p.y)));
+      var d = rect.getDims();
+      var r = p.x + d.x;
+      var b = p.y + d.y;
+      var wh = new Point2D((r > this.getWidth() ? this.getWidth() - tr.x : (r < 0 ? 1 : d.x)),
+                           (b > this.getHeight() ? this.getHeight() - tr.y : (b < 0 ? 1 : d.y)));
+
+
+      return this.get2DContext().getImageData(tr.x, tr.y, wh.x, wh.y);
+   },
+
+   /**
+    * Draw an image, captured with {@link #getImage}, to
+    * the context.
+    *
+    * @param imageData {ImageData} Image data captured
+    * @param point {Point2D} The poisition at which to draw the image
+    */
+   putImage: function(imageData, point) {
+      var x = (point.x < 0 ? 0 : (point.x > this.getWidth() ? this.getWidth() - 1 : point.x));
+      var y = (point.y < 0 ? 0 : (point.y > this.getHeight() ? this.getHeight() - 1 : point.y));
+      if (imageData != null)
+      {
+         debugger;
+         this.get2DContext().putImageData(imageData, x, y);
+      }
    },
 
    /**

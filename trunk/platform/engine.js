@@ -564,6 +564,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
+    * Get the path to the engine.
+    * @type String
+    */
+   getEnginePath: function() {
+      return this.engineLocation;
+   },
+
+   /**
     * Load the scripts required for the engine to run.
     * @private
     * @memberOf Engine
@@ -591,6 +599,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Object components
       this.load("/components/component.base.js");
+
+      // Resource loaders
+      this.load("/resourceloaders/loader.image.js");
+      this.load("/resourceloaders/loader.bitmapfont.js");
 
       // Text rendering
       this.load("/textrender/text.renderer.js");

@@ -33,7 +33,7 @@
  * @class A render component that renders its contents from a set of points.
  * @extends BaseComponent
  */
-var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.prototype */{
+var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prototype */{
 
    strokeStyle: "#ffffff",     // Default to white lines
 
@@ -43,14 +43,17 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
 
    points: null,
 
-   renderState: null,
+   fullBox: null,
+
+   closedManifold: null,
 
    /**
     * @constructor
     * @memberOf Vector2DComponent
     */
    constructor: function(name, priority) {
-      this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
+      this.base(name, priority || 0.1);
+      this.closedManifold = true;
    },
 
    /**
@@ -83,7 +86,18 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
          }
       }
 
-      this.getHostObject().setBoundingBox(new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
+      var bbox = new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
+      this.getHostObject().setBoundingBox(bbox);
+
+      // Figure out longest axis
+      if (bbox.len_x() > bbox.len_y)
+      {
+         this.fullBox = new Rectangle2D(x1,x1,Math.abs(x1) + x2,Math.abs(x1) + x2);
+      }
+      else
+      {
+         this.fullBox = new Rectangle2D(y1,y1,Math.abs(y1) + y2,Math.abs(y1) + y2);
+      }
    },
 
    /**
@@ -138,10 +152,23 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
    },
 
    /**
+    * Set whether or not we draw a polygon or polyline.
+    * @param closed {Boolean}
+    */
+   setClosed: function(closed) {
+      this.closedManifold = closed;
+   },
+
+   /**
     * @memberOf Vector2DComponent
     */
    execute: function(renderContext, time) {
       Assert((this.points != null), "Points not defined in CanvasVectorComponent");
+
+      if (this.getDrawMode() == RenderComponent.NO_DRAW)
+      {
+         return;
+      }
 
       // Set the stroke and fill styles
       if (this.getLineStyle() != null)
@@ -157,7 +184,14 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
       }
 
       // Render out the points
-      renderContext.drawPolygon(this.points);
+      if (this.closedManifold)
+      {
+         renderContext.drawPolygon(this.points);
+      }
+      else
+      {
+         renderContext.drawPolyline(this.points);
+      }
 
       if (this.fillStyle)
       {
@@ -174,6 +208,4 @@ var Vector2DComponent = BaseComponent.extend(/** @scope Vector2DComponent.protot
    getClassName: function() {
       return "Vector2DComponent";
    }
-
-
 });
