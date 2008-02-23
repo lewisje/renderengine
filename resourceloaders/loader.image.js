@@ -34,40 +34,46 @@
  */
 var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.prototype */{
 
-   elementStorage: null,
-
    /**
     * Load an image resource from a URL.
     *
     * @param name {String} The name of the resource
-    * @param location {String} The URL where the resource is located
+    * @param url {String} The URL where the resource is located
     * @param width {Number} The width of this resource, in pixels
     * @param height {Number} The height of this resource, in pixels
     */
-   load: function(name, location, width, height) {
-debugger;
+   load: function(name, url, width, height) {
+
       // Create the area if it doesn't exist which will
       // be used to load the images from their URL
-      var doc = Engine.getDefaultContext().getSurface();
-      var div = jQuery("<div/>");
-      div.css({ display: none });
-
-      // Wrap the div in an object so it can be automatically cleaned up
-      if (this.elementStorage == null)
+      if (this.getElement() == null)
       {
-         this.elementStorage = new BaseObject("ImgStorage");
-         this.elementStorage.setElement(div[0]);
-         doc.add(elementStorage);
+         var div = jQuery("<div/>");
+         div.css({ background: "black" });
+         div.css({ display: "none" });
+
+         this.setElement(div[0]);
+
+         // Add it to the defauls context so it can be cleaned up
+         Engine.getDefaultContext().add(this);
       }
 
-
       // Create an image element
-      var image = $("<img/>").attr("src", location).attr("width", width).attr("height", height);
+      var image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
+      var thisObj = this;
+      image.bind("load", function() {
+         thisObj.setReady(name, true);
+      });
 
-      // Append it to the document so it can load the image
-      $(elementStorage.getElement()).append(image);
+      // Append it to the container so it can load the image
+      $(this.getElement()).append(image);
 
       this.base(name, image);
+   },
+
+   get: function(name) {
+      var img = this.base(name);
+      return img ? img[0] : null;
    },
 
 });

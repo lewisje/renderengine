@@ -46,7 +46,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    constructor: function(name, interval, callback) {
       callback = name instanceof Number ? interval : callback;
       interval = name instanceof Number ? name : interval;
-      name = name instanceof Number ? "Timeout" : name;
+      name = name instanceof Number ? "Timer" : name;
 
       Assert((typeof callback == "function"), "Callback must be a function in Timer");
 

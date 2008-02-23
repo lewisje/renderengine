@@ -45,32 +45,33 @@ var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.pr
     * Load a font resource from a URL.
     *
     * @param name {String} The name of the resource
-    * @param location {String} The URL where the resource is located
+    * @param url {String} The URL where the resource is located
     */
-   load: function(name, location) {
+   load: function(name, url, info) {
 
-      var thisObj = this;
+      // The bitmap is in the same path
+      var path = Engine.getEnginePath() + "/fonts/";
 
-      Console.log("Loading font: " + name + " @ " + location);
+      if (url)
+      {
+         var thisObj = this;
 
-      // Get the path, the bitmap is in the same path
-      var path = EngineSupport.getPath(location);
-
-      var cb = function(data) {
-         debugger;
-         var thisObj = arguments.callee.thisObj;
-         data = BitmapFontLoader.font;
+         // Get the file from the server
+         $.getScript(path + url, function(data) {
+            data = BitmapFontLoader.font;
+            thisObj.load(name, null, data);
+         });
+      }
+      else
+      {
+         Console.log("Loading font: " + name + " @ " + path + info.bitmapImage);
 
          // Load the bitmap file
-         thisObj.base(name, path + data.bitmapImage, data.width, data.height);
+         this.base(name, path + info.bitmapImage, info.width, info.height);
 
          // Store the font info
-         thisObj.fonts[name] = data;
-      };
-      cb.thisObj = this;
-
-      // Get the file from the server
-      $.getJSON(location, cb);
+         this.fonts[name] = info;
+      }
    },
 
    /**
@@ -82,7 +83,7 @@ var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.pr
     * @type Object
     */
    get: function(name) {
-      var bitmap = this.cache[name];
+      var bitmap = this.base(name);
       var font = {
          image: bitmap,
          info: this.fonts[name]

@@ -121,6 +121,12 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
    },
 
    /**
+    * Update the state of the object.
+    */
+   update: function(renderContext, time) {
+   },
+
+   /**
     * Get the class name of this object
     *
     * @type String

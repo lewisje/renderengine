@@ -111,7 +111,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       var lCount = text.length;
       var align = this.getAlignment();
       var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
-      var kern = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.kerning : this.font.info.kerning), 0);
+      var kern = (align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.kerning : this.font.info.kerning);
       var space = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.space : this.font.info.space), 0);
       var cW, cH = this.font.info.height;
       var cS = 0;
@@ -137,16 +137,20 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
          {
             // Draw the text
             cS = this.font.info.letters[glyph - 1];
-            cW = this.font.info.letters[glyph + 1] - cS;
-            debugger;
+            cW = this.font.info.letters[glyph] - cS;
+            //debugger;
             renderContext.get2DContext().drawImage(this.font.image, cS, 0, cW, cH, pc.x, pc.y, cW, cH);
+            pc.add(new Point2D(cW, 0).mul(kern));
          }
 
          letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
       }
 
       // 2nd pass: The color
-      renderContext.get2DContext().globalCompositeOperation = "source-in";
+      renderContext.get2DContext().globalCompositeOperation = "source-atop";
+      lCount = text.length;
+      pc = new Point2D(0,0);
+      letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
       while (lCount-- > 0)
       {
          var glyph = text.charCodeAt(letter) - 32;
@@ -159,10 +163,11 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
          {
             // Draw a box the color we want and the size of the character
             cS = this.font.info.letters[glyph - 1];
-            cW = this.font.info.letters[glyph + 1] - cS;
+            cW = this.font.info.letters[glyph] - cS;
             var r = new Rectangle2D(pc.x, pc.y, cW, cH);
             renderContext.setFillStyle(this.getColor());
             renderContext.drawFilledRectangle(r);
+            pc.add(new Point2D(cW, 0).mul(kern));
          }
 
          letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
