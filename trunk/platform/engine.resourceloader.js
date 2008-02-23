@@ -51,10 +51,21 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     *
     * @param name {String} The name to refer to the loaded object
     * @param data {Object} The data to store in the cache
+    * @param isReady {Boolean} A flag that states whether or not a resource
+    *                          is ready to use.
     */
-   load: function(name, data) {
-      this.cache[name] = data;
+   load: function(name, data, isReady) {
+      var obj = { data: data, ready: isReady || false};
+      this.cache[name] = obj;
       this.length++;
+   },
+
+   setReady: function(name, isReady) {
+      this.cache[name].isReady = isReady;
+   },
+
+   isReady: function(name) {
+      return this.cache[name] ? this.cache[name].isReady : false;
    },
 
    /**
@@ -76,7 +87,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     * @type Object
     */
    get: function(name) {
-      return this.cache[name];
+      return this.cache[name].data;
    },
 
    /**
@@ -84,7 +95,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     */
    clear: function() {
       for (var o in this.cache) {
-         this.cache(o) = null;
+         this.cache[o] = null;
       }
 
       this.cache = {};

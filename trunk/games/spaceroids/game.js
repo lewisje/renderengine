@@ -220,10 +220,10 @@ var Spaceroids = Game.extend({
 
    gameOver: function() {
 
-      //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 3);
+      //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 1.5);
 
       var g = new TextRenderer(new VectorText(), "Game Over", 3);
-      g.setPosition(new Point2D(100, 300));
+      g.setPosition(new Point2D(100, 260));
       g.setTextWeight(0.25);
       g.setColor("#ffffff");
       this.renderContext.add(g);
@@ -264,9 +264,25 @@ var Spaceroids = Game.extend({
 
       // Load our font
 //      Spaceroids.fontLoader = new BitmapFontLoader();
-//      Spaceroids.fontLoader.load("lucida", Engine.getEnginePath() + "/fonts/lucida_sans_36.js");
+//      Spaceroids.fontLoader.load("lucida", "lucida_sans_36.js");
 
-      this.attractMode();
+//      Spaceroids.loadTimeout = new Timeout("wait", 250, Spaceroids.waitForResources);
+//      this.waitForResources();
+      Spaceroids.attractMode();
+   },
+
+   waitForResources: function() {
+      //Console.debug("checking");
+      if (Spaceroids.fontLoader.isReady("lucida"))
+      {
+         Spaceroids.loadTimeout.destroy();
+         Spaceroids.attractMode();
+         return;
+      }
+      else
+      {
+         Spaceroids.loadTimeout.restart();
+      }
    },
 
    teardown: function() {
