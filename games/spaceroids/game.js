@@ -39,7 +39,7 @@
 Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/platform/engine.spatialgrid.js");
 Engine.load("/textrender/text.vector.js");
-Engine.load("/textrender/text.bitmap.js");
+//Engine.load("/textrender/text.bitmap.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.render.js");
@@ -47,8 +47,6 @@ Engine.load("/components/component.vector2d.js");
 Engine.load("/components/component.collider.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
-
-Engine.load("/resourceloaders/loader.bitmapfont.js");
 
 // Load game objects
 Game.load("/rock.js");
