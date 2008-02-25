@@ -3,7 +3,7 @@
  * The Render Engine
  * Example Game: Spaceroids - an Asteroids clone
  *
- * The player object
+ * The bullet object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -71,6 +71,10 @@ Spaceroids.Bullet = Object2D.extend({
       return this.getComponent("move").getPosition();
    },
 
+   getLastPosition: function() {
+      return this.getComponent("move").getLastPosition();
+   },
+
    setPosition: function(point) {
       this.base(point);
       this.getComponent("move").setPosition(point);
@@ -98,8 +102,15 @@ Spaceroids.Bullet = Object2D.extend({
 
    onCollide: function(obj) {
       if ((obj.getClassName() == "Rock") &&
-          (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())))
+          ( (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())) ||
+            (Math2D.lineBoxCollision(this.getPosition(), this.getLastPosition(), obj.getWorldBox())) )
+         )
       {
+         for (var x = 0; x < 8; x++)
+         {
+            Spaceroids.pEngine.addParticle(new SimpleParticle(obj.getPosition()));
+         }
+
          Spaceroids.scorePoints(obj.scoreValue);
          if (obj.size - 4 > 1)
          {

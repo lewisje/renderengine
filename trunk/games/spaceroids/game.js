@@ -52,6 +52,7 @@ Engine.load("/components/component.keyboardinput.js");
 Game.load("/rock.js");
 Game.load("/player.js");
 Game.load("/bullet.js");
+Game.load("/particle.js");
 
 var Spaceroids = Game.extend({
 
@@ -79,6 +80,8 @@ var Spaceroids = Game.extend({
    playerObj: null,
 
    showStart: false,
+
+   pEngine: null,
 
    onKeyPress: function(event) {
       if (event.keyCode == EventEngine.KEYCODE_ENTER)
@@ -209,6 +212,10 @@ var Spaceroids = Game.extend({
       this.renderContext.add(this.playerObj);
       this.playerObj.setup(pWidth, pHeight);
 
+      // Start up a particle engine
+      this.pEngine = new ParticleEngine()
+      this.renderContext.add(this.pEngine);
+
       this.addHiScore();
       this.addScore();
       this.scorePoints(0);
@@ -266,6 +273,7 @@ var Spaceroids = Game.extend({
 
 //      Spaceroids.loadTimeout = new Timeout("wait", 250, Spaceroids.waitForResources);
 //      this.waitForResources();
+
       Spaceroids.attractMode();
    },
 

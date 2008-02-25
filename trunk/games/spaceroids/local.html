@@ -57,11 +57,15 @@
    <body>
       <span id="loading">Loading Spaceroids...</span>
       <script type="text/javascript">
-         Engine.setDebugMode(true);
-         Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+      	var p = EngineSupport.getQueryParams();
+		if (p["debug"] != null && p["debug"] == "true")
+		{
+			Engine.setDebugMode(true);
+			Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+		}
 
-         // Load the game script
-         Engine.loadGame("../../games/spaceroids/game.js");
+		// Load the game script
+		Engine.loadGame("../../games/spaceroids/game.js");
       </script>
    </body>
 </html>

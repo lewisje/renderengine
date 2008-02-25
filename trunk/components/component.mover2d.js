@@ -43,6 +43,8 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 
    angularVelocity: 0,
 
+   lPos: null,
+
    /**
     * @constructor
     * @memberOf Mover2DComponent
@@ -51,27 +53,27 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.velocity = new Vector2D(0,0);
       this.acceleration = new Vector2D(0,0);
       this.base(name, priority || 1.0);
+      this.lPos = new Point2D(0,0);
    },
 
    /**
     * @memberOf Mover2DComponent
     */
    execute: function(renderContext, time) {
-      var pos = this.getPosition();
+      this.lPos.set(this.getPosition());
       var rot = this.getRotation();
 
       // If we've just come into the world, we can short circuit with a
       // quick addition of the velocity.
       if (this.lastTime == -1)
       {
-         this.setPosition(pos.add(this.velocity));
+         this.setPosition(this.lPos.add(this.velocity));
       }
       else
       {
          var diff = (time - this.lastTime) * 0.1;
          var vz = new Vector2D(this.velocity).mul(diff);
-         pos.add(vz);
-         this.setPosition(pos);
+         this.setPosition(this.lPos.add(vz));
 
          this.setRotation(rot + this.angularVelocity * (diff));
       }

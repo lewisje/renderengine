@@ -123,6 +123,12 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       return (ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0);
    },
 
+   lineBoxCollision: function(p1, p2, rect) {
+      // Convert the line to a box itself and do a quick box box test
+      var lRect = new Rectangle2D(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+      return Math2D.boxBoxCollision(lRect, rect);
+   },
+
    /**
     * Test to see if a line intersects a Rectangle.
     *
@@ -131,11 +137,10 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @param rect {Rectangle} The box to test against
     * @return <tt>true</tt> if the line intersects the box
     * @type Boolean
-    */
    lineBoxCollision: function(p1, p2, rect)
    {
-      if (Math2D.boxPointCollision(rect, Point2D.ZERO, p1) &&
-          Math2D.boxPointCollision(rect, Point2D.ZERO, p2))
+      if (Math2D.boxPointCollision(rect, p1) &&
+          Math2D.boxPointCollision(rect, p2))
       {
          // line inside
          return true;
@@ -147,13 +152,14 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       var topRight = new Point2D(rect.x, rect.y).add(new Point2D(rect.width, 0));
       var bottomLeft = new Point2D(rect.x, rect.y).add(new Point2D(0, rect.height));
 
-      if (Math2D.lineLineCollision(p1, p2, topLeft, bottomLeft)) return true;
-      if (Math2D.lineLineCollision(p1, p2, topRight, lowerRight)) return true;
-      if (Math2D.lineLineCollision(p1, p2, upperLeft, upperRight)) return true;
-      if (Math2D.lineLineCollision(p1, p2, upperRight, lowerRight)) return true;
+      if (Math2D.lineLineCollision(p1, p2, topLeft, topRight)) return true;
+      if (Math2D.lineLineCollision(p1, p2, topRight, bottomRight)) return true;
+      if (Math2D.lineLineCollision(p1, p2, bottomRight, bottomLeft)) return true;
+      if (Math2D.lineLineCollision(p1, p2, bottomLeft, topLeft)) return true;
 
       return false;
    },
+    */
 
    /**
     * A static method used to calculate a direction vector

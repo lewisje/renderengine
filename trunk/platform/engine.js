@@ -592,6 +592,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.load("/platform/engine.resourceloader.js");
       this.load("/platform/engine.events.js");
       this.load("/platform/engine.spatialcontainer.js");
+      this.load("/platform/engine.particles.js");
 
       // Contexts
       this.load("/rendercontexts/context.render2d.js");
