@@ -41,6 +41,8 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
 
    scale: 1.0,
 
+   lastPosition: null,
+
    /**
     * @constructor
     * @memberOf Transform2DComponent
@@ -48,12 +50,14 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_RENDERING, priority || 1.0);
       this.position = new Point2D(0,0);
+      this.lastPosition = new Point2D(0,0);
    },
 
    /**
     * @memberOf Transform2DComponent
     */
    setPosition: function(point) {
+      this.setLastPosition(this.getPosition());
       this.position.set(point);
    },
 
@@ -62,6 +66,14 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     */
    getPosition: function() {
       return this.position;
+   },
+
+   setLastPosition: function(point) {
+      this.lastPosition.set(point);
+   },
+
+   getLastPosition: function() {
+      return this.lastPosition;
    },
 
    /**

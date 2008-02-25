@@ -271,7 +271,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @param point {Point2D} The position to draw the point
     */
    drawPoint: function(point) {
-      this.drawLine(point, point);
+      this.get2DContext().fillRect(point.x, point.y, 1.5, 1.5);
       this.base(point);
    },
 

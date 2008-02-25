@@ -31,34 +31,74 @@
  *
  */
 
+/**
+ * @class Base particle class.  A particle need only implement the
+ *        draw method.  The remainder of the functionality is
+ *        handled by this abstract class.
+ */
 var Particle = Base.extend(/** @scope Particle.prototype */{
 
+   life: 0,
 
+   engine: null,
 
    constructor: function(lifetime) {
+      this.life = lifetime;
+   },
 
+   init: function(pEngine, time) {
+      this.engine = pEngine;
+      this.life += time;
+   },
+
+   update: function(renderContext, time) {
+      if (time < this.life)
+      {
+         // Draw it ( I think this is an optimization point )
+         renderContext.pushTransform();
+         this.draw(renderContext, time);
+         renderContext.popTransform();
+      }
+      else
+      {
+         // Remove it
+         this.engine.removeParticle(this);
+      }
    },
 
    draw: function(renderContext, time) {
-
    },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "Particle";
+   }
 
 });
 
 
 /**
- * The particle engine is simply a system for updating, and expiring
- * particles within a game environment.  This is registered with the
- * render context so it will be updated at regular intervals.
+ * @class The particle engine is simply a system for updating, and expiring
+ *        particles within a game environment.  This is registered with the
+ *        render context so it will be updated at regular intervals.
  *
  */
 var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 
    particles: null,
 
+   lastTime: 0,
+
+   dead: null,
+
    constructor: function() {
       this.base("ParticleEngine");
       this.particles = [];
+      this.dead = [];
    },
 
    /**
@@ -68,6 +108,29 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     */
    addParticle: function(particle) {
       this.particles.push(particle);
+      particle.init(this, this.lastTime);
+   },
+
+   /**
+    * Mark a particle as dead so we can remove it after
+    * the update.
+    *
+    * @param particle {Particle} A particle to animate
+    */
+   removeParticle: function(particle) {
+      this.dead.push(particle);
+   },
+
+   /**
+    * Kill off all of the dead particles.
+    * @private
+    */
+   kill: function() {
+      for (var d = 0; d < this.dead.length; d++)
+      {
+         EngineSupport.arrayRemove(this.particles, this.dead[d]);
+      }
+      this.dead = [];
    },
 
    /**
@@ -79,32 +142,39 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
    update: function(renderContext, time) {
       var p = 1;
 
-      // Using Duff's device with loop inversion
-      switch((this.particles.length - 1) & 0x5)
+      this.lastTime = time;
+      if (this.particles.length == 0)
       {
-         case 5:
-            this.particles[p++].draw(renderContext, time);
-         case 4:
-            this.particles[p++].draw(renderContext, time);
+         return;
+      }
+
+
+      // Using Duff's device with loop inversion
+      switch((this.particles.length - 1) & 0x3)
+      {
          case 3:
-            this.particles[p++].draw(renderContext, time);
+            this.particles[p++].update(renderContext, time);
          case 2:
-            this.particles[p++].draw(renderContext, time);
+            this.particles[p++].update(renderContext, time);
          case 1:
-            this.particles[p++].draw(renderContext, time);
+            this.particles[p++].update(renderContext, time);
       }
 
       if (p < this.particles.length)
       {
          do
          {
-            this.particles[p++].draw(renderContext, time);
-            this.particles[p++].draw(renderContext, time);
-            this.particles[p++].draw(renderContext, time);
-            this.particles[p++].draw(renderContext, time);
-            this.particles[p++].draw(renderContext, time);
-            this.particles[p++].draw(renderContext, time);
+            this.particles[p++].update(renderContext, time);
+            this.particles[p++].update(renderContext, time);
+            this.particles[p++].update(renderContext, time);
+            this.particles[p++].update(renderContext, time);
          } while (p < this.particles.length);
+      }
+
+      if (this.dead.length)
+      {
+         // Kill off dead particles
+         this.kill();
       }
    },
 

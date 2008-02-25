@@ -42,8 +42,10 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    /** @private */
    bBox: null,
 
-   /** @private */
-   lastPosition: null,
+   constructor: function(name) {
+      this.base(name);
+      this.lastPosition = new Point2D(5,5);
+   },
 
    /**
     * Set the bounding box of this object
@@ -71,7 +73,6 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    },
 
    setPosition: function(point) {
-      this.lastPosition = this.getPosition();
    },
 
    getPosition: function() {

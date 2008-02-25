@@ -90,6 +90,10 @@ Spaceroids.Rock = Object2D.extend({
       return this.getComponent("move").getPosition();
    },
 
+   getLastPosition: function() {
+      return this.getComponent("move").getLastPosition();
+   },
+
    setPosition: function(point) {
       this.base(point);
       this.getComponent("move").setPosition(point);

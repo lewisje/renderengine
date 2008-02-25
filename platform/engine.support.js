@@ -99,6 +99,26 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    },
 
    /**
+    * Get the query parameters from the window location object.
+    *
+    * @type Object
+    */
+   getQueryParams: function() {
+      var parms = {};
+      var p = window.location.toString().split("?")[1];
+      if (p)
+      {
+         p = p.split("&");
+         for (var x = 0; x < p.length; x++)
+         {
+            var v = p[x].split("=");
+            parms[v[0]] = (v.length > 1 ? v[1] : "");
+         }
+      }
+      return parms;
+   },
+
+   /**
     * Returns specified object as a JavaScript Object Notation (JSON) string.
     *
     * Code to handle "undefined" type was delibrately not implemented, being that it is not part of JSON.
