@@ -39,7 +39,7 @@
 Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.load("/platform/engine.spatialgrid.js");
 Engine.load("/textrender/text.vector.js");
-Engine.load("/textrender/text.bitmap.js");
+//Engine.load("/textrender/text.bitmap.js");
 Engine.load("/components/component.transform2d.js");
 Engine.load("/components/component.mover2d.js");
 Engine.load("/components/component.render.js");
@@ -48,12 +48,11 @@ Engine.load("/components/component.collider.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
 
-Engine.load("/resourceloaders/loader.bitmapfont.js");
-
 // Load game objects
 Game.load("/rock.js");
 Game.load("/player.js");
 Game.load("/bullet.js");
+Game.load("/particle.js");
 
 var Spaceroids = Game.extend({
 
@@ -81,6 +80,8 @@ var Spaceroids = Game.extend({
    playerObj: null,
 
    showStart: false,
+
+   pEngine: null,
 
    onKeyPress: function(event) {
       if (event.keyCode == EventEngine.KEYCODE_ENTER)
@@ -211,6 +212,10 @@ var Spaceroids = Game.extend({
       this.renderContext.add(this.playerObj);
       this.playerObj.setup(pWidth, pHeight);
 
+      // Start up a particle engine
+      this.pEngine = new ParticleEngine()
+      this.renderContext.add(this.pEngine);
+
       this.addHiScore();
       this.addScore();
       this.scorePoints(0);
@@ -220,10 +225,10 @@ var Spaceroids = Game.extend({
 
    gameOver: function() {
 
-      //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 3);
+      //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 1.5);
 
       var g = new TextRenderer(new VectorText(), "Game Over", 3);
-      g.setPosition(new Point2D(100, 300));
+      g.setPosition(new Point2D(100, 260));
       g.setTextWeight(0.25);
       g.setColor("#ffffff");
       this.renderContext.add(g);
@@ -264,9 +269,26 @@ var Spaceroids = Game.extend({
 
       // Load our font
 //      Spaceroids.fontLoader = new BitmapFontLoader();
-//      Spaceroids.fontLoader.load("lucida", Engine.getEnginePath() + "/fonts/lucida_sans_36.js");
+//      Spaceroids.fontLoader.load("lucida", "lucida_sans_36.js");
 
-      this.attractMode();
+//      Spaceroids.loadTimeout = new Timeout("wait", 250, Spaceroids.waitForResources);
+//      this.waitForResources();
+
+      Spaceroids.attractMode();
+   },
+
+   waitForResources: function() {
+      //Console.debug("checking");
+      if (Spaceroids.fontLoader.isReady("lucida"))
+      {
+         Spaceroids.loadTimeout.destroy();
+         Spaceroids.attractMode();
+         return;
+      }
+      else
+      {
+         Spaceroids.loadTimeout.restart();
+      }
    },
 
    teardown: function() {
