@@ -32,6 +32,11 @@
  *
  */
 
+/**
+ * @class The player object.  Creates the player and assigns the
+ *        components which handle collision, drawing, drawing the thrust
+ *        and moving the object.
+ */
 Spaceroids.Player = Object2D.extend({
 
    size: 4,
@@ -44,6 +49,10 @@ Spaceroids.Player = Object2D.extend({
 
    tip: null,
 
+   players: 3,
+
+   alive: false,
+
    constructor: function() {
       this.base("Player");
 
@@ -55,9 +64,20 @@ Spaceroids.Player = Object2D.extend({
       this.add(new ColliderComponent("collider", Spaceroids.collisionModel));
 
       this.tip = new Point2D(0, -1);
+      this.players--;
 
+      this.alive = true;
    },
 
+   /**
+    * Update the player within the rendering context.  This draws
+    * the shape to the context, after updating the transform of the
+    * object.  If the player is thrusting, draw the thrust flame
+    * under the ship.
+    *
+    * @param renderContext {RenderContext} The rendering context
+    * @param time {Number} The engine time in milliseconds
+    */
    update: function(renderContext, time) {
 
       renderContext.pushTransform();
@@ -78,28 +98,58 @@ Spaceroids.Player = Object2D.extend({
 
    },
 
+   /**
+    * Get the position of the ship from the mover component.
+    * @type Point2D
+    */
    getPosition: function() {
       return this.getComponent("move").getPosition();
    },
 
+   /**
+    * Get the last position the ship was at before the current move.
+    * @type Point2D
+    */
    getLastPosition: function() {
       return this.getComponent("move").getLastPosition();
    },
 
+   /**
+    * Set, or initialize, the position of the mover component
+    *
+    * @param point {Point2D} The position to draw the ship in the playfield
+    */
    setPosition: function(point) {
       this.base(point);
       this.getComponent("move").setPosition(point);
    },
 
+   /**
+    * Get the rotation of the ship from the mover component.
+    * @type Number
+    */
    getRotation: function() {
       return this.getComponent("move").getRotation();
    },
 
+   /**
+    * Set the rotation of the ship on the mover component.
+    *
+    * @param angle {Number} The rotation angle of the ship
+    */
    setRotation: function(angle) {
       this.base(angle);
       this.getComponent("move").setRotation(angle);
    },
 
+   /**
+    * Set up the player object on the playfield.  The width and
+    * heigh of the playfield are used to determine the center point
+    * where the player starts.
+    *
+    * @param pWidth {Number} The width of the playfield in pixels
+    * @param pHeight {Number} The height of the playfield in pixels
+    */
    setup: function(pWidth, pHeight) {
 
       // Playfield bounding box for quick checks
@@ -143,18 +193,102 @@ Spaceroids.Player = Object2D.extend({
       c_mover.setPosition( this.pBox.getCenter() );
    },
 
+   /**
+    * Called when the player shoots a bullet to create a bullet
+    * in the playfield and keep track of the active number of bullets.
+    */
    shoot: function() {
       var b = new Spaceroids.Bullet(this);
       this.getRenderContext().add(b);
       this.bullets++;
    },
 
-   removeBullet: function(bullet) {
+   /**
+    * Called when a bullet collides with another object or leaves
+    * the playfield so the player can fire more bullets.
+    */
+   removeBullet: function() {
       // Clean up
       this.bullets--;
    },
 
+   /**
+    * Called after a player has been killed.  If the node where the player
+    * was last located does not contain any objects, the player will respawn.
+    * Otherwise, the routine will wait until the area is clear to respawn
+    * the player.
+    */
+   respawn: function() {
+      // Are there rocks in our area?
+      if (this.ModelData)
+      {
+         if (this.ModelData.lastNode.getObjects().length > 1)
+         {
+            var pl = this;
+            new OneShotTimeout("respawn", 500, function() { pl.respawn(); });
+            return;
+         }
+      }
+
+      // Nope, respawn
+      this.getComponent("draw").setDrawMode(RenderComponent.DRAW);
+      this.alive = true;
+   },
+
+   /**
+    * Returns the state of the player object.
+    * @type Boolean
+    */
+   isAlive: function() {
+      return this.alive;
+   },
+
+   /**
+    * Kills the player, creating the particle explosion and removing a
+    * life from the extra lives.  Afterwards, it determines if the
+    * player can respawn (any lives left) and either calls the
+    * respawn method or signals that the game is over.
+    */
+   kill: function() {
+      this.alive = false;
+
+      this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
+
+      // Make some particles
+      for (var x = 0; x < 8; x++)
+      {
+         Spaceroids.pEngine.addParticle(new SimpleParticle(this.getPosition()));
+      }
+
+      this.getComponent("move").setVelocity(0);
+      this.getComponent("move").setPosition(this.getRenderContext().getBoundingBox().getCenter());
+      this.getComponent("move").setRotation(0);
+
+      // Remove one of the players
+      if (this.players-- > 0)
+      {
+         // Set a timer to spawn another player
+         var pl = this;
+         new OneShotTimeout("respawn", 2000, function() { pl.respawn(); });
+      }
+      else
+      {
+         Spaceroids.gameOver();
+      }
+
+   },
+
+   /**
+    * Called by the keyboard input component to handle a key down event.
+    *
+    * @param event {Event} The event object
+    */
    onKeyDown: function(event) {
+      if (!this.alive)
+      {
+         return;
+      }
+
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
             this.rotDir = -10;
@@ -174,7 +308,17 @@ Spaceroids.Player = Object2D.extend({
       }
    },
 
+   /**
+    * Called by the keyboard input component to handle a key up event.
+    *
+    * @param event {Event} The event object
+    */
    onKeyUp: function(event) {
+      if (!this.alive)
+      {
+         return;
+      }
+
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
          case EventEngine.KEYCODE_RIGHT_ARROW:

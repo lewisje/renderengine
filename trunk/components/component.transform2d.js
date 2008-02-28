@@ -54,7 +54,9 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Set the position of the transform.
+    *
+    * @param point {Point2D} The position
     */
    setPosition: function(point) {
       this.setLastPosition(this.getPosition());
@@ -62,50 +64,71 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Returns the position of the transform.
+    * @type Point2D
     */
    getPosition: function() {
       return this.position;
    },
 
+   /**
+    * Set the last position that the transform was at.
+    *
+    * @param point {Point2D} The last position
+    */
    setLastPosition: function(point) {
       this.lastPosition.set(point);
    },
 
+   /**
+    * Get the last position of the transform.
+    * @type Point2D
+    */
    getLastPosition: function() {
       return this.lastPosition;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Set the rotation of the transform.
+    *
+    * @param rotation {Number} The rotation
     */
    setRotation: function(rotation) {
       this.rotation = rotation;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Get the rotation of the transform.
+    * @type Number
     */
    getRotation: function() {
       return this.rotation;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Set the uniform scale of the transform.  The uniform
+    * scale applies to both the X and Y axis.
+    *
+    * @param scale {Number} The scale of the transform with 1.0 being 100%
     */
    setScale: function(scale) {
       this.scale = scale;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Get the uniform scale of the transform.
+    * @type Number
     */
    getScale: function() {
       return this.scale;
    },
 
    /**
-    * @memberOf Transform2DComponent
+    * Set the components of a transformation: position, rotation,
+    * and scale, within the rendering context.
+    *
+    * @param renderContext {RenderContext} The rendering context
+    * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
 
