@@ -54,6 +54,9 @@ Game.load("/player.js");
 Game.load("/bullet.js");
 Game.load("/particle.js");
 
+/**
+ * @class The game.
+ */
 var Spaceroids = Game.extend({
 
    constructor: null,
@@ -83,6 +86,11 @@ var Spaceroids = Game.extend({
 
    pEngine: null,
 
+   /**
+    * Handle the keypress which starts the game
+    *
+    * @param event {Event} The event object
+    */
    onKeyPress: function(event) {
       if (event.keyCode == EventEngine.KEYCODE_ENTER)
       {
@@ -90,6 +98,11 @@ var Spaceroids = Game.extend({
       }
    },
 
+   /**
+    * Clean up the playfield, removing any objects that are
+    * currently within the render context.  Used to initialize the game
+    * and to handle transitions between attract mode and play mode.
+    */
    cleanupPlayfield: function() {
 
       // Remove any rocks still floating around
@@ -103,6 +116,10 @@ var Spaceroids = Game.extend({
       this.hscoreObj = null;
    },
 
+   /**
+    * A simple mode where the title, highscore, game over message,
+    * and start message are displayed with asteroids in the background
+    */
    attractMode: function() {
 
       this.cleanupPlayfield();
@@ -156,6 +173,9 @@ var Spaceroids = Game.extend({
 
    },
 
+   /**
+    * Add the highscore object to the playfield.
+    */
    addHiScore: function() {
       this.hscoreObj = new TextRenderer(new VectorText(), this.hiScore, 2);
       this.hscoreObj.setPosition(new Point2D(430, 20));
@@ -165,6 +185,9 @@ var Spaceroids = Game.extend({
       this.renderContext.add(this.hscoreObj);
    },
 
+   /**
+    * Add the score object to the playfield.
+    */
    addScore: function() {
       this.scoreObj = new TextRenderer(new VectorText(), this.playerScore, 2);
       this.scoreObj.setPosition(new Point2D(130, 20));
@@ -174,6 +197,11 @@ var Spaceroids = Game.extend({
       this.renderContext.add(this.scoreObj);
    },
 
+   /**
+    * Called to add points to the player's score.
+    *
+    * @param howMany {Number} The number of points to add to the player's score.
+    */
    scorePoints: function(howMany) {
       this.playerScore += howMany;
       if (this.playerScore > this.hiScore)
@@ -185,6 +213,10 @@ var Spaceroids = Game.extend({
       this.scoreObj.setText(this.playerScore);
    },
 
+   /**
+    * Start the game, resetting the playfield and creating the player.
+    * If the game is already running, has no effect.
+    */
    startGame: function() {
 
       if (this.gameRunning)
@@ -223,6 +255,10 @@ var Spaceroids = Game.extend({
       this.gameRunning = true;
    },
 
+   /**
+    * Called when the game is over to draw the game over message and
+    * set a timer to return to attract mode.
+    */
    gameOver: function() {
 
       //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 1.5);
@@ -250,6 +286,10 @@ var Spaceroids = Game.extend({
       var t = new Timeout("gameover", 10000, function() { Spaceroids.attractMode(); });
    },
 
+   /**
+    * Called to set up the game, download any resources, and initialize
+    * the game to its running state.
+    */
    setup: function() {
       $("#loading").remove();
 
@@ -277,6 +317,10 @@ var Spaceroids = Game.extend({
       Spaceroids.attractMode();
    },
 
+   /**
+    * Wait for resources to become available before starting the game
+    * @private
+    */
    waitForResources: function() {
       //Console.debug("checking");
       if (Spaceroids.fontLoader.isReady("lucida"))
@@ -291,6 +335,11 @@ var Spaceroids = Game.extend({
       }
    },
 
+   /**
+    * Called when the game is being shut down to allow the game
+    * the chance to clean up any objects, remove event handlers, and
+    * destroy the rendering context.
+    */
    teardown: function() {
       this.scoreObj = null
       this.hscoreObj = null;
@@ -300,11 +349,25 @@ var Spaceroids = Game.extend({
       renderContext.destroy();
    },
 
+   /**
+    * A simple method that determines if the position is within the supplied bounding
+    * box.
+    *
+    * @param pos {Point2D} The position to test
+    * @param bBox {Rectangle2D} The bounding box of the playfield
+    * @type Boolean
+    */
    inField: function(pos, bBox) {
       var newPos = this.wrap(pos, bBox);
       return newPos.equals(pos);
    },
 
+   /**
+    * Called to wrap an object around the edges of the playfield.
+    *
+    * @param pos {Point2D} The position of the object
+    * @param bBox {Rectangle2D} The bounding box of the playfield
+    */
    wrap: function(pos, bBox) {
 
       // Get XY radius and set new collision box
@@ -344,5 +407,7 @@ var Spaceroids = Game.extend({
 
 });
 
+// Give the engine a chance to initialize and
+// load its libs before starting the game.
 setTimeout("Spaceroids.setup();", 2000);
 

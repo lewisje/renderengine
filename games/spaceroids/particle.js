@@ -31,6 +31,12 @@
  *
  */
 
+/**
+ * @class A simple particle
+ *
+ * @param pos {Point2D} The starting position of the particle.  A
+ *            velocity vector will be derived from this position.
+ */
 var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
 
    pos: null,
@@ -46,6 +52,13 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       this.vec.mul(vel);
    },
 
+   /**
+    * Called by the particle engine to draw the particle to the rendering
+    * context.
+    *
+    * @param renderContext {RenderContext} The rendering context
+    * @param time {Number} The engine time in milliseconds
+    */
    draw: function(renderContext, time) {
       this.pos.add(this.vec);
       renderContext.setPosition(this.pos);
@@ -53,6 +66,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       renderContext.drawPoint(Point2D.ZERO);
    }
 
-}, { //
+}, {
+   // A simple reference point for the "up" vector
    ref: new Point2D(0, -1)
 });
