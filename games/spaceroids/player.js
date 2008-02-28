@@ -67,6 +67,9 @@ Spaceroids.Player = Object2D.extend({
       this.players--;
 
       this.alive = true;
+      this.rotDir = 0;
+      this.thrusting = false;
+
    },
 
    /**
@@ -263,6 +266,8 @@ Spaceroids.Player = Object2D.extend({
       this.getComponent("move").setVelocity(0);
       this.getComponent("move").setPosition(this.getRenderContext().getBoundingBox().getCenter());
       this.getComponent("move").setRotation(0);
+      this.rotDir = 0;
+      this.thrusting = false;
 
       // Remove one of the players
       if (this.players-- > 0)

@@ -184,7 +184,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    execute: function(renderContext, time) {
       Assert((this.points != null), "Points not defined in CanvasVectorComponent");
 
-      if (!this.base())
+      if (this.getDrawMode() != RenderComponent.DRAW)
       {
          return;
       }
