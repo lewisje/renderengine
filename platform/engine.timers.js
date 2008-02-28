@@ -60,7 +60,6 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
     * Stop the timer and remove it from the system
     */
    destroy: function() {
-      this.cancel();
       this.timer = null;
       this.base();
    },
@@ -172,6 +171,11 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
       this.base();
    },
 
+   destroy: function() {
+      this.cancel();
+      this.base();
+   },
+
    /**
     * Restart this timeout timer
     */
@@ -191,6 +195,50 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
 });
 
 /**
+ * @class A one-shot timer that cannot be restarted.
+ *
+ * @param name {String} The name of the timer
+ * @param interval {Number} The interval for the timer, in milliseconds
+ * @param callback {Function} The function to call when the interval is reached
+ */
+var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
+
+   constructor: function(name, interval, fn) {
+
+      var cb = function() {
+         arguments.callee.cbFn();
+         arguments.callee.timer.destroy();
+      };
+      cb.cbFn = fn;
+      cb.timer = this;
+
+      this.base(name, interval, cb);
+   },
+
+   /**
+    * This timer cannot be restarted.
+    * @private
+    */
+   restart: function() {
+      if (this.running)
+      {
+         return;
+      }
+
+      this.base();
+   },
+
+   /**
+    * Get the class name of this object
+    * @type String
+    */
+   getClassName: function() {
+      return "OneShotTimeout";
+   }
+
+});
+
+/**
  * @class A timer that wraps the <tt>window.setInterval</tt> method.
  * @extends Timer
  */
@@ -201,6 +249,11 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
     */
    cancel: function() {
       window.clearInterval(this.getTimer());
+      this.base();
+   },
+
+   destroy: function() {
+      this.cancel();
       this.base();
    },
 

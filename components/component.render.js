@@ -30,6 +30,13 @@
  *
  */
 
+/**
+ * @class The base component class for components which render
+ *        to a context.
+ *
+ * @param name {String} The name of the component
+ * @param priority {Number} The priority of the component between 0.0 and 1.0
+ */
 var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype */{
 
    drawMode: 0,
@@ -38,26 +45,44 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
       this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
    },
 
+   /**
+    * Set the draw mode of the component.  Currently this determines
+    * if the component should render itself to the context or not.
+    *
+    * @param drawMode {Number} One of <tt>RenderComponent.DRAW</tt> or
+    *                 <tt>RenderComponent.NO_DRAW</tt>
+    */
    setDrawMode: function(drawMode) {
       this.drawMode = drawMode;
    },
 
+   /**
+    * Get the drawing mode of the component.
+    * @type Number
+    */
    getDrawMode: function() {
       return this.drawMode;
    },
 
+   /**
+    * Handles whether or not the component should draw to the
+    * render context, or not.
+    *
+    * @param renderContext {RenderContext} The rendering context
+    * @param time {Number} The engine time in milliseconds
+    */
    execute: function(renderContext, time) {
 
       if (this.drawMode == RenderContext.NO_DRAW)
       {
-         return;
+         return false;
       }
 
       // Set up drawing state
       // Xor, source-in, dest-in, etc...
 
       // Tear down drawing state
-
+      return true;
    },
 
    /**
@@ -70,8 +95,14 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
    }
 }, { // Static
 
+   /**
+    * The component should render itself to the rendering context.
+    */
    DRAW: 0,
 
+   /**
+    * The component <i>should not</i> render itself to the rendering context.
+    */
    NO_DRAW: 1
 
 });

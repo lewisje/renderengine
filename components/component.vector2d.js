@@ -57,7 +57,9 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Calculate the bounding box from the set of
+    * points which comprise the shape to be rendered.
+    * @private
     */
    calculateBoundingBox: function() {
       var x1 = 0;
@@ -101,7 +103,10 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Set the points which comprise the shape of the object to
+    * be rendered to the context.
+    *
+    * @param pointArray {Array} An array of <tt>Point2D</tt> instances
     */
    setPoints: function(pointArray) {
       this.points = pointArray;
@@ -110,35 +115,43 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Set the color of the lines to be drawn for this shape.
+    *
+    * @param strokeStyle {String} The HTML color of the stroke (lines) of the shape
     */
    setLineStyle: function(strokeStyle) {
       this.strokeStyle = strokeStyle;
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Returns the line style that will be used to draw this shape.
+    * @type String
     */
    getLineStyle: function() {
       return this.strokeStyle;
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Set the width of lines used to draw this shape.
+    *
+    * @param lineWidth {Number} The width of lines in the shape
     */
    setLineWidth: function(lineWidth) {
       this.lineWidth = lineWidth;
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Returns the width of the lines used to draw the shape.
+    * @type Number
     */
    getLineWidth: function() {
       return this.lineWidth;
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Set the color used to fill the shape.
+    *
+    * @param fillStyle {String} The HTML color used to fill the shape.
     */
    setFillStyle: function(fillStyle) {
       this.fillStyle = fillStyle;
@@ -152,7 +165,9 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    },
 
    /**
-    * Set whether or not we draw a polygon or polyline.
+    * Set whether or not we draw a polygon or polyline.  <tt>true</tt>
+    * to draw a polygon (the path formed by the points is a closed loop.
+    *
     * @param closed {Boolean}
     */
    setClosed: function(closed) {
@@ -160,12 +175,16 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Draw the shape, defined by the points, to the rendering context
+    * using the specified line style and fill style.
+    *
+    * @param renderContext {RenderContext} The context to render to
+    * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
       Assert((this.points != null), "Points not defined in CanvasVectorComponent");
 
-      if (this.getDrawMode() == RenderComponent.NO_DRAW)
+      if (!this.base())
       {
          return;
       }

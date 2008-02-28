@@ -48,6 +48,14 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       this.collisionModel = collisionModel;
    },
 
+   /**
+    * Update the collision model that this component was initialized with.
+    * Creates an object called <tt>ModelData</tt> on the host object which contains
+    * information relative to the collision model.  This data contains:
+    * <ul>
+    * <li>lastNode - The last node the object was reported within.
+    * </ul>
+    */
    updateModel: function() {
 
       // Get the model data for the object
@@ -76,6 +84,24 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       }
    },
 
+   /**
+    * Updates the object within the collision model and determines if
+    * the host object wants to be alerted whenever a potential collision
+    * has occurred.  If a potential collision occurs, an array (referred to
+    * as a Potentail Collision List, or PCL) will be created which
+    * contains objects that might be colliding with the host object.  It
+    * is up to the host object to make the final determination that a
+    * collision has occurred.
+    * <p/>
+    * The list of objects within the PCL will be passed to the <tt>onCollide</tt>
+    * method (if declared) on the host object.  If a collision occurred and was
+    * handled, the <tt>onCollide</tt> method should return <tt>CollisionComponent.STOP</tt>,
+    * otherwise, it should return <tt>CollisionComponent.CONTINUE</tt> to continue
+    * checking objects from the PCL against the host object.
+    *
+    * @param renderContext {RenderContext} The render context for the component
+    * @param time {Number} The current engine time in milliseconds
+    */
    execute: function(renderContext, time) {
 
       // Update the collision model
@@ -109,8 +135,9 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
    /**
     * When <tt>onCollide</tt> is called on the host object, it should
-    * return <tt>ColliderComponent.CONTINUE</tt> if it wishes
-    * for additional collisions to be reported.
+    * return <tt>ColliderComponent.CONTINUE</tt> if it hasn't handled
+    * the collision, or if it wishes to be notified about other potential
+    * collisions.
     * @type Number
     */
    CONTINUE: 0,

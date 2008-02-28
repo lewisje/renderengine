@@ -32,6 +32,11 @@
  *
  */
 
+/**
+ * @class The bullet object.
+ *
+ * @param player {Spaceroids.Player} The player object this bullet comes from,
+ */
 Spaceroids.Bullet = Object2D.extend({
 
    player: null,
@@ -67,19 +72,38 @@ Spaceroids.Bullet = Object2D.extend({
       c_mover.setVelocity(dir.mul(3));
    },
 
+   /**
+    * Returns the bullet position
+    * @type Point2D
+    */
    getPosition: function() {
       return this.getComponent("move").getPosition();
    },
 
+   /**
+    * Returns the last position of the bullet
+    * @type Point2D
+    */
    getLastPosition: function() {
       return this.getComponent("move").getLastPosition();
    },
 
+   /**
+    * Set the position of the bullet.
+    *
+    * @param point {Point2D} The position of the bullet.
+    */
    setPosition: function(point) {
       this.base(point);
       this.getComponent("move").setPosition(point);
    },
 
+   /**
+    * Update the host object to reflect the state of the bullet.
+    *
+    * @param renderContext {RenderContext} The rendering context
+    * @param time {Number} The engine time in milliseconds
+    */
    update: function(renderContext, time) {
 
       var c_mover = this.getComponent("move");
@@ -100,32 +124,32 @@ Spaceroids.Bullet = Object2D.extend({
 
    },
 
+   /**
+    * Called whenever an object is located in the PCL which might
+    * be in a collision state with this bullet.  Checks for collisions
+    * with rocks and UFO's.
+    *
+    * @param obj {HostObject} The object that the bullet might be in a
+    *            collision state with.
+    *
+    * @returns <tt>ColliderComponent.STOP</tt> if the collision was handled,
+    *          otherwise <tt>ColliderComponent.CONTINUE</tt> if the other
+    *          objects in the PCL should be tested.
+    */
    onCollide: function(obj) {
       if ((obj.getClassName() == "Rock") &&
           ( (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())) ||
             (Math2D.lineBoxCollision(this.getPosition(), this.getLastPosition(), obj.getWorldBox())) )
          )
       {
-         for (var x = 0; x < 8; x++)
-         {
-            Spaceroids.pEngine.addParticle(new SimpleParticle(obj.getPosition()));
-         }
+         // Kill the rock
+         obj.kill();
 
-         Spaceroids.scorePoints(obj.scoreValue);
-         if (obj.size - 4 > 1)
-         {
-            for (var p = 0; p < 3; p++)
-            {
-               var rock = new Spaceroids.Rock(obj.size - 4, obj.getPosition());
-               this.getRenderContext().add(rock);
-               rock.setup(obj.pBox.getDims().x, obj.pBox.getDims().y);
-            }
-         }
-
+         // Remove the bullet
          this.destroy();
-         obj.destroy();
-
          this.player.removeBullet(this);
+
+         // All set
          return ColliderComponent.STOP;
       }
 
@@ -143,8 +167,10 @@ Spaceroids.Bullet = Object2D.extend({
    }
 
 }, {
+   // Why we have this, I don't know...
    shape: [ new Point2D(-1, -1), new Point2D( 1, -1),
             new Point2D( 1,  1), new Point2D(-1,  1)],
 
+   // The tip of the player at zero rotation (up)
    tip: new Point2D(0, -1)
 });

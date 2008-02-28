@@ -33,6 +33,9 @@
  * @class A simple mover component that adjusts the translation of a component
  * over time.  This component handles velocity, acceleration, and
  * deceleration.
+ *
+ * @param name {String} The name of the component
+ * @param priority {Number} The priority of this component between 0.0 and 1.0
  * @extends Transform2DComponent
  */
 var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.prototype */{
@@ -45,10 +48,6 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 
    lPos: null,
 
-   /**
-    * @constructor
-    * @memberOf Mover2DComponent
-    */
    constructor: function(name, priority) {
       this.velocity = new Vector2D(0,0);
       this.acceleration = new Vector2D(0,0);
@@ -57,7 +56,14 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    },
 
    /**
-    * @memberOf Mover2DComponent
+    * Updates the transformation of the component, setting the
+    * position and rotation based on the time that has elapsed since
+    * the last update.  This component handles frame rate independent
+    * updates so that lag between frames doesn't affect the relative
+    * position or rotation.
+    *
+    * @param renderContext {RenderContext} The render context for the component
+    * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
       this.lPos.set(this.getPosition());
@@ -83,28 +89,34 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    },
 
    /**
-    * @memberOf Mover2DComponent
+    * Set the velocity vector of the component.
+    *
+    * @param vector {Vector2D} The velocity vector
     */
    setVelocity: function(vector) {
       this.velocity.set(vector);
    },
 
    /**
-    * @memberOf Mover2DComponent
+    * Returns the velocity vector of the component
+    * @type Vector2D
     */
    getVelocity: function() {
       return this.velocity;
    },
 
    /**
-    * @memberOf Mover2DComponent
+    * Set the angular velocity as a number of degrees per second.
+    *
+    * @param angularVelocity {Number} The angle change per second
     */
    setAngularVelocity: function(angularVelocity) {
       this.angularVelocity = angularVelocity;
    },
 
    /**
-    * @memberOf Mover2DComponent
+    * Returns the angle change per second of the component.
+    * @type Number
     */
    getAngularVelocity: function() {
       return this.angularVelocity;

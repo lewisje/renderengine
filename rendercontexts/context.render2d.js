@@ -54,6 +54,8 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    scaleY: 1,
 
+   bBox: null,
+
    backgroundColor: null,
 
    /**
@@ -111,6 +113,17 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     */
    getHeight: function() {
       return this.height;
+   },
+
+   /**
+    * Get the bounding box for the rendering context.
+    * @type Rectangle2D
+    */
+   getBoundingBox: function() {
+      if (!this.bBox) {
+         this.bBox = new Rectangle2D(0, 0, this.getWidth(), this.getHeight());
+      }
+      return this.bBox;
    },
 
    /**
