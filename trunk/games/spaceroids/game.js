@@ -294,11 +294,13 @@ var Spaceroids = Game.extend({
       $("#loading").remove();
 
       // Set the FPS of the game
-      Engine.setFPS(24);
+      Engine.setFPS(50);
+
       // Create the 2D context
       this.fieldBox = new Rectangle2D(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
       this.renderContext = new CanvasContext(this.fieldWidth, this.fieldHeight);
+      this.renderContext.setWorldScale(0.75);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
 
