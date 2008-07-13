@@ -57,11 +57,22 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
       // Create the canvas element
       var canvas = document.createElement("canvas");
-      canvas.width = this.width;
-      canvas.height = this.height;
+      var worldScale = this.getWorldScale();
+      canvas.width = this.width * worldScale[0];
+      canvas.height = this.height * worldScale[1];
       canvas.id = this.getId();
 
       this.base("CanvasContext", canvas);
+   },
+
+   setWorldScale: function(scaleX, scaleY) {
+      this.base(scaleX, scaleY);
+
+      scaleY = scaleY ? scaleY : scaleX;
+      // Adjust the element accordingly
+      $(this.getElement())
+         .attr("width", this.getWidth() * scaleX)
+         .attr("height", this.getHeight() * scaleY);
    },
 
    /**

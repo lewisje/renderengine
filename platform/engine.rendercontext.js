@@ -40,6 +40,10 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    transformStackDepth: 0,
 
+   renderScaleX: 1,
+
+   renderScaleY: 1,
+
    /**
     * Create an instance of this rendering context and optionally
     * assign the surface to which all rendering will occur.  This
@@ -89,6 +93,18 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       return this.surface;
    },
 
+   setScale: function(scaleX, scaleY) {
+   },
+
+   setWorldScale: function(scaleX, scaleY) {
+      this.renderScaleX = scaleX;
+      this.renderScaleY = scaleY ? scaleY : scaleX;
+   },
+
+   getWorldScale: function() {
+      return [this.renderScaleX, this.renderScaleY];
+   },
+
    /**
     * Add an object to the render list.  Only objects
     * within the render list will be rendered.
@@ -136,10 +152,14 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param time {Number} The current render time in milliseconds from the engine.
     */
    render: function(time) {
-      this.reset();
 
       // Push the world transform
       this.pushTransform();
+
+      // Set the scaling of the world
+      this.setScale(this.renderScaleX, this.renderScaleY);
+
+      this.reset();
 
       // Render the objects into the world
       var objs = this.getObjects();
