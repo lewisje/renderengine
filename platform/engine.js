@@ -41,6 +41,15 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
 
    dumpWindow: null,
 
+	/** @private */
+	combiner: function() {
+		var out = "";
+		for (var a in arguments) {
+			out += arguments[a].toString();
+		}
+		return out;
+	},
+
    /** @private */
    out: function(msg) {
       if (this.dumpWindow == null)
@@ -99,28 +108,28 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
     * Write a debug message to the console
     * @param msg {String} The message to write
     */
-   debug: function(msg) {
-      this.out("<span class='debug'>" + this.dump(msg) + "</span>");
+   debug: function() {
+      this.out("<span class='debug'>" + this.dump(arguments) + "</span>");
    },
 
-   info: function(msg) {
-      this.debug(msg);
+   info: function() {
+      this.debug(arguments);
    },
 
    /**
     * Write a warning message to the console
     * @param msg {String} The message to write
     */
-   warn: function(msg) {
-      this.out("<span class='warn'>" + this.dump(msg) + "</span>");
+   warn: function() {
+      this.out("<span class='warn'>" + this.dump(arguments) + "</span>");
    },
 
    /**
     * Write an error message to the console
     * @param msg {String} The message to write
     */
-   error: function(msg) {
-      this.out("<span class='error'>" + this.dump(msg) + "</span>");
+   error: function() {
+      this.out("<span class='error'>" + this.dump(arguments) + "</span>");
    }
 
 });
@@ -138,27 +147,36 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * Write a debug message to the console
     * @param msg {String} The message to write
     */
-   debug: function(msg) {
+   info: function() {
       if (window.opera)
-         window.opera.postError("[ DEBUG ] " + msg);
+         window.opera.postError("[ INFO ] " + this.dump(arguments));
+   },
+
+   /**
+    * Write a debug message to the console
+    * @param msg {String} The message to write
+    */
+   debug: function() {
+      if (window.opera)
+         window.opera.postError("[ DEBUG ] " + this.dump(arguments));
    },
 
    /**
     * Write a warning message to the console
     * @param msg {String} The message to write
     */
-   warn: function(msg) {
+   warn: function() {
       if (window.opera)
-         window.opera.postError("[ WARN ] " + msg);
+         window.opera.postError("[ WARN ] " + this.dump(arguments));
    },
 
    /**
     * Write an error message to the console
     * @param msg {String} The message to write
     */
-   error: function(msg) {
+   error: function() {
       if (window.opera)
-         window.opera.postError("[!!! ERROR !!!] " + msg);
+         window.opera.postError("[!!! ERROR !!!] " + this.dump(arguments));
    }
 });
 
@@ -229,9 +247,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     *
     * @param msg {String} The message to output
     */
-   log: function(msg) {
+   log: function() {
       if (Engine.debugMode && this.verbosity == this.DEBUGLEVEL_VERBOSE)
-         this.consoleRef.debug("    " + msg);
+         this.consoleRef.debug.apply(this.consoleRef, arguments);
    },
 
    /**
@@ -239,9 +257,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     *
     * @param msg {String} The message to output
     */
-   debug: function(msg) {
+   debug: function() {
       if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_DEBUG)
-         this.consoleRef.info(msg);
+         this.consoleRef.info.apply(this.consoleRef, arguments);
    },
 
    /**
@@ -249,9 +267,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     *
     * @param msg {String} The message to output
     */
-   warn: function(msg) {
+   warn: function() {
       if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_WARNINGS)
-         this.consoleRef.warn(msg);
+         this.consoleRef.warn.apply(this.consoleRef, arguments);
    },
 
    /**
@@ -259,9 +277,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     *
     * @param msg {String} The message to output
     */
-   error: function(msg) {
+   error: function() {
       if (this.verbosity >= this.DEBUGLEVEL_ERRORS)
-         this.consoleRef.error(msg);
+         this.consoleRef.error.apply(this.consoleRef, arguments);
    }
 });
 
@@ -347,6 +365,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    metricDisplay: null,
 
+   metricSampleRate: 10,
+
+   lastMetricSample: 10,
+
    showMetricsWindow: false,
 
    /**
@@ -362,7 +384,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
-      Console.log("Object " + objId + " created");
+      Console.log("CREATED Object ", objId, "[", obj, "]");
       this.livingObjects++;
 
       return objId;
@@ -378,7 +400,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Assert((obj != null), "Trying to destroy non-existent object!");
       var objId = obj.getId();
       Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!");
-      Console.log("Object " + objId + " destroyed");
+      Console.log("DESTROYED Object ", objId, "[", obj, "]");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
       this.livingObjects--;
@@ -436,7 +458,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       this.running = true;
 
-      Console.debug(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
+      Console.warn(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
 
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
@@ -453,7 +475,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          return;
       }
 
-      Console.debug(">>> Engine shutting down...");
+      Console.warn(">>> Engine shutting down...");
 
       // Stop world timer
       window.clearTimeout(Engine.globalTimer);
@@ -465,7 +487,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       this.downTime = new Date().getTime();
-      Console.debug(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
+      Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
       this.running = false;
       for (var o in this.gameObjects)
@@ -475,7 +497,24 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.gameObjects = null;
 
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
+
+      // Perform final cleanup
+      this.cleanup();
    },
+
+	/**
+	 * After a successful shutdown, we need to clean up all of the objects
+	 * that were created on the window object by the engine.
+	 * @memberOf Engine
+	 * @private
+	 */
+   cleanup: function() {
+      // Remove the body contents
+      $(document.body).empty();
+
+      // Remove all scripts from the <head>
+      $("head script", document).remove();
+	},
 
    /**
     * Get the default rendering context for the Engine.
@@ -497,7 +536,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadScript: function(scriptPath) {
-      Console.log("Loading script: " + scriptPath);
+      Console.debug("Loading script: " + scriptPath);
 
       var s = scriptPath.replace(/[\/\.]/g,"_");
       if (this.loadedScripts[s] == null)
@@ -658,14 +697,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       {
          Engine.getDefaultContext().update(null, new Date().getTime());
 
-         if (this.showMetricsWindow)
+         if (this.showMetricsWindow && this.lastMetricSample-- == 0)
          {
             var d = new Date().getTime() - b;
-            Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000));
-            Engine.addMetric("rTime", d + "ms");
-            Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100) + "%");
+            Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
+            Engine.addMetric("frame", d, true, "#ms");
+            Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
 
             this.updateMetrics();
+            this.lastMetricSample = this.metricSampleRate;
          }
       }
 
@@ -674,15 +714,43 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
+    * Set the interval at which metrics are sampled by the system.
+    * The default is calculated every 10 engine ticks.
+    *
+    * @param sampleRate {Number} The number of ticks between samples
+    */
+   setMetricSampleRate: function(sampleRate) {
+		this.lastMetricSample = 1;
+		this.metricSampleRate = sampleRate;
+	},
+
+   /**
     * Add a metric to the game engine that can be displayed
-    * while it is running.
+    * while it is running.  If smoothing is selected, a 3 point
+    * running average will be used to smooth out jitters in the
+    * value that is shown.
     *
     * @param metricName {String} The name of the metric to track
     * @param value {String/Number} The value of the metric
+    * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
     * @memberOf Engine
     */
-   addMetric: function(metricName, value) {
-      this.metrics[metricName] = value;
+   addMetric: function(metricName, value, smoothing, fmt) {
+		if (smoothing) {
+			var vals = this.metrics[metricName] ? this.metrics[metricName].values : [];
+			if (vals.length == 0) {
+				// Init
+				vals.push(value);
+				vals.push(value);
+				vals.push(value);
+			}
+			vals.shift();
+			vals.push(value);
+			var v = Math.floor((vals[0] + vals[1] + vals[2]) * 0.33);
+			this.metrics[metricName] = { val: fmt.replace("#", v), values: vals };
+		} else {
+	      this.metrics[metricName] = { val: fmt.replace("#", value) };
+		}
    },
 
    /**
@@ -727,7 +795,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       var h = "";
       for (var m in this.metrics)
       {
-         h += m + ": " + this.metrics[m] + "<br/>";
+         h += m + ": " + this.metrics[m].val + "<br/>";
       }
       this.metricDisplay.html(h);
    },

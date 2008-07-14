@@ -70,6 +70,12 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
     * @memberOf BaseObject
     */
    destroy: function() {
+		// Remove any defined element from it's parent, unless it's the document body
+      if (this.element && this.element.parentNode && this.element != document.body) {
+			Console.log("DOM element ", this.element, " removed from ", this.element.parentNode);
+			this.element.parentNode.removeChild(this.element);
+		}
+
       // Clean up the reference to this object
       Engine.destroy(this);
       this.element = null;

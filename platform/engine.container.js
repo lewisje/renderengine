@@ -127,7 +127,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    add: function(obj) {
       this.objects.push(obj);
-      Console.log("Added " + obj.getId() + " to " + this.getId());
+      Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
    },
 
    /**
@@ -137,7 +137,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {BaseObject} The object to remove from the container.
     */
    remove: function(obj) {
-      Console.log("Removed " + obj.getId() + " from " + this.getId());
+      Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
       EngineSupport.arrayRemove(this.objects, obj);
    },
 
@@ -154,7 +154,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 
       var obj = this.objects[idx];
 
-      Console.log("Removed " + obj.getId() + " from " + this.getId());
+      Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
       this.objects.splice(idx, 1);
 
       return obj;
@@ -199,7 +199,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    sort: function(fn) {
       Assert((fn != null), "A function must be provided to sort the Container");
-      Console.log("Sorting " + this.getClassName() + " [" + this.getId() + "]");
+      Console.log("Sorting ", this.getClassName(), "[" + this.getId() + "]");
       this.objects.sort(fn);
    },
 

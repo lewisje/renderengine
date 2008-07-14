@@ -171,7 +171,7 @@ Spaceroids.Rock = Object2D.extend({
 
       // Assign the shape to the vector component
       c_draw.setPoints(s);
-      c_draw.setLineStyle("silver");
+      c_draw.setLineStyle("white");
       c_draw.setLineWidth(0.5);
    },
 

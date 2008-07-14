@@ -93,7 +93,7 @@ Spaceroids.Player = Object2D.extend({
       {
          var r = c_mover.getRotation();
          var dir = Math2D.getDirectionVector(Point2D.ZERO, this.tip, r);
-         c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.25)));
+         c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.15)));
       }
 
       this.base(renderContext, time);

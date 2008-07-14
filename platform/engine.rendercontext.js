@@ -67,12 +67,8 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * parent container.
     */
    destroy: function() {
-      if (this.surface != document.body)
-      {
-         this.surface.parentNode.removeChild(this.surface);
-      }
-      this.surface = null;
       this.base();
+      this.surface = null;
    },
 
    /**
@@ -82,6 +78,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     */
    setSurface: function(element) {
       this.surface = element;
+      this.setElement(element);
    },
 
    /**
