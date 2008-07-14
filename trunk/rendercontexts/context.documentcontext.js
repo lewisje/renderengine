@@ -54,7 +54,11 @@ var DocumentContext = RenderContext2D.extend(/** @scope DocumentContext.prototyp
       var objs = this.getObjects();
       for (var o in objs)
       {
-         this.getSurface().removeChild(objs[o].getElement());
+			var e = objs[o].getElement();
+			if (e && e != document.body) {
+				Console.log("DOM element ", e, " removed from ", this.getSurface());
+	         this.getSurface().removeChild(e);
+			}
       }
 
       this.base();
