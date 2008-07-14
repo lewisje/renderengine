@@ -67,7 +67,7 @@ var Spaceroids = Game.extend({
    centerPoint: null,
    areaScale: 0.9,
 
-   engineFPS: 30,
+   engineFPS: 25,
 
    collisionModel: null,
 

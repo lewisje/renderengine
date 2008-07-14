@@ -701,6 +701,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          {
             var d = new Date().getTime() - b;
             Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
+            Engine.addMetric("avail", this.fpsClock, false, "#ms");
             Engine.addMetric("frame", d, true, "#ms");
             Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
 
