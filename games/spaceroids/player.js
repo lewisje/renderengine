@@ -53,6 +53,8 @@ Spaceroids.Player = Object2D.extend({
 
    alive: false,
 
+   playerShape: null,
+
    constructor: function() {
       this.base("Player");
 
@@ -99,6 +101,17 @@ Spaceroids.Player = Object2D.extend({
       this.base(renderContext, time);
       renderContext.popTransform();
 
+      // Draw the remaining lives
+      renderContext.setLineStyle("white");
+      var posX = 170;
+      for (var l = 0; l <= this.players; l++) {
+         renderContext.pushTransform();
+         renderContext.setScale(0.7);
+         renderContext.setPosition(new Point2D(posX, 60));
+         renderContext.drawPolygon(this.playerShape);
+         renderContext.popTransform();
+         posX -= 20;
+      }
    },
 
    /**
@@ -178,6 +191,9 @@ Spaceroids.Player = Object2D.extend({
       // Assign the shape to the vector component
       c_draw.setPoints(s);
       c_draw.setLineStyle("white");
+
+      // Save the shape so we can draw lives remaining
+      this.playerShape = s;
 
       var thrust = Spaceroids.Player.thrust;
       s = [];
