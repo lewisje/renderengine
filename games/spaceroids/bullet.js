@@ -47,7 +47,7 @@ Spaceroids.Bullet = Object2D.extend({
       // Track the player that created us
       this.player = player;
 
-      // Add components to move and draw the asteroid
+      // Add components to move and draw the bullet
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
       this.add(new ColliderComponent("collide", Spaceroids.collisionModel));

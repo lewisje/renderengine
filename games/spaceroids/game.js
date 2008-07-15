@@ -65,6 +65,9 @@ var Spaceroids = Game.extend({
 
    fieldBox: null,
    centerPoint: null,
+   areaScale: 0.9,
+
+   engineFPS: 25,
 
    collisionModel: null,
 
@@ -146,8 +149,8 @@ var Spaceroids = Game.extend({
       copy.setPosition(new Point2D(145, 130));
       this.renderContext.add(copy);
 
-      Spaceroids.start = new TextRenderer(new VectorText(), "Press =Enter= to Start", 1);
-      Spaceroids.start.setPosition(new Point2D(120, 450));
+      Spaceroids.start = new TextRenderer(new VectorText(), "[ Press =Enter= to Start ]", 1);
+      Spaceroids.start.setPosition(new Point2D(96, 450));
       Spaceroids.start.setColor("#ffffff");
       Spaceroids.renderContext.add(Spaceroids.start);
 
@@ -294,11 +297,13 @@ var Spaceroids = Game.extend({
       $("#loading").remove();
 
       // Set the FPS of the game
-      Engine.setFPS(24);
+      Engine.setFPS(this.engineFPS);
+
       // Create the 2D context
       this.fieldBox = new Rectangle2D(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
       this.renderContext = new CanvasContext(this.fieldWidth, this.fieldHeight);
+      this.renderContext.setWorldScale(this.areaScale);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
 
