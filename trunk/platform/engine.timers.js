@@ -195,7 +195,8 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
 });
 
 /**
- * @class A one-shot timer that cannot be restarted.
+ * @class A one-shot timer that cannot be restarted and will
+ *        self-destroy after it completes its interval..
  *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
@@ -206,8 +207,8 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
    constructor: function(name, interval, fn) {
 
       var cb = function() {
-         arguments.callee.cbFn();
          arguments.callee.timer.destroy();
+         arguments.callee.cbFn();
       };
       cb.cbFn = fn;
       cb.timer = this;

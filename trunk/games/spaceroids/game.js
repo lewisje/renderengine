@@ -149,8 +149,8 @@ var Spaceroids = Game.extend({
       copy.setPosition(new Point2D(145, 130));
       this.renderContext.add(copy);
 
-      Spaceroids.start = new TextRenderer(new VectorText(), "Press =Enter= to Start", 1);
-      Spaceroids.start.setPosition(new Point2D(120, 450));
+      Spaceroids.start = new TextRenderer(new VectorText(), "[ Press =Enter= to Start ]", 1);
+      Spaceroids.start.setPosition(new Point2D(96, 450));
       Spaceroids.start.setColor("#ffffff");
       Spaceroids.renderContext.add(Spaceroids.start);
 
