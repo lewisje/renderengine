@@ -102,7 +102,7 @@ Spaceroids.Player = Object2D.extend({
       renderContext.popTransform();
 
       // Debug the quad node
-      if (this.ModelData && this.ModelData.lastNode)
+      if (Engine.getDebugMode() && this.ModelData && this.ModelData.lastNode)
       {
          renderContext.setLineStyle("red");
          renderContext.drawRectangle(this.ModelData.lastNode.rect);
