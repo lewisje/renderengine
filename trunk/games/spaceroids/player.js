@@ -101,6 +101,13 @@ Spaceroids.Player = Object2D.extend({
       this.base(renderContext, time);
       renderContext.popTransform();
 
+      // Debug the quad node
+      if (this.ModelData && this.ModelData.lastNode)
+      {
+         renderContext.setLineStyle("red");
+         renderContext.drawRectangle(this.ModelData.lastNode.rect);
+      }
+
       // Draw the remaining lives
       renderContext.setLineStyle("white");
       var posX = 170;
