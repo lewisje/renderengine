@@ -98,10 +98,10 @@ Spaceroids.Rock = Object2D.extend({
       renderContext.popTransform();
 
       // Debug the quad node
-      if (renderContext.getContextData(this) && renderContext.getContextData(this).lastNode)
+      if (this.ModelData && this.ModelData.lastNode)
       {
          renderContext.setLineStyle("blue");
-         renderContext.drawRectangle(renderContext.getContextData(this).lastNode.rect);
+         renderContext.drawRectangle(this.ModelData.lastNode.rect);
       }
    },
 

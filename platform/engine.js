@@ -455,14 +455,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Load the required scripts
       this.loadEngineScripts();
+   },
 
-      this.running = true;
-
+	/**
+	 * Runs the engine after all of the scripts have been loaded.
+	 * @private
+	 * @memberOf Engine
+	 */
+   run: function() {
       Console.warn(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
+      this.running = true;
 
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
-   },
+
+	},
 
    /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
@@ -536,31 +543,101 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadScript: function(scriptPath) {
-      Console.debug("Loading script: " + scriptPath);
-
       var s = scriptPath.replace(/[\/\.]/g,"_");
       if (this.loadedScripts[s] == null)
       {
+         // Store the request in the cache
+         this.loadedScripts[s] = scriptPath;
+
+	      if (!Engine.scriptQueue) {
+				// Create the queue
+				Engine.scriptQueue = [];
+			}
+
+	      // Put script into load queue
+	      Engine.scriptQueue.push(scriptPath);
+
+	      if (!Engine.scriptQueueTimer) {
+				// Process any waiting scripts
+				Engine.scriptQueueTimer = setInterval(function() {
+					if (Engine.scriptQueue.length > 0) {
+						Engine.processScriptQueue();
+					} else {
+						// Stop the queue timer if there are no scripts
+						clearInterval(Engine.scriptQueueTimer);
+						Engine.scriptQueueTimer = null;
+					}
+				}, 10);
+
+				Engine.readyForNextScript = true;
+			}
+      }
+   },
+
+   /**
+    * Put a callback into the script queue so that when a
+    * certain number of files has been loaded, we can call
+    * a method.  Allows for functionality to start with
+    * incremental loading.
+    *
+    * @param cb {Function} A callback to execute
+	 * @memberOf Engine
+    */
+   setQueueCallback: function(cb) {
+		if (!Engine.scriptQueue) {
+			// Create the queue
+			Engine.scriptQueue = [];
+		}
+
+		// Put callback into load queue
+		Engine.scriptQueue.push(cb);
+	},
+
+   /**
+    * Process any scripts that are waiting to be loaded.
+    * @private
+    * @memberOf Engine
+    */
+   processScriptQueue: function() {
+		if (Engine.scriptQueue.length > 0 && Engine.readyForNextScript) {
+
+         // Hold the queue until the script is loaded
+         Engine.readyForNextScript = false;
+
+			// Get next script...
+			var scriptPath = Engine.scriptQueue.shift();
+
+			// If the queue element is a function, execute it and return
+			if (typeof scriptPath == "function") {
+				scriptPath();
+	         Engine.readyForNextScript = true;
+	         return;
+			}
+
          // A hack to allow us to do filesystem testing
          if (!window.localDebugMode)
          {
-            jQuery.getScript(scriptPath);
+            jQuery.getScript(scriptPath, function() {
+					Console.debug("Loaded '" + scriptPath + "'");
+					Engine.readyForNextScript = true;
+				});
          }
          else
          {
-            // If we're running locally, don't use jQuery.  This
-            // allows us to see the loaded scripts.
-            var head = document.getElementsByTagName("head")[0];
+            // If we're running locally, don't use jQuery to get the script.
+            // This allows us to see and debug the loaded scripts.
             var n = document.createElement("script");
             n.src = scriptPath;
             n.type = "text/javascript";
-            head.appendChild(n);
+            $(n).load(function() {
+					Console.debug("Loaded '" + scriptPath + "'");
+					Engine.readyForNextScript = true;
+				});
+				var h = document.getElementsByTagName("head")[0];
+            h.appendChild(n);
          }
-
-         // Store the request in the cache
-         this.loadedScripts[s] = scriptPath;
-      }
-   },
+		}
+	},
 
    /**
     * Load a game script.  Creates the default rendering context
@@ -570,9 +647,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadGame: function(gameSource) {
-      // Create the default context (the document)
-      this.defaultContext = new DocumentContext();
-      this.loadScript(gameSource);
+		// We'll wait for the Engine to be ready before we load the game
+		var engine = this;
+		Engine.gameLoadTimer = setInterval(function() {
+			if (engine.running) {
+				// Stop the timer
+				clearInterval(Engine.gameLoadTimer);
+				Engine.gameLoadTimer = null;
+
+				// Create the default context (the document)
+				Console.debug("Loading '" + gameSource + "'");
+				engine.defaultContext = new DocumentContext();
+				engine.loadScript(gameSource);
+			}
+		}, 100);
    },
 
    /**
@@ -616,9 +704,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadEngineScripts: function() {
-
       // Engine platform
-      this.load("/platform/engine.support.js");
       this.load("/platform/engine.math2d.js");
       this.load("/platform/engine.game.js");
       this.load("/platform/engine.baseobject.js");
@@ -647,6 +733,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Text rendering
       this.load("/textrender/text.renderer.js");
       this.load("/textrender/text.abstractrender.js");
+
+      // Start the engine after all these files load
+      this.setQueueCallback(function() {
+			Engine.run();
+		});
    },
 
    /**
