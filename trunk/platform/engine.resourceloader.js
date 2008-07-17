@@ -46,6 +46,11 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
       this.base(name || "ResourceLoader");
    },
 
+   destroy: function() {
+		this.clear();
+		this.base();
+	},
+
    /**
     * Load an object via this resource loader, and add it to the cache.
     *
