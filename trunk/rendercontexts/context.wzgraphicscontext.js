@@ -66,9 +66,9 @@ var WZGraphicsContext = RenderContext2D.extend(/** @scope CanvasContext.prototyp
       // Create the canvas element
       var canvas = document.createElement("div");
       var worldScale = this.getWorldScale();
-      canvas.width = this.width * worldScale[0];
-      canvas.height = this.height * worldScale[1];
-      canvas.id = this.getId();
+      $(canvas)
+      	.css({width: this.width * worldScale[0], height: this.height * worldScale[1]})
+      	.attr("id", this.getId());
 
       this.jg = new jsGraphics(canvas);
       this.currentTransform = { translate: [0, 0],
