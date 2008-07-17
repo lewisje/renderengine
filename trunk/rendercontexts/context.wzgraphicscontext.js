@@ -181,14 +181,6 @@ var WZGraphicsContext = RenderContext2D.extend(/** @scope CanvasContext.prototyp
    },
 
    /**
-    * Set the transformation using a matrix.
-    *
-    * @param matrix {Matrix2D} The transformation matrix
-    */
-   setTransform: function(matrix) {
-   },
-
-   /**
     * Set the line style for the context.
     *
     * @param lineStyle {String} An HTML color or <tt>null</tt>
