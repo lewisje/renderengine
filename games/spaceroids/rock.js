@@ -220,7 +220,9 @@ Spaceroids.Rock = Object2D.extend({
       }
 
       // Score some points
-      Spaceroids.scorePoints(this.scoreValue);
+      if (!Spaceroids.attractMode) {
+	      Spaceroids.scorePoints(this.scoreValue);
+		}
 
       // Break the rock up into smaller chunks
       if (this.size - 4 > 1)
@@ -230,6 +232,9 @@ Spaceroids.Rock = Object2D.extend({
             var rock = new Spaceroids.Rock(this.size - 4, this.getPosition());
             this.getRenderContext().add(rock);
             rock.setup(this.pBox.getDims().x, this.pBox.getDims().y);
+            if (Spaceroids.attractMode) {
+	            rock.killTimer = Engine.worldTime + 2000;
+			  	}
          }
       }
 
@@ -252,6 +257,17 @@ Spaceroids.Rock = Object2D.extend({
             return ColliderComponent.STOP;
          }
       }
+
+      if (Spaceroids.attractMode &&
+      		obj.killTimer < Engine.worldTime &&
+      		obj.getClassName() == "Rock" &&
+      		obj != this &&
+          	(Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
+      {
+			this.kill();
+			obj.kill();
+			return ColliderComponent.STOP;
+		}
 
       return ColliderComponent.CONTINUE;
    },
