@@ -129,6 +129,7 @@ var Spaceroids = Game.extend({
    attractMode: function() {
 
       this.cleanupPlayfield();
+     	Spaceroids.attractMode = true;
 
       var pWidth = this.fieldWidth;
       var pHeight = this.fieldHeight;
@@ -139,6 +140,7 @@ var Spaceroids = Game.extend({
          var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
          rock.setup();
+         rock.killTimer = Engine.worldTime + 2000;
       }
 
       var title = new TextRenderer(new VectorText(), "Asteroids", 2);
@@ -174,8 +176,21 @@ var Spaceroids = Game.extend({
 
       Spaceroids.intv = new Timeout("startkey", 1000, flash);
 
+      // Start up a particle engine
+      this.pEngine = new ParticleEngine()
+      this.renderContext.add(this.pEngine);
+
       this.addHiScore();
       this.gameOver();
+
+		// Create a new rock every 20 seconds
+		Spaceroids.attractTimer = new Interval("attract", 20000,
+			function() {
+				var rock = new Spaceroids.Rock(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
+				Spaceroids.renderContext.add(rock);
+				rock.setup();
+				rock.killTimer = Engine.worldTime + 2000;
+			});
 
    },
 
@@ -229,6 +244,9 @@ var Spaceroids = Game.extend({
       {
          return;
       }
+
+		Spaceroids.attractTimer.destroy();
+     	Spaceroids.attractMode = false;
 
       Spaceroids.intv.destroy();
 

@@ -371,6 +371,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    showMetricsWindow: false,
 
+   worldTime: 0,
+
    /**
     * Create an instance of an object, managed by the Engine.
     *
@@ -782,6 +784,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    engineTimer: function() {
 
       var b = new Date().getTime();
+      Engine.worldTime = b;
 
       // Update the world
       if (Engine.getDefaultContext() != null)
