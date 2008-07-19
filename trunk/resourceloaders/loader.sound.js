@@ -30,14 +30,14 @@
 
 /**
  * @class Loads sounds and stores the reference to them.  Provides a simple
- *			 way to play and stop the sounds that have been loaded.
+ *        way to play and stop the sounds that have been loaded.
  * @extends ResourceLoader
  */
 var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.prototype */{
 
-	init: false,
+   init: false,
 
-	playingSounds: null,
+   playingSounds: null,
 
    /**
     * Load a sound resource from a URL.
@@ -47,78 +47,28 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
     */
    load: function(name, url) {
 
-		// Determine a possible MIME type
-		var soundTypes = new RegExp(".*\.(wav|mp3|mid|aif|aifc|aiff|m3u)");
-		var check = soundTypes.exec(url);
-		var mimeType = "audio/";
-		switch (check[1]) {
-			case "wav": mimeType += "x-wav"; break;
-			case "mp3": mimeType += "mpeg"; break;
-			case "mid": mimeType += "mid"; break;
-			case "aif":
-			case "aifc":
-			case "aiff": mimeType += "x-aiff"; break;
-			case "m3u": mimeType += "x-mpegurl"; break;
-			default: mimeType += "basic";
-		}
+      if (!Engine.isSoundEnabled()) {
+         return;
+      }
 
-		// Create the sound object
-		var sound = jQuery("<object>")
-			.attr("data", url)
-			.attr("width", "0")
-			.attr("height", "0")
-			.attr("type", mimeType)
-			.append(jQuery("<param>")
-				.attr("name", "src")
-				.attr("value", url));
+      // Only MP3 files are supported
+      Assert(url.indexOf(".mp3") > 0, "Only MP3 sound format is supported!");
 
-		var thisObj = sound;
-		sound.bind("load", function() {
-			thisObj.setReady(name, true);
-		});
+      // Create the sound object
+      var sound = Engine.soundManager.createSound({
+         "id": name,
+         "url": url,
+         "autoPlay": false,
+         "volume": 50
+      });
 
-		if (!this.init) {
-			Engine.getDefaultContext().add(this);
-			this.playingSounds = {};
-			this.init = true;
-		}
+
+      if (!this.init) {
+         Engine.getDefaultContext().add(this);
+         this.init = true;
+      }
 
       this.base(name, sound);
-   },
-
-	/**
-	 * Plays a sound effect.  There is no way to know which sounds
-	 * are currently done playing, so sounds must be stopped.
-	 *
-	 * @param name {String} The name of the sound resource to play
-	 * @return The Id of the sound so it can be stopped
-	 */
-   play: function(name) {
-      var sound = this.get(name);
-      var soundId = Engine.worldTimer + Math.floor(Math.random() * 200);
-
-      // Clone the object so we can have multiples playing
-      var cloned = $(sound).clone();
-
-      // Remember the playing sounds
-      this.playingSounds[soundId] = cloned;
-
-      // Append the sound to the body element so it plays
-      $("body", document).append(cloned);
-      return soundId;
-   },
-
-	/**
-	 * Stop the sound identified by the given <tt>soundId</tt>.
-	 *
-	 * @param soundId {String} The Id which was returned by the {@link #play} method
-	 */
-   stop: function(soundId) {
-		var sound = this.playingSounds[soundId];
-		if (sound) {
-			sound.remove();
-			delete this.playingSounds[soundId];
-		}
-	},
+   }
 
 });
