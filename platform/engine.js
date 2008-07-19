@@ -41,14 +41,14 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
 
    dumpWindow: null,
 
-	/** @private */
-	combiner: function() {
-		var out = "";
-		for (var a in arguments) {
-			out += arguments[a].toString();
-		}
-		return out;
-	},
+   /** @private */
+   combiner: function() {
+      var out = "";
+      for (var a in arguments) {
+         out += arguments[a].toString();
+      }
+      return out;
+   },
 
    /** @private */
    out: function(msg) {
@@ -373,6 +373,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    worldTime: 0,
 
+   soundsEnabled: false,
+
    /**
     * Create an instance of an object, managed by the Engine.
     *
@@ -442,6 +444,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
+    * Returns <tt>true</tt> if SoundManager2 is loaded and initialized
+    * properly.  The resource loader and play manager will use this
+    * value to execute properly.
+    * @return <tt>true</tt> if the sound engine was loaded properly
+    * @memberOf Engine
+    */
+   isSoundEnabled: function() {
+      return this.soundsEnabled;
+   },
+
+   /**
     * Starts the engine and initializes the timer to update the
     * world managed by the engine.
     *
@@ -459,11 +472,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadEngineScripts();
    },
 
-	/**
-	 * Runs the engine after all of the scripts have been loaded.
-	 * @private
-	 * @memberOf Engine
-	 */
+   /**
+    * Runs the engine after all of the scripts have been loaded.
+    * @private
+    * @memberOf Engine
+    */
    run: function() {
       Console.warn(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
       this.running = true;
@@ -471,7 +484,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
 
-	},
+   },
 
    /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
@@ -511,19 +524,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.cleanup();
    },
 
-	/**
-	 * After a successful shutdown, we need to clean up all of the objects
-	 * that were created on the window object by the engine.
-	 * @memberOf Engine
-	 * @private
-	 */
+   /**
+    * After a successful shutdown, we need to clean up all of the objects
+    * that were created on the window object by the engine.
+    * @memberOf Engine
+    * @private
+    */
    cleanup: function() {
       // Remove the body contents
       $(document.body).empty();
 
       // Remove all scripts from the <head>
       $("head script", document).remove();
-	},
+   },
 
    /**
     * Get the default rendering context for the Engine.
@@ -551,28 +564,28 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Store the request in the cache
          this.loadedScripts[s] = scriptPath;
 
-	      if (!Engine.scriptQueue) {
-				// Create the queue
-				Engine.scriptQueue = [];
-			}
+         if (!Engine.scriptQueue) {
+            // Create the queue
+            Engine.scriptQueue = [];
+         }
 
-	      // Put script into load queue
-	      Engine.scriptQueue.push(scriptPath);
+         // Put script into load queue
+         Engine.scriptQueue.push(scriptPath);
 
-	      if (!Engine.scriptQueueTimer) {
-				// Process any waiting scripts
-				Engine.scriptQueueTimer = setInterval(function() {
-					if (Engine.scriptQueue.length > 0) {
-						Engine.processScriptQueue();
-					} else {
-						// Stop the queue timer if there are no scripts
-						clearInterval(Engine.scriptQueueTimer);
-						Engine.scriptQueueTimer = null;
-					}
-				}, 10);
+         if (!Engine.scriptQueueTimer) {
+            // Process any waiting scripts
+            Engine.scriptQueueTimer = setInterval(function() {
+               if (Engine.scriptQueue.length > 0) {
+                  Engine.processScriptQueue();
+               } else {
+                  // Stop the queue timer if there are no scripts
+                  clearInterval(Engine.scriptQueueTimer);
+                  Engine.scriptQueueTimer = null;
+               }
+            }, 10);
 
-				Engine.readyForNextScript = true;
-			}
+            Engine.readyForNextScript = true;
+         }
       }
    },
 
@@ -583,17 +596,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * incremental loading.
     *
     * @param cb {Function} A callback to execute
-	 * @memberOf Engine
+    * @memberOf Engine
     */
    setQueueCallback: function(cb) {
-		if (!Engine.scriptQueue) {
-			// Create the queue
-			Engine.scriptQueue = [];
-		}
+      if (!Engine.scriptQueue) {
+         // Create the queue
+         Engine.scriptQueue = [];
+      }
 
-		// Put callback into load queue
-		Engine.scriptQueue.push(cb);
-	},
+      // Put callback into load queue
+      Engine.scriptQueue.push(cb);
+   },
 
    /**
     * Process any scripts that are waiting to be loaded.
@@ -601,28 +614,28 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    processScriptQueue: function() {
-		if (Engine.scriptQueue.length > 0 && Engine.readyForNextScript) {
+      if (Engine.scriptQueue.length > 0 && Engine.readyForNextScript) {
 
          // Hold the queue until the script is loaded
          Engine.readyForNextScript = false;
 
-			// Get next script...
-			var scriptPath = Engine.scriptQueue.shift();
+         // Get next script...
+         var scriptPath = Engine.scriptQueue.shift();
 
-			// If the queue element is a function, execute it and return
-			if (typeof scriptPath == "function") {
-				scriptPath();
-	         Engine.readyForNextScript = true;
-	         return;
-			}
+         // If the queue element is a function, execute it and return
+         if (typeof scriptPath == "function") {
+            scriptPath();
+            Engine.readyForNextScript = true;
+            return;
+         }
 
          // A hack to allow us to do filesystem testing
          if (!window.localDebugMode)
          {
             jQuery.getScript(scriptPath, function() {
-					Console.debug("Loaded '" + scriptPath + "'");
-					Engine.readyForNextScript = true;
-				});
+               Console.debug("Loaded '" + scriptPath + "'");
+               Engine.readyForNextScript = true;
+            });
          }
          else
          {
@@ -632,14 +645,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             n.src = scriptPath;
             n.type = "text/javascript";
             $(n).load(function() {
-					Console.debug("Loaded '" + scriptPath + "'");
-					Engine.readyForNextScript = true;
-				});
-				var h = document.getElementsByTagName("head")[0];
+               Console.debug("Loaded '" + scriptPath + "'");
+               Engine.readyForNextScript = true;
+            });
+            var h = document.getElementsByTagName("head")[0];
             h.appendChild(n);
          }
-		}
-	},
+      }
+   },
 
    /**
     * Load a game script.  Creates the default rendering context
@@ -649,20 +662,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadGame: function(gameSource) {
-		// We'll wait for the Engine to be ready before we load the game
-		var engine = this;
-		Engine.gameLoadTimer = setInterval(function() {
-			if (engine.running) {
-				// Stop the timer
-				clearInterval(Engine.gameLoadTimer);
-				Engine.gameLoadTimer = null;
+      // We'll wait for the Engine to be ready before we load the game
+      var engine = this;
+      Engine.gameLoadTimer = setInterval(function() {
+         if (engine.running) {
+            // Stop the timer
+            clearInterval(Engine.gameLoadTimer);
+            Engine.gameLoadTimer = null;
 
-				// Create the default context (the document)
-				Console.debug("Loading '" + gameSource + "'");
-				engine.defaultContext = new DocumentContext();
-				engine.loadScript(gameSource);
-			}
-		}, 100);
+            // Create the default context (the document)
+            Console.debug("Loading '" + gameSource + "'");
+            engine.defaultContext = new DocumentContext();
+            engine.loadScript(gameSource);
+         }
+      }, 100);
    },
 
    /**
@@ -672,6 +685,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    load: function(scriptSource) {
+      this.loadScript(this.getEnginePath() + scriptSource);
+   },
+
+   /**
+    * Get the path to the engine.
+    * @type String
+    */
+   getEnginePath: function() {
       if (this.engineLocation == null)
       {
          // Determine the path of the "engine.js" file
@@ -689,14 +710,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          }
       }
 
-      this.loadScript(this.engineLocation + scriptSource);
-   },
-
-   /**
-    * Get the path to the engine.
-    * @type String
-    */
-   getEnginePath: function() {
       return this.engineLocation;
    },
 
@@ -736,10 +749,40 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.load("/textrender/text.renderer.js");
       this.load("/textrender/text.abstractrender.js");
 
+      // Sound manager
+      this.load("/libs/soundmanager2.js");
+
+      // Initialize the sounds engine
+      this.setQueueCallback(function() {
+         Engine.soundManager = new SoundManager();
+
+         // directory where SM2 .SWFs live
+         Engine.soundManager.url = Engine.getEnginePath() + '/libs/';
+
+         // Debugging enabled
+         Engine.soundManager.debugMode = Engine.getDebugMode();
+
+         Engine.soundManager.onload = function() {
+            Engine.soundsEnabled = true;
+            Console.debug("SoundManager loaded successfully");
+         };
+
+         Engine.soundManager.onerror = function() {
+            Engine.soundsEnabled = false;
+            Console.warn("SoundManager not loaded - sound disabled");
+         };
+
+         if (Engine.getEnginePath().indexOf("file:") == 0) {
+            Engine.soundManager.sandbox.type = "localWithFile";
+         }
+
+         Engine.soundManager.init();
+      });
+
       // Start the engine after all these files load
       this.setQueueCallback(function() {
-			Engine.run();
-		});
+         Engine.run();
+      });
    },
 
    /**
@@ -815,9 +858,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param sampleRate {Number} The number of ticks between samples
     */
    setMetricSampleRate: function(sampleRate) {
-		this.lastMetricSample = 1;
-		this.metricSampleRate = sampleRate;
-	},
+      this.lastMetricSample = 1;
+      this.metricSampleRate = sampleRate;
+   },
 
    /**
     * Add a metric to the game engine that can be displayed
@@ -831,21 +874,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    addMetric: function(metricName, value, smoothing, fmt) {
-		if (smoothing) {
-			var vals = this.metrics[metricName] ? this.metrics[metricName].values : [];
-			if (vals.length == 0) {
-				// Init
-				vals.push(value);
-				vals.push(value);
-				vals.push(value);
-			}
-			vals.shift();
-			vals.push(value);
-			var v = Math.floor((vals[0] + vals[1] + vals[2]) * 0.33);
-			this.metrics[metricName] = { val: fmt.replace("#", v), values: vals };
-		} else {
-	      this.metrics[metricName] = { val: fmt.replace("#", value) };
-		}
+      if (smoothing) {
+         var vals = this.metrics[metricName] ? this.metrics[metricName].values : [];
+         if (vals.length == 0) {
+            // Init
+            vals.push(value);
+            vals.push(value);
+            vals.push(value);
+         }
+         vals.shift();
+         vals.push(value);
+         var v = Math.floor((vals[0] + vals[1] + vals[2]) * 0.33);
+         this.metrics[metricName] = { val: fmt.replace("#", v), values: vals };
+      } else {
+         this.metrics[metricName] = { val: fmt.replace("#", value) };
+      }
    },
 
    /**
