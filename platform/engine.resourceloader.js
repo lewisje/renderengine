@@ -47,9 +47,9 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
    },
 
    destroy: function() {
-		this.clear();
-		this.base();
-	},
+      this.clear();
+      this.base();
+   },
 
    /**
     * Load an object via this resource loader, and add it to the cache.
@@ -63,6 +63,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
       var obj = { data: data, ready: isReady || false};
       this.cache[name] = obj;
       this.length++;
+      Console.log("Loading " + this.getResourceType() + ": " + name);
    },
 
    setReady: function(name, isReady) {
@@ -105,6 +106,14 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
       this.cache = {};
       this.length = 0;
+   },
+
+   /**
+    * The name of the resource this loader will get.
+    * @returns A String that represents the resource type.
+    */
+   getResourceType: function() {
+      return "default";
    },
 
    /**

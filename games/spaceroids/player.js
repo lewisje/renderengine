@@ -227,6 +227,7 @@ Spaceroids.Player = Object2D.extend({
       var b = new Spaceroids.Bullet(this);
       this.getRenderContext().add(b);
       this.bullets++;
+      Spaceroids.soundLoader.get("shoot").play({volume: 15});
    },
 
    /**
@@ -283,7 +284,7 @@ Spaceroids.Player = Object2D.extend({
       // Make some particles
       for (var x = 0; x < 8; x++)
       {
-         Spaceroids.pEngine.addParticle(new SimpleParticle(this.getPosition()));
+         Spaceroids.pEngine.addParticle(new SimpleParticle(this.getPosition(), 3000));
       }
 
       this.getComponent("move").setVelocity(0);
@@ -292,12 +293,14 @@ Spaceroids.Player = Object2D.extend({
       this.rotDir = 0;
       this.thrusting = false;
 
+      Spaceroids.soundLoader.get("death").play({volume: 50});
+
       // Remove one of the players
       if (this.players-- > 0)
       {
          // Set a timer to spawn another player
          var pl = this;
-         new OneShotTimeout("respawn", 2000, function() { pl.respawn(); });
+         new OneShotTimeout("respawn", 3000, function() { pl.respawn(); });
       }
       else
       {

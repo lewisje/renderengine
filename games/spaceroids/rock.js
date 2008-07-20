@@ -223,6 +223,7 @@ Spaceroids.Rock = Object2D.extend({
       // Score some points
       if (!Spaceroids.isAttractMode) {
          Spaceroids.scorePoints(this.scoreValue);
+         Spaceroids.soundLoader.get("explode").play({volume: 20});
       }
 
       // Break the rock up into smaller chunks

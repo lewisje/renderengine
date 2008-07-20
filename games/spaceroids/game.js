@@ -47,6 +47,7 @@ Engine.load("/components/component.vector2d.js");
 Engine.load("/components/component.collider.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
+Engine.load("/resourceloaders/loader.sound.js");
 
 // Load game objects
 Game.load("/rock.js");
@@ -339,6 +340,13 @@ var Spaceroids = Game.extend({
 
 //      Spaceroids.loadTimeout = new Timeout("wait", 250, Spaceroids.waitForResources);
 //      this.waitForResources();
+
+      this.soundLoader = new SoundResourceLoader();
+
+      // Load the sounds
+      this.soundLoader.load("explode", "explode1.mp3");
+      this.soundLoader.load("shoot", "shoot.mp3");
+      this.soundLoader.load("death", "explode2.mp3");
 
       Spaceroids.attractMode();
    },

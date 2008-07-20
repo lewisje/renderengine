@@ -34,6 +34,10 @@
  */
 var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.prototype */{
 
+   constructor: function() {
+      this.base("ImageLoader");
+   },
+
    /**
     * Load an image resource from a URL.
     *
@@ -75,5 +79,22 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
       var img = this.base(name);
       return img ? img[0] : null;
    },
+
+   /**
+    * The name of the resource this loader will get.
+    * @returns A String that represents the resource type.
+    */
+   getResourceType: function() {
+      return "image";
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "ImageResourceLoader";
+   }
 
 });
