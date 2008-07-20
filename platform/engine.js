@@ -375,6 +375,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    soundsEnabled: false,
 
+   queuePaused:false,
+
+   pauseReps: 0,
+
    /**
     * Create an instance of an object, managed by the Engine.
     *
@@ -575,6 +579,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          if (!Engine.scriptQueueTimer) {
             // Process any waiting scripts
             Engine.scriptQueueTimer = setInterval(function() {
+               if (Engine.queuePaused) {
+                  if (Engine.pauseReps++ > 500) {
+                     // If after ~5 seconds the queue is still paused, unpause it and
+                     // warn the user that the situation occurred
+                     Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
+                     Engine.pauseReps = 0;
+                     Engine.pauseQueue(false);
+                  }
+                  return;
+               }
+
+               Engine.pauseReps = 0;
+
                if (Engine.scriptQueue.length > 0) {
                   Engine.processScriptQueue();
                } else {
@@ -606,6 +623,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Put callback into load queue
       Engine.scriptQueue.push(cb);
+   },
+
+   /**
+    * You can pause the queue from a callback function, then
+    * unpause it to continue processing queued scripts.  This will
+    * allow you to wait for an event to occur before continuing to
+    * to load scripts.
+    *
+    * @param state {Boolean} <tt>true</tt> to put the queue processor
+    *                        in a paused state.
+    */
+   pauseQueue: function(state) {
+      Engine.queuePaused = state;
    },
 
    /**
@@ -754,6 +784,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Initialize the sounds engine
       this.setQueueCallback(function() {
+         Engine.pauseQueue(true);
+
          Engine.soundManager = new SoundManager();
 
          // directory where SM2 .SWFs live
@@ -764,19 +796,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
          Engine.soundManager.onload = function() {
             Engine.soundsEnabled = true;
-            Console.debug("SoundManager loaded successfully");
+            Console.warn("SoundManager loaded successfully");
+            Engine.pauseQueue(false);
          };
 
          Engine.soundManager.onerror = function() {
             Engine.soundsEnabled = false;
             Console.warn("SoundManager not loaded - sound disabled");
+            Engine.pauseQueue(false);
          };
 
          if (Engine.getEnginePath().indexOf("file:") == 0) {
             Engine.soundManager.sandbox.type = "localWithFile";
          }
 
-         Engine.soundManager.init();
+         Engine.soundManager.go();
       });
 
       // Start the engine after all these files load
