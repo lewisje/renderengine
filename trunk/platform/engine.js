@@ -983,10 +983,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Object components
       this.load("/components/component.base.js");
 
-      // Resource loaders
-      this.load("/resourceloaders/loader.image.js");
-      this.load("/resourceloaders/loader.bitmapfont.js");
-
       // Text rendering
       this.load("/textrender/text.renderer.js");
       this.load("/textrender/text.abstractrender.js");

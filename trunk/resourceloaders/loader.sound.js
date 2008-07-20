@@ -39,6 +39,12 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
 
    playingSounds: null,
 
+   constructor: function() {
+      this.base("SoundLoader");
+      this.init = false;
+      this.playingSounds = {};
+   },
+
    /**
     * Load a sound resource from a URL.
     *
@@ -69,6 +75,19 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
       }
 
       this.base(name, sound);
+   },
+
+   /**
+    * The name of the resource this loader will get.
+    * @returns A String that represents the resource type.
+    */
+   getResourceType: function() {
+      return "sound";
+   },
+
+   getClassName: function() {
+      return "SoundResourceLoader";
    }
+
 
 });

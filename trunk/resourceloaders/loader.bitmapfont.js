@@ -91,4 +91,20 @@ var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.pr
       return font;
    },
 
+   /**
+    * The name of the resource this loader will get.
+    * @returns A String that represents the resource type.
+    */
+   getResourceType: function() {
+      return "bitmap font";
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "BitmapFontLoader";
+   }
 });

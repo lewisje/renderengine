@@ -42,8 +42,8 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
    pos: null,
    vec: null,
 
-   constructor: function(pos) {
-      this.base(2000);
+   constructor: function(pos, ttl) {
+      this.base(ttl || 2000);
       this.pos = new Point2D(pos);
 
       var a = Math.floor(Math.random() * 360);
