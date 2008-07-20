@@ -1003,8 +1003,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // directory where SM2 .SWFs live
          Engine.soundManager.url = Engine.getEnginePath() + '/libs/';
 
-         // Debugging enabled
-         Engine.soundManager.debugMode = Engine.getDebugMode();
+         // Debugging enabled?
+         var p = EngineSupport.getQueryParams();
+         if (p["debugSound"] != null && p["debugSound"] == "true") {
+            Engine.soundManager.debugMode = Engine.getDebugMode();
+         }
 
          Engine.soundManager.onload = function() {
             Engine.soundsEnabled = true;
