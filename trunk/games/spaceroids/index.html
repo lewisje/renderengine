@@ -49,19 +49,10 @@
 
       <!-- Load the main engine script -->
       <script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/platform/engine.js"></script>
-      <script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/platform/engine.support.js"></script>
-      <link rel="stylesheet" type="text/css" href="http://renderengine.googlecode.com/svn/trunk/css/engine.css" />
    </head>
    <body>
       <span id="loading">Loading...</span>
       <script type="text/javascript">
-         var p = EngineSupport.getQueryParams();
-         if (p["debug"] != null && p["debug"] == "true")
-         {
-            Engine.setDebugMode(true);
-            Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
-         }
-
          // Load the game script
          Engine.loadGame('http://renderengine.googlecode.com/svn/trunk/games/spaceroids/game.js');
       </script>
