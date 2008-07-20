@@ -283,9 +283,6 @@ var Console = Base.extend(/** @scope Console.prototype */{
    }
 });
 
-// Start the console so logging can take place immediately
-Console.startup();
-
 
 /**
  * Halts the engine if the test fails, throwing the error as a result.
@@ -332,6 +329,179 @@ var AssertWarn = function(test, warning) {
    }
 };
 
+/**
+ * @class Engine support class.  Provides extra functions the engine, or games,
+ *        can use.
+ */
+var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
+   constructor: null,
+
+   /**
+    * Remove an element from an array.
+    *
+    * @param array {Array} The array to modify
+    * @param obj {Object} The object to remove
+    */
+   arrayRemove: function(array, obj) {
+      var idx = -1;
+      if (Array.prototype.indexOf) {
+         idx = array.indexOf(obj);
+      }
+      else
+      {
+         for (var o in array) {
+            if (array[o] == obj) {
+               idx = o;
+               break;
+            }
+         }
+      }
+
+      if (idx != -1)
+      {
+         array.splice(idx, 1);
+      }
+   },
+
+   /**
+    * Executes a callback for each element within an array.
+    *
+    * @param array {Array} The array to operate on
+    * @param fn {Function} The function to apply to each element
+    * @param [thisp] {Object} An optional "this" pointer to use in the callback
+    */
+   forEach: function(array, fn, thisp) {
+
+      if (Array.prototype.forEach) {
+         array.forEach(fn, thisp);
+      }
+      else
+      {
+         var len = array.length;
+         if (typeof fn != "function")
+            throw new TypeError();
+
+         for (var i = 0; i < len; i++)
+         {
+            if (i in array)
+               fn.call(thisp, array[i], i, array);
+         }
+      }
+   },
+
+   /**
+    * Get the path from a fully qualified URL.
+    *
+    * @param url {String} The URL
+    * @type String
+    */
+   getPath: function(url) {
+      var l = url.lastIndexOf("/");
+      return url.substr(0, l);
+   },
+
+   /**
+    * Get the query parameters from the window location object.
+    *
+    * @type Object
+    */
+   getQueryParams: function() {
+      var parms = {};
+      var p = window.location.toString().split("?")[1];
+      if (p)
+      {
+         p = p.split("&");
+         for (var x = 0; x < p.length; x++)
+         {
+            var v = p[x].split("=");
+            parms[v[0]] = (v.length > 1 ? v[1] : "");
+         }
+      }
+      return parms;
+   },
+
+   /**
+    * Returns specified object as a JavaScript Object Notation (JSON) string.
+    *
+    * Code to handle "undefined" type was delibrately not implemented, being that it is not part of JSON.
+    * "undefined" type is casted to "null".
+    *
+    * @param object {Object} Must not be undefined or contain undefined types and variables.
+    * @return String
+    */
+   toJSONString: function(o)
+   {
+      if(o == null)
+      {
+         return "null";
+      }
+
+      switch(o.constructor)
+      {
+         case Array:
+            var a = [], i;
+            for(i = 0; i < o.length; i++)
+            {
+               a[i] = EngineSupport.toJSONString(o[i]);
+            }
+            return "[" + a.join() + "]";
+         case String:
+            return EngineSupport.quoteString(o);
+         case Boolean:
+         case Number:
+            return o.toString();
+         default:
+            var a = [], i;
+            for(i in o)
+            {
+               if(o[i] == null)
+               {
+                  a.push(i.quote() + ":null");
+               }
+               else if(o[i].constructor != Function)
+               {
+                  a.push(i.quote() + ':' + EngineSupport.toJSONString(o[i]));
+               }
+            }
+            return '{' + a.join() + '}';
+      }
+   },
+
+   /**
+    * Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
+    *
+    * @param jsonString
+    * @return Object
+    * @see http://www.json.org
+    */
+   parseJSONString: function(jsonString)
+   {
+      var obj = null;
+      eval.call(arguments.callee, 'obj = (function(){return ' + jsonString + ';})();');
+      return obj;
+   },
+
+   /**
+    * Return a string, enclosed in quotes.
+    *
+    * @param string
+    * @type String
+    */
+   quoteString: function(o)
+   {
+      return '"'+this.replace(/[\\"\r\n]/g, function(s)
+         {
+            switch(s)
+            {
+               case "\\":return "\\\\";
+               case "\r":return "\\r";
+               case "\n":return "\\n";
+               case '"':return '\\"';
+            }
+         }
+      )+'"';
+   },
+});
 
 /**
  * @class Engine
@@ -477,8 +647,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Runs the engine after all of the scripts have been loaded.
-    * @private
+    * Runs the engine.  This will be called after all scripts have been loaded.
+    * You will also need to call this if you pause the engine.
     * @memberOf Engine
     */
    run: function() {
@@ -491,6 +661,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
+    * Pause the engine.
+    * @memberOf Engine
+    */
+   pause: function() {
+      Console.warn(">>> Engine paused <<<");
+      this.running = false;
+   },
+
+   /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
     * objects that have been created and added to the world.
     * @memberOf Engine
@@ -498,7 +677,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    shutdown: function() {
       if (!this.running)
       {
-         return;
+         this.running = true;
+         setTimeout(function() { Engine.shutdown(); }, 10);
       }
 
       Console.warn(">>> Engine shutting down...");
@@ -551,6 +731,32 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    getDefaultContext: function() {
       return this.defaultContext;
+   },
+
+   /**
+    * Load a stylesheet and append it to the document.  Allows for
+    * scripts to specify additional stylesheets that can be loaded
+    * as needed.
+    *
+    * @param stylesheetPath {String} Path to the stylesheet, relative to
+    *                                the engine path.
+    */
+   loadStylesheet: function(stylesheetPath) {
+      stylesheetPath = this.getEnginePath() + stylesheetPath;
+      var f = function() {
+         var n = document.createElement("link");
+         n.rel = "stylesheet";
+         n.href = stylesheetPath;
+         n.type = "text/css";
+         $(n).load(function() {
+            Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
+            Engine.readyForNextScript = true;
+         });
+         var h = document.getElementsByTagName("head")[0];
+         h.appendChild(n);
+      };
+
+      this.setQueueCallback(f);
    },
 
    /**
@@ -749,6 +955,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadEngineScripts: function() {
+      // Engine stylesheet
+      this.loadStylesheet("/css/engine.css");
+
       // Engine platform
       this.load("/platform/engine.math2d.js");
       this.load("/platform/engine.game.js");
@@ -786,7 +995,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.setQueueCallback(function() {
          Engine.pauseQueue(true);
 
-         Engine.soundManager = new SoundManager();
+         window.soundManager = new SoundManager();
+
+         // Create a link to the object
+         Engine.soundManager = window.soundManager;
 
          // directory where SM2 .SWFs live
          Engine.soundManager.url = Engine.getEnginePath() + '/libs/';
@@ -859,6 +1071,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
+
+      if (!this.running) {
+         return;
+      }
 
       var b = new Date().getTime();
       Engine.worldTime = b;
@@ -985,6 +1201,16 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
  });
 
+// Start the console so logging can take place immediately
+Console.startup();
+
 // Start the engine
 Engine.startup();
 
+// Read any engine-level query params
+var p = EngineSupport.getQueryParams();
+if (p["debug"] != null && p["debug"] == "true")
+{
+   Engine.setDebugMode(true);
+   Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+}
