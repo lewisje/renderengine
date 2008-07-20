@@ -1010,6 +1010,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          var p = EngineSupport.getQueryParams();
          if (p["debugSound"] != null && p["debugSound"] == "true") {
             Engine.soundManager.debugMode = true;
+         } else {
+            Engine.soundManager.debugMode = false;
          }
 
          Engine.soundManager.onload = function() {
