@@ -692,6 +692,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay = null;
       }
 
+      // Stop the sound manager
+      Engine.soundManager.destruct();
+
       this.downTime = new Date().getTime();
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
@@ -1006,7 +1009,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Debugging enabled?
          var p = EngineSupport.getQueryParams();
          if (p["debugSound"] != null && p["debugSound"] == "true") {
-            Engine.soundManager.debugMode = Engine.getDebugMode();
+            Engine.soundManager.debugMode = true;
          }
 
          Engine.soundManager.onload = function() {
