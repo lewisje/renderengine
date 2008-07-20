@@ -78,7 +78,7 @@ Spaceroids.Rock = Object2D.extend({
     * in the last collision model node.
     */
    destroy: function() {
-		Assert(this.ModelData.lastNode, "Rock not located in a node!");
+      Assert(this.ModelData.lastNode, "Rock not located in a node!");
       this.ModelData.lastNode.removeObject(this);
       this.base();
    },
@@ -221,9 +221,9 @@ Spaceroids.Rock = Object2D.extend({
       }
 
       // Score some points
-      if (!Spaceroids.attractMode) {
-	      Spaceroids.scorePoints(this.scoreValue);
-		}
+      if (!Spaceroids.isAttractMode) {
+         Spaceroids.scorePoints(this.scoreValue);
+      }
 
       // Break the rock up into smaller chunks
       if (this.size - 4 > 1)
@@ -233,9 +233,9 @@ Spaceroids.Rock = Object2D.extend({
             var rock = new Spaceroids.Rock(this.size - 4, this.getPosition());
             this.getRenderContext().add(rock);
             rock.setup(this.pBox.getDims().x, this.pBox.getDims().y);
-            if (Spaceroids.attractMode) {
-	            rock.killTimer = Engine.worldTime + 2000;
-			  	}
+            if (Spaceroids.isAttractMode) {
+               rock.killTimer = Engine.worldTime + 2000;
+            }
          }
       }
 
@@ -259,16 +259,16 @@ Spaceroids.Rock = Object2D.extend({
          }
       }
 
-      if (Spaceroids.attractMode &&
-      		obj.killTimer < Engine.worldTime &&
-      		obj.getClassName() == "Rock" &&
-      		obj != this &&
-          	(Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
+      if (Spaceroids.isAttractMode &&
+            obj.killTimer < Engine.worldTime &&
+            obj.getClassName() == "Rock" &&
+            obj != this &&
+            (Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
       {
-			this.kill();
-			obj.kill();
-			return ColliderComponent.STOP;
-		}
+         this.kill();
+         obj.kill();
+         return ColliderComponent.STOP;
+      }
 
       return ColliderComponent.CONTINUE;
    },

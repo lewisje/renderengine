@@ -129,7 +129,7 @@ var Spaceroids = Game.extend({
    attractMode: function() {
 
       this.cleanupPlayfield();
-     	Spaceroids.attractMode = true;
+      Spaceroids.isAttractMode = true;
 
       var pWidth = this.fieldWidth;
       var pHeight = this.fieldHeight;
@@ -183,14 +183,14 @@ var Spaceroids = Game.extend({
       this.addHiScore();
       this.gameOver();
 
-		// Create a new rock every 20 seconds
-		Spaceroids.attractTimer = new Interval("attract", 20000,
-			function() {
-				var rock = new Spaceroids.Rock(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
-				Spaceroids.renderContext.add(rock);
-				rock.setup();
-				rock.killTimer = Engine.worldTime + 2000;
-			});
+      // Create a new rock every 20 seconds
+      Spaceroids.attractTimer = new Interval("attract", 20000,
+         function() {
+            var rock = new Spaceroids.Rock(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
+            Spaceroids.renderContext.add(rock);
+            rock.setup();
+            rock.killTimer = Engine.worldTime + 2000;
+         });
 
    },
 
@@ -245,8 +245,8 @@ var Spaceroids = Game.extend({
          return;
       }
 
-		Spaceroids.attractTimer.destroy();
-     	Spaceroids.attractMode = false;
+      Spaceroids.attractTimer.destroy();
+      Spaceroids.isAttractMode = false;
 
       Spaceroids.intv.destroy();
 
