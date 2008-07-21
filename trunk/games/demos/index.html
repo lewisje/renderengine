@@ -104,11 +104,12 @@
          </ul>
       </div>
       <script type="text/javascript">
-         // Load the game script
-         Engine.loadGame('http://renderengine.googlecode.com/svn/trunk/games/demos/game.js', 'DemoHost');
 
          // Wire up the demos with jQuery to launch them
          $(document).ready(function() {
+            // Load the game script
+            Engine.loadGame('http://renderengine.googlecode.com/svn/trunk/games/demos/game.js', 'DemoHost');
+
             $("#menu li[section]")
                .click(function() {
                   DemoHost.exec($(this).attr("section"));
