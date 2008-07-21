@@ -227,6 +227,13 @@ var DemoHost = Game.extend({
 	},
 
 	hostDemo: function() {
+		DemoHost.hideMenu();
+
+		if (typeof HostDemo !== "undefined") {
+			new HostDemo();
+			return;
+		}
+
 		Game.load("hostDemo.js");
 	},
 
