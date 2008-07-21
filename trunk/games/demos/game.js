@@ -208,7 +208,7 @@ var DemoHost = Game.extend({
 		 * We may have already loaded the script, in which case we
 		 * only need to create a new instance of the object.
 		 */
-		if (typeof IntroDemo !== undefined) {
+		if (typeof IntroDemo !== "undefined") {
 			new IntroDemo();
 			return;
 		}
