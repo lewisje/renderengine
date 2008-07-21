@@ -40,7 +40,7 @@ var DemoHost = Game.extend({
 
    constructor: null,
 
-   demoContainer: new Container(),
+   demoContainer: null,
 
 /*
    renderContext: null,
@@ -107,11 +107,13 @@ var DemoHost = Game.extend({
 
 	hideMenu: function() {
 		$("#menu").hide();
+		$("#return").show();
 	},
 
 	showMenu: function() {
 		$("#loading").remove();
 		$("#menu").show();
+		$("#return").hide();
 	},
 
    /**
@@ -124,6 +126,9 @@ var DemoHost = Game.extend({
       Engine.setFPS(20);
 
       this.showMenu();
+
+		this.demoContainer = new Container();
+		Engine.getDefaultContext().add(this.demoContainer);
 
 		/*
       // Create the 2D context
