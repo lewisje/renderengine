@@ -1,11 +1,9 @@
 
 /**
  * The Render Engine
- * Example Game: Spaceroids - an Asteroids clone
+ * DemoHost
  *
- * This is an example of using The Render Engine to create a simple
- * game.  This game is based off of the popular vector shooter, Asteroids,
- * which is (c)Copyright 1979 - Atari Corporation.
+ * Demonstration of using The Render Engine.
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -34,15 +32,6 @@
  * THE SOFTWARE.
  *
  */
-
-// Load required engine components
-//Engine.load("/rendercontexts/context.canvascontext.js");
-
-// Load game objects
-//Game.load("/rock.js");
-
-// Start the game when all the scripts are loaded.
-Engine.setQueueCallback(function() { DemoHost.setup(); });
 
 /**
  * @class The game.

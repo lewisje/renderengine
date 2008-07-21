@@ -55,9 +55,6 @@ Game.load("/player.js");
 Game.load("/bullet.js");
 Game.load("/particle.js");
 
-// Start the game when all the scripts are loaded.
-Engine.setQueueCallback(function() { Spaceroids.setup(); });
-
 /**
  * @class The game.
  */
