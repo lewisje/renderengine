@@ -101,7 +101,7 @@ var DemoHost = Game.extend({
     * is unloaded we can call this method to clean it up.
     */
    cleanup: function() {
-		demoContainer.clear();
+		this.demoContainer.clear();
    },
 
    /**
@@ -116,6 +116,14 @@ var DemoHost = Game.extend({
    },
     */
 
+	hideMenu: function() {
+		$("#menu").hide();
+	},
+
+	showMenu: function() {
+		$("#menu").show();
+	},
+
    /**
     * Called to set up the game, download any resources, and initialize
     * the game to its running state.
@@ -124,6 +132,9 @@ var DemoHost = Game.extend({
 
       // Set the FPS of the game
       Engine.setFPS(20);
+
+		$("#loading").remove();
+      this.showMenu();
 
 		/*
       // Create the 2D context
@@ -169,19 +180,19 @@ var DemoHost = Game.extend({
 	exec: function(sectionName) {
 		Console.debug("running " + sectionName);
 		switch (sectionName) {
-			case "intro"			: introDemo(); break;
-			case "host"				: hostDemo(); break;
-			case "vector2d"		: doSomething(); break;
-			case "transform2d"	: doSomething(); break;
-			case "mover2d"			: doSomething(); break;
-			case "keyboardinput"	: doSomething(); break;
-			case "test1"			: doSomething(); break;
-			case "spatialgrid"	: doSomething(); break;
-			case "collider"		: doSomething(); break;
-			case "loadsound"		: doSomething(); break;
-			case "playsound"		: doSomething(); break;
-			case "changesound"	: doSomething(); break;
-			case "loopsound"		: doSomething(); break;
+			case "intro"			: this.introDemo(); break;
+			case "host"				: this.hostDemo(); break;
+			case "vector2d"		: this.doSomething(); break;
+			case "transform2d"	: this.doSomething(); break;
+			case "mover2d"			: this.doSomething(); break;
+			case "keyboardinput"	: this.doSomething(); break;
+			case "test1"			: this.doSomething(); break;
+			case "spatialgrid"	: this.doSomething(); break;
+			case "collider"		: this.doSomething(); break;
+			case "loadsound"		: this.doSomething(); break;
+			case "playsound"		: this.doSomething(); break;
+			case "changesound"	: this.doSomething(); break;
+			case "loopsound"		: this.doSomething(); break;
 		}
 	},
 
