@@ -63,10 +63,19 @@
          #menu {
             display: none;
          }
+
+         #menu li[@section] {
+            color: red;
+         }
+
+         #return {
+            display: none;
+         }
       </style>
    </head>
    <body>
       <span id="loading">Loading...</span>
+      <span id="return">&lt;&lt; Return to Menu</span>
       <span id="menu">
          Select a Demo:<br/>
          <ul>
@@ -107,6 +116,10 @@
                   DemoHost.exec($(this).attr("section"));
                })
                .addClass("runnable");
+            $("#return").click(function() {
+               DemoHost.cleanup();
+               DemoHost.showMenu();
+            });
          });
       </script>
    </body>
