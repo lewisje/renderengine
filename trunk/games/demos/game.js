@@ -167,6 +167,7 @@ var DemoHost = Game.extend({
    },
 
 	exec: function(sectionName) {
+		Console.debug("running " + sectionName);
 		switch (sectionName) {
 			case "intro"			: introDemo(); break;
 			case "host"				: hostDemo(); break;
