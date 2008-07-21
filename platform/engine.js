@@ -330,38 +330,100 @@ var AssertWarn = function(test, warning) {
 };
 
 /**
- * @class Engine support class.  Provides extra functions the engine, or games,
- *        can use.
+ * @class Engine support class.  Provides extra functions the engine or games
+ *        can use.  Mainly contains functions that can manipulate arrays and
+ *			 generate/read JSON.
  */
 var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    constructor: null,
+
+	/**
+	 * Get the index of an element in the specified array.
+	 *
+    * @param array {Array} The array to scan
+    * @param obj {Object} The object to find
+    * @param from {Number=0} The index to start at, defaults to zero.
+    * @memberOf EngineSupport
+    */
+	indexOf: function(array, obj, from) {
+		if (Array.prototype.indexOf) {
+			return array.indexOf(obj, from);
+		}
+		else
+		{
+			var len = array.length;
+			var from = Number(from) || 0;
+			from = (from < 0)
+				? Math.ceil(from)
+				: Math.floor(from);
+			if (from < 0)
+				from += len;
+
+			for (; from < len; from++)
+			{
+				if (from in array && array[from] === obj)
+					return from;
+			}
+			return -1;
+		}
+	},
 
    /**
     * Remove an element from an array.
     *
     * @param array {Array} The array to modify
     * @param obj {Object} The object to remove
+    * @memberOf EngineSupport
     */
    arrayRemove: function(array, obj) {
-      var idx = -1;
-      if (Array.prototype.indexOf) {
-         idx = array.indexOf(obj);
-      }
-      else
-      {
-         for (var o in array) {
-            if (array[o] == obj) {
-               idx = o;
-               break;
-            }
-         }
-      }
-
+		var idx = EngineSupport.indexOf(array, obj);
       if (idx != -1)
       {
          array.splice(idx, 1);
       }
    },
+
+	/**
+	 * Calls a provided callback function once for each element in
+	 * an array, and constructs a new array of all the values for which
+	 * callback returns a <tt>true</tt> value. callback is invoked only
+	 * for indexes of the array which have assigned values; it is not invoked
+	 * for indexes which have been deleted or which have never been assigned
+	 * values. Array elements which do not pass the callback test are simply
+	 * skipped, and are not included in the new array.
+	 *
+    * @param array {Array} The array to filter.
+    * @param fn {Function} The callback to invoke.  It will be passed three
+    *								arguments: The element value, the index of the element,
+    *								and the array being traversed.
+    * @param thisp {Object} Used as <tt>this</tt> for each invocation of the
+    *								 callback.  Default: <tt>null</tt>
+    * @memberOf EngineSupport
+    */
+	filter: function(array, fn, thisp) {
+		if (Array.prototype.filter) {
+			return array.filter(fn, thisp)
+		}
+		else
+		{
+			var len = array.length;
+			if (typeof fn != "function")
+				throw new TypeError();
+
+			var res = new Array();
+			for (var i = 0; i < len; i++)
+			{
+				if (i in array)
+				{
+					var val = array[i]; // in case fn mutates this
+					if (fn.call(thisp, val, i, array))
+						res.push(val);
+				}
+			}
+
+			return res;
+		}
+	},
 
    /**
     * Executes a callback for each element within an array.
@@ -369,9 +431,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @param array {Array} The array to operate on
     * @param fn {Function} The function to apply to each element
     * @param [thisp] {Object} An optional "this" pointer to use in the callback
+    * @memberOf EngineSupport
     */
    forEach: function(array, fn, thisp) {
-
       if (Array.prototype.forEach) {
          array.forEach(fn, thisp);
       }
@@ -394,6 +456,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *
     * @param url {String} The URL
     * @type String
+    * @memberOf EngineSupport
     */
    getPath: function(url) {
       var l = url.lastIndexOf("/");
@@ -404,6 +467,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * Get the query parameters from the window location object.
     *
     * @type Object
+    * @memberOf EngineSupport
     */
    getQueryParams: function() {
       var parms = {};
@@ -428,6 +492,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *
     * @param object {Object} Must not be undefined or contain undefined types and variables.
     * @return String
+    * @memberOf EngineSupport
     */
    toJSONString: function(o)
    {
@@ -473,6 +538,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @param jsonString
     * @return Object
     * @see http://www.json.org
+    * @memberOf EngineSupport
     */
    parseJSONString: function(jsonString)
    {
@@ -486,6 +552,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *
     * @param string
     * @type String
+    * @memberOf EngineSupport
     */
    quoteString: function(o)
    {
@@ -511,7 +578,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 var Engine = Base.extend(/** @scope Engine.prototype */{
    constructor: null,
 
-   version: "1.0.0 (alpha)",
+   version: "1.0.3 (alpha)",
 
    idRef: 0,
 
@@ -1112,7 +1179,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       // Another process interval
-      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
+      Engine.globalTimer = setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
    },
 
    /**
