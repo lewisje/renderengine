@@ -90,7 +90,7 @@ var IntroDemo = BaseObject.extend({
     * perform any additional cleanup that you need.
     */
    destroy: function() {
-
+		this.base();
    },
 
    /**
