@@ -58,25 +58,23 @@
       <style type="text/css">
          .runnable {
             cursor: pointer;
+            color: red;
          }
 
          #menu {
             display: none;
          }
 
-         #menu li[@section] {
-            color: red;
-         }
-
          #return {
+            cursor: pointer;
             display: none;
          }
       </style>
    </head>
    <body>
       <span id="loading">Loading...</span>
-      <span id="return">&lt;&lt; Return to Menu</span>
-      <span id="menu">
+      <div id="return">&lt;&lt; Return to Menu</div>
+      <div id="menu">
          Select a Demo:<br/>
          <ul>
             <li section="intro">Introduction: Creating a Canvas Render Context</li>
@@ -104,7 +102,7 @@
                </ul>
             </li>
          </ul>
-      </span>
+      </div>
       <script type="text/javascript">
          // Load the game script
          Engine.loadGame('http://renderengine.googlecode.com/svn/trunk/games/demos/game.js', 'DemoHost');
@@ -116,6 +114,10 @@
                   DemoHost.exec($(this).attr("section"));
                })
                .addClass("runnable");
+         });
+         $("#return").click(function() {
+            DemoHost.cleanup();
+            DemoHost.showMenu();
          });
       </script>
    </body>
