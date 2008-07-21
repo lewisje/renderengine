@@ -76,11 +76,6 @@ var IntroDemo = Container.extend({
       DemoHost.demoContainer.add(this);
 
       /*
-       * Hide the menu while the demo is running.
-       */
-		DemoHost.hideMenu();
-
-      /*
        * We're calling the "run" method to start our execution.  Without
        * this call, nothing would happen beyond this point.
        */

@@ -180,6 +180,16 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    },
 
    /**
+    * Remove and destroy all objects from the container.
+    */
+   cleanUp: function() {
+		while (this.objects.length > 0) {
+			this.objects.shift().destroy();
+		}
+		this.clear();
+	},
+
+   /**
     * Get the array of objects within this container.
     *
     * @type Array

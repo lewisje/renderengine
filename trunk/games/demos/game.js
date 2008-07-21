@@ -90,7 +90,7 @@ var DemoHost = Game.extend({
     * is unloaded we can call this method to clean it up.
     */
    cleanup: function() {
-		this.demoContainer.clear();
+		this.demoContainer.cleanUp();
    },
 
    /**
@@ -199,6 +199,11 @@ var DemoHost = Game.extend({
 	// EXAMPLES
 
 	introDemo: function() {
+      /*
+       * Hide the menu while the demo is running.
+       */
+		DemoHost.hideMenu();
+
 		/* Scripts are queued to be loaded one after the other, since
 		 * objects declared in one file might need objects from another
 		 * file loaded before it.  Both Engine.load() and Game.load()
