@@ -204,6 +204,15 @@ var DemoHost = Game.extend({
        */
 		DemoHost.hideMenu();
 
+		/*
+		 * We may have already loaded the script, in which case we
+		 * only need to create a new instance of the object.
+		 */
+		if (typeof IntroDemo !== undefined) {
+			new IntroDemo();
+			return;
+		}
+
 		/* Scripts are queued to be loaded one after the other, since
 		 * objects declared in one file might need objects from another
 		 * file loaded before it.  Both Engine.load() and Game.load()
