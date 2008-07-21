@@ -50,8 +50,8 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
 
    weight: 1,
 
-   constructor: function(componentName) {
-      this.base(componentName || "TextRenderObject", BaseComponent.TYPE_RENDERING, 0.1);
+   constructor: function(componentName, priority) {
+      this.base(componentName || "TextRenderObject", BaseComponent.TYPE_RENDERING, priority || 0.1);
 
       this.text = "";
       this.weight = 1;
