@@ -67,14 +67,6 @@ var IntroDemo = BaseObject.extend({
       this.base("IntroDemo");
 
       /*
-       * We're calling the "run" method to start our execution.  Without
-       * this call, nothing would happen beyond this point.
-       */
-      this.run();
-   },
-
-   init: function() {
-      /*
        * Now we add ourself to the DemoHost object's demoContainer
        * object so we can be cleaned up.  The DemoHost object (and all
        * Game object subclasses) are logically "static".  This means that
@@ -82,7 +74,13 @@ var IntroDemo = BaseObject.extend({
        * methods (functions) and fields within it.
        */
       DemoHost.demoContainer.add(this);
-	},
+
+      /*
+       * We're calling the "run" method to start our execution.  Without
+       * this call, nothing would happen beyond this point.
+       */
+      this.run();
+   },
 
    /**
     * All objects that extend from BaseObject (in this case, Container)
