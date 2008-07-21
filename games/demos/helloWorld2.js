@@ -120,7 +120,7 @@ var HelloWorld2 = Object2D.extend({
        * Here we set the position relative to its origin point, and
        * then initialize the rotation.
        */
-      local.getComponent("pos").setPosition(new Point2D(-40, 0));
+      local.getComponent("pos").setPosition(new Point2D(-80, 0));
       local.getComponent("pos").setRotation(0);
 
 		this.getComponent("host").add("local", local);
