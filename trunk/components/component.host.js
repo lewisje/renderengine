@@ -56,8 +56,8 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
       this.objects.add(name, obj);
    },
 
-   get: function(obj) {
-		this.objects.get(obj);
+   get: function(name) {
+		this.objects.get(name);
 	},
 
    remove: function(obj) {
@@ -71,8 +71,9 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
-      for (var c in this.objects) {
-         this.objects.get(c).update(renderContext, time);
+		var objs = this.objects.getObjects();
+      for (var c in objs) {
+         objs[c].update(renderContext, time);
       }
    },
 
