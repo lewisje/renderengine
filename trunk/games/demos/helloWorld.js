@@ -68,7 +68,7 @@ var HelloWorld = Object2D.extend({
       {
 			// Set the position
 			position = new Point2D( Math.floor(Math.random() * 300),
-											Math.floor(Math.random() * 400);
+											Math.floor(Math.random() * 400));
       }
       this.setPosition(position);
    },
