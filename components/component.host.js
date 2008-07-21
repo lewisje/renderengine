@@ -56,6 +56,10 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
       this.objects.add(name, obj);
    },
 
+   get: function(obj) {
+		this.objects.get(obj);
+	},
+
    remove: function(obj) {
       this.objects.remove(obj);
    },
