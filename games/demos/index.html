@@ -104,11 +104,15 @@
          </ul>
       </div>
       <script type="text/javascript">
+         // Load the game script
+         setInterval(function() {
+            if (typeof Engine !== "undefined") {
+               Engine.loadGame('http://renderengine.googlecode.com/svn/trunk/games/demos/game.js', 'DemoHost');
+            }
+         }, 100);
 
          // Wire up the demos with jQuery to launch them
          $(document).ready(function() {
-            // Load the game script
-            Engine.loadGame('http://renderengine.googlecode.com/svn/trunk/games/demos/game.js', 'DemoHost');
 
             $("#menu li[section]")
                .click(function() {
