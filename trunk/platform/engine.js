@@ -900,7 +900,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param gameSource {String} The URL of the game script.
     * @memberOf Engine
     */
-   loadGame: function(gameSource) {
+   loadGame: function(gameSource, gameObjectName) {
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
       Engine.gameLoadTimer = setInterval(function() {
@@ -913,6 +913,16 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             Console.debug("Loading '" + gameSource + "'");
             engine.defaultContext = new DocumentContext();
             engine.loadScript(gameSource);
+
+            // Start the game when it's ready
+            if (gameObjectName) {
+	            Engine.gameRunTimer = setInterval(function() {
+						if (window[gameObjectName]) {
+							clearInterval(Engine.gameRunTimer);
+							window[gameObjectName].setup();
+						}
+					}, 100);
+				}
          }
       }, 100);
    },
