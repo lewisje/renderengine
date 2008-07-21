@@ -98,10 +98,10 @@
          // Wire up the demos with jQuery to launch them
          $(document).ready(function() {
             $("#menu li [class]")
-               .addClass("runnable")
                .click(function() {
-                  DemoHost.exec($(this).text());
-               });
+                  DemoHost.exec($(this).attr("class"));
+               })
+               .addClass("runnable");
          });
       </script>
    </body>
