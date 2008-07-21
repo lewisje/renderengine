@@ -92,10 +92,6 @@ var HelloWorld2 = Object2D.extend({
 
 		var Local = HostObject.extend({
 
-			constructor: function() {
-				this.base();
-			},
-
 			update: function(renderContext, time) {
 				renderContext.pushTransform();
 				this.base(renderContext, time);
