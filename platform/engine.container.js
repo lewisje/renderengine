@@ -102,11 +102,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * to perform clean up operations.
     */
    destroy: function() {
-      while(this.objects.length > 0)
-      {
-         var o = this.objects.shift();
-         o.destroy();
-      }
+		this.cleanUp();
       this.base();
    },
 
@@ -183,9 +179,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Remove and destroy all objects from the container.
     */
    cleanUp: function() {
-		while (this.objects.length > 0) {
-			this.objects.shift().destroy();
-		}
+      while(this.objects.length > 0)
+      {
+         var o = this.objects.shift();
+         o.destroy();
+      }
 		this.clear();
 	},
 

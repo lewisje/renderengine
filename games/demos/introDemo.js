@@ -43,12 +43,12 @@ Engine.load("/rendercontexts/context.canvascontext.js");
 Engine.setQueueCallback(function() { new IntroDemo(); });
 
 /*
- * The IntroDemo object extends the Container object so we
+ * The IntroDemo object extends the BaseObject object so we
  * can add it to the demoContainer object located in the DemoHost
  * object.  It can be cleaned up when the demo is either
  * terminated, or a demo is unloaded.
  */
-var IntroDemo = Container.extend({
+var IntroDemo = BaseObject.extend({
 
    /*
     * This field will contain a reference to our rendering
@@ -67,6 +67,14 @@ var IntroDemo = Container.extend({
       this.base("IntroDemo");
 
       /*
+       * We're calling the "run" method to start our execution.  Without
+       * this call, nothing would happen beyond this point.
+       */
+      this.run();
+   },
+
+   init: function() {
+      /*
        * Now we add ourself to the DemoHost object's demoContainer
        * object so we can be cleaned up.  The DemoHost object (and all
        * Game object subclasses) are logically "static".  This means that
@@ -74,13 +82,7 @@ var IntroDemo = Container.extend({
        * methods (functions) and fields within it.
        */
       DemoHost.demoContainer.add(this);
-
-      /*
-       * We're calling the "run" method to start our execution.  Without
-       * this call, nothing would happen beyond this point.
-       */
-      this.run();
-   },
+	},
 
    /**
     * All objects that extend from BaseObject (in this case, Container)
