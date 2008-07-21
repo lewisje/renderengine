@@ -121,6 +121,7 @@ var DemoHost = Game.extend({
 	},
 
 	showMenu: function() {
+		$("#loading").remove();
 		$("#menu").show();
 	},
 
@@ -133,7 +134,6 @@ var DemoHost = Game.extend({
       // Set the FPS of the game
       Engine.setFPS(20);
 
-		$("#loading").remove();
       this.showMenu();
 
 		/*
