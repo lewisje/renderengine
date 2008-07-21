@@ -87,8 +87,8 @@ var HelloWorld2 = Object2D.extend({
        * after the first one.  The text component has a default of 0.1 (the
        * lowest) which will make it update last.
        */
-      this.add(new Transform2DComponent("move"));
-      this.add(new HostComponent("host", 0.5));
+      this.add(new Transform2DComponent("move"), 0.5);
+      this.add(new HostComponent("host", 1.0));
 
 		var Local = HostObject.extend({
 
