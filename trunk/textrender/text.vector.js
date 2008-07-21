@@ -39,8 +39,8 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
    spacing: 0,
 
-   constructor: function() {
-      this.base();
+   constructor: function(componentName) {
+      this.base(componentName || "VectorTextRenderer");
       this.rText = [];
    },
 
