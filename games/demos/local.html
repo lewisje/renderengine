@@ -54,6 +54,12 @@
 
       <!-- Load the main engine script -->
       <script type="text/javascript" src="../../platform/engine.js"></script>
+
+      <style type="text/css">
+         .runnable {
+            cursor: pointer;
+         }
+      </style>
    </head>
    <body>
       <span id="menu">
@@ -86,14 +92,13 @@
          </ul>
       </span>
       <script type="text/javascript">
-         // Load the game script
-         Engine.loadGame('game.js');
-
-         // Wire up the demos
+         // Wire up the demos with jQuery to launch them
          $(document).ready(function() {
-            $("#menu li [class]").click(function() {
-               DemoHost.exec($(this).text());
-            });
+            $("#menu li [@class]")
+               .click(function() {
+                  DemoHost.exec($(this).attr("class"));
+               })
+               .addClass("runnable");
          });
       </script>
    </body>
