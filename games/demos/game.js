@@ -186,6 +186,7 @@ var DemoHost = Game.extend({
 
 	/* REMOVE ME WHEN COMPLETE!! */
 	doSomething: function() {
+		alert("not implemented yet");
 	},
 
 	//===============================================================================================
