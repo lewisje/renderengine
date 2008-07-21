@@ -44,6 +44,7 @@ Engine.load("/components/component.transform2d.js");
  * host object is.
  */
 Game.load("helloWorld.js");
+Game.load("helloWorld2.js");
 
 /*
  * The anonymous function specified in the queue callback
@@ -76,6 +77,7 @@ var HostDemo = BaseObject.extend({
 	 */
    hello1: null,
    hello2: null,
+   hello3: null,
 
 	/*
 	 * We'll have a little fun and animate the objects. There
@@ -153,7 +155,7 @@ var HostDemo = BaseObject.extend({
        */
       this.renderContext = new CanvasContext(350, 450);
       Engine.getDefaultContext().add(this.renderContext);
-      this.renderContext.setBackgroundColor("blue");
+      this.renderContext.setBackgroundColor("red");
 
 		/*
 		 * Here we create two instances of our host object. Each instance
@@ -163,7 +165,8 @@ var HostDemo = BaseObject.extend({
 		 * screen will result in a real framerate drop.
 		 */
 		this.hello1 = new HelloWorld();
-		this.hello2 = new HelloWorld();
+		this.hello2 = new HelloWorld2();
+		this.hello3 = new HelloWorld2();
 
 		/*
 		 * Here we add the objects to the rendering context so that they
@@ -174,6 +177,7 @@ var HostDemo = BaseObject.extend({
 		 */
 		this.renderContext.add(this.hello1);
 		this.renderContext.add(this.hello2);
+		this.renderContext.add(this.hello3);
 
 		/*
 		 * We're about to create the timer.  It uses what is known as
@@ -210,6 +214,7 @@ var HostDemo = BaseObject.extend({
 			 */
 			var r1 = self.hello1.getRotation();
 			var r2 = self.hello2.getRotation();
+			var r3 = self.hello3.getRotation();
 
 			/*
 			 * We want to do some "bounds checking" on the two values to keep
@@ -218,6 +223,7 @@ var HostDemo = BaseObject.extend({
 			 */
 			r1 = r1 < 360 ? r1 + 2 : 0;
 			r2 = r2 > 0 ? r2 - 2 : 360;
+			r3 = r3 < 360 ? r3 + 2 : 0;
 
 			/*
 			 * Finally, we set the rotation of the two host objects, which
@@ -225,6 +231,7 @@ var HostDemo = BaseObject.extend({
 			 */
 			self.hello1.setRotation(r1);
 			self.hello2.setRotation(r2);
+			self.hello3.setRotation(r3);
 		});
    }
 });

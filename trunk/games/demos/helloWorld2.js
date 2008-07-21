@@ -1,11 +1,11 @@
 /**
  * The Render Engine
- * A simple "Hello World" 2D object
+ * A more advanced "Hello World" 2D object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 82 $
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  *
@@ -49,9 +49,9 @@
  *
  * @constructor
  * @param position {Point2D} An optional position for the text to render.
- *									  If not specified, a random position will be assigned.
+ *                           If not specified, a random position will be assigned.
  */
-var HelloWorld = Object2D.extend({
+var HelloWorld2 = Object2D.extend({
 
    constructor: function(position) {
 
@@ -59,7 +59,7 @@ var HelloWorld = Object2D.extend({
        * We call the super class to allow it to set up its data.
        * After that we can set up ourself.
        */
-      this.base("HelloWorld");
+      this.base("HelloWorld2");
 
       /*
        * This host object is comprised of three components.  One component
@@ -88,37 +88,52 @@ var HelloWorld = Object2D.extend({
        * lowest) which will make it update last.
        */
       this.add(new Transform2DComponent("move"));
-      this.add(new Transform2DComponent("pos", 0.5));
-      this.add(new VectorText("text"));
+      this.add(new HostComponent("host", 0.5));
 
-		/*
-		 * Accessing a component is done by the unique name you gave it
-		 * when you created it.  It is possible to have more than one
-		 * component of a given type in a single host.  Just make sure they
-		 * each have a unique name.  You can then get a component, like below,
-		 * and call methods on that component to configure or change it.
-		 * Here we set the text of the VectorText component and the
-		 * color of it.
-		 */
-      this.getComponent("text").setText("Hello World");
-      this.getComponent("text").setColor("white");
+		var Local = HostObject.extend({
 
-		/*
-		 * Here we set the position relative to its origin point, and
-		 * then initialize the rotation.
-		 */
-      this.getComponent("pos").setPosition(new Point2D(-40, 0));
-      this.getComponent("pos").setRotation(0);
+			update: function(renderContext, time) {
+				renderContext.pushTransform();
+				this.base(renderContext, time);
+				renderContext.popTransform();
+			}
 
-		/*
-		 * We're doing a little work here so that if no position is
-		 * specified, we'll randomly assign one.
-		 */
+		});
+		var local = new Local();
+
+		this.getComponent("host").add("local", local);
+
+		local.add(new Transform2DComponent("pos"));
+      local.add(new VectorText("text"));
+
+      /*
+       * Accessing a component is done by the unique name you gave it
+       * when you created it.  It is possible to have more than one
+       * component of a given type in a single host.  Just make sure they
+       * each have a unique name.  You can then get a component, like below,
+       * and call methods on that component to configure or change it.
+       * Here we set the text of the VectorText component and the
+       * color of it.
+       */
+      local.getComponent("text").setText("Hello World");
+      local.getComponent("text").setColor("white");
+
+      /*
+       * Here we set the position relative to its origin point, and
+       * then initialize the rotation.
+       */
+      local.getComponent("pos").setPosition(new Point2D(-40, 0));
+      local.getComponent("pos").setRotation(0);
+
+      /*
+       * We're doing a little work here so that if no position is
+       * specified, we'll randomly assign one.
+       */
       if (!position)
       {
-			// Create a random position
-			position = new Point2D( Math.floor(Math.random() * 300),
-											Math.floor(Math.random() * 400));
+         // Create a random position
+         position = new Point2D( Math.floor(Math.random() * 300),
+                                 Math.floor(Math.random() * 400));
       }
 
       /*
@@ -147,17 +162,17 @@ var HelloWorld = Object2D.extend({
     */
    update: function(renderContext, time) {
 
-		/*
-		 * Our render context has what is known as a "transform stack"
-		 * built into it.  This allows us to stack the many transforms that
-		 * may occur within a single object, and then pop them off that stack
-		 * (reverting anything we've done such as position and rotation) back
-		 * to how it was before our object rendered.  You should note that
-		 * even though we're pushing the transform before the actual update,
-		 * each component may do their own pushing and popping of the transform.
-		 * This allows an object to keep transforms relative to the object space
-		 * rather than doing everything in world space.
-		 */
+      /*
+       * Our render context has what is known as a "transform stack"
+       * built into it.  This allows us to stack the many transforms that
+       * may occur within a single object, and then pop them off that stack
+       * (reverting anything we've done such as position and rotation) back
+       * to how it was before our object rendered.  You should note that
+       * even though we're pushing the transform before the actual update,
+       * each component may do their own pushing and popping of the transform.
+       * This allows an object to keep transforms relative to the object space
+       * rather than doing everything in world space.
+       */
       renderContext.pushTransform();
 
       /*
@@ -206,7 +221,7 @@ var HelloWorld = Object2D.extend({
     * @type Number
     */
    getRotation: function() {
-      return this.getComponent("pos").getRotation();
+      return this.getComponent("host").get("local").getComponent("pos").getRotation();
    },
 
    /**
@@ -215,7 +230,7 @@ var HelloWorld = Object2D.extend({
     */
    setRotation: function(angle) {
       this.base(angle);
-      this.getComponent("pos").setRotation(angle);
+      this.getComponent("host").get("local").getComponent("pos").setRotation(angle);
    },
 
    /**
@@ -225,6 +240,6 @@ var HelloWorld = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "HelloWorld";
+      return "HelloWorld2";
    }
 });

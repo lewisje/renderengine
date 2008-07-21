@@ -131,11 +131,9 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
-
       renderContext.setPosition(this.position);
       renderContext.setRotation(this.rotation);
       renderContext.setScale(this.scale, this.scale);
-
    },
 
    /**
