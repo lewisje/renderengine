@@ -97,7 +97,7 @@
 
          // Wire up the demos with jQuery to launch them
          $(document).ready(function() {
-            $("#menu li [class]")
+            $("#menu li [@class]")
                .click(function() {
                   DemoHost.exec($(this).attr("class"));
                })
