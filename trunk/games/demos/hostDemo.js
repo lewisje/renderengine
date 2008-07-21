@@ -69,6 +69,8 @@ var HostDemo = BaseObject.extend({
 
    hello2: null,
 
+   timer: null,
+
    constructor: function() {
 
       /*
@@ -101,7 +103,7 @@ var HostDemo = BaseObject.extend({
     */
    destroy: function() {
 
-      Engine.getObject("HostTimer").destroy();
+      this.timer.destroy();
 
       /*
        * We need to clean up our render context.
@@ -130,7 +132,7 @@ var HostDemo = BaseObject.extend({
 		this.renderContext.add(this.hello2);
 
 		var self = this;
-		new Interval("HostTimer", 10, function() {
+		this.timer = new Interval("HostTimer", 10, function() {
 			var r1 = self.hello1.getRotation();
 			r1 = r1 < 360 ? r1 + 2 : 0;
 
