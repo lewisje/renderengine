@@ -953,9 +953,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             $(n).load(function() {
                Console.debug("Loaded '" + scriptPath + "'");
                Engine.readyForNextScript = true;
-            }).bind("readystatechange", function() {
-					Console.debug("Script: " + this.readyState);
-				});
+            });
             var h = document.getElementsByTagName("head")[0];
             h.appendChild(n);
          }

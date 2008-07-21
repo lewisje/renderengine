@@ -80,6 +80,7 @@ var HelloWorld = Object2D.extend({
        * then refer to each component by its name.
        */
       this.add(new Transform2DComponent("move"));
+      this.add(new Transform2DComponent("pos", 0.5);
       this.add(new VectorText("text"));
 
 		/*
@@ -93,6 +94,8 @@ var HelloWorld = Object2D.extend({
 		 */
       this.getComponent("text").setText("Hello World");
       this.getComponent("text").setColor("white");
+
+      this.getComponent("pos").setPosition(new Point2D(-40, 0));
 
 		/*
 		 * We're doing a little work here so that if no position is
@@ -184,6 +187,10 @@ var HelloWorld = Object2D.extend({
       this.base(point);
       this.getComponent("move").setPosition(point);
    },
+
+   setTextPosition: function(point) {
+		this.getComponent("pos").setPosition(point);
+	},
 
    /**
     * An accessor method that gets the rotation from the "move" component.
