@@ -72,7 +72,7 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
     */
    execute: function(renderContext, time) {
       for (var c in this.objects) {
-         this.objects[c].update(renderContext, time);
+         this.objects.get(c).update(renderContext, time);
       }
    },
 
