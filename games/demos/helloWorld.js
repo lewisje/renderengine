@@ -63,6 +63,7 @@ var HelloWorld = Object2D.extend({
       this.add(new VectorText("text"));
 
       this.getComponent("text").setText("Hello World");
+      this.getComponent("text").setColor("white");
 
       if (!position)
       {

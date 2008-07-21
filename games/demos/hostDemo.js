@@ -100,6 +100,9 @@ var HostDemo = BaseObject.extend({
     * that you need.
     */
    destroy: function() {
+
+      Engine.getObject("HostTimer").destroy();
+
       /*
        * We need to clean up our render context.
        */
@@ -126,7 +129,15 @@ var HostDemo = BaseObject.extend({
 		this.renderContext.add(this.hello1);
 		this.renderContext.add(this.hello2);
 
+		new Interval("HostTimer", 10, function() {
+			var r1 = DemoHost.hello1.getRotation();
+			r1 = r1 < 360 ? r1 + 2 : 0;
 
+			var r2 = DemoHost.hello2.getRotation();
+			r2 = r2 > 0 ? r2 - 2 : 360;
+
+			DemoHost.hello1.setRotation(r1);
+			DemoHost.hello2.setRotation(r2);
+		});
    }
-
 });
