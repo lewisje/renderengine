@@ -83,11 +83,15 @@ var IntroDemo = BaseObject.extend({
    },
 
    /**
-    * All objects that extend from BaseObject (in this case, Container)
-    * have a "destroy" method on them.  You can extend this method to
-    * perform any additional cleanup that you need.
+    * All objects that extend from BaseObject have a "destroy" method on
+    * them.  You can extend this method to perform any additional cleanup
+    * that you need.
     */
    destroy: function() {
+		/*
+		 * We need to clean up our render context.
+		 */
+		this.renderContext.destroy();
 		this.base();
    },
 
