@@ -160,6 +160,11 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
       this.objHash = {};
    },
 
+   cleanUp: function() {
+		this.base();
+		this.clear();
+	},
+
    /**
     * Get the class name of this object
     *

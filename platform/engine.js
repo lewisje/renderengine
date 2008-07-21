@@ -1059,6 +1059,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Object components
       this.load("/components/component.base.js");
+      this.load("/components/component.host.js");
 
       // Text rendering
       this.load("/textrender/text.renderer.js");

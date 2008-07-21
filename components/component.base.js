@@ -117,7 +117,7 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
 
    /**
     * Run the component, updating its state.  Not all components will need an execute
-    * method.  However, it is important to include one if you need to run caculations
+    * method.  However, it is important to include one if you need to run calculations
     * or update the state of the component each engine cycle.
     *
     * @param renderContext {RenderContext} The context the component will render within.
