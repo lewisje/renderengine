@@ -62,9 +62,10 @@ var HelloWorld = Object2D.extend({
       this.base("HelloWorld");
 
       /*
-       * This host object is comprised of two components.  One component
-       * is responsible for positioning, rotating, and scaling the object.
-       * The other will render text using lines (i.e. vector text). We
+       * This host object is comprised of three components.  One component
+       * is responsible for positioning the object in the context.  The second one
+       * modifies the position relative to the "world" location and then rotates it.
+       * The last one will render text using lines (i.e. vector text). We
        * use components so that an object doesn't have to implement each
        * bit of functionality itself.  So, instead of having to know how
        * to move, rotate, scale, color, draw text, etc. we use these
@@ -78,9 +79,16 @@ var HelloWorld = Object2D.extend({
        * Add each component to this host, and assign a name to it.  The
        * name should be unique amongst all other components.  You can
        * then refer to each component by its name.
+       *
+       * The priority of the components is important here.  Render components,
+       * by default, have a priority of 1.0 (highest) and thus get updated
+       * sooner.  Other components have lower priorities which makes them
+       * execute later.  We'll have the second transform component be processed
+       * after the first one.  The text component has a default of 0.1 (the
+       * lowest) which will make it update last.
        */
       this.add(new Transform2DComponent("move"));
-      this.add(new Transform2DComponent("pos", 0.5);
+      this.add(new Transform2DComponent("pos", 0.5));
       this.add(new VectorText("text"));
 
 		/*
@@ -95,7 +103,12 @@ var HelloWorld = Object2D.extend({
       this.getComponent("text").setText("Hello World");
       this.getComponent("text").setColor("white");
 
+		/*
+		 * Here we set the position and original rotation of the component,
+		 * relative to its origin point.
+		 */
       this.getComponent("pos").setPosition(new Point2D(-40, 0));
+      this.getComponent("pos").setRotation(0);
 
 		/*
 		 * We're doing a little work here so that if no position is
@@ -188,16 +201,12 @@ var HelloWorld = Object2D.extend({
       this.getComponent("move").setPosition(point);
    },
 
-   setTextPosition: function(point) {
-		this.getComponent("pos").setPosition(point);
-	},
-
    /**
     * An accessor method that gets the rotation from the "move" component.
     * @type Number
     */
    getRotation: function() {
-      return this.getComponent("move").getRotation();
+      return this.getComponent("pos").getRotation();
    },
 
    /**
@@ -206,7 +215,7 @@ var HelloWorld = Object2D.extend({
     */
    setRotation: function(angle) {
       this.base(angle);
-      this.getComponent("move").setRotation(angle);
+      this.getComponent("pos").setRotation(angle);
    },
 
    /**
