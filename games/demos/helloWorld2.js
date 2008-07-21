@@ -92,6 +92,10 @@ var HelloWorld2 = Object2D.extend({
 
 		var Local = HostObject.extend({
 
+			constructor: function() {
+				this.base();
+			},
+
 			update: function(renderContext, time) {
 				renderContext.pushTransform();
 				this.base(renderContext, time);
@@ -100,8 +104,6 @@ var HelloWorld2 = Object2D.extend({
 
 		});
 		var local = new Local();
-
-		this.getComponent("host").add("local", local);
 
 		local.add(new Transform2DComponent("pos"));
       local.add(new VectorText("text"));
@@ -124,6 +126,8 @@ var HelloWorld2 = Object2D.extend({
        */
       local.getComponent("pos").setPosition(new Point2D(-40, 0));
       local.getComponent("pos").setRotation(0);
+
+		this.getComponent("host").add("local", local);
 
       /*
        * We're doing a little work here so that if no position is
