@@ -30,22 +30,14 @@
  */
 
 /**
- * Creates a host object that we can add a couple of
- * components to.  A host object will update its components
- * each time it is updated.  This way an object doesn't
- * have to know how to draw itself, move around, check for
- * collisions, etc.
+ * Creates a host object that we can add a few components to.
+ * A host object will execute its components each time it is updated.
+ * This way an object doesn't have to know how to draw itself, move
+ * around, check for collisions, etc.
  *
- * This simple host object will use a transform component,
- * which knows how to position itself in a rendering context,
- * and a vector text renderer.  Although we could just put
- * text into a TextRenderer object, which is a pre-made
- * host object that can position and draw text, we want
- * to control it ourselves.
- *
- * The host object we'll use is specially made to work in a
- * two dimensional context.  It will provide for us some basic
- * structure from which we'll extend it.
+ * This host object will uses a special host component
+ * which knows how to render another host object within itself.
+ * See the area where we create the locally hosted object.
  *
  * @constructor
  * @param position {Point2D} An optional position for the text to render.
@@ -90,8 +82,20 @@ var HelloWorld2 = Object2D.extend({
       this.add(new Transform2DComponent("move"), 0.5);
       this.add(new HostComponent("host", 1.0));
 
+		/*
+		 * We're creating a special host object that will allow this object
+		 * to be rotated around its axis.  We'll then use a method whereby
+		 * a host object can be added to an existing host object via a special
+		 * component.
+		 */
 		var Local = HostObject.extend({
 
+			/*
+			 * Host objects have an "update" method which is where the
+			 * components are executed.  We're using this to introduce
+			 * another transform stack state, allowing us to offset the
+			 * text.
+			 */
 			update: function(renderContext, time) {
 				renderContext.pushTransform();
 				this.base(renderContext, time);
@@ -101,6 +105,10 @@ var HelloWorld2 = Object2D.extend({
 		});
 		var local = new Local();
 
+		/*
+		 * Add the offset position and the text object components to the locally
+		 * created host object.
+		 */
 		local.add(new Transform2DComponent("pos"));
       local.add(new VectorText("text"));
 
@@ -111,7 +119,8 @@ var HelloWorld2 = Object2D.extend({
        * each have a unique name.  You can then get a component, like below,
        * and call methods on that component to configure or change it.
        * Here we set the text of the VectorText component and the
-       * color of it.
+       * color and weight of it.  These components exist in the locally
+       * create host object that we'll add in a bit.
        */
       local.getComponent("text").setText("Hello World");
       local.getComponent("text").setColor("black");
@@ -119,13 +128,27 @@ var HelloWorld2 = Object2D.extend({
 
 
       /*
-       * Here we set the position relative to its origin point, and
-       * then initialize the rotation.
+       * Next we set the position relative to its origin point.  The second
+       * hosted object allows us to introduce another transform state to be
+       * pushed onto the stack.  Since text draws from either the left or
+       * right of the origin (depending on alignment) we use the second
+       * transformation to offset where the text will begin to draw.
        */
       local.getComponent("pos").setPosition(new Point2D(-60, 0));
 
-		this.getComponent("host").add("local", local);
+		/*
+		 * Back to the original host object (HelloWorld2) we set the rotation
+		 * we want it to begin at.  In this case, zero degrees.
+		 */
       this.getComponent("move").setRotation(0);
+
+		/*
+		 * Here is the special assignment of the locally created host object.
+		 * This type of component can store references to other host objects
+		 * within it.  This could be used to put arms and legs onto a creatures
+		 * body, or have tank tracks animate around wheel hubs on a tank object.
+		 */
+		this.getComponent("host").add("local", local);
 
       /*
        * We're doing a little work here so that if no position is

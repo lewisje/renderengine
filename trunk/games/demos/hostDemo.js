@@ -161,7 +161,7 @@ var HostDemo = BaseObject.extend({
 		 * is controlled independent of the other.  We can have as many
 		 * instances of an object as we want, but remember that it takes
 		 * time to process each object and then render it.  More objects on
-		 * screen will result in a real framerate drop.
+		 * screen will result in a framerate drop.
 		 */
 		this.hello1 = new HelloWorld();
 		this.hello2 = new HelloWorld2();

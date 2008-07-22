@@ -52,14 +52,33 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
       this.base();
    },
 
+	/**
+	 * Add a {@link HostObject} to the component to be processed when
+	 * this component is executed.
+	 *
+	 * @param name {String} A unique name to refer to the object by
+	 * @param obj {HostObject} The host object reference
+	 */
    add: function(name, obj) {
       this.objects.add(name.toUpperCase(), obj);
    },
 
+	/**
+	 * Retrieves the {@link HostObject} that is associated with the
+	 * given name from the component.
+	 *
+	 * @param name {String} The unique name of the object
+	 * @type HostObject
+	 */
    get: function(name) {
 		return this.objects.get(name.toUpperCase());
 	},
 
+	/**
+	 * Remove the host object from the component.
+	 *
+	 * @param obj {HostObject} The host object reference
+	 */
    remove: function(obj) {
       return this.objects.remove(obj);
    },
@@ -86,7 +105,4 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
    getClassName: function() {
       return "HostComponent";
    }
-
-
-
 });
