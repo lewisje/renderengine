@@ -160,6 +160,10 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
       this.objHash = {};
    },
 
+	/**
+	 * Cleans up the references to the objects (destroys them) within
+	 * the container.
+	 */
    cleanUp: function() {
 		this.base();
 		this.clear();
