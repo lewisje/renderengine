@@ -77,6 +77,28 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
       this.base(name, sound);
    },
 
+	/**
+	 * Get the sound object.  If the sound object isn't found and the
+	 * sound engine didn't initialize, this will return a safe object
+	 * whose methods can be called without exceptions.
+	 *
+	 * @param name {String} The name of the sound to retrieve.
+	 * @type SMSound
+	 */
+	get: function(name) {
+		var sound = this.base(name);
+		if (!sound && !Engine.isSoundEnabled()) {
+			// If the sound engine didn't load, this will return an object
+			// that won't throw exceptions when methods are called.
+			sound = {
+				play: function() {},
+				stop: function() {}
+			};
+		}
+
+		return sound;
+	},
+
    /**
     * The name of the resource this loader will get.
     * @returns A String that represents the resource type.
