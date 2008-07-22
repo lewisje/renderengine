@@ -46,7 +46,9 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * @memberOf HostObject
     */
    destroy: function() {
-      this.getRenderContext().remove(this);
+		if (this.getRenderContext()) {
+	      this.getRenderContext().remove(this);
+		}
       this.base();
    },
 

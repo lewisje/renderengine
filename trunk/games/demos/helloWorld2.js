@@ -114,16 +114,18 @@ var HelloWorld2 = Object2D.extend({
        * color of it.
        */
       local.getComponent("text").setText("Hello World");
-      local.getComponent("text").setColor("white");
+      local.getComponent("text").setColor("black");
+      local.getComponent("text").setTextWeight(2);
+
 
       /*
        * Here we set the position relative to its origin point, and
        * then initialize the rotation.
        */
-      local.getComponent("pos").setPosition(new Point2D(-80, 0));
-      local.getComponent("pos").setRotation(0);
+      local.getComponent("pos").setPosition(new Point2D(-60, 0));
 
 		this.getComponent("host").add("local", local);
+      this.getComponent("move").setRotation(0);
 
       /*
        * We're doing a little work here so that if no position is
@@ -221,7 +223,7 @@ var HelloWorld2 = Object2D.extend({
     * @type Number
     */
    getRotation: function() {
-      return this.getComponent("host").get("local").getComponent("pos").getRotation();
+      return this.getComponent("move").getRotation();
    },
 
    /**
@@ -230,7 +232,7 @@ var HelloWorld2 = Object2D.extend({
     */
    setRotation: function(angle) {
       this.base(angle);
-      this.getComponent("host").get("local").getComponent("pos").setRotation(angle);
+      this.getComponent("move").setRotation(angle);
    },
 
    /**
