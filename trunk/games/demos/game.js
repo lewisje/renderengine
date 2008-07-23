@@ -111,6 +111,9 @@ var DemoHost = Game.extend({
 	},
 
 	showMenu: function() {
+		$("#code-pages .page-names").empty();
+		$("#code-pages .code-page").remove();
+
 		$("#loading").remove();
 		$("#menu").show();
 		$("#return").hide();
@@ -195,6 +198,44 @@ var DemoHost = Game.extend({
 		alert("not implemented yet");
 	},
 
+	loadCodePages: function(pageFiles) {
+		$("#code-pages .page-names").empty();
+		$("#code-pages .code-page").remove();
+
+		for (var x in pageFiles) {
+			var pageURL = pageFiles[x];
+
+			// Add the page name
+			var pn = $("<span class='page'>").text(pageURL).attr("pageNum", x);
+			if (x == 0) {
+				pn.addClass("selected");
+			}
+
+			pn.click(function() {
+				var jQ = $(this);
+				$("#code-pages .page").removeClass("selected");
+				jQ.addClass("selected");
+				$("#code-pages .code-page").css("display", "none");
+				$("#code-pages .code-page:eq(" + jQ.attr("pageNum") + ")").css("display", "block");
+			});
+			$("#code-pages .page-names").append(pn);
+
+			// Create a code page
+			var cp = $("<div class='code-page'>").append($("<pre>")).attr("pageURL", pageURL);
+			if (x == 0) {
+				cp.css("display", "block");
+			}
+			$("#code-pages").append(cp);
+		}
+
+		$("#code-pages .code-page").each(function() {
+			var self = this;
+			$.get($(this).attr("pageURL"), function(data) {
+				$("pre", self).text(data);
+			});
+		});
+	},
+
 	//===============================================================================================
 	// EXAMPLES
 
@@ -203,6 +244,13 @@ var DemoHost = Game.extend({
        * Hide the menu while the demo is running.
        */
 		DemoHost.hideMenu();
+
+		/*
+		 * Load code pages of demo
+		 */
+		DemoHost.loadCodePages([
+			"introDemo.js"
+		]);
 
 		/*
 		 * We may have already loaded the script, in which case we
@@ -228,6 +276,12 @@ var DemoHost = Game.extend({
 
 	hostDemo: function() {
 		DemoHost.hideMenu();
+
+		DemoHost.loadCodePages([
+			"hostDemo.js",
+			"helloWorld.js",
+			"helloWorld2.js"
+		]);
 
 		if (typeof HostDemo !== "undefined") {
 			new HostDemo();

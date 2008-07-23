@@ -109,11 +109,6 @@ var HostDemo = BaseObject.extend({
        */
       this.run();
 
-      /*
-       * We'll enable metrics so you can see how this impacts the
-       * available render time, and how long rendering takes.
-       */
-      Engine.toggleMetrics();
    },
 
    /**
@@ -122,11 +117,6 @@ var HostDemo = BaseObject.extend({
     * that you need.
     */
    destroy: function() {
-
-		/*
-		 * The metrics are probably on, so we should turn the off.
-		 */
-      Engine.toggleMetrics();
 
 		/*
 		 * Anything that we create should be destroyed.  This way we
