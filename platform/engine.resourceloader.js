@@ -93,7 +93,11 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     * @type Object
     */
    get: function(name) {
-      return this.cache[name].data;
+		if (this.cache[name]) {
+	      return this.cache[name].data;
+		} else {
+			return null;
+		}
    },
 
    /**

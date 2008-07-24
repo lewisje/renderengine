@@ -47,6 +47,7 @@ Engine.load("/components/component.vector2d.js");
 Engine.load("/components/component.collider.js");
 Engine.load("/components/component.input.js");
 Engine.load("/components/component.keyboardinput.js");
+Engine.load("/components/component.wiimoteinput.js");
 Engine.load("/resourceloaders/loader.sound.js");
 
 // Load game objects
@@ -99,7 +100,8 @@ var Spaceroids = Game.extend({
     * @param event {Event} The event object
     */
    onKeyPress: function(event) {
-      if (event.keyCode == EventEngine.KEYCODE_ENTER)
+      if (event.keyCode == EventEngine.KEYCODE_ENTER ||
+      	 event.keyCode == 65 || event.keyCode == 97)
       {
          Spaceroids.startGame();
       }
@@ -155,7 +157,19 @@ var Spaceroids = Game.extend({
       copy.setPosition(new Point2D(145, 130));
       this.renderContext.add(copy);
 
-      Spaceroids.start = new TextRenderer(new VectorText(), "[ Press =Enter= to Start ]", 1);
+		var startText;
+		if (window.opera && opera.wiiremote) {
+			startText = "[ Press =A Button= to Start ]";
+
+			var wii = new TextRenderer(new VectorText(), "(Wii Detected)", 1);
+			wii.setColor("#ffffff");
+			wii.setPosition(new Point2D(160, 470));
+			this.renderContext.add(wii);
+		} else {
+			startText = "[ Press =Enter= to Start ]";
+		}
+
+      Spaceroids.start = new TextRenderer(new VectorText(), startText, 1);
       Spaceroids.start.setPosition(new Point2D(96, 450));
       Spaceroids.start.setColor("#ffffff");
       Spaceroids.renderContext.add(Spaceroids.start);
