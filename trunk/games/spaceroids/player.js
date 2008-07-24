@@ -58,8 +58,13 @@ Spaceroids.Player = Object2D.extend({
    constructor: function() {
       this.base("Player");
 
-      // Add components to move and draw the asteroid
-      this.add(new KeyboardInputComponent("input"));
+      // Add components to move and draw the player
+      if (window.opera && opera.wiiremote) {
+			this.add(new WiimoteInputComponent("input"));
+		} else {
+	      this.add(new KeyboardInputComponent("input"));
+		}
+
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
       this.add(new Vector2DComponent("thrust"));
@@ -362,6 +367,33 @@ Spaceroids.Player = Object2D.extend({
 
       }
    },
+
+	/*
+	 * WiiMote support -------------------------------------------------------------------------------------
+	 */
+
+   onWiimoteLeft: function(controller, pressed) {
+		this.rotDir = pressed ? -10 : 0;;
+	},
+
+   onWiimoteRight: function(controller, pressed) {
+		this.rotDir = pressed ? 10 : 0;;
+	},
+
+   onWiimoteUp: function(controller, pressed) {
+		this.getComponent("thrust").setDrawMode(pressed ? RenderComponent.DRAW : RenderComponent.NO_DRAW);
+		this.thrusting = pressed;
+	},
+
+   onWiimoteButtonB: function(controller, pressed) {
+		if (pressed && this.bullets < 5) {
+			this.shoot();
+		}
+	},
+
+	/*
+	 * WiiMote support -------------------------------------------------------------------------------------
+	 */
 
    /**
     * Get the class name of this object
