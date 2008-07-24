@@ -258,6 +258,23 @@ var HelloWorld2 = Object2D.extend({
       this.getComponent("move").setRotation(angle);
    },
 
+	/**
+	 * An accessor method that gets the uniform scale from the "move" component.
+	 * @type Number
+	 */
+	getScale: function() {
+		return this.getComponent("move").getScale();
+	},
+
+	/**
+	 * An accessor method to set the scale on the "move" component.
+	 * @param size {Number} The unifor scale to apply to the component.
+	 */
+   setScale: function(size) {
+		this.base(size);
+		this.getComponent("move").setScale(size);
+	},
+
    /**
     * Each object should have this method declared so that the class
     * name of the object can be ascertained.  We can use this string form

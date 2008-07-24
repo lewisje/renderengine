@@ -178,6 +178,8 @@ var HostDemo = BaseObject.extend({
 		 */
 		var self = this;
 
+		this.scaleDir = 0.01;
+
 		/*
 		 * Finally, here we are at the animation timer.  We'll make our
 		 * two host objects rotate in opposite directions.  If you examined the
@@ -203,12 +205,26 @@ var HostDemo = BaseObject.extend({
 			var r2 = self.hello2.getRotation();
 
 			/*
+			 * We get the scale of the second host object so we can make the demo
+			 * a little more spicy.
+			 */
+			var s2 = self.hello2.getScale();
+
+			/*
 			 * We want to do some "bounds checking" on the two values to keep
 			 * them within a suitable range.  Here we'll be keeping the two
 			 * values between zero and 360 degrees.
 			 */
-			r1 = r1 < 360 ? r1 + 2 : 0;
+			r1 = r1 < 360 ? r1 + 1 : 0;
 			r2 = r2 > 0 ? r2 - 2 : 360;
+
+			/*
+			 * Let's toggle the scale up and down a bit.
+			 */
+			s2 += self.scaleDir;
+			if (s2 > 6 || s2 < 0.2) {
+				self.scaleDir *= -1;
+			}
 
 			/*
 			 * Finally, we set the rotation of the two host objects, which
@@ -216,6 +232,12 @@ var HostDemo = BaseObject.extend({
 			 */
 			self.hello1.setRotation(r1);
 			self.hello2.setRotation(r2);
+
+			/*
+			 * Set the scale to the new value, and we're done with this
+			 * iteration of the timer.
+			 */
+			self.hello2.setScale(s2);
 		});
    }
 });
