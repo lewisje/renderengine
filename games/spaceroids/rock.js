@@ -204,6 +204,7 @@ Spaceroids.Rock = Object2D.extend({
       this.setShape();
       this.setMotion();
 
+      Spaceroids.rocks++;
    },
 
    /**
@@ -219,6 +220,8 @@ Spaceroids.Rock = Object2D.extend({
       {
          Spaceroids.pEngine.addParticle(new SimpleParticle(this.getPosition()));
       }
+
+      Spaceroids.rocks--;
 
       // Score some points
       if (!Spaceroids.isAttractMode) {
@@ -239,6 +242,12 @@ Spaceroids.Rock = Object2D.extend({
             }
          }
       }
+
+      if (Spaceroids.rocks == 0) {
+			new OneShotTimeout("nextLevel", 3000, function() {
+				Spaceroids.nextLevel();
+			});
+		}
 
       this.destroy();
    },

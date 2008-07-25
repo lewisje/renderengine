@@ -76,7 +76,7 @@ var Spaceroids = Game.extend({
 
    collisionModel: null,
 
-   rocks: [],
+   rocks: 0,
 
    fieldWidth: 500,
    fieldHeight: 580,
@@ -93,6 +93,8 @@ var Spaceroids = Game.extend({
    showStart: false,
 
    pEngine: null,
+
+   level: 0,
 
    /**
     * Handle the keypress which starts the game
@@ -120,6 +122,9 @@ var Spaceroids = Game.extend({
       {
          objs.shift().destroy();
       }
+
+		this.rocks = 0;
+		this.level = 0;
 
       this.scoreObj = null;
       this.hscoreObj = null;
@@ -271,13 +276,7 @@ var Spaceroids = Game.extend({
       var pWidth = this.fieldWidth;
       var pHeight = this.fieldHeight;
 
-      // Add some asteroids
-      for (var a = 0; a < 5; a++)
-      {
-         var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
-         this.renderContext.add(rock);
-         rock.setup();
-      }
+		this.nextLevel();
 
       this.playerObj = new Spaceroids.Player();
       this.renderContext.add(this.playerObj);
@@ -293,6 +292,25 @@ var Spaceroids = Game.extend({
 
       this.gameRunning = true;
    },
+
+   nextLevel: function() {
+		Spaceroids.level++;
+
+		if (Spaceroids.level > 7) {
+			Spaceroids.level = 7;
+		}
+
+      // Add some asteroids
+      var pWidth = this.fieldWidth;
+      var pHeight = this.fieldHeight;
+
+      for (var a = 0; a < Spaceroids.level + 1; a++)
+      {
+         var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
+         this.renderContext.add(rock);
+         rock.setup();
+      }
+	},
 
    /**
     * Called when the game is over to draw the game over message and
