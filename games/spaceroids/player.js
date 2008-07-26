@@ -251,15 +251,13 @@ Spaceroids.Player = Object2D.extend({
     * the player.
     */
    respawn: function() {
-      this.respawnTimer.destroy();
-
       // Are there rocks in our area?
       if (this.ModelData)
       {
          if (this.ModelData.lastNode.getObjects().length > 1)
          {
             var pl = this;
-            this.respawnTimer = new Timeout("respawn", 250, function() { pl.respawn(); });
+            new OneShotTimeout("respawn", 250, function() { pl.respawn(); });
             return;
          }
       }
@@ -307,7 +305,7 @@ Spaceroids.Player = Object2D.extend({
       {
          // Set a timer to spawn another player
          var pl = this;
-         this.respawnTimer = new Timeout("respawn", 3000, function() { pl.respawn(); });
+         new OneShotTimeout("respawn", 3000, function() { pl.respawn(); });
       }
       else
       {
