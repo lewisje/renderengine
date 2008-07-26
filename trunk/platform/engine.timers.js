@@ -36,6 +36,8 @@
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
  * @param callback {Function} The function to call when the interval is reached
+ *
+ * @extends BaseObject
  */
 var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 

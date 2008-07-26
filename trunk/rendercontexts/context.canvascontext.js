@@ -30,12 +30,14 @@
  */
 
 if (jQuery.browser.msie) {
-	// This is the Google "ExplorerCanvas" object we need for IE
-	Engine.load("/libs/excanvas.js");
+   // This is the Google "ExplorerCanvas" object we need for IE
+   Engine.load("/libs/excanvas.js");
 }
 
 /**
- * @class A canvas element represented within the engine.
+ * @class A <tt>canvas</tt> element represented within the engine.  A canvas
+ * is a 2D context which can render lines, images, and polygons.  Transformations
+ * can be saved and restored, allowing for complex, stacked transformations.
  *
  * @extends RenderContext2D
  */
@@ -67,10 +69,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       canvas.height = this.height * worldScale[1];
       canvas.id = this.getId();
 
-		// IE Support
-		if (jQuery.browser.msie) {
-			G_vmlCanvasManager_.initElement(canvas);
-		}
+      // IE Support
+      if (jQuery.browser.msie) {
+         G_vmlCanvasManager_.initElement(canvas);
+      }
 
       this.base("CanvasContext", canvas);
    },

@@ -30,7 +30,30 @@
  */
 
 /**
- * @class The base component class
+ * @class All components extend from this object class.  A component is one
+ *        part of an operating whole object (a {@link HostObject}) which is
+ *        responsible for only a portion of the overall operation of an in-
+ *        game object.  Components are broken down into four major categories:
+ *        <ul>
+ *          <li><b>TYPE_INPUT</b> - Input from controllers (keyboard, mouse, etc.)</li>
+ *          <li><b>TYPE_LOGIC</b> - Handles logical operations that are not related to
+ *              input and collision</li>
+ *          <li><b>TYPE_COLLIDER</b> - Determines what this object is possibly colliding
+ *              with, and reports those collisions via callbacks to the host.</li>
+ *          <li><b>TYPE_RENDER</b> - Performs some sort of rendering operation to the context</li>
+ *        </ul>
+ *        Components are executed in the order listed.  First, all inputs are
+ *        checked, then logic is performed.  Logic may be internal to a host object
+ *        itself, but some components perform an object-centric type of logic that
+ *        can be reused.  Next, collisions are checked.  And finally, rendering can
+ *        occur.
+ *        <p/>
+ *        Within each component type set, components can be prioritized so that
+ *        one component will execute before others.  Such an ordering allows for
+ *        multiple components of each type to perform their tasks in an order
+ *        that the host defines.
+ *
+ *
  * @extends BaseObject
  */
 var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
