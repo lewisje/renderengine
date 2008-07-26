@@ -44,6 +44,8 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 
    velocity: null,
 
+   vDecay: 0,
+
    angularVelocity: 0,
 
    lPos: null,
@@ -53,6 +55,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.acceleration = new Vector2D(0,0);
       this.base(name, priority || 1.0);
       this.lPos = new Point2D(0,0);
+      this.vDecay = 0;
    },
 
    /**
@@ -77,6 +80,15 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       }
       else
       {
+         if (this.vDecay != 0 && this.velocity.len() > 0) {
+            // We need to decay the velocity by the amount
+            // specified until velocity is zero, or less than zero
+            var invVelocity = new Vector2D(this.velocity).neg();
+            invVelocity.mul(this.vDecay);
+
+            this.velocity.add(invVelocity);
+         }
+
          var diff = (time - this.lastTime) * 0.1;
          var vz = new Vector2D(this.velocity).mul(diff);
          this.setPosition(this.lPos.add(vz));
@@ -103,6 +115,26 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
     */
    getVelocity: function() {
       return this.velocity;
+   },
+
+   /**
+    * Set the decay rate at which the velocity will
+    * approach zero.  You can use this value to cause
+    * a moving object to eventually stop moving.
+    *
+    * @param decay {Number} The rate at which velocity decays
+    */
+   setVelocityDecay: function(decay) {
+      this.vDecay = decay;
+   },
+
+   /**
+    * Get the rate at which velocity will decay to zero.
+    * @return The velocity decay rate
+    * @type Number
+    */
+   getVelocityDecay: function() {
+      return this.vDecay;
    },
 
    /**

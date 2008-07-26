@@ -222,6 +222,7 @@ Spaceroids.Player = Object2D.extend({
 
       // Put us in the middle of the playfield
       c_mover.setPosition( this.pBox.getCenter() );
+      c_mover.setVelocityDecay(0.03);
    },
 
    /**
