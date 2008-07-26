@@ -285,6 +285,8 @@ Spaceroids.Player = Object2D.extend({
       this.alive = false;
 
       this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
+      this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
+      Spaceroids.soundLoader.get("thrust").stop();
 
       // Make some particles
       for (var x = 0; x < 8; x++)
@@ -385,6 +387,11 @@ Spaceroids.Player = Object2D.extend({
    onWiimoteUp: function(controller, pressed) {
       this.getComponent("thrust").setDrawMode(pressed ? RenderComponent.DRAW : RenderComponent.NO_DRAW);
       this.thrusting = pressed;
+      if (pressed) {
+         Spaceroids.soundLoader.get("thrust").play({volume: 30});
+      } else {
+         Spaceroids.soundLoader.get("thrust").stop();
+      }
    },
 
    onWiimoteButtonB: function(controller, pressed) {
