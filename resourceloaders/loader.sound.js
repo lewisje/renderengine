@@ -31,6 +31,9 @@
 /**
  * @class Loads sounds and stores the reference to them.  Provides a simple
  *        way to play and stop the sounds that have been loaded.
+ *        <p/>
+ *        Sounds must be 44.1KHz and have a bitrate of 192k to play correctly.
+ *
  * @extends ResourceLoader
  */
 var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.prototype */{
