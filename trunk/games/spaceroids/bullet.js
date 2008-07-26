@@ -73,6 +73,18 @@ Spaceroids.Bullet = Object2D.extend({
    },
 
    /**
+    * Destroy a bullet, removing it from the list of objects
+    * in the last collision model node.
+    */
+   destroy: function() {
+      AssertWarn(this.ModelData.lastNode, "Bullet not located in a node!");
+      if (this.ModelData.lastNode) {
+         this.ModelData.lastNode.removeObject(this);
+      }
+      this.base();
+   },
+
+   /**
     * Returns the bullet position
     * @type Point2D
     */
