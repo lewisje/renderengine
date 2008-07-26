@@ -103,7 +103,7 @@ var Spaceroids = Game.extend({
     */
    onKeyPress: function(event) {
       if (event.keyCode == EventEngine.KEYCODE_ENTER ||
-      	 event.keyCode == 65 || event.keyCode == 97)
+          event.keyCode == 65 || event.keyCode == 97)
       {
          Spaceroids.startGame();
       }
@@ -123,8 +123,8 @@ var Spaceroids = Game.extend({
          objs.shift().destroy();
       }
 
-		this.rocks = 0;
-		this.level = 0;
+      this.rocks = 0;
+      this.level = 0;
 
       this.scoreObj = null;
       this.hscoreObj = null;
@@ -162,17 +162,17 @@ var Spaceroids = Game.extend({
       copy.setPosition(new Point2D(145, 130));
       this.renderContext.add(copy);
 
-		var startText;
-		if (window.opera && opera.wiiremote) {
-			startText = "[ Press =A Button= to Start ]";
+      var startText;
+      if (window.opera && opera.wiiremote) {
+         startText = "[ Press =A Button= to Start ]";
 
-			var wii = new TextRenderer(new VectorText(), "(Wii Detected)", 1);
-			wii.setColor("#ffffff");
-			wii.setPosition(new Point2D(160, 470));
-			this.renderContext.add(wii);
-		} else {
-			startText = "[ Press =Enter= to Start ]";
-		}
+         var wii = new TextRenderer(new VectorText(), "(Wii Detected)", 1);
+         wii.setColor("#ffffff");
+         wii.setPosition(new Point2D(160, 470));
+         this.renderContext.add(wii);
+      } else {
+         startText = "[ Press =Enter= to Start ]";
+      }
 
       Spaceroids.start = new TextRenderer(new VectorText(), startText, 1);
       Spaceroids.start.setPosition(new Point2D(96, 450));
@@ -276,7 +276,7 @@ var Spaceroids = Game.extend({
       var pWidth = this.fieldWidth;
       var pHeight = this.fieldHeight;
 
-		this.nextLevel();
+      this.nextLevel();
 
       this.playerObj = new Spaceroids.Player();
       this.renderContext.add(this.playerObj);
@@ -290,15 +290,27 @@ var Spaceroids = Game.extend({
       this.addScore();
       this.scorePoints(0);
 
+      Spaceroids.soundNum = 1;
+
+      Spaceroids.gameSound = new Interval("gameSound", 1000, function() {
+         if (Spaceroids.soundNum == 1) {
+            Spaceroids.soundLoader.get("lowboop").play();
+            Spaceroids.soundNum = 2;
+         } else {
+            Spaceroids.soundLoader.get("hiboop").play();
+            Spaceroids.soundNum = 1;
+         }
+      });
+
       this.gameRunning = true;
    },
 
    nextLevel: function() {
-		Spaceroids.level++;
+      Spaceroids.level++;
 
-		if (Spaceroids.level > 7) {
-			Spaceroids.level = 7;
-		}
+      if (Spaceroids.level > 7) {
+         Spaceroids.level = 7;
+      }
 
       // Add some asteroids
       var pWidth = this.fieldWidth;
@@ -310,7 +322,7 @@ var Spaceroids = Game.extend({
          this.renderContext.add(rock);
          rock.setup();
       }
-	},
+   },
 
    /**
     * Called when the game is over to draw the game over message and
@@ -330,6 +342,8 @@ var Spaceroids = Game.extend({
       {
          return;
       }
+
+      Spaceroids.gameSound.destroy();
 
       this.gameRunning = false;
 
@@ -379,6 +393,9 @@ var Spaceroids = Game.extend({
       this.soundLoader.load("explode", "explode1.mp3");
       this.soundLoader.load("shoot", "shoot.mp3");
       this.soundLoader.load("death", "explode2.mp3");
+      this.soundLoader.load("thrust", "thrust.mp3");
+      this.soundLoader.load("lowboop", "low.mp3");
+      this.soundLoader.load("hiboop", "hi.mp3");
 
       Spaceroids.attractMode();
    },

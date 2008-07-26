@@ -30,7 +30,11 @@
  */
 
 /**
- * @class A reference to the document.body element as a rendering context.
+ * @class A reference to the <tt>document.body</tt> element as a rendering context.
+ * Aside from being The Render Engine's default rendering context, the context
+ * is essentially a wrapper for the HTML document.  Wrapping, in this way, allows
+ * us to update not only this context, but all other contexts during an engine frame.
+ *
  * @extends RenderContext2D
  */
 var DocumentContext = RenderContext2D.extend(/** @scope DocumentContext.prototype */{
@@ -54,11 +58,11 @@ var DocumentContext = RenderContext2D.extend(/** @scope DocumentContext.prototyp
       var objs = this.getObjects();
       for (var o in objs)
       {
-			var e = objs[o].getElement();
-			if (e && e != document.body) {
-				Console.log("DOM element ", e, " removed from ", this.getSurface());
-	         this.getSurface().removeChild(e);
-			}
+         var e = objs[o].getElement();
+         if (e && e != document.body) {
+            Console.log("DOM element ", e, " removed from ", this.getSurface());
+            this.getSurface().removeChild(e);
+         }
       }
 
       this.base();

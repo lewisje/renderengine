@@ -332,41 +332,41 @@ var AssertWarn = function(test, warning) {
 /**
  * @class Engine support class.  Provides extra functions the engine or games
  *        can use.  Mainly contains functions that can manipulate arrays and
- *			 generate/read JSON.
+ *        generate/read JSON.
  */
 var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    constructor: null,
 
-	/**
-	 * Get the index of an element in the specified array.
-	 *
+   /**
+    * Get the index of an element in the specified array.
+    *
     * @param array {Array} The array to scan
     * @param obj {Object} The object to find
     * @param from {Number=0} The index to start at, defaults to zero.
     * @memberOf EngineSupport
     */
-	indexOf: function(array, obj, from) {
-		if (Array.prototype.indexOf) {
-			return array.indexOf(obj, from);
-		}
-		else
-		{
-			var len = array.length;
-			var from = Number(from) || 0;
-			from = (from < 0)
-				? Math.ceil(from)
-				: Math.floor(from);
-			if (from < 0)
-				from += len;
+   indexOf: function(array, obj, from) {
+      if (Array.prototype.indexOf) {
+         return array.indexOf(obj, from);
+      }
+      else
+      {
+         var len = array.length;
+         var from = Number(from) || 0;
+         from = (from < 0)
+            ? Math.ceil(from)
+            : Math.floor(from);
+         if (from < 0)
+            from += len;
 
-			for (; from < len; from++)
-			{
-				if (from in array && array[from] === obj)
-					return from;
-			}
-			return -1;
-		}
-	},
+         for (; from < len; from++)
+         {
+            if (from in array && array[from] === obj)
+               return from;
+         }
+         return -1;
+      }
+   },
 
    /**
     * Remove an element from an array.
@@ -376,54 +376,54 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    arrayRemove: function(array, obj) {
-		var idx = EngineSupport.indexOf(array, obj);
+      var idx = EngineSupport.indexOf(array, obj);
       if (idx != -1)
       {
          array.splice(idx, 1);
       }
    },
 
-	/**
-	 * Calls a provided callback function once for each element in
-	 * an array, and constructs a new array of all the values for which
-	 * callback returns a <tt>true</tt> value. callback is invoked only
-	 * for indexes of the array which have assigned values; it is not invoked
-	 * for indexes which have been deleted or which have never been assigned
-	 * values. Array elements which do not pass the callback test are simply
-	 * skipped, and are not included in the new array.
-	 *
+   /**
+    * Calls a provided callback function once for each element in
+    * an array, and constructs a new array of all the values for which
+    * callback returns a <tt>true</tt> value. callback is invoked only
+    * for indexes of the array which have assigned values; it is not invoked
+    * for indexes which have been deleted or which have never been assigned
+    * values. Array elements which do not pass the callback test are simply
+    * skipped, and are not included in the new array.
+    *
     * @param array {Array} The array to filter.
     * @param fn {Function} The callback to invoke.  It will be passed three
-    *								arguments: The element value, the index of the element,
-    *								and the array being traversed.
+    *                      arguments: The element value, the index of the element,
+    *                      and the array being traversed.
     * @param thisp {Object} Used as <tt>this</tt> for each invocation of the
-    *								 callback.  Default: <tt>null</tt>
+    *                       callback.  Default: <tt>null</tt>
     * @memberOf EngineSupport
     */
-	filter: function(array, fn, thisp) {
-		if (Array.prototype.filter) {
-			return array.filter(fn, thisp)
-		}
-		else
-		{
-			var len = array.length;
-			if (typeof fn != "function")
-				throw new TypeError();
+   filter: function(array, fn, thisp) {
+      if (Array.prototype.filter) {
+         return array.filter(fn, thisp)
+      }
+      else
+      {
+         var len = array.length;
+         if (typeof fn != "function")
+            throw new TypeError();
 
-			var res = new Array();
-			for (var i = 0; i < len; i++)
-			{
-				if (i in array)
-				{
-					var val = array[i]; // in case fn mutates this
-					if (fn.call(thisp, val, i, array))
-						res.push(val);
-				}
-			}
+         var res = new Array();
+         for (var i = 0; i < len; i++)
+         {
+            if (i in array)
+            {
+               var val = array[i]; // in case fn mutates this
+               if (fn.call(thisp, val, i, array))
+                  res.push(val);
+            }
+         }
 
-			return res;
-		}
-	},
+         return res;
+      }
+   },
 
    /**
     * Executes a callback for each element within an array.
@@ -464,9 +464,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    },
 
    /**
-    * Get the query parameters from the window location object.
+    * Get the query parameters from the window location object.  The
+    * object returned will contain a key/value pair for each argument
+    * found.
     *
     * @type Object
+    * @return An <tt>Object</tt> with a key and value for each query argument.
     * @memberOf EngineSupport
     */
    getQueryParams: function() {
@@ -571,9 +574,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 });
 
 /**
- * @class Engine
+ * @class The main engine class which is responsible for tracking objects
+ * and rendering a frame.  Additionally, the Engine will track some simple
+ * metrics for optimizing a game. Finally, the Engine is responsible for
+ * maintaining the local client's <tt>worldTime</tt>.
  *
- * The main engine class.
+ * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
    constructor: null,
@@ -608,6 +614,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    showMetricsWindow: false,
 
+   /**
+    * The current time of the world on the client.  This time is updated
+    * for each frame generated by the Engine.
+    * @type Number
+    * @memberOf Engine
+    */
    worldTime: 0,
 
    soundsEnabled: false,
@@ -617,7 +629,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    pauseReps: 0,
 
    /**
-    * Create an instance of an object, managed by the Engine.
+    * Create an instance of an object, managed by the Engine.  Called
+    * by any object that extends from {@link BaseObject}.
     *
     * @param obj {BaseObject} A managed object within the engine
     * @return The global Id of the object
@@ -728,7 +741,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Pause the engine.
+    * Pauses the engine.
     * @memberOf Engine
     */
    pause: function() {
@@ -793,7 +806,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Get the default rendering context for the Engine.
+    * Get the default rendering context for the Engine.  This
+    * is the <tt>document.body</tt> element in the browser.
     *
     * @return The default rendering context
     * @type RenderContext
@@ -810,6 +824,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     *
     * @param stylesheetPath {String} Path to the stylesheet, relative to
     *                                the engine path.
+    * @memberOf Engine
     */
    loadStylesheet: function(stylesheetPath) {
       stylesheetPath = this.getEnginePath() + stylesheetPath;
@@ -983,13 +998,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
             // Start the game when it's ready
             if (gameObjectName) {
-	            Engine.gameRunTimer = setInterval(function() {
-						if (window[gameObjectName]) {
-							clearInterval(Engine.gameRunTimer);
-							window[gameObjectName].setup();
-						}
-					}, 100);
-				}
+               Engine.gameRunTimer = setInterval(function() {
+                  if (window[gameObjectName]) {
+                     clearInterval(Engine.gameRunTimer);
+                     window[gameObjectName].setup();
+                  }
+               }, 100);
+            }
          }
       }, 100);
    },
@@ -1007,6 +1022,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    /**
     * Get the path to the engine.
     * @type String
+    * @memberOf Engine
     */
    getEnginePath: function() {
       if (this.engineLocation == null)
@@ -1030,7 +1046,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Load the scripts required for the engine to run.
+    * Load the scripts required for the engine to run and
+    * initializes the sound engine.
     * @private
     * @memberOf Engine
     */
@@ -1136,7 +1153,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Set the FPS the engine runs at
+    * Set the FPS (frames per second) the engine runs at.  This value
+    * is mainly a suggestion to the engine as to how fast you want to
+    * redraw frames.  If frame execution time is long, frames may be
+    * missed.  See the metrics to understand available time versus
+    * render time.
     *
     * @param fps {Number} The number of frames per second to refresh
     *                     Engine objects.
@@ -1185,9 +1206,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    /**
     * Set the interval at which metrics are sampled by the system.
-    * The default is calculated every 10 engine ticks.
+    * The default is for metrics to be calculated every 10 engine frames.
     *
     * @param sampleRate {Number} The number of ticks between samples
+    * @memberOf Engine
     */
    setMetricSampleRate: function(sampleRate) {
       this.lastMetricSample = 1;
@@ -1198,10 +1220,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Add a metric to the game engine that can be displayed
     * while it is running.  If smoothing is selected, a 3 point
     * running average will be used to smooth out jitters in the
-    * value that is shown.
+    * value that is shown.  For the <tt>value</tt> argument,
+    * you can provide a string which contains the pound sign "#"
+    * that will be used to determine where the calculated value will
+    * occur in the formatted string.
     *
     * @param metricName {String} The name of the metric to track
-    * @param value {String/Number} The value of the metric
+    * @param value {String/Number} The value of the metric.
     * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
     * @memberOf Engine
     */

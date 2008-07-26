@@ -38,6 +38,8 @@
  * @param name {String} Name of the component
  * @param collisionModel {SpatialCollection} The collision model
  * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
+ *
+ * @extends BaseComponent
  */
 var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.prototype */{
 

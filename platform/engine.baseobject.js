@@ -32,7 +32,11 @@
 
 /**
  * @class The base object class which represents an object within
- * the engine.  All objects should extend from this class.
+ * the engine.  All objects should extend from this class mainly due to
+ * the fact that the object intelligently will inherit a <tt>destroy</tt>
+ * method.  This method gives the object an opportunity to clean up
+ * object references, thus keeping the memory requirements low.
+ *
  */
 var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
    id: -1,
@@ -51,7 +55,10 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
    },
 
    /**
-    * Create an instance of this object, assigning a name to it.
+    * Create an instance of this object, assigning a name to it.  An
+    * object reference will be maintained by the {@link Engine} class,
+    * which gives the object final responsibility for making sure the
+    * object can be destroyed.
     *
     * @param name {String} The name of the object from which the Id will be generated.
     * @memberOf BaseObject
@@ -70,11 +77,11 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
     * @memberOf BaseObject
     */
    destroy: function() {
-		// Remove any defined element from it's parent, unless it's the document body
+      // Remove any defined element from it's parent, unless it's the document body
       if (this.element && this.element.parentNode && this.element != document.body) {
-			Console.log("DOM element ", this.element, " removed from ", this.element.parentNode);
-			this.element.parentNode.removeChild(this.element);
-		}
+         Console.log("DOM element ", this.element, " removed from ", this.element.parentNode);
+         this.element.parentNode.removeChild(this.element);
+      }
 
       // Clean up the reference to this object
       Engine.destroy(this);
@@ -139,6 +146,9 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
     * @memberOf BaseObject
     */
    getClassName: function() {
+      if (!this.hasOwnProperty("getClassName")) {
+         Console.warn("Object ", this.toString(), " is missing getClassName()");
+      }
       return "BaseObject";
    },
 

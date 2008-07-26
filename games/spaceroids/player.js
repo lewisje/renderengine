@@ -60,10 +60,10 @@ Spaceroids.Player = Object2D.extend({
 
       // Add components to move and draw the player
       if (window.opera && opera.wiiremote) {
-			this.add(new WiimoteInputComponent("input"));
-		} else {
-	      this.add(new KeyboardInputComponent("input"));
-		}
+         this.add(new WiimoteInputComponent("input"));
+      } else {
+         this.add(new KeyboardInputComponent("input"));
+      }
 
       this.add(new Mover2DComponent("move"));
       this.add(new Vector2DComponent("draw"));
@@ -251,13 +251,15 @@ Spaceroids.Player = Object2D.extend({
     * the player.
     */
    respawn: function() {
+      this.respawnTimer.destroy();
+
       // Are there rocks in our area?
       if (this.ModelData)
       {
          if (this.ModelData.lastNode.getObjects().length > 1)
          {
             var pl = this;
-            new OneShotTimeout("respawn", 500, function() { pl.respawn(); });
+            this.respawnTimer = new Timeout("respawn", 250, function() { pl.respawn(); });
             return;
          }
       }
@@ -298,14 +300,14 @@ Spaceroids.Player = Object2D.extend({
       this.rotDir = 0;
       this.thrusting = false;
 
-      Spaceroids.soundLoader.get("death").play({volume: 50});
+      Spaceroids.soundLoader.get("death").play({volume: 80});
 
       // Remove one of the players
       if (this.players-- > 0)
       {
          // Set a timer to spawn another player
          var pl = this;
-         new OneShotTimeout("respawn", 3000, function() { pl.respawn(); });
+         this.respawnTimer = new Timeout("respawn", 3000, function() { pl.respawn(); });
       }
       else
       {
@@ -335,6 +337,7 @@ Spaceroids.Player = Object2D.extend({
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.DRAW);
             this.thrusting = true;
+            Spaceroids.soundLoader.get("thrust").play({volume: 30});
             break;
          case EventEngine.KEYCODE_SPACE:
             if (this.bullets < 5) {
@@ -363,37 +366,38 @@ Spaceroids.Player = Object2D.extend({
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
             this.thrusting = false;
+            Spaceroids.soundLoader.get("thrust").stop();
             break;
 
       }
    },
 
-	/*
-	 * WiiMote support -------------------------------------------------------------------------------------
-	 */
+   /*
+    * WiiMote support -------------------------------------------------------------------------------------
+    */
 
    onWiimoteLeft: function(controller, pressed) {
-		this.rotDir = pressed ? -10 : 0;;
-	},
+      this.rotDir = pressed ? -10 : 0;;
+   },
 
    onWiimoteRight: function(controller, pressed) {
-		this.rotDir = pressed ? 10 : 0;;
-	},
+      this.rotDir = pressed ? 10 : 0;;
+   },
 
    onWiimoteUp: function(controller, pressed) {
-		this.getComponent("thrust").setDrawMode(pressed ? RenderComponent.DRAW : RenderComponent.NO_DRAW);
-		this.thrusting = pressed;
-	},
+      this.getComponent("thrust").setDrawMode(pressed ? RenderComponent.DRAW : RenderComponent.NO_DRAW);
+      this.thrusting = pressed;
+   },
 
    onWiimoteButtonB: function(controller, pressed) {
-		if (pressed && this.bullets < 5) {
-			this.shoot();
-		}
-	},
+      if (pressed && this.bullets < 5) {
+         this.shoot();
+      }
+   },
 
-	/*
-	 * WiiMote support -------------------------------------------------------------------------------------
-	 */
+   /*
+    * WiiMote support -------------------------------------------------------------------------------------
+    */
 
    /**
     * Get the class name of this object

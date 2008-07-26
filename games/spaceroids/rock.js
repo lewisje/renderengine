@@ -78,8 +78,10 @@ Spaceroids.Rock = Object2D.extend({
     * in the last collision model node.
     */
    destroy: function() {
-      Assert(this.ModelData.lastNode, "Rock not located in a node!");
-      this.ModelData.lastNode.removeObject(this);
+      AssertWarn(this.ModelData.lastNode, "Rock not located in a node!");
+      if (this.ModelData.lastNode) {
+         this.ModelData.lastNode.removeObject(this);
+      }
       this.base();
    },
 
@@ -244,10 +246,10 @@ Spaceroids.Rock = Object2D.extend({
       }
 
       if (Spaceroids.rocks == 0) {
-			new OneShotTimeout("nextLevel", 3000, function() {
-				Spaceroids.nextLevel();
-			});
-		}
+         new OneShotTimeout("nextLevel", 3000, function() {
+            Spaceroids.nextLevel();
+         });
+      }
 
       this.destroy();
    },

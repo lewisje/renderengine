@@ -32,18 +32,26 @@
  *
  */
 
+/**
+ * @class A static class with methods and fields that are helpful
+ * when dealing with two dimensional mathematics.
+ *
+ * @static
+ */
 var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
    constructor: null,
 
    /**
     * An approximation of PI for speedier calculations.
+    * @memberOf Math2D
     */
    PI: 3.14159,
 
    /**
     * An approximation of the inverse of PI so we can
     * avoid divisions.
+    * @memberOf Math2D
     */
    INV_PI: 0.31831,
 
@@ -51,6 +59,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * Convert degrees to radians.
     * @param degrees {Number} An angle in degrees
     * @type Number
+    * @memberOf Math2D
     */
    degToRad: function(degrees) {
       // ((Math.PI / 180) * deg);
@@ -61,6 +70,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * Convert radians to degrees.
     * @param radians {Number} An angle in radians
     * @type Number
+    * @memberOf Math2D
     */
    radToDeg: function(radians) {
       // ((rad * 180) / Math.PI)
@@ -74,6 +84,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @param box1 {Rectangle2D} The collision box of object 1
     * @param box2 {Rectangle2D} The collision box of object 2
     * @type Boolean
+    * @memberOf Math2D
     */
    boxBoxCollision: function(box1, box2)
    {
@@ -87,6 +98,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @param box {Rectangle2D} The collision box of the object
     * @param point {Point2D} The point to test, in world coordinates
     * @type Boolean
+    * @memberOf Math2D
     */
    boxPointCollision: function(box, point)
    {
@@ -102,6 +114,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @param p4 {Point2D} End of line 2
     * @return <tt>true</tt> if the lines intersect
     * @type Boolean
+    * @memberOf Math2D
     */
    lineLineCollision: function(p1, p2, p3, p4)
    {
@@ -123,13 +136,23 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       return (ua >= 0.0 && ua <= 1.0 && ub >= 0.0 && ub <= 1.0);
    },
 
+   /**
+    * Test to see if a line intersects a Rectangle.
+    *
+    * @param p1 {Point2D} The start of the line
+    * @param p2 {Point2D} The end of the line
+    * @param rect {Rectangle} The box to test against
+    * @return <tt>true</tt> if the line intersects the box
+    * @type Boolean
+    * @memberOf Math2D
+    */
    lineBoxCollision: function(p1, p2, rect) {
       // Convert the line to a box itself and do a quick box box test
       var lRect = new Rectangle2D(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
       return Math2D.boxBoxCollision(lRect, rect);
    },
 
-   /**
+   /*
     * Test to see if a line intersects a Rectangle.
     *
     * @param p1 {Point2D} The start of the line
@@ -168,6 +191,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @param baseVec {Vector2D} The base vector
     * @param angle {Number} The rotation in degrees
     * @type Vector2D
+    * @memberOf Math2D
     */
    getDirectionVector: function(origin, baseVec, angle)
    {
@@ -183,7 +207,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 });
 
 /**
- * 2D point class
+ * @class A 2D point class with helpful methods for manipulation
  */
 var Point2D = Base.extend(/** @scope Point2D.prototype */{
 
@@ -213,7 +237,7 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Returns true if this point is equal to the specified point.
+    * Returns <tt>true</tt> if this point is equal to the specified point.
     *
     * @param point {Point2D} The point to compare to
     * @type Boolean
@@ -355,7 +379,8 @@ Point2D.ZERO = new Point2D(0,0);
 
 
 /**
- * 2D vector class
+ * @class A 2D vector class with helpful manipulation methods.
+ * @extends Point2D
  */
 var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
@@ -413,11 +438,23 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
 });
 
+/**
+ * @class A 2D rectangle class with helpful manipulation methods.
+ */
 var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
 
    topLeft: null,
    dims: null,
 
+   /**
+    * Create a rectangle object specifying the X and Y position and
+    * the width and height.
+    *
+    * @param x {Number} The top-left X coordinate
+    * @param y {Number} The top-left Y coordinate
+    * @param width {Number} the width of the rectangle
+    * @param height {Number} The height of the rectangle
+    */
    constructor: function(x, y, width, height) {
       this.topLeft = new Point2D(0,0);
       this.dims = new Point2D(0,0);
@@ -446,7 +483,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Returns true if this rectangle is equal to the specified rectangle.
+    * Returns <tt>true</tt> if this rectangle is equal to the specified rectangle.
     *
     * @param rect {Rectangle2D} The rectangle to compare to
     * @type Boolean
@@ -551,7 +588,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Returns true if this rectangle contains the specified point.
+    * Returns <tt>true</tt> if this rectangle contains the specified point.
     *
     * @param point {Point} The point to test
     * @type Boolean
@@ -565,7 +602,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Returns a {@link Point} that contains the center point of this rectangle.
+    * Returns a {@link Point2D} that contains the center point of this rectangle.
     *
     * @type Point2D
     */
@@ -595,7 +632,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Gets a point representing the top-left corner of this rectangle.
+    * Gets a {@link Point2D} representing the top-left corner of this rectangle.
     * @type Point2D
     */
    getTopLeft: function()
@@ -604,7 +641,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Gets a point representing the width and height of this rectangle.
+    * Gets a {@link Point2D) representing the width and height of this rectangle.
     * @type Point2D
     */
    getDims: function()
@@ -613,7 +650,7 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Gets a point representing the bottom-right corner of this rectangle.
+    * Gets a {@link Point2D} representing the bottom-right corner of this rectangle.
     * @type Point2D
     */
    getBottomRight: function()
