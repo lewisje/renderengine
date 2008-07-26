@@ -1,0 +1,280 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>engine.quadtree.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>engine.quadtree.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="Quadtree.html" target="main">Quadtree</a>
+         </td>
+         <td>
+            
+A quadtree which divides up a space into smaller and smaller       divisions to quickly locate objects within that space.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="QuadtreeNode.html" target="main">QuadtreeNode</a>
+         </td>
+         <td>
+            
+A single node within a quadtree.
+         </td>
+      </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * Quadtree
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * A generalized representation of a spatial quadtree.
+<span class='linenumber'>  6</span>  *
+<span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'>  8</span>  *
+<span class='linenumber'>  9</span>  * @author: $Author: bfattori $
+<span class='linenumber'> 10</span>  * @version: $Revision: 81 $
+<span class='linenumber'> 11</span>  *
+<span class='linenumber'> 12</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 13</span>  *
+<span class='linenumber'> 14</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 15</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 16</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 17</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 18</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 19</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 20</span>  *
+<span class='linenumber'> 21</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 22</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 23</span>  *
+<span class='linenumber'> 24</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 25</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 26</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 27</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 28</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 29</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 30</span>  * THE SOFTWARE.
+<span class='linenumber'> 31</span>  *
+<span class='linenumber'> 32</span>  */</span><span class="WHIT">
+<span class='linenumber'> 33</span> 
+<span class='linenumber'> 34</span> </span><span class="COMM">/**
+<span class='linenumber'> 35</span>  * @class A single node within a quadtree.  Contains references to sub-nodes.
+<span class='linenumber'> 36</span>  *
+<span class='linenumber'> 37</span>  * @param rect {Rectangle2D} The rectangle which defines the area of this node
+<span class='linenumber'> 38</span>  * @extends SpatialNode
+<span class='linenumber'> 39</span>  */</span><span class="WHIT">
+<span class='linenumber'> 40</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">QuadtreeNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">SpatialNode.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope QuadtreeNode.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 41</span> 
+<span class='linenumber'> 42</span> </span><span class="WHIT">   </span><span class="NAME">rect</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 43</span> 
+<span class='linenumber'> 44</span> </span><span class="WHIT">   </span><span class="NAME">quads</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 45</span> 
+<span class='linenumber'> 46</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 47</span> </span><span class="WHIT">   </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 48</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 49</span> </span><span class="WHIT">      </span><span class="NAME">this.rect</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">rect</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 50</span> </span><span class="WHIT">      </span><span class="NAME">this.quads</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 51</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 52</span> 
+<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 54</span>     * Get the rectangle which defines this node.
+<span class='linenumber'> 55</span>     * @type Rectangle2D
+<span class='linenumber'> 56</span>     */</span><span class="WHIT">
+<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="NAME">getRect</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.rect</span><span class="WHIT">
+<span class='linenumber'> 59</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 60</span> 
+<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 62</span>     * Get the array of quads within this node.
+<span class='linenumber'> 63</span>     * @type Array
+<span class='linenumber'> 64</span>     */</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="NAME">getQuads</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.quads</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 68</span> 
+<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 70</span>     * Get the class name of this object
+<span class='linenumber'> 71</span>     *
+<span class='linenumber'> 72</span>     * @type String
+<span class='linenumber'> 73</span>     * @memberOf Container
+<span class='linenumber'> 74</span>     */</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 76</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"QuadtreeNode"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 77</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 78</span> 
+<span class='linenumber'> 79</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 80</span> 
+<span class='linenumber'> 81</span> </span><span class="COMM">/**
+<span class='linenumber'> 82</span>  * @class A quadtree which divides up a space into smaller and smaller
+<span class='linenumber'> 83</span>  *        divisions to quickly locate objects within that space.
+<span class='linenumber'> 84</span>  *
+<span class='linenumber'> 85</span>  * @param width {Number} The width of the area
+<span class='linenumber'> 86</span>  * @param height {Number} The height of the area
+<span class='linenumber'> 87</span>  * @param divisions {Number} The number of divisions determines the smallest node size
+<span class='linenumber'> 88</span>  * @extends SpatialContainer
+<span class='linenumber'> 89</span>  */</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Quadtree</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">SpatialContainer.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope QuadTree.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 91</span> 
+<span class='linenumber'> 92</span> </span><span class="WHIT">   </span><span class="COMM">/*
+<span class='linenumber'> 93</span>     * Build a quadtree which can be used to quickly locate objects
+<span class='linenumber'> 94</span>     * within a defined space.
+<span class='linenumber'> 95</span>     */</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">divisions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 97</span> 
+<span class='linenumber'> 98</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"QuadTree"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">smWidth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">width</span><span class="WHIT"> </span><span class="REGX">/ divisions);
+<span class='linenumber'>100</span> 
+<span class='linenumber'>101</span>       function subdivNode(node, rect) {
+<span class='linenumber'>102</span>          var hW = Math.floor(width /</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>103</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">hH</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">height</span><span class="WHIT"> </span><span class="REGX">/ 2);
+<span class='linenumber'>104</span> 
+<span class='linenumber'>105</span>          if (hW &lt; smWidth)
+<span class='linenumber'>106</span>          {
+<span class='linenumber'>107</span>             return;
+<span class='linenumber'>108</span>          }
+<span class='linenumber'>109</span> 
+<span class='linenumber'>110</span>          /</span><span class="REGX">/ This node
+<span class='linenumber'>111</span>          node = new QuadtreeNode(rect);
+<span class='linenumber'>112</span>          var curTopLeft = rect.getTopLeft();
+<span class='linenumber'>113</span> 
+<span class='linenumber'>114</span>          /</span><span class="REGX">/ Top-left
+<span class='linenumber'>115</span>          var n;
+<span class='linenumber'>116</span>          var r = new Rectangle2D(curTopLeft.x, curTopLeft.y, hW, hH);
+<span class='linenumber'>117</span>          node.getQuads()[0] = subdivNode({}, r);
+<span class='linenumber'>118</span> 
+<span class='linenumber'>119</span>          /</span><span class="REGX">/ Top-right
+<span class='linenumber'>120</span>          r = new Rectangle2D(curTopLeft.x + hW, curTopLeft.y, hW, hH);
+<span class='linenumber'>121</span>          node.getQuads()[1] = subdivNode({}, r);
+<span class='linenumber'>122</span> 
+<span class='linenumber'>123</span>          /</span><span class="REGX">/ Bottom-left
+<span class='linenumber'>124</span>          r = new Rectangle2D(curTopLeft.x, curTopLeft.y + hH, hW, hH);
+<span class='linenumber'>125</span>          node.getQuads()[2] = subdivNode({}, r);
+<span class='linenumber'>126</span> 
+<span class='linenumber'>127</span>          /</span><span class="REGX">/ Bottom-right
+<span class='linenumber'>128</span>          r = new Rectangle2D(curTopLeft.x + hW, curTopLeft.y + hH, hW, hH);
+<span class='linenumber'>129</span>          node.getQuads()[3] = subdivNode({}, r);
+<span class='linenumber'>130</span> 
+<span class='linenumber'>131</span>          return node;
+<span class='linenumber'>132</span>       }
+<span class='linenumber'>133</span> 
+<span class='linenumber'>134</span>       /</span><span class="REGX">/ Build the spatial quadtree
+<span class='linenumber'>135</span>       subdivNode(this.getRoot(), new Rectangle2D(0, 0, width, height));
+<span class='linenumber'>136</span>    },
+<span class='linenumber'>137</span> 
+<span class='linenumber'>138</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>139</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Find</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">quadtree</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="NAME">which</span><span class="WHIT"> </span><span class="NAME">contains</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">point</span><span class="WHIT"> </span><span class="NAME">specified.</span><span class="WHIT">
+<span class='linenumber'>140</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>141</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">point</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Point2D</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">point</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">locate</span><span class="WHIT">
+<span class='linenumber'>142</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">QuadtreeNode</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">start</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">search</span><span class="WHIT"> </span><span class="NAME">at</span><span class="WHIT">
+<span class='linenumber'>143</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">type</span><span class="WHIT"> </span><span class="NAME">QuadtreeNode</span><span class="WHIT">
+<span class='linenumber'>144</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>145</span>    findNodePoint: function(point, node) {
+<span class='linenumber'>146</span>       var fNode = node;
+<span class='linenumber'>147</span>       if (node.rect.containsPoint(point) && node.getQuads()[0] != null)
+<span class='linenumber'>148</span>       {
+<span class='linenumber'>149</span>          /</span><span class="REGX">/ Check to see if any of the quads contain the point
+<span class='linenumber'>150</span>          var p = 0;
+<span class='linenumber'>151</span>          while (fNode == node && p &lt; 4)
+<span class='linenumber'>152</span>          {
+<span class='linenumber'>153</span>             fNode = this.findNodePoint(point, node.getQuads()[p++]);
+<span class='linenumber'>154</span>          }
+<span class='linenumber'>155</span>       }
+<span class='linenumber'>156</span>       return fNode;
+<span class='linenumber'>157</span>    },
+<span class='linenumber'>158</span> 
+<span class='linenumber'>159</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>160</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Find</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">smallest</span><span class="WHIT"> </span><span class="NAME">quadtree</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="NAME">which</span><span class="WHIT"> </span><span class="NAME">contains</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">rectangle</span><span class="WHIT"> </span><span class="NAME">specified.</span><span class="WHIT">
+<span class='linenumber'>161</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>162</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">rect</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Rectangle2D</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">rectangle</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">locate</span><span class="WHIT">
+<span class='linenumber'>163</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">QuadtreeNode</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">start</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">search</span><span class="WHIT"> </span><span class="NAME">at</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">type</span><span class="WHIT"> </span><span class="NAME">QuadtreeNode</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>166</span>    findNodeRect: function(rect, node) {
+<span class='linenumber'>167</span>       var fNode = node;
+<span class='linenumber'>168</span>       if (node.rect.containsRect(rect) && node.getQuads()[0] != null)
+<span class='linenumber'>169</span>       {
+<span class='linenumber'>170</span>          /</span><span class="REGX">/ Check to see if any of the quads contain the rect
+<span class='linenumber'>171</span>          var p = 0;
+<span class='linenumber'>172</span>          while (fNode == node && p &lt; 4)
+<span class='linenumber'>173</span>          {
+<span class='linenumber'>174</span>             fNode = this.findNodeRect(rect, node.getQuads()[p++]);
+<span class='linenumber'>175</span>          }
+<span class='linenumber'>176</span>       }
+<span class='linenumber'>177</span>       return fNode;
+<span class='linenumber'>178</span>    },
+<span class='linenumber'>179</span> 
+<span class='linenumber'>180</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>181</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Returns</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">potential</span><span class="WHIT"> </span><span class="NAME">collision</span><span class="WHIT"> </span><span class="NAME">list</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">objects</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="NAME">are</span><span class="WHIT"> </span><span class="NAME">contained</span><span class="WHIT">
+<span class='linenumber'>182</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">within</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">defined</span><span class="WHIT"> </span><span class="NAME">sub</span><span class="PUNC">-</span><span class="NAME">space</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">container.</span><span class="WHIT">
+<span class='linenumber'>183</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>184</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">QuadtreeNode</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">node</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">search</span><span class="WHIT"> </span><span class="NAME">against</span><span class="WHIT">
+<span class='linenumber'>185</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">type</span><span class="WHIT"> </span><span class="NAME">HashContainer</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>187</span>    getPCL: function(node) {
+<span class='linenumber'>188</span> 
+<span class='linenumber'>189</span>    },
+<span class='linenumber'>190</span> 
+<span class='linenumber'>191</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>192</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Get</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">class</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT">
+<span class='linenumber'>193</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>194</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">type</span><span class="WHIT"> </span><span class="NAME">String</span><span class="WHIT">
+<span class='linenumber'>195</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="TOKN"></span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Jul 26 2008 14:07:51 GMT-0400 (EDT)</div>
+</body>
+</html>
