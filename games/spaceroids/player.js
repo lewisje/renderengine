@@ -79,6 +79,13 @@ Spaceroids.Player = Object2D.extend({
 
    },
 
+   destroy: function() {
+      AssertWarn(this.ModelData.lastNode, "Player not located in a node!");
+		if (this.ModelData && this.modelData.lastNode) {
+			this.ModelData.lastNode.removeObject(this);
+		}
+	},
+
    /**
     * Update the player within the rendering context.  This draws
     * the shape to the context, after updating the transform of the
