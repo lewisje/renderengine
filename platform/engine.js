@@ -1380,7 +1380,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
 // Start the console so logging can take place immediately
 $(document).ready(function() {
-	alert("here");
 	Console.startup();
 
 	// Start the engine
