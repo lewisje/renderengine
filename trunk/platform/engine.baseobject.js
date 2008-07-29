@@ -158,7 +158,7 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
     *
     * @type String
     */
-   toString: function() {
+   serialize: function() {
       return EngineSupport.toJSONString(this);
    }
 });

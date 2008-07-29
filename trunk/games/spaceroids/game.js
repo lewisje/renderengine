@@ -72,7 +72,7 @@ var Spaceroids = Game.extend({
    centerPoint: null,
    areaScale: 0.9,
 
-   engineFPS: 25,
+   engineFPS: 60,
 
    collisionModel: null,
 
@@ -290,8 +290,8 @@ var Spaceroids = Game.extend({
       this.addScore();
       this.scorePoints(0);
 
+		// Start the "music" track
       Spaceroids.soundNum = 1;
-
       Spaceroids.gameSound = new Interval("gameSound", 1000, function() {
          if (Spaceroids.soundNum == 1) {
             Spaceroids.soundLoader.get("lowboop").play();
