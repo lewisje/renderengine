@@ -35,7 +35,10 @@ The problem is that using `new` like this will create an object instance that we
 
 You can see that it was a small change, but the effect is huge.  When the object instance's `destroy()` method is called, we intercept this and can return the instance to a pool of similar objects.  To ensure that an object isn't left in some previous state, objects must now implement a `release()` method if they extend from the `PooledObject` class.  This method is called to return instance fields to an "initialized" state.
 
-Additionally, `getClassName()` is now a class method instead of an instance method.  This makes a lot of sense for object pooling to work.  However, it means that you cannot get the class name directly from an object.  You can, however, get it from the class constructor: `this.constructor.getClassName()` instead of `this.getClassName()`.
+Additionally, `getClassName()` is now a class method instead of an instance method.  This makes a lot of sense for object pooling to work.  However, it means that you cannot get the class name directly from an object.  You can, however, get it from the class constructor:
+{{{
+   var className = this.constructor.getClassName();
+}}}
 
 Here you can see `BaseObject` which has undergone some changes:
 
