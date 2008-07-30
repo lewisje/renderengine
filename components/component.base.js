@@ -89,6 +89,13 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
       this.base(name);
    },
 
+   release: function() {
+      this.base();
+      this.priority = 0;
+      this.type = -1;
+      this.host = null;
+   },
+
    /**
     * Set the host object this component exists within.
     *
@@ -151,15 +158,6 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    },
 
    /**
-    * Get the class name of this object
-    *
-    * @type String
-    */
-   getClassName: function() {
-      return "BaseComponent";
-   },
-
-   /**
     * Converts the type name to a string.
     *
     * @type String
@@ -179,6 +177,15 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
 
 
 }, /** @scope BaseComponent.prototype */{
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "BaseComponent";
+   },
 
    /**
     * An input component

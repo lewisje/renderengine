@@ -36,14 +36,21 @@
  *        draw method.  The remainder of the functionality is
  *        handled by this abstract class.
  */
-var Particle = Base.extend(/** @scope Particle.prototype */{
+var Particle = PooledObject.extend(/** @scope Particle.prototype */{
 
    life: 0,
 
    engine: null,
 
    constructor: function(lifetime) {
+      this.base("Particle");
       this.life = lifetime;
+   },
+
+   release: function() {
+      this.base();
+      this.life = 0;
+      this.engine = null;
    },
 
    init: function(pEngine, time) {
@@ -67,8 +74,8 @@ var Particle = Base.extend(/** @scope Particle.prototype */{
    },
 
    draw: function(renderContext, time) {
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -77,7 +84,6 @@ var Particle = Base.extend(/** @scope Particle.prototype */{
    getClassName: function() {
       return "Particle";
    }
-
 });
 
 
@@ -99,6 +105,13 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       this.base("ParticleEngine");
       this.particles = [];
       this.dead = [];
+   },
+
+   release: function() {
+      this.base();
+      this.particles = null,
+      this.lastTime = 0;
+      this.dead = null;
    },
 
    /**
@@ -128,6 +141,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
    kill: function() {
       for (var d = 0; d < this.dead.length; d++)
       {
+         this.dead[d].destroy();
          EngineSupport.arrayRemove(this.particles, this.dead[d]);
       }
       this.dead = [];
@@ -176,8 +190,9 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          // Kill off dead particles
          this.kill();
       }
-   },
+   }
 
+}, {
    /**
     * Get the class name of this object
     *
@@ -186,5 +201,4 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
    getClassName: function() {
       return "ParticleEngine";
    }
-
 });

@@ -44,6 +44,12 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       this.font = font;
    },
 
+   release: function() {
+      this.base();
+      this.font = null;
+      this.spacing = 0;
+   },
+
    /**
     * Calculate the bounding box for the text and set it on the host object.
     * @private
@@ -176,8 +182,8 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 
       // Reset the composition operation
       renderContext.get2DContext().globalCompositeOperation = "source-over";
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     * @type String
@@ -185,5 +191,4 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
    getClassName: function() {
       return "BitmapText";
    }
-
 });

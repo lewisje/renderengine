@@ -46,6 +46,11 @@ var NotifierComponent = BaseComponent.extend(/** @scope NotifierComponent.protot
       this.notifyLists = {};
    },
 
+   release: function() {
+      this.base();
+      this.notifyLists = null;
+   },
+
    /**
     * Add a recipient function for the event type specified.  The function
     * will be passed the event object as its only parameter.
@@ -120,8 +125,8 @@ var NotifierComponent = BaseComponent.extend(/** @scope NotifierComponent.protot
 
          } while (p < this.notifyLists[type].length);
       }
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -131,5 +136,4 @@ var NotifierComponent = BaseComponent.extend(/** @scope NotifierComponent.protot
    getClassName: function() {
       return "NotifierComponent";
    }
-
 });

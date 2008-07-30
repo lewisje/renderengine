@@ -63,6 +63,15 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
       }
 
       // Create an image element
+      var image = null;
+      if (url != null) {
+         image = this.loadImageResource(url, width, height);
+      }
+
+      this.base(name, image);
+   },
+
+   loadImageResource: function(url, width, height) {
       var image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
       var thisObj = this;
       image.bind("load", function() {
@@ -71,8 +80,7 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
 
       // Append it to the container so it can load the image
       $(this.getElement()).append(image);
-
-      this.base(name, image);
+      return image;
    },
 
    get: function(name) {

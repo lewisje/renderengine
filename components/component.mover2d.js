@@ -58,6 +58,15 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.vDecay = 0;
    },
 
+   release: function() {
+      this.base();
+      this.lastTime = -1;
+      this.velocity = null;
+      this.vDecay = 0;
+      this.angularVelocity = 0;
+      this.lPos = null;
+   },
+
    /**
     * Updates the transformation of the component, setting the
     * position and rotation based on the time that has elapsed since
@@ -152,8 +161,8 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
     */
    getAngularVelocity: function() {
       return this.angularVelocity;
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -163,5 +172,4 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    getClassName: function() {
       return "Mover2DComponent";
    }
-
 });

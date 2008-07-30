@@ -58,6 +58,21 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    backgroundColor: null,
 
+   release: function() {
+      this.base();
+      this.width= 0;
+      this.height= 0;
+      this.lineStyle= null;
+      this.fillStyle= null;
+      this.lineWidth= 1;
+      this.position= null;
+      this.rotation= 0;
+      this.scaleX= 1;
+      this.scaleY= 1;
+      this.bBox= null;
+      this.backgroundColor= null;
+   },
+
    /**
     * Reset the context, clearing it and preparing it for drawing.
     */
@@ -511,8 +526,8 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param radius {Number} The radius of the arc
     */
    arcTo: function(point1, point2, radius) {
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -522,5 +537,4 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    getClassName: function() {
       return "RenderContext2D";
    }
-
 });

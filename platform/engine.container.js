@@ -35,7 +35,7 @@
  *
  * @param container {Container} The container to iterate over.
  */
-var Iterator = Base.extend(/** @scope Iterator.prototype */{
+var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 
    idx: 0,
 
@@ -44,6 +44,11 @@ var Iterator = Base.extend(/** @scope Iterator.prototype */{
    constructor: function(container) {
       this.idx = 0;
       this.c = container;
+   },
+
+   release: function() {
+      this.idx = 0;
+      this.c = null;
    },
 
    /**
@@ -64,8 +69,9 @@ var Iterator = Base.extend(/** @scope Iterator.prototype */{
     */
    hasNext: function() {
       return (this.idx < this.c.size);
-   },
+   }
 
+}, {
    /**
     * Get the class name of this object
     *
@@ -75,7 +81,6 @@ var Iterator = Base.extend(/** @scope Iterator.prototype */{
    getClassName: function() {
       return "Iterator";
    }
-
 });
 
 /**
@@ -96,13 +101,18 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       this.objects = [];
    },
 
+   release: function() {
+      this.base();
+      this.objects = null;
+   },
+
    /**
     * Destroy all objects contained within this object.  Calls the
     * <tt>destroy()</tt> method on each object, giving them a chance
     * to perform clean up operations.
     */
    destroy: function() {
-		this.cleanUp();
+      this.cleanUp();
       this.base();
    },
 
@@ -184,8 +194,8 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
          var o = this.objects.shift();
          o.destroy();
       }
-		this.clear();
-	},
+      this.clear();
+   },
 
    /**
     * Get the array of objects within this container.
@@ -207,10 +217,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    sort: function(fn) {
       Assert((fn != null), "A function must be provided to sort the Container");
-      Console.log("Sorting ", this.getClassName(), "[" + this.getId() + "]");
+      Console.log("Sorting ", this.getName(), "[" + this.getId() + "]");
       this.objects.sort(fn);
-   },
+   }
 
+}, {
    /**
     * Get the class name of this object
     *

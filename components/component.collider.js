@@ -50,6 +50,11 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       this.collisionModel = collisionModel;
    },
 
+   release: function() {
+      this.base();
+      this.collisionModel = null;
+   },
+
    /**
     * Update the collision model that this component was initialized with.
     * Creates an object called <tt>ModelData</tt> on the host object which contains
@@ -122,7 +127,9 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
             }
          }, this);
       }
-   },
+   }
+
+}, /** @scope ColliderComponent.prototype */{ // Statics
 
    /**
     * Get the class name of this object
@@ -131,9 +138,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     */
    getClassName: function() {
       return "ColliderComponent";
-   }
-
-}, /** @scope ColliderComponent.prototype */{ // Statics
+   },
 
    /**
     * When <tt>onCollide</tt> is called on the host object, it should

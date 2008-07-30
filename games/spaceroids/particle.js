@@ -52,6 +52,12 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       this.vec.mul(vel);
    },
 
+   release: function() {
+      this.base();
+      this.pos = null;
+      this.vec = null;
+   },
+
    /**
     * Called by the particle engine to draw the particle to the rendering
     * context.
@@ -67,6 +73,10 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
    }
 
 }, {
+   getClassName: function() {
+      return "SimpleParticle";
+   },
+
    // A simple reference point for the "up" vector
    ref: new Point2D(0, -1)
 });

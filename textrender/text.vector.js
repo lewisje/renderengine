@@ -44,6 +44,12 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       this.rText = [];
    },
 
+   release: function() {
+      this.base();
+      this.rText = null;
+      this.spacing = 0;
+   },
+
    /**
     * Calculate the bounding box for the text and set it on the host object.
     * @private
@@ -153,7 +159,10 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
       renderContext.setLineWidth(this.getTextWeight());
       renderContext.drawPolyline(this.rText);
-   },
+   }
+
+
+}, { // Statics
 
    /**
     * Get the class name of this object
@@ -161,10 +170,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
     */
    getClassName: function() {
       return "VectorText";
-   }
-
-
-}, { // Statics
+   },
 
    /**
     * The character set

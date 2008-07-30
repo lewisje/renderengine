@@ -62,6 +62,14 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.setElement(surface);
    },
 
+   release: function() {
+      this.base();
+      this.surface = null;
+      this.transformStackDepth = 0;
+      this.renderScaleX = 1;
+      this.renderScaleY = 1;
+   },
+
    /**
     * Destroy the rendering context, and detach the surface from its
     * parent container.
@@ -220,17 +228,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     */
    getNearObjects: function(obj) {
       return {};
-   },
-
-   /**
-    * Get the class name of this object
-    *
-    * @type String
-    */
-   getClassName: function() {
-      return "RenderContext";
    }
-
 }, /** @scope RenderContext.prototype */{ // Static
 
    /**
@@ -247,6 +245,15 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       }
 
       return obj1.getZIndex() - obj2.getZIndex();
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
+   getClassName: function() {
+      return "RenderContext";
    }
 
 });

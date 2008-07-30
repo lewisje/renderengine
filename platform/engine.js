@@ -416,6 +416,10 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    indexOf: function(array, obj, from) {
+      if (!array) {
+         return -1;
+      }
+
       if (Array.prototype.indexOf) {
          return array.indexOf(obj, from);
       }
@@ -446,6 +450,10 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    arrayRemove: function(array, obj) {
+      if (!array) {
+         return;
+      }
+
       var idx = EngineSupport.indexOf(array, obj);
       if (idx != -1)
       {
@@ -471,6 +479,10 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    filter: function(array, fn, thisp) {
+      if (!array) {
+         return null;
+      }
+
       if (Array.prototype.filter) {
          return array.filter(fn, thisp)
       }
@@ -504,6 +516,10 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    forEach: function(array, fn, thisp) {
+      if (!array) {
+         return;
+      }
+
       if (Array.prototype.forEach) {
          array.forEach(fn, thisp);
       }
@@ -855,6 +871,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
       this.gameObjects = null;
 
+      // Dump the object pool
+      PooledObject.objectPool = null;
+
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
 
       // Perform final cleanup
@@ -1128,6 +1147,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Engine platform
       this.load("/platform/engine.math2d.js");
       this.load("/platform/engine.game.js");
+      this.load("/platform/engine.pooledobject.js");
       this.load("/platform/engine.baseobject.js");
       this.load("/platform/engine.timers.js");
       this.load("/platform/engine.container.js");

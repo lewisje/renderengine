@@ -60,17 +60,17 @@ Spaceroids.Player = Object2D.extend({
 
       // Add components to move and draw the player
       if (window.opera && opera.wiiremote) {
-         this.add(new WiimoteInputComponent("input"));
+         this.add(WiimoteInputComponent.create("input"));
       } else {
-         this.add(new KeyboardInputComponent("input"));
+         this.add(KeyboardInputComponent.create("input"));
       }
 
-      this.add(new Mover2DComponent("move"));
-      this.add(new Vector2DComponent("draw"));
-      this.add(new Vector2DComponent("thrust"));
-      this.add(new ColliderComponent("collider", Spaceroids.collisionModel));
+      this.add(Mover2DComponent.create("move"));
+      this.add(Vector2DComponent.create("draw"));
+      this.add(Vector2DComponent.create("thrust"));
+      this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
 
-      this.tip = new Point2D(0, -1);
+      this.tip = Point2D.create(0, -1);
       this.players--;
 
       this.alive = true;
@@ -81,10 +81,22 @@ Spaceroids.Player = Object2D.extend({
 
    destroy: function() {
       AssertWarn(this.ModelData.lastNode, "Player not located in a node!");
-		if (this.ModelData && this.modelData.lastNode) {
-			this.ModelData.lastNode.removeObject(this);
-		}
-	},
+      if (this.ModelData && this.modelData.lastNode) {
+         this.ModelData.lastNode.removeObject(this);
+      }
+   },
+
+   release: function() {
+      this.base();
+      this.size = 4;
+      this.rotDir = 0;
+      this.thrusting = false;
+      this.bullets = 0;
+      this.tip = null;
+      this.players = 3;
+      this.alive = false;
+      this.playerShape = null;
+   },
 
    /**
     * Update the player within the rendering context.  This draws
@@ -188,7 +200,7 @@ Spaceroids.Player = Object2D.extend({
    setup: function(pWidth, pHeight) {
 
       // Playfield bounding box for quick checks
-      this.pBox = new Rectangle2D(0, 0, pWidth, pHeight);
+      this.pBox = Rectangle2D.create(0, 0, pWidth, pHeight);
 
       // Randomize the position and velocity
       var c_mover = this.getComponent("move");
@@ -202,7 +214,7 @@ Spaceroids.Player = Object2D.extend({
       var s = [];
       for (var p = 0; p < shape.length; p++)
       {
-         var pt = new Point2D(shape[p][0], shape[p][1]);
+         var pt = Point2D.create(shape[p][0], shape[p][1]);
          pt.mul(this.size);
          s.push(pt);
       }
@@ -218,7 +230,7 @@ Spaceroids.Player = Object2D.extend({
       s = [];
       for (var p = 0; p < thrust.length; p++)
       {
-         var pt = new Point2D(thrust[p][0], thrust[p][1]);
+         var pt = Point2D.create(thrust[p][0], thrust[p][1]);
          pt.mul(this.size);
          s.push(pt);
       }
@@ -237,7 +249,7 @@ Spaceroids.Player = Object2D.extend({
     * in the playfield and keep track of the active number of bullets.
     */
    shoot: function() {
-      var b = new Spaceroids.Bullet(this);
+      var b = Spaceroids.Bullet.create(this);
       this.getRenderContext().add(b);
       this.bullets++;
       Spaceroids.soundLoader.get("shoot").play({volume: 15});
@@ -265,7 +277,7 @@ Spaceroids.Player = Object2D.extend({
          if (this.ModelData.lastNode.getObjects().length > 1)
          {
             var pl = this;
-            new OneShotTimeout("respawn", 250, function() { pl.respawn(); });
+            OneShotTimeout.create("respawn", 250, function() { pl.respawn(); });
             return;
          }
       }
@@ -299,7 +311,7 @@ Spaceroids.Player = Object2D.extend({
       // Make some particles
       for (var x = 0; x < 8; x++)
       {
-         Spaceroids.pEngine.addParticle(new SimpleParticle(this.getPosition(), 3000));
+         Spaceroids.pEngine.addParticle(SimpleParticle.create(this.getPosition(), 3000));
       }
 
       this.getComponent("move").setVelocity(0);
@@ -315,7 +327,7 @@ Spaceroids.Player = Object2D.extend({
       {
          // Set a timer to spawn another player
          var pl = this;
-         new OneShotTimeout("respawn", 3000, function() { pl.respawn(); });
+         OneShotTimeout.create("respawn", 3000, function() { pl.respawn(); });
       }
       else
       {
@@ -412,18 +424,17 @@ Spaceroids.Player = Object2D.extend({
     * WiiMote support -------------------------------------------------------------------------------------
     */
 
+
+}, { // Static
+
    /**
     * Get the class name of this object
     *
     * @type String
-
     */
    getClassName: function() {
-      return "Player";
-   }
-
-
-}, { // Static
+      return "Spaceroids.Player";
+   },
 
    /** The player shape
     * @private

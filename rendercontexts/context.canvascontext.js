@@ -77,6 +77,12 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.base("CanvasContext", canvas);
    },
 
+   release: function() {
+      this.base();
+      this.context2D = null;
+      this.mouseHandler = false;
+   },
+
    setWorldScale: function(scaleX, scaleY) {
       this.base(scaleX, scaleY);
 
@@ -446,8 +452,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    arcTo: function(point1, point2, radius) {
       this.get2DContext().arcTo(point1.x, point1.y, point2.x, point2.y, radius);
       this.base(point1, point2, radius);
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *

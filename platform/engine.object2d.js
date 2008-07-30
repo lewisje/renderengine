@@ -47,6 +47,12 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       this.lastPosition = new Point2D(5,5);
    },
 
+   release: function() {
+      this.base();
+      this.zIndex = 1;
+      this.bBox = null;
+   },
+
    /**
     * Set the bounding box of this object
     *
@@ -122,8 +128,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     */
    getZIndex: function() {
       return this.zIndex;
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -133,5 +139,4 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    getClassName: function() {
       return "Object2D";
    }
-
 });

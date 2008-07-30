@@ -107,6 +107,13 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       }
    },
 
+   release: function() {
+      this.base();
+      this.divisions = 1;
+      this.xLocator = 1;
+      this.yLocator = 1;
+   },
+
    /**
     * Find the node that contains the specified point.
     *
@@ -174,8 +181,9 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
          }
       }
       return o;
-   },
+   }
 
+}, {
    /**
     * Get the class name of this object
     *
@@ -185,5 +193,4 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
    getClassName: function() {
       return "SpatialGrid";
    }
-
 });

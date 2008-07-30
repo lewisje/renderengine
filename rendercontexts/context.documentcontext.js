@@ -88,8 +88,8 @@ var DocumentContext = RenderContext2D.extend(/** @scope DocumentContext.prototyp
          this.getSurface().removeChild(obj.getElement());
       }
       this.base(obj);
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *

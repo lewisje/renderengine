@@ -123,6 +123,13 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
       this.height = height;
    },
 
+   release: function() {
+      this.base();
+      this.root = null;
+      this.width = 0;
+      this.height = 0;
+   },
+
    /**
     * Get the width of the container.
     * @type Number
@@ -165,8 +172,9 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     */
    getPCL: function(point) {
       return new HashContainer();
-   },
+   }
 
+}, {
    /**
     * Get the class name of this object
     *

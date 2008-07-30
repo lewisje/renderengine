@@ -39,6 +39,10 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    renderContext: null,
 
+   release: function() {
+      this.base();
+      this.renderContext = null;
+   },
 
    /**
     * Destroy all of the components within this object and
@@ -46,9 +50,9 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * @memberOf HostObject
     */
    destroy: function() {
-		if (this.getRenderContext()) {
-	      this.getRenderContext().remove(this);
-		}
+      if (this.getRenderContext()) {
+         this.getRenderContext().remove(this);
+      }
       this.base();
    },
 
@@ -154,18 +158,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     */
    getComponent: function(name) {
       return this.get(name.toUpperCase());
-   },
-
-   /**
-    * Get the class name of this object
-    *
-    * @type String
-    * @memberOf HostObject
-    */
-   getClassName: function() {
-      return "HostObject";
    }
-
 
 }, /** @scope HostObject.prototype */{  // Interface
 
@@ -179,6 +172,16 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    componentSort: function(component1, component2) {
       return ((component1.getType() - component2.getType()) +
               ((1 / component1.getPriority()) - (1 / component2.getPriority())));
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    * @memberOf HostObject
+    */
+   getClassName: function() {
+      return "HostObject";
    }
 
 });
