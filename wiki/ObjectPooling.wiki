@@ -1,3 +1,4 @@
+#labels Phase-Design,Featured
 = Introduction =
 
 Javascript uses a garbage collector to keep the memory clean.  Much like Java, it will only clean up objects that no longer have a reference back to them.  With many Javascript engines, the garbage collector runs at regular intervals to perform this memory cleanup and return memory to a heap for later usage.  In Firefox 3, this is quite obvious in the example game when the engine pauses for a half second or more.  The garbage collector is looking for unreferenced objects and returning the memory to the heap.
