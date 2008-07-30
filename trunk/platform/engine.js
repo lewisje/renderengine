@@ -38,7 +38,7 @@
  */
 var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    constructor: function() {
-	},
+   },
 
    dumpWindow: null,
 
@@ -73,17 +73,17 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
 
    /** @private */
    dump: function() {
-		var s = "";
-		for (var x = 0; x < arguments.length; x++) {
-			if (arguments[x].length) {
-				for (var z = 0; z < arguments[x].length; z++) {
-					s += arguments[x][z].toString() + "<br/>";
-				}
-			} else {
-				s += arguments[x].toString() + "<br/>";
-			}
-		}
-		return s;
+      var s = "";
+      for (var x = 0; x < arguments.length; x++) {
+         if (arguments[x].length) {
+            for (var z = 0; z < arguments[x].length; z++) {
+               s += arguments[x][z].toString() + "<br/>";
+            }
+         } else {
+            s += arguments[x].toString() + "<br/>";
+         }
+      }
+      return s;
    },
 
    /** @private */
@@ -123,46 +123,46 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
 
 /**
  * @class A debug console that will use a pre-defined element to display its output.  You must create
- *			 an element with the class "debug-console" for this to function properly.  This object is created,
- *			 as necessary, by the {@link Console} object.
+ *        an element with the class "debug-console" for this to function properly.  This object is created,
+ *        as necessary, by the {@link Console} object.
  * @extends ConsoleRef
  */
 var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
-	constructor: function() {
-		$("head", document).append(
-				"<style> " +
-				".debug-console { font-family: 'Lucida Console',Courier; font-size: 8pt; color: black; } " +
-				".debug-console .console-debug { background: white; } " +
-				".debug-console .console-warn { font-style: italics; background: #00ffff; } " +
-				".debug-console .console-error { color: red; background: yellow; font-weight: bold; } " +
-				"</style>"
-		);
-	},
+   constructor: function() {
+      $("head", document).append(
+            "<style> " +
+            ".debug-console { font-family: 'Lucida Console',Courier; font-size: 8pt; color: black; } " +
+            ".debug-console .console-debug { background: white; } " +
+            ".debug-console .console-warn { font-style: italics; background: #00ffff; } " +
+            ".debug-console .console-error { color: red; background: yellow; font-weight: bold; } " +
+            "</style>"
+      );
+   },
 
-	clean: function() {
-		if ($(".debug-console > span").length > 150) {
-			$(".debug-console > span:lt(150)").remove();
-		}
-	},
+   clean: function() {
+      if ($(".debug-console > span").length > 150) {
+         $(".debug-console > span:lt(150)").remove();
+      }
+   },
 
-	scroll: function() {
-		var w = $(".debug-console")[0];
-		if (w.scrollTop <= w.scrollHeight - 50) {
-			return;
-		} else {
-			$(".debug-console")[0].scrollTop = 10000;
-		}
-	},
+   scroll: function() {
+      var w = $(".debug-console")[0];
+      if (w.scrollTop <= w.scrollHeight - 50) {
+         return;
+      } else {
+         $(".debug-console")[0].scrollTop = 10000;
+      }
+   },
 
    /**
     * Write a debug message to the console
     * @param msg {String} The message to write
     */
    info: function() {
-		this.clean();
-		$(".debug-console").append($("<span class='console-info'>" + this.dump(arguments) + "</span>"));
-		this.scroll();
+      this.clean();
+      $(".debug-console").append($("<span class='console-info'>" + this.dump(arguments) + "</span>"));
+      this.scroll();
    },
 
    /**
@@ -170,9 +170,9 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     * @param msg {String} The message to write
     */
    debug: function() {
-		this.clean();
-		$(".debug-console").append($("<span class='console-debug'>" + this.dump(arguments) + "</span>"));
-		this.scroll();
+      this.clean();
+      $(".debug-console").append($("<span class='console-debug'>" + this.dump(arguments) + "</span>"));
+      this.scroll();
    },
 
    /**
@@ -180,9 +180,9 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     * @param msg {String} The message to write
     */
    warn: function() {
-		this.clean();
-		$(".debug-console").append($("<span class='console-warn'>" + this.dump(arguments) + "</span>"));
-		this.scroll();
+      this.clean();
+      $(".debug-console").append($("<span class='console-warn'>" + this.dump(arguments) + "</span>"));
+      this.scroll();
    },
 
    /**
@@ -190,14 +190,14 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     * @param msg {String} The message to write
     */
    error: function() {
-		this.clean();
-		$(".debug-console").append($("<span class='console-error'>" + this.dump(arguments) + "</span>"));
-		this.scroll();
+      this.clean();
+      $(".debug-console").append($("<span class='console-error'>" + this.dump(arguments) + "</span>"));
+      this.scroll();
    },
 
-	/** @private **/
+   /** @private **/
    init: function() {
-	}
+   }
 });
 
 /**
@@ -208,7 +208,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
  */
 var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
    constructor: function () {
-	},
+   },
 
    /**
     * Write a debug message to the console
@@ -273,9 +273,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * Start up the console.
     */
    startup: function() {
-		if ($(".debug-console").length == 1) {
-			this.consoleRef = new HTMLConsoleRef();
-		}
+      if ($(".debug-console").length == 1) {
+         this.consoleRef = new HTMLConsoleRef();
+      }
       else if (window.console) {
          // Firebug
          this.consoleRef = window.console;
@@ -1399,17 +1399,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
  });
 
 // Start the console so logging can take place immediately
-$(document).ready(function() {
-	Console.startup();
+Console.startup();
 
-	// Start the engine
-	Engine.startup();
+// Start the engine
+Engine.startup();
 
-	// Read any engine-level query params
-	var p = EngineSupport.getQueryParams();
-	if (p["debug"] != null && p["debug"] == "true")
-	{
-		Engine.setDebugMode(true);
-		Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
-	}
-});
+// Read any engine-level query params
+var p = EngineSupport.getQueryParams();
+if (p["debug"] != null && p["debug"] == "true")
+{
+   Engine.setDebugMode(true);
+   Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+}
