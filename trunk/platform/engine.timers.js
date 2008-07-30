@@ -58,6 +58,12 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
       this.restart();
    },
 
+   release: function() {
+      this.base();
+      this.timer = null;
+      this.running = false;
+   },
+
    /**
     * Stop the timer and remove it from the system
     */
@@ -146,8 +152,8 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
     */
    getInterval: function() {
       return this.interval;
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     * @type String
@@ -155,8 +161,6 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    getClassName: function() {
       return "Timer";
    }
-
-
 });
 
 /**
@@ -183,8 +187,8 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
     */
    restart: function() {
       this.setTimer(window.setTimeout(this.getCallback(), this.getInterval()));
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     * @type String
@@ -192,8 +196,6 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
    getClassName: function() {
       return "Timeout";
    }
-
-
 });
 
 /**
@@ -229,7 +231,8 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
       }
 
       this.base();
-   },
+   }
+}, {
 
    /**
     * Get the class name of this object
@@ -238,7 +241,6 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
    getClassName: function() {
       return "OneShotTimeout";
    }
-
 });
 
 /**
@@ -265,8 +267,8 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
     */
    restart: function() {
       this.setTimer(window.setInterval(this.getCallback(), this.getInterval()));
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     * @type String
@@ -274,5 +276,4 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
    getClassName: function() {
       return "Interval";
    }
-
 });

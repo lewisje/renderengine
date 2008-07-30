@@ -51,6 +51,11 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
       this.objHash = {};
    },
 
+   release: function() {
+      this.base();
+      this.objHash = null;
+   },
+
    /**
     * Returns <tt>true</tt> if the object name is already in
     * the hash.
@@ -160,15 +165,16 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
       this.objHash = {};
    },
 
-	/**
-	 * Cleans up the references to the objects (destroys them) within
-	 * the container.
-	 */
+   /**
+    * Cleans up the references to the objects (destroys them) within
+    * the container.
+    */
    cleanUp: function() {
-		this.base();
-		this.clear();
-	},
+      this.base();
+      this.clear();
+   }
 
+}, {
    /**
     * Get the class name of this object
     *
@@ -178,5 +184,4 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    getClassName: function() {
       return "HashContainer";
    }
-
 });

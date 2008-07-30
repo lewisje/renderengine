@@ -38,77 +38,13 @@
  * object references, thus keeping the memory requirements low.
  *
  */
-var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
-   id: -1,
-
-   name: "",
+var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
 
    element: null,
 
-   /**
-    * Returns <tt>true</tt> if the object is an object within the
-    * Render Engine.  All objects should extend this class.
-    * @memberOf BaseObject
-    */
-   isRenderEngineObject: function() {
-      return true;
-   },
-
-   /**
-    * Create an instance of this object, assigning a name to it.  An
-    * object reference will be maintained by the {@link Engine} class,
-    * which gives the object final responsibility for making sure the
-    * object can be destroyed.
-    *
-    * @param name {String} The name of the object from which the Id will be generated.
-    * @memberOf BaseObject
-    * @constructor
-    */
-   constructor: function(name) {
-      this.name = name;
-      this.id = Engine.create(this);
-   },
-
-   /**
-    * Destroy this object instance (remove it from the Engine).  The object
-    * may still exist as a reference from another object, but will not
-    * be managed by the Engine any longer.  Untracked objects pose the
-    * potential for memory leaks.
-    * @memberOf BaseObject
-    */
-   destroy: function() {
-      // Remove any defined element from it's parent, unless it's the document body
-      if (this.element && this.element.parentNode && this.element != document.body) {
-         Console.log("DOM element ", this.element, " removed from ", this.element.parentNode);
-         this.element.parentNode.removeChild(this.element);
-      }
-
-      // Clean up the reference to this object
-      Engine.destroy(this);
+   release: function() {
+      this.base();
       this.element = null;
-   },
-
-   /**
-    * Get the managed Id of this object within the Engine.
-    *
-    * @return This object's engine Id
-    * @type String
-    * @memberOf BaseObject
-    * @memberOf BaseObject
-    */
-   getId: function() {
-      return this.id;
-   },
-
-   /**
-    * Get the original name this object was created with.
-    *
-    * @return The name used when creating this object
-    * @type String
-    * @memberOf BaseObject
-    */
-   getName: function() {
-      return this.name;
    },
 
    /**
@@ -137,7 +73,9 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
     * Update the state of the object.
     */
    update: function(renderContext, time) {
-   },
+   }
+
+}, {
 
    /**
     * Get the class name of this object
@@ -146,19 +84,7 @@ var BaseObject = Base.extend(/** @scope BaseObject.prototype */{
     * @memberOf BaseObject
     */
    getClassName: function() {
-      if (!this.hasOwnProperty("getClassName")) {
-         Console.warn("Object ", this.toString(), " is missing getClassName()");
-      }
       return "BaseObject";
-   },
-
-   /**
-    * Output the object in JSON format so it can be reconstructed from
-    * a text stream.
-    *
-    * @type String
-    */
-   serialize: function() {
-      return EngineSupport.toJSONString(this);
    }
+
 });

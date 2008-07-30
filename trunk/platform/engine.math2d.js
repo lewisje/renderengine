@@ -148,7 +148,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     */
    lineBoxCollision: function(p1, p2, rect) {
       // Convert the line to a box itself and do a quick box box test
-      var lRect = new Rectangle2D(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+      var lRect = Rectangle2D.create(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
       return Math2D.boxBoxCollision(lRect, rect);
    },
 
@@ -186,7 +186,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
    /**
     * A static method used to calculate a direction vector
-    * for the player's heading.
+    * from a heading angle.
     * @param origin {Point2D} The origin of the shape
     * @param baseVec {Vector2D} The base vector
     * @param angle {Number} The rotation in degrees
@@ -200,16 +200,29 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       var x = Math.cos(r) * baseVec.x - Math.sin(r) * baseVec.y;
       var y = Math.sin(r) * baseVec.x + Math.cos(r) * baseVec.y;
 
-      var v = new Vector2D(x, y).sub(origin);
+      var v = Vector2D.create(x, y).sub(origin);
       return v.normalize();
    }
 
 });
 
+var MathObject = Base.extend({
+   constructor: function() {
+   }
+}, {
+   create: function() {
+      return new this(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
+   },
+
+   getClassName: function() {
+      return "MathObject";
+   }
+});
+
 /**
  * @class A 2D point class with helpful methods for manipulation
  */
-var Point2D = Base.extend(/** @scope Point2D.prototype */{
+var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
    _vec: null,
 
@@ -225,7 +238,15 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
     *                   was a number.
     */
    constructor: function(x, y) {
+      this.base("Point2D");
       this.set(x, y);
+   },
+
+   release: function() {
+      this.base();
+      this.x = 0;
+      this.y = 0;
+      this._vec.setElements([0,0]);
    },
 
    /**
@@ -373,6 +394,11 @@ var Point2D = Base.extend(/** @scope Point2D.prototype */{
       return this._vec.inspect();
    }
 
+}, {
+
+   getClassName: function() {
+      return "Point2D";
+   }
 });
 
 Point2D.ZERO = new Point2D(0,0);
@@ -436,12 +462,16 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
       return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
    }
 
+}, {
+   getClassName: function() {
+      return "Vector2D";
+   }
 });
 
 /**
  * @class A 2D rectangle class with helpful manipulation methods.
  */
-var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
+var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 
    topLeft: null,
    dims: null,
@@ -459,6 +489,12 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
       this.topLeft = new Point2D(0,0);
       this.dims = new Point2D(0,0);
       this.set(x,y,width,height);
+   },
+
+   release: function() {
+      this.base();
+      this.topLeft = null;
+      this.dims = null;
    },
 
    /**
@@ -667,5 +703,9 @@ var Rectangle2D = Base.extend(/** @scope Rectangle2D.prototype */{
    toString: function()
    {
       return (this.topLeft.x + "," + this.topLeft.y + " [" + this.dims.x + "," + this.dims.y + "]");
+   }
+}, {
+   getClassName: function() {
+      return "Rectangle2D";
    }
 });

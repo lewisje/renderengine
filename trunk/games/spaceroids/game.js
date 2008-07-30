@@ -145,37 +145,37 @@ var Spaceroids = Game.extend({
       // Add some asteroids
       for (var a = 0; a < 3; a++)
       {
-         var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
+         var rock = Spaceroids.Rock.create(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
          rock.setup();
          rock.killTimer = Engine.worldTime + 2000;
       }
 
-      var title = new TextRenderer(new VectorText(), "Asteroids", 2);
-      title.setPosition(new Point2D(150, 100));
+      var title = TextRenderer.create(VectorText.create(), "Asteroids", 2);
+      title.setPosition(Point2D.create(150, 100));
       title.setTextWeight(1);
       title.setColor("#ffffff");
       this.renderContext.add(title);
 
-      var copy = new TextRenderer(new VectorText(), "&copy;1979 Atari Games", 1);
+      var copy = TextRenderer.create(VectorText.create(), "&copy;1979 Atari Games", 1);
       copy.setColor("#ffffff");
-      copy.setPosition(new Point2D(145, 130));
+      copy.setPosition(Point2D.create(145, 130));
       this.renderContext.add(copy);
 
       var startText;
       if (window.opera && opera.wiiremote) {
          startText = "[ Press =A Button= to Start ]";
 
-         var wii = new TextRenderer(new VectorText(), "(Wii Detected)", 1);
+         var wii = TextRenderer.create(VectorText.create(), "(Wii Detected)", 1);
          wii.setColor("#ffffff");
-         wii.setPosition(new Point2D(160, 470));
+         wii.setPosition(Point2D.create(160, 470));
          this.renderContext.add(wii);
       } else {
          startText = "[ Press =Enter= to Start ]";
       }
 
-      Spaceroids.start = new TextRenderer(new VectorText(), startText, 1);
-      Spaceroids.start.setPosition(new Point2D(96, 450));
+      Spaceroids.start = TextRenderer.create(VectorText.create(), startText, 1);
+      Spaceroids.start.setPosition(Point2D.create(96, 450));
       Spaceroids.start.setColor("#ffffff");
       Spaceroids.renderContext.add(Spaceroids.start);
 
@@ -194,19 +194,19 @@ var Spaceroids = Game.extend({
          }
       };
 
-      Spaceroids.intv = new Timeout("startkey", 1000, flash);
+      Spaceroids.intv = Timeout.create("startkey", 1000, flash);
 
       // Start up a particle engine
-      this.pEngine = new ParticleEngine()
+      this.pEngine = ParticleEngine.create()
       this.renderContext.add(this.pEngine);
 
       this.addHiScore();
       this.gameOver();
 
       // Create a new rock every 20 seconds
-      Spaceroids.attractTimer = new Interval("attract", 20000,
+      Spaceroids.attractTimer = Interval.create("attract", 20000,
          function() {
-            var rock = new Spaceroids.Rock(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
+            var rock = Spaceroids.Rock.create(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
             Spaceroids.renderContext.add(rock);
             rock.setup();
             rock.killTimer = Engine.worldTime + 2000;
@@ -218,8 +218,8 @@ var Spaceroids = Game.extend({
     * Add the highscore object to the playfield.
     */
    addHiScore: function() {
-      this.hscoreObj = new TextRenderer(new VectorText(), this.hiScore, 2);
-      this.hscoreObj.setPosition(new Point2D(430, 20));
+      this.hscoreObj = TextRenderer.create(VectorText.create(), this.hiScore, 2);
+      this.hscoreObj.setPosition(Point2D.create(400, 20));
       this.hscoreObj.setColor("#ffffff");
       this.hscoreObj.setTextWeight(0.5);
       this.hscoreObj.setTextAlignment(AbstractTextRenderer.ALIGN_RIGHT);
@@ -230,8 +230,8 @@ var Spaceroids = Game.extend({
     * Add the score object to the playfield.
     */
    addScore: function() {
-      this.scoreObj = new TextRenderer(new VectorText(), this.playerScore, 2);
-      this.scoreObj.setPosition(new Point2D(130, 20));
+      this.scoreObj = TextRenderer.create(VectorText.create(), this.playerScore, 2);
+      this.scoreObj.setPosition(Point2D.create(130, 20));
       this.scoreObj.setColor("#ffffff");
       this.scoreObj.setTextWeight(0.5);
       this.scoreObj.setTextAlignment(AbstractTextRenderer.ALIGN_RIGHT);
@@ -278,12 +278,12 @@ var Spaceroids = Game.extend({
 
       this.nextLevel();
 
-      this.playerObj = new Spaceroids.Player();
+      this.playerObj = Spaceroids.Player.create();
       this.renderContext.add(this.playerObj);
       this.playerObj.setup(pWidth, pHeight);
 
       // Start up a particle engine
-      this.pEngine = new ParticleEngine()
+      this.pEngine = ParticleEngine.create()
       this.renderContext.add(this.pEngine);
 
       this.addHiScore();
@@ -292,7 +292,7 @@ var Spaceroids = Game.extend({
 
 		// Start the "music" track
       Spaceroids.soundNum = 1;
-      Spaceroids.gameSound = new Interval("gameSound", 1000, function() {
+      Spaceroids.gameSound = Interval.create("gameSound", 1000, function() {
          if (Spaceroids.soundNum == 1) {
             Spaceroids.soundLoader.get("lowboop").play();
             Spaceroids.soundNum = 2;
@@ -318,7 +318,7 @@ var Spaceroids = Game.extend({
 
       for (var a = 0; a < Spaceroids.level + 1; a++)
       {
-         var rock = new Spaceroids.Rock(null, null, pWidth, pHeight);
+         var rock = Spaceroids.Rock.create(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
          rock.setup();
       }
@@ -332,8 +332,8 @@ var Spaceroids = Game.extend({
 
       //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 1.5);
 
-      var g = new TextRenderer(new VectorText(), "Game Over", 3);
-      g.setPosition(new Point2D(100, 260));
+      var g = TextRenderer.create(VectorText.create(), "Game Over", 3);
+      g.setPosition(Point2D.create(100, 260));
       g.setTextWeight(0.25);
       g.setColor("#ffffff");
       this.renderContext.add(g);
@@ -354,7 +354,7 @@ var Spaceroids = Game.extend({
       }
 
       // Back to attract mode in 10sec
-      var t = new Timeout("gameover", 10000, function() { Spaceroids.attractMode(); });
+      var t = Timeout.create("gameover", 10000, function() { Spaceroids.attractMode(); });
    },
 
    /**
@@ -368,15 +368,15 @@ var Spaceroids = Game.extend({
       Engine.setFPS(this.engineFPS);
 
       // Create the 2D context
-      this.fieldBox = new Rectangle2D(0, 0, this.fieldWidth, this.fieldHeight);
+      this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
-      this.renderContext = new CanvasContext(this.fieldWidth, this.fieldHeight);
+      this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
       this.renderContext.setWorldScale(this.areaScale);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("black");
 
       // We'll need something to detect collisions
-      this.collisionModel = new SpatialGrid(this.fieldWidth, this.fieldHeight, 7);
+      this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 7);
 
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
 
@@ -387,7 +387,7 @@ var Spaceroids = Game.extend({
 //      Spaceroids.loadTimeout = new Timeout("wait", 250, Spaceroids.waitForResources);
 //      this.waitForResources();
 
-      this.soundLoader = new SoundResourceLoader();
+      this.soundLoader = SoundResourceLoader.create();
 
       // Load the sounds
       this.soundLoader.load("explode", "explode1.mp3");

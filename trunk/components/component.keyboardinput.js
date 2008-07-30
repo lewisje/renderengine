@@ -59,6 +59,13 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       this.base(name, priority);
    },
 
+   release: function() {
+      this.base();
+      this.downFn = null;
+      this.upFn = null;
+      this.pressFn = null;
+   },
+
    /**
     * Set the host object this component exists within.  Additionally, this
     * component sets up the event listeners.  Due to key events occurring
@@ -157,8 +164,9 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       {
          this.getHostObject().onKeyPress(eventObj);
       }
-   },
+   }
 
+}, {
    /**
     * Get the class name of this object
     *
@@ -168,5 +176,4 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    getClassName: function() {
       return "KeyboardInputComponent";
    }
-
 });

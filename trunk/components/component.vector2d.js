@@ -56,6 +56,16 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       this.closedManifold = true;
    },
 
+   release: function() {
+      this.base();
+      this.strokeStyle = "#ffffff";
+      this.lineWidth = 1;
+      this.fillStyle = null;
+      this.points = null;
+      this.fullBox = null;
+      this.closedManifold = null;
+   },
+
    /**
     * Calculate the bounding box from the set of
     * points which comprise the shape to be rendered.
@@ -216,8 +226,8 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       {
          renderContext.drawFilledPolygon(this.points);
       }
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *

@@ -42,8 +42,8 @@ var InputComponent = BaseComponent.extend(/** @scope InputComponent.prototype */
     */
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_INPUT, priority || 1.0);
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -53,5 +53,4 @@ var InputComponent = BaseComponent.extend(/** @scope InputComponent.prototype */
    getClassName: function() {
       return "InputComponent";
    }
-
 });

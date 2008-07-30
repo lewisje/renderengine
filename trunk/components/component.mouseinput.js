@@ -159,8 +159,8 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
          this.getHostObject().MouseInputComponent_mouseDown = false;
          this.getHostObject().onMouseUp(mouseInfo);
       }
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -170,5 +170,4 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
    getClassName: function() {
       return "MouseInputComponent";
    }
-
 });

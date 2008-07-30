@@ -48,9 +48,9 @@ Spaceroids.Bullet = Object2D.extend({
       this.player = player;
 
       // Add components to move and draw the bullet
-      this.add(new Mover2DComponent("move"));
-      this.add(new Vector2DComponent("draw"));
-      this.add(new ColliderComponent("collide", Spaceroids.collisionModel));
+      this.add(Mover2DComponent.create("move"));
+      this.add(Vector2DComponent.create("draw"));
+      this.add(ColliderComponent.create("collide", Spaceroids.collisionModel));
 
       // Get the player's position and rotation,
       // then position this at the tip of the ship
@@ -66,10 +66,15 @@ Spaceroids.Bullet = Object2D.extend({
       var r = p_mover.getRotation();
       var dir = Math2D.getDirectionVector(Point2D.ZERO, Spaceroids.Bullet.tip, r);
 
-      var p = new Point2D(p_mover.getPosition());
+      var p = Point2D.create(p_mover.getPosition());
 
-      c_mover.setPosition(p.add(new Point2D(dir).mul(10)));
+      c_mover.setPosition(p.add(Point2D.create(dir).mul(10)));
       c_mover.setVelocity(dir.mul(3));
+   },
+
+   release: function() {
+      this.base();
+      this.player = null;
    },
 
    /**
@@ -122,11 +127,11 @@ Spaceroids.Bullet = Object2D.extend({
 
       // Is this bullet in field any more?
       var p = c_mover.getPosition();
-      var bBox = new Rectangle2D(p.x, p.y, 2, 2);
+      var bBox = Rectangle2D.create(p.x, p.y, 2, 2);
       if (!Spaceroids.inField(p, bBox))
       {
-         this.destroy();
          this.player.removeBullet(this);
+         this.destroy();
          return;
       }
 
@@ -149,7 +154,7 @@ Spaceroids.Bullet = Object2D.extend({
     *          objects in the PCL should be tested.
     */
    onCollide: function(obj) {
-      if ((obj.getClassName() == "Rock") &&
+      if ((obj instanceof Spaceroids.Rock) &&
           ( (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())) ||
             (Math2D.lineBoxCollision(this.getPosition(), this.getLastPosition(), obj.getWorldBox())) )
          )
@@ -158,27 +163,27 @@ Spaceroids.Bullet = Object2D.extend({
          obj.kill();
 
          // Remove the bullet
-         this.destroy();
          this.player.removeBullet(this);
+         this.destroy();
 
          // All set
          return ColliderComponent.STOP;
       }
 
       return ColliderComponent.CONTINUE;
-   },
+   }
 
+
+}, {
    /**
     * Get the class name of this object
     *
     * @type String
-
     */
    getClassName: function() {
-      return "Bullet";
-   }
+      return "Spaceroids.Bullet";
+   },
 
-}, {
    // Why we have this, I don't know...
    shape: [ new Point2D(-1, -1), new Point2D( 1, -1),
             new Point2D( 1,  1), new Point2D(-1,  1)],

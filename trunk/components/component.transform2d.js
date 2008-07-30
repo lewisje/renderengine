@@ -53,6 +53,14 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
       this.lastPosition = new Point2D(0,0);
    },
 
+   release: function() {
+      this.base();
+      this.position = null;
+      this.rotation = 0;
+      this.scale = 1.0;
+      this.lastPosition = null;
+   },
+
    /**
     * Set the position of the transform.
     *
@@ -134,8 +142,8 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
       renderContext.setPosition(this.position);
       renderContext.setRotation(this.rotation);
       renderContext.setScale(this.scale, this.scale);
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -145,7 +153,4 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    getClassName: function() {
       return "Transform2DComponent";
    }
-
-
-
 });

@@ -57,6 +57,14 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
       this.weight = 1;
    },
 
+   release: function() {
+      this.base();
+      this.text = null;
+      this.color= "#000000";
+      this.alignment = 0;
+      this.weight = 1;
+   },
+
    /**
     * Get the text being rendered
     * @type String
@@ -126,15 +134,15 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
       return this.alignment;
    },
 
+}, /** @scope AbstractTextRenderer */{
+
    /**
     * Get the class name of this object
     * @type String
     */
    getClassName: function() {
       return "AbstractTextRenderer";
-   }
-
-}, /** @scope AbstractTextRenderer.prototype */{
+   },
 
    /**
     * Align text with the left edge of the string at the point specified.

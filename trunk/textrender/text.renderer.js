@@ -53,9 +53,14 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
       // Add components to move and draw the asteroid
       this.renderer = renderer;
       this.add(this.renderer);
-      this.add(new Transform2DComponent("transform"));
+      this.add(Transform2DComponent.create("transform"));
       this.getComponent("TextRenderObject").setText(text || "");
       this.getComponent("transform").setScale(size || 1);
+   },
+
+   release: function() {
+      this.base();
+      this.drawMode = 0;
    },
 
    update: function(renderContext, time) {
@@ -195,7 +200,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    getDrawMode: function() {
       return this.drawMode;
-   },
+   }
+}, /** @scope TextRenderer.prototype */{
 
    /**
     * Get the class name of this object
@@ -205,10 +211,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     */
    getClassName: function() {
       return "TextRenderer";
-   }
-
-
-}, /** @scope TextRenderer.prototype */{
+   },
 
    /**
     * Draw the text to the context.

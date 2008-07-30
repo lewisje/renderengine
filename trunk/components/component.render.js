@@ -45,6 +45,11 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
       this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
    },
 
+   release: function() {
+      this.base();
+      this.drawMode = 0;
+   },
+
    /**
     * Set the draw mode of the component.  Currently this determines
     * if the component should render itself to the context or not.
@@ -83,7 +88,9 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
 
       // Tear down drawing state
       return true;
-   },
+   }
+
+}, { // Static
 
    /**
     * Get the class name of this object
@@ -92,8 +99,7 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
     */
    getClassName: function() {
       return "RenderComponent";
-   }
-}, { // Static
+   },
 
    /**
     * The component should render itself to the rendering context.

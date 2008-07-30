@@ -46,6 +46,12 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
       this.base(name || "ResourceLoader");
    },
 
+   release: function() {
+      this.base();
+      this.cache = {};
+      this.length = 0;
+   },
+
    destroy: function() {
       this.clear();
       this.base();
@@ -93,11 +99,11 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     * @type Object
     */
    get: function(name) {
-		if (this.cache[name]) {
-	      return this.cache[name].data;
-		} else {
-			return null;
-		}
+      if (this.cache[name]) {
+         return this.cache[name].data;
+      } else {
+         return null;
+      }
    },
 
    /**
@@ -118,8 +124,8 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     */
    getResourceType: function() {
       return "default";
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -128,4 +134,5 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
    getClassName: function() {
       return "ResourceLoader";
    }
+
 });
