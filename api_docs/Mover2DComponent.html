@@ -165,9 +165,23 @@ A simple mover component that adjusts the translation of a componentover time. 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <code> <b> <a href="#getVelocity">getVelocity</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the velocity vector of the component
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getVelocityDecay">getVelocityDecay</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the rate at which velocity will decay to zero.
  
          </td>
       </tr>
@@ -177,9 +191,9 @@ A simple mover component that adjusts the translation of a componentover time. 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#getVelocity">getVelocity</a></b>() </code> 
+            <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the velocity vector of the component
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -208,6 +222,18 @@ A simple mover component that adjusts the translation of a componentover time. 
          </td>
       </tr>
    
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setVelocityDecay">setVelocityDecay</a></b>(decay) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the decay rate at which the velocity willapproach zero.
+ 
+         </td>
+      </tr>
+   
 </table>
 &nbsp;
 
@@ -229,21 +255,11 @@ A simple mover component that adjusts the translation of a componentover time. 
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="BaseObject.html#isRenderEngineObject">isRenderEngineObject</a>,
-            
-               <a href="BaseObject.html#destroy">destroy</a>,
-            
-               <a href="BaseObject.html#getId">getId</a>,
-            
-               <a href="BaseObject.html#getName">getName</a>,
-            
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
             
                <a href="BaseObject.html#update">update</a>,
-            
-               <a href="BaseObject.html#toString">toString</a>,
             
          </code></td>
       </tr>
@@ -267,6 +283,8 @@ A simple mover component that adjusts the translation of a componentover time. 
                <a href="BaseComponent.html#getPriority">getPriority</a>,
             
                <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+               <a href="BaseComponent.html#getClassName">getClassName</a>,
             
          </code></td>
       </tr>
@@ -427,10 +445,10 @@ A simple mover component that adjusts the translation of a componentover time. 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="getClassName"> </a> <h3>getClassName</h3>
-      <pre><b>getClassName</b>()</pre> 
+   <a name="getVelocity"> </a> <h3>getVelocity</h3>
+      <pre><b>getVelocity</b>()</pre> 
    <ul>
-      Get the class name of this object
+      Returns the velocity vector of the component
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -443,10 +461,31 @@ A simple mover component that adjusts the translation of a componentover time. 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="getVelocity"> </a> <h3>getVelocity</h3>
-      <pre><b>getVelocity</b>()</pre> 
+   <a name="getVelocityDecay"> </a> <h3>getVelocityDecay</h3>
+      <pre>&nbsp;<b>getVelocityDecay</b>()</pre> 
    <ul>
-      Returns the velocity vector of the component
+      Get the rate at which velocity will decay to zero.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code>The velocity decay rate 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      undocumented
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -501,6 +540,27 @@ A simple mover component that adjusts the translation of a componentover time. 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setVelocityDecay"> </a> <h3>setVelocityDecay</h3>
+      <pre><b>setVelocityDecay</b>(decay)</pre> 
+   <ul>
+      Set the decay rate at which the velocity willapproach zero.  You can use this value to causea moving object to eventually stop moving.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;decay </code> - The rate at which velocity decays 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -512,6 +572,6 @@ A simple mover component that adjusts the translation of a componentover time. 
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Jul 26 2008 14:07:59 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:28:28 GMT-0400 (EDT)</div>
 </body>
 </html>

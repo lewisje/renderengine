@@ -108,30 +108,6 @@ The base object class which represents an object withinthe engine.  All objects
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Destroy this object instance (remove it from the Engine).
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;
             </code></font> 
@@ -146,40 +122,12 @@ The base object class which represents an object withinthe engine.  All objects
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code>
-            &nbsp;
-            </code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#getId">getId</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the managed Id of this object within the Engine.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>
-            &nbsp;
-            </code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#getName">getName</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the original name this object was created with.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#isRenderEngineObject">isRenderEngineObject</a></b>() </code> 
+            <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if the object is an object within theRender Engine.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -192,18 +140,6 @@ The base object class which represents an object withinthe engine.  All objects
             <code> <b> <a href="#setElement">setElement</a></b>(element) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the element which will represent this object withinits rendering context.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#toString">toString</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output the object in JSON format so it can be reconstructed froma text stream.
  
          </td>
       </tr>
@@ -280,38 +216,6 @@ The base object class which represents an object withinthe engine.  All objects
 </table>
 
 
-   <a name="destroy"> </a> <h3>destroy</h3>
-      <pre><b>destroy</b>()</pre> 
-   <ul>
-      Destroy this object instance (remove it from the Engine).  The objectmay still exist as a reference from another object, but will notbe managed by the Engine any longer.  Untracked objects pose thepotential for memory leaks.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="getClassName"> </a> <h3>getClassName</h3>
-      <pre><b>getClassName</b>()</pre> 
-   <ul>
-      Get the class name of this object
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="getElement"> </a> <h3>getElement</h3>
       <pre>&nbsp;<b>getElement</b>()</pre> 
    <ul>
@@ -333,52 +237,10 @@ The base object class which represents an object withinthe engine.  All objects
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="getId"> </a> <h3>getId</h3>
-      <pre>&nbsp;<b>getId</b>()</pre> 
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
    <ul>
-      Get the managed Id of this object within the Engine.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   <ul>
-      <b>Returns:</b>
-      <ul>
-         <code></code>This object's engine Id 
-      </ul>
-   </ul>
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="getName"> </a> <h3>getName</h3>
-      <pre>&nbsp;<b>getName</b>()</pre> 
-   <ul>
-      Get the original name this object was created with.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   <ul>
-      <b>Returns:</b>
-      <ul>
-         <code></code>The name used when creating this object 
-      </ul>
-   </ul>
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="isRenderEngineObject"> </a> <h3>isRenderEngineObject</h3>
-      <pre><b>isRenderEngineObject</b>()</pre> 
-   <ul>
-      Returns <tt>true</tt> if the object is an object within theRender Engine.  All objects should extend this class.
+      undocumented
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -404,22 +266,6 @@ The base object class which represents an object withinthe engine.  All objects
          <code>element </code> 
       </ul>
    </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="toString"> </a> <h3>toString</h3>
-      <pre><b>toString</b>()</pre> 
-   <ul>
-      Output the object in JSON format so it can be reconstructed froma text stream.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -463,6 +309,6 @@ The base object class which represents an object withinthe engine.  All objects
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Jul 26 2008 14:07:58 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:28:28 GMT-0400 (EDT)</div>
 </body>
 </html>
