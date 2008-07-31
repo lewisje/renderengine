@@ -84,7 +84,7 @@ Create an iterator over a container.
 <span class='linenumber'>  6</span>  *
 <span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  8</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  9</span>  * @version: $Revision: 138 $
+<span class='linenumber'>  9</span>  * @version: $Revision: 190 $
 <span class='linenumber'> 10</span>  *
 <span class='linenumber'> 11</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 12</span>  *
@@ -113,7 +113,7 @@ Create an iterator over a container.
 <span class='linenumber'> 35</span>  *
 <span class='linenumber'> 36</span>  * @param container {Container} The container to iterate over.
 <span class='linenumber'> 37</span>  */</span><span class="WHIT">
-<span class='linenumber'> 38</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Iterator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Base.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Iterator.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 38</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Iterator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PooledObject.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Iterator.prototype */</span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 39</span> 
 <span class='linenumber'> 40</span> </span><span class="WHIT">   </span><span class="NAME">idx</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 41</span> 
@@ -124,184 +124,195 @@ Create an iterator over a container.
 <span class='linenumber'> 46</span> </span><span class="WHIT">      </span><span class="NAME">this.c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">container</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'> 47</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 48</span> 
-<span class='linenumber'> 49</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 50</span>     * Get the next element from the iterator.
-<span class='linenumber'> 51</span>     * @type Object
-<span class='linenumber'> 52</span>     */</span><span class="WHIT">
-<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="NAME">next</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 54</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.idx</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.c.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'> 55</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 56</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.c.get</span><span class="PUNC">(</span><span class="NAME">this.idx</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 57</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 58</span> </span><span class="WHIT">      </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"Index out of range!"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 59</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 60</span> 
-<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 62</span>     * Returns &lt;tt>true&lt;/tt> if the iterator has more elements.
-<span class='linenumber'> 63</span>     * @type Boolean
-<span class='linenumber'> 64</span>     */</span><span class="WHIT">
-<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="NAME">hasNext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.idx</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.c.size</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 67</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 68</span> 
-<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 70</span>     * Get the class name of this object
-<span class='linenumber'> 71</span>     *
-<span class='linenumber'> 72</span>     * @type String
-<span class='linenumber'> 73</span>     * @memberOf Container
-<span class='linenumber'> 74</span>     */</span><span class="WHIT">
-<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 76</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Iterator"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 77</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 78</span> 
-<span class='linenumber'> 79</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 80</span> 
-<span class='linenumber'> 81</span> </span><span class="COMM">/**
-<span class='linenumber'> 82</span>  * @class A container is a logical collection of objects.  A container
-<span class='linenumber'> 83</span>  * is responsible for maintaining the list of objects within it.
-<span class='linenumber'> 84</span>  * When a container is destroyed, all objects within the container
-<span class='linenumber'> 85</span>  * are destroyed with it.
-<span class='linenumber'> 86</span>  *
-<span class='linenumber'> 87</span>  * @param {String} The name of the container. Default: Container
-<span class='linenumber'> 88</span>  * @extends BaseObject
-<span class='linenumber'> 89</span>  */</span><span class="WHIT">
-<span class='linenumber'> 90</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Container</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseObject.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Container.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 91</span> 
-<span class='linenumber'> 92</span> </span><span class="WHIT">   </span><span class="NAME">objects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 93</span> 
-<span class='linenumber'> 94</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">containerName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 95</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">containerName</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Container"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 96</span> </span><span class="WHIT">      </span><span class="NAME">this.objects</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 97</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 49</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 50</span> </span><span class="WHIT">      </span><span class="NAME">this.idx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 51</span> </span><span class="WHIT">      </span><span class="NAME">this.c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 52</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 53</span> 
+<span class='linenumber'> 54</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 55</span>     * Get the next element from the iterator.
+<span class='linenumber'> 56</span>     * @type Object
+<span class='linenumber'> 57</span>     */</span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="NAME">next</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 59</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.idx</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.c.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 60</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 61</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.c.get</span><span class="PUNC">(</span><span class="NAME">this.idx</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">      </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"Index out of range!"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 64</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 65</span> 
+<span class='linenumber'> 66</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 67</span>     * Returns &lt;tt>true&lt;/tt> if the iterator has more elements.
+<span class='linenumber'> 68</span>     * @type Boolean
+<span class='linenumber'> 69</span>     */</span><span class="WHIT">
+<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="NAME">hasNext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.idx</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.c.size</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 73</span> 
+<span class='linenumber'> 74</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 76</span>     * Get the class name of this object
+<span class='linenumber'> 77</span>     *
+<span class='linenumber'> 78</span>     * @type String
+<span class='linenumber'> 79</span>     * @memberOf Container
+<span class='linenumber'> 80</span>     */</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 82</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Iterator"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 85</span> 
+<span class='linenumber'> 86</span> </span><span class="COMM">/**
+<span class='linenumber'> 87</span>  * @class A container is a logical collection of objects.  A container
+<span class='linenumber'> 88</span>  * is responsible for maintaining the list of objects within it.
+<span class='linenumber'> 89</span>  * When a container is destroyed, all objects within the container
+<span class='linenumber'> 90</span>  * are destroyed with it.
+<span class='linenumber'> 91</span>  *
+<span class='linenumber'> 92</span>  * @param {String} The name of the container. Default: Container
+<span class='linenumber'> 93</span>  * @extends BaseObject
+<span class='linenumber'> 94</span>  */</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Container</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseObject.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Container.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 96</span> 
+<span class='linenumber'> 97</span> </span><span class="WHIT">   </span><span class="NAME">objects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 98</span> 
-<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>100</span>     * Destroy all objects contained within this object.  Calls the
-<span class='linenumber'>101</span>     * &lt;tt>destroy()&lt;/tt> method on each object, giving them a chance
-<span class='linenumber'>102</span>     * to perform clean up operations.
-<span class='linenumber'>103</span>     */</span><span class="WHIT">
-<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>105</span> </span><span class="WHIT">		</span><span class="NAME">this.cleanUp</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>106</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">containerName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>100</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">containerName</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Container"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>101</span> </span><span class="WHIT">      </span><span class="NAME">this.objects</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>102</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>103</span> 
+<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>105</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">      </span><span class="NAME">this.objects</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>107</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>108</span> 
 <span class='linenumber'>109</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>110</span>     * Returns the count of the number of objects within the
-<span class='linenumber'>111</span>     * container.
-<span class='linenumber'>112</span>     *
-<span class='linenumber'>113</span>     * @type Number
-<span class='linenumber'>114</span>     */</span><span class="WHIT">
-<span class='linenumber'>115</span> </span><span class="WHIT">   </span><span class="NAME">size</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>116</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objects.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>110</span>     * Destroy all objects contained within this object.  Calls the
+<span class='linenumber'>111</span>     * &lt;tt>destroy()&lt;/tt> method on each object, giving them a chance
+<span class='linenumber'>112</span>     * to perform clean up operations.
+<span class='linenumber'>113</span>     */</span><span class="WHIT">
+<span class='linenumber'>114</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>115</span> </span><span class="WHIT">      </span><span class="NAME">this.cleanUp</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>116</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>117</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>118</span> 
 <span class='linenumber'>119</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>120</span>     * Add an object to the container.
-<span class='linenumber'>121</span>     *
-<span class='linenumber'>122</span>     * @param obj {BaseObject} The object to add to the container.
-<span class='linenumber'>123</span>     */</span><span class="WHIT">
-<span class='linenumber'>124</span> </span><span class="WHIT">   </span><span class="NAME">add</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>125</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.push</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Added "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"] to "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>120</span>     * Returns the count of the number of objects within the
+<span class='linenumber'>121</span>     * container.
+<span class='linenumber'>122</span>     *
+<span class='linenumber'>123</span>     * @type Number
+<span class='linenumber'>124</span>     */</span><span class="WHIT">
+<span class='linenumber'>125</span> </span><span class="WHIT">   </span><span class="NAME">size</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objects.length</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>127</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>128</span> 
 <span class='linenumber'>129</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>130</span>     * Remove an object from the container.  The object is
-<span class='linenumber'>131</span>     * not destroyed when it is removed from the container.
-<span class='linenumber'>132</span>     *
-<span class='linenumber'>133</span>     * @param obj {BaseObject} The object to remove from the container.
-<span class='linenumber'>134</span>     */</span><span class="WHIT">
-<span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="NAME">remove</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>136</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Removed "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"] from "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>137</span> </span><span class="WHIT">      </span><span class="NAME">EngineSupport.arrayRemove</span><span class="PUNC">(</span><span class="NAME">this.objects</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>139</span> 
-<span class='linenumber'>140</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>141</span>     * Remove an object from the container at the specified index.
-<span class='linenumber'>142</span>     * The object is not destroyed when it is removed.
-<span class='linenumber'>143</span>     *
-<span class='linenumber'>144</span>     * @param idx {Number} An index between zero and the size of the container minus 1.
-<span class='linenumber'>145</span>     * @return The object removed from the container.
-<span class='linenumber'>146</span>     * @type BaseObject
-<span class='linenumber'>147</span>     */</span><span class="WHIT">
-<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="NAME">removeAtIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>149</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Index of out range in Container"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>150</span> 
-<span class='linenumber'>151</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.objects</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>152</span> 
-<span class='linenumber'>153</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Removed "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"] from "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>154</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.splice</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>155</span> 
-<span class='linenumber'>156</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>158</span> 
-<span class='linenumber'>159</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>160</span>     * Get the object at the index specified. If the container has been
-<span class='linenumber'>161</span>     * sorted, objects might not be in the position you'd expect.
-<span class='linenumber'>162</span>     *
-<span class='linenumber'>163</span>     * @param idx {Number} The index of the object to get
-<span class='linenumber'>164</span>     * @type BaseObject
-<span class='linenumber'>165</span>     */</span><span class="WHIT">
-<span class='linenumber'>166</span> </span><span class="WHIT">   </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>167</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objects</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>168</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>169</span> 
-<span class='linenumber'>170</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>171</span>     * Remove all objects from the container.  None of the objects are
-<span class='linenumber'>172</span>     * destroyed, only removed from this container.
-<span class='linenumber'>173</span>     */</span><span class="WHIT">
-<span class='linenumber'>174</span> </span><span class="WHIT">   </span><span class="NAME">clear</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>175</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.length</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>176</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>177</span> 
-<span class='linenumber'>178</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>179</span>     * Remove and destroy all objects from the container.
-<span class='linenumber'>180</span>     */</span><span class="WHIT">
-<span class='linenumber'>181</span> </span><span class="WHIT">   </span><span class="NAME">cleanUp</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>182</span> </span><span class="WHIT">      </span><span class="KEYW">while</span><span class="PUNC">(</span><span class="NAME">this.objects.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>183</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>184</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.objects.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>185</span> </span><span class="WHIT">         </span><span class="NAME">o.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>186</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>187</span> </span><span class="WHIT">		</span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>188</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>189</span> 
-<span class='linenumber'>190</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>191</span>     * Get the array of objects within this container.
-<span class='linenumber'>192</span>     *
-<span class='linenumber'>193</span>     * @type Array
-<span class='linenumber'>194</span>     */</span><span class="WHIT">
-<span class='linenumber'>195</span> </span><span class="WHIT">   </span><span class="NAME">getObjects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>196</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objects</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>197</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>198</span> 
-<span class='linenumber'>199</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>200</span>     * Sort the objects within the container, using the provided function.
-<span class='linenumber'>201</span>     * The function will be provided object A and B.  If the result of the
-<span class='linenumber'>202</span>     * function is less than zero, A will be sorted before B.  If the result is zero,
-<span class='linenumber'>203</span>     * A and B retain their order.  If the result is greater than zero, A will
-<span class='linenumber'>204</span>     * be sorted after B.
-<span class='linenumber'>205</span>     *
-<span class='linenumber'>206</span>     * @param fn {Function} The function to sort with.
-<span class='linenumber'>207</span>     */</span><span class="WHIT">
-<span class='linenumber'>208</span> </span><span class="WHIT">   </span><span class="NAME">sort</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>209</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"A function must be provided to sort the Container"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Sorting "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getClassName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>211</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.sort</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>212</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>213</span> 
-<span class='linenumber'>214</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>215</span>     * Get the class name of this object
-<span class='linenumber'>216</span>     *
-<span class='linenumber'>217</span>     * @type String
-<span class='linenumber'>218</span>     */</span><span class="WHIT">
-<span class='linenumber'>219</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>220</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Container"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>221</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>222</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>130</span>     * Add an object to the container.
+<span class='linenumber'>131</span>     *
+<span class='linenumber'>132</span>     * @param obj {BaseObject} The object to add to the container.
+<span class='linenumber'>133</span>     */</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">   </span><span class="NAME">add</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.push</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Added "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"] to "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>138</span> 
+<span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>140</span>     * Remove an object from the container.  The object is
+<span class='linenumber'>141</span>     * not destroyed when it is removed from the container.
+<span class='linenumber'>142</span>     *
+<span class='linenumber'>143</span>     * @param obj {BaseObject} The object to remove from the container.
+<span class='linenumber'>144</span>     */</span><span class="WHIT">
+<span class='linenumber'>145</span> </span><span class="WHIT">   </span><span class="NAME">remove</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>146</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Removed "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"] from "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">      </span><span class="NAME">EngineSupport.arrayRemove</span><span class="PUNC">(</span><span class="NAME">this.objects</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>149</span> 
+<span class='linenumber'>150</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>151</span>     * Remove an object from the container at the specified index.
+<span class='linenumber'>152</span>     * The object is not destroyed when it is removed.
+<span class='linenumber'>153</span>     *
+<span class='linenumber'>154</span>     * @param idx {Number} An index between zero and the size of the container minus 1.
+<span class='linenumber'>155</span>     * @return The object removed from the container.
+<span class='linenumber'>156</span>     * @type BaseObject
+<span class='linenumber'>157</span>     */</span><span class="WHIT">
+<span class='linenumber'>158</span> </span><span class="WHIT">   </span><span class="NAME">removeAtIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>159</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">idx</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.size</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Index of out range in Container"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>160</span> 
+<span class='linenumber'>161</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.objects</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>162</span> 
+<span class='linenumber'>163</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Removed "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"] from "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.splice</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>165</span> 
+<span class='linenumber'>166</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>167</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>168</span> 
+<span class='linenumber'>169</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>170</span>     * Get the object at the index specified. If the container has been
+<span class='linenumber'>171</span>     * sorted, objects might not be in the position you'd expect.
+<span class='linenumber'>172</span>     *
+<span class='linenumber'>173</span>     * @param idx {Number} The index of the object to get
+<span class='linenumber'>174</span>     * @type BaseObject
+<span class='linenumber'>175</span>     */</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">   </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">idx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>177</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objects</span><span class="PUNC">[</span><span class="NAME">idx</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>178</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>179</span> 
+<span class='linenumber'>180</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>181</span>     * Remove all objects from the container.  None of the objects are
+<span class='linenumber'>182</span>     * destroyed, only removed from this container.
+<span class='linenumber'>183</span>     */</span><span class="WHIT">
+<span class='linenumber'>184</span> </span><span class="WHIT">   </span><span class="NAME">clear</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>185</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.length</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>187</span> 
+<span class='linenumber'>188</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>189</span>     * Remove and destroy all objects from the container.
+<span class='linenumber'>190</span>     */</span><span class="WHIT">
+<span class='linenumber'>191</span> </span><span class="WHIT">   </span><span class="NAME">cleanUp</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>192</span> </span><span class="WHIT">      </span><span class="KEYW">while</span><span class="PUNC">(</span><span class="NAME">this.objects.length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>193</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>194</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.objects.shift</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>195</span> </span><span class="WHIT">         </span><span class="NAME">o.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>196</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>197</span> </span><span class="WHIT">      </span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>198</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>199</span> 
+<span class='linenumber'>200</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>201</span>     * Get the array of objects within this container.
+<span class='linenumber'>202</span>     *
+<span class='linenumber'>203</span>     * @type Array
+<span class='linenumber'>204</span>     */</span><span class="WHIT">
+<span class='linenumber'>205</span> </span><span class="WHIT">   </span><span class="NAME">getObjects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>206</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objects</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>207</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>208</span> 
+<span class='linenumber'>209</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>210</span>     * Sort the objects within the container, using the provided function.
+<span class='linenumber'>211</span>     * The function will be provided object A and B.  If the result of the
+<span class='linenumber'>212</span>     * function is less than zero, A will be sorted before B.  If the result is zero,
+<span class='linenumber'>213</span>     * A and B retain their order.  If the result is greater than zero, A will
+<span class='linenumber'>214</span>     * be sorted after B.
+<span class='linenumber'>215</span>     *
+<span class='linenumber'>216</span>     * @param fn {Function} The function to sort with.
+<span class='linenumber'>217</span>     */</span><span class="WHIT">
+<span class='linenumber'>218</span> </span><span class="WHIT">   </span><span class="NAME">sort</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>219</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"A function must be provided to sort the Container"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>220</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Sorting "</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"["</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"]"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>221</span> </span><span class="WHIT">      </span><span class="NAME">this.objects.sort</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>222</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>223</span> 
+<span class='linenumber'>224</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>225</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>226</span>     * Get the class name of this object
+<span class='linenumber'>227</span>     *
+<span class='linenumber'>228</span>     * @type String
+<span class='linenumber'>229</span>     */</span><span class="WHIT">
+<span class='linenumber'>230</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>231</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Container"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>232</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>233</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Jul 26 2008 14:07:42 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:28:08 GMT-0400 (EDT)</div>
 </body>
 </html>
