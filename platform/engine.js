@@ -657,6 +657,29 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          }
       )+'"';
    },
+
+   /**
+    * Gets an object that is a collation of a number of browser and
+    * client settings.  You can use this information to tailor a game
+    * to the environment it is running within.
+    * @return An object with system information
+    * @memberOf EngineSupport
+    */
+   sysInfo: function() {
+		return {
+			"browser" : $.browser.safari ? "safari" : ($.browser.mozilla ? "mozilla" : ($.browser.opera ? "opera" : ($.browser.msie ? "msie" : "unknown"))),
+			"version" : $.browser.version,
+			"agent": navigator.userAgent,
+			"platform": navigator.platform,
+			"cpu": navigator.cpuClass || navigator.oscpu,
+			"language": navigator.language,
+			"online": navigator.onLine,
+			"cookies": navigator.cookieEnabled,
+			"fullscreen": window.fullScreen || false,
+			"width": window.innerWidth || document.body.parentNode.clientWidth,
+			"height": window.innerHeight || document.body.parentNode.clientHeight
+		};
+	}
 });
 
 /**
