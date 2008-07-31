@@ -205,7 +205,7 @@ var Spaceroids = Game.extend({
 
       // Create a new rock every 20 seconds
       Spaceroids.attractTimer = Interval.create("attract", 20000,
-         function() {
+         function _createRock() {
             var rock = Spaceroids.Rock.create(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
             Spaceroids.renderContext.add(rock);
             rock.setup();

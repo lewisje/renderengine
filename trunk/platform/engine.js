@@ -1291,7 +1291,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       // Another process interval
-      Engine.globalTimer = setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
+      Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, this.fpsClock);
    },
 
    /**
