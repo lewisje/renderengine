@@ -36,7 +36,7 @@
  * the fact that the object intelligently will inherit a <tt>destroy</tt>
  * method.  This method gives the object an opportunity to clean up
  * object references, thus keeping the memory requirements low.
- *
+ * @extends PooledObject
  */
 var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
 
