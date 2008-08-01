@@ -1,0 +1,43 @@
+= Engine Process Overview =
+
+My goal in this document is to assist you in understanding the engine architecture.  It is by no means a simple concept to grasp, but once you understand it, it will be easier to work with and modify the engine -- or create games.  Overall, the engine is an object oriented structure, with a clear inheritance model, and some parts that work kinda like COM.
+
+== Engine Process ==
+
+Each object in the engine is one of two object types: A single object that _is not_ a container, or an object that contains other objects.  When the engine processes a frame, it starts with a known object (the default render context) which is a container, and runs through each object within it.  For containers, the object's contained objects are iterated over (etc. on down the line) until all objects have been processed.
+
+The default engine context (a wrapper for the `HTMLDocument` object) contains objects, which must be updated, and each of those objects can contain their own objects, and so on.  It's basically a chain reaction of objects updating objects until everything has been given a chance to update itself.
+
+Objects that are created, and need to be updated, have to be added to a parent object that is itself contained in an object which will be updated for each frame.  That is why most objects extend from the `Container` object.  For example, in the example game, you'll see the following in the `Spaceroids.setup()` method:
+{{{
+   this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
+   this.renderContext.setWorldScale(this.areaScale);
+   Engine.getDefaultContext().add(this.renderContext);
+}}}
+This creates a `CanvasContext` (itself, a container) and adds it to the engine's default context.  By doing so, anything added to the game's `renderContext` will be updated each time the engine's default context updates the `renderContext`.  You can see that as we create rocks in attract mode for the game, they are added to the game's `renderContext`:
+{{{
+   // Add some asteroids
+   for (var a = 0; a < 3; a++)
+   {
+      var rock = Spaceroids.Rock.create(null, null, pWidth, pHeight);
+      this.renderContext.add(rock);
+      rock.setup();
+      rock.killTimer = Engine.worldTime + 2000;
+   }
+}}}
+The process becomes quite evident after you've explored it and used it a few times.  Container objects update the objects they contain, and so on...  Keep that phrase in your mind and you'll soon understand how simple the process really is.
+
+== Host Objects ==
+
+Host objects are where the COM-like architecture comes into play.  To make game objects easier to work with, we use components to build up the functionality of an in-game object.  Instead of writing each object to understand keyboard or mouse interactions, how to draw themselves, what collisions are important, or how to move, we depend on different components which specialize in those processes.
+
+Components break down into one of four functional areas.  Those areas, in order of macro-level processing, are as follows:
+
+  * *TYPE_INPUT* - Components that interact with an input device, such as the keyboard.
+  * *TYPE_LOGIC* - A component which performs logic functions, such as score calculations, or what animation to run.
+  * *TYPE_COLLIDER* - Components that can interact with a collision model and determine when a host object might collide with another game object.
+  * *TYPE_RENDERING* - A component that can update a render context with a visual representation.
+
+Not every host object will use components of each type.  Some game objects may only have a logic and rendering component, while others may have just a collider component.  Plus, there isn't a limit on the number of components of _one type_ that can be used.  A host might have two input components and five rendering components.  The thing is that each component does one thing, and does it well.
+
+Host objects call the `execute()` method of each component added to it.  This gives the host a chance to update itself before the container it is in moves onto the next object.  Components can be prioritized within their macro type, so that you can assure that one rendering component is executed before another.  Thus, if you need to rotate a shoulder before an elbow, you can prioritize them as such.
