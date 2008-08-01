@@ -559,19 +559,63 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getQueryParams: function() {
-      var parms = {};
-      var p = window.location.toString().split("?")[1];
-      if (p)
-      {
-         p = p.split("&");
-         for (var x = 0; x < p.length; x++)
-         {
-            var v = p[x].split("=");
-            parms[v[0]] = (v.length > 1 ? v[1] : "");
-         }
-      }
-      return parms;
+		if (!EngineSupport.parms) {
+			EngineSupport.parms = {};
+			var p = window.location.toString().split("?")[1];
+			if (p)
+			{
+				p = p.split("&");
+				for (var x = 0; x < p.length; x++)
+				{
+					var v = p[x].split("=");
+					EngineSupport.parms[v[0]] = (v.length > 1 ? v[1] : "");
+				}
+			}
+		}
+      return EngineSupport.parms;
    },
+
+   /**
+    * Check for a query parameter and to see if it evaluates to one of the following:
+    * <tt>true</tt>, <tt>1</tt>, <tt>yes</tt>, or <tt>y</tt>.  If so, returns <tt>true</tt>.
+    *
+    * @param paramName {String} The query parameter name
+    * @return <tt>true</tt> if the query parameter exists and is one of the specified values.
+    * @type Boolean
+    */
+   checkBooleanParam: function(paramName) {
+		return (EngineSupport.getQueryParams()[paramName] &&
+				  (EngineSupport.getQueryParams()[paramName] == "true" ||
+				   EngineSupport.getQueryParams()[paramName] == "1" ||
+				   EngineSupport.getQueryParams()[paramName].toLowerCase() == "yes" ||
+				   EngineSupport.getQueryParams()[paramName].toLowerCase() == "y"));
+	},
+
+   /**
+    * Check for a query parameter and to see if it evaluates to the specified value.
+    * If so, returns <tt>true</tt>.
+    *
+    * @param paramName {String} The query parameter name
+    * @param val {String} The value to check for
+    * @return <tt>true</tt> if the query parameter exists and is the value specified
+    * @type Boolean
+    */
+	checkStringParam: function(paramName, val) {
+		return (EngineSupport.getQueryParams()[paramName] && EngineSupport.getQueryParams()[paramName] == val);
+	},
+
+   /**
+    * Check for a query parameter and to see if it evaluates to the specified number.
+    * If so, returns <tt>true</tt>.
+    *
+    * @param paramName {String} The query parameter name
+    * @param val {Number} The number to check for
+    * @return <tt>true</tt> if the query parameter exists and is the value specified
+    * @type Boolean
+    */
+	checkNumericParam: function(paramName, val) {
+		return (EngineSupport.getQueryParams()[paramName] && Number(EngineSupport.getQueryParams()[paramName]) == val);
+	},
 
    /**
     * Returns specified object as a JavaScript Object Notation (JSON) string.
@@ -1300,10 +1344,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       {
          Engine.getDefaultContext().update(null, new Date().getTime());
 
+			if (this.showMetricsWindow && !this.metricDisplay) {
+				this.metricDisplay = jQuery("<div/>").addClass("metrics");
+				this.metricDisplay.appendTo($("body"));
+			}
+			else if (!this.showMetricsWindow && this.metricDisplay) {
+				this.metricDisplay.remove();
+				this.metricDisplay = null;
+			}
+
          if (this.showMetricsWindow && this.lastMetricSample-- == 0)
          {
             var d = new Date().getTime() - b;
             Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
+            Engine.addMetric("aFPS", Math.floor((1 / d) * 1000), true, "#");
             Engine.addMetric("avail", this.fpsClock, false, "#ms");
             Engine.addMetric("frame", d, true, "#ms");
             Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
@@ -1316,6 +1370,31 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Another process interval
       Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, this.fpsClock);
    },
+
+   /**
+    * Toggle the display of the metrics window.  Any metrics
+    * that are being tracked will be reported in this window.
+    * @memberOf Engine
+    */
+   toggleMetrics: function() {
+      this.showMetricsWindow = !this.showMetricsWindow;
+   },
+
+	/**
+	 * Show the metrics window
+	 * @memberOf Engine
+	 */
+   showMetrics: function() {
+      this.showMetricsWindow = true;
+	},
+
+	/**
+	 * Hide the metrics window
+	 * @memberOf Engine
+	 */
+	hideMetrics: function() {
+      this.showMetricsWindow = false;
+	},
 
    /**
     * Set the interval at which metrics are sampled by the system.
@@ -1373,28 +1452,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Toggle the display of the metrics window.  Any metrics
-    * that are being tracked will be reported in this window.
-    * @memberOf Engine
-    */
-   toggleMetrics: function() {
-      this.showMetricsWindow = !this.showMetricsWindow;
-
-      if (this.showMetricsWindow && !this.metricDisplay)
-      {
-         this.metricDisplay = jQuery("<div/>").addClass("metrics");
-         this.metricDisplay.appendTo($("body"));
-      }
-
-
-      if (!this.showMetricsWindow && this.metricDisplay)
-      {
-         this.metricDisplay.remove();
-         this.metricDisplay = null;
-      }
-   },
-
-   /**
     * Updates the display of the metrics window.
     * @private
     * @memberOf Engine
@@ -1428,9 +1485,13 @@ Console.startup();
 Engine.startup();
 
 // Read any engine-level query params
-var p = EngineSupport.getQueryParams();
-if (p["debug"] != null && p["debug"] == "true")
+if (EngineSupport.checkBooleanParam("debug"))
 {
    Engine.setDebugMode(true);
    Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+}
+
+if (EngineSupport.checkBooleanParam("metrics"))
+{
+	Engine.showMetrics();
 }
