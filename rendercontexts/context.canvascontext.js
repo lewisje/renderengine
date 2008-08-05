@@ -310,8 +310,11 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @param point {Point2D} The top-left position to draw the image.
     * @param sprite {Image} The sprite to draw
     */
-   drawSprite: function(point, sprite) {
-      this.get2DContext().drawImage(sprite, point.x, point.y);
+   drawSprite: function(sprite, time) {
+      var f = sprite.getFrame(time);
+      var tl = f.getTopLeft();
+      var d = f.getDims();
+      this.get2DContext().drawImage(sprite.getSourceImage(), tl.x, tl.y, d.x, d.y, 0, 0, d.x, d.y);
       this.base(point, sprite);
    },
 
