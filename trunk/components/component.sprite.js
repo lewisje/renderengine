@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * VectorDrawComponent
+ * SpriteComponent
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -33,37 +33,22 @@
  * @class A render component that renders its contents from a set of points.
  * @extends BaseComponent
  */
-var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prototype */{
+var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototype */{
 
-   strokeStyle: "#ffffff",     // Default to white lines
-
-   lineWidth: 1,
-
-   fillStyle: null,          // Default to none
-
-   points: null,
-
-   fullBox: null,
-
-   closedManifold: null,
+   currentSprite: null,
 
    /**
     * @constructor
     * @memberOf Vector2DComponent
     */
-   constructor: function(name, priority) {
+   constructor: function(name, priority, sprite) {
       this.base(name, priority || 0.1);
-      this.closedManifold = true;
+      this.currentSprite = sprite;
    },
 
    release: function() {
       this.base();
-      this.strokeStyle = "#ffffff";
-      this.lineWidth = 1;
-      this.fillStyle = null;
-      this.points = null;
-      this.fullBox = null;
-      this.closedManifold = null;
+      this.currentSprite = null;
    },
 
    /**
@@ -72,6 +57,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * @private
     */
    calculateBoundingBox: function() {
+      return;
       var x1 = 0;
       var x2 = 0;
       var y1 = 0;
@@ -112,76 +98,12 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       }
    },
 
-   /**
-    * Set the points which comprise the shape of the object to
-    * be rendered to the context.
-    *
-    * @param pointArray {Array} An array of <tt>Point2D</tt> instances
-    */
-   setPoints: function(pointArray) {
-      this.points = pointArray;
-      this.renderState = null;
-      this.calculateBoundingBox();
+   setSprite: function(sprite) {
+      this.currentSprite = sprite;
    },
 
-   /**
-    * Set the color of the lines to be drawn for this shape.
-    *
-    * @param strokeStyle {String} The HTML color of the stroke (lines) of the shape
-    */
-   setLineStyle: function(strokeStyle) {
-      this.strokeStyle = strokeStyle;
-   },
-
-   /**
-    * Returns the line style that will be used to draw this shape.
-    * @type String
-    */
-   getLineStyle: function() {
-      return this.strokeStyle;
-   },
-
-   /**
-    * Set the width of lines used to draw this shape.
-    *
-    * @param lineWidth {Number} The width of lines in the shape
-    */
-   setLineWidth: function(lineWidth) {
-      this.lineWidth = lineWidth;
-   },
-
-   /**
-    * Returns the width of the lines used to draw the shape.
-    * @type Number
-    */
-   getLineWidth: function() {
-      return this.lineWidth;
-   },
-
-   /**
-    * Set the color used to fill the shape.
-    *
-    * @param fillStyle {String} The HTML color used to fill the shape.
-    */
-   setFillStyle: function(fillStyle) {
-      this.fillStyle = fillStyle;
-   },
-
-   /**
-    * @memberOf Vector2DComponent
-    */
-   getFillStyle: function() {
-      return this.fillStyle;
-   },
-
-   /**
-    * Set whether or not we draw a polygon or polyline.  <tt>true</tt>
-    * to draw a polygon (the path formed by the points is a closed loop.
-    *
-    * @param closed {Boolean}
-    */
-   setClosed: function(closed) {
-      this.closedManifold = closed;
+   getSprite: function() {
+      return this.currentSprite;
    },
 
    /**
@@ -192,42 +114,13 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
-      if (!this.points) {
-         return;
-      }
 
       if (this.getDrawMode() != RenderComponent.DRAW)
       {
          return;
       }
 
-      // Set the stroke and fill styles
-      if (this.getLineStyle() != null)
-      {
-         renderContext.setLineStyle(this.strokeStyle);
-      }
-
-      renderContext.setLineWidth(this.lineWidth);
-
-      if (this.getFillStyle() != null)
-      {
-         renderContext.setFillStyle(this.fillStyle);
-      }
-
-      // Render out the points
-      if (this.closedManifold)
-      {
-         renderContext.drawPolygon(this.points);
-      }
-      else
-      {
-         renderContext.drawPolyline(this.points);
-      }
-
-      if (this.fillStyle)
-      {
-         renderContext.drawFilledPolygon(this.points);
-      }
+      renderContext.drawSprite(this.currentSprite. time);
    }
 }, {
    /**
@@ -237,6 +130,6 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * @memberOf Vector2DComponent
     */
    getClassName: function() {
-      return "Vector2DComponent";
+      return "SpriteComponent";
    }
 });
