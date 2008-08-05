@@ -120,7 +120,9 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
          return;
       }
 
-      renderContext.drawSprite(this.currentSprite. time);
+		if (this.currentSprite) {
+      	renderContext.drawSprite(this.currentSprite, time);
+		}
    }
 }, {
    /**

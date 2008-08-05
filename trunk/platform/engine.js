@@ -673,10 +673,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @see http://www.json.org
     * @memberOf EngineSupport
     */
-   parseJSONString: function(jsonString)
+   parseJSON: function(jsonString)
    {
-      var obj = null;
-      eval.call(arguments.callee, 'obj = (function(){return ' + jsonString + ';})();');
+      var obj = eval('(function(){return ' + jsonString + ';})();');
       return obj;
    },
 
