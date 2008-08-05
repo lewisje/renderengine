@@ -2,6 +2,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 08/05/2008 ||I've created a sprite resource loader and a sprite rendering component.  I'll be updating it with more functionality in later commits. ||
 || 08/01/2008 ||Simplified the way to get at query parameters.  Added "metrics" query parameter to allow turning on engine metrics without having to open Firebug.  I played with pooling math objects, but found it to _not_ do much for the Firefox 3 hitch.  Both Safari and Opera are outperforming Firefox 3 at the moment.  My work friend has let me know that the example game won't start on the Wii, but I'm going to continue pursuing this.  I need to get me a Wii so I can test it myself... ||
 || 07/29/2008 ||Object pooling added.  This is a big change and requires some updates to class usage in games.  See the wiki article about ObjectPooling for notes on what this means. ||
 || 07/24/2008 ||Nintendo Wii support?  It occurred to me that the Wii uses Opera.  And since Opera supports The Render Engine, I asked a friend at work to verify if the engine works.  I looked up some stuff about it and found how to access the Wii Remote from Javascript.  Added a !WiimoteInputComponent to the components list and updated the example game to attempt to use it.  I'll let you all know how it goes! ||
