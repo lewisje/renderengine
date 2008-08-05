@@ -34,8 +34,8 @@
  */
 var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.prototype */{
 
-   constructor: function() {
-      this.base("ImageLoader");
+   constructor: function(name) {
+      this.base(name || "ImageLoader");
    },
 
    /**
@@ -65,13 +65,13 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
       // Create an image element
       var image = null;
       if (url != null) {
-         image = this.loadImageResource(url, width, height);
+         image = this.loadImageResource(name, url, width, height);
       }
 
       this.base(name, image);
    },
 
-   loadImageResource: function(url, width, height) {
+   loadImageResource: function(name, url, width, height) {
       var image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
       var thisObj = this;
       image.bind("load", function() {

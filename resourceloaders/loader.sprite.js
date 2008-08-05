@@ -30,18 +30,31 @@
 
 var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
 
-   mode: -1,
-
+	// The type of sprite: Single or Animation
    type: -1,
 
+	// Animation mode: loop or toggle
+   mode: -1,
+
+	// Animation frame count
    count: -1,
 
+	// Animation speed
    speed: -1,
 
+	// The rect which defines the sprite frame
    frame: null,
 
+	// The image map that contains the sprite(s)
    image: null,
 
+	/**
+	 * Creates an instance of a Sprite object.
+	 *
+	 * @param name {String} The name of the object
+	 * @param spriteObj {Object} Passed in by a SpriteLoader
+	 * @param spriteResource {Object} The sprite resource loaded by the SpriteLoader
+	 */
    constructor: function(name, spriteObj, spriteResource) {
 
       this.type = (spriteObj["a"] ? Sprite.TYPE_ANIMATION : Sprite.TYPE_SINGLE);
@@ -69,70 +82,111 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       this.image = null;
    },
 
+	/**
+	 * Returns <tt>true</tt> if the sprite is an animation.
+	 * @return <tt>true</tt> if the sprite is an animation
+	 */
    isAnimation: function() {
       return (this.type == Sprite.TYPE_ANIMATION);
    },
 
+	/**
+	 * Returns <tt>true</tt> if the sprite is an animation and loops.
+	 * @return <tt>true</tt> if the sprite is an animation and loops
+	 */
    isLoop: function() {
       return (this.isAnimation() && this.mode == Sprite.MODE_LOOP);
    },
 
+	/**
+	 * Returns <tt>true</tt> if the sprite is an animation and toggles.
+	 * @return <tt>true</tt> if the sprite is an animation and toggles
+	 */
    isToggle: function() {
       return (this.isAnimation() && this.mode == Sprite.MODE_TOGGLE);
    },
 
+	/**
+	 * Gets the frame (rectangle defining what portion of the image map
+	 * the sprite frame occupies) of the sprite.
+	 *
+	 * @param time {Number} Current world time
+	 * @return A {@link Rectangle2D} which defines the frame of the sprite in
+	 *			  the source image map.
+	 */
    getFrame: function(time) {
       if (!this.isAnimation) {
          return this.frame;
       } else {
          var f = Rectangle2D.create(this.frame);
          var fn = Math.floor(time / this.speed) % this.count;
-         return f.offset(f.width * fn, f.height);
+         return f.offset(f.dims.x * fn, 0);
       }
    },
 
+	/**
+	 * The source image loaded by the {@link SpriteLoader} when the sprite was
+	 * created.
+	 * @return The source image the sprite is contained within
+	 */
    getSourceImage: function() {
       return this.image;
    }
 
 }, {
+   /**
+    * Gets the class name of this object.
+    * @return The string <tt>Sprite</tt>
+    */
    getClassName: function() {
       return "Sprite";
    },
 
+   /** The sprite animation loops */
    MODE_LOOP: 0,
 
+	/** The sprite animation toggles - Plays from the first to the last frame
+		 then plays backwards to the first frame and repeats. */
    MODE_TOGGLE: 1,
 
+	/** The sprite is a single frame */
    TYPE_SINGLE: 0,
 
+	/** The sprite is an animation */
    TYPE_ANIMATION: 1,
 
+	/** The field in the sprite definition file for the left pixel of the sprite frame */
    INDEX_LEFT: 0,
 
+	/** The field in the sprite definition file for the top pixel of the sprite frame */
    INDEX_TOP: 1,
 
+	/** The field in the sprite definition file for the width of the sprite frame */
    INDEX_WIDTH: 2,
 
+	/** The field in the sprite definition file for the height of the sprite frame */
    INDEX_HEIGHT: 3,
 
+	/** The field in the sprite definition file for the count of frames in the sprite */
    INDEX_COUNT: 4,
 
+	/** The field in the sprite definition file for the speed in milliseconds that the sprite animates */
    INDEX_SPEED: 5,
 
+	/** The field in the sprite definition file for the type of sprite animation */
    INDEX_TYPE: 6
 });
 
 /**
- * @class Loads bitmap fonts and makes them available to the system.
+ * @class Loads sprites and makes them available to the system.
  * @extends ImageResourceLoader
  */
 var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype */{
 
    sprites: null,
 
-   constructor: function() {
-      this.base("SpriteLoader");
+   constructor: function(name) {
+      this.base(name || "SpriteLoader");
       this.sprites = {};
    },
 
@@ -142,22 +196,24 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
     * @param name {String} The name of the resource
     * @param url {String} The URL where the resource is located
     */
-   load: function(name, url, info) {
-
-      Assert(url && url.indexOf("http") == -1, "Sprites must be located on this server");
+   load: function(name, url, info, path) {
 
       if (url)
       {
+	      Assert(url.indexOf("http") == -1, "Sprites must be located on this server");
          var thisObj = this;
 
          // Get the file from the server
          $.get(url, function(data) {
             var spriteInfo = EngineSupport.parseJSON(data);
-            thisObj.load(name, null, spriteInfo);
+            // get the path to the resource file
+            var path = url.substring(0, url.lastIndexOf("/"));
+            thisObj.load(name, null, spriteInfo, path + "/");
          });
       }
       else
       {
+         info.bitmapImage = path + info.bitmapImage;
          Console.log("Loading sprite: " + name + " @ " + info.bitmapImage);
 
          // Load the sprite image file
@@ -186,14 +242,14 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
    },
 
    /**
-    * Get the named sprite from the specified resource.
+    * Creates a {@link Sprite} object representing the named sprite.
     *
     * @param resource {String} A loaded sprite resource
     * @param sprite {String} The name of the sprite from the resource
     * @returns A {@link Sprite} object
     */
    getSprite: function(resource, sprite) {
-      return Sprite.create(this.get(resource).info.sprites[sprite], this.get(resource));
+      return Sprite.create(sprite, this.get(resource).info.sprites[sprite], this.get(resource));
    },
 
    /**
@@ -202,11 +258,12 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
     */
    getResourceType: function() {
       return "sprite";
-   },
+   }
 
+}, {
    /**
-    * Get the class name of this object
-    *
+    * Get the class name of this object.
+    * @return The string <tt>SpriteLoader</tt>
     * @type String
     */
    getClassName: function() {

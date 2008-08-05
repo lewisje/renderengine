@@ -401,7 +401,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param point {Point2D} The top-left position to draw the image.
     * @param imageData {Image} The sprite to draw
     */
-   drawSprite: function(point, sprite) {
+   drawSprite: function(sprite, time) {
    },
 
    /**
