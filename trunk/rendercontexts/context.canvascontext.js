@@ -29,11 +29,6 @@
  *
  */
 
-if (jQuery.browser.msie) {
-   // This is the Google "ExplorerCanvas" object we need for IE
-   Engine.load("/libs/excanvas.js");
-}
-
 /**
  * @class A <tt>canvas</tt> element represented within the engine.  A canvas
  * is a 2D context which can render lines, images, and polygons.  Transformations
@@ -46,7 +41,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    context2D: null,
 
    mouseHandler: false,
-
 
    /**
     * Create an instance of a 2D rendering context using the canvas element.
@@ -69,13 +63,15 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       canvas.height = this.height * worldScale[1];
       canvas.id = this.getId();
 
-      // IE Support
-      if (jQuery.browser.msie) {
-         G_vmlCanvasManager_.initElement(canvas);
-      }
-
       this.base("CanvasContext", canvas);
    },
+
+   afterAdd: function(parent) {
+      // IE Support
+      if (jQuery.browser.msie) {
+         this.setSurface(G_vmlCanvasManager.initElement(this.getSurface()));
+      }
+	},
 
    release: function() {
       this.base();

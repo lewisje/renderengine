@@ -1091,7 +1091,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    processScriptQueue: function() {
       if (Engine.scriptQueue.length > 0 && Engine.readyForNextScript) {
-
          // Hold the queue until the script is loaded
          Engine.readyForNextScript = false;
 
@@ -1120,10 +1119,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             var n = document.createElement("script");
             n.src = scriptPath;
             n.type = "text/javascript";
-            $(n).load(function() {
-               Console.debug("Loaded '" + scriptPath + "'");
-               Engine.readyForNextScript = true;
-            });
+            var fn = function() {
+					if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+						Console.debug("Loaded '" + scriptPath + "'");
+						Engine.readyForNextScript = true;
+					}
+				}
+            if ($.browser.msie) {
+					n.defer = true;
+					n.onreadystatechange = fn;
+				} else {
+					n.onload = fn;
+				}
+
             var h = document.getElementsByTagName("head")[0];
             h.appendChild(n);
          }
@@ -1148,7 +1156,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
             // Create the default context (the document)
             Console.debug("Loading '" + gameSource + "'");
-            engine.defaultContext = new DocumentContext();
+            engine.defaultContext = DocumentContext.create();
             engine.loadScript(gameSource);
 
             // Start the game when it's ready
@@ -1229,6 +1237,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Contexts
       this.load("/rendercontexts/context.render2d.js");
       this.load("/rendercontexts/context.documentcontext.js");
+
+		if ($.browser.msie) {
+			// This is the Google "ExplorerCanvas" object we need for IE
+			this.load("/libs/excanvas.js");
+		}
 
       // Object components
       this.load("/components/component.base.js");
@@ -1488,6 +1501,9 @@ if (EngineSupport.checkBooleanParam("debug"))
 {
    Engine.setDebugMode(true);
    Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+   if (console && console.open) {
+		console.open();
+	}
 }
 
 if (EngineSupport.checkBooleanParam("metrics"))

@@ -127,6 +127,12 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
          // the render context that keeps it separate from the rest of the object.
          obj.RenderContext = {};
       }
+
+      if (obj.afterAdd) {
+			// If the object being added to the render context has
+			// an "afterAdd" method, call it (canvas uses this for IE emulation)
+			obj.afterAdd(this);
+		}
    },
 
    /**

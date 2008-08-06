@@ -186,8 +186,8 @@ var Quadtree = SpatialContainer.extend(/** @scope QuadTree.prototype */{
     */
    getPCL: function(node) {
 
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
