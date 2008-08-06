@@ -45,6 +45,10 @@
       <!-- Set this here so we get alternate JS loading-->
       <script type="text/javascript">window.localDebugMode = true</script>
 
+      <!--[if IE]>
+      <script type="text/javascript" src="../../libs/firebug/firebug.js"></script>
+      <![endif]-->
+
       <!-- Supporting Libraries -->
       <script type="text/javascript" src="../../libs/base.js"></script>
       <script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
@@ -52,10 +56,11 @@
 
       <!-- Load the main engine script -->
       <script type="text/javascript" src="../../platform/engine.js"></script>
+
    </head>
    <body>
       <span id="loading">Loading...</span>
-      <script type="text/javascript">
+      <script type="text/javascript" defer="yes">
          // Load the game script
          Engine.loadGame('game.js');
       </script>

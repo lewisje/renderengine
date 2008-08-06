@@ -418,7 +418,7 @@ Spaceroids.Player = Object2D.extend({
       if (pressed && this.bullets < 5) {
          this.shoot();
       }
-   },
+   }
 
    /*
     * WiiMote support -------------------------------------------------------------------------------------

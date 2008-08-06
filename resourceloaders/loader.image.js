@@ -94,8 +94,8 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
     */
    getResourceType: function() {
       return "image";
-   },
-
+   }
+}, {
    /**
     * Get the class name of this object
     *
@@ -104,5 +104,4 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
    getClassName: function() {
       return "ImageResourceLoader";
    }
-
 });

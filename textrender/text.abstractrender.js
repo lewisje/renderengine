@@ -132,7 +132,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
     */
    getAlignment: function() {
       return this.alignment;
-   },
+   }
 
 }, /** @scope AbstractTextRenderer */{
 

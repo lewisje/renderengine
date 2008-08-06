@@ -486,7 +486,7 @@ var Spaceroids = Game.extend({
          p.set(x,y);
       }
       return p;
-   },
+   }
 
 });
 

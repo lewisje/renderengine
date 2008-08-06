@@ -109,11 +109,14 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
     */
    getResourceType: function() {
       return "sound";
-   },
-
+   }
+}, {
+   /**
+    * Get the class name of this object
+    *
+    * @type String
+    */
    getClassName: function() {
       return "SoundResourceLoader";
    }
-
-
 });
