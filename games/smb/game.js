@@ -69,6 +69,7 @@ var SpriteTest = Game.extend({
    fieldHeight: 480,
 
    spriteLoader: null,
+   soundLoader: null,
 
    /**
     * Handle the keypress which starts the game
@@ -88,7 +89,7 @@ var SpriteTest = Game.extend({
     * is unloaded we can call this method to clean it up.
     */
    cleanup: function() {
-		this.renderContext.cleanUp();
+      this.renderContext.cleanUp();
    },
 
    /**
@@ -100,7 +101,7 @@ var SpriteTest = Game.extend({
       // Set the FPS of the game
       Engine.setFPS(this.engineFPS);
 
-		$("#loading").remove();
+      $("#loading").remove();
 
       // Create the 2D context
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
@@ -111,6 +112,11 @@ var SpriteTest = Game.extend({
       this.renderContext.setBackgroundColor("skyblue");
 
       this.spriteLoader = SpriteLoader.create();
+      this.soundLoader = SoundResourceLoader.create();
+
+      // Load the music
+      this.soundLoader.load("bgm", "resources/smblvl1.mp3");
+
 
       // Load the sprites
       this.spriteLoader.load("smbtiles", "resources/smbtiles.js");
@@ -145,25 +151,37 @@ var SpriteTest = Game.extend({
    },
 
    run: function() {
-		var player = SpriteTest.Actor.create();
-		player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
-		this.renderContext.add(player);
+      var player = SpriteTest.Actor.create();
+      player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
+      this.renderContext.add(player);
 
-		var goomba = SpriteTest.Actor.create();
-		goomba.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "goomba"));
-		goomba.setPosition(Point2D.create(164, 132));
-		this.renderContext.add(goomba);
+      var goomba = SpriteTest.Actor.create();
+      goomba.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "goomba"));
+      goomba.setPosition(Point2D.create(164, 132));
+      this.renderContext.add(goomba);
 
-		var mario = SpriteTest.Actor.create();
-		mario.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "mario_walk"));
-		mario.setPosition(Point2D.create(228, 132));
-		this.renderContext.add(mario);
+      var mario = SpriteTest.Actor.create();
+      mario.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "mario_walk"));
+      mario.setPosition(Point2D.create(228, 132));
+      this.renderContext.add(mario);
 
-		var koopa = SpriteTest.Actor.create();
-		koopa.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "green_koopa"));
-		koopa.setPosition(Point2D.create(292, 100));
-		this.renderContext.add(koopa);
-	},
+      var koopa = SpriteTest.Actor.create();
+      koopa.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "green_koopa"));
+      koopa.setPosition(Point2D.create(292, 100));
+      this.renderContext.add(koopa);
+
+      var coin = SpriteTest.Actor.create();
+      coin.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "coin"));
+      coin.setPosition(Point2D.create(356, 132));
+      this.renderContext.add(coin);
+
+      var qblock = SpriteTest.Actor.create();
+      qblock.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "q_block"));
+      qblock.setPosition(Point2D.create(420, 132));
+      this.renderContext.add(qblock);
+
+      this.soundLoader.get("bgm").play();
+   },
 
    /**
     * A simple method that determines if the position is within the supplied bounding
