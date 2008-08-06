@@ -390,12 +390,12 @@ var Spaceroids = Game.extend({
       this.soundLoader = SoundResourceLoader.create();
 
       // Load the sounds
-      this.soundLoader.load("explode", "explode1.mp3");
-      this.soundLoader.load("shoot", "shoot.mp3");
-      this.soundLoader.load("death", "explode2.mp3");
-      this.soundLoader.load("thrust", "thrust.mp3");
-      this.soundLoader.load("lowboop", "low.mp3");
-      this.soundLoader.load("hiboop", "hi.mp3");
+      this.soundLoader.load("explode", "resources/explode1.mp3");
+      this.soundLoader.load("shoot", "resources/shoot.mp3");
+      this.soundLoader.load("death", "resources/explode2.mp3");
+      this.soundLoader.load("thrust", "resources/thrust.mp3");
+      this.soundLoader.load("lowboop", "resources/low.mp3");
+      this.soundLoader.load("hiboop", "resources/hi.mp3");
 
       Spaceroids.attractMode();
    },
