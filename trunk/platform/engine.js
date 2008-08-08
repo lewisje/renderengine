@@ -96,11 +96,11 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
     * @param msg {String} The message to write
     */
    debug: function() {
-      this.out("<span class='debug'>" + this.dump(arguments) + "</span>");
+      //this.out("<span class='debug'>" + this.dump(arguments) + "</span>");
    },
 
    info: function() {
-      this.debug(arguments);
+      //this.debug(arguments);
    },
 
    /**
@@ -108,7 +108,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
     * @param msg {String} The message to write
     */
    warn: function() {
-      this.out("<span class='warn'>" + this.dump(arguments) + "</span>");
+      //this.out("<span class='warn'>" + this.dump(arguments) + "</span>");
    },
 
    /**
@@ -116,7 +116,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
     * @param msg {String} The message to write
     */
    error: function() {
-      this.out("<span class='error'>" + this.dump(arguments) + "</span>");
+      //this.out("<span class='error'>" + this.dump(arguments) + "</span>");
    }
 
 });
@@ -201,12 +201,11 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 });
 
 /**
- * @class An Opera specific implementation which redirects output to the <tt>postError()</tt>
- *        method of the <tt>opera</tt> object.  This object is created, as necessary, by the
- *        {@link Console}
+ * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
  * @extends ConsoleRef
  */
-var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
+var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
+
    constructor: function () {
    },
 
@@ -215,8 +214,11 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * @param msg {String} The message to write
     */
    info: function() {
-      if (window.opera)
-         window.opera.postError("[ INFO ] " + this.dump(arguments));
+      if (typeof firebug != "undefined") {
+			firebug.d.console.log.apply(firebug.d.console, arguments);
+		} else {
+         console.info.apply(console, arguments);
+		}
    },
 
    /**
@@ -224,8 +226,11 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * @param msg {String} The message to write
     */
    debug: function() {
-      if (window.opera)
-         window.opera.postError("[ DEBUG ] " + this.dump(arguments));
+      if (typeof firebug != "undefined") {
+			firebug.d.console.log.apply(firebug.d.console, arguments);
+		} else {
+         console.debug.apply(console, arguments);
+		}
    },
 
    /**
@@ -233,8 +238,11 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * @param msg {String} The message to write
     */
    warn: function() {
-      if (window.opera)
-         window.opera.postError("[ WARN ] " + this.dump(arguments));
+      if (typeof firebug != "undefined") {
+			firebug.d.console.log.apply(firebug.d.console, arguments);
+		} else {
+         console.warn.apply(console, arguments);
+		}
    },
 
    /**
@@ -242,8 +250,11 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsole.prototype **/{
     * @param msg {String} The message to write
     */
    error: function() {
-      if (window.opera)
-         window.opera.postError("[!!! ERROR !!!] " + this.dump(arguments));
+      if (typeof firebug != "undefined") {
+			firebug.d.console.log.apply(firebug.d.console, arguments);
+		} else {
+      	console.error.apply(console, arguments);
+		}
    }
 });
 
@@ -276,14 +287,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
       if ($(".debug-console").length == 1) {
          this.consoleRef = new HTMLConsoleRef();
       }
-      else if (window.console) {
-         // Firebug
-         this.consoleRef = window.console;
-      }
-      else if (window.opera && window.opera.postError)
-      {
-         // Opera console
-         this.consoleRef = new OperaConsoleRef();
+      else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
+         // Firebug or firebug lite
+         this.consoleRef = new FirebugConsoleRef();
       }
       else
       {
