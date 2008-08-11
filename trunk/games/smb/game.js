@@ -172,16 +172,17 @@ var SpriteTest = Game.extend({
       player.setPosition(Point2D.create(100, 346));
       this.renderContext.add(player);
 
+/*
       var goomba = SpriteTest.Actor.create();
       goomba.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "goomba"));
       goomba.setPosition(Point2D.create(164, 378));
       this.renderContext.add(goomba);
-
+*/
       var mario = SpriteTest.Actor.create();
       mario.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "mario_walk"));
       mario.setPosition(Point2D.create(228, 378));
       this.renderContext.add(mario);
-
+/*
       var koopa = SpriteTest.Actor.create();
       koopa.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "green_koopa"));
       koopa.setPosition(Point2D.create(292, 346));
@@ -196,6 +197,7 @@ var SpriteTest = Game.extend({
       qblock.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "q_block"));
       qblock.setPosition(Point2D.create(420, 378));
       this.renderContext.add(qblock);
+*/
 
       //this.soundLoader.get("bgm").play();
       SpriteTest.scrollAmt = 0;
