@@ -230,6 +230,24 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       }
    },
 
+	/**
+	 * Set the speed, in milliseconds, that an animation runs at.
+	 * @param speed {Number} The number of milliseconds per frame of an animation
+	 */
+	setSpeed: function(speed) {
+		if (speed >= 0) {
+			this.speed = speed;
+		}
+	},
+
+	/**
+	 * Get the number of milliseconds each frame is displayed for an animation
+	 * @type Number
+	 */
+	getSpeed: function() {
+		return this.speed;
+	},
+
    /**
     * The source image loaded by the {@link SpriteLoader} when the sprite was
     * created.
