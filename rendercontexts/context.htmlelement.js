@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * DocumentContext
+ * HTMLElementContext
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -35,29 +35,67 @@
  * is essentially a wrapper for the HTML document.  Wrapping, in this way, allows
  * us to update not only this context, but all other contexts during an engine frame.
  *
- * @extends HTMLElementContext
+ * @extends RenderContext2D
  */
-var DocumentContext = HTMLElementContext.extend(/** @scope DocumentContext.prototype */{
+var HTMLElementContext = RenderContext2D.extend(/** @scope DocumentContext.prototype */{
 
    /**
-    * Create an instance of a document rendering context.  This context
-    * represents the HTML document body.  Theoretically, only one of these
-    * contexts should ever be created.
-    * @memberOf DocumentContext
+    * Create an instance of an HTML element rendering context.  This context
+    * represents any HTML element.
+    * @memberOf HTMLElementContext
     * @constructor
     */
-   constructor: function() {
-      this.base("DocumentContext", document.body);
-   }
+   constructor: function(name, element) {
+      this.base(name || "HTMLElementContext", element);
+   },
 
-}, {
+   /**
+    * Eliminate the elements from container element.
+    * @memberOf HTMLElementContext
+    */
+   destroy: function() {
+      var objs = this.getObjects();
+      for (var o in objs)
+      {
+         var e = objs[o].getElement();
+         if (e && e != document.body) {
+            Console.log("DOM element ", e, " removed from ", this.getSurface());
+            this.getSurface().removeChild(e);
+         }
+      }
+
+      this.base();
+   },
+
+   /**
+    * @memberOf HTMLElementContext
+    */
+   add: function(obj) {
+      if (obj.getElement())
+      {
+         this.getSurface().appendChild(obj.getElement());
+      }
+      this.base(obj);
+   },
+
+   /**
+    * @memberOf HTMLElementContext
+    */
+   remove: function(obj) {
+      if (obj.getElement())
+      {
+         this.getSurface().removeChild(obj.getElement());
+      }
+      this.base(obj);
+   }
+}, /** @scope HTMLElementContext */{
+
    /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf DocumentContext
     */
    getClassName: function() {
-      return "DocumentContext";
+      return "HTMLElementContext";
    }
 });

@@ -1,7 +1,6 @@
 /**
  * The Render Engine
- * DocumentContext
- *
+ * ObjectLoader
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -30,34 +29,60 @@
  */
 
 /**
- * @class A reference to the <tt>document.body</tt> element as a rendering context.
- * Aside from being The Render Engine's default rendering context, the context
- * is essentially a wrapper for the HTML document.  Wrapping, in this way, allows
- * us to update not only this context, but all other contexts during an engine frame.
- *
- * @extends HTMLElementContext
+ * @class Loads JSON objects from a specified URL.
+ * @extends ResourceLoader
  */
-var DocumentContext = HTMLElementContext.extend(/** @scope DocumentContext.prototype */{
+var ObjectLoader = ResourceLoader.extend(/** @scope ObjectLoader.prototype */{
+
+   objects: null,
+
+   constructor: function(name) {
+      this.base(name || "ObjectLoader");
+      this.objects = {};
+   },
 
    /**
-    * Create an instance of a document rendering context.  This context
-    * represents the HTML document body.  Theoretically, only one of these
-    * contexts should ever be created.
-    * @memberOf DocumentContext
-    * @constructor
+    * Load a JSON object from a URL.
+    *
+    * @param name {String} The name of the resource
+    * @param url {String} The URL where the resource is located
+    * @param obj {Object} The object that was loaded
     */
-   constructor: function() {
-      this.base("DocumentContext", document.body);
+   load: function(name, url, obj) {
+
+      if (url) {
+			Assert(url.indexOf("http") == -1, "Objects must be located relative to this server");
+			var thisObj = this;
+
+			// Get the file from the server
+			$.get(url, function(data) {
+				var objectInfo = EngineSupport.parseJSON(data);
+
+				// 2nd pass - store the object
+				thisObj.load(name, null, objectInfo);
+			});
+		} else {
+			// The object has been loaded and is ready for use
+			this.setReady(true);
+			this.base(name, obj);
+		}
+   },
+
+   /**
+    * The name of the resource this loader will get.
+    * @returns A String that represents the resource type.
+    */
+   getResourceType: function() {
+      return "object";
    }
 
 }, {
    /**
-    * Get the class name of this object
-    *
+    * Get the class name of this object.
+    * @return The string <tt>SpriteLoader</tt>
     * @type String
-    * @memberOf DocumentContext
     */
    getClassName: function() {
-      return "DocumentContext";
+      return "ObjectLoader";
    }
 });

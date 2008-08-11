@@ -1242,6 +1242,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Contexts
       this.load("/rendercontexts/context.render2d.js");
+      this.load("/rendercontexts/context.htmlelement.js");
       this.load("/rendercontexts/context.documentcontext.js");
 
 		if ($.browser.msie) {
@@ -1507,7 +1508,7 @@ if (EngineSupport.checkBooleanParam("debug"))
 {
    Engine.setDebugMode(true);
    Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
-   if (console && console.open) {
+   if (!typeof console == "undefined" && console.open) {
 		console.open();
 	}
 }
