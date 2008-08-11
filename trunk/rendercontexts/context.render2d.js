@@ -405,6 +405,16 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    },
 
    /**
+    * Draw an image on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle that specifies the position and
+    *					dimensions of the image rectangle.
+    * @param image {Object} The image to draw onto the context
+    */
+   drawImage: function(rect, image) {
+	},
+
+   /**
     * Capture an image from the context.
     *
     * @param rect {Rectangle2D} The area to capture

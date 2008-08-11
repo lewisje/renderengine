@@ -315,6 +315,18 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
+    * Draw an image on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle that specifies the position and
+    *					dimensions of the image rectangle.
+    * @param image {Object} The image to draw onto the context
+    */
+   drawImage: function(rect, image) {
+		this.get2DContext().drawImage(image, rect.x, rect.y, rect.width, rect.height);
+		this.base(rect, image);
+	},
+
+   /**
     * Capture an image from the context.
     *
     * @param rect {Rectangle2D} The area to capture
@@ -350,7 +362,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       var y = (point.y < 0 ? 0 : (point.y > this.getHeight() ? this.getHeight() - 1 : point.y));
       if (imageData != null)
       {
-         debugger;
          this.get2DContext().putImageData(imageData, x, y);
       }
    },
