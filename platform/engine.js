@@ -1527,7 +1527,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 	 * @param fn {Function} The function to run when the object can be initialized.
 	 */
 	initObject: function(objectName, dependency, fn) {
-		Console.debug("initObject", arguments);
 		if (dependency === null) {
 			// The object has no dependencies, create it...
 			window[objectName] = fn();
