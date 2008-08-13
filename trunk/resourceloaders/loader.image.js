@@ -30,16 +30,23 @@
 
 /**
  * @class Loads images and stores the reference to those images.
+ *
+ * @constructor
+ * @param name {String=ImageLoader} The name of the resource loader
  * @extends ResourceLoader
  */
 var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.prototype */{
 
+	/**
+	 * @private
+	 */
    constructor: function(name) {
       this.base(name || "ImageLoader");
    },
 
    /**
-    * Load an image resource from a URL.
+    * Load an image resource from a URL.  Images are cached within the page
+    * in an invisible object for fast retrieval.
     *
     * @param name {String} The name of the resource
     * @param url {String} The URL where the resource is located
@@ -71,6 +78,15 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
       this.base(name, image);
    },
 
+	/**
+	 * Lazy loads an image resource when the information for it becomes available.
+	 *
+    * @param name {String} The name of the resource
+    * @param url {String} The URL where the resource is located
+    * @param width {Number} The width of this resource, in pixels
+    * @param height {Number} The height of this resource, in pixels
+    * @return {HTMLImage} The image loaded
+    */
    loadImageResource: function(name, url, width, height) {
       var image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
       var thisObj = this;
@@ -83,6 +99,13 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
       return image;
    },
 
+	/**
+	 * Get the image from the resource stored with the specified name, or <tt>null</tt>
+	 * if no such image exists.
+	 *
+	 * @param name {String} The name of the image resource
+	 * @return {HTMLImage} The image
+	 */
    get: function(name) {
       var img = this.base(name);
       return img ? img[0] : null;
@@ -90,16 +113,15 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
 
    /**
     * The name of the resource this loader will get.
-    * @returns A String that represents the resource type.
+    * @return {String} The string "image"
     */
    getResourceType: function() {
       return "image";
    }
-}, {
+}, /** @scope ImageResourceLoader.prototype */{
    /**
     * Get the class name of this object
-    *
-    * @type String
+    * @return {String} The string "ImageResourceLoader"
     */
    getClassName: function() {
       return "ImageResourceLoader";

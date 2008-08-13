@@ -53,6 +53,8 @@
  * }
  * </pre>
  *
+ * @constructor
+ * @param name {String=SpriteLoader} The name of the resource loader
  * @extends ImageResourceLoader
  */
 var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype */{
@@ -104,7 +106,7 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
     * the sprite definition as <tt>info</tt>.
     *
     * @param name {String} The name of the object to retrieve
-    * @type Object
+    * @return {Object} An object with two keys: "image" and "info"
     */
    get: function(name) {
       var bitmap = this.base(name);
@@ -120,7 +122,7 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
     *
     * @param resource {String} A loaded sprite resource
     * @param sprite {String} The name of the sprite from the resource
-    * @returns A {@link Sprite} object
+    * @return {Sprite} A {@link Sprite} instance
     */
    getSprite: function(resource, sprite) {
       return Sprite.create(sprite, this.get(resource).info.sprites[sprite], this.get(resource));
@@ -130,7 +132,7 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
     * Get the names of all the sprites available in a resource.
     *
     * @param resource {String} The name of the resource
-    * @return An Array of sprite names in the given resource
+    * @return {Array} All of the sprite names in the given loaded resource
     */
    getSpriteNames: function(resource) {
       var s = [];
@@ -143,17 +145,16 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
 
    /**
     * The name of the resource this loader will get.
-    * @returns A String that represents the resource type.
+    * @returns {String} The string "sprite"
     */
    getResourceType: function() {
       return "sprite";
    }
 
-}, {
+}, /** @scope SpriteLoader.prototype */{
    /**
     * Get the class name of this object.
-    * @return The string <tt>SpriteLoader</tt>
-    * @type String
+    * @return {String} The string "SpriteLoader"
     */
    getClassName: function() {
       return "SpriteLoader";
@@ -162,6 +163,12 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
 
 /**
  * @class Represents a sprite
+ *
+ * @constructor
+ * @param name {String} The name of the sprite within the resource
+ * @param spriteObj {Object} Passed in by a {@link SpriteLoader}.  An array which defines the
+ *						  sprite frame, and parameters.
+ * @param spriteResource {Object} The sprite resource loaded by the {@link SpriteLoader}
  * @extends PooledObject
  */
 var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
@@ -188,11 +195,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
    bbox: null,
 
    /**
-    * Creates an instance of a Sprite object.
-    *
-    * @param name {String} The name of the object
-    * @param spriteObj {Object} Passed in by a SpriteLoader
-    * @param spriteResource {Object} The sprite resource loaded by the SpriteLoader
+    * @private
     */
    constructor: function(name, spriteObj, spriteResource) {
 
@@ -212,6 +215,9 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       return this.base(name);
    },
 
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.mode = -1;
@@ -225,7 +231,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
 
    /**
     * Returns <tt>true</tt> if the sprite is an animation.
-    * @return <tt>true</tt> if the sprite is an animation
+    * @return {Boolean} <tt>true</tt> if the sprite is an animation
     */
    isAnimation: function() {
       return (this.type == Sprite.TYPE_ANIMATION);
@@ -233,7 +239,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
 
    /**
     * Returns <tt>true</tt> if the sprite is an animation and loops.
-    * @return <tt>true</tt> if the sprite is an animation and loops
+    * @return {Boolean} <tt>true</tt> if the sprite is an animation and loops
     */
    isLoop: function() {
       return (this.isAnimation() && this.mode == Sprite.MODE_LOOP);
@@ -241,7 +247,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
 
    /**
     * Returns <tt>true</tt> if the sprite is an animation and toggles.
-    * @return <tt>true</tt> if the sprite is an animation and toggles
+    * @return {Boolean} <tt>true</tt> if the sprite is an animation and toggles
     */
    isToggle: function() {
       return (this.isAnimation() && this.mode == Sprite.MODE_TOGGLE);
@@ -249,18 +255,18 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
 
    /**
     * Get the bounding box for the sprite.
-    * @return A {@link Rectangle2D}
+    * @return {Rectangle2D} The bounding box which contains the entire sprite
     */
    getBoundingBox: function() {
       return this.bbox;
    },
 
    /**
-    * Gets the frame (rectangle defining what portion of the image map
-    * the sprite frame occupies) of the sprite.
+    * Gets the frame of the sprite. The frame is the rectangle that defining what
+    * portion of the image map the sprite frame occupies, given the specified time.
     *
-    * @param time {Number} Current world time
-    * @return A {@link Rectangle2D} which defines the frame of the sprite in
+    * @param time {Number} Current world time (can be obtained with {@link Engine#worldTime}
+    * @return {Rectangle2D} A rectangle which defines the frame of the sprite in
     *         the source image map.
     */
    getFrame: function(time) {
@@ -282,7 +288,9 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
    },
 
    /**
-    * Set the speed, in milliseconds, that an animation runs at.
+    * Set the speed, in milliseconds, that an animation runs at.  If the sprite is
+    * not an animation, this has no effect.
+    *
     * @param speed {Number} The number of milliseconds per frame of an animation
     */
    setSpeed: function(speed) {
@@ -293,7 +301,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
 
    /**
     * Get the number of milliseconds each frame is displayed for an animation
-    * @type Number
+    * @return {Number} The milliseconds per frame
     */
    getSpeed: function() {
       return this.speed;
@@ -302,52 +310,74 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
    /**
     * The source image loaded by the {@link SpriteLoader} when the sprite was
     * created.
-    * @return The source image the sprite is contained within
+    * @return {HTMLImage} The source image the sprite is contained within
     */
    getSourceImage: function() {
       return this.image;
    }
 
-}, /** @scope Sprite */{
+}, /** @scope Sprite.prototype */{
    /**
     * Gets the class name of this object.
-    * @return The string <tt>Sprite</tt>
+    * @return {String} The string "Sprite"
     */
    getClassName: function() {
       return "Sprite";
    },
 
-   /** The sprite animation loops */
+   /** The sprite animation loops
+    * @type Number
+    */
    MODE_LOOP: 0,
 
    /** The sprite animation toggles - Plays from the first to the last frame
-       then plays backwards to the first frame and repeats. */
+    *  then plays backwards to the first frame and repeats.
+    * @type Number
+    */
    MODE_TOGGLE: 1,
 
-   /** The sprite is a single frame */
+   /** The sprite is a single frame
+    * @type Number
+    */
    TYPE_SINGLE: 0,
 
-   /** The sprite is an animation */
+   /** The sprite is an animation
+    * @type Number
+    */
    TYPE_ANIMATION: 1,
 
-   /** The field in the sprite definition file for the left pixel of the sprite frame */
+   /** The field in the sprite definition file for the left pixel of the sprite frame
+    * @private
+    */
    INDEX_LEFT: 0,
 
-   /** The field in the sprite definition file for the top pixel of the sprite frame */
+   /** The field in the sprite definition file for the top pixel of the sprite frame
+    * @private
+    */
    INDEX_TOP: 1,
 
-   /** The field in the sprite definition file for the width of the sprite frame */
+   /** The field in the sprite definition file for the width of the sprite frame
+    * @private
+    */
    INDEX_WIDTH: 2,
 
-   /** The field in the sprite definition file for the height of the sprite frame */
+   /** The field in the sprite definition file for the height of the sprite frame
+    * @private
+    */
    INDEX_HEIGHT: 3,
 
-   /** The field in the sprite definition file for the count of frames in the sprite */
+   /** The field in the sprite definition file for the count of frames in the sprite
+    * @private
+    */
    INDEX_COUNT: 4,
 
-   /** The field in the sprite definition file for the speed in milliseconds that the sprite animates */
+   /** The field in the sprite definition file for the speed in milliseconds that the sprite animates
+    * @private
+    */
    INDEX_SPEED: 5,
 
-   /** The field in the sprite definition file for the type of sprite animation */
+   /** The field in the sprite definition file for the type of sprite animation
+    * @private
+    */
    INDEX_TYPE: 6
 });

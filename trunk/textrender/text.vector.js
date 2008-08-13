@@ -31,6 +31,10 @@
 
 /**
  * @class A text renderer which draws text with simple vectors.
+ *
+ * @constructor
+ * @param componentName {String} The name of the text component
+ * @param priority {Number} The priority of the component
  * @extends AbstractTextRenderer
  */
 var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
@@ -39,11 +43,17 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
    spacing: 0,
 
+	/**
+	 * @private
+	 */
    constructor: function(componentName, priority) {
       this.base(componentName, priority);
       this.rText = [];
    },
 
+	/**
+	 * @private
+	 */
    release: function() {
       this.base();
       this.rText = null;
@@ -162,11 +172,11 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
    }
 
 
-}, { // Statics
+}, /** @scope VectorText.prototype */{
 
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} The string "VectorText"
     */
    getClassName: function() {
       return "VectorText";

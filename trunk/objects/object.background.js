@@ -41,7 +41,8 @@
  * @param name {String} The name of the object
  * @param level {Level} A level object to use for this scrolling background
  * @param windowWidth {Number} The width of the viewable window, in pixels
- * @param windowHeight (Number} The height of the viewable window, in pixels
+ * @param windowHeight {Number} The height of the viewable window, in pixels
+ * @example ScrollingBackground.create("background", levelObj, 640, 448);
  * @extends HTMLElementContext
  */
 var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackground.prototype */{
@@ -50,6 +51,9 @@ var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackgrou
 
    jQ: null,
 
+	/**
+	 * @private
+	 */
    constructor: function(name, level, windowWidth, windowHeight) {
 
       // Create an element for us to use as our window
@@ -60,34 +64,67 @@ var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackgrou
 
       // Draw the image
       this.jQ.append($(level.getSourceImage()).clone());
-      //this.canvasContext.drawImage(level.getFrame(), level.getSourceImage());
    },
 
+	/**
+	 * @private
+	 */
    release: function() {
       this.base();
       this.canvasContext = null;
       this.jQ = null;
    },
 
+	/**
+	 * Set the scroll position for the background using a {@link Point2D} to
+	 * define the X and Y scroll amount.
+	 *
+	 * @param point {Point2D} The scroll position along X and Y
+	 */
    setScrollPosition: function(point) {
-      this.jQ[0].scrollLeft = point.x;
-      this.jQ[0].scrollTop = point.y;
+      this.jQ.scrollLeft(point.x);
+      this.jQ.scrollTop(point.y);
    },
 
+	/**
+	 * Set the horizontal scroll amount in pixels.
+	 *
+	 * @param x {Number} The horizontal scroll in pixels
+	 */
    setHorizontalScroll: function(x) {
-      this.jQ[0].scrollLeft = x;
+      this.jQ.scrollLeft(x);
    },
 
+	/**
+	 * Set the vertical scroll amount in pixels.
+	 *
+	 * @param y {Number} The vertical scroll in pixels
+	 */
    setVerticalScroll: function(y) {
-      this.jQ[0].scrollTop = y;
-   }
+      this.jQ.scrollTop(y);
+   },
 
-}, /** @scope ScrollingBackground */{
+   /**
+    * Get the horizontal scroll amount in pixels.
+    * @return {Number} The horizontal scroll
+    */
+   getHorizontalScroll: function() {
+		return this.jQ.scrollLeft();
+	},
+
+   /**
+    * Get the vertical scroll amount in pixels.
+    * @return {Number} The vertical scroll
+    */
+	getVerticalScroll: function() {
+		return this.jQ.scrollTop();
+	}
+
+}, /** @scope ScrollingBackground.prototype */{
 
    /**
     * Get the class name of this object
-    *
-    * @type String
+    * @return {String} The string "ScrollingBackground"
     */
    getClassName: function() {
       return "ScrollingBackground";

@@ -30,14 +30,20 @@
 
 /**
  * @class Loads bitmap fonts and makes them available to the system.
+ *
+ * @constructor
+ * @param name {String=BitmapFontLoader} The name of the resource loader
  * @extends ImageResourceLoader
  */
 var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.prototype */{
 
    fonts: null,
 
-   constructor: function() {
-      this.base("BitmapFontLoader");
+	/**
+	 * @private
+	 */
+   constructor: function(name) {
+      this.base(name || "BitmapFontLoader");
       this.fonts = {};
    },
 
@@ -80,7 +86,7 @@ var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.pr
     * the font definition as <tt>info</tt>.
     *
     * @param name {String} The name of the object to retrieve
-    * @type Object
+    * @return {Object} The object representing the named font
     */
    get: function(name) {
       var bitmap = this.base(name);
@@ -93,16 +99,15 @@ var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.pr
 
    /**
     * The name of the resource this loader will get.
-    * @returns A String that represents the resource type.
+    * @return {String} The string "bitmap font"
     */
    getResourceType: function() {
       return "bitmap font";
    }
-}, {
+}, /** @scope BitmapFontLoader.protoype */{
    /**
     * Get the class name of this object
-    *
-    * @type String
+    * @return {String} The string "BitmapFontLoader"
     */
    getClassName: function() {
       return "BitmapFontLoader";

@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("Object2D", "HostObject", function() {
+
 /**
  * @class An object for use in a 2D environment.  Methods for getting position, rotation
  * and scale should be implemented within the extended class.
@@ -143,4 +145,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    getClassName: function() {
       return "Object2D";
    }
+});
+
+return Object2D;
+
 });

@@ -31,6 +31,8 @@
  * THE SOFTWARE
  */
 
+Engine.initObject("Game", null, function() {
+
 /**
  * @class The game object represents an instance of a game.  It is
  * the controlling entity for all of a game and is responsible
@@ -88,4 +90,8 @@ var Game = Base.extend(/** @scope Game.prototype */{
    getPlayers: function() {
       return 1;
    }
+});
+
+return Game;
+
 });

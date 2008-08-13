@@ -29,6 +29,7 @@
  *
  */
 
+Engine.initObject("PooledObject", null, function() {
 
 /**
  * @class Pooled objects are created as needed, and reused from a static pool
@@ -217,4 +218,8 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       }
       return "PooledObject";
    }
+});
+
+return PooledObject;
+
 });

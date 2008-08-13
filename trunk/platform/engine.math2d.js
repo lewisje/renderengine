@@ -32,6 +32,8 @@
  *
  */
 
+Engine.initObject("Math2D", null, function() {
+
 /**
  * @class A static class with methods and fields that are helpful
  * when dealing with two dimensional mathematics.
@@ -206,6 +208,12 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
 });
 
+return Math2D;
+
+});
+
+Engine.initObject("MathObject", null, function() {
+
 var MathObject = Base.extend({
    constructor: function() {
    }
@@ -218,6 +226,12 @@ var MathObject = Base.extend({
       return "MathObject";
    }
 });
+
+return MathObject;
+
+});
+
+Engine.initObject("Point2D", "MathObject", function() {
 
 /**
  * @class A 2D point class with helpful methods for manipulation
@@ -403,6 +417,11 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
 Point2D.ZERO = new Point2D(0,0);
 
+return Point2D;
+
+});
+
+Engine.initObject("Vector2D", "Point2D", function() {
 
 /**
  * @class A 2D vector class with helpful manipulation methods.
@@ -467,6 +486,12 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
       return "Vector2D";
    }
 });
+
+return Vector2D;
+
+});
+
+Engine.initObject("Rectangle2D", "MathObject", function() {
 
 /**
  * @class A 2D rectangle class with helpful manipulation methods.
@@ -708,4 +733,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    getClassName: function() {
       return "Rectangle2D";
    }
+});
+
+return Rectangle2D;
+
 });

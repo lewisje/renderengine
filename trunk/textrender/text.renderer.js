@@ -49,6 +49,9 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    drawMode: 0,
 
+	/**
+	 * @private
+	 */
    constructor: function(renderer, text, size) {
 
       Assert((renderer instanceof AbstractTextRenderer), "Text renderer must extend AbstractTextRenderer");
@@ -63,11 +66,20 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
       this.getComponent("transform").setScale(size || 1);
    },
 
+	/**
+	 * @private
+	 */
    release: function() {
       this.base();
       this.drawMode = 0;
    },
 
+	/**
+	 * Called to render the text to the context.
+	 *
+	 * @param renderContext {RenderContext} The context to render the text upon
+	 * @param time {Number} The engine time in milliseconds
+	 */
    update: function(renderContext, time) {
 
       if (this.drawMode == TextRenderer.DRAW_TEXT)
@@ -90,8 +102,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Get the text for this object to render.
-    *
-    * @type String
+    * @return {String} The text to draw
     */
    getText: function() {
       return this.getComponent("TextRenderObject").getText();
@@ -108,7 +119,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Get the size of the text to render.
-    * @type Number
+    * @return {Number} The size/scale of the text
     */
    getTextSize: function() {
       this.getComponent("transform").getScale();
@@ -125,7 +136,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Get the weight of the text.
-    * @type Number
+    * @return {Number} The text weight
     */
    getTextWeight: function() {
       this.getComponent("TextRenderObject").getTextWeight();
@@ -133,7 +144,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Get the position where the text will render.
-    * @type Point2D
+    * @return {Point2D} The position of the text
     */
    getPosition: function() {
       return this.getComponent("transform").getPosition();
@@ -151,7 +162,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
    /**
     * Set the horizontal alignment of the text.
     *
-    * @param alignment {Boolean} One of {@link #ALIGN_LEFT} or {@link #ALIGN_RIGHT}
+    * @param alignment {Number} One of {@link AbstractTextRenderer#ALIGN_LEFT}, {@link AbstractTextRenderer#ALIGN_RIGHT}
+    *						  or {@link AbstractTextRenderer#ALIGN_CENTER}
     */
    setTextAlignment: function(alignment) {
       this.getComponent("TextRenderObject").setAlignment(alignment);
@@ -159,7 +171,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Get the horizontal alignment of the text.
-    * @type Number
+    * @return {Number} The alignment constant for the text
     */
    getTextAlignment: function() {
       this.getComponent("TextRenderObject").getAlignment();
@@ -176,7 +188,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Get the color of the text to render
-    * @type String
+    * @return {String} The text color
     */
    getColor: function() {
       this.getComponent("TextRenderObject").getColor();
@@ -192,17 +204,26 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
    },
 
    /**
-    * Get the line style
-    * @type String
+    * Get the text color
+    * @return {String} The color or style of the line
     */
    getTextColor: function() {
       return this.getComponent("TextRenderObject").getColor();
    },
 
+	/**
+	 * Set the text drawing mode to either {@link #DRAW_TEXT} or {@link #NO_DRAW}.
+	 *
+	 * @param drawMode {Number} The drawing mode for the text.
+	 */
    setDrawMode: function(drawMode) {
       this.drawMode = drawMode;
    },
 
+	/**
+	 * Get the current drawing mode for the text.
+	 * @return {Number} The text drawing mode
+	 */
    getDrawMode: function() {
       return this.drawMode;
    }
@@ -210,9 +231,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Get the class name of this object
-    *
-    * @type String
-
+    * @return {String} The string "TextRenderer"
     */
    getClassName: function() {
       return "TextRenderer";
@@ -220,11 +239,13 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    /**
     * Draw the text to the context.
+    * @type Number
     */
    DRAW_TEXT: 0,
 
    /**
     * Don't draw the text to the context.
+    * @type Number
     */
    NO_DRAW: 1
 });

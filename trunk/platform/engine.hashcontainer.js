@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("HashContainer", "Container", function() {
+
 /**
  * @class A hash container is a logical collection of objects.  A hash container
  * is a container with a backing object for faster lookups.  Objects within
@@ -184,4 +186,8 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    getClassName: function() {
       return "HashContainer";
    }
+});
+
+return HashContainer;
+
 });

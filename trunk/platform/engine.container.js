@@ -30,6 +30,8 @@
  *
  */
 
+Engine.initObject("Iterator", "PooledObject", function() {
+
 /**
  * @class Create an iterator over a {@link Container} instance.
  *
@@ -100,6 +102,12 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       return "Iterator";
    }
 });
+
+return Iterator;
+
+});
+
+Engine.initObject("Container", "BaseObject", function() {
 
 /**
  * @class A container is a logical collection of objects.  A container
@@ -248,4 +256,8 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    getClassName: function() {
       return "Container";
    }
+});
+
+return Container;
+
 });

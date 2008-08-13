@@ -29,6 +29,7 @@
  *
  */
 
+Engine.initObject("BaseObject", "PooledObject", function() {
 
 /**
  * @class The base object class which represents an object within
@@ -108,5 +109,9 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    getClassName: function() {
       return "BaseObject";
    }
+
+});
+
+return BaseObject;
 
 });

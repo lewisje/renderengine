@@ -31,6 +31,8 @@
  *
  */
 
+Engine.initObject("QuadtreeNode", "SpatialNode", function() {
+
 /**
  * @class A single node within a quadtree.  Contains references to sub-nodes.
  *
@@ -77,6 +79,12 @@ var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
    }
 
 };
+
+return QuadtreeNode;
+
+});
+
+Engine.initObject("Quadtree", "SpatialContainer", function() {
 
 /**
  * @class A quadtree which divides up a space into smaller and smaller
@@ -194,7 +202,11 @@ var Quadtree = SpatialContainer.extend(/** @scope QuadTree.prototype */{
     * @type String
     */
    getClassName: function() {
-      return "QuadTree";
+      return "Quadtree";
    }
+
+});
+
+return Quadtree;
 
 });

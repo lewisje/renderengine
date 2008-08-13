@@ -38,9 +38,9 @@
  *
  * @constructor
  * @param componentName {String} The name of the renderer
- * @param priority {Number} The priority of the rendering order. Default: 0.1
+ * @param priority {Number} The priority of the rendering order. Default: <tt>0.1</tt>
  */
-var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer */{
+var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.prototype */{
 
    text: null,
 
@@ -50,6 +50,9 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
 
    weight: 1,
 
+	/**
+	 * @private
+	 */
    constructor: function(componentName, priority) {
       this.base(componentName || "TextRenderObject", BaseComponent.TYPE_RENDERING, priority || 0.1);
 
@@ -57,6 +60,9 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
       this.weight = 1;
    },
 
+	/**
+	 * @private
+	 */
    release: function() {
       this.base();
       this.text = null;
@@ -67,7 +73,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
 
    /**
     * Get the text being rendered
-    * @type String
+    * @return {String} The text this renderer will draw
     */
    getText: function() {
       return this.text;
@@ -94,7 +100,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
 
    /**
     * Get the weight of the text to render.
-    * @type Number
+    * @return {Number} The weight of the text
     */
    getTextWeight: function() {
       return this.weight;
@@ -111,16 +117,17 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
 
    /**
     * Get the color of the text to render.
-    * @type String
+    * @return {String} The text color
     */
    getColor: function() {
       return this.color;
    },
 
    /**
-    * Set the alignment of the text.
+    * Set the alignment of the text to one of the constants {@link #ALIGN_LEFT}, {@link #ALIGN_RIGHT}, or
+    *	{@link #ALIGN_CENTER}.
     *
-    * @param alignment {Number} The alignment for the text
+    * @param alignment {Number} The alignment constant for the text
     */
    setAlignment: function(alignment) {
       this.alignment = alignment;
@@ -128,17 +135,17 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer 
 
    /**
     * Get the alignment of the text.
-    * @type Number
+    * @return {Number} The alignment of the text
     */
    getAlignment: function() {
       return this.alignment;
    }
 
-}, /** @scope AbstractTextRenderer */{
+}, /** @scope AbstractTextRenderer.prototype */{
 
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} The string "AbstractTextRenderer"
     */
    getClassName: function() {
       return "AbstractTextRenderer";

@@ -46,12 +46,17 @@
  * }
  * </pre>
  *
+ * @constructor
+ * @param name {String=LevelLoader} The name of the resource loader
  * @extends ImageResourceLoader
  */
 var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */{
 
    levels: null,
 
+	/**
+	 * @private
+	 */
    constructor: function(name) {
       this.base(name || "LevelLoader");
       this.levels = {};
@@ -98,7 +103,7 @@ var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */
     * the level definition as <tt>info</tt>.
     *
     * @param name {String} The name of the object to retrieve
-    * @type Object
+    * @return {Object} The level resource specified by the name
     */
    get: function(name) {
       var bitmap = this.base(name);
@@ -110,10 +115,10 @@ var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */
    },
 
    /**
-    * Creates a {@link Level} object representing the named sprite.
+    * Creates a {@link Level} object representing the named level.
     *
     * @param level {String} A loaded level name
-    * @returns A {@link Sprite} object
+    * @returns {Level} A {@link Level} object
     */
    getLevel: function(level) {
       return Level.create(level, this.get(level));
@@ -121,17 +126,16 @@ var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */
 
    /**
     * The name of the resource this loader will get.
-    * @returns A String that represents the resource type.
+    * @returns {String} The string "level"
     */
    getResourceType: function() {
       return "level";
    }
 
-}, /** @scope LevelLoader */{
+}, /** @scope LevelLoader.prototype */{
    /**
     * Get the class name of this object.
-    * @return The string <tt>SpriteLoader</tt>
-    * @type String
+    * @return {String} The string "LevelLoader"
     */
    getClassName: function() {
       return "LevelLoader";
@@ -139,7 +143,11 @@ var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */
 });
 
 /**
- * @class Represents a playable level
+ * @class Creates an instance of a Level object.
+ *
+ * @constructor
+ * @param name {String} The name of the object
+ * @param levelResource {Object} The level resource loaded by the LevelLoader
  * @extends PooledObject
  */
 var Level = PooledObject.extend(/** @scope Level.prototype */{
@@ -154,10 +162,7 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
    collisionMap: null,
 
    /**
-    * Creates an instance of a Level object.
-    *
-    * @param name {String} The name of the object
-    * @param levelResource {Object} The level resource loaded by the LevelLoader
+    * @private
     */
    constructor: function(name, levelResource) {
 
@@ -174,6 +179,9 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
       return this.base(name);
    },
 
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.levelResource = null;
@@ -188,7 +196,7 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
     *
     * @param point {Point2D} The position to check for a collision
     * @param radius {Number} The distance from the point to check for collisions
-    * @return An array of {@link Rectangle2D} instances which might be possible collisions
+    * @return {Array} An array of {@link Rectangle2D} instances which might be possible collisions
     */
    getPCL: function(point, radius) {
       // Create a rectangle which represents the position and radius
@@ -207,8 +215,7 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
 
    /**
     * Get the width of the level image.
-    * @returns The width of the level in pixels
-    * @type Number
+    * @return {Number} The width of the level in pixels
     */
    getWidth: function() {
       return this.levelResource.info.bitmapWidth;
@@ -216,8 +223,7 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
 
    /**
     * Get the height of the level image.
-    * @returns The height of the level in pixels
-    * @type Number
+    * @return {Number} The height of the level in pixels
     */
    getHeight: function() {
       return this.levelResource.info.bitmapHeight;
@@ -225,7 +231,7 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
 
    /**
     * Get a {@link Rectangle2D} which encloses this level.
-    * @type Rectangle2D
+    * @return {Rectangle2D} A {@link Rectangle2D} which encloses the level
     */
    getFrame: function() {
       if (!this.frame) {
@@ -236,18 +242,18 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
    },
 
    /**
-    * The source image loaded by the {@link SpriteLoader} when the sprite was
+    * The source image loaded by the {@link LevelLoader} when the level was
     * created.
-    * @return The source image the sprite is contained within
+    * @return {HTMLImage} The source image of the level
     */
    getSourceImage: function() {
       return this.levelResource.image;
    }
 
-}, /** @scope Level */{
+}, /** @scope Level.prototype */{
    /**
     * Gets the class name of this object.
-    * @return The string <tt>Sprite</tt>
+    * @return {String} The string "Level"
     */
    getClassName: function() {
       return "Level";

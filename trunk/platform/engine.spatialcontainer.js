@@ -38,6 +38,8 @@
  */
 Engine.NodeIndex = 1;
 
+Engine.initObject("SpatialNode", null, function() {
+
 /**
  * @class A single node within a spatial container.  Has an index for fast node
  *        comparisons, and a list of objects contained within the node.
@@ -98,6 +100,12 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
    }
 
 });
+
+return SpatialNode;
+
+});
+
+Engine.initObject("SpatialContainer", "BaseObject", function() {
 
 /**
  * @class An abstract class to represent spatial containers.  Spatial containers
@@ -184,5 +192,9 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
    getClassName: function() {
       return "SpatialContainer";
    }
+
+});
+
+return SpatialContainer;
 
 });
