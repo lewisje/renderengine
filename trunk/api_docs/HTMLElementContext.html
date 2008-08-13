@@ -1,0 +1,398 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: HTMLElementContext</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class HTMLElementContext</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='Container.html' target='main'>Container</a>
+            |
+            +--<a href='RenderContext.html' target='main'>RenderContext</a>
+               |
+               +--<a href='RenderContext2D.html' target='main'>RenderContext2D</a>
+                  |
+                  +--<b>HTMLElementContext</b></pre>
+   <hr>
+   Class <b>HTMLElementContext</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="RenderContext2D.html">RenderContext2D</a>.<br/>
+
+<p>
+A reference to the <tt>document.body</tt> element as a rendering context.Aside from being The Render Engine's default rendering context, the contextis essentially a wrapper for the HTML document.  Wrapping, in this way, allowsus to update not only this context, but all other contexts during an engine frame.</p>
+
+
+
+<br/><i>Defined in <a href="context.htmlelement.src.html">context.htmlelement.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#HTMLElementContext">HTMLElementContext</a></b>()
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="RenderContext.html">RenderContext</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="RenderContext.html#destroy">destroy</a>,
+            
+               <a href="RenderContext.html#setSurface">setSurface</a>,
+            
+               <a href="RenderContext.html#getSurface">getSurface</a>,
+            
+               <a href="RenderContext.html#setWorldScale">setWorldScale</a>,
+            
+               <a href="RenderContext.html#getWorldScale">getWorldScale</a>,
+            
+               <a href="RenderContext.html#add">add</a>,
+            
+               <a href="RenderContext.html#getContextData">getContextData</a>,
+            
+               <a href="RenderContext.html#sort">sort</a>,
+            
+               <a href="RenderContext.html#update">update</a>,
+            
+               <a href="RenderContext.html#render">render</a>,
+            
+               <a href="RenderContext.html#updateObject">updateObject</a>,
+            
+               <a href="RenderContext.html#pushTransform">pushTransform</a>,
+            
+               <a href="RenderContext.html#popTransform">popTransform</a>,
+            
+               <a href="RenderContext.html#resetTransformStack">resetTransformStack</a>,
+            
+               <a href="RenderContext.html#getNearObjects">getNearObjects</a>,
+            
+               <a href="RenderContext.html#sortFn">sortFn</a>,
+            
+               <a href="RenderContext.html#getClassName">getClassName</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="RenderContext2D.html">RenderContext2D</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="RenderContext2D.html#release">release</a>,
+            
+               <a href="RenderContext2D.html#reset">reset</a>,
+            
+               <a href="RenderContext2D.html#setBackgroundColor">setBackgroundColor</a>,
+            
+               <a href="RenderContext2D.html#getBackgroundColor">getBackgroundColor</a>,
+            
+               <a href="RenderContext2D.html#setWidth">setWidth</a>,
+            
+               <a href="RenderContext2D.html#getWidth">getWidth</a>,
+            
+               <a href="RenderContext2D.html#setHeight">setHeight</a>,
+            
+               <a href="RenderContext2D.html#getHeight">getHeight</a>,
+            
+               <a href="RenderContext2D.html#getBoundingBox">getBoundingBox</a>,
+            
+               <a href="RenderContext2D.html#setPosition">setPosition</a>,
+            
+               <a href="RenderContext2D.html#getPosition">getPosition</a>,
+            
+               <a href="RenderContext2D.html#setRotation">setRotation</a>,
+            
+               <a href="RenderContext2D.html#getRotation">getRotation</a>,
+            
+               <a href="RenderContext2D.html#setScale">setScale</a>,
+            
+               <a href="RenderContext2D.html#getScaleX">getScaleX</a>,
+            
+               <a href="RenderContext2D.html#getScaleY">getScaleY</a>,
+            
+               <a href="RenderContext2D.html#setTransform">setTransform</a>,
+            
+               <a href="RenderContext2D.html#setLineStyle">setLineStyle</a>,
+            
+               <a href="RenderContext2D.html#getLineStyle">getLineStyle</a>,
+            
+               <a href="RenderContext2D.html#setLineWidth">setLineWidth</a>,
+            
+               <a href="RenderContext2D.html#getLineWidth">getLineWidth</a>,
+            
+               <a href="RenderContext2D.html#setFillStyle">setFillStyle</a>,
+            
+               <a href="RenderContext2D.html#getFillStyle">getFillStyle</a>,
+            
+               <a href="RenderContext2D.html#drawRectangle">drawRectangle</a>,
+            
+               <a href="RenderContext2D.html#drawFilledRectangle">drawFilledRectangle</a>,
+            
+               <a href="RenderContext2D.html#drawArc">drawArc</a>,
+            
+               <a href="RenderContext2D.html#drawFilledArc">drawFilledArc</a>,
+            
+               <a href="RenderContext2D.html#drawPolygon">drawPolygon</a>,
+            
+               <a href="RenderContext2D.html#drawPolyline">drawPolyline</a>,
+            
+               <a href="RenderContext2D.html#drawFilledPolygon">drawFilledPolygon</a>,
+            
+               <a href="RenderContext2D.html#drawLine">drawLine</a>,
+            
+               <a href="RenderContext2D.html#drawPoint">drawPoint</a>,
+            
+               <a href="RenderContext2D.html#drawSprite">drawSprite</a>,
+            
+               <a href="RenderContext2D.html#drawImage">drawImage</a>,
+            
+               <a href="RenderContext2D.html#getImage">getImage</a>,
+            
+               <a href="RenderContext2D.html#putImage">putImage</a>,
+            
+               <a href="RenderContext2D.html#drawText">drawText</a>,
+            
+               <a href="RenderContext2D.html#startPath">startPath</a>,
+            
+               <a href="RenderContext2D.html#endPath">endPath</a>,
+            
+               <a href="RenderContext2D.html#strokePath">strokePath</a>,
+            
+               <a href="RenderContext2D.html#fillPath">fillPath</a>,
+            
+               <a href="RenderContext2D.html#moveTo">moveTo</a>,
+            
+               <a href="RenderContext2D.html#lineTo">lineTo</a>,
+            
+               <a href="RenderContext2D.html#lineSeg">lineSeg</a>,
+            
+               <a href="RenderContext2D.html#quadraticCurveTo">quadraticCurveTo</a>,
+            
+               <a href="RenderContext2D.html#bezierCurveTo">bezierCurveTo</a>,
+            
+               <a href="RenderContext2D.html#arcTo">arcTo</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#serialize">serialize</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Container.html">Container</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Container.html#constructor">constructor</a>,
+            
+               <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#remove">remove</a>,
+            
+               <a href="Container.html#removeAtIndex">removeAtIndex</a>,
+            
+               <a href="Container.html#get">get</a>,
+            
+               <a href="Container.html#clear">clear</a>,
+            
+               <a href="Container.html#cleanUp">cleanUp</a>,
+            
+               <a href="Container.html#getObjects">getObjects</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="HTMLElementContext"> </a>
+<h3>HTMLElementContext</h3>
+
+   <pre><b>HTMLElementContext</b>()</pre>
+   <ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:16 GMT-0400 (EDT)</div>
+</body>
+</html>
