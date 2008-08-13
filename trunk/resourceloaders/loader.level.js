@@ -29,7 +29,23 @@
  */
 
 /**
- * @class Loads levels and makes them available to the system.
+ * @class Loads levels and makes them available to the system.  Levels are defined
+ *        by a specific type of resource file.  A level is comprised of its bitmap
+ *        file, a collision map, and objects that make up the level with their
+ *        constructor states.
+ * <pre>
+ * {
+ *    // A level file
+ *    bitmapImage: "level1.png",
+ *    bitmapWidth: 6768,
+ *    bitmapHeight: 448,
+ *    collisionMap: [
+ *       [0, 400, 6768, 48]
+ *    ],
+ *    objects: {}
+ * }
+ * </pre>
+ *
  * @extends ImageResourceLoader
  */
 var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */{
@@ -111,7 +127,7 @@ var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */
       return "level";
    }
 
-}, {
+}, /** @scope LevelLoader */{
    /**
     * Get the class name of this object.
     * @return The string <tt>SpriteLoader</tt>
@@ -128,11 +144,11 @@ var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */
  */
 var Level = PooledObject.extend(/** @scope Level.prototype */{
 
-	// The level resource
-	levelResource: null,
+   // The level resource
+   levelResource: null,
 
-	// The level frame
-	frame: null,
+   // The level frame
+   frame: null,
 
    // The map of all collision rects defined for the level
    collisionMap: null,
@@ -146,14 +162,14 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
    constructor: function(name, levelResource) {
 
       this.levelResource = levelResource;
-		this.collisionMap = [];
+      this.collisionMap = [];
 
-		// Run through the collision map to recreate
-		// the collision rectangles
-		for (var r in levelResource.info.collisionMap) {
-			var rA = levelResource.info.collisionMap[r];
-			this.collisionMap.push(Rectangle2D.create(rA[0], rA[1], rA[2], rA[3]));
-		}
+      // Run through the collision map to recreate
+      // the collision rectangles
+      for (var r in levelResource.info.collisionMap) {
+         var rA = levelResource.info.collisionMap[r];
+         this.collisionMap.push(Rectangle2D.create(rA[0], rA[1], rA[2], rA[3]));
+      }
 
       return this.base(name);
    },
@@ -175,49 +191,49 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
     * @return An array of {@link Rectangle2D} instances which might be possible collisions
     */
    getPCL: function(point, radius) {
-		// Create a rectangle which represents the position and radius
-		var cRect = Rectangle2D.create(point.x - radius, point.y - radius, radius * 2, radius * 2);
+      // Create a rectangle which represents the position and radius
+      var cRect = Rectangle2D.create(point.x - radius, point.y - radius, radius * 2, radius * 2);
 
-		// Check the collision map for possible collisions
-		var pcl = [];
-		for (var r in this.collisionMap) {
-			if (this.collisionMap[r].isOverlapped(cRect)) {
-				pcl.push(this.collisionMap[r]);
-			}
-		}
+      // Check the collision map for possible collisions
+      var pcl = [];
+      for (var r in this.collisionMap) {
+         if (this.collisionMap[r].isOverlapped(cRect)) {
+            pcl.push(this.collisionMap[r]);
+         }
+      }
 
-		return pcl;
+      return pcl;
    },
 
-	/**
-	 * Get the width of the level image.
-	 * @returns The width of the level in pixels
-	 * @type Number
-	 */
-	getWidth: function() {
-		return this.levelResource.info.bitmapWidth;
-	},
+   /**
+    * Get the width of the level image.
+    * @returns The width of the level in pixels
+    * @type Number
+    */
+   getWidth: function() {
+      return this.levelResource.info.bitmapWidth;
+   },
 
-	/**
-	 * Get the height of the level image.
-	 * @returns The height of the level in pixels
-	 * @type Number
-	 */
-	getHeight: function() {
-		return this.levelResource.info.bitmapHeight;
-	},
+   /**
+    * Get the height of the level image.
+    * @returns The height of the level in pixels
+    * @type Number
+    */
+   getHeight: function() {
+      return this.levelResource.info.bitmapHeight;
+   },
 
-	/**
-	 * Get a {@link Rectangle2D} which encloses this level.
-	 * @type Rectangle2D
-	 */
-	getFrame: function() {
-		if (!this.frame) {
-			this.frame = Rectangle2D.create(0, 0, this.getWidth(), this.getHeight());
-		}
+   /**
+    * Get a {@link Rectangle2D} which encloses this level.
+    * @type Rectangle2D
+    */
+   getFrame: function() {
+      if (!this.frame) {
+         this.frame = Rectangle2D.create(0, 0, this.getWidth(), this.getHeight());
+      }
 
-		return this.frame;
-	},
+      return this.frame;
+   },
 
    /**
     * The source image loaded by the {@link SpriteLoader} when the sprite was
@@ -228,7 +244,7 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
       return this.levelResource.image;
    }
 
-}, /** @scope Sprite */{
+}, /** @scope Level */{
    /**
     * Gets the class name of this object.
     * @return The string <tt>Sprite</tt>

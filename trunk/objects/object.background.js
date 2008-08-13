@@ -2,7 +2,7 @@
  * The Render Engine
  *
  * @fileoverview An object which loads an image and a collision map
- *					  for usage as a single layered scrolling background.
+ *               for usage as a single layered scrolling background.
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -34,21 +34,21 @@
 
 /**
  * @class A scrolling background render context with an associated
- *			 collision map.  The render context loads a static image
- *			 which will be displayed within a rendering context
+ *        collision map.  The render context loads a level which defines
+ *        the image that will be displayed within a rendering context.
  *
  * @constructor
  * @param name {String} The name of the object
  * @param level {Level} A level object to use for this scrolling background
  * @param windowWidth {Number} The width of the viewable window, in pixels
  * @param windowHeight (Number} The height of the viewable window, in pixels
- * @extends BaseObject
+ * @extends HTMLElementContext
  */
 var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackground.prototype */{
 
-	canvasContext: null,
+   canvasContext: null,
 
-	jQ: null,
+   jQ: null,
 
    constructor: function(name, level, windowWidth, windowHeight) {
 
@@ -58,8 +58,8 @@ var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackgrou
 
       this.jQ = $(this.getSurface());
 
-		// Draw the image
-		this.jQ.append($(level.getSourceImage()).clone());
+      // Draw the image
+      this.jQ.append($(level.getSourceImage()).clone());
       //this.canvasContext.drawImage(level.getFrame(), level.getSourceImage());
    },
 
@@ -70,17 +70,17 @@ var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackgrou
    },
 
    setScrollPosition: function(point) {
-		this.jQ[0].scrollLeft = point.x;
-		this.jQ[0].scrollTop = point.y;
-	},
+      this.jQ[0].scrollLeft = point.x;
+      this.jQ[0].scrollTop = point.y;
+   },
 
-	setHorizontalScroll: function(x) {
-		this.jQ[0].scrollLeft = x;
-	},
+   setHorizontalScroll: function(x) {
+      this.jQ[0].scrollLeft = x;
+   },
 
-	setVerticalScroll: function(y) {
-		this.jQ[0].scrollTop = y;
-	}
+   setVerticalScroll: function(y) {
+      this.jQ[0].scrollTop = y;
+   }
 
 }, /** @scope ScrollingBackground */{
 

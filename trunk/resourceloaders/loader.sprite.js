@@ -29,7 +29,30 @@
  */
 
 /**
- * @class Loads sprites and makes them available to the system.
+ * @class Loads sprites and makes them available to the system.  Sprites are
+ *        defined by an external resource that consist of the follwing definition.
+ *        The definition file must include the source bitmap, the width and height
+ *        of the bitmap, and a section that defines each sprite.
+ *        <p/>
+ *        Sprites can either be single frames, or animations:
+ * <pre>
+ * {
+ *    // Frame (f): left, top, frameWidth, frameHeight
+ *    // Animation (a): left, top, frameWidth, frameHeight, frameCount, speedMS, loop/toggle
+ *    bitmapImage: "bitmapFile.ext",
+ *    bitmapWidth: 320,
+ *    bitmapHeight: 320,
+ *    sprites: {
+ *        "stand": {
+ *           "f" : [0, 0, 32, 32]
+ *        },
+ *        "walk": {
+ *           "a" : [32, 0, 32, 32, 3, 150, "loop"]
+ *        }
+ *    }
+ * }
+ * </pre>
+ *
  * @extends ImageResourceLoader
  */
 var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype */{

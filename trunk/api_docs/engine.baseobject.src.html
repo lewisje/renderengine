@@ -73,7 +73,7 @@ The base object class which represents an object withinthe engine.
 <span class='linenumber'>  5</span>  *
 <span class='linenumber'>  6</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  7</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  8</span>  * @version: $Revision: 190 $
+<span class='linenumber'>  8</span>  * @version: $Revision: 231 $
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 11</span>  *
@@ -119,48 +119,70 @@ The base object class which represents an object withinthe engine.
 <span class='linenumber'> 51</span>     * Set the element which will represent this object within
 <span class='linenumber'> 52</span>     * its rendering context.
 <span class='linenumber'> 53</span>     *
-<span class='linenumber'> 54</span>     * @type element {BaseObject}
-<span class='linenumber'> 55</span>     * @memberOf BaseObject
-<span class='linenumber'> 56</span>     */</span><span class="WHIT">
-<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="NAME">setElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 58</span> </span><span class="WHIT">      </span><span class="NAME">this.element</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 59</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 60</span> 
-<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 62</span>     * Get the element which represents this object within its rendering context.
-<span class='linenumber'> 63</span>     *
-<span class='linenumber'> 64</span>     * @return The element
-<span class='linenumber'> 65</span>     * @type BaseObject
-<span class='linenumber'> 66</span>     * @memberOf BaseObject
-<span class='linenumber'> 67</span>     */</span><span class="WHIT">
-<span class='linenumber'> 68</span> </span><span class="WHIT">   </span><span class="NAME">getElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 69</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.element</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 71</span> 
-<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 73</span>     * Update the state of the object.
+<span class='linenumber'> 54</span>     * @param element {HTMLElement} The HTML element this object is associated with.
+<span class='linenumber'> 55</span>     */</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="NAME">setElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">element</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 57</span> </span><span class="WHIT">      </span><span class="NAME">this.element</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">element</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 59</span> 
+<span class='linenumber'> 60</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 61</span>     * Get the element which represents this object within its rendering context.
+<span class='linenumber'> 62</span>     *
+<span class='linenumber'> 63</span>     * @return The HTML element
+<span class='linenumber'> 64</span>     */</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="NAME">getElement</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.element</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 68</span> 
+<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 70</span>     * Abstract update method to set the state of the object.
+<span class='linenumber'> 71</span>     *
+<span class='linenumber'> 72</span>     * @param renderContext {RenderContext} The context the object exists within
+<span class='linenumber'> 73</span>     * @param time {Number} The current engine time, in milliseconds
 <span class='linenumber'> 74</span>     */</span><span class="WHIT">
 <span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 76</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 76</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 77</span> 
-<span class='linenumber'> 78</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 79</span> 
-<span class='linenumber'> 80</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 81</span>     * Get the class name of this object
-<span class='linenumber'> 82</span>     *
-<span class='linenumber'> 83</span>     * @type String
-<span class='linenumber'> 84</span>     * @memberOf BaseObject
-<span class='linenumber'> 85</span>     */</span><span class="WHIT">
-<span class='linenumber'> 86</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 87</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"BaseObject"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 88</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 79</span>     * Add an event handler to objects that have an associated HTML element.
+<span class='linenumber'> 80</span>     *
+<span class='linenumber'> 81</span>     * @param type {String} The event type to respond to
+<span class='linenumber'> 82</span>     * @param fn {Function} The function to trigger when the event fires
+<span class='linenumber'> 83</span>     */</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">   </span><span class="NAME">addEvent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 86</span> </span><span class="WHIT">         </span><span class="NAME">EventEngine.setHandler</span><span class="PUNC">(</span><span class="NAME">this.getElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 87</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 88</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 89</span> 
-<span class='linenumber'> 90</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 91</span> </span></pre>
+<span class='linenumber'> 90</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 91</span>     * Remove an event handler assigned to the object's associated HTML element.
+<span class='linenumber'> 92</span>     *
+<span class='linenumber'> 93</span>     * @param type {String} The event type to remove
+<span class='linenumber'> 94</span>     * @param fn {Function} The handler function to remove
+<span class='linenumber'> 95</span>     */</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="NAME">removeEvent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 98</span> </span><span class="WHIT">         </span><span class="NAME">EventEngine.clearHandler</span><span class="PUNC">(</span><span class="NAME">this.getElement</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>100</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>101</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope BaseObject */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>102</span> 
+<span class='linenumber'>103</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>104</span>     * Get the class name of this object
+<span class='linenumber'>105</span>     *
+<span class='linenumber'>106</span>     * @type String
+<span class='linenumber'>107</span>     */</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"BaseObject"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>110</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>111</span> 
+<span class='linenumber'>112</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>113</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:32:52 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:01 GMT-0400 (EDT)</div>
 </body>
 </html>

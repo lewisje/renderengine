@@ -31,7 +31,7 @@
  */
 
 /**
- * @class Create an iterator over a container.
+ * @class Create an iterator over a {@link Container} instance.
  *
  * @param container {Container} The container to iterate over.
  */
@@ -59,6 +59,10 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       this.objs = null;
    },
 
+   /**
+    * Reverse the order of the elements in the container (non-destructive) before
+    * iterating over them.  You cannot call this method after you have called {@link #next}.
+    */
    reverse: function() {
       if (this.idx != 0) {
          throw new Error("Cannot reverse Iterator after calling next()");
@@ -86,12 +90,11 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       return (this.idx < this.c.size());
    }
 
-}, {
+}, /** @scope Iterator */{
    /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf Container
     */
    getClassName: function() {
       return "Iterator";
@@ -236,7 +239,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       this.objects.sort(fn);
    }
 
-}, {
+}, /** @scope Container */{
    /**
     * Get the class name of this object
     *

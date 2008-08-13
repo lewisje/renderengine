@@ -43,19 +43,17 @@ var DocumentContext = HTMLElementContext.extend(/** @scope DocumentContext.proto
     * Create an instance of a document rendering context.  This context
     * represents the HTML document body.  Theoretically, only one of these
     * contexts should ever be created.
-    * @memberOf DocumentContext
     * @constructor
     */
    constructor: function() {
       this.base("DocumentContext", document.body);
    }
 
-}, {
+}, /** @scope DocumentContext */{
    /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf DocumentContext
     */
    getClassName: function() {
       return "DocumentContext";

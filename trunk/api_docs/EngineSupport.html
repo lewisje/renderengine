@@ -120,6 +120,48 @@ Engine support class.  Provides extra functions the engine or games       can u
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#checkBooleanParam">checkBooleanParam</a></b>(paramName) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Check for a query parameter and to see if it evaluates to one of the following:<tt>true</tt>, <tt>1</tt>, <tt>yes</tt>, or <tt>y</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#checkNumericParam">checkNumericParam</a></b>(paramName, val) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Check for a query parameter and to see if it evaluates to the specified number.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#checkStringParam">checkStringParam</a></b>(paramName, val) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Check for a query parameter and to see if it evaluates to the specified value.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
@@ -187,7 +229,7 @@ Engine support class.  Provides extra functions the engine or games       can u
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#parseJSONString">parseJSONString</a></b>(jsonString) </code> 
+            <code> <b> <a href="#parseJSON">parseJSON</a></b>(jsonString) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
  
@@ -202,6 +244,20 @@ Engine support class.  Provides extra functions the engine or games       can u
             <code> <b> <a href="#quoteString">quoteString</a></b>(string) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Return a string, enclosed in quotes.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#sysInfo">sysInfo</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets an object that is a collation of a number of browser andclient settings.
  
          </td>
       </tr>
@@ -300,6 +356,90 @@ Engine support class.  Provides extra functions the engine or games       can u
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
    
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="checkBooleanParam"> </a> <h3>checkBooleanParam</h3>
+      <pre>&nbsp;<b>checkBooleanParam</b>(paramName)</pre> 
+   <ul>
+      Check for a query parameter and to see if it evaluates to one of the following:<tt>true</tt>, <tt>1</tt>, <tt>yes</tt>, or <tt>y</tt>.  If so, returns <tt>true</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The query parameter name 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code><tt>true</tt> if the query parameter exists and is one of the specified values. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="checkNumericParam"> </a> <h3>checkNumericParam</h3>
+      <pre>&nbsp;<b>checkNumericParam</b>(paramName, val)</pre> 
+   <ul>
+      Check for a query parameter and to see if it evaluates to the specified number.If so, returns <tt>true</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The query parameter name 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;val </code> - The number to check for 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code><tt>true</tt> if the query parameter exists and is the value specified 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="checkStringParam"> </a> <h3>checkStringParam</h3>
+      <pre>&nbsp;<b>checkStringParam</b>(paramName, val)</pre> 
+   <ul>
+      Check for a query parameter and to see if it evaluates to the specified value.If so, returns <tt>true</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The query parameter name 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;val </code> - The value to check for 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code><tt>true</tt> if the query parameter exists and is the value specified 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -427,8 +567,8 @@ Engine support class.  Provides extra functions the engine or games       can u
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="parseJSONString"> </a> <h3>parseJSONString</h3>
-      <pre>&nbsp;<b>parseJSONString</b>(jsonString)</pre> 
+   <a name="parseJSON"> </a> <h3>parseJSON</h3>
+      <pre>&nbsp;<b>parseJSON</b>(jsonString)</pre> 
    <ul>
       Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
       
@@ -474,6 +614,27 @@ Engine support class.  Provides extra functions the engine or games       can u
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="sysInfo"> </a> <h3>sysInfo</h3>
+      <pre>&nbsp;<b>sysInfo</b>()</pre> 
+   <ul>
+      Gets an object that is a collation of a number of browser andclient settings.  You can use this information to tailor a gameto the environment it is running within.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code>An object with system information 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="toJSONString"> </a> <h3>toJSONString</h3>
       <pre>&nbsp;<b>toJSONString</b>(object)</pre> 
    <ul>
@@ -511,6 +672,6 @@ Engine support class.  Provides extra functions the engine or games       can u
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:33:11 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
 </body>
 </html>
