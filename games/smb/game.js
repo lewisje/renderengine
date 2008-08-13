@@ -75,6 +75,10 @@ var SpriteTest = Game.extend({
    soundLoader: null,
    levelLoader: null,
 
+   nextZ: 0,
+
+   gridSize: 32,
+
    /**
     * Handle the keypress which starts the game
     *
@@ -107,13 +111,13 @@ var SpriteTest = Game.extend({
 
       this.spriteLoader = SpriteLoader.create();
       this.soundLoader = SoundResourceLoader.create();
-		this.levelLoader = LevelLoader.create();
+      this.levelLoader = LevelLoader.create();
 
       // Load the music
       this.soundLoader.load("bgm", "resources/smblvl1.mp3");
 
-		// Load the level
-		this.levelLoader.load("level1", "resources/smblevel1.js");
+      // Load the level
+      this.levelLoader.load("level1", "resources/smblevel1.js");
 
       // Load the sprites
       this.spriteLoader.load("smbtiles", "resources/smbtiles.js");
@@ -128,7 +132,7 @@ var SpriteTest = Game.extend({
    waitForResources: function() {
       //Console.debug("checking");
       if (SpriteTest.spriteLoader.isReady("smbtiles") &&
-      	 SpriteTest.levelLoader.isReady("level1"))
+          SpriteTest.levelLoader.isReady("level1"))
       {
          SpriteTest.loadTimeout.destroy();
          SpriteTest.run();
@@ -149,61 +153,39 @@ var SpriteTest = Game.extend({
    },
 
    run: function() {
-		$("#loading").remove();
+      $("#loading").remove();
 
-		// Create the 2D context
-		this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
-		this.centerPoint = this.fieldBox.getCenter();
+      // Create the 2D context
+      this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
+      this.centerPoint = this.fieldBox.getCenter();
 
-		var level = SpriteTest.levelLoader.getLevel("level1");
+      var level = SpriteTest.levelLoader.getLevel("level1");
 
-		this.scrollBkg = ScrollingBackground.create("bkg", level, this.fieldWidth, this.fieldHeight);
-		Engine.getDefaultContext().add(this.scrollBkg);
+      this.scrollBkg = ScrollingBackground.create("bkg", level, this.fieldWidth, this.fieldHeight);
+      Engine.getDefaultContext().add(this.scrollBkg);
 
-		this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
-		this.renderContext.setWorldScale(this.areaScale);
-		$(this.renderContext.getSurface()).css({ position: "absolute", top: "0px"});
-		Engine.getDefaultContext().add(this.renderContext);
+      this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
+      this.renderContext.setWorldScale(this.areaScale);
+      $(this.renderContext.getSurface()).css({ position: "absolute", top: "8px"});
+      Engine.getDefaultContext().add(this.renderContext);
 
-		//this.renderContext.setBackgroundColor("#5c94fc");
+      if (EngineSupport.checkBooleanParam("edit")) {
+         this.editor();
+      } else {
+         this.play();
+      }
+   },
 
+   play: function() {
       var player = SpriteTest.Actor.create();
       player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
-      player.setPosition(Point2D.create(100, 346));
+      player.setPosition(Point2D.create(100, 338));
       this.renderContext.add(player);
 
-/*
-      var goomba = SpriteTest.Actor.create();
-      goomba.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "goomba"));
-      goomba.setPosition(Point2D.create(164, 378));
-      this.renderContext.add(goomba);
-*/
       var mario = SpriteTest.Actor.create();
       mario.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "mario_walk"));
-      mario.setPosition(Point2D.create(228, 378));
+      mario.setPosition(Point2D.create(228, 370));
       this.renderContext.add(mario);
-/*
-      var koopa = SpriteTest.Actor.create();
-      koopa.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "green_koopa"));
-      koopa.setPosition(Point2D.create(292, 346));
-      this.renderContext.add(koopa);
-
-      var coin = SpriteTest.Actor.create();
-      coin.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "coin"));
-      coin.setPosition(Point2D.create(356, 378));
-      this.renderContext.add(coin);
-
-      var qblock = SpriteTest.Actor.create();
-      qblock.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "q_block"));
-      qblock.setPosition(Point2D.create(420, 378));
-      this.renderContext.add(qblock);
-*/
-
-      //this.soundLoader.get("bgm").play();
-      SpriteTest.scrollAmt = 0;
-      SpriteTest.sTimer = Interval.create("scroll", 50, function() {
-			SpriteTest.scrollBkg.setHorizontalScroll(SpriteTest.scrollAmt+=3);
-		});
    },
 
    /**
@@ -260,7 +242,113 @@ var SpriteTest = Game.extend({
          p.set(x,y);
       }
       return p;
-   }
+   },
 
+   editor: function() {
+      // Render the editor controls
+      $(this.scrollBkg.getSurface()).css("overflow-x", "auto");
+      $(this.renderContext.getSurface()).css("height", "432px");
+
+      var tbar = $("<div class='toolbar'/>");
+      var self = this;
+
+      // Create actor
+      tbar.append($("<span class='tool'>Actors:</span>"));
+      var s = $("<select id='actor' class='tool'>");
+      var spr = SpriteTest.spriteLoader.getSpriteNames("smbtiles");
+      $.each(spr, function() {
+         s.append($("<option value='" + this + "'>" + this + "</option>"));
+      });
+      tbar.append(s);
+      tbar.append($("<input type='button' value='Add' class='tool'/>").click(function() {
+         self.createActor($("#actor option:selected").val());
+      }));
+
+      // Remove actor
+      tbar.append($("<input type='button' value='Delete' class='tool'/>").click(function() {
+         if (SpriteTest.currentSelectedObject) {
+            self.renderContext.remove(SpriteTest.currentSelectedObject);
+            SpriteTest.currentSelectedObject = null;
+         }
+      }));
+
+      // Update grid size
+      tbar.append($("<span class='tool'>Grid Size:</span>"));
+      tbar.append($("<input class='tool' type='text' size='3' value='32'/>").change(function() {
+         if (!isNaN($(this).val())) {
+            SpriteTest.gridSize = $(this).val();
+         } else {
+            $(this).val(SpriteTest.gridSize);
+         }
+      }));
+
+      $(document.body).append(tbar);
+
+      // Add an event handler to the context
+      this.renderContext.addEvent("mousedown", function(evt) {
+         self.selectObject(evt.pageX, evt.pageY);
+         self.mouseDown = true;
+      });
+
+      this.renderContext.addEvent("mouseup", function() {
+         self.mouseDown = false;
+      });
+
+      this.renderContext.addEvent("mousemove", function(evt) {
+         if (self.mouseDown) {
+            self.moveSelected(evt.pageX, evt.pageY);
+         }
+      });
+   },
+
+   deselectObject: function(obj) {
+      if (obj == null) {
+         if (SpriteTest.currentSelectedObject) {
+            SpriteTest.currentSelectedObject.setEditing(false);
+            SpriteTest.currentSelectedObject = null;
+         }
+      } else {
+         obj.setEditing(false);
+      }
+   },
+
+   createActor: function(actorName) {
+      var actor = SpriteTest.Actor.create();
+      actor.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", actorName));
+      actor.setPosition(Point2D.create(this.centerPoint));
+      actor.setZIndex(SpriteTest.nextZ++);
+      this.renderContext.add(actor);
+      this.deselectObject();
+      SpriteTest.currentSelectedObject = actor;
+      actor.setEditing(true);
+   },
+
+   selectObject: function(x, y) {
+      this.deselectObject();
+
+      // Check to see if this object falls on top of an object
+      var pt = Point2D.create(x,y);
+      var itr = Iterator.create(this.renderContext);
+      itr.reverse();
+      while (itr.hasNext()) {
+         var obj = itr.next();
+         if (obj.constructor.getClassName() === "SpriteTest.Actor" &&
+               obj.getWorldBox().containsPoint(pt))
+         {
+            SpriteTest.currentSelectedObject = obj;
+            obj.setEditing(true);
+            break;
+         }
+      }
+   },
+
+   moveSelected: function(x, y) {
+      if (SpriteTest.currentSelectedObject) {
+         var grid = this.fieldWidth / SpriteTest.gridSize;
+         x = x - x % SpriteTest.gridSize;
+         y = y - y % SpriteTest.gridSize;
+         SpriteTest.currentSelectedObject.setPosition(Point2D.create(x, y));
+      }
+   }
 });
 

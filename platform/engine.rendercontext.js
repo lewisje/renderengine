@@ -121,7 +121,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       if (obj instanceof HostObject)
       {
          obj.setRenderContext(this);
-         this.sort(RenderContext.sortFn);
+         this.sort();
 
          // Create a structure to hold information that is related to
          // the render context that keeps it separate from the rest of the object.
@@ -129,10 +129,10 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       }
 
       if (obj.afterAdd) {
-			// If the object being added to the render context has
-			// an "afterAdd" method, call it (canvas uses this for IE emulation)
-			obj.afterAdd(this);
-		}
+         // If the object being added to the render context has
+         // an "afterAdd" method, call it (canvas uses this for IE emulation)
+         obj.afterAdd(this);
+      }
    },
 
    /**
@@ -144,6 +144,13 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     */
    getContextData: function(obj) {
       return obj.RenderContext;
+   },
+
+   /**
+    * Sort the render context's objects by Z-index
+    */
+   sort: function() {
+      this.base(RenderContext.sortFn);
    },
 
    /**

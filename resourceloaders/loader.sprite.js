@@ -104,6 +104,21 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
    },
 
    /**
+    * Get the names of all the sprites available in a resource.
+    *
+    * @param resource {String} The name of the resource
+    * @return An Array of sprite names in the given resource
+    */
+   getSpriteNames: function(resource) {
+      var s = [];
+      var spr = this.sprites[resource].sprites;
+      for (var i in spr) {
+         s.push(i);
+      }
+      return s;
+   },
+
+   /**
     * The name of the resource this loader will get.
     * @returns A String that represents the resource type.
     */
@@ -146,6 +161,9 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
    // The image map that contains the sprite(s)
    image: null,
 
+   // The bounding box for the sprite
+   bbox: null,
+
    /**
     * Creates an instance of a Sprite object.
     *
@@ -167,6 +185,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       this.image = spriteResource.image;
 
       this.frame = Rectangle2D.create(s[Sprite.INDEX_LEFT], s[Sprite.INDEX_TOP], s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
+      this.bbox = Rectangle2D.create(0, 0, s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
       return this.base(name);
    },
 
@@ -178,6 +197,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       this.speed = -1;
       this.frame = null;
       this.image = null;
+      this.bbox = null;
    },
 
    /**
@@ -205,6 +225,14 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
    },
 
    /**
+    * Get the bounding box for the sprite.
+    * @return A {@link Rectangle2D}
+    */
+   getBoundingBox: function() {
+      return this.bbox;
+   },
+
+   /**
     * Gets the frame (rectangle defining what portion of the image map
     * the sprite frame occupies) of the sprite.
     *
@@ -213,7 +241,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
     *         the source image map.
     */
    getFrame: function(time) {
-      if (!this.isAnimation) {
+      if (!this.isAnimation()) {
          return this.frame;
       } else {
          var f = Rectangle2D.create(this.frame);
@@ -230,23 +258,23 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       }
    },
 
-	/**
-	 * Set the speed, in milliseconds, that an animation runs at.
-	 * @param speed {Number} The number of milliseconds per frame of an animation
-	 */
-	setSpeed: function(speed) {
-		if (speed >= 0) {
-			this.speed = speed;
-		}
-	},
+   /**
+    * Set the speed, in milliseconds, that an animation runs at.
+    * @param speed {Number} The number of milliseconds per frame of an animation
+    */
+   setSpeed: function(speed) {
+      if (speed >= 0) {
+         this.speed = speed;
+      }
+   },
 
-	/**
-	 * Get the number of milliseconds each frame is displayed for an animation
-	 * @type Number
-	 */
-	getSpeed: function() {
-		return this.speed;
-	},
+   /**
+    * Get the number of milliseconds each frame is displayed for an animation
+    * @type Number
+    */
+   getSpeed: function() {
+      return this.speed;
+   },
 
    /**
     * The source image loaded by the {@link SpriteLoader} when the sprite was

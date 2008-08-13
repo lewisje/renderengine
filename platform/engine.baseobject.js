@@ -73,8 +73,19 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * Update the state of the object.
     */
    update: function(renderContext, time) {
-   }
+   },
 
+   addEvent: function(type, fn) {
+      if (this.getElement()) {
+         EventEngine.setHandler(this.getElement(), type, fn);
+      }
+   },
+
+   removeEvent: function(type, fn) {
+      if (this.getElement()) {
+         EventEngine.clearHandler(this.getElement(), type, fn);
+      }
+   }
 }, {
 
    /**

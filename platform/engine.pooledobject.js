@@ -120,8 +120,25 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * @type String
     */
    serialize: function() {
-      return EngineSupport.toJSONString(this);
+      // Only serialize bean-style properties
+      var o = {};
+      for (var i in this) {
+         try {
+            if (i.length > 3 && i.substring(0,3) == "get") {
+               var v = this[i]();
+               v = (typeof v == "undefined" ? "undefined" : (v != null ? v : "null"));
+               if (v != "[object Object]") {
+                  o[i.substring(3)] = v;
+               }
+            }
+         } catch(ex) {
+            // empty
+         }
+      }
+      Console.debug(o);
+      return EngineSupport.toJSONString(o);
    }
+
 }, /** @scope PooledObject **/{
 
    /**

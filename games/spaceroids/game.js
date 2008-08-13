@@ -290,7 +290,7 @@ var Spaceroids = Game.extend({
       this.addScore();
       this.scorePoints(0);
 
-		// Start the "music" track
+      // Start the "music" track
       Spaceroids.soundNum = 1;
       Spaceroids.gameSound = Interval.create("gameSound", 1000, function() {
          if (Spaceroids.soundNum == 1) {
@@ -373,7 +373,7 @@ var Spaceroids = Game.extend({
       this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
       this.renderContext.setWorldScale(this.areaScale);
       Engine.getDefaultContext().add(this.renderContext);
-      this.renderContext.setBackgroundColor("black");
+      this.renderContext.setBackgroundColor("#000000");
 
       // We'll need something to detect collisions
       this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 7);

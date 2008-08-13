@@ -41,14 +41,29 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 
    c: null,
 
+   objs: null,
+
    constructor: function(container) {
+      this.base("Iterator");
       this.idx = 0;
       this.c = container;
+
+      // Duplicate the elements in the container
+      this.objs = new Array().concat(container.getObjects());
    },
 
    release: function() {
+      this.base();
       this.idx = 0;
       this.c = null;
+      this.objs = null;
+   },
+
+   reverse: function() {
+      if (this.idx != 0) {
+         throw new Error("Cannot reverse Iterator after calling next()");
+      }
+      this.objs.reverse();
    },
 
    /**
@@ -58,9 +73,9 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
    next: function() {
       if (this.idx < this.c.size())
       {
-         return this.c.get(this.idx++);
+         return this.objs[this.idx++];
       }
-      throw new Error("Index out of range!");
+      throw new Error("Index out of range");
    },
 
    /**
@@ -68,7 +83,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * @type Boolean
     */
    hasNext: function() {
-      return (this.idx < this.c.size);
+      return (this.idx < this.c.size());
    }
 
 }, {
