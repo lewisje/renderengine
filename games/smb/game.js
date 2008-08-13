@@ -177,6 +177,8 @@ var SpriteTest = Game.extend({
    },
 
    play: function() {
+      this.soundLoader.get("bgm").play();
+
       var player = SpriteTest.Actor.create();
       player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
       player.setPosition(Point2D.create(100, 338));
