@@ -28,13 +28,17 @@
  *
  */
 
+Engine.initObject("ResourceLoader", "BaseObject", function() {
+
 /**
  * @class  A resource loader is a generalized interface used by all resource
  *         loaders.  It is designed to provide a common set of routines for
  *         loading resources (fonts, images, game data, etc...) from some
  *         location.
  *
- * @param name {String} The name of the resource loader. Default: ResourceLoader
+ * @constructor
+ * @param name {String=ResourceLoader} The name of the resource loader.
+ * @extends BaseObject
  */
 var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
@@ -42,17 +46,26 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
    length: 0,
 
+	/**
+	 * @private
+	 */
    constructor: function(name) {
       this.base(name || "ResourceLoader");
       this.cache = {};
    },
 
+	/**
+	 * @private
+	 */
    release: function() {
       this.base();
       this.cache = null;
       this.length = 0;
    },
 
+	/**
+	 * @private
+	 */
    destroy: function() {
       this.clear();
       this.base();
@@ -73,10 +86,22 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
       Console.log("Loading " + this.getResourceType() + ": " + name);
    },
 
+	/**
+	 * Set the "ready" state of the resource.  When a resource has been completely
+	 * loaded, set the resource "ready" state to <tt>true</tt> to allow objects
+	 * waiting for those resources to utilize them.
+	 *
+	 * @param name {String} The name of the resource
+	 * @param isReady {Boolean} <tt>true</tt> to set the resource to "ready for use"
+	 */
    setReady: function(name, isReady) {
       this.cache[name].isReady = isReady;
    },
 
+	/**
+	 * Check to see if a named resource is "ready for use".
+	 * @return {Boolean} <tt>true</tt> if the resource is loaded and ready to use
+	 */
    isReady: function(name) {
       return this.cache[name] ? this.cache[name].isReady : false;
    },
@@ -97,7 +122,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     * Get the object with the specified name from the cache.
     *
     * @param name {String} The name of the object to retrieve
-    * @type Object
+    * @return {Object} The object stored within the cache
     */
    get: function(name) {
       if (this.cache[name]) {
@@ -121,7 +146,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
    /**
     * Get the names of all the resources available in this resource loader.
-    * @return An Array of resource names
+    * @return {Array} An array of resource names
     */
    getResources: function() {
       var n = [];
@@ -133,19 +158,22 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
    /**
     * The name of the resource this loader will get.
-    * @returns A String that represents the resource type.
+    * @return {String} The string "default"
     */
    getResourceType: function() {
       return "default";
    }
-}, {
+}, /** @scope ResourceLoader.prototype */{
    /**
     * Get the class name of this object
-    *
-    * @type String
+    * @return {String} The string "ResourceLoader"
     */
    getClassName: function() {
       return "ResourceLoader";
    }
+
+});
+
+return ResourceLoader;
 
 });

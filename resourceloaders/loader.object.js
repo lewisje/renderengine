@@ -30,12 +30,18 @@
 
 /**
  * @class Loads JSON objects from a specified URL.
+ *
+ * @constructor
+ * @param name {String=ObjectLoader} The name of the resource loader
  * @extends ResourceLoader
  */
 var ObjectLoader = ResourceLoader.extend(/** @scope ObjectLoader.prototype */{
 
    objects: null,
 
+	/**
+	 * private
+	 */
    constructor: function(name) {
       this.base(name || "ObjectLoader");
       this.objects = {};
@@ -70,17 +76,16 @@ var ObjectLoader = ResourceLoader.extend(/** @scope ObjectLoader.prototype */{
 
    /**
     * The name of the resource this loader will get.
-    * @returns A String that represents the resource type.
+    * @returns {String} The string "object"
     */
    getResourceType: function() {
       return "object";
    }
 
-}, {
+}, /** @scope ObjectLoader.prototype */{
    /**
     * Get the class name of this object.
-    * @return The string <tt>SpriteLoader</tt>
-    * @type String
+    * @return {String} The string "SpriteLoader"
     */
    getClassName: function() {
       return "ObjectLoader";

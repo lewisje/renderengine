@@ -30,6 +30,8 @@
  *
  */
 
+Engine.initObject("Timer", "BaseObject", function() {
+
 /**
  * @class The base abstract class for all timers.
  *
@@ -163,6 +165,12 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    }
 });
 
+return Timer;
+
+});
+
+Engine.initObject("Timeout", "Timer", function() {
+
 /**
  * @class A timer that wraps the <tt>window.setTimeout</tt> method.
  * @extends Timer
@@ -197,6 +205,12 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
       return "Timeout";
    }
 });
+
+return Timeout;
+
+});
+
+Engine.initObject("OneShotTimeout", "Timeout", function() {
 
 /**
  * @class A one-shot timer that cannot be restarted and will
@@ -243,6 +257,12 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
    }
 });
 
+return OneShotTimeout;
+
+});
+
+Engine.initObject("Interval", "Timer", function() {
+
 /**
  * @class A timer that wraps the <tt>window.setInterval</tt> method.
  * @extends Timer
@@ -276,4 +296,8 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
    getClassName: function() {
       return "Interval";
    }
+});
+
+return Interval;
+
 });

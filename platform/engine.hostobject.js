@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("HostObject", "HashContainer", function() {
+
 /**
  * @class A host object is a container of components which provide some sort
  * of action, be it rendering, collision detection, effects, or whatever.
@@ -186,3 +188,6 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
 });
 
+return HostObject;
+
+});

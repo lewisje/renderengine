@@ -31,6 +31,8 @@
  *
  */
 
+Engine.initObject("Particle", "PooledObject", function() {
+
 /**
  * @class Base particle class.  A particle need only implement the
  *        draw method.  The remainder of the functionality is
@@ -86,6 +88,11 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
    }
 });
 
+return Particle;
+
+});
+
+Engine.initObject("ParticleEngine", "BaseObject", function() {
 
 /**
  * @class The particle engine is simply a system for updating, and expiring
@@ -201,4 +208,8 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
    getClassName: function() {
       return "ParticleEngine";
    }
+});
+
+return ParticleEngine;
+
 });

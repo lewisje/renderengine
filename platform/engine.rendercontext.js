@@ -29,9 +29,18 @@
  *
  */
 
+Engine.initObject("RenderContext", "Container", function() {
+
 /**
  * @class A base rendering context.  Game objects are rendered to a context
- * during engine runtime.
+ * during engine runtime.  A render context is a container of all of the objects
+ * added to it so that each object is given the chance to render.
+ *
+ * @constructor
+ * @param contextName {String} The name of this context.  Default: RenderContext
+ * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.
+ * @see CanvasContext
+ * @see DocumentContext
  * @extends Container
  */
 var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
@@ -45,16 +54,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    renderScaleY: 1,
 
    /**
-    * Create an instance of this rendering context and optionally
-    * assign the surface to which all rendering will occur.  This
-    * is a base class and does not have any particular surface associated
-    * with it.  Rendering contexts should extend this class.
-    *
-    * @param contextName {String} The name of this context.  Default: RenderContext
-    * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.
-    * @see CanvasContext
-    * @see DocumentContext
-    * @constructor
+    * @private
     */
    constructor: function(contextName, surface) {
       this.base(contextName || "RenderContext");
@@ -62,6 +62,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.setElement(surface);
    },
 
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.surface = null;
@@ -82,7 +85,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    /**
     * Set the surface element that objects will be rendered to.
     *
-    * @param element {HTMLElement} The surface node that all objects will be rendered to.
+    * @param element {HTMLElement} The document node that all objects will be rendered to.
     */
    setSurface: function(element) {
       this.surface = element;
@@ -91,28 +94,46 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    /**
     * Get the surface node that all objects will be rendered to.
-    *
-    * @type HTMLElement
+    * @return {HTMLElement} The document node that represents the rendering surface
     */
    getSurface: function() {
       return this.surface;
    },
 
+	/**
+	 * Set the scale of the rendering context.
+	 *
+	 * @param scaleX {Number} The scale along the X dimension
+	 * @param scaleY {Number} The scale along the Y dimension
+	 */
    setScale: function(scaleX, scaleY) {
    },
 
+	/**
+	 * Set the world scale of the rendering context.  All objects should
+	 * be adjusted by this scale when the context renders.
+	 *
+	 * @param scaleX {Number} The scale along the X dimension
+	 * @param scaleY {Number} The scale along the Y dimension
+	 */
    setWorldScale: function(scaleX, scaleY) {
       this.renderScaleX = scaleX;
       this.renderScaleY = scaleY ? scaleY : scaleX;
    },
 
+	/**
+	 * Gets an array representing the rendering scale of the world.
+	 * @return {Array} The first element is the X axis, the second is the Y axis
+	 */
    getWorldScale: function() {
       return [this.renderScaleX, this.renderScaleY];
    },
 
    /**
     * Add an object to the render list.  Only objects
-    * within the render list will be rendered.
+    * within the render list will be rendered.  If an object declared
+    * an <tt>afterAdd</tt> method, it will be called after the object
+    * has been added to the context.
     *
     * @param obj {BaseObject} The object to add to the render list
     */
@@ -139,15 +160,14 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Returns the structure that contains information held about
     * the rendering context.  This object allows a context to store
     * extra information on an object that an object wouldn't know about.
-    *
-    * @type Object
+    * @return {Object} An object with data used by the context
     */
    getContextData: function(obj) {
       return obj.RenderContext;
    },
 
    /**
-    * Sort the render context's objects by Z-index
+    * Sort the render context's objects by their respective Z-index value.
     */
    sort: function() {
       this.base(RenderContext.sortFn);
@@ -165,7 +185,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
-    * Called after the update to render all of the objects to the rendering context.
+    * Called after the update to render all of the objects to the context.
     *
     * @param time {Number} The current render time in milliseconds from the engine.
     */
@@ -188,7 +208,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
       // Restore the world transform
       this.popTransform();
-
    },
 
    /**
@@ -203,7 +222,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    /**
     * Increment the transform stack counter.
-    * @memberOf RenderContext
     */
    pushTransform: function() {
       this.transformStackDepth++;
@@ -237,17 +255,16 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     *
     * @param obj {Object2D} The object to test against
     * @returns A collection that contains the names of objects nearby
-    * @type Object
+    * @deprecated
     */
    getNearObjects: function(obj) {
       return {};
    }
-}, /** @scope RenderContext.prototype */{ // Static
+}, /** @scope RenderContext.prototype */{
 
    /**
     * Sort the objects to draw from objects with the lowest
     * z-index to the highest z-index.
-    * @memberOf RenderContext
     * @static
     */
    sortFn: function(obj1, obj2) {
@@ -262,11 +279,14 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    /**
     * Get the class name of this object
-    *
-    * @type String
+    * @return {String} The string "RenderContext"
     */
    getClassName: function() {
       return "RenderContext";
    }
+
+});
+
+return RenderContext;
 
 });

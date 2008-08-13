@@ -33,6 +33,8 @@
  *
  */
 
+Engine.initObject("GridNode", "SpatialNode", function() {
+
 /**
  * @class A single node within a SpatialGrid.
  *
@@ -66,6 +68,12 @@ var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
    }
 
 });
+
+return GridNode;
+
+});
+
+Engine.initObject("SpatialGrid", "SpatialContainer", function() {
 
 /**
  * @class A structure which divides a finite space up into a more
@@ -193,4 +201,8 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
    getClassName: function() {
       return "SpatialGrid";
    }
+});
+
+return SpatialGrid;
+
 });

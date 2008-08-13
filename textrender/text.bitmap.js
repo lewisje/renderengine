@@ -31,6 +31,9 @@
 
 /**
  * @class A text renderer which draws text from a bitmap font file.
+ *
+ * @constructor
+ * @param font {Font} A resource obtained by calling {@link FontResourceLoader#get}
  * @extends AbstractTextRenderer
  * @see FontResourceLoader
  */
@@ -40,11 +43,17 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 
    spacing: 0,
 
+	/**
+	 * @private
+	 */
    constructor: function(font) {
       this.base();
       this.font = font;
    },
 
+	/**
+	 * @private
+	 */
    release: function() {
       this.base();
       this.font = null;
@@ -184,10 +193,10 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       // Reset the composition operation
       renderContext.get2DContext().globalCompositeOperation = "source-over";
    }
-}, /** @scope BitmapText */{
+}, /** @scope BitmapText.prototype */{
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} The string "BitmapText"
     */
    getClassName: function() {
       return "BitmapText";

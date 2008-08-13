@@ -34,6 +34,8 @@
  *        <p/>
  *        Sounds must be 44.1KHz and have a bitrate of 192k to play correctly.
  *
+ * @constructor
+ * @param name {String=SoundLoader} The name of the resource loader
  * @extends ResourceLoader
  */
 var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.prototype */{
@@ -42,8 +44,11 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
 
    playingSounds: null,
 
-   constructor: function() {
-      this.base("SoundLoader");
+	/**
+	 * @private
+	 */
+   constructor: function(name) {
+      this.base(name || "SoundLoader");
       this.init = false;
       this.playingSounds = {};
    },
@@ -86,7 +91,7 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
     * whose methods can be called without exceptions.
     *
     * @param name {String} The name of the sound to retrieve.
-    * @type SMSound
+    * @return {SMSound} The sound SoundManager2 SMSound object
     */
    get: function(name) {
       var sound = this.base(name);
@@ -105,16 +110,15 @@ var SoundResourceLoader = ResourceLoader.extend(/** @scope SoundResourceLoader.p
 
    /**
     * The name of the resource this loader will get.
-    * @returns A String that represents the resource type.
+    * @return {String} The string "sound"
     */
    getResourceType: function() {
       return "sound";
    }
-}, {
+}, /** @scope SoundResourceLoader.prototype */{
    /**
     * Get the class name of this object
-    *
-    * @type String
+    * @return {String} The string "SoundResourceLoader"
     */
    getClassName: function() {
       return "SoundResourceLoader";

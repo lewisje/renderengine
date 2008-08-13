@@ -732,10 +732,24 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 });
 
 /**
- * @class The main engine class which is responsible for tracking objects
- * and rendering a frame.  Additionally, the Engine will track some simple
- * metrics for optimizing a game. Finally, the Engine is responsible for
- * maintaining the local client's <tt>worldTime</tt>.
+ * @class The main engine class which is responsible for keeping the world up to date.
+ * Additionally, the Engine will track and display metrics for optimizing a game. Finally,
+ * the Engine is responsible for maintaining the local client's <tt>worldTime</tt>.
+ * <p/>
+ * The engine includes methods to load scripts and stylesheets in a serialized fashion
+ * and report on the sound engine status.  Since objects are tracked by the engine, a list
+ * of all game objects can be obtained from the engine.  The engine also contains the root
+ * rendering context, or "default" context.  For anything to be rendered, or updated by the
+ * engine, it will need to be added to a child of the default context.
+ * <p/>
+ * Other methods allow for starting or shutting down then engine, toggling metric display,
+ * setting of the base "frames per second", toggling of the debug mode, and processing of
+ * the script and function queue.
+ * <p/>
+ * Since JavaScript is a single-threaded environment, frames are generated serially.  One
+ * frame must complete before another can be rendered.  Frames are not currently skipped
+ * by the engine.  It is up to objects to determine if frames have been skipped and adjust
+ * themselves appropriately.
  *
  * @static
  */
@@ -787,12 +801,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    pauseReps: 0,
 
    /**
-    * Create an instance of an object, managed by the Engine.  Called
-    * by any object that extends from {@link BaseObject}.
+    * Track an instance of an object managed by the Engine.  This is called
+    * by any object that extends from {@link PooledObject}.
     *
-    * @param obj {BaseObject} A managed object within the engine
-    * @return The global Id of the object
-    * @type String
+    * @param obj {PooledObject} A managed object within the engine
+    * @return {String} The global Id of the object
     * @memberOf Engine
     */
    create: function(obj) {
@@ -807,9 +820,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Destroys an object instance managed by the Engine.
+    * Removes an object instance managed by the Engine.
     *
-    * @param obj {BaseObject} The object, managed by the engine, to destroy
+    * @param obj {PooledObject} The object, managed by the engine, to destroy
     * @memberOf Engine
     */
    destroy: function(obj) {
@@ -823,11 +836,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Get an object by it's Id that is managed by the Engine.
+    * Get an object by it's Id that was assigned during the call to {@link #create}.
     *
     * @param id {String} The global Id of the object to locate
-    * @return The object
-    * @type BaseObject
+    * @return {PooledObject} The object
     * @memberOf Engine
     */
    getObject: function(id) {
@@ -848,7 +860,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    /**
     * Query the debugging mode of the engine.
     *
-    * @type Boolean
+    * @return {Boolean}
     * @memberOf Engine
     */
    getDebugMode: function() {
@@ -859,7 +871,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Returns <tt>true</tt> if SoundManager2 is loaded and initialized
     * properly.  The resource loader and play manager will use this
     * value to execute properly.
-    * @return <tt>true</tt> if the sound engine was loaded properly
+    * @return {Boolean} <tt>true</tt> if the sound engine was loaded properly
     * @memberOf Engine
     */
    isSoundEnabled: function() {
@@ -867,8 +879,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Starts the engine and initializes the timer to update the
-    * world managed by the engine.
+    * Starts the engine and loads the engine scripts.  When all scripts required
+    * by the engine have been loaded the {@link #run} method will be called.
     *
     * @param debugMode {Boolean} <tt>true</tt> to set the engine into debug mode
     *                            which allows the output of messages to the console.
@@ -953,8 +965,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * After a successful shutdown, we need to clean up all of the objects
-    * that were created on the window object by the engine.
+    * After a successful shutdown, the Engine needs to clean up
+    * all of the objects that were created on the window object by the engine.
     * @memberOf Engine
     * @private
     */
@@ -970,8 +982,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Get the default rendering context for the Engine.  This
     * is the <tt>document.body</tt> element in the browser.
     *
-    * @return The default rendering context
-    * @type RenderContext
+    * @return {RenderContext} The default rendering context
     * @memberOf Engine
     */
    getDefaultContext: function() {
@@ -1110,39 +1121,47 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             return;
          }
 
-         // A hack to allow us to do filesystem testing
-         if (!window.localDebugMode)
-         {
-            jQuery.getScript(scriptPath, function() {
-               Console.debug("Loaded '" + scriptPath + "'");
-               Engine.readyForNextScript = true;
-            });
-         }
-         else
-         {
-            // If we're running locally, don't use jQuery to get the script.
-            // This allows us to see and debug the loaded scripts.
-            var n = document.createElement("script");
-            n.src = scriptPath;
-            n.type = "text/javascript";
-            var fn = function() {
-               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-                  Console.debug("Loaded '" + scriptPath + "'");
-                  Engine.readyForNextScript = true;
-               }
-            }
-            if ($.browser.msie) {
-               n.defer = true;
-               n.onreadystatechange = fn;
-            } else {
-               n.onload = fn;
-            }
-
-            var h = document.getElementsByTagName("head")[0];
-            h.appendChild(n);
-         }
+			this.doLoad(scriptPath);
       }
    },
+
+	doLoad: function(scriptPath) {
+		// A hack to allow us to do filesystem testing
+		if (!window.localDebugMode)
+		{
+			jQuery.getScript(scriptPath, function() {
+				Console.debug("Loaded '" + scriptPath + "'");
+				Engine.readyForNextScript = true;
+			});
+		}
+		else
+		{
+			// If we're running locally, don't use jQuery to get the script.
+			// This allows us to see and debug the loaded scripts.
+			var n = document.createElement("script");
+			n.src = scriptPath;
+			n.type = "text/javascript";
+			var fn = function() {
+				if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+					Console.debug("Loaded '" + scriptPath + "'");
+					Engine.readyForNextScript = true;
+				}
+			}
+			if ($.browser.msie) {
+				n.defer = true;
+				n.onreadystatechange = fn;
+			} else {
+				n.onload = fn;
+			}
+
+			var h = document.getElementsByTagName("head")[0];
+			h.appendChild(n);
+		}
+	},
+
+	loadNow: function(scriptPath) {
+		this.doLoad(this.getEnginePath() + scriptPath);
+	},
 
    /**
     * Load a game script.  Creates the default rendering context
@@ -1190,7 +1209,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    /**
     * Get the path to the engine.
-    * @type String
+    * @return {String} The path/URL where the engine is located
     * @memberOf Engine
     */
    getEnginePath: function() {
@@ -1225,20 +1244,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadStylesheet("/css/engine.css");
 
       // Engine platform
-      this.load("/platform/engine.math2d.js");
-      this.load("/platform/engine.game.js");
-      this.load("/platform/engine.pooledobject.js");
-      this.load("/platform/engine.baseobject.js");
-      this.load("/platform/engine.timers.js");
-      this.load("/platform/engine.container.js");
-      this.load("/platform/engine.hashcontainer.js");
-      this.load("/platform/engine.rendercontext.js");
-      this.load("/platform/engine.hostobject.js");
-      this.load("/platform/engine.object2d.js");
-      this.load("/platform/engine.resourceloader.js");
-      this.load("/platform/engine.events.js");
-      this.load("/platform/engine.spatialcontainer.js");
-      this.load("/platform/engine.particles.js");
+      this.loadNow("/platform/engine.math2d.js");
+      this.loadNow("/platform/engine.game.js");
+      this.loadNow("/platform/engine.pooledobject.js");
+      this.loadNow("/platform/engine.baseobject.js");
+      this.loadNow("/platform/engine.timers.js");
+      this.loadNow("/platform/engine.container.js");
+      this.loadNow("/platform/engine.hashcontainer.js");
+      this.loadNow("/platform/engine.rendercontext.js");
+      this.loadNow("/platform/engine.hostobject.js");
+      this.loadNow("/platform/engine.object2d.js");
+      this.loadNow("/platform/engine.resourceloader.js");
+      this.loadNow("/platform/engine.events.js");
+      this.loadNow("/platform/engine.spatialcontainer.js");
+      this.loadNow("/platform/engine.particles.js");
+
 
       // Contexts
       this.load("/rendercontexts/context.render2d.js");
@@ -1490,11 +1510,65 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    toString: function() {
       return "The Render Engine " + this.version;
-   }
+   },
+
+   //=====================================================================================
+   // These methods handle object dependencies so that each object will be
+   // initialized as soon as its dependencies become available.
+
+	dependencyList: {},
+	dependencyProcessor: null,
+
+	/**
+	 * @param objectName {String} The name of the object class
+	 * @param dependencies {Array} An array of object names the object to initialize
+	 *							  is dependent on.  When all objects have been created, the
+	 *							  object will be initialized.
+	 * @param fn {Function} The function to run when the object can be initialized.
+	 */
+	initObject: function(objectName, dependency, fn) {
+		Console.debug("initObject", arguments);
+		if (dependency === null) {
+			// The object has no dependencies, create it...
+			window[objectName] = fn();
+			Console.debug("Initialized", objectName);
+		} else {
+			Engine.dependencyList[objectName] = {dep: dependency, objFn: fn};
+		}
+
+		if (!Engine.dependencyProcessor) {
+			Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
+		}
+	},
+
+	processDependencies: function() {
+		var pDeps = [];
+		var dCount = 0;
+		for (var d in Engine.dependencyList) {
+			dCount++;
+			// Check to see if the dependency of an object is loaded
+			if (window[Engine.dependencyList[d].dep] != null) {
+				// We can load it
+				window[d] = Engine.dependencyList[d].objFn();
+				Console.debug("Initialized", d);
+				pDeps.push(d);
+			}
+		}
+
+		for (var i in pDeps) {
+			delete Engine.dependencyList[pDeps[i]];
+		}
+
+		if (dCount != 0) {
+			Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
+		} else {
+			window.clearTimeout(Engine.dependencyProcessor);
+			Engine.dependencyProcessor = null;
+		}
+	}
 
  }, { // Interface
    globalTimer: null
-
  });
 
 // Start the console so logging can take place immediately

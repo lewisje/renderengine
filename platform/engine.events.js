@@ -31,6 +31,8 @@
  *
  */
 
+Engine.initObject("EventEngine", null, function() {
+
 var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
 
    constructor: null,
@@ -167,5 +169,9 @@ var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
 
    /** Constant for the "Windows" key (Windows) **/
    KEYCODE_WINDOW: 91
+
+});
+
+return EventEngine;
 
 });
