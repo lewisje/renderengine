@@ -33,12 +33,12 @@
  */
 
 /**
- * @class Abstract class that provides basic interface for all
- *     text render objects used by the text renderer.
+ * @class Abstract class that provides the basic interface for all
+ *        text render objects used by the {@link TextRenderer}.
  *
  * @constructor
- * @param text {String} The text to render
- * @param weight {Number} The weight (boldness) of the text. Default: 1
+ * @param componentName {String} The name of the renderer
+ * @param priority {Number} The priority of the rendering order. Default: 0.1
  */
 var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer */{
 

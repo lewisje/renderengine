@@ -122,6 +122,18 @@ The base object class which represents an object withinthe engine.  All objects
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#addEvent">addEvent</a></b>(type, fn) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add an event handler to objects that have an associated HTML element.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;
             </code></font> 
@@ -151,6 +163,18 @@ The base object class which represents an object withinthe engine.  All objects
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#removeEvent">removeEvent</a></b>(type, fn) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove an event handler assigned to the object's associated HTML element.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#setElement">setElement</a></b>(element) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the element which will represent this object withinits rendering context.
@@ -165,7 +189,7 @@ The base object class which represents an object withinthe engine.  All objects
          <td>
             <code> <b> <a href="#update">update</a></b>(renderContext, time) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update the state of the object.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Abstract update method to set the state of the object.
  
          </td>
       </tr>
@@ -252,6 +276,30 @@ The base object class which represents an object withinthe engine.  All objects
 </table>
 
 
+   <a name="addEvent"> </a> <h3>addEvent</h3>
+      <pre><b>addEvent</b>(type, fn)</pre> 
+   <ul>
+      Add an event handler to objects that have an associated HTML element.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;type </code> - The event type to respond to 
+      </ul>
+      <ul>
+         <code>[<i>Function</i>]&nbsp;fn </code> - The function to trigger when the event fires 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getElement"> </a> <h3>getElement</h3>
       <pre>&nbsp;<b>getElement</b>()</pre> 
    <ul>
@@ -266,7 +314,7 @@ The base object class which represents an object withinthe engine.  All objects
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The element 
+         <code></code>The HTML element 
       </ul>
    </ul>
    
@@ -289,6 +337,30 @@ The base object class which represents an object withinthe engine.  All objects
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="removeEvent"> </a> <h3>removeEvent</h3>
+      <pre><b>removeEvent</b>(type, fn)</pre> 
+   <ul>
+      Remove an event handler assigned to the object's associated HTML element.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;type </code> - The event type to remove 
+      </ul>
+      <ul>
+         <code>[<i>Function</i>]&nbsp;fn </code> - The handler function to remove 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setElement"> </a> <h3>setElement</h3>
       <pre><b>setElement</b>(element)</pre> 
    <ul>
@@ -299,7 +371,7 @@ The base object class which represents an object withinthe engine.  All objects
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>element </code> 
+         <code>[<i>HTMLElement</i>]&nbsp;element </code> - The HTML element this object is associated with. 
       </ul>
    </ul>
    
@@ -313,17 +385,17 @@ The base object class which represents an object withinthe engine.  All objects
    <a name="update"> </a> <h3>update</h3>
       <pre><b>update</b>(renderContext, time)</pre> 
    <ul>
-      Update the state of the object.
+      Abstract update method to set the state of the object.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>renderContext </code> 
+         <code>[<i>RenderContext</i>]&nbsp;renderContext </code> - The context the object exists within 
       </ul>
       <ul>
-         <code>time </code> 
+         <code>[<i>Number</i>]&nbsp;time </code> - The current engine time, in milliseconds 
       </ul>
    </ul>
    
@@ -345,6 +417,6 @@ The base object class which represents an object withinthe engine.  All objects
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:33:12 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
 </body>
 </html>

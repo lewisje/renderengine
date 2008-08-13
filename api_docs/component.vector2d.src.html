@@ -82,7 +82,7 @@ A render component that renders its contents from a set of points.
 <span class='linenumber'>  5</span>  *
 <span class='linenumber'>  6</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  7</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  8</span>  * @version: $Revision: 190 $
+<span class='linenumber'>  8</span>  * @version: $Revision: 213 $
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 11</span>  *
@@ -269,56 +269,58 @@ A render component that renders its contents from a set of points.
 <span class='linenumber'>192</span>     * @param time {Number} The engine time in milliseconds
 <span class='linenumber'>193</span>     */</span><span class="WHIT">
 <span class='linenumber'>194</span> </span><span class="WHIT">   </span><span class="NAME">execute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>195</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">this.points</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Points not defined in CanvasVectorComponent"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>196</span> 
-<span class='linenumber'>197</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getDrawMode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">RenderComponent.DRAW</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>198</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>199</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>200</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>201</span> 
-<span class='linenumber'>202</span> </span><span class="WHIT">      </span><span class="COMM">// Set the stroke and fill styles</span><span class="WHIT">
-<span class='linenumber'>203</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getLineStyle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>204</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>205</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.setLineStyle</span><span class="PUNC">(</span><span class="NAME">this.strokeStyle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>206</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>207</span> 
-<span class='linenumber'>208</span> </span><span class="WHIT">      </span><span class="NAME">renderContext.setLineWidth</span><span class="PUNC">(</span><span class="NAME">this.lineWidth</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>195</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.points</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>196</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>197</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>198</span> 
+<span class='linenumber'>199</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getDrawMode</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">RenderComponent.DRAW</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>200</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>201</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>202</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>203</span> 
+<span class='linenumber'>204</span> </span><span class="WHIT">      </span><span class="COMM">// Set the stroke and fill styles</span><span class="WHIT">
+<span class='linenumber'>205</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getLineStyle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>206</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>207</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.setLineStyle</span><span class="PUNC">(</span><span class="NAME">this.strokeStyle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>208</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
 <span class='linenumber'>209</span> 
-<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getFillStyle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>211</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>212</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.setFillStyle</span><span class="PUNC">(</span><span class="NAME">this.fillStyle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>213</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>214</span> 
-<span class='linenumber'>215</span> </span><span class="WHIT">      </span><span class="COMM">// Render out the points</span><span class="WHIT">
-<span class='linenumber'>216</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.closedManifold</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>217</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>218</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.drawPolygon</span><span class="PUNC">(</span><span class="NAME">this.points</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>219</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>220</span> </span><span class="WHIT">      </span><span class="KEYW">else</span><span class="WHIT">
-<span class='linenumber'>221</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>222</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.drawPolyline</span><span class="PUNC">(</span><span class="NAME">this.points</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>223</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>224</span> 
-<span class='linenumber'>225</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.fillStyle</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>226</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>227</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.drawFilledPolygon</span><span class="PUNC">(</span><span class="NAME">this.points</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>228</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>229</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>230</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>231</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>232</span>     * Get the class name of this object
-<span class='linenumber'>233</span>     *
-<span class='linenumber'>234</span>     * @type String
-<span class='linenumber'>235</span>     * @memberOf Vector2DComponent
-<span class='linenumber'>236</span>     */</span><span class="WHIT">
-<span class='linenumber'>237</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>238</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Vector2DComponent"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>239</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>240</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="NAME">renderContext.setLineWidth</span><span class="PUNC">(</span><span class="NAME">this.lineWidth</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>211</span> 
+<span class='linenumber'>212</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getFillStyle</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>213</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>214</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.setFillStyle</span><span class="PUNC">(</span><span class="NAME">this.fillStyle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>215</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>216</span> 
+<span class='linenumber'>217</span> </span><span class="WHIT">      </span><span class="COMM">// Render out the points</span><span class="WHIT">
+<span class='linenumber'>218</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.closedManifold</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>219</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>220</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.drawPolygon</span><span class="PUNC">(</span><span class="NAME">this.points</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>221</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>222</span> </span><span class="WHIT">      </span><span class="KEYW">else</span><span class="WHIT">
+<span class='linenumber'>223</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>224</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.drawPolyline</span><span class="PUNC">(</span><span class="NAME">this.points</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>225</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>226</span> 
+<span class='linenumber'>227</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.fillStyle</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>228</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>229</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.drawFilledPolygon</span><span class="PUNC">(</span><span class="NAME">this.points</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>230</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>231</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>232</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>233</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>234</span>     * Get the class name of this object
+<span class='linenumber'>235</span>     *
+<span class='linenumber'>236</span>     * @type String
+<span class='linenumber'>237</span>     * @memberOf Vector2DComponent
+<span class='linenumber'>238</span>     */</span><span class="WHIT">
+<span class='linenumber'>239</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>240</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Vector2DComponent"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>241</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>242</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:32:50 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Aug 12 2008 23:59:59 GMT-0400 (EDT)</div>
 </body>
 </html>

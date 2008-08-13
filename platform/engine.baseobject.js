@@ -51,8 +51,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * Set the element which will represent this object within
     * its rendering context.
     *
-    * @type element {BaseObject}
-    * @memberOf BaseObject
+    * @param element {HTMLElement} The HTML element this object is associated with.
     */
    setElement: function(element) {
       this.element = element;
@@ -61,38 +60,50 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    /**
     * Get the element which represents this object within its rendering context.
     *
-    * @return The element
-    * @type BaseObject
-    * @memberOf BaseObject
+    * @return The HTML element
     */
    getElement: function() {
       return this.element;
    },
 
    /**
-    * Update the state of the object.
+    * Abstract update method to set the state of the object.
+    *
+    * @param renderContext {RenderContext} The context the object exists within
+    * @param time {Number} The current engine time, in milliseconds
     */
    update: function(renderContext, time) {
    },
 
+   /**
+    * Add an event handler to objects that have an associated HTML element.
+    *
+    * @param type {String} The event type to respond to
+    * @param fn {Function} The function to trigger when the event fires
+    */
    addEvent: function(type, fn) {
       if (this.getElement()) {
          EventEngine.setHandler(this.getElement(), type, fn);
       }
    },
 
+   /**
+    * Remove an event handler assigned to the object's associated HTML element.
+    *
+    * @param type {String} The event type to remove
+    * @param fn {Function} The handler function to remove
+    */
    removeEvent: function(type, fn) {
       if (this.getElement()) {
          EventEngine.clearHandler(this.getElement(), type, fn);
       }
    }
-}, {
+}, /** @scope BaseObject */{
 
    /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf BaseObject
     */
    getClassName: function() {
       return "BaseObject";

@@ -32,6 +32,7 @@
 /**
  * @class A text renderer which draws text from a bitmap font file.
  * @extends AbstractTextRenderer
+ * @see FontResourceLoader
  */
 var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 
@@ -183,7 +184,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       // Reset the composition operation
       renderContext.get2DContext().globalCompositeOperation = "source-over";
    }
-}, {
+}, /** @scope BitmapText */{
    /**
     * Get the class name of this object
     * @type String

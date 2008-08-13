@@ -33,12 +33,17 @@
  */
 
 /**
- * @class A 2d text rendering object.
+ * @class A 2d text rendering object.  The object hosts the given text
+ *        renderer, and a way to position and size the text.  It is up
+ *        to the rendered provided to present the text within the render
+ *        context.
  *
  * @constructor
  * @param renderer {AbstractTextRenderer} The text renderer to use
  * @param text {String} The text to render
  * @param size {Number} The size of the text to render
+ * @see VectorText
+ * @see BitmapText
  */
 var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 

@@ -71,14 +71,16 @@
                |
                +--<a href='RenderContext2D.html' target='main'>RenderContext2D</a>
                   |
-                  +--<b>DocumentContext</b></pre>
+                  +--<a href='HTMLElementContext.html' target='main'>HTMLElementContext</a>
+                     |
+                     +--<b>DocumentContext</b></pre>
    <hr>
    Class <b>DocumentContext</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
 
 
 
-   Extends <a href="RenderContext2D.html">RenderContext2D</a>.<br/>
+   Extends <a href="HTMLElementContext.html">HTMLElementContext</a>.<br/>
 
 <p>
 A reference to the <tt>document.body</tt> element as a rendering context.Aside from being The Render Engine's default rendering context, the contextis essentially a wrapper for the HTML document.  Wrapping, in this way, allowsus to update not only this context, but all other contexts during an engine frame.</p>
@@ -120,53 +122,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
 
 <!-- ========== METHOD SUMMARY =========== -->
 
-<a name="method_summary"> </a> 
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
-      <td colspan=2>
-         <font size="+2"> <b>Method Summary</b></font>
-      </td>
-   </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#add">add</a></b>(obj) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Eliminate the elements from the document.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#remove">remove</a></b>(obj) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
- 
-         </td>
-      </tr>
-   
-</table>
-&nbsp;
-
 
 <!-- ========== EVENT SUMMARY =========== -->
 
@@ -185,6 +140,8 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
+               <a href="RenderContext.html#destroy">destroy</a>,
+            
                <a href="RenderContext.html#setSurface">setSurface</a>,
             
                <a href="RenderContext.html#getSurface">getSurface</a>,
@@ -193,7 +150,11 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext.html#getWorldScale">getWorldScale</a>,
             
+               <a href="RenderContext.html#add">add</a>,
+            
                <a href="RenderContext.html#getContextData">getContextData</a>,
+            
+               <a href="RenderContext.html#sort">sort</a>,
             
                <a href="RenderContext.html#update">update</a>,
             
@@ -290,6 +251,8 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext2D.html#drawSprite">drawSprite</a>,
             
+               <a href="RenderContext2D.html#drawImage">drawImage</a>,
+            
                <a href="RenderContext2D.html#getImage">getImage</a>,
             
                <a href="RenderContext2D.html#putImage">putImage</a>,
@@ -346,6 +309,8 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="Container.html#size">size</a>,
             
+               <a href="Container.html#remove">remove</a>,
+            
                <a href="Container.html#removeAtIndex">removeAtIndex</a>,
             
                <a href="Container.html#get">get</a>,
@@ -355,8 +320,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
                <a href="Container.html#cleanUp">cleanUp</a>,
             
                <a href="Container.html#getObjects">getObjects</a>,
-            
-               <a href="Container.html#sort">sort</a>,
             
          </code></td>
       </tr>
@@ -372,6 +335,10 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -418,75 +385,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
 
 <!-- ============ METHOD DETAIL START ======= -->
 
-<a name="method_detail"> </a> 
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
-      <td colspan=1>
-         <font size="+2"> <b>Method Detail</b></font> 
-      </td>
-   </tr>
-</table>
-
-
-   <a name="add"> </a> <h3>add</h3>
-      <pre><b>add</b>(obj)</pre> 
-   <ul>
-      
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>obj </code> 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="destroy"> </a> <h3>destroy</h3>
-      <pre><b>destroy</b>()</pre> 
-   <ul>
-      Eliminate the elements from the document.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="remove"> </a> <h3>remove</h3>
-      <pre><b>remove</b>(obj)</pre> 
-   <ul>
-      
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>obj </code> 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-
 <!-- ============ METHOD DETAIL END ========== -->
 
 <!-- ============ EVENT DETAIL START ======= -->
@@ -497,6 +395,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Jul 30 2008 23:33:12 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
 </body>
 </html>

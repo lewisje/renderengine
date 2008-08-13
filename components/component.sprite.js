@@ -30,8 +30,8 @@
  */
 
 /**
- * @class A render component that renders its contents from a set of points.
- * @extends BaseComponent
+ * @class A render component that renders its contents from a {@link Sprite}.
+ * @extends RenderComponent
  */
 var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototype */{
 
@@ -39,7 +39,6 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
 
    /**
     * @constructor
-    * @memberOf Vector2DComponent
     */
    constructor: function(name, priority, sprite) {
       this.base(name, priority || 0.1);
@@ -98,17 +97,28 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
       }
    },
 
+   /**
+    * Set the sprite the component will render.
+    *
+    * @param sprite {Sprite} The sprite to render
+    */
    setSprite: function(sprite) {
       this.currentSprite = sprite;
    },
 
+   /**
+    * Get the sprite the component is rendering.
+    *
+    * @return A {@link Sprite} object
+    */
    getSprite: function() {
       return this.currentSprite;
    },
 
    /**
-    * Draw the shape, defined by the points, to the rendering context
-    * using the specified line style and fill style.
+    * Draw the sprite to the render context.  The frame, for animated
+    * sprites, will be automatically determined based on the current
+    * time passed to the method.
     *
     * @param renderContext {RenderContext} The context to render to
     * @param time {Number} The engine time in milliseconds
@@ -124,12 +134,11 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
          renderContext.drawSprite(this.currentSprite, time);
       }
    }
-}, {
+}, /** @scope SpriteComponent */{
    /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf Vector2DComponent
     */
    getClassName: function() {
       return "SpriteComponent";
