@@ -38,17 +38,18 @@
  */
 var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
-   cache: {},
+   cache: null,
 
    length: 0,
 
    constructor: function(name) {
       this.base(name || "ResourceLoader");
+      this.cache = {};
    },
 
    release: function() {
       this.base();
-      this.cache = {};
+      this.cache = null;
       this.length = 0;
    },
 
@@ -116,6 +117,18 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
       this.cache = {};
       this.length = 0;
+   },
+
+   /**
+    * Get the names of all the resources available in this resource loader.
+    * @return An Array of resource names
+    */
+   getResources: function() {
+      var n = [];
+      for (var i in this.cache) {
+         n.push(i);
+      }
+      return n;
    },
 
    /**

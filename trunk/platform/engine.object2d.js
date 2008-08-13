@@ -45,6 +45,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    constructor: function(name) {
       this.base(name);
       this.lastPosition = new Point2D(5,5);
+      this.zIndex = 1;
    },
 
    release: function() {
@@ -117,6 +118,9 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     */
    setZIndex: function(zIndex) {
       this.zIndex = zIndex;
+      if (this.getRenderContext()) {
+         this.getRenderContext().sort();
+      }
    },
 
    /**

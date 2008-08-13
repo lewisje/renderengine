@@ -38,8 +38,14 @@
  */
 SpriteTest.Actor = Object2D.extend({
 
+   editing: false,
+
+   sprite: null,
+
    constructor: function() {
       this.base("Actor");
+
+      this.editing = false;
 
       // Add components to move and draw the player
       if (window.opera && opera.wiiremote) {
@@ -66,12 +72,25 @@ SpriteTest.Actor = Object2D.extend({
    update: function(renderContext, time) {
       renderContext.pushTransform();
       this.base(renderContext, time);
+
+      if (this.editing) {
+         renderContext.setLineStyle("white");
+         renderContext.setLineWidth(2);
+         renderContext.drawRectangle(this.getSprite().getBoundingBox());
+      }
+
       renderContext.popTransform();
    },
 
    setSprite: function(sprite) {
-		this.getComponent("draw").setSprite(sprite);
-	},
+      this.sprite = sprite;
+      this.setBoundingBox(sprite.getBoundingBox());
+      this.getComponent("draw").setSprite(sprite);
+   },
+
+   getSprite: function() {
+      return this.sprite;
+   },
 
    /**
     * Get the position of the ship from the mover component.
@@ -100,6 +119,10 @@ SpriteTest.Actor = Object2D.extend({
     * @param pHeight {Number} The height of the playfield in pixels
     */
    setup: function(pWidth, pHeight) {
+   },
+
+   setEditing: function(state) {
+      this.editing = state;
    }
 
 }, { // Static

@@ -215,10 +215,10 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
     */
    info: function() {
       if (typeof firebug != "undefined") {
-			firebug.d.console.log.apply(firebug.d.console, arguments);
-		} else {
+         firebug.d.console.log.apply(firebug.d.console, arguments);
+      } else {
          console.info.apply(console, arguments);
-		}
+      }
    },
 
    /**
@@ -227,10 +227,10 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
     */
    debug: function() {
       if (typeof firebug != "undefined") {
-			firebug.d.console.log.apply(firebug.d.console, arguments);
-		} else {
+         firebug.d.console.log.apply(firebug.d.console, arguments);
+      } else {
          console.debug.apply(console, arguments);
-		}
+      }
    },
 
    /**
@@ -239,10 +239,10 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
     */
    warn: function() {
       if (typeof firebug != "undefined") {
-			firebug.d.console.log.apply(firebug.d.console, arguments);
-		} else {
+         firebug.d.console.log.apply(firebug.d.console, arguments);
+      } else {
          console.warn.apply(console, arguments);
-		}
+      }
    },
 
    /**
@@ -251,10 +251,10 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
     */
    error: function() {
       if (typeof firebug != "undefined") {
-			firebug.d.console.log.apply(firebug.d.console, arguments);
-		} else {
-      	console.error.apply(console, arguments);
-		}
+         firebug.d.console.log.apply(firebug.d.console, arguments);
+      } else {
+         console.error.apply(console, arguments);
+      }
    }
 });
 
@@ -565,19 +565,19 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getQueryParams: function() {
-		if (!EngineSupport.parms) {
-			EngineSupport.parms = {};
-			var p = window.location.toString().split("?")[1];
-			if (p)
-			{
-				p = p.split("&");
-				for (var x = 0; x < p.length; x++)
-				{
-					var v = p[x].split("=");
-					EngineSupport.parms[v[0]] = (v.length > 1 ? v[1] : "");
-				}
-			}
-		}
+      if (!EngineSupport.parms) {
+         EngineSupport.parms = {};
+         var p = window.location.toString().split("?")[1];
+         if (p)
+         {
+            p = p.split("&");
+            for (var x = 0; x < p.length; x++)
+            {
+               var v = p[x].split("=");
+               EngineSupport.parms[v[0]] = (v.length > 1 ? v[1] : "");
+            }
+         }
+      }
       return EngineSupport.parms;
    },
 
@@ -590,12 +590,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @type Boolean
     */
    checkBooleanParam: function(paramName) {
-		return (EngineSupport.getQueryParams()[paramName] &&
-				  (EngineSupport.getQueryParams()[paramName] == "true" ||
-				   EngineSupport.getQueryParams()[paramName] == "1" ||
-				   EngineSupport.getQueryParams()[paramName].toLowerCase() == "yes" ||
-				   EngineSupport.getQueryParams()[paramName].toLowerCase() == "y"));
-	},
+      return (EngineSupport.getQueryParams()[paramName] &&
+              (EngineSupport.getQueryParams()[paramName] == "true" ||
+               EngineSupport.getQueryParams()[paramName] == "1" ||
+               EngineSupport.getQueryParams()[paramName].toLowerCase() == "yes" ||
+               EngineSupport.getQueryParams()[paramName].toLowerCase() == "y"));
+   },
 
    /**
     * Check for a query parameter and to see if it evaluates to the specified value.
@@ -606,9 +606,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @return <tt>true</tt> if the query parameter exists and is the value specified
     * @type Boolean
     */
-	checkStringParam: function(paramName, val) {
-		return (EngineSupport.getQueryParams()[paramName] && EngineSupport.getQueryParams()[paramName] == val);
-	},
+   checkStringParam: function(paramName, val) {
+      return (EngineSupport.getQueryParams()[paramName] && EngineSupport.getQueryParams()[paramName] == val);
+   },
 
    /**
     * Check for a query parameter and to see if it evaluates to the specified number.
@@ -619,9 +619,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @return <tt>true</tt> if the query parameter exists and is the value specified
     * @type Boolean
     */
-	checkNumericParam: function(paramName, val) {
-		return (EngineSupport.getQueryParams()[paramName] && Number(EngineSupport.getQueryParams()[paramName]) == val);
-	},
+   checkNumericParam: function(paramName, val) {
+      return (EngineSupport.getQueryParams()[paramName] && Number(EngineSupport.getQueryParams()[paramName]) == val);
+   },
 
    /**
     * Returns specified object as a JavaScript Object Notation (JSON) string.
@@ -660,11 +660,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             {
                if(o[i] == null)
                {
-                  a.push(i.quote() + ":null");
+                  a.push(EngineSupport.quoteString(i) + ":null");
                }
                else if(o[i].constructor != Function)
                {
-                  a.push(i.quote() + ':' + EngineSupport.toJSONString(o[i]));
+                  a.push(EngineSupport.quoteString(i) + ':' + EngineSupport.toJSONString(o[i]));
                }
             }
             return '{' + a.join() + '}';
@@ -694,7 +694,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    quoteString: function(o)
    {
-      return '"'+this.replace(/[\\"\r\n]/g, function(s)
+      return '"'+o.replace(/[\\"\r\n]/g, function(s)
          {
             switch(s)
             {
@@ -715,20 +715,20 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    sysInfo: function() {
-		return {
-			"browser" : $.browser.safari ? "safari" : ($.browser.mozilla ? "mozilla" : ($.browser.opera ? "opera" : ($.browser.msie ? "msie" : "unknown"))),
-			"version" : $.browser.version,
-			"agent": navigator.userAgent,
-			"platform": navigator.platform,
-			"cpu": navigator.cpuClass || navigator.oscpu,
-			"language": navigator.language,
-			"online": navigator.onLine,
-			"cookies": navigator.cookieEnabled,
-			"fullscreen": window.fullScreen || false,
-			"width": window.innerWidth || document.body.parentNode.clientWidth,
-			"height": window.innerHeight || document.body.parentNode.clientHeight
-		};
-	}
+      return {
+         "browser" : $.browser.safari ? "safari" : ($.browser.mozilla ? "mozilla" : ($.browser.opera ? "opera" : ($.browser.msie ? "msie" : "unknown"))),
+         "version" : $.browser.version,
+         "agent": navigator.userAgent,
+         "platform": navigator.platform,
+         "cpu": navigator.cpuClass || navigator.oscpu,
+         "language": navigator.language,
+         "online": navigator.onLine,
+         "cookies": navigator.cookieEnabled,
+         "fullscreen": window.fullScreen || false,
+         "width": window.innerWidth || document.body.parentNode.clientWidth,
+         "height": window.innerHeight || document.body.parentNode.clientHeight
+      };
+   }
 });
 
 /**
@@ -1126,17 +1126,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             n.src = scriptPath;
             n.type = "text/javascript";
             var fn = function() {
-					if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-						Console.debug("Loaded '" + scriptPath + "'");
-						Engine.readyForNextScript = true;
-					}
-				}
+               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+                  Console.debug("Loaded '" + scriptPath + "'");
+                  Engine.readyForNextScript = true;
+               }
+            }
             if ($.browser.msie) {
-					n.defer = true;
-					n.onreadystatechange = fn;
-				} else {
-					n.onload = fn;
-				}
+               n.defer = true;
+               n.onreadystatechange = fn;
+            } else {
+               n.onload = fn;
+            }
 
             var h = document.getElementsByTagName("head")[0];
             h.appendChild(n);
@@ -1245,10 +1245,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.load("/rendercontexts/context.htmlelement.js");
       this.load("/rendercontexts/context.documentcontext.js");
 
-		if ($.browser.msie) {
-			// This is the Google "ExplorerCanvas" object we need for IE
-			this.load("/libs/excanvas.js");
-		}
+      if ($.browser.msie) {
+         // This is the Google "ExplorerCanvas" object we need for IE
+         this.load("/libs/excanvas.js");
+      }
 
       // Object components
       this.load("/components/component.base.js");
@@ -1363,14 +1363,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       {
          Engine.getDefaultContext().update(null, new Date().getTime());
 
-			if (this.showMetricsWindow && !this.metricDisplay) {
-				this.metricDisplay = jQuery("<div/>").addClass("metrics");
-				this.metricDisplay.appendTo($("body"));
-			}
-			else if (!this.showMetricsWindow && this.metricDisplay) {
-				this.metricDisplay.remove();
-				this.metricDisplay = null;
-			}
+         if (this.showMetricsWindow && !this.metricDisplay) {
+            this.metricDisplay = jQuery("<div/>").addClass("metrics");
+            this.metricDisplay.appendTo($("body"));
+         }
+         else if (!this.showMetricsWindow && this.metricDisplay) {
+            this.metricDisplay.remove();
+            this.metricDisplay = null;
+         }
 
          if (this.showMetricsWindow && this.lastMetricSample-- == 0)
          {
@@ -1399,21 +1399,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.showMetricsWindow = !this.showMetricsWindow;
    },
 
-	/**
-	 * Show the metrics window
-	 * @memberOf Engine
-	 */
+   /**
+    * Show the metrics window
+    * @memberOf Engine
+    */
    showMetrics: function() {
       this.showMetricsWindow = true;
-	},
+   },
 
-	/**
-	 * Hide the metrics window
-	 * @memberOf Engine
-	 */
-	hideMetrics: function() {
+   /**
+    * Hide the metrics window
+    * @memberOf Engine
+    */
+   hideMetrics: function() {
       this.showMetricsWindow = false;
-	},
+   },
 
    /**
     * Set the interval at which metrics are sampled by the system.
@@ -1509,11 +1509,11 @@ if (EngineSupport.checkBooleanParam("debug"))
    Engine.setDebugMode(true);
    Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
    if (!typeof console == "undefined" && console.open) {
-		console.open();
-	}
+      console.open();
+   }
 }
 
 if (EngineSupport.checkBooleanParam("metrics"))
 {
-	Engine.showMetrics();
+   Engine.showMetrics();
 }

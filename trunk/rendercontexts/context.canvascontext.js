@@ -55,12 +55,17 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
       this.setWidth(width);
       this.setHeight(height);
-
-      // Create the canvas element
-      var canvas = document.createElement("canvas");
+      var canvas;
       var worldScale = this.getWorldScale();
-      canvas.width = this.width * worldScale[0];
-      canvas.height = this.height * worldScale[1];
+      // Create the canvas element
+      canvas = document.createElement("canvas");
+      if (jQuery.browser.msie) {
+         canvas.style.width = this.width * worldScale[0];
+         canvas.style.height = this.height * worldScale[1];
+      } else {
+         canvas.width = this.width * worldScale[0];
+         canvas.height = this.height * worldScale[1];
+      }
       canvas.id = this.getId();
 
       this.base("CanvasContext", canvas);
@@ -69,9 +74,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    afterAdd: function(parent) {
       // IE Support
       if (jQuery.browser.msie) {
+         alert("here");
          this.setSurface(G_vmlCanvasManager.initElement(this.getSurface()));
       }
-	},
+   },
 
    release: function() {
       this.base();
