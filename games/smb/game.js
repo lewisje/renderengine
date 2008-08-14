@@ -34,23 +34,27 @@
  */
 
 // Load required engine components
-Engine.load("/rendercontexts/context.canvascontext.js");
-Engine.load("/objects/object.background.js");
-Engine.load("/components/component.transform2d.js");
-Engine.load("/components/component.render.js");
-Engine.load("/components/component.sprite.js");
-Engine.load("/components/component.input.js");
-Engine.load("/components/component.keyboardinput.js");
-Engine.load("/resourceloaders/loader.sound.js");
-Engine.load("/resourceloaders/loader.image.js");
-Engine.load("/resourceloaders/loader.sprite.js");
-Engine.load("/resourceloaders/loader.level.js");
+Game.loadEngineScripts([
+	"/rendercontexts/context.canvascontext.js",
+	"/objects/object.background.js",
+	"/components/component.transform2d.js",
+	"/components/component.render.js",
+	"/components/component.sprite.js",
+	"/components/component.input.js",
+	"/components/component.keyboardinput.js",
+	"/resourceloaders/loader.sound.js",
+	"/resourceloaders/loader.image.js",
+	"/resourceloaders/loader.sprite.js",
+	"/resourceloaders/loader.level.js"
+]);
+
+Engine.initObject("SpriteTest", "EngineInitialized", function() {
 
 // Load game objects
 Game.load("/actor.js");
 
 // Start the game when all the scripts are loaded.
-Engine.setQueueCallback(function() { SpriteTest.setup(); });
+Game.setQueueCallback(function() { SpriteTest.setup(); });
 
 /**
  * @class The game.
@@ -110,7 +114,7 @@ var SpriteTest = Game.extend({
       Engine.setFPS(this.engineFPS);
 
       this.spriteLoader = SpriteLoader.create();
-      this.soundLoader = SoundResourceLoader.create();
+      this.soundLoader = SoundLoader.create();
       this.levelLoader = LevelLoader.create();
 
       // Load the music
@@ -354,3 +358,6 @@ var SpriteTest = Game.extend({
    }
 });
 
+return SpriteTest;
+
+});

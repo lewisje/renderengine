@@ -32,6 +32,8 @@
  *
  */
 
+Engine.initObject("ScrollingBackground", "HTMLElementContext", function() {
+
 /**
  * @class A scrolling background render context with an associated
  *        collision map.  The render context loads a level which defines
@@ -129,5 +131,9 @@ var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackgrou
    getClassName: function() {
       return "ScrollingBackground";
    }
+});
+
+return ScrollingBackground;
+
 });
 

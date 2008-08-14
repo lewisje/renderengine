@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("BaseComponent", "BaseObject", function() {
+
 /**
  * @class All components extend from this object class.  A component is one
  *        part of an operating whole object (a {@link HostObject}) which is
@@ -210,4 +212,8 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
     * @type Number
     */
    TYPE_RENDERING:      4
+});
+
+return BaseComponent;
+
 });

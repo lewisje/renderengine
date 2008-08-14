@@ -30,6 +30,8 @@
  *
  */
 
+Engine.initObject("RenderComponent", "BaseComponent", function() {
+
 /**
  * @class The base component class for components which render
  *        to a context.
@@ -110,5 +112,9 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
     * The component <i>should not</i> render itself to the rendering context.
     */
    NO_DRAW: 1
+
+});
+
+return RenderComponent;
 
 });

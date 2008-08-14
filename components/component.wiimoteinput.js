@@ -28,6 +28,8 @@
  *
  */
 
+Engine.initObject("WiimoteInputComponent", "InputComponent", function() {
+
 /**
  * @class A component which responds to the Wiimote (in the Opera browser)
  * is notifies its host object by calling a number of methods.  The host object
@@ -519,4 +521,8 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
    KEYCODE_UP: 38,
 
    KEYCODE_DOWN: 40
+});
+
+return WiimoteInputComponent;
+
 });

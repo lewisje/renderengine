@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("Mover2DComponent", "Transform2DComponent", function() {
+
 /**
  * @class A simple mover component that adjusts the translation of a component
  * over time.  This component handles velocity, acceleration, and
@@ -172,4 +174,8 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    getClassName: function() {
       return "Mover2DComponent";
    }
+});
+
+return Mover2DComponent;
+
 });

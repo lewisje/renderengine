@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("BitmapText", "AbstractTextRenderer", function() {
+
 /**
  * @class A text renderer which draws text from a bitmap font file.
  *
@@ -201,4 +203,8 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
    getClassName: function() {
       return "BitmapText";
    }
+});
+
+return BitmapText;
+
 });

@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("Transform2DComponent", "BaseComponent", function() {
+
 /**
  * @class A simple component that has position, rotation, and scale.
  * @extends BaseComponent
@@ -153,4 +155,8 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    getClassName: function() {
       return "Transform2DComponent";
    }
+});
+
+return Transform2DComponent;
+
 });

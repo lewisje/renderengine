@@ -1125,12 +1125,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
    },
 
-	doLoad: function(scriptPath) {
+	doLoad: function(scriptPath, simplePath, cb) {
 		// A hack to allow us to do filesystem testing
 		if (!window.localDebugMode)
 		{
 			jQuery.getScript(scriptPath, function() {
 				Console.debug("Loaded '" + scriptPath + "'");
+				if (cb) {
+					cb(simplePath);
+				}
 				Engine.readyForNextScript = true;
 			});
 		}
@@ -1144,6 +1147,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 			var fn = function() {
 				if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
 					Console.debug("Loaded '" + scriptPath + "'");
+					if (cb) {
+						cb(simplePath);
+					}
 					Engine.readyForNextScript = true;
 				}
 			}
@@ -1159,8 +1165,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		}
 	},
 
-	loadNow: function(scriptPath) {
-		this.doLoad(this.getEnginePath() + scriptPath);
+	loadNow: function(scriptPath, cb) {
+		if ($.browser.safari) {
+			Engine.load(scriptPath);
+		} else {
+			this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
+		}
 	},
 
    /**
@@ -1259,24 +1269,23 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadNow("/platform/engine.spatialcontainer.js");
       this.loadNow("/platform/engine.particles.js");
 
-
       // Contexts
-      this.load("/rendercontexts/context.render2d.js");
-      this.load("/rendercontexts/context.htmlelement.js");
-      this.load("/rendercontexts/context.documentcontext.js");
+      this.loadNow("/rendercontexts/context.render2d.js");
+      this.loadNow("/rendercontexts/context.htmlelement.js");
+      this.loadNow("/rendercontexts/context.documentcontext.js");
 
       if ($.browser.msie) {
          // This is the Google "ExplorerCanvas" object we need for IE
-         this.load("/libs/excanvas.js");
+         this.loadNow("/libs/excanvas.js");
       }
 
       // Object components
-      this.load("/components/component.base.js");
-      this.load("/components/component.host.js");
+      this.loadNow("/components/component.base.js");
+      this.loadNow("/components/component.host.js");
 
       // Text rendering
-      this.load("/textrender/text.renderer.js");
-      this.load("/textrender/text.abstractrender.js");
+      this.loadNow("/textrender/text.renderer.js");
+      this.loadNow("/textrender/text.abstractrender.js");
 
       // Sound manager
       this.load("/libs/soundmanager2.js");

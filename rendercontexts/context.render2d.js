@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("RenderContext2D", "RenderContext", function() {
+
 /**
  * @class All 2D contexts should extend from this to inherit the
  * methods which abstract the drawing methods.
@@ -547,4 +549,8 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    getClassName: function() {
       return "RenderContext2D";
    }
+});
+
+return RenderContext2D;
+
 });

@@ -28,6 +28,8 @@
  *
  */
 
+Engine.initObject("SpriteLoader", "ImageLoader", function() {
+
 /**
  * @class Loads sprites and makes them available to the system.  Sprites are
  *        defined by an external resource that consist of the follwing definition.
@@ -55,9 +57,9 @@
  *
  * @constructor
  * @param name {String=SpriteLoader} The name of the resource loader
- * @extends ImageResourceLoader
+ * @extends ImageLoader
  */
-var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype */{
+var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
 
    sprites: null,
 
@@ -160,6 +162,12 @@ var SpriteLoader = ImageResourceLoader.extend(/** @scope SpriteLoader.prototype 
       return "SpriteLoader";
    }
 });
+
+return SpriteLoader;
+
+});
+
+Engine.initObject("Sprite", "PooledObject", function() {
 
 /**
  * @class Represents a sprite
@@ -380,4 +388,8 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
     * @private
     */
    INDEX_TYPE: 6
+});
+
+return Sprite;
+
 });

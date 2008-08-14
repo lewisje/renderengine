@@ -32,6 +32,8 @@
  *
  */
 
+Engine.initObject("WZGraphicsContext", "RenderContext2D", function() {
+
 /**
  * @class A WZGraphicsContext element represented within the engine.
  *
@@ -342,5 +344,9 @@ var WZGraphicsContext = RenderContext2D.extend(/** @scope CanvasContext.prototyp
    getClassName: function() {
       return "WZGraphicsContext";
    }
+});
+
+return WZGraphicsContext;
+
 });
 

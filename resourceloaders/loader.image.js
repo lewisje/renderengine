@@ -28,6 +28,8 @@
  *
  */
 
+Engine.initObject("ImageLoader", "PooledObject", function() {
+
 /**
  * @class Loads images and stores the reference to those images.
  *
@@ -35,7 +37,7 @@
  * @param name {String=ImageLoader} The name of the resource loader
  * @extends ResourceLoader
  */
-var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.prototype */{
+var ImageLoader = ResourceLoader.extend(/** @scope ImageLoader.prototype */{
 
 	/**
 	 * @private
@@ -118,12 +120,16 @@ var ImageResourceLoader = ResourceLoader.extend(/** @scope ImageResourceLoader.p
    getResourceType: function() {
       return "image";
    }
-}, /** @scope ImageResourceLoader.prototype */{
+}, /** @scope ImageLoader.prototype */{
    /**
     * Get the class name of this object
-    * @return {String} The string "ImageResourceLoader"
+    * @return {String} The string "ImageLoader"
     */
    getClassName: function() {
-      return "ImageResourceLoader";
+      return "ImageLoader";
    }
+});
+
+return ImageLoader;
+
 });

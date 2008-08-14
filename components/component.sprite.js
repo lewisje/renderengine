@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("SpriteComponent", "RenderComponent", function() {
+
 /**
  * @class A render component that renders its contents from a {@link Sprite}.
  * @extends RenderComponent
@@ -143,4 +145,8 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
    getClassName: function() {
       return "SpriteComponent";
    }
+});
+
+return SpriteComponent;
+
 });

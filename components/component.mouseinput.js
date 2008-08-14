@@ -28,6 +28,8 @@
  *
  */
 
+Engine.initObject("MouseInputComponent", "InputComponent", function() {
+
 /**
  * @class A component which responds to mouse events and notifies
  * the host object when one of the events occurs.  The host object should implement
@@ -170,4 +172,8 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
    getClassName: function() {
       return "MouseInputComponent";
    }
+});
+
+return MouseInputComponent;
+
 });

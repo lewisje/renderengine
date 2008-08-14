@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("CanvasContext", "RenderContext2D", function() {
+
 /**
  * @class A <tt>canvas</tt> element represented within the engine.  A canvas
  * is a 2D context which can render lines, images, and polygons.  Transformations
@@ -479,5 +481,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    getClassName: function() {
       return "CanvasContext";
    }
+});
+
+return CanvasContext;
+
 });
 

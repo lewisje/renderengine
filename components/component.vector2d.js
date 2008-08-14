@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("Vector2DComponent", "RenderComponent", function() {
+
 /**
  * @class A render component that renders its contents from a set of points.
  * @extends BaseComponent
@@ -239,4 +241,8 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    getClassName: function() {
       return "Vector2DComponent";
    }
+});
+
+return Vector2DComponent;
+
 });
