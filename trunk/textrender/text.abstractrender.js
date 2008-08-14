@@ -32,6 +32,8 @@
  *
  */
 
+Engine.initObject("AbstractTextRenderer", "BaseComponent", function() {
+
 /**
  * @class Abstract class that provides the basic interface for all
  *        text render objects used by the {@link TextRenderer}.
@@ -168,5 +170,9 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
     * @type Number
     */
    ALIGN_CENTER: 2
+
+});
+
+return AbstractTextRenderer;
 
 });

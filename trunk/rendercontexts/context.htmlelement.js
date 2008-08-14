@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
+
 /**
  * @class A reference to the <tt>document.body</tt> element as a rendering context.
  * Aside from being The Render Engine's default rendering context, the context
@@ -98,4 +100,8 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope DocumentContext.proto
    getClassName: function() {
       return "HTMLElementContext";
    }
+});
+
+return HTMLElementContext;
+
 });

@@ -31,6 +31,8 @@
  *
  */
 
+Engine.initObject("ColliderComponent", "BaseComponent", function() {
+
 /**
  * @class A collider component handles collisions by updating the
  *        collision model and checking for possible collisions.
@@ -156,5 +158,9 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     * @type Number
     */
    STOP: 1
+
+});
+
+return ColliderComponent;
 
 });

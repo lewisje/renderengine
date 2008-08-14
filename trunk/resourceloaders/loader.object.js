@@ -28,6 +28,8 @@
  *
  */
 
+Engine.initObject("ObjectLoader", "ResourceLoader", function() {
+
 /**
  * @class Loads JSON objects from a specified URL.
  *
@@ -90,4 +92,8 @@ var ObjectLoader = ResourceLoader.extend(/** @scope ObjectLoader.prototype */{
    getClassName: function() {
       return "ObjectLoader";
    }
+});
+
+return ObjectLoader;
+
 });

@@ -28,6 +28,8 @@
  *
  */
 
+Engine.initObject("LevelLoader", "ImageLoader", function() {
+
 /**
  * @class Loads levels and makes them available to the system.  Levels are defined
  *        by a specific type of resource file.  A level is comprised of its bitmap
@@ -48,9 +50,9 @@
  *
  * @constructor
  * @param name {String=LevelLoader} The name of the resource loader
- * @extends ImageResourceLoader
+ * @extends ImageLoader
  */
-var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */{
+var LevelLoader = ImageLoader.extend(/** @scope LevelLoader.prototype */{
 
    levels: null,
 
@@ -141,6 +143,12 @@ var LevelLoader = ImageResourceLoader.extend(/** @scope LevelLoader.prototype */
       return "LevelLoader";
    }
 });
+
+return LevelLoader;
+
+});
+
+Engine.initObject("Level", "PooledObject", function() {
 
 /**
  * @class Creates an instance of a Level object.
@@ -258,4 +266,8 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
    getClassName: function() {
       return "Level";
    }
+});
+
+return Level;
+
 });

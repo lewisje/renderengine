@@ -113,6 +113,11 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     * @param name {String} The name of the object to remove
     */
    unload: function(name) {
+		if (this.cache[name].data.destroy) {
+			// Make sure that cached objects have a chance to clean up
+			this.cache[name].data.destroy();
+		}
+
       this.cache[name] = null;
       delete this.cache[name];
       this.length--;
@@ -131,6 +136,15 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
          return null;
       }
    },
+
+   /**
+    * Returns the cache.  You should not manipulate the cache directly.
+    * instead, call methods to update the cache.
+    * @return {Object} The cache
+    */
+   getCachedObjects: function() {
+		return this.cache;
+	},
 
    /**
     * Clear the objects contained in the cache.

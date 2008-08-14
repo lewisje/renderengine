@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("DocumentContext", "HTMLElementContext", function() {
+
 /**
  * @class A reference to the <tt>document.body</tt> element as a rendering context.
  * Aside from being The Render Engine's default rendering context, the context
@@ -58,4 +60,8 @@ var DocumentContext = HTMLElementContext.extend(/** @scope DocumentContext.proto
    getClassName: function() {
       return "DocumentContext";
    }
+});
+
+return DocumentContext;
+
 });

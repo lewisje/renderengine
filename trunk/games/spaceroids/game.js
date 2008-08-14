@@ -36,19 +36,22 @@
  */
 
 // Load required engine components
-Engine.load("/rendercontexts/context.canvascontext.js");
-Engine.load("/platform/engine.spatialgrid.js");
-Engine.load("/textrender/text.vector.js");
-//Engine.load("/textrender/text.bitmap.js");
-Engine.load("/components/component.transform2d.js");
-Engine.load("/components/component.mover2d.js");
-Engine.load("/components/component.render.js");
-Engine.load("/components/component.vector2d.js");
-Engine.load("/components/component.collider.js");
-Engine.load("/components/component.input.js");
-Engine.load("/components/component.keyboardinput.js");
-Engine.load("/components/component.wiimoteinput.js");
-Engine.load("/resourceloaders/loader.sound.js");
+Game.loadEngineScripts([
+	"/rendercontexts/context.canvascontext.js",
+	"/platform/engine.spatialgrid.js",
+	"/textrender/text.vector.js",
+	"/components/component.transform2d.js",
+	"/components/component.mover2d.js",
+	"/components/component.render.js",
+	"/components/component.vector2d.js",
+	"/components/component.collider.js",
+	"/components/component.input.js",
+	"/components/component.keyboardinput.js",
+	"/components/component.wiimoteinput.js",
+	"/resourceloaders/loader.sound.js",
+]);
+
+Engine.initObject("Spaceroids", "EngineInitialized", function() {
 
 // Load game objects
 Game.load("/rock.js");
@@ -387,7 +390,7 @@ var Spaceroids = Game.extend({
 //      Spaceroids.loadTimeout = new Timeout("wait", 250, Spaceroids.waitForResources);
 //      this.waitForResources();
 
-      this.soundLoader = SoundResourceLoader.create();
+      this.soundLoader = SoundLoader.create();
 
       // Load the sounds
       this.soundLoader.load("explode", "resources/explode1.mp3");
@@ -490,3 +493,6 @@ var Spaceroids = Game.extend({
 
 });
 
+return Spaceroids;
+
+});

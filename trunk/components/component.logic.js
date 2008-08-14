@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * InputComponent
+ * LogicComponent
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -29,34 +29,31 @@
  *
  */
 
-Engine.initObject("InputComponent", "BaseComponent", function() {
+Engine.initObject("LogicComponent", "BaseComponent", function() {
 
 /**
- * @class A component which can read an input device and make those inputs
- * available for usage.
+ * @class A component which performs a form of logic.
  * @extends BaseComponent
  */
-var InputComponent = BaseComponent.extend(/** @scope InputComponent.prototype */{
+var LogicComponent = BaseComponent.extend(/** @scope LogicComponent.prototype */{
 
    /**
     * @constructor
     * @memberOf InputComponent
     */
    constructor: function(name, priority) {
-      this.base(name, BaseComponent.TYPE_INPUT, priority || 1.0);
+      this.base(name, BaseComponent.TYPE_LOGIC, priority || 1.0);
    }
-}, {
+}, /** @scope LogicComponent.prototype */{
    /**
     * Get the class name of this object
-    *
-    * @type String
-    * @memberOf InputComponent
+    * @return {String} The string "LogicComponent"
     */
    getClassName: function() {
-      return "InputComponent";
+      return "LogicComponent";
    }
 });
 
-return InputComponent;
+return LogicComponent;
 
 });

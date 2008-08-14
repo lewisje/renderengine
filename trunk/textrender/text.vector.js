@@ -29,6 +29,8 @@
  *
  */
 
+Engine.initObject("VectorText", "AbstractTextRenderer", function() {
+
 /**
  * @class A text renderer which draws text with simple vectors.
  *
@@ -264,4 +266,8 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       // &reg;
       [[ 5,-3],[ 0,-5],[-5,-3],[-5, 3],[ 0, 5],[ 5, 3],[ 5,-3],null   ,[-3, 2],[-3,-2],[ 2,-2],[ 3,-1],[ 2, 0],[-3, 0],null   ,[ 2, 0],[ 3, 2]]
    ]
+});
+
+return VectorText;
+
 });

@@ -28,14 +28,16 @@
  *
  */
 
+Engine.initObject("BitmapFontLoader", "ImageLoader", function() {
+
 /**
  * @class Loads bitmap fonts and makes them available to the system.
  *
  * @constructor
  * @param name {String=BitmapFontLoader} The name of the resource loader
- * @extends ImageResourceLoader
+ * @extends ImageLoader
  */
-var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.prototype */{
+var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype */{
 
    fonts: null,
 
@@ -112,4 +114,8 @@ var BitmapFontLoader = ImageResourceLoader.extend(/** @scope BitmapFontLoader.pr
    getClassName: function() {
       return "BitmapFontLoader";
    }
+});
+
+return BitmapFontLoader;
+
 });

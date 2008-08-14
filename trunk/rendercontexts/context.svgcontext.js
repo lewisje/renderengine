@@ -32,6 +32,8 @@
  *
  */
 
+Engine.initObject("SVGContext", "RenderContext2D", function() {
+
 var SVGContext = RenderContext2D.extend({
 
    context2D: null,
@@ -291,9 +293,9 @@ var SVGContext = RenderContext2D.extend({
 
    arcTo: function(point1, point2, radius) {
       this.base(point1, point2, radius);
-   },
+   }
 
-
+}, /** @scope SVGContext.prototype */{
    /**
     * Get the class name of this object
     *
@@ -302,4 +304,8 @@ var SVGContext = RenderContext2D.extend({
    getClassName: function() {
       return "SVGContext";
    }
+});
+
+return SVGContext;
+
 });

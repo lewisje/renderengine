@@ -29,12 +29,14 @@
  *
  */
 
+Engine.initObject("HostComponent", "LogicComponent", function() {
+
 /**
  * @class A component that can execute host objects.  Allows embedding
  *        of multiple objects into one object.
- * @extends BaseComponent
+ * @extends LogicComponent
  */
-var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
+var HostComponent = LogicComponent.extend(/** @scope HostComponent.prototype */{
 
    objects: null,
 
@@ -43,7 +45,7 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
     * @memberOf Transform2DComponent
     */
    constructor: function(name, priority) {
-      this.base(name, BaseComponent.TYPE_RENDERING, priority || 1.0);
+      this.base(name, priority || 1.0);
       this.objects = new HashContainer();
    },
 
@@ -110,4 +112,8 @@ var HostComponent = BaseComponent.extend(/** @scope HostComponent.prototype */{
    getClassName: function() {
       return "HostComponent";
    }
+});
+
+return HostComponent;
+
 });

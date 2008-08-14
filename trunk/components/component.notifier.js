@@ -29,11 +29,13 @@
  *
  */
 
+Engine.initObject("NotifierComponent", "LogicComponent", function() {
+
 /**
  * @class A component which notifies objects when an action occurs.
- * @extends BaseComponent
+ * @extends LogicComponent
  */
-var NotifierComponent = BaseComponent.extend(/** @scope NotifierComponent.prototype */{
+var NotifierComponent = LogicComponent.extend(/** @scope NotifierComponent.prototype */{
 
    notifyLists: null,
 
@@ -41,8 +43,8 @@ var NotifierComponent = BaseComponent.extend(/** @scope NotifierComponent.protot
     * @constructor
     * @memberOf NotifierComponent
     */
-   constructor: function(name, type, priority) {
-      this.base(name, type, priority || 1.0);
+   constructor: function(name, priority) {
+      this.base(name, priority || 1.0);
       this.notifyLists = {};
    },
 
@@ -136,4 +138,8 @@ var NotifierComponent = BaseComponent.extend(/** @scope NotifierComponent.protot
    getClassName: function() {
       return "NotifierComponent";
    }
+});
+
+return NotifierComponent;
+
 });

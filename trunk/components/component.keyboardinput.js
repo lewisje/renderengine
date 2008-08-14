@@ -28,6 +28,8 @@
  *
  */
 
+Engine.initObject("KeyboardInputComponent", "InputComponent", function() {
+
 /**
  * @class A component which responds to keyboard events and notifies
  * its host object by calling one of three methods.  The host object
@@ -176,4 +178,8 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    getClassName: function() {
       return "KeyboardInputComponent";
    }
+});
+
+return KeyboardInputComponent;
+
 });

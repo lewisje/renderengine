@@ -32,6 +32,8 @@
  *
  */
 
+Engine.initObject("TextRenderer", "Object2D", function() {
+
 /**
  * @class A 2d text rendering object.  The object hosts the given text
  *        renderer, and a way to position and size the text.  It is up
@@ -248,5 +250,9 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @type Number
     */
    NO_DRAW: 1
+});
+
+return TextRenderer;
+
 });
 
