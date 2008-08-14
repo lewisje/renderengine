@@ -2,6 +2,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 08/14/2008 ||The dependency checking breaks loading in Safari and Opera.  Not a big deal, I know how to make them work so I might have to revert to old loading for those browsers.  Yeah, it takes a bit longer but at least it'll work. ||
 || 08/13/2008 ||I was able to speed up engine loading using a new dependency processor that I've written.  It's still a little buggy, so expect some wonkiness for the time being.  Not all objects are currently configured with their dependency, but when they are I will probably remove the serial script processor due to it being the main slowness in engine startup.  The dependency processor simply looks for an object that another object depends on to become available, then initializes that object class. ||
 || 08/11/2008 ||I've added a couple new loaders: one for generic JSON objects, and another for simple bitmap levels with a collision map.  I then created an object to load that level into a scrolling background object.  Updated the SMB example to use the new scrolling background. ||
 || 08/08/2008 ||Internet Explorer is now loading the example game.  However, I cannot get the canvas context to show up.  I'm using !ExCanvas, and even !ExCanvas for Silverlight but neither is actually displaying anything.  I also added Firebug Lite into the mix for IE.  When you specify the `debug=true` query param, it will display the console. *Note:* I'm rethinking using the new Firebug Lite... it's not ready for primetime. ||
