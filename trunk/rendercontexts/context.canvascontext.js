@@ -47,12 +47,12 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    /**
     * Create an instance of a 2D rendering context using the canvas element.
     *
-    * @param contextName {String} The name of this context.  Default: CanvasContext
+    * @param name {String} The name of this context.  Default: CanvasContext
     * @param width {Number} The width (in pixels) of the canvas context.
     * @param height {Number} The height (in pixels) of the canvas context.
     * @constructor
     */
-   constructor: function(width, height) {
+   constructor: function(name, width, height) {
       Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
 
       this.setWidth(width);
@@ -70,7 +70,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       }
       canvas.id = this.getId();
 
-      this.base("CanvasContext", canvas);
+      this.base(name || "CanvasContext", canvas);
    },
 
    afterAdd: function(parent) {
@@ -328,9 +328,17 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @param rect {Rectangle2D} The rectangle that specifies the position and
     *					dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
+    * @param srcRect {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
+    *						<tt>null</tt> the entire image is used
     */
-   drawImage: function(rect, image) {
-		this.get2DContext().drawImage(image, rect.x, rect.y, rect.width, rect.height);
+   drawImage: function(rect, image, srcRect) {
+		if (srcRect) {
+			this.get2DContext().drawImage(image,
+				srcRect.x, srcRect.y, srcRect.width, srcRect.height);
+				rect.x, rect.y, rect.width, rect.height);
+		} else {
+			this.get2DContext().drawImage(image, rect.x, rect.y, rect.width, rect.height);
+		}
 		this.base(rect, image);
 	},
 
