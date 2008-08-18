@@ -303,6 +303,26 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       return this;
    },
 
+	/**
+	 * Set the X coordinate
+	 *
+	 * @param x {Number} The X coordinate
+	 */
+	setX: function(x) {
+		this._vec.setElements([x]);
+		this.upd();
+	},
+
+	/**
+	 * Set the Y coordinate
+	 *
+	 * @param y {Number} The Y coordinate
+	 */
+	setY: function(y) {
+		this._vec.setElements([this.e(1), y]);
+		this.upd();
+	},
+
    /**
     * Adds the specified point to this point.
     * @param point {Point2D} A point
@@ -578,6 +598,23 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       this.topLeft.add(offs);
       return this;
    },
+
+   /**
+    * Set the top left of the rectangle to the point, or coordinates specified.
+    *
+    * @param ptOrX {Point2D/Number} The top left point, or the X coordinate
+    * @param y {Number} If the top left wasn't specified as the first argument, this is the Y coordinate
+    */
+   setTopLeft: function(ptOrX, y) {
+		if (ptOrX instanceof Point2D)
+		{
+			this.topLeft.set(ptOrX);
+		}
+		else
+		{
+			this.topLeft.set(ptOrX, y);
+		}
+	},
 
    /**
     * Set the width of the rectangle.
