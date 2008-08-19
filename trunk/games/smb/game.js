@@ -35,17 +35,17 @@
 
 // Load required engine components
 Game.loadEngineScripts([
-	"/rendercontexts/context.canvascontext.js",
-	"/objects/object.background.js",
-	"/components/component.transform2d.js",
-	"/components/component.render.js",
-	"/components/component.sprite.js",
-	"/components/component.input.js",
-	"/components/component.keyboardinput.js",
-	"/resourceloaders/loader.sound.js",
-	"/resourceloaders/loader.image.js",
-	"/resourceloaders/loader.sprite.js",
-	"/resourceloaders/loader.level.js"
+   "/rendercontexts/context.canvascontext.js",
+   "/rendercontexts/context.scrollingbackground.js",
+   "/components/component.transform2d.js",
+   "/components/component.render.js",
+   "/components/component.sprite.js",
+   "/components/component.input.js",
+   "/components/component.keyboardinput.js",
+   "/resourceloaders/loader.sound.js",
+   "/resourceloaders/loader.image.js",
+   "/resourceloaders/loader.sprite.js",
+   "/resourceloaders/loader.level.js"
 ]);
 
 Engine.initObject("SpriteTest", "EngineInitialized", function() {
@@ -81,7 +81,8 @@ var SpriteTest = Game.extend({
 
    nextZ: 0,
 
-   gridSize: 32,
+   gridSize: 16,
+   level: null,
 
    /**
     * Handle the keypress which starts the game
@@ -163,14 +164,10 @@ var SpriteTest = Game.extend({
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
 
-      var level = SpriteTest.levelLoader.getLevel("level1");
+      this.level = SpriteTest.levelLoader.getLevel("level1");
 
-      this.scrollBkg = ScrollingBackground.create("bkg", level, this.fieldWidth, this.fieldHeight);
-      Engine.getDefaultContext().add(this.scrollBkg);
-
-      this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
+      this.renderContext = ScrollingBackground.create("bkg", this.level, this.fieldWidth, this.fieldHeight);
       this.renderContext.setWorldScale(this.areaScale);
-      $(this.renderContext.getSurface()).css({ position: "absolute", top: "8px"});
       Engine.getDefaultContext().add(this.renderContext);
 
       if (EngineSupport.checkBooleanParam("edit")) {
@@ -252,9 +249,6 @@ var SpriteTest = Game.extend({
 
    editor: function() {
       // Render the editor controls
-      $(this.scrollBkg.getSurface()).css("overflow-x", "auto");
-      $(this.renderContext.getSurface()).css("height", "432px");
-
       var tbar = $("<div class='toolbar'/>");
       var self = this;
 
@@ -280,7 +274,7 @@ var SpriteTest = Game.extend({
 
       // Update grid size
       tbar.append($("<span class='tool'>Grid Size:</span>"));
-      tbar.append($("<input class='tool' type='text' size='3' value='32'/>").change(function() {
+      tbar.append($("<input class='tool' type='text' size='3' value='16'/>").change(function() {
          if (!isNaN($(this).val())) {
             SpriteTest.gridSize = $(this).val();
          } else {
@@ -288,7 +282,16 @@ var SpriteTest = Game.extend({
          }
       }));
 
+      // We need a scrollbar to move the world
+      var sb = $("<div style='height: 20px; width: " + this.fieldWidth + "px; overflow-x: auto;'><div style='width: " +
+         this.level.getFrame().get().w + "px; border: 1px dashed'></div></div>").bind("scroll", function() {
+            self.renderContext.setHorizontalScroll(this.scrollLeft);
+      });
+
+      $(document.body).append(sb);
+
       $(document.body).append(tbar);
+
 
       // Add an event handler to the context
       this.renderContext.addEvent("mousedown", function(evt) {
@@ -321,7 +324,12 @@ var SpriteTest = Game.extend({
    createActor: function(actorName) {
       var actor = SpriteTest.Actor.create();
       actor.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", actorName));
-      actor.setPosition(Point2D.create(this.centerPoint));
+
+      // Adjust for scroll
+      var s = this.renderContext.getHorizontalScroll();
+      var pT = Point2D.create(this.centerPoint.x, this.centerPoint.y);
+
+      actor.setPosition(pT);
       actor.setZIndex(SpriteTest.nextZ++);
       this.renderContext.add(actor);
       this.deselectObject();
