@@ -1,0 +1,5 @@
+= Current Work =
+
+At this point, a lot of the engine is solid. There are some ugly issues that are rearing their heads. I'm trying to get a scrolling background context (based on the canvas context) working.  It's getting there, but I'm not seeing what I would expect with object positioning. I hope to get that finished soon so I can finish my sprite testing and the second example.
+
+The engine isn't loading in Opera or Safari, but I'm going to tackle that soon.  I was able to create a dependency tracker so that engine components can all be loaded as soon as the script is added to the document.  Once I get this working in Opera and Safari, it'll be a much better load (shorter load times) than with the single-threaded loads as they were.
