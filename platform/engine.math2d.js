@@ -303,25 +303,25 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       return this;
    },
 
-	/**
-	 * Set the X coordinate
-	 *
-	 * @param x {Number} The X coordinate
-	 */
-	setX: function(x) {
-		this._vec.setElements([x]);
-		this.upd();
-	},
+   /**
+    * Set the X coordinate
+    *
+    * @param x {Number} The X coordinate
+    */
+   setX: function(x) {
+      this._vec.setElements([x]);
+      this.upd();
+   },
 
-	/**
-	 * Set the Y coordinate
-	 *
-	 * @param y {Number} The Y coordinate
-	 */
-	setY: function(y) {
-		this._vec.setElements([this.e(1), y]);
-		this.upd();
-	},
+   /**
+    * Set the Y coordinate
+    *
+    * @param y {Number} The Y coordinate
+    */
+   setY: function(y) {
+      this._vec.setElements([this.e(1), y]);
+      this.upd();
+   },
 
    /**
     * Adds the specified point to this point.
@@ -564,6 +564,18 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
+    * Get an object with the elements containing left, top, width, height as
+    * elements x, y, w, h.
+    *
+    * @return {Object} An object with the elements x, y, w, h
+    */
+   get: function() {
+      var tl = this.getTopLeft();
+      var d = this.getDims();
+      return {x: tl.x, y: tl.y, w: d.x, h: d.y};
+   },
+
+   /**
     * Returns <tt>true</tt> if this rectangle is equal to the specified rectangle.
     *
     * @param rect {Rectangle2D} The rectangle to compare to
@@ -606,15 +618,15 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param y {Number} If the top left wasn't specified as the first argument, this is the Y coordinate
     */
    setTopLeft: function(ptOrX, y) {
-		if (ptOrX instanceof Point2D)
-		{
-			this.topLeft.set(ptOrX);
-		}
-		else
-		{
-			this.topLeft.set(ptOrX, y);
-		}
-	},
+      if (ptOrX instanceof Point2D)
+      {
+         this.topLeft.set(ptOrX);
+      }
+      else
+      {
+         this.topLeft.set(ptOrX, y);
+      }
+   },
 
    /**
     * Set the width of the rectangle.

@@ -127,7 +127,7 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
     */
    execute: function(renderContext, time) {
 
-      if (this.getDrawMode() != RenderComponent.DRAW)
+      if (!this.base(renderContext, time))
       {
          return;
       }

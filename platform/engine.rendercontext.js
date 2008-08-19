@@ -49,9 +49,11 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    transformStackDepth: 0,
 
-   renderScaleX: 1,
+   worldTransform: null,
 
-   renderScaleY: 1,
+   worldRotation: null,
+
+   worldScale: null,
 
    /**
     * @private
@@ -60,6 +62,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.base(contextName || "RenderContext");
       this.surface = surface;
       this.setElement(surface);
+      this.worldScale = [1, 1];
+      this.worldTransform = Point2D.create(0, 0);
+      this.worldRotation = 0;
    },
 
    /**
@@ -69,8 +74,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.base();
       this.surface = null;
       this.transformStackDepth = 0;
-      this.renderScaleX = 1;
-      this.renderScaleY = 1;
+      this.worldScale = null;
+      this.worldTransform = null;
+      this.worldRotation = null;
    },
 
    /**
@@ -100,33 +106,45 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       return this.surface;
    },
 
-	/**
-	 * Set the scale of the rendering context.
-	 *
-	 * @param scaleX {Number} The scale along the X dimension
-	 * @param scaleY {Number} The scale along the Y dimension
-	 */
+   /**
+    * Set the scale of the rendering context.
+    *
+    * @param scaleX {Number} The scale along the X dimension
+    * @param scaleY {Number} The scale along the Y dimension
+    */
    setScale: function(scaleX, scaleY) {
    },
 
-	/**
-	 * Set the world scale of the rendering context.  All objects should
-	 * be adjusted by this scale when the context renders.
-	 *
-	 * @param scaleX {Number} The scale along the X dimension
-	 * @param scaleY {Number} The scale along the Y dimension
-	 */
+   /**
+    * Set the world scale of the rendering context.  All objects should
+    * be adjusted by this scale when the context renders.
+    *
+    * @param scaleX {Number} The scale along the X dimension
+    * @param scaleY {Number} The scale along the Y dimension
+    */
    setWorldScale: function(scaleX, scaleY) {
-      this.renderScaleX = scaleX;
-      this.renderScaleY = scaleY ? scaleY : scaleX;
+      this.worldScale[0] = scaleX;
+      this.worldScale[1] = scaleY ? scaleY : scaleX;
    },
 
-	/**
-	 * Gets an array representing the rendering scale of the world.
-	 * @return {Array} The first element is the X axis, the second is the Y axis
-	 */
+   setWorldRotation: function(rotation) {
+      this.worldRotation = rotation;
+   },
+
+   setWorldPosition: function(point) {
+      this.worldPosition.set(point);
+   },
+
+   /**
+    * Gets an array representing the rendering scale of the world.
+    * @return {Array} The first element is the X axis, the second is the Y axis
+    */
    getWorldScale: function() {
-      return [this.renderScaleX, this.renderScaleY];
+      return this.worldScale;
+   },
+
+   getWorldRotation: function() {
+      return this.worldRotation;
    },
 
    /**
@@ -174,6 +192,17 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
+    * Clear the context and prepare it for rendering.  If you pass a
+    * rectangle, only that portion of the world will be cleared.  If
+    * you don't pass a rectangle, the entire context is cleared.
+    *
+    * @param rect {Rectangle2D} The area to clear in the context, or
+    *             <tt>null</tt> to clear the entire context.
+    */
+   reset: function(rect) {
+   },
+
+   /**
     * Update the render context before rendering the objects to the surface.
     *
     * @param parentContext {RenderContext} A parent context, or <tt>null</tt>
@@ -191,13 +220,13 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     */
    render: function(time) {
 
+
+      // Setup the world
+      this.reset();
+      this.setupWorld(time);
+
       // Push the world transform
       this.pushTransform();
-
-      // Set the scaling of the world
-      this.setScale(this.renderScaleX, this.renderScaleY);
-
-      this.reset();
 
       // Render the objects into the world
       var objs = this.getObjects();
@@ -208,6 +237,15 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
       // Restore the world transform
       this.popTransform();
+   },
+
+   /**
+    * Gives the render context a chance to initialize the world.
+    * Use this method to change the world position, rotation, scale, etc.
+    *
+    * @param time {Number} The current world time
+    */
+   setupWorld: function(time) {
    },
 
    /**

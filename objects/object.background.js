@@ -49,61 +49,92 @@ Engine.initObject("ScrollingBackground", "HTMLElementContext", function() {
  */
 var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackground.prototype */{
 
-   canvasContext: null,
+   context: null,
 
    jQ: null,
 
-	/**
-	 * @private
-	 */
-   constructor: function(name, level, windowWidth, windowHeight) {
+   scrollEvt: false,
+
+   /**
+    * @private
+    */
+   constructor: function(name, context, level, windowWidth, windowHeight) {
 
       // Create an element for us to use as our window
       var e = $("<div style='overflow: hidden; width:" + windowWidth + "px; height:" + windowHeight + "px'></div>");
       this.base(name || "ScrollingBackground", e[0]);
 
       this.jQ = $(this.getSurface());
+      this.context = context;
+
+      // Set up an event handler so that if something external sets our
+      // scroll, we can mimic it in the context
+      var self = this;
+      this.jQ.bind("scroll", function(evt) {
+         self.onScroll(evt);
+      });
+      this.scrollEvt = false;
 
       // Draw the image
       this.jQ.append($(level.getSourceImage()).clone());
    },
 
-	/**
-	 * @private
-	 */
+   destroy: function() {
+      this.jQ.unbind("scroll");
+      this.base();
+   },
+
+   onScroll: function(evt) {
+      var pt = Point2D.create(-this.jQ[0].scrollLeft, this.jQ[0].scrollTop);
+      this.context.setWorldPosition(pt);
+   },
+
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.canvasContext = null;
       this.jQ = null;
    },
 
-	/**
-	 * Set the scroll position for the background using a {@link Point2D} to
-	 * define the X and Y scroll amount.
-	 *
-	 * @param point {Point2D} The scroll position along X and Y
-	 */
+   /**
+    * Set the scroll position for the background using a {@link Point2D} to
+    * define the X and Y scroll amount.
+    *
+    * @param point {Point2D} The scroll position along X and Y
+    */
    setScrollPosition: function(point) {
-      this.jQ.scrollLeft(point.x);
-      this.jQ.scrollTop(point.y);
+      if (!this.scrollEvt) {
+         this.jQ[0].scrollLeft = point.x;
+         this.jQ[0].scrollTop = point.y;
+      }
+
+      this.context.setWorldPosition(point);
    },
 
-	/**
-	 * Set the horizontal scroll amount in pixels.
-	 *
-	 * @param x {Number} The horizontal scroll in pixels
-	 */
+   /**
+    * Set the horizontal scroll amount in pixels.
+    *
+    * @param x {Number} The horizontal scroll in pixels
+    */
    setHorizontalScroll: function(x) {
-      this.jQ.scrollLeft(x);
+      this.jQ[0].scrollLeft = x;
+      var wP = this.context.getWorldPosition();
+      wP.set(x, wP.y);
+      this.context.setWorldPosition(wP);
    },
 
-	/**
-	 * Set the vertical scroll amount in pixels.
-	 *
-	 * @param y {Number} The vertical scroll in pixels
-	 */
+   /**
+    * Set the vertical scroll amount in pixels.
+    *
+    * @param y {Number} The vertical scroll in pixels
+    */
    setVerticalScroll: function(y) {
-      this.jQ.scrollTop(y);
+      this.jQ[0].scrollTop = y;
+      var wP = this.context.getWorldPosition();
+      wP.set(wP.x, y);
+      this.context.setWorldPosition(wP);
    },
 
    /**
@@ -111,16 +142,16 @@ var ScrollingBackground = HTMLElementContext.extend(/** @scope ScrollingBackgrou
     * @return {Number} The horizontal scroll
     */
    getHorizontalScroll: function() {
-		return this.jQ.scrollLeft();
-	},
+      return this.jQ[0].scrollLeft;
+   },
 
    /**
     * Get the vertical scroll amount in pixels.
     * @return {Number} The vertical scroll
     */
-	getVerticalScroll: function() {
-		return this.jQ.scrollTop();
-	}
+   getVerticalScroll: function() {
+      return this.jQ[0].scrollTop;
+   }
 
 }, /** @scope ScrollingBackground.prototype */{
 

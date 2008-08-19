@@ -49,46 +49,49 @@ Engine.initObject("ScrollingBackground", "CanvasContext", function() {
  */
 var ScrollingBackground = CanvasContext.extend(/** @scope ScrollingBackground.prototype */{
 
-	visRect: null,
+   visRect: null,
 
-	/**
-	 * @private
-	 */
+   level: null,
+
+   /**
+    * @private
+    */
    constructor: function(name, level, windowWidth, windowHeight) {
       // Create an element for us to use as our window
       this.base(name || "ScrollingBackground", windowWidth, windowHeight);
-   	this.visRect = Rectangle2D.create(0, 0, windowWidth, windowHeight);
+      this.visRect = Rectangle2D.create(0, 0, windowWidth, windowHeight);
+      this.level = level;
    },
 
-	/**
-	 * Set the scroll position for the background using a {@link Point2D} to
-	 * define the X and Y scroll amount.
-	 *
-	 * @param point {Point2D} The scroll position along X and Y
-	 */
+   /**
+    * Set the scroll position for the background using a {@link Point2D} to
+    * define the X and Y scroll amount.
+    *
+    * @param point {Point2D} The scroll position along X and Y
+    */
    setWorldPosition: function(point) {
-		this.visRect.setTopLeft(point);
+      this.visRect.setTopLeft(point);
    },
 
-	/**
-	 * Set the horizontal scroll amount in pixels.
-	 *
-	 * @param x {Number} The horizontal scroll in pixels
-	 */
+   /**
+    * Set the horizontal scroll amount in pixels.
+    *
+    * @param x {Number} The horizontal scroll in pixels
+    */
    setHorizontalScroll: function(x) {
-		var pt = this.visRect.getTopLeft();
-		pt.setX(x);
+      var pt = this.visRect.getTopLeft();
+      pt.setX(x);
       this.setWorldPosition(pt);
    },
 
-	/**
-	 * Set the vertical scroll amount in pixels.
-	 *
-	 * @param y {Number} The vertical scroll in pixels
-	 */
+   /**
+    * Set the vertical scroll amount in pixels.
+    *
+    * @param y {Number} The vertical scroll in pixels
+    */
    setVerticalScroll: function(y) {
-		var pt = this.visRect.getTopLeft();
-		pt.setY(y);
+      var pt = this.visRect.getTopLeft();
+      pt.setY(y);
       this.setWorldPosition(pt);
    },
 
@@ -97,21 +100,23 @@ var ScrollingBackground = CanvasContext.extend(/** @scope ScrollingBackground.pr
     * @return {Number} The horizontal scroll
     */
    getHorizontalScroll: function() {
-		return this.visRect.getTopLeft().x;
-	},
+      return this.visRect.getTopLeft().x;
+   },
 
    /**
     * Get the vertical scroll amount in pixels.
     * @return {Number} The vertical scroll
     */
-	getVerticalScroll: function() {
-		return this.visRect.getTopLeft().y;
-	},
+   getVerticalScroll: function() {
+      return this.visRect.getTopLeft().y;
+   },
 
-	setupWorld: function(time) {
-		// Render the slice of the level image first
-		this.drawImage(worldRect, level.getSourceImage, this.visRect);
-	},
+   setupWorld: function(time) {
+      this.base(time);
+
+      // Render the slice of the level image first
+      this.drawImage(this.worldRect, this.level.getSourceImage(), this.visRect);
+   },
 
 }, /** @scope ScrollingBackground.prototype */{
 

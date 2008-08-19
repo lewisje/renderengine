@@ -42,6 +42,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
    context2D: null,
 
+   worldRect: null,
+
    mouseHandler: false,
 
    /**
@@ -62,14 +64,15 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       // Create the canvas element
       canvas = document.createElement("canvas");
       if (jQuery.browser.msie) {
-         canvas.style.width = this.width * worldScale[0];
-         canvas.style.height = this.height * worldScale[1];
+         canvas.style.width = this.width * worldScale;
+         canvas.style.height = this.height * worldScale;
       } else {
-         canvas.width = this.width * worldScale[0];
-         canvas.height = this.height * worldScale[1];
+         canvas.width = this.width * worldScale;
+         canvas.height = this.height * worldScale;
       }
       canvas.id = this.getId();
 
+      this.worldRect = Rectangle2D.create(0, 0, this.width, this.height);
       this.base(name || "CanvasContext", canvas);
    },
 
@@ -85,6 +88,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.base();
       this.context2D = null;
       this.mouseHandler = false;
+      this.worldRect = null;
    },
 
    setWorldScale: function(scaleX, scaleY) {
@@ -95,6 +99,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       $(this.getElement())
          .attr("width", this.getWidth() * scaleX)
          .attr("height", this.getHeight() * scaleY);
+
+      this.worldRect = Rectangle2D.create(0, 0, this.getWidth() * scaleX, this.getHeight() * scaleY);
    },
 
    /**
@@ -133,8 +139,18 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    /**
     * Reset the context, clearing it and preparing it for drawing.
     */
-   reset: function() {
-      this.get2DContext().clearRect(0, 0, this.width, this.height);
+   reset: function(rect) {
+      var cRect = (rect != null ? rect : this.worldRect);
+      this.get2DContext().clearRect(cRect.getTopLeft().x, cRect.getTopLeft().y, cRect.getDims().x, cRect.getDims().y);
+   },
+
+   setupWorld: function(time) {
+      this.base(time);
+
+      // Set the scaling of the world
+      this.setPosition(this.getWorldPosition());
+      this.setRotation(this.getWorldRotation());
+      this.setScale(this.getWorldScale(), this.getWorldScale());
    },
 
    /**
@@ -326,21 +342,24 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * Draw an image on the context.
     *
     * @param rect {Rectangle2D} The rectangle that specifies the position and
-    *					dimensions of the image rectangle.
+    *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
     * @param srcRect {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
-    *						<tt>null</tt> the entire image is used
+    *                <tt>null</tt> the entire image is used
     */
    drawImage: function(rect, image, srcRect) {
-		if (srcRect) {
-			this.get2DContext().drawImage(image,
-				srcRect.x, srcRect.y, srcRect.width, srcRect.height);
-				rect.x, rect.y, rect.width, rect.height);
-		} else {
-			this.get2DContext().drawImage(image, rect.x, rect.y, rect.width, rect.height);
-		}
-		this.base(rect, image);
-	},
+      if (srcRect) {
+         var s = srcRect.get();
+         var d = rect.get();
+
+         this.get2DContext().drawImage(image,
+            s.x, s.y, s.w, s.h, d.x, d.y, d.w, d.h);
+      } else {
+         var d = rect.get();
+         this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
+      }
+      this.base(rect, image);
+   },
 
    /**
     * Capture an image from the context.

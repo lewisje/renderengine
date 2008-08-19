@@ -56,9 +56,22 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    scaleY: 1,
 
+   wPosition: null,
+
+   wRotation: 0,
+
+   wScale: null,
+
    bBox: null,
 
    backgroundColor: null,
+
+   constructor: function(name, surface) {
+      this.base(name || "RenderContext2D", surface);
+      this.wPosition = Point2D.create(0,0);
+      this.wRotation = 0;
+      this.wScale = 1;
+   },
 
    release: function() {
       this.base();
@@ -73,12 +86,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
       this.scaleY= 1;
       this.bBox= null;
       this.backgroundColor= null;
-   },
-
-   /**
-    * Reset the context, clearing it and preparing it for drawing.
-    */
-   reset: function() {
+      this.wPosition = null;
+      this.wRotation = 0;
+      this.wScale = null;
    },
 
    /**
@@ -211,6 +221,43 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param matrix {Matrix2D} The transformation matrix
     */
    setTransform: function(matrix) {
+   },
+
+   /**
+    * Set the transformation of the world.
+    *
+    * @param position {Point2D}
+    * @param rotation {Number}
+    * @param scale {Number}
+    */
+   setWorldTransform: function(position, rotation, scale) {
+      this.wPosition = position;
+      this.wRotation = rotation;
+      this.wScale = scale;
+   },
+
+   setWorldPosition: function(position) {
+      this.wPosition = position;
+   },
+
+   getWorldPosition: function() {
+      return this.wPosition;
+   },
+
+   setWorldRotation: function(rotation) {
+      this.wRotation = rotation;
+   },
+
+   getWorldRotation: function() {
+      return this.wRotation;
+   },
+
+   setWorldScale: function(scale) {
+      this.wScale = scale;
+   },
+
+   getWorldScale: function() {
+      return this.wScale;
    },
 
    /**
@@ -410,11 +457,11 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * Draw an image on the context.
     *
     * @param rect {Rectangle2D} The rectangle that specifies the position and
-    *					dimensions of the image rectangle.
+    *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
     */
    drawImage: function(rect, image) {
-	},
+   },
 
    /**
     * Capture an image from the context.
