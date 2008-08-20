@@ -945,7 +945,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       // Stop the sound manager
-      Engine.soundManager.destruct();
+      if (Engine.isSoundEnabled()) {
+	      Engine.soundManager.destruct();
+		}
 
       this.downTime = new Date().getTime();
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
