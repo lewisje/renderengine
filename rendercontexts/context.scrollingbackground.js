@@ -61,6 +61,7 @@ var ScrollingBackground = CanvasContext.extend(/** @scope ScrollingBackground.pr
       this.base(name || "ScrollingBackground", windowWidth, windowHeight);
       this.visRect = Rectangle2D.create(0, 0, windowWidth, windowHeight);
       this.level = level;
+      this.setViewport(this.visRect);
    },
 
    /**
@@ -71,6 +72,7 @@ var ScrollingBackground = CanvasContext.extend(/** @scope ScrollingBackground.pr
     */
    setWorldPosition: function(point) {
       this.visRect.setTopLeft(point);
+      this.base(point);
    },
 
    /**

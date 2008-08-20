@@ -230,34 +230,19 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param rotation {Number}
     * @param scale {Number}
     */
-   setWorldTransform: function(position, rotation, scale) {
-      this.wPosition = position;
-      this.wRotation = rotation;
-      this.wScale = scale;
+   setRenderTransform: function(mtx3) {
    },
 
-   setWorldPosition: function(position) {
-      this.wPosition = position;
+   getRenderPosition: function() {
+      return Point2D.ZERO;
    },
 
-   getWorldPosition: function() {
-      return this.wPosition;
+   getRenderRotation: function() {
+      return 0;
    },
 
-   setWorldRotation: function(rotation) {
-      this.wRotation = rotation;
-   },
-
-   getWorldRotation: function() {
-      return this.wRotation;
-   },
-
-   setWorldScale: function(scale) {
-      this.wScale = scale;
-   },
-
-   getWorldScale: function() {
-      return this.wScale;
+   getRenderScale: function() {
+      return 1.0;
    },
 
    /**

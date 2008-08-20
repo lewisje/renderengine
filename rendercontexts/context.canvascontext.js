@@ -148,9 +148,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.base(time);
 
       // Set the scaling of the world
-      this.setPosition(this.getWorldPosition());
-      this.setRotation(this.getWorldRotation());
-      this.setScale(this.getWorldScale(), this.getWorldScale());
+//      this.setPosition(this.getWorldPosition());
+//      this.setRotation(this.getWorldRotation());
+//      this.setScale(this.getWorldScale(), this.getWorldScale());
    },
 
    /**

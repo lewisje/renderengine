@@ -309,7 +309,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @param x {Number} The X coordinate
     */
    setX: function(x) {
-      this._vec.setElements([x]);
+      this._vec.setElements([x, this._vec.e(2)]);
       this.upd();
    },
 
@@ -319,7 +319,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @param y {Number} The Y coordinate
     */
    setY: function(y) {
-      this._vec.setElements([this.e(1), y]);
+      this._vec.setElements([this._vec.e(1), y]);
       this.upd();
    },
 
@@ -351,7 +351,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @type Point2D
     */
    sub: function(point) {
-      this._vec.subtract(point._vec);
+      this._vec = this._vec.subtract(point._vec);
       this.upd();
       return this;
    },

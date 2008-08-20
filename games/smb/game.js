@@ -327,7 +327,7 @@ var SpriteTest = Game.extend({
 
       // Adjust for scroll
       var s = this.renderContext.getHorizontalScroll();
-      var pT = Point2D.create(this.centerPoint.x, this.centerPoint.y);
+      var pT = Point2D.create(this.centerPoint.x + s, this.centerPoint.y);
 
       actor.setPosition(pT);
       actor.setZIndex(SpriteTest.nextZ++);
@@ -339,6 +339,9 @@ var SpriteTest = Game.extend({
 
    selectObject: function(x, y) {
       this.deselectObject();
+
+      // Adjust for scroll
+      x += this.renderContext.getHorizontalScroll();
 
       // Check to see if this object falls on top of an object
       var pt = Point2D.create(x,y);
@@ -357,6 +360,9 @@ var SpriteTest = Game.extend({
    },
 
    moveSelected: function(x, y) {
+      // Adjust for scroll
+      x += this.renderContext.getHorizontalScroll();
+
       if (SpriteTest.currentSelectedObject) {
          var grid = this.fieldWidth / SpriteTest.gridSize;
          x = x - x % SpriteTest.gridSize;
