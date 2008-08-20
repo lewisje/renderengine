@@ -125,8 +125,7 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
     * @param sound {String} The name of the sound to unload
     */
    unload: function(sound) {
-		var s = this.get(sound);
-		s.unload();
+		var s = this.get(sound).destroy();
       this.base(sound);
 	},
 
@@ -216,6 +215,14 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
 		this.muted = false;
       return this.base(name);
    },
+
+	/**
+	 * Destroy the sound object
+	 */
+	destroy: function() {
+		this.smSound.unload();
+		this.base();
+	},
 
    /**
     * @private
