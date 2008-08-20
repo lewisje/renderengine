@@ -100,6 +100,10 @@ SpriteTest.Actor = Object2D.extend({
       return this.getComponent("move").getPosition();
    },
 
+   getRenderPosition: function() {
+		return this.getComponent("move").getRenderPosition();
+	},
+
    /**
     * Set, or initialize, the position of the mover component
     *

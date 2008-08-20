@@ -49,7 +49,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    transformStackDepth: 0,
 
-   worldTransform: null,
+   viewport: null,
+
+   worldPosition: null,
 
    worldRotation: null,
 
@@ -63,8 +65,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.surface = surface;
       this.setElement(surface);
       this.worldScale = [1, 1];
-      this.worldTransform = Point2D.create(0, 0);
+      this.worldPosition = Point2D.create(0, 0);
       this.worldRotation = 0;
+      this.viewport = Rectangle2D.create(0, 0, 100, 100);
    },
 
    /**
@@ -75,7 +78,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.surface = null;
       this.transformStackDepth = 0;
       this.worldScale = null;
-      this.worldTransform = null;
+      this.worldPosition = null;
       this.worldRotation = null;
    },
 
@@ -146,6 +149,18 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    getWorldRotation: function() {
       return this.worldRotation;
    },
+
+	getWorldPosition: function() {
+		return this.worldPosition;
+	},
+
+	setViewport: function(rect) {
+		this.viewport = Rectangle2D.create(rect);
+	},
+
+	getViewport: function() {
+		return this.viewport;
+	},
 
    /**
     * Add an object to the render list.  Only objects
@@ -228,11 +243,15 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       // Push the world transform
       this.pushTransform();
 
-      // Render the objects into the world
+      // Render the visible objects into the world
+		//this.viewport.setTopLeft(this.getWorldPosition());
       var objs = this.getObjects();
       for (var o in objs)
       {
-         this.updateObject(objs[o], time);
+			if (!objs[o].getRenderPosition || this.viewport.containsPoint(objs[o].getRenderPosition())) {
+         	this.updateObject(objs[o], time);
+         	Engine.vObj++;
+			}
       }
 
       // Restore the world transform
