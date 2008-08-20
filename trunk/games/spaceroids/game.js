@@ -373,7 +373,7 @@ var Spaceroids = Game.extend({
       // Create the 2D context
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
-      this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
+      this.renderContext = CanvasContext.create("playfield", this.fieldWidth, this.fieldHeight);
       this.renderContext.setWorldScale(this.areaScale);
       Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("#000000");
