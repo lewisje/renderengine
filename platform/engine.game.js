@@ -40,7 +40,7 @@ Engine.initObject("Game", null, function() {
  */
 var Game = Base.extend(/** @scope Game.prototype */{
 
-	scriptsToLoad: [],
+   scriptsToLoad: [],
 
    constructor: null,
 
@@ -82,27 +82,27 @@ var Game = Base.extend(/** @scope Game.prototype */{
       Engine.loadScript( (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource );
    },
 
-	loadEngineScripts: function(scripts) {
-		Game.scriptsToLoad = scripts;
-		for (var i in scripts) {
-			Engine.loadNow(scripts[i], Game.scriptLoaded);
-		}
-	},
+   loadEngineScripts: function(scripts) {
+      Game.scriptsToLoad = scripts;
+      for (var i in scripts) {
+         Engine.loadNow(scripts[i], Game.scriptLoaded);
+      }
+   },
 
-	scriptLoaded: function(scriptPath) {
-		EngineSupport.arrayRemove(Game.scriptsToLoad, scriptPath);
-		if (Game.scriptsToLoad.length == 0) {
-			// A dummy object that can be looked for
-			window["EngineInitialized"] = {};
-		}
-	},
+   scriptLoaded: function(scriptPath) {
+      EngineSupport.arrayRemove(Game.scriptsToLoad, scriptPath);
+      if (Game.scriptsToLoad.length == 0) {
+         // A dummy object that can be looked for
+         window["EngineInitialized"] = {};
+      }
+   },
 
-	/**
-	 * Abstracted to keep games separate from Engine
-	 */
-	setQueueCallback: function(cb) {
-		Engine.setQueueCallback(cb);
-	},
+   /**
+    * Abstracted to keep games separate from Engine
+    */
+   setQueueCallback: function(cb) {
+      Engine.setQueueCallback(cb);
+   },
 
    /**
     * Get the number of players this game supports.

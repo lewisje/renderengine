@@ -77,10 +77,10 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
       for (var x = 0; x < arguments.length; x++) {
          if (arguments[x].length) {
             for (var z = 0; z < arguments[x].length; z++) {
-               s += arguments[x][z].toString() + "<br/>";
+               s += arguments[x][z].toString() + "\n";
             }
          } else {
-            s += arguments[x].toString() + "<br/>";
+            s += arguments[x].toString() + "\n";
          }
       }
       return s;
@@ -201,6 +201,63 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 });
 
 /**
+ * @class A debug console that will use a pre-defined element to display its output.  You must create
+ *        an element with the class "debug-console" for this to function properly.  This object is created,
+ *        as necessary, by the {@link Console} object.
+ * @extends ConsoleRef
+ */
+var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
+
+   constructor: function() {
+   },
+
+   fixArgs: function(a) {
+      var x = [];
+      for (var i=0; i < a.length; i++) {
+         x.push(a[i]);
+      }
+      return x;
+   },
+
+   /**
+    * Write a debug message to the console
+    * @param msg {String} The message to write
+    */
+   info: function() {
+      console.log(this.fixArgs(arguments));
+   },
+
+   /**
+    * Write a debug message to the console
+    * @param msg {String} The message to write
+    */
+   debug: function() {
+      console.log(["[D]", this.fixArgs(arguments)]);
+   },
+
+   /**
+    * Write a warning message to the console
+    * @param msg {String} The message to write
+    */
+   warn: function() {
+      console.log(["[W]", this.fixArgs(arguments)]);
+   },
+
+   /**
+    * Write an error message to the console
+    * @param msg {String} The message to write
+    */
+   error: function() {
+      console.log(["[E!]", this.fixArgs(arguments)]);
+   },
+
+   /** @private **/
+   init: function() {
+   }
+});
+
+
+/**
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
  * @extends ConsoleRef
  */
@@ -290,6 +347,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
       else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
          // Firebug or firebug lite
          this.consoleRef = new FirebugConsoleRef();
+      }
+      else if (jQuery.browser.safari) {
+         this.consoleRef = new SafariConsoleRef();
       }
       else
       {
@@ -946,8 +1006,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Stop the sound manager
       if (Engine.isSoundEnabled()) {
-	      Engine.soundManager.destruct();
-		}
+         Engine.soundManager.destruct();
+      }
 
       this.downTime = new Date().getTime();
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
@@ -1125,57 +1185,62 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             return;
          }
 
-			this.doLoad(scriptPath);
+         this.doLoad(scriptPath);
       }
    },
 
-	doLoad: function(scriptPath, simplePath, cb) {
-		// A hack to allow us to do filesystem testing
-		if (!window.localDebugMode)
-		{
-			jQuery.getScript(scriptPath, function() {
-				Console.debug("Loaded '" + scriptPath + "'");
-				if (cb) {
-					cb(simplePath);
-				}
-				Engine.readyForNextScript = true;
-			});
-		}
-		else
-		{
-			// If we're running locally, don't use jQuery to get the script.
-			// This allows us to see and debug the loaded scripts.
-			var n = document.createElement("script");
-			n.src = scriptPath;
-			n.type = "text/javascript";
-			var fn = function() {
-				if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-					Console.debug("Loaded '" + scriptPath + "'");
-					if (cb) {
-						cb(simplePath);
-					}
-					Engine.readyForNextScript = true;
-				}
-			}
-			if ($.browser.msie) {
-				n.defer = true;
-				n.onreadystatechange = fn;
-			} else {
-				n.onload = fn;
-			}
+   doLoad: function(scriptPath, simplePath, cb) {
+      // A hack to allow us to do filesystem testing
+      if (!window.localDebugMode)
+      {
+         jQuery.getScript(scriptPath, function() {
+            Console.debug("Loaded '" + scriptPath + "'");
+            if (cb) {
+               cb(simplePath);
+            }
+            Engine.readyForNextScript = true;
+         });
+      }
+      else
+      {
+         // If we're running locally, don't use jQuery to get the script.
+         // This allows us to see and debug the loaded scripts.
+         var n = document.createElement("script");
+         n.src = scriptPath;
+         n.type = "text/javascript";
+         var fn = function() {
+            if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+               Console.debug("Loaded '" + scriptPath + "'");
+               if (cb) {
+                  cb(simplePath);
+               }
+               Engine.readyForNextScript = true;
+            }
+         }
+         if ($.browser.msie) {
+            n.defer = true;
+            n.onreadystatechange = fn;
+         } else {
+            n.onload = fn;
+         }
 
-			var h = document.getElementsByTagName("head")[0];
-			h.appendChild(n);
-		}
-	},
+         var h = document.getElementsByTagName("head")[0];
+         h.appendChild(n);
+      }
+   },
 
-	loadNow: function(scriptPath, cb) {
-		if ($.browser.safari) {
-			Engine.load(scriptPath);
-		} else {
-			this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
-		}
-	},
+   loadNow: function(scriptPath, cb) {
+      if ($.browser.safari) {
+         Engine.load(scriptPath);
+         if (cb) {
+            Engine.setQueueCallback(function() {
+               cb(scriptPath);
+            });
+         }
+      } else {
+         this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
+      }
+   },
 
    /**
     * Load a game script.  Creates the default rendering context
@@ -1298,39 +1363,43 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.setQueueCallback(function() {
          Engine.pauseQueue(true);
 
-         window.soundManager = new SoundManager();
+         if (typeof SoundManager != "undefined") {
+            window.soundManager = new SoundManager();
 
-         // Create a link to the object
-         Engine.soundManager = window.soundManager;
+            // Create a link to the object
+            Engine.soundManager = window.soundManager;
 
-         // directory where SM2 .SWFs live
-         Engine.soundManager.url = Engine.getEnginePath() + '/libs/';
+            // directory where SM2 .SWFs live
+            Engine.soundManager.url = Engine.getEnginePath() + '/libs/';
 
-         // Debugging enabled?
-         var p = EngineSupport.getQueryParams();
-         if (p["debugSound"] != null && p["debugSound"] == "true") {
-            Engine.soundManager.debugMode = true;
+            // Debugging enabled?
+            var p = EngineSupport.getQueryParams();
+            if (p["debugSound"] != null && p["debugSound"] == "true") {
+               Engine.soundManager.debugMode = true;
+            } else {
+               Engine.soundManager.debugMode = false;
+            }
+
+            Engine.soundManager.onload = function() {
+               Engine.soundsEnabled = true;
+               Console.warn("SoundManager loaded successfully");
+               Engine.pauseQueue(false);
+            };
+
+            Engine.soundManager.onerror = function() {
+               Engine.soundsEnabled = false;
+               Console.warn("SoundManager not loaded - sound disabled");
+               Engine.pauseQueue(false);
+            };
+
+            if (Engine.getEnginePath().indexOf("file:") == 0) {
+               Engine.soundManager.sandbox.type = "localWithFile";
+            }
+
+            Engine.soundManager.go();
          } else {
-            Engine.soundManager.debugMode = false;
-         }
-
-         Engine.soundManager.onload = function() {
-            Engine.soundsEnabled = true;
-            Console.warn("SoundManager loaded successfully");
-            Engine.pauseQueue(false);
-         };
-
-         Engine.soundManager.onerror = function() {
             Engine.soundsEnabled = false;
-            Console.warn("SoundManager not loaded - sound disabled");
-            Engine.pauseQueue(false);
-         };
-
-         if (Engine.getEnginePath().indexOf("file:") == 0) {
-            Engine.soundManager.sandbox.type = "localWithFile";
          }
-
-         Engine.soundManager.go();
       });
 
       // Start the engine after all these files load
@@ -1394,7 +1463,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Update the world
       if (Engine.getDefaultContext() != null)
       {
-			Engine.vObj = 0;
+         Engine.vObj = 0;
          Engine.getDefaultContext().update(null, new Date().getTime());
 
          if (this.showMetricsWindow && !this.metricDisplay) {
@@ -1414,7 +1483,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             Engine.addMetric("avail", this.fpsClock, false, "#ms");
             Engine.addMetric("frame", d, true, "#ms");
             Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
-				Engine.addMetric("visObj", Engine.vObj, false, "#");
+            Engine.addMetric("visObj", Engine.vObj, false, "#");
 
             this.updateMetrics();
             this.lastMetricSample = this.metricSampleRate;
@@ -1531,55 +1600,55 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    // These methods handle object dependencies so that each object will be
    // initialized as soon as its dependencies become available.
 
-	dependencyList: {},
-	dependencyProcessor: null,
+   dependencyList: {},
+   dependencyProcessor: null,
 
-	/**
-	 * @param objectName {String} The name of the object class
-	 * @param dependencies {Array} An array of object names the object to initialize
-	 *							  is dependent on.  When all objects have been created, the
-	 *							  object will be initialized.
-	 * @param fn {Function} The function to run when the object can be initialized.
-	 */
-	initObject: function(objectName, dependency, fn) {
-		if (dependency === null) {
-			// The object has no dependencies, create it...
-			window[objectName] = fn();
-			Console.debug("Initialized", objectName);
-		} else {
-			Engine.dependencyList[objectName] = {dep: dependency, objFn: fn};
-		}
+   /**
+    * @param objectName {String} The name of the object class
+    * @param dependencies {Array} An array of object names the object to initialize
+    *                     is dependent on.  When all objects have been created, the
+    *                     object will be initialized.
+    * @param fn {Function} The function to run when the object can be initialized.
+    */
+   initObject: function(objectName, dependency, fn) {
+      if (dependency === null) {
+         // The object has no dependencies, create it...
+         window[objectName] = fn();
+         Console.debug("Initialized", objectName);
+      } else {
+         Engine.dependencyList[objectName] = {dep: dependency, objFn: fn};
+      }
 
-		if (!Engine.dependencyProcessor) {
-			Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
-		}
-	},
+      if (!Engine.dependencyProcessor) {
+         Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
+      }
+   },
 
-	processDependencies: function() {
-		var pDeps = [];
-		var dCount = 0;
-		for (var d in Engine.dependencyList) {
-			dCount++;
-			// Check to see if the dependency of an object is loaded
-			if (window[Engine.dependencyList[d].dep] != null) {
-				// We can load it
-				window[d] = Engine.dependencyList[d].objFn();
-				Console.debug("Initialized", d);
-				pDeps.push(d);
-			}
-		}
+   processDependencies: function() {
+      var pDeps = [];
+      var dCount = 0;
+      for (var d in Engine.dependencyList) {
+         dCount++;
+         // Check to see if the dependency of an object is loaded
+         if (window[Engine.dependencyList[d].dep] != null) {
+            // We can load it
+            window[d] = Engine.dependencyList[d].objFn();
+            Console.debug("Initialized", d);
+            pDeps.push(d);
+         }
+      }
 
-		for (var i in pDeps) {
-			delete Engine.dependencyList[pDeps[i]];
-		}
+      for (var i in pDeps) {
+         delete Engine.dependencyList[pDeps[i]];
+      }
 
-		if (dCount != 0) {
-			Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
-		} else {
-			window.clearTimeout(Engine.dependencyProcessor);
-			Engine.dependencyProcessor = null;
-		}
-	}
+      if (dCount != 0) {
+         Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
+      } else {
+         window.clearTimeout(Engine.dependencyProcessor);
+         Engine.dependencyProcessor = null;
+      }
+   }
 
  }, { // Interface
    globalTimer: null
