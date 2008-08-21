@@ -1,0 +1,45 @@
+= Introduction =
+
+There are a few ways to configure The Render Engine to your liking. The query parameters are meant to give you a method to intialize the engine with values before it runs anything.
+
+== Query Parameters ==
+
+The following table lists query parameters you can pass to the engine to configure it before it starts a game's execution:
+
+|| *Query Parameter* || *Description* ||
+|| `debug` ||Set this vale to `true` to enable debugging output from the engine.  The engine will try to utilize a method best suited for the browser you are running within. ||
+|| `metrics` ||Setting this value to `true` will enable the display of engine metrics collected during runtime.  You can use these values to tune your game.  Some of the values are important:
+   * `FPS` - The desired engine frames per second
+   * `aFPS` - The "actual" frames per second being generated
+   * `avail` - The time available (in milliseconds) to render a frame.  This is based off of the desired `FPS`
+   * `frame` - The average time to render a frame (in milliseconds)
+   * `load` - The amount of load a frame is generating. This is the ration between the availble frame time, and the time taken to render a frame.
+   * `visObj` - The number of visible objects in a scene
+   * `newObjs` - The number of times a new instance has been created via ObjectPooling
+   * `poolUse` - The percentage of all of the pooled objects available for use
+||
+|| `debugSound` ||To see the sound engine initialization messages, and get a better idea of what SoundManager2 is doing, set this value to `true`.||
+
+== Engine methods ==
+
+This table lists methods you can call, on the `Engine` global object, to modify it during runtime or from within a game.  This is, by no means, a complete list.  You should refer to the engine API for more detailed listings:
+
+|| *Method Name* || *Description * ||
+|| `setFPS(int)` || Set the FPS the engine will attempt to render at. ||
+|| `toggleMetrics()` || Toggle the display of engine metrics. ||
+|| `showMetrics()` || Show the metrics display. ||
+|| `hideMetrics()` || Hide the metrics display. ||
+|| `setMetricSampleRate()` || Set how often metrics, that are averaged, are sampled.  This is the number of generated frames between samples. ||
+|| `addMetric(str,val,bool,str)` || Add a metric to the engine's metrics display. Usage: `Engine.addMetric('displayName', calculatedValue, true, '#%');` You can average the metric with the third arg.  The final argument will replace the `#` sign with the value, so you can format the output.  e.g. The value of 123 using the format `#ms` would appear as `123ms` ||
+|| `getObject(str)` || Get a reference to an object created in the engine.  The string is the one returned by the engine when it was created. ||
+|| `setDebugMode(bool)` || Enable or disable debug output. ||
+|| `getDebugMode()` || Determine if debugging is enabled. ||
+|| `isSoundEnabled()` || Determine if the sound engine initialized. ||
+|| `pause()` || Pause the execution of the engine.  No additional frames will be processed until `run()` is called. ||
+|| `run()` || Run the engine after it has been paused. ||
+|| `shutdown()` || Shutdown the engine and clean up object instances. ||
+|| `getDefaultContext()` || Get the engine's default rendering context.  You will need to add objects to this for the engine to process them. ||
+|| `getEnginePath()` || Retrieve the path where the engine was started from.  All other scripts will be loaded relative to that. ||
+|| `dumpScripts()` || Outputs all of the scripts loaded by the engine to the debugger window. ||
+|| `clearScriptCache()` || Clears any references to scripts that have been loaded, allowing them to be loaded again. ||
+|| `toString()` || Output the engine name and version. ||
