@@ -56,21 +56,34 @@
       <!-- Load the main engine script -->
       <script type="text/javascript" src="../../platform/engine.js"></script>
       <style type="text/css">
-      	.toolbar {
-      		font: 9px Verdana, Arial, Helvetica;
-      		border: 1px outset black;
-      		background: silver;
-      		height: 24px;
-      	}
+         .toolbar {
+            font: 9px Verdana, Arial, Helvetica;
+            border: 1px outset black;
+            background: silver;
+            height: 24px;
+         }
 
-      	.tool {
-      		float: left;
-      		margin-right: 8px;
-      	}
+         .tool {
+            float: left;
+            margin-right: 8px;
+         }
+
+         #engine-load-progress {
+            position: relative;
+            border: 1px solid;
+            width: 300px;
+            height: 10px;
+         }
+
+         #engine-load-progress .bar {
+            background: blue;
+         }
       </style>
   </head>
    <body>
-      <span id="loading">Loading...</span>
+      <span id="loading">Loading...
+         <div id="engine-load-progress"></div>
+      </span>
       <script type="text/javascript">
          // Load the game script
          Engine.loadGame('game.js');

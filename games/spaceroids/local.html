@@ -52,10 +52,23 @@
 
       <!-- Load the main engine script -->
       <script type="text/javascript" src="../../platform/engine.js"></script>
+      <style type="text/css">
+         #engine-load-progress {
+            position: relative;
+            border: 1px solid;
+            width: 300px;
+            height: 10px;
+         }
 
+         #engine-load-progress .bar {
+            background: blue;
+         }
+      </style>
    </head>
    <body>
-      <span id="loading">Loading...</span>
+      <span id="loading">Loading...
+         <div id="engine-load-progress"></div>
+      </span>
       <script type="text/javascript" defer="yes">
          // Load the game script
          Engine.loadGame('game.js');
