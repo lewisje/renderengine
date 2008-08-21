@@ -173,8 +173,9 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     * @type Number
     */
    getRenderScale: function() {
-		var wS = this.getHostObject().getRenderContext().getWorldScale();
-      return wS * this.scale;
+//		var wS = this.getHostObject().getRenderContext().getWorldScale();
+//      return wS * this.scale;
+		return this.scale;
    },
 
    /**
@@ -188,7 +189,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
       renderContext.setPosition(this.getRenderPosition());
       renderContext.setRotation(this.getRenderRotation());
       var s = this.getRenderScale();
-      renderContext.setScale(s, s);
+      renderContext.setScale(s);
    }
 }, {
    /**
