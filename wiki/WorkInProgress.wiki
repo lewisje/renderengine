@@ -1,9 +1,0 @@
-#labels Featured
-The following are links to works in progress.  They are the tests that I've put together to work out the various parts of the engine:
-
-   * [http://renderengine.googlecode.com/svn/trunk/games/spaceroids/index.html Asteroids clone]
-   * [http://renderengine.googlecode.com/svn/trunk/games/smb/index.html Super Mario clone]
-   * [http://renderengine.googlecode.com/svn/trunk/games/smb/index.html?edit=true Super Mario editor]
-
-
-I'll add more as I get them completed and into the repo...
