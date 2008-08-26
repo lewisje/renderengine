@@ -29,6 +29,9 @@
  *
  */
 
+// Includes
+Engine.include("/rendercontexts/context.htmlelement.js");
+
 Engine.initObject("DocumentContext", "HTMLElementContext", function() {
 
 /**

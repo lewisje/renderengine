@@ -32,6 +32,10 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.object2d.js");
+Engine.include("/components/component.transform2d.js");
+
 Engine.initObject("TextRenderer", "Object2D", function() {
 
 /**

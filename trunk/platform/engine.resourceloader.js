@@ -28,6 +28,9 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.baseobject.js");
+
 Engine.initObject("ResourceLoader", "BaseObject", function() {
 
 /**
@@ -80,6 +83,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     *                          is ready to use.
     */
    load: function(name, data, isReady) {
+		Engine.scriptLoadCount++;
       var obj = { data: data, ready: isReady || false};
       this.cache[name] = obj;
       this.length++;
@@ -96,6 +100,9 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 	 */
    setReady: function(name, isReady) {
       this.cache[name].isReady = isReady;
+      if (isReady) {
+			Engine.handleScriptDone();
+		}
    },
 
 	/**

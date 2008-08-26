@@ -30,6 +30,9 @@
  *
  */
 
+// Includes
+Engine.include("/components/component.base.js");
+
 Engine.initObject("RenderComponent", "BaseComponent", function() {
 
 /**
@@ -80,7 +83,7 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
     */
    execute: function(renderContext, time) {
 
-      if (this.drawMode == RenderContext.NO_DRAW)
+      if (this.drawMode == RenderComponent.NO_DRAW)
       {
          return false;
       }

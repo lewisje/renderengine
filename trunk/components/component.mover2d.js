@@ -29,6 +29,10 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.math2d.js");
+Engine.include("/components/component.transform2d.js");
+
 Engine.initObject("Mover2DComponent", "Transform2DComponent", function() {
 
 /**

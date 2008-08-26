@@ -31,6 +31,9 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.spatialcontainer.js");
+
 Engine.initObject("QuadtreeNode", "SpatialNode", function() {
 
 /**

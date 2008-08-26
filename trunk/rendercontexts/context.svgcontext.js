@@ -32,6 +32,10 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.math2d.js");
+Engine.include("/rendercontexts/context.render2d.js");
+
 Engine.initObject("SVGContext", "RenderContext2D", function() {
 
 var SVGContext = RenderContext2D.extend({

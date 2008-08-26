@@ -31,6 +31,9 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.object2d.js");
+
 /**
  * @class The player object.  Creates the player and assigns the
  *        components which handle collision, drawing, drawing the thrust

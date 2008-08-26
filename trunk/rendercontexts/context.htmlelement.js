@@ -29,6 +29,9 @@
  *
  */
 
+// Includes
+Engine.include("/rendercontexts/context.render2d.js");
+
 Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
 
 /**
