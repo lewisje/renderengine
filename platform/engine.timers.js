@@ -30,6 +30,9 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.baseobject.js");
+
 Engine.initObject("Timer", "BaseObject", function() {
 
 /**

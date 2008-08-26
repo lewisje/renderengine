@@ -29,6 +29,9 @@
  *
  */
 
+// Includes
+Engine.include("/components/component.logic.js");
+
 Engine.initObject("NotifierComponent", "LogicComponent", function() {
 
 /**

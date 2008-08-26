@@ -28,6 +28,9 @@
  *
  */
 
+// Includes
+Engine.include("/resourceloaders/loader.image.js");
+
 Engine.initObject("XMLLoader", "ResourceLoader", function() {
 
 /**

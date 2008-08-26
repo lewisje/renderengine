@@ -31,6 +31,10 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.pooledobject.js");
+Engine.include("/platform/engine.baseobject.js");
+
 Engine.initObject("Particle", "PooledObject", function() {
 
 /**

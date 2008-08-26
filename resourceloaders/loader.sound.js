@@ -28,6 +28,10 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.pooledobject.js");
+Engine.include("/platform/engine.resourceloader.js");
+
 Engine.initObject("SoundLoader", "ResourceLoader", function() {
 
 /**

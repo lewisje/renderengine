@@ -29,6 +29,9 @@
  *
  */
 
+// Includes
+Engine.include("/components/component.base.js");
+
 Engine.initObject("LogicComponent", "BaseComponent", function() {
 
 /**

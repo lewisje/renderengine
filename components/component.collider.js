@@ -31,6 +31,9 @@
  *
  */
 
+// Includes
+Engine.include("/components/component.base.js");
+
 Engine.initObject("ColliderComponent", "BaseComponent", function() {
 
 /**

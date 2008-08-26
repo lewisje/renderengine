@@ -28,7 +28,10 @@
  *
  */
 
-Engine.initObject("ImageLoader", "PooledObject", function() {
+// Includes
+Engine.include("/platform/engine.resourceloader.js");
+
+Engine.initObject("ImageLoader", "ResourceLoader", function() {
 
 /**
  * @class Loads images and stores the reference to those images.

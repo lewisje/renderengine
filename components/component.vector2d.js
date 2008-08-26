@@ -29,6 +29,10 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.math2d.js");
+Engine.include("/components/component.render.js");
+
 Engine.initObject("Vector2DComponent", "RenderComponent", function() {
 
 /**

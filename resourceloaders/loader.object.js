@@ -28,6 +28,9 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.resourceloader.js");
+
 Engine.initObject("ObjectLoader", "ResourceLoader", function() {
 
 /**

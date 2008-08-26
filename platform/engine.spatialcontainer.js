@@ -32,6 +32,10 @@
  *
  */
 
+// Includes
+Engine.include("/platform/engine.baseobject.js");
+Engine.include("/platform/engine.container.js");
+
 /**
  * An index assigned to a node.
  * @private

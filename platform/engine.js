@@ -420,7 +420,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @param msg {String} The message to output
     */
    error: function() {
-      if (this.verbosity >= this.DEBUGLEVEL_ERRORS)
+      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
          this.consoleRef.error.apply(this.consoleRef, arguments);
    }
 });
@@ -454,6 +454,8 @@ var Assert = function(test, error) {
          }
          error += "\nin function " + funcName;
       }
+
+      // This will provide a stacktrace for browsers that support it
       throw new Error(error);
    }
 };
@@ -881,6 +883,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    vObj: 0,
 
+   localMode: false,
+
    /*
     * Used to calculate a ratio of scripts to load, to those loaded.
     */
@@ -1004,7 +1008,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
-      Console.warn(">>> Engine started. " + (this.debugMode ? "[DEBUG]" : ""));
+		var mode = "[";
+		mode += (this.debugMode ? "DEBUG" : "");
+		mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
+		mode += "]"
+      Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
       this.running = true;
 
       // Start world timer
@@ -1129,52 +1137,45 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadScript: function(scriptPath) {
-      var s = scriptPath.replace(/[\/\.]/g,"_");
-      if (this.loadedScripts[s] == null)
-      {
-         // Store the request in the cache
-         this.loadedScripts[s] = scriptPath;
+		if (!Engine.scriptQueue) {
+			// Create the queue
+			Engine.scriptQueue = [];
+		}
 
-         if (!Engine.scriptQueue) {
-            // Create the queue
-            Engine.scriptQueue = [];
-         }
+		// Track what we need to load
+		Engine.scriptLoadCount++;
+		Engine.updateProgress();
 
-         // Track what we need to load
-         Engine.scriptLoadCount++;
-         Engine.updateProgress();
+		// Put script into load queue
+		Engine.scriptQueue.push(scriptPath);
 
-         // Put script into load queue
-         Engine.scriptQueue.push(scriptPath);
+		if (!Engine.scriptQueueTimer) {
+			// Process any waiting scripts
+			Engine.scriptQueueTimer = setInterval(function() {
+				if (Engine.queuePaused) {
+					if (Engine.pauseReps++ > 500) {
+						// If after ~5 seconds the queue is still paused, unpause it and
+						// warn the user that the situation occurred
+						Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
+						Engine.pauseReps = 0;
+						Engine.pauseQueue(false);
+					}
+					return;
+				}
 
-         if (!Engine.scriptQueueTimer) {
-            // Process any waiting scripts
-            Engine.scriptQueueTimer = setInterval(function() {
-               if (Engine.queuePaused) {
-                  if (Engine.pauseReps++ > 500) {
-                     // If after ~5 seconds the queue is still paused, unpause it and
-                     // warn the user that the situation occurred
-                     Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
-                     Engine.pauseReps = 0;
-                     Engine.pauseQueue(false);
-                  }
-                  return;
-               }
+				Engine.pauseReps = 0;
 
-               Engine.pauseReps = 0;
+				if (Engine.scriptQueue.length > 0) {
+					Engine.processScriptQueue();
+				} else {
+					// Stop the queue timer if there are no scripts
+					clearInterval(Engine.scriptQueueTimer);
+					Engine.scriptQueueTimer = null;
+				}
+			}, 10);
 
-               if (Engine.scriptQueue.length > 0) {
-                  Engine.processScriptQueue();
-               } else {
-                  // Stop the queue timer if there are no scripts
-                  clearInterval(Engine.scriptQueueTimer);
-                  Engine.scriptQueueTimer = null;
-               }
-            }, 10);
-
-            Engine.readyForNextScript = true;
-         }
-      }
+			Engine.readyForNextScript = true;
+		}
    },
 
    /**
@@ -1237,45 +1238,66 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    doLoad: function(scriptPath, simplePath, cb) {
-      // A hack to allow us to do filesystem testing
-      if (!Engine.localMode)
+      var s = scriptPath.replace(/[\/\.]/g,"_");
+      if (this.loadedScripts[s] == null)
       {
-         jQuery.getScript(scriptPath, function() {
-            Console.debug("Loaded '" + scriptPath + "'");
-            Engine.handleScriptDone();
-            if (cb) {
-               cb(simplePath);
-            }
-            Engine.readyForNextScript = true;
-         });
-      }
-      else
-      {
-         // If we're running locally, don't use jQuery to get the script.
-         // This allows us to see and debug the loaded scripts.
-         var n = document.createElement("script");
-         n.src = scriptPath;
-         n.type = "text/javascript";
-         var fn = function() {
-            if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-               Console.debug("Loaded '" + scriptPath + "'");
-               Engine.handleScriptDone();
-               if (cb) {
-                  cb(simplePath);
-               }
-               Engine.readyForNextScript = true;
-            }
-         }
-         if ($.browser.msie) {
-            n.defer = true;
-            n.onreadystatechange = fn;
-         } else {
-            n.onload = fn;
-         }
+         // Store the request in the cache
+         this.loadedScripts[s] = scriptPath;
 
-         var h = document.getElementsByTagName("head")[0];
-         h.appendChild(n);
-      }
+			// A hack to allow us to do filesystem testing
+			if (!Engine.localMode)
+			{
+				jQuery.getScript(scriptPath, function() {
+					Console.debug("Loaded '" + scriptPath + "'");
+					Engine.handleScriptDone();
+					if (cb) {
+						cb(simplePath);
+					}
+					Engine.readyForNextScript = true;
+				});
+			}
+			else
+			{
+				// If we're running locally, don't use jQuery to get the script.
+				// This allows us to see and debug the loaded scripts.
+				var n = document.createElement("script");
+				n.src = scriptPath;
+				n.type = "text/javascript";
+
+				// When the file is loaded
+				var fn = function() {
+					if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+						Console.debug("Loaded '" + scriptPath + "'");
+						Engine.handleScriptDone();
+						if (cb) {
+							cb(simplePath);
+						}
+					}
+					Engine.readyForNextScript = true;
+				};
+
+				// When an error occurs
+				var eFn = function() {
+					Console.error("File not found: ", scriptPath);
+					Engine.readyForNextScript = true;
+				};
+
+				if ($.browser.msie) {
+					n.defer = true;
+					n.onreadystatechange = fn;
+					n.onerror = eFn;
+				} else {
+					n.onload = fn;
+					n.onerror = eFn;
+				}
+
+				var h = document.getElementsByTagName("head")[0];
+				h.appendChild(n);
+			}
+		} else {
+			// Already have this script
+			Engine.readyForNextScript = true;
+		}
    },
 
    loadNow: function(scriptPath, cb) {
@@ -1399,38 +1421,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadStylesheet("/css/engine.css");
 
       // Engine platform
-      this.loadNow("/platform/engine.math2d.js");
       this.loadNow("/platform/engine.game.js");
-      this.loadNow("/platform/engine.pooledobject.js");
-      this.loadNow("/platform/engine.baseobject.js");
-      this.loadNow("/platform/engine.timers.js");
-      this.loadNow("/platform/engine.container.js");
-      this.loadNow("/platform/engine.hashcontainer.js");
-      this.loadNow("/platform/engine.rendercontext.js");
-      this.loadNow("/platform/engine.hostobject.js");
-      this.loadNow("/platform/engine.object2d.js");
-      this.loadNow("/platform/engine.resourceloader.js");
-      this.loadNow("/platform/engine.events.js");
-      this.loadNow("/platform/engine.spatialcontainer.js");
-      this.loadNow("/platform/engine.particles.js");
-
-      // Contexts
-      this.loadNow("/rendercontexts/context.render2d.js");
-      this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");
 
       if ($.browser.msie) {
          // This is the Google "ExplorerCanvas" object we need for IE
-         this.loadNow("/libs/excanvas.js");
+         //this.loadNow("/libs/excanvas.js");
       }
-
-      // Object components
-      this.loadNow("/components/component.base.js");
-      this.loadNow("/components/component.host.js");
-
-      // Text rendering
-      this.loadNow("/textrender/text.renderer.js");
-      this.loadNow("/textrender/text.abstractrender.js");
 
       // Sound manager
       this.load("/libs/soundmanager2.js");
@@ -1679,6 +1676,29 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    dependencyList: {},
    dependencyProcessor: null,
 
+	/**
+	 * Include a script file.
+	 *
+	 * @param scriptURL {String} The URL of the script file
+	 */
+	include: function(scriptURL) {
+		Engine.loadNow(scriptURL);
+	},
+
+	/**
+	 * Get the object reference named by the string passed in.
+	 * @param objName {String} A dot-notation class name
+	 * @private
+	 */
+	getObjectRef: function(objName) {
+		var objHr = objName.split(".");
+		var o = window[objHr[0]];
+		for (var i = 1; i < objHr.length; i++) {
+			o = o[objHr[i]];
+		}
+		return o
+	},
+
    /**
     * @param objectName {String} The name of the object class
     * @param dependencies {Array} An array of object names the object to initialize
@@ -1690,7 +1710,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       if (dependency === null) {
          // The object has no dependencies, create it...
          window[objectName] = fn();
-         Console.debug("Initialized", objectName);
+         Console.log("Initializing", objectName);
       } else {
          Engine.dependencyList[objectName] = {dep: dependency, objFn: fn};
       }
@@ -1709,7 +1729,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          if (window[Engine.dependencyList[d].dep] != null) {
             // We can load it
             window[d] = Engine.dependencyList[d].objFn();
-            Console.debug("Initialized", d);
+            Console.log("Initializing", d);
             pDeps.push(d);
          }
       }
@@ -1754,6 +1774,3 @@ if (EngineSupport.checkBooleanParam("metrics"))
 
 // Local mode keeps loaded script source available
 Engine.localMode = EngineSupport.checkBooleanParam("local");
-if (Engine.localMode) {
-   Console.debug("Engine started in Local mode");
-}

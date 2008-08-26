@@ -32,6 +32,9 @@
  *
  */
 
+// Includes
+Engine.include("/components/component.base.js");
+
 Engine.initObject("AbstractTextRenderer", "BaseComponent", function() {
 
 /**

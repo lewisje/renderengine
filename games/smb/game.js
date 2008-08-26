@@ -34,21 +34,27 @@
  */
 
 // Load required engine components
+Engine.include("/rendercontexts/context.scrollingbackground.js");
+Engine.include("/components/component.transform2d.js");
+Engine.include("/components/component.sprite.js");
+Engine.include("/components/component.keyboardinput.js");
+Engine.include("/resourceloaders/loader.sound.js");
+Engine.include("/resourceloaders/loader.sprite.js");
+Engine.include("/resourceloaders/loader.level.js");
+
+/*
 Game.loadEngineScripts([
-   "/rendercontexts/context.canvascontext.js",
    "/rendercontexts/context.scrollingbackground.js",
    "/components/component.transform2d.js",
-   "/components/component.render.js",
    "/components/component.sprite.js",
-   "/components/component.input.js",
    "/components/component.keyboardinput.js",
    "/resourceloaders/loader.sound.js",
-   "/resourceloaders/loader.image.js",
    "/resourceloaders/loader.sprite.js",
    "/resourceloaders/loader.level.js"
 ]);
+*/
 
-Engine.initObject("SpriteTest", "EngineInitialized", function() {
+Engine.initObject("SpriteTest", "Game", function() {
 
 // Load game objects
 Game.load("/actor.js");
