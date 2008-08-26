@@ -3,13 +3,13 @@
 <!--
    /**
     * The Render Engine
-    * Demos
+    * SpriteTest
     *
-    * This "game" is a collection of demos to familiarize you with the
-    * game engine and how it operates.  Select a demo to run it, examine the
-    * code to see how it works.  I've provided a ton of comments to explain
-    * what is going on.  I'll be adding to this as I think of more things
-    * to demonstrate within the Engine.
+    * This example tests the sprite engine and its capabilities.  It also
+    * shows off the scrolling background context.  The example is a simple
+    * implementation of the first level of Super Mario Bros (c)Nintendo
+    * Corporation.  The images used in this example were acquired via the
+    * Internet.
     *
     *
     * @author: Brett Fattori (brettf@renderengine.com)
@@ -44,16 +44,13 @@
    <head>
       <title>The Render Engine - Sprite Testing</title>
 
-      <!-- Set this here so we get alternate JS loading-->
-      <script type="text/javascript">window.localDebugMode = true</script>
-
       <!-- Supporting Libraries -->
-      <script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/libs/base.js"></script>
-      <script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/libs/jquery-1.2.2.min.js"></script>
-      <script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/libs/sylvester.js"></script>
+      <script type="text/javascript" src="../../libs/base.js"></script>
+      <script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
+      <script type="text/javascript" src="../../libs/sylvester.js"></script>
 
       <!-- Load the main engine script -->
-      <script type="text/javascript" src="http://renderengine.googlecode.com/svn/trunk/platform/engine.js"></script>
+      <script type="text/javascript" src="../../platform/engine.js"></script>
       <style type="text/css">
          .toolbar {
             font: 9px Verdana, Arial, Helvetica;
@@ -85,7 +82,7 @@
       </span>
       <script type="text/javascript">
          // Load the game script
-         Engine.loadGame('http://renderengine.googlecode.com/svn/trunk/games/smb/game.js');
+         Engine.loadGame('game.js');
       </script>
    </body>
 </html>

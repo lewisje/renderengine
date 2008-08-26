@@ -78,7 +78,11 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
 
       if (url)
       {
-         Assert(url.indexOf("http") == -1, "Sprites must be located on this server");
+         var loc = window.location;
+         if (url.indexOf(loc.protocol) != -1 && url.indexOf(loc.host) == -1) {
+            Assert(false, "Sprites must be located on this server");
+         }
+
          var thisObj = this;
 
          // Get the file from the server
@@ -175,7 +179,7 @@ Engine.initObject("Sprite", "PooledObject", function() {
  * @constructor
  * @param name {String} The name of the sprite within the resource
  * @param spriteObj {Object} Passed in by a {@link SpriteLoader}.  An array which defines the
- *						  sprite frame, and parameters.
+ *                  sprite frame, and parameters.
  * @param spriteResource {Object} The sprite resource loaded by the {@link SpriteLoader}
  * @extends PooledObject
  */

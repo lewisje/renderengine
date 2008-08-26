@@ -113,6 +113,26 @@ var Game = Base.extend(/** @scope Game.prototype */{
     */
    getPlayers: function() {
       return 1;
+   },
+
+   getGamePath: function() {
+      var loc = window.location;
+      var path = loc.protocol + "//" + loc.host + loc.pathname.substring(0,loc.pathname.lastIndexOf("/"));
+      path += (path.charAt(path.length - 1) == "/" ? "" : "/");
+      return path;
+   },
+
+   getFilePath: function(fileName) {
+      var loc = window.location;
+      if (fileName.indexOf(loc.protocol) != -1 && fileName.indexOf(loc.host) == -1) {
+         throw new Error("File cannot be located on another server!");
+      }
+
+      if (fileName.indexOf(loc.protocol) == -1) {
+         return this.getGamePath() + fileName;
+      } else {
+         return file;
+      }
    }
 });
 

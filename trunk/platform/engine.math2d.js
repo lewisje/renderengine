@@ -628,6 +628,10 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       }
    },
 
+   setDims: function(point) {
+      this.dims.set(point.x, point.y);
+   },
+
    /**
     * Set the width of the rectangle.
     *
