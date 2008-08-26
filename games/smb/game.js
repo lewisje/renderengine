@@ -52,6 +52,7 @@ Engine.initObject("SpriteTest", "EngineInitialized", function() {
 
 // Load game objects
 Game.load("/actor.js");
+Game.load("/collisionbox.js");
 
 // Start the game when all the scripts are loaded.
 Game.setQueueCallback(function() { SpriteTest.setup(); });
@@ -119,13 +120,13 @@ var SpriteTest = Game.extend({
       this.levelLoader = LevelLoader.create();
 
       // Load the music
-      this.soundLoader.load("bgm", "resources/smblvl1.mp3");
+      this.soundLoader.load("bgm", this.getFilePath("resources/smblvl1.mp3"));
 
       // Load the level
-      this.levelLoader.load("level1", "resources/smblevel1.js");
+      this.levelLoader.load("level1", this.getFilePath("resources/smblevel1.js"));
 
       // Load the sprites
-      this.spriteLoader.load("smbtiles", "resources/smbtiles.js");
+      this.spriteLoader.load("smbtiles", this.getFilePath("resources/smbtiles.js"));
       SpriteTest.loadTimeout = Timeout.create("wait", 250, SpriteTest.waitForResources);
       this.waitForResources();
    },
@@ -137,7 +138,8 @@ var SpriteTest = Game.extend({
    waitForResources: function() {
       //Console.debug("checking");
       if (SpriteTest.spriteLoader.isReady("smbtiles") &&
-          SpriteTest.levelLoader.isReady("level1"))
+          SpriteTest.levelLoader.isReady("level1") &&
+          SpriteTest.soundLoader.isReady("bgm"))
       {
          SpriteTest.loadTimeout.destroy();
          SpriteTest.run();
@@ -282,6 +284,11 @@ var SpriteTest = Game.extend({
          }
       }));
 
+      // Create collision rect
+      tbar.append($("<input type='button' value='Collision Box' class='tool'/>").click(function() {
+         self.createCollisionBox();
+      }));
+
       // We need a scrollbar to move the world
       var sb = $("<div style='height: 20px; width: " + this.fieldWidth + "px; overflow-x: auto;'><div style='width: " +
          this.level.getFrame().get().w + "px; border: 1px dashed'></div></div>").bind("scroll", function() {
@@ -337,6 +344,22 @@ var SpriteTest = Game.extend({
       actor.setEditing(true);
    },
 
+   createCollisionBox: function() {
+      var cbox = SpriteTest.CollisionBox.create();
+
+      // Adjust for scroll
+      var s = this.renderContext.getHorizontalScroll();
+      var pT = Point2D.create(this.centerPoint.x + s, this.centerPoint.y);
+
+      cbox.setPosition(pT);
+      cbox.setBoxSize(80, 80);
+      cbox.setZIndex(SpriteTest.nextZ++);
+      this.renderContext.add(cbox);
+      this.deselectObject();
+      SpriteTest.currentSelectedObject = cbox;
+      cbox.setEditing(true);
+   },
+
    selectObject: function(x, y) {
       this.deselectObject();
 
@@ -349,7 +372,7 @@ var SpriteTest = Game.extend({
       itr.reverse();
       while (itr.hasNext()) {
          var obj = itr.next();
-         if (obj.constructor.getClassName() === "SpriteTest.Actor" &&
+         if (obj.constructor.isEditable &&
                obj.getWorldBox().containsPoint(pt))
          {
             SpriteTest.currentSelectedObject = obj;

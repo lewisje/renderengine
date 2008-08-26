@@ -56,9 +56,9 @@ var LevelLoader = ImageLoader.extend(/** @scope LevelLoader.prototype */{
 
    levels: null,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(name) {
       this.base(name || "LevelLoader");
       this.levels = {};
@@ -74,7 +74,11 @@ var LevelLoader = ImageLoader.extend(/** @scope LevelLoader.prototype */{
 
       if (url)
       {
-         Assert(url.indexOf("http") == -1, "Levels must be located on this server");
+         var loc = window.location;
+         if (url.indexOf(loc.protocol) != -1 && url.indexOf(loc.host) == -1) {
+            Assert(false, "Levels must be located on this server");
+         }
+
          var thisObj = this;
 
          // Get the file from the server

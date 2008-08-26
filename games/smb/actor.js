@@ -101,8 +101,8 @@ SpriteTest.Actor = Object2D.extend({
    },
 
    getRenderPosition: function() {
-		return this.getComponent("move").getRenderPosition();
-	},
+      return this.getComponent("move").getRenderPosition();
+   },
 
    /**
     * Set, or initialize, the position of the mover component
@@ -127,6 +127,10 @@ SpriteTest.Actor = Object2D.extend({
 
    setEditing: function(state) {
       this.editing = state;
+   },
+
+   isEditable: function() {
+      return true;
    }
 
 }, { // Static

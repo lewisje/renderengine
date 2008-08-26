@@ -329,10 +329,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
 
    consoleRef: null,
 
-   DEBUGLEVEL_ERRORS:      0,
-   DEBUGLEVEL_WARNINGS:    1,
-   DEBUGLEVEL_DEBUG:       2,
-   DEBUGLEVEL_VERBOSE:     3,
+   DEBUGLEVEL_ERRORS:      3,
+   DEBUGLEVEL_WARNINGS:    2,
+   DEBUGLEVEL_DEBUG:       1,
+   DEBUGLEVEL_VERBOSE:     0,
    DEBUGLEVEL_NONE:       -1,
 
    verbosity: this.DEBUGLEVEL_NONE,
@@ -361,10 +361,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
    /**
     * Set the debug output level of the console.  The available levels are:
     * <ul>
-    * <li>Console.DEBUGLEVEL_ERRORS = 0</li>
-    * <li>Console.DEBUGLEVEL_WARNINGS = 1</li>
-    * <li>Console.DEBUGLEVEL_DEBUG = 2</li>
-    * <li>Console.DEBUGLEVEL_VERBOSE = 3</li>
+    * <li>Console.DEBUGLEVEL_ERRORS = 3</li>
+    * <li>Console.DEBUGLEVEL_WARNINGS = 2</li>
+    * <li>Console.DEBUGLEVEL_DEBUG = 1</li>
+    * <li>Console.DEBUGLEVEL_VERBOSE = 0</li>
     * <li>Console.DEBUGLEVEL_NONE = -1</li>
     * </ul>
     * Messages of the same (or lower) level as the specified level will be logged.
@@ -378,13 +378,19 @@ var Console = Base.extend(/** @scope Console.prototype */{
       this.verbosity = level;
    },
 
+   checkVerbosity: function(debugLevel) {
+      return (this.verbosity != this.DEBUGLEVEL_NONE &&
+              this.verbosity == this.DEBUGLEVEL_VERBOSE ||
+              (debugLevel != this.DEBUGLEVEL_VERBOSE && debugLevel >= this.verbosity));
+   },
+
    /**
     * Outputs a log message.  These messages will only show when DEBUGLEVEL_VERBOSE is the level.
     *
     * @param msg {String} The message to output
     */
    log: function() {
-      if (Engine.debugMode && this.verbosity == this.DEBUGLEVEL_VERBOSE)
+      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_VERBOSE))
          this.consoleRef.debug.apply(this.consoleRef, arguments);
    },
 
@@ -394,7 +400,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @param msg {String} The message to output
     */
    debug: function() {
-      if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_DEBUG)
+      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_DEBUG))
          this.consoleRef.info.apply(this.consoleRef, arguments);
    },
 
@@ -404,7 +410,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @param msg {String} The message to output
     */
    warn: function() {
-      if (Engine.debugMode && this.verbosity >= this.DEBUGLEVEL_WARNINGS)
+      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_WARNINGS))
          this.consoleRef.warn.apply(this.consoleRef, arguments);
    },
 
@@ -607,7 +613,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * Get the path from a fully qualified URL.
     *
     * @param url {String} The URL
-    * @type String
+    * @return {String} The path
     * @memberOf EngineSupport
     */
    getPath: function(url) {
@@ -620,8 +626,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * object returned will contain a key/value pair for each argument
     * found.
     *
-    * @type Object
-    * @return An <tt>Object</tt> with a key and value for each query argument.
+    * @return {Object} An <tt>Object</tt> with a key and value for each query argument.
     * @memberOf EngineSupport
     */
    getQueryParams: function() {
@@ -646,8 +651,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * <tt>true</tt>, <tt>1</tt>, <tt>yes</tt>, or <tt>y</tt>.  If so, returns <tt>true</tt>.
     *
     * @param paramName {String} The query parameter name
-    * @return <tt>true</tt> if the query parameter exists and is one of the specified values.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the query parameter exists and is one of the specified values.
+    * @memberOf EngineSupport
     */
    checkBooleanParam: function(paramName) {
       return (EngineSupport.getQueryParams()[paramName] &&
@@ -663,11 +668,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *
     * @param paramName {String} The query parameter name
     * @param val {String} The value to check for
-    * @return <tt>true</tt> if the query parameter exists and is the value specified
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the query parameter exists and is the value specified
+    * @memberOf EngineSupport
     */
    checkStringParam: function(paramName, val) {
-      return (EngineSupport.getQueryParams()[paramName] && EngineSupport.getQueryParams()[paramName] == val);
+      return (EngineSupport.getStringParam(paramName, null) == val);
    },
 
    /**
@@ -676,11 +681,37 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *
     * @param paramName {String} The query parameter name
     * @param val {Number} The number to check for
-    * @return <tt>true</tt> if the query parameter exists and is the value specified
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the query parameter exists and is the value specified
+    * @memberOf EngineSupport
     */
    checkNumericParam: function(paramName, val) {
-      return (EngineSupport.getQueryParams()[paramName] && Number(EngineSupport.getQueryParams()[paramName]) == val);
+      return (EngineSupport.getStringParam(paramName, null) == val)
+   },
+
+   /**
+    * Get a numeric query parameter, or the default specified if the parameter
+    * doesn't exist.
+    *
+    * @param paramName {String} The name of the parameter
+    * @param defaultVal {Number} The number to return if the parameter doesn't exist
+    * @return {Number} The value
+    * @memberOf EngineSupport
+    */
+   getNumericParam: function(paramName, defaultVal) {
+      return Number(EngineSupport.getStringParam(paramName, defaultVal));
+   },
+
+   /**
+    * Get a string query parameter, or the default specified if the parameter
+    * doesn't exist.
+    *
+    * @param paramName {String} The name of the parameter
+    * @param defaultVal {String} The string to return if the parameter doesn't exist
+    * @return {String} The value
+    * @memberOf EngineSupport
+    */
+   getStringParam: function(paramName, defaultVal) {
+      return (EngineSupport.getQueryParams()[paramName] || defaultVal);
    },
 
    /**
@@ -828,6 +859,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    debugMode: false,
 
+   localMode: false,
+
    defaultContext: null,
 
    running: false,
@@ -848,9 +881,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    vObj: 0,
 
-	/*
-	 * Used to calculate a ratio of scripts to load, to those loaded.
-	 */
+   /*
+    * Used to calculate a ratio of scripts to load, to those loaded.
+    */
    scriptLoadCount: 0,
    scriptsProcessed: 0,
    scriptRatio: 0,
@@ -1107,9 +1140,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             Engine.scriptQueue = [];
          }
 
-			// Track what we need to load
-			Engine.scriptLoadCount++;
-			Engine.updateProgress();
+         // Track what we need to load
+         Engine.scriptLoadCount++;
+         Engine.updateProgress();
 
          // Put script into load queue
          Engine.scriptQueue.push(scriptPath);
@@ -1160,8 +1193,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       // Put callback into load queue
-		Engine.scriptLoadCount++;
-		Engine.updateProgress();
+      Engine.scriptLoadCount++;
+      Engine.updateProgress();
       Engine.scriptQueue.push(cb);
    },
 
@@ -1205,7 +1238,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    doLoad: function(scriptPath, simplePath, cb) {
       // A hack to allow us to do filesystem testing
-      if (!window.localDebugMode)
+      if (!Engine.localMode)
       {
          jQuery.getScript(scriptPath, function() {
             Console.debug("Loaded '" + scriptPath + "'");
@@ -1226,7 +1259,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          var fn = function() {
             if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
                Console.debug("Loaded '" + scriptPath + "'");
-	            Engine.handleScriptDone();
+               Engine.handleScriptDone();
                if (cb) {
                   cb(simplePath);
                }
@@ -1246,8 +1279,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    loadNow: function(scriptPath, cb) {
-		Engine.scriptLoadCount++;
-		Engine.updateProgress();
+      Engine.scriptLoadCount++;
+      Engine.updateProgress();
       if ($.browser.safari) {
          Engine.load(scriptPath);
          if (cb) {
@@ -1304,30 +1337,30 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadScript(this.getEnginePath() + scriptSource);
    },
 
-	handleScriptDone: function() {
-		Engine.scriptsProcessed++;
-		Engine.scriptRatio = Engine.scriptsProcessed / Engine.scriptLoadCount;
-		Engine.scriptRatio = Engine.scriptRatio > 1 ? 1 : Engine.scriptRatio;
-		Engine.updateProgress();
-	},
+   handleScriptDone: function() {
+      Engine.scriptsProcessed++;
+      Engine.scriptRatio = Engine.scriptsProcessed / Engine.scriptLoadCount;
+      Engine.scriptRatio = Engine.scriptRatio > 1 ? 1 : Engine.scriptRatio;
+      Engine.updateProgress();
+   },
 
-	updateProgress: function() {
-		var pBar = jQuery("#engine-load-progress");
-		if (pBar.length > 0) {
-			// Update their progress bar
-			if (pBar.css("position") != "relative" || pBar.css("position") != "absolute") {
-				pBar.css("position", "relative");
-			}
-			var pW = pBar.width();
-			var fill = Math.floor(pW * Engine.scriptRatio);
-			var fBar = jQuery("#engine-load-progress .bar");
-			if (fBar.length == 0) {
-				fBar = jQuery("<div class='bar' style='position: absolute; top: 0px; left: 0px; height: 100%;'></div>");
-				pBar.append(fBar);
-			}
-			fBar.width(fill);
-		}
-	},
+   updateProgress: function() {
+      var pBar = jQuery("#engine-load-progress");
+      if (pBar.length > 0) {
+         // Update their progress bar
+         if (pBar.css("position") != "relative" || pBar.css("position") != "absolute") {
+            pBar.css("position", "relative");
+         }
+         var pW = pBar.width();
+         var fill = Math.floor(pW * Engine.scriptRatio);
+         var fBar = jQuery("#engine-load-progress .bar");
+         if (fBar.length == 0) {
+            fBar = jQuery("<div class='bar' style='position: absolute; top: 0px; left: 0px; height: 100%;'></div>");
+            pBar.append(fBar);
+         }
+         fBar.width(fill);
+      }
+   },
 
    /**
     * Get the path to the engine.
@@ -1704,10 +1737,11 @@ Console.startup();
 Engine.startup();
 
 // Read any engine-level query params
-if (EngineSupport.checkBooleanParam("debug"))
+Engine.setDebugMode(EngineSupport.checkBooleanParam("debug"));
+
+if (Engine.getDebugMode())
 {
-   Engine.setDebugMode(true);
-   Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
+   Console.setDebugLevel(EngineSupport.getNumericParam("debugLevel", Console.DEBUGLEVEL_DEBUG));
    if (!typeof console == "undefined" && console.open) {
       console.open();
    }
@@ -1716,4 +1750,10 @@ if (EngineSupport.checkBooleanParam("debug"))
 if (EngineSupport.checkBooleanParam("metrics"))
 {
    Engine.showMetrics();
+}
+
+// Local mode keeps loaded script source available
+Engine.localMode = EngineSupport.checkBooleanParam("local");
+if (Engine.localMode) {
+   Console.debug("Engine started in Local mode");
 }

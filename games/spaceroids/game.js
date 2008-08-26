@@ -37,18 +37,18 @@
 
 // Load required engine components
 Game.loadEngineScripts([
-	"/rendercontexts/context.canvascontext.js",
-	"/platform/engine.spatialgrid.js",
-	"/textrender/text.vector.js",
-	"/components/component.transform2d.js",
-	"/components/component.mover2d.js",
-	"/components/component.render.js",
-	"/components/component.vector2d.js",
-	"/components/component.collider.js",
-	"/components/component.input.js",
-	"/components/component.keyboardinput.js",
-	"/components/component.wiimoteinput.js",
-	"/resourceloaders/loader.sound.js",
+   "/rendercontexts/context.canvascontext.js",
+   "/platform/engine.spatialgrid.js",
+   "/textrender/text.vector.js",
+   "/components/component.transform2d.js",
+   "/components/component.mover2d.js",
+   "/components/component.render.js",
+   "/components/component.vector2d.js",
+   "/components/component.collider.js",
+   "/components/component.input.js",
+   "/components/component.keyboardinput.js",
+   "/components/component.wiimoteinput.js",
+   "/resourceloaders/loader.sound.js",
 ]);
 
 Engine.initObject("Spaceroids", "EngineInitialized", function() {
@@ -393,12 +393,12 @@ var Spaceroids = Game.extend({
       this.soundLoader = SoundLoader.create();
 
       // Load the sounds
-      this.soundLoader.load("explode", "resources/explode1.mp3");
-      this.soundLoader.load("shoot", "resources/shoot.mp3");
-      this.soundLoader.load("death", "resources/explode2.mp3");
-      this.soundLoader.load("thrust", "resources/thrust.mp3");
-      this.soundLoader.load("lowboop", "resources/low.mp3");
-      this.soundLoader.load("hiboop", "resources/hi.mp3");
+      this.soundLoader.load("explode", this.getFilePath("resources/explode1.mp3"));
+      this.soundLoader.load("shoot", this.getFilePath("resources/shoot.mp3"));
+      this.soundLoader.load("death", this.getFilePath("resources/explode2.mp3"));
+      this.soundLoader.load("thrust", this.getFilePath("resources/thrust.mp3"));
+      this.soundLoader.load("lowboop", this.getFilePath("resources/low.mp3"));
+      this.soundLoader.load("hiboop", this.getFilePath("resources/hi.mp3"));
 
       Spaceroids.attractMode();
    },
