@@ -127,8 +127,7 @@ var SpriteTest = Game.extend({
    waitForResources: function() {
       //Console.debug("checking");
       if (SpriteTest.spriteLoader.isReady("smbtiles") &&
-          SpriteTest.levelLoader.isReady("level1") &&
-          SpriteTest.soundLoader.isReady("bgm"))
+          SpriteTest.levelLoader.isReady("level1"))
       {
          SpriteTest.loadTimeout.destroy();
          SpriteTest.run();
