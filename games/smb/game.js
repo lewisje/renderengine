@@ -33,35 +33,18 @@
  *
  */
 
-// Load required engine components
+// Load all required engine components
 Engine.include("/rendercontexts/context.scrollingbackground.js");
-Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.sprite.js");
-Engine.include("/components/component.keyboardinput.js");
 Engine.include("/resourceloaders/loader.sound.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/resourceloaders/loader.level.js");
-
-/*
-Game.loadEngineScripts([
-   "/rendercontexts/context.scrollingbackground.js",
-   "/components/component.transform2d.js",
-   "/components/component.sprite.js",
-   "/components/component.keyboardinput.js",
-   "/resourceloaders/loader.sound.js",
-   "/resourceloaders/loader.sprite.js",
-   "/resourceloaders/loader.level.js"
-]);
-*/
-
-Engine.initObject("SpriteTest", "Game", function() {
+Engine.include("/platform/engine.timers.js");
 
 // Load game objects
 Game.load("/actor.js");
 Game.load("/collisionbox.js");
 
-// Start the game when all the scripts are loaded.
-Game.setQueueCallback(function() { SpriteTest.setup(); });
+Engine.initObject("SpriteTest", "Game", function() {
 
 /**
  * @class The game.
@@ -162,7 +145,7 @@ var SpriteTest = Game.extend({
     * any objects, remove event handlers, destroy the rendering context, etc.
     */
    teardown: function() {
-      renderContext.destroy();
+      this.renderContext.destroy();
    },
 
    run: function() {
@@ -186,7 +169,7 @@ var SpriteTest = Game.extend({
    },
 
    play: function() {
-      this.soundLoader.get("bgm").play();
+      //this.soundLoader.get("bgm").play();
 
       var player = SpriteTest.Actor.create();
       player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
@@ -400,6 +383,9 @@ var SpriteTest = Game.extend({
       }
    }
 });
+
+// Start the game when all the scripts are loaded.
+Game.setQueueCallback(function() { SpriteTest.setup(); });
 
 return SpriteTest;
 

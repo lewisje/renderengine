@@ -81,11 +81,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    afterAdd: function(parent) {
-      // IE Support
-      if (jQuery.browser.msie) {
-         alert("here");
-         this.setSurface(G_vmlCanvasManager.initElement(this.getSurface()));
-      }
    },
 
    release: function() {
