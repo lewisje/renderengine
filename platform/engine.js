@@ -1846,23 +1846,38 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       var nwR = new RegExp("(new\\s+" + nR + ")","g");
       var ctR = new RegExp("(" + nR + "\\.create\\()","g");
       var fcR = new RegExp("(" + nR + "\\()", "g");
+      var inR = new RegExp("(intanceof\\s+"+ nR + ")", "g");
       var m;
+
+      // "new"-ing objects
       while ((m = nwR.exec(def)) != null) {
          if (EngineSupport.indexOf(dTable, m[2]) == -1) {
             dTable.push(m[2]);
          }
       }
+
+      // "create"-ing objects
       while ((m = ctR.exec(def)) != null) {
          if (EngineSupport.indexOf(dTable, m[2]) == -1) {
             dTable.push(m[2]);
          }
       }
+
+      // method dependencies
       while ((m = fcR.exec(def)) != null) {
          var k = m[2].split(".")[0];
          if (EngineSupport.indexOf(dTable, k) == -1) {
             dTable.push(k);
          }
       }
+
+      // "instanceof" checks
+      while ((m = inR.exec(def)) != null) {
+         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
+            dTable.push(m[2]);
+         }
+      }
+
       return dTable;
    },
 
