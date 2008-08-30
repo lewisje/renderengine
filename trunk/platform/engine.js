@@ -865,6 +865,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    defaultContext: null,
 
+   started: false,
    running: false,
 
    loadedScripts: {},
@@ -997,6 +998,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
+      this.started = true;
 
       // Load the required scripts
       this.loadEngineScripts();
@@ -1008,10 +1010,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
-		var mode = "[";
-		mode += (this.debugMode ? "DEBUG" : "");
-		mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
-		mode += "]"
+      var mode = "[";
+      mode += (this.debugMode ? "DEBUG" : "");
+      mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
+      mode += "]"
       Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
       this.running = true;
 
@@ -1035,11 +1037,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
-      if (!this.running)
+      if (!this.running && this.started)
       {
          this.running = true;
          setTimeout(function() { Engine.shutdown(); }, 10);
       }
+
+      this.started = false;
+      window.clearTimeout(Engine.dependencyProcessor);
 
       Console.warn(">>> Engine shutting down...");
 
@@ -1098,6 +1103,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getDefaultContext: function() {
+      if (this.defaultContext == null) {
+         this.defaultContext = DocumentContext.create();
+      }
+
       return this.defaultContext;
    },
 
@@ -1137,45 +1146,48 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    loadScript: function(scriptPath) {
-		if (!Engine.scriptQueue) {
-			// Create the queue
-			Engine.scriptQueue = [];
-		}
+      if (!Engine.scriptQueue) {
+         // Create the queue
+         Engine.scriptQueue = [];
+      }
 
-		// Track what we need to load
-		Engine.scriptLoadCount++;
-		Engine.updateProgress();
+      // Track what we need to load
+      Engine.scriptLoadCount++;
+      Engine.updateProgress();
 
-		// Put script into load queue
-		Engine.scriptQueue.push(scriptPath);
+      // Put script into load queue
+      Engine.scriptQueue.push(scriptPath);
+      Engine.runScriptQueue();
+   },
 
-		if (!Engine.scriptQueueTimer) {
-			// Process any waiting scripts
-			Engine.scriptQueueTimer = setInterval(function() {
-				if (Engine.queuePaused) {
-					if (Engine.pauseReps++ > 500) {
-						// If after ~5 seconds the queue is still paused, unpause it and
-						// warn the user that the situation occurred
-						Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
-						Engine.pauseReps = 0;
-						Engine.pauseQueue(false);
-					}
-					return;
-				}
+   runScriptQueue: function() {
+      if (!Engine.scriptQueueTimer) {
+         // Process any waiting scripts
+         Engine.scriptQueueTimer = setInterval(function() {
+            if (Engine.queuePaused) {
+               if (Engine.pauseReps++ > 500) {
+                  // If after ~5 seconds the queue is still paused, unpause it and
+                  // warn the user that the situation occurred
+                  Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
+                  Engine.pauseReps = 0;
+                  Engine.pauseQueue(false);
+               }
+               return;
+            }
 
-				Engine.pauseReps = 0;
+            Engine.pauseReps = 0;
 
-				if (Engine.scriptQueue.length > 0) {
-					Engine.processScriptQueue();
-				} else {
-					// Stop the queue timer if there are no scripts
-					clearInterval(Engine.scriptQueueTimer);
-					Engine.scriptQueueTimer = null;
-				}
-			}, 10);
+            if (Engine.scriptQueue.length > 0) {
+               Engine.processScriptQueue();
+            } else {
+               // Stop the queue timer if there are no scripts
+               clearInterval(Engine.scriptQueueTimer);
+               Engine.scriptQueueTimer = null;
+            }
+         }, 10);
 
-			Engine.readyForNextScript = true;
-		}
+         Engine.readyForNextScript = true;
+      }
    },
 
    /**
@@ -1197,6 +1209,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Engine.scriptLoadCount++;
       Engine.updateProgress();
       Engine.scriptQueue.push(cb);
+      Engine.runScriptQueue();
    },
 
    /**
@@ -1238,66 +1251,70 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    doLoad: function(scriptPath, simplePath, cb) {
+      if (!this.started) {
+         return;
+      }
+
       var s = scriptPath.replace(/[\/\.]/g,"_");
       if (this.loadedScripts[s] == null)
       {
          // Store the request in the cache
          this.loadedScripts[s] = scriptPath;
 
-			// A hack to allow us to do filesystem testing
-			if (!Engine.localMode)
-			{
-				jQuery.getScript(scriptPath, function() {
-					Console.debug("Loaded '" + scriptPath + "'");
-					Engine.handleScriptDone();
-					if (cb) {
-						cb(simplePath);
-					}
-					Engine.readyForNextScript = true;
-				});
-			}
-			else
-			{
-				// If we're running locally, don't use jQuery to get the script.
-				// This allows us to see and debug the loaded scripts.
-				var n = document.createElement("script");
-				n.src = scriptPath;
-				n.type = "text/javascript";
+         // A hack to allow us to do filesystem testing
+         if (!Engine.localMode)
+         {
+            jQuery.getScript(scriptPath, function() {
+               Console.debug("Loaded '" + scriptPath + "'");
+               Engine.handleScriptDone();
+               if (cb) {
+                  cb(simplePath);
+               }
+               Engine.readyForNextScript = true;
+            });
+         }
+         else
+         {
+            // If we're running locally, don't use jQuery to get the script.
+            // This allows us to see and debug the loaded scripts.
+            var n = document.createElement("script");
+            n.src = scriptPath;
+            n.type = "text/javascript";
 
-				// When the file is loaded
-				var fn = function() {
-					if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-						Console.debug("Loaded '" + scriptPath + "'");
-						Engine.handleScriptDone();
-						if (cb) {
-							cb(simplePath);
-						}
-					}
-					Engine.readyForNextScript = true;
-				};
+            // When the file is loaded
+            var fn = function() {
+               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+                  Console.debug("Loaded '" + scriptPath + "'");
+                  Engine.handleScriptDone();
+                  if (cb) {
+                     cb(simplePath);
+                  }
+               }
+               Engine.readyForNextScript = true;
+            };
 
-				// When an error occurs
-				var eFn = function() {
-					Console.error("File not found: ", scriptPath);
-					Engine.readyForNextScript = true;
-				};
+            // When an error occurs
+            var eFn = function() {
+               Console.error("File not found: ", scriptPath);
+               Engine.readyForNextScript = true;
+            };
 
-				if ($.browser.msie) {
-					n.defer = true;
-					n.onreadystatechange = fn;
-					n.onerror = eFn;
-				} else {
-					n.onload = fn;
-					n.onerror = eFn;
-				}
+            if ($.browser.msie) {
+               n.defer = true;
+               n.onreadystatechange = fn;
+               n.onerror = eFn;
+            } else {
+               n.onload = fn;
+               n.onerror = eFn;
+            }
 
-				var h = document.getElementsByTagName("head")[0];
-				h.appendChild(n);
-			}
-		} else {
-			// Already have this script
-			Engine.readyForNextScript = true;
-		}
+            var h = document.getElementsByTagName("head")[0];
+            h.appendChild(n);
+         }
+      } else {
+         // Already have this script
+         Engine.readyForNextScript = true;
+      }
    },
 
    loadNow: function(scriptPath, cb) {
@@ -1326,14 +1343,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
       Engine.gameLoadTimer = setInterval(function() {
-         if (engine.running) {
+         if (window["DocumentContext"] != null) {
+
+            // Start the engine
+            Engine.run();
+
             // Stop the timer
             clearInterval(Engine.gameLoadTimer);
             Engine.gameLoadTimer = null;
 
             // Create the default context (the document)
             Console.debug("Loading '" + gameSource + "'");
-            engine.defaultContext = DocumentContext.create();
             engine.loadScript(gameSource);
 
             // Start the game when it's ready
@@ -1420,8 +1440,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Engine stylesheet
       this.loadStylesheet("/css/engine.css");
 
-      // Engine platform
+      // The basics needed by the engine to get started
       this.loadNow("/platform/engine.game.js");
+      this.loadNow("/platform/engine.rendercontext.js");
+      this.loadNow("/rendercontexts/context.render2d.js");
+      this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");
 
       if ($.browser.msie) {
@@ -1473,11 +1496,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          } else {
             Engine.soundsEnabled = false;
          }
-      });
-
-      // Start the engine after all these files load
-      this.setQueueCallback(function() {
-         Engine.run();
       });
    },
 
@@ -1676,28 +1694,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    dependencyList: {},
    dependencyProcessor: null,
 
-	/**
-	 * Include a script file.
-	 *
-	 * @param scriptURL {String} The URL of the script file
-	 */
-	include: function(scriptURL) {
-		Engine.loadNow(scriptURL);
-	},
-
-	/**
-	 * Get the object reference named by the string passed in.
-	 * @param objName {String} A dot-notation class name
-	 * @private
-	 */
-	getObjectRef: function(objName) {
-		var objHr = objName.split(".");
-		var o = window[objHr[0]];
-		for (var i = 1; i < objHr.length; i++) {
-			o = o[objHr[i]];
-		}
-		return o
-	},
+   /**
+    * Include a script file.
+    *
+    * @param scriptURL {String} The URL of the script file
+    */
+   include: function(scriptURL) {
+      Engine.loadNow(scriptURL);
+   },
 
    /**
     * @param objectName {String} The name of the object class
@@ -1707,29 +1711,95 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param fn {Function} The function to run when the object can be initialized.
     */
    initObject: function(objectName, dependency, fn) {
-      if (dependency === null) {
-         // The object has no dependencies, create it...
-         window[objectName] = fn();
-         Console.log("Initializing", objectName);
-      } else {
-         Engine.dependencyList[objectName] = {dep: dependency, objFn: fn};
+      var objDeps = Engine.findFunctionDeps(fn);
+
+      // Add the known dependency to the list of object
+      // dependencies we discovered
+      objDeps.push(dependency);
+      var newDeps = [];
+
+      // Check for nulls and circular references
+      for (var d in objDeps) {
+         if (objDeps[d] != null && objDeps[d] != objectName && objDeps[d].split(".")[0] != objectName) {
+            newDeps.push(objDeps[d]);
+         }
       }
+
+      Engine.dependencyList[objectName] = {deps: newDeps, objFn: fn};
+      Console.log(objectName + " depends on: " + newDeps);
 
       if (!Engine.dependencyProcessor) {
          Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
       }
    },
 
+   /**
+    * Check the object to make sure the namespace(s) are defined.
+    * @param objName {String} A dot-notation class name
+    * @private
+    */
+   checkNSDeps: function(objName) {
+      var objHr = objName.split(".");
+
+      if (objHr.length == 0) {
+         return true;
+      }
+
+      var o = window;
+      for (var i = 0; i < objHr.length - 1; i++) {
+         o = o[objHr[i]];
+         if (!o) {
+            return false;
+         }
+      }
+      return true;
+   },
+
+   /**
+    * Get the parent class of the object specified by classname string.
+    * @param classname {String} A dot-notation class name
+    * @private
+    */
+   getParentClass: function(classname) {
+      var objHr = classname.split(".");
+      var o = window;
+      for (var i = 0; i < objHr.length - 1; i++) {
+         o = o[objHr[i]];
+         if (!o) {
+            return null;
+         }
+      }
+      return o;
+   },
+
+   /**
+    * Dependency processor.
+    * @private
+    */
    processDependencies: function() {
       var pDeps = [];
       var dCount = 0;
       for (var d in Engine.dependencyList) {
+         // Check to see if the dependencies of an object are loaded
+         // We also need to make sure that it's namespace(s) are initialized
          dCount++;
-         // Check to see if the dependency of an object is loaded
-         if (window[Engine.dependencyList[d].dep] != null) {
-            // We can load it
-            window[d] = Engine.dependencyList[d].objFn();
+
+         var deps = Engine.dependencyList[d].deps;
+         var miss = false;
+         for (var dep in deps) {
+            if (deps[dep] != null && window[deps[dep]] == null) {
+               miss = true;
+               break;
+            }
+         }
+
+         if (!miss && Engine.checkNSDeps(d)) {
+            // We can initialize it
+            var parentObj = Engine.getParentClass(d);
+            parentObj[d] = Engine.dependencyList[d].objFn();
             Console.log("Initializing", d);
+
+            // Remember what we processed so we don't process them again
             pDeps.push(d);
          }
       }
@@ -1744,6 +1814,172 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          window.clearTimeout(Engine.dependencyProcessor);
          Engine.dependencyProcessor = null;
       }
+   },
+
+   /**
+    * Find variables defined in a function
+    * @private
+    */
+   findVars: function(obj) {
+      // Find all variables explicitly defined
+      var def = obj.toString();
+      var vTable = [];
+      var nR = "([\\$_\\w\\.]*)";
+      var vR = new RegExp("(var\\s*" + nR + "\\s*=?)","g");
+      var m;
+      while ((m = vR.exec(def)) != null) {
+         vTable.push(m[2]);
+      }
+      return vTable;
+
+   },
+
+   /**
+    * Find object dependencies in variables, arguments, and method usage.
+    * @private
+    */
+   findDependencies: function(obj) {
+      // Find all dependent objects
+      var def = obj.toString();
+      var dTable = [];
+      var nR = "([\\$_\\w\\.]*)";
+      var nwR = new RegExp("(new\\s+" + nR + ")","g");
+      var ctR = new RegExp("(" + nR + "\\.create\\()","g");
+      var fcR = new RegExp("(" + nR + "\\()", "g");
+      var m;
+      while ((m = nwR.exec(def)) != null) {
+         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
+            dTable.push(m[2]);
+         }
+      }
+      while ((m = ctR.exec(def)) != null) {
+         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
+            dTable.push(m[2]);
+         }
+      }
+      while ((m = fcR.exec(def)) != null) {
+         var k = m[2].split(".")[0];
+         if (EngineSupport.indexOf(dTable, k) == -1) {
+            dTable.push(k);
+         }
+      }
+      return dTable;
+   },
+
+   /**
+    * Get a list of all object dependencies within a function table.
+    * @private
+    */
+   getFunctionDependencies: function(fTable) {
+      // Remove dependencies resolved by local variables and arguments
+      var r = [];
+      var allDeps = [];
+      for (var f in fTable) {
+         var deps = fTable[f].deps;
+         var vars = fTable[f].vars;
+
+         for (var d in deps) {
+            var dp = deps[d].split(".")[0];
+            if (EngineSupport.indexOf(vars, dp) != -1 && EngineSupport.indexOf(r, deps[d]) == -1) {
+               r.push(deps[d]);
+            }
+         }
+
+         fTable[f].deps = EngineSupport.filter(deps, function(e) {
+            return (EngineSupport.indexOf(r, e) == -1);
+         });
+
+         for (var d in fTable[f].deps) {
+            if (EngineSupport.indexOf(allDeps, fTable[f].deps[d]) == -1) {
+               allDeps.push(fTable[f].deps[d]);
+            }
+         }
+      }
+
+      return allDeps;
+   },
+
+   /**
+    * Find the dependencies that exist within an anonymous function.
+    * @private
+    */
+   findAnonFunctionDeps: function(obj) {
+      var def = obj.toString();
+      var m;
+
+      var strR = /(["|']).*?\1/g;
+
+      // Find internal functions
+      var fTable = {};
+      var fR = new RegExp("(function\\s*.*?\\((.*?)\\)\\s*\\{(.*?)\\};)","g");
+      var anon = 0;
+      while ((m = fR.exec(def)) != null) {
+         var fdef = m[3].replace(strR, "");
+         fTable["_" + anon] = { vars: Engine.findVars(fdef),
+                                deps: Engine.findDependencies(fdef) };
+         fTable["_" + anon].deps = EngineSupport.filter(fTable["_" + anon].deps, function(e) {
+            return (e != "" && e != "this" && e != "arguments");
+         });
+
+         var args = m[2].split(",");
+         var vs = fTable["_" + anon].vars;
+         for (var a in args) {
+            if (EngineSupport.indexOf(vs, args[a]) == -1) {
+               vs.push(args[a].replace(" ",""));
+            }
+         }
+         anon++;
+      }
+
+      return Engine.getFunctionDependencies(fTable);
+   },
+
+   /**
+    * Find all of the function dependencies within an object class.
+    * @private
+    */
+   findFunctionDeps: function(obj) {
+      var def = obj.toString();
+      var m;
+
+      var nR = "([\\$_\\w\\.]*)";
+      var strR = /(["|']).*?\1/g;
+      var afnR = new RegExp("(function\\s*.*?\\(.*?\\)\\s*\{.*?\\};)","g");
+
+      // Find internal functions
+      var fTable = {};
+      var fR = new RegExp("(" + nR + "\\s*:\\s*function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{(.*?)\\})\\s*,","g");
+      while ((m = fR.exec(def)) != null) {
+         var fdef = m[4].replace(strR, "");
+
+         // Process anonymous function dependencies, then remove the functions
+         var aDeps = Engine.findAnonFunctionDeps(fdef);
+         fdef = fdef.replace(afnR, "");
+
+         // Process each function
+         fTable["_" + m[2]] = { vars: Engine.findVars(fdef),
+                                deps: Engine.findDependencies(fdef) };
+         fTable["_" + m[2]].deps = EngineSupport.filter(fTable["_" + m[2]].deps, function(e) {
+            return (e != "" && e != "this");
+         });
+
+         // Add anonymous function dependencies
+         EngineSupport.forEach(aDeps, function(e) {
+            if (EngineSupport.indexOf(fTable["_" + m[2]].deps, e) == -1) {
+               fTable["_" + m[2]].deps.push(e);
+            }
+         });
+
+         var args = m[3].split(",");
+         var vs = fTable["_" + m[2]].vars;
+         for (var a in args) {
+            if (EngineSupport.indexOf(vs, args[a]) == -1) {
+               vs.push(args[a].replace(" ",""));
+            }
+         }
+      }
+
+      return Engine.getFunctionDependencies(fTable);
    }
 
  }, { // Interface

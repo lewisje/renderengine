@@ -93,7 +93,7 @@ var Game = Base.extend(/** @scope Game.prototype */{
       EngineSupport.arrayRemove(Game.scriptsToLoad, scriptPath);
       if (Game.scriptsToLoad.length == 0) {
          // A dummy object that can be looked for
-         window["EngineInitialized"] = {};
+         window["GameInitialized"] = {};
       }
    },
 

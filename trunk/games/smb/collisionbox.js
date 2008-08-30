@@ -2,7 +2,7 @@
 /**
  * The Render Engine
  *
- * The actor object
+ * Collision box editing object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -32,34 +32,33 @@
  */
 
 Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.sprite.js");
-Engine.include("/components/component.keyboardinput.js");
+Engine.include("/components/component.render.js");
 Engine.include("/platform/engine.object2d.js");
 
-Engine.initObject("SpriteTest.Actor", "Object2D", function() {
+
+Engine.initObject("SpriteTest.CollisionBox", "Object2D", function() {
 
 /**
  * @class The player object.  Creates the player and assigns the
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-SpriteTest.Actor = Object2D.extend({
+SpriteTest.CollisionBox = Object2D.extend({
 
    editing: false,
 
-   sprite: null,
+   boxRect: null,
 
    constructor: function() {
       this.base("Actor");
 
       this.editing = false;
 
-      // Add components to move and draw the player
-      this.add(KeyboardInputComponent.create("input"));
       this.add(Transform2DComponent.create("move"));
-      this.add(SpriteComponent.create("draw"));
+      this.add(RenderComponent.create("draw"));
 
       this.setPosition(Point2D.create(100, 100));
+      this.boxRect = Rectangle2D.create(0, 0, 80, 80);
    },
 
    /**
@@ -76,22 +75,16 @@ SpriteTest.Actor = Object2D.extend({
       this.base(renderContext, time);
 
       if (this.editing) {
-         renderContext.setLineStyle("white");
+         renderContext.setLineStyle("yellow");
          renderContext.setLineWidth(2);
-         renderContext.drawRectangle(this.getSprite().getBoundingBox());
+      } else {
+         renderContext.setLineStyle("red");
+         renderContext.setLineWidth(1.5);
       }
 
+      renderContext.drawRectangle(this.boxRect);
+
       renderContext.popTransform();
-   },
-
-   setSprite: function(sprite) {
-      this.sprite = sprite;
-      this.setBoundingBox(sprite.getBoundingBox());
-      this.getComponent("draw").setSprite(sprite);
-   },
-
-   getSprite: function() {
-      return this.sprite;
    },
 
    /**
@@ -104,6 +97,11 @@ SpriteTest.Actor = Object2D.extend({
 
    getRenderPosition: function() {
       return this.getComponent("move").getRenderPosition();
+   },
+
+   setBoxSize: function(width, height) {
+      this.boxRect.setDims(Point2D.create(width, height));
+      this.setBoundingBox(this.boxRect);
    },
 
    /**
@@ -143,10 +141,10 @@ SpriteTest.Actor = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "SpriteTest.Actor";
+      return "SpriteTest.CollisionBox";
    }
 });
 
-return SpriteTest.Actor;
+return SpriteTest.CollisionBox;
 
 });
