@@ -2,4 +2,6 @@
 
 I've got dependency checking working in Firefox.  The engine now processes a file, determining what objects and classes a class is dependent on before initializing it.  It has some interesting implications, but is a little shaky at the moment.  The exact same error is showing up in Opera and Safari, so that'll make tracking the problem down a tad easier.
 
+The sound engine has also stopped working.  Not exactly sure what's going on there...
+
 I'm trying to get the dependency loader working for all of the engine so that only files that are needed are loaded.  It means the examples are borked, but that's the nature of the beast.
