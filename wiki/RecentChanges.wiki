@@ -2,6 +2,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 08/30/2008 ||Safari and Opera are *broken* again... sigh. I've got an even better dependency checker working.  It actually scrapes classes, looking for object and class dependencies.  It's a little bit shaky, as it only understands certain coding styles. Hopefully I'll get it working in Safari and Opera again soon.  It's getting closer to an actual release. ||
 || 08/20/2008 ||Safari and Opera are loading again... WOOT! Didn't have to sacrifice the new loading code, either. Added a Safari console for debug messages. I've got a basic editor started for the sprite testing.  The scrolling background is now just the canvas with a slice of the background showing. Updated the rendering pipeline to ignore objects that aren't in the viewport. Added an XML resource loader. ||
 || 08/14/2008 ||The dependency checking breaks loading in Safari and Opera.  Not a big deal, I know how to make them work so I might have to revert to old loading for those browsers.  Yeah, it takes a bit longer but at least it'll work. ||
 || 08/13/2008 ||I was able to speed up engine loading using a new dependency processor that I've written.  It's still a little buggy, so expect some wonkiness for the time being.  Not all objects are currently configured with their dependency, but when they are I will probably remove the serial script processor due to it being the main slowness in engine startup.  The dependency processor simply looks for an object that another object depends on to become available, then initializes that object class. ||
