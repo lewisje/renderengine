@@ -32,6 +32,7 @@
 // Includes
 Engine.include("/platform/engine.container.js");
 Engine.include("/platform/engine.math2d.js");
+Engine.include("/platform/engine.hostobject.js");
 
 Engine.initObject("RenderContext", "Container", function() {
 
@@ -154,17 +155,17 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       return this.worldRotation;
    },
 
-	getWorldPosition: function() {
-		return this.worldPosition;
-	},
+   getWorldPosition: function() {
+      return this.worldPosition;
+   },
 
-	setViewport: function(rect) {
-		this.viewport = Rectangle2D.create(rect);
-	},
+   setViewport: function(rect) {
+      this.viewport = Rectangle2D.create(rect);
+   },
 
-	getViewport: function() {
-		return this.viewport;
-	},
+   getViewport: function() {
+      return this.viewport;
+   },
 
    /**
     * Add an object to the render list.  Only objects
@@ -248,14 +249,14 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.pushTransform();
 
       // Render the visible objects into the world
-		//this.viewport.setTopLeft(this.getWorldPosition());
+      //this.viewport.setTopLeft(this.getWorldPosition());
       var objs = this.getObjects();
       for (var o in objs)
       {
-			if (!objs[o].getRenderPosition || this.viewport.containsPoint(objs[o].getRenderPosition())) {
-         	this.updateObject(objs[o], time);
-         	Engine.vObj++;
-			}
+         if (!objs[o].getRenderPosition || this.viewport.containsPoint(objs[o].getRenderPosition())) {
+            this.updateObject(objs[o], time);
+            Engine.vObj++;
+         }
       }
 
       // Restore the world transform
