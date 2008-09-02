@@ -36,21 +36,21 @@ Engine.include("/components/component.render.js");
 Engine.include("/platform/engine.object2d.js");
 
 
-Engine.initObject("SpriteTest.CollisionBox", "Object2D", function() {
+Engine.initObject("SpriteTestCollisionBox", "Object2D", function() {
 
 /**
  * @class The player object.  Creates the player and assigns the
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-SpriteTest.CollisionBox = Object2D.extend({
+SpriteTestCollisionBox = Object2D.extend({
 
    editing: false,
 
    boxRect: null,
 
    constructor: function() {
-      this.base("Actor");
+      this.base("CollisionBox");
 
       this.editing = false;
 
@@ -141,10 +141,10 @@ SpriteTest.CollisionBox = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "SpriteTest.CollisionBox";
+      return "SpriteTestCollisionBox";
    }
 });
 
-return SpriteTest.CollisionBox;
+return SpriteTestCollisionBox;
 
 });

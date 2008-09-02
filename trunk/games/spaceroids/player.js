@@ -32,14 +32,24 @@
  *
  */
 
+Engine.include("/components/component.mover2d.js");
+Engine.include("/components/component.vector2d.js");
+Engine.include("/components/component.keyboardinput.js");
+Engine.include("/components/component.collider.js");
+Engine.include("/platform/engine.object2d.js");
+
+Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
+
 /**
  * @class The player object.  Creates the player and assigns the
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-Spaceroids.Player = Object2D.extend({
+SpaceroidsPlayer = Object2D.extend({
 
    size: 4,
+
+   field: null,
 
    rotDir: 0,
 
@@ -58,17 +68,19 @@ Spaceroids.Player = Object2D.extend({
    constructor: function() {
       this.base("Player");
 
+      this.field = Spaceroids;
+
       // Add components to move and draw the player
-      if (window.opera && opera.wiiremote) {
-         this.add(WiimoteInputComponent.create("input"));
-      } else {
+//      if (window.opera && opera.wiiremote) {
+//         this.add(WiimoteInputComponent.create("input"));
+//      } else {
          this.add(KeyboardInputComponent.create("input"));
-      }
+//      }
 
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
       this.add(Vector2DComponent.create("thrust"));
-      this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
+      this.add(ColliderComponent.create("collider", this.field.collisionModel));
 
       this.tip = Point2D.create(0, -1);
       this.players--;
@@ -112,7 +124,7 @@ Spaceroids.Player = Object2D.extend({
       renderContext.pushTransform();
 
       var c_mover = this.getComponent("move");
-      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
+      c_mover.setPosition(this.field.wrap(c_mover.getPosition(), this.getBoundingBox()));
       c_mover.setRotation(c_mover.getRotation() + this.rotDir);
 
       if (this.thrusting)
@@ -208,7 +220,7 @@ Spaceroids.Player = Object2D.extend({
       var c_thrust = this.getComponent("thrust");
 
       // The player shapes
-      var shape = Spaceroids.Player.points;
+      var shape = SpaceroidsPlayer.points;
 
       // Scale the shape
       var s = [];
@@ -226,7 +238,7 @@ Spaceroids.Player = Object2D.extend({
       // Save the shape so we can draw lives remaining
       this.playerShape = s;
 
-      var thrust = Spaceroids.Player.thrust;
+      var thrust = SpaceroidsPlayer.thrust;
       s = [];
       for (var p = 0; p < thrust.length; p++)
       {
@@ -249,10 +261,10 @@ Spaceroids.Player = Object2D.extend({
     * in the playfield and keep track of the active number of bullets.
     */
    shoot: function() {
-      var b = Spaceroids.Bullet.create(this);
+      var b = SpaceroidsBullet.create(this);
       this.getRenderContext().add(b);
       this.bullets++;
-      Spaceroids.soundLoader.get("shoot").play({volume: 15});
+      this.field.soundLoader.get("shoot").play({volume: 15});
    },
 
    /**
@@ -306,12 +318,12 @@ Spaceroids.Player = Object2D.extend({
 
       this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
       this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
-      Spaceroids.soundLoader.get("thrust").stop();
+      this.field.soundLoader.get("thrust").stop();
 
       // Make some particles
       for (var x = 0; x < 8; x++)
       {
-         Spaceroids.pEngine.addParticle(SimpleParticle.create(this.getPosition(), 3000));
+         this.field.pEngine.addParticle(SimpleParticle.create(this.getPosition(), 3000));
       }
 
       this.getComponent("move").setVelocity(0);
@@ -320,7 +332,7 @@ Spaceroids.Player = Object2D.extend({
       this.rotDir = 0;
       this.thrusting = false;
 
-      Spaceroids.soundLoader.get("death").play({volume: 80});
+      this.field.soundLoader.get("death").play({volume: 80});
 
       // Remove one of the players
       if (this.players-- > 0)
@@ -331,7 +343,7 @@ Spaceroids.Player = Object2D.extend({
       }
       else
       {
-         Spaceroids.gameOver();
+         this.field.gameOver();
       }
 
    },
@@ -357,7 +369,7 @@ Spaceroids.Player = Object2D.extend({
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.DRAW);
             this.thrusting = true;
-            Spaceroids.soundLoader.get("thrust").play({volume: 30});
+            this.field.soundLoader.get("thrust").play({volume: 30});
             break;
          case EventEngine.KEYCODE_SPACE:
             if (this.bullets < 5) {
@@ -386,7 +398,7 @@ Spaceroids.Player = Object2D.extend({
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
             this.thrusting = false;
-            Spaceroids.soundLoader.get("thrust").stop();
+            this.field.soundLoader.get("thrust").stop();
             break;
 
       }
@@ -408,9 +420,9 @@ Spaceroids.Player = Object2D.extend({
       this.getComponent("thrust").setDrawMode(pressed ? RenderComponent.DRAW : RenderComponent.NO_DRAW);
       this.thrusting = pressed;
       if (pressed) {
-         Spaceroids.soundLoader.get("thrust").play({volume: 30});
+         this.field.soundLoader.get("thrust").play({volume: 30});
       } else {
-         Spaceroids.soundLoader.get("thrust").stop();
+         this.field.soundLoader.get("thrust").stop();
       }
    },
 
@@ -433,7 +445,7 @@ Spaceroids.Player = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "Spaceroids.Player";
+      return "SpaceroidsPlayer";
    },
 
    /** The player shape
@@ -445,5 +457,9 @@ Spaceroids.Player = Object2D.extend({
     * @private
     */
    thrust: [ [-1,  2], [0,  3], [ 1,  2] ]
+
+});
+
+return SpaceroidsPlayer;
 
 });

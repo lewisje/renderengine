@@ -1711,7 +1711,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param fn {Function} The function to run when the object can be initialized.
     */
    initObject: function(objectName, dependency, fn) {
-      var objDeps = Engine.findFunctionDeps(fn);
+      var objDeps = Engine.findFunctionDeps(objectName, fn);
 
       // Add the known dependency to the list of object
       // dependencies we discovered
@@ -1720,13 +1720,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Check for nulls and circular references
       for (var d in objDeps) {
-         if (objDeps[d] != null && objDeps[d] != objectName && objDeps[d].split(".")[0] != objectName) {
-            newDeps.push(objDeps[d]);
-         }
+			if (objDeps[d] != null) {
+				if (objDeps[d].split(".")[0] != objectName) {
+					newDeps.push(objDeps[d]);
+				} else {
+					Console.warn("Object references itself: ", objectName);
+				}
+			}
       }
 
       Engine.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Console.log(objectName + " depends on: " + newDeps);
+
+		// Check for 1st level circular references
+		this.checkCircularRefs(objectName);
 
       if (!Engine.dependencyProcessor) {
          Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
@@ -1785,13 +1792,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          dCount++;
 
          var deps = Engine.dependencyList[d].deps;
+         var resolved = [];
          var miss = false;
          for (var dep in deps) {
             if (deps[dep] != null && window[deps[dep]] == null) {
                miss = true;
-               break;
-            }
+            } else {
+					resolved.push(deps[dep]);
+				}
          }
+
+			for (var x in resolved) {
+				EngineSupport.arrayRemove(Engine.dependencyList[d].deps, resolved[x]);
+			}
 
          if (!miss && Engine.checkNSDeps(d)) {
             // We can initialize it
@@ -1816,11 +1829,16 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
    },
 
+	/*
+	 * The following set of functions breaks apart a function into its
+	 * components.  It is used to determine the dependencies of classes.
+	 */
+
    /**
     * Find variables defined in a function
     * @private
     */
-   findVars: function(obj) {
+   findVars: function(objectName, obj) {
       // Find all variables explicitly defined
       var def = obj.toString();
       var vTable = [];
@@ -1838,7 +1856,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Find object dependencies in variables, arguments, and method usage.
     * @private
     */
-   findDependencies: function(obj) {
+   findDependencies: function(objectName, obj) {
       // Find all dependent objects
       var def = obj.toString();
       var dTable = [];
@@ -1885,7 +1903,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Get a list of all object dependencies within a function table.
     * @private
     */
-   getFunctionDependencies: function(fTable) {
+   getFunctionDependencies: function(objectName, fTable) {
       // Remove dependencies resolved by local variables and arguments
       var r = [];
       var allDeps = [];
@@ -1918,7 +1936,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Find the dependencies that exist within an anonymous function.
     * @private
     */
-   findAnonFunctionDeps: function(obj) {
+   findAnonFunctionDeps: function(objectName, obj) {
       var def = obj.toString();
       var m;
 
@@ -1930,10 +1948,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       var anon = 0;
       while ((m = fR.exec(def)) != null) {
          var fdef = m[3].replace(strR, "");
-         fTable["_" + anon] = { vars: Engine.findVars(fdef),
-                                deps: Engine.findDependencies(fdef) };
+         fTable["_" + anon] = { vars: Engine.findVars(objectName, fdef),
+                                deps: Engine.findDependencies(objectName, fdef) };
          fTable["_" + anon].deps = EngineSupport.filter(fTable["_" + anon].deps, function(e) {
-            return (e != "" && e != "this" && e != "arguments");
+            return (e != "" && e != "this" && e != "arguments" && e != objectName);
          });
 
          var args = m[2].split(",");
@@ -1946,14 +1964,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          anon++;
       }
 
-      return Engine.getFunctionDependencies(fTable);
+      return Engine.getFunctionDependencies(objectName, fTable);
    },
 
    /**
     * Find all of the function dependencies within an object class.
     * @private
     */
-   findFunctionDeps: function(obj) {
+   findFunctionDeps: function(objectName, obj) {
       var def = obj.toString();
       var m;
 
@@ -1968,12 +1986,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          var fdef = m[4].replace(strR, "");
 
          // Process anonymous function dependencies, then remove the functions
-         var aDeps = Engine.findAnonFunctionDeps(fdef);
+         var aDeps = Engine.findAnonFunctionDeps(objectName, fdef);
          fdef = fdef.replace(afnR, "");
 
          // Process each function
-         fTable["_" + m[2]] = { vars: Engine.findVars(fdef),
-                                deps: Engine.findDependencies(fdef) };
+         fTable["_" + m[2]] = { vars: Engine.findVars(objectName, fdef),
+                                deps: Engine.findDependencies(objectName, fdef) };
          fTable["_" + m[2]].deps = EngineSupport.filter(fTable["_" + m[2]].deps, function(e) {
             return (e != "" && e != "this");
          });
@@ -1994,8 +2012,34 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          }
       }
 
-      return Engine.getFunctionDependencies(fTable);
-   }
+		// This is useful for debugging dependency problems...
+		//console.debug(objectName, fTable);
+
+      return Engine.getFunctionDependencies(objectName, fTable);
+   },
+
+	/**
+	 * Perform a quick resolution on first-level circular references.
+	 * @private
+	 */
+   checkCircularRefs: function(objectName) {
+		var deps = Engine.dependencyList[objectName].deps;
+		var r = [];
+		for (var dep in deps) {
+			if (Engine.dependencyList[deps[dep]] && EngineSupport.indexOf(Engine.dependencyList[deps[dep]].deps, objectName) != -1) {
+				// Try removing the circular reference
+				EngineSupport.arrayRemove(Engine.dependencyList[objectName].deps, deps[dep]);
+			}
+		}
+	},
+
+	/**
+	 * Dump out any unresolved class dependencies.
+	 * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
+	 */
+	dumpDependencies: function() {
+		Console.debug(Engine.dependencyList);
+	},
 
  }, { // Interface
    globalTimer: null

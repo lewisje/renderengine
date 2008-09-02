@@ -32,17 +32,29 @@
  *
  */
 
+Engine.include("/components/component.mover2d.js");
+Engine.include("/components/component.vector2d.js");
+Engine.include("/components/component.collider.js");
+Engine.include("/platform/engine.object2d.js");
+
+Engine.initObject("SpaceroidsBullet", "Object2D", function() {
+
 /**
  * @class The bullet object.
  *
  * @param player {Spaceroids.Player} The player object this bullet comes from,
  */
-Spaceroids.Bullet = Object2D.extend({
+SpaceroidsBullet = Object2D.extend({
 
    player: null,
 
+   field: null,
+
    constructor: function(player) {
       this.base("Bullet");
+
+		// This is a hack!
+		this.field = Spaceroids;
 
       // Track the player that created us
       this.player = player;
@@ -50,7 +62,7 @@ Spaceroids.Bullet = Object2D.extend({
       // Add components to move and draw the bullet
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
-      this.add(ColliderComponent.create("collide", Spaceroids.collisionModel));
+      this.add(ColliderComponent.create("collide", this.field.collisionModel));
 
       // Get the player's position and rotation,
       // then position this at the tip of the ship
@@ -59,12 +71,12 @@ Spaceroids.Bullet = Object2D.extend({
       var c_mover = this.getComponent("move");
       var c_draw = this.getComponent("draw");
 
-      c_draw.setPoints(Spaceroids.Bullet.shape);
+      c_draw.setPoints(SpaceroidsBullet.shape);
       c_draw.setLineStyle("white");
       c_draw.setFillStyle("white");
 
       var r = p_mover.getRotation();
-      var dir = Math2D.getDirectionVector(Point2D.ZERO, Spaceroids.Bullet.tip, r);
+      var dir = Math2D.getDirectionVector(Point2D.ZERO, SpaceroidsBullet.tip, r);
 
       var p = Point2D.create(p_mover.getPosition());
 
@@ -128,7 +140,7 @@ Spaceroids.Bullet = Object2D.extend({
       // Is this bullet in field any more?
       var p = c_mover.getPosition();
       var bBox = Rectangle2D.create(p.x, p.y, 2, 2);
-      if (!Spaceroids.inField(p, bBox))
+      if (!this.field.inField(p, bBox))
       {
          this.player.removeBullet(this);
          this.destroy();
@@ -154,7 +166,7 @@ Spaceroids.Bullet = Object2D.extend({
     *          objects in the PCL should be tested.
     */
    onCollide: function(obj) {
-      if ((obj instanceof Spaceroids.Rock) &&
+      if ((obj instanceof SpaceroidsRock) &&
           ( (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())) ||
             (Math2D.lineBoxCollision(this.getPosition(), this.getLastPosition(), obj.getWorldBox())) )
          )
@@ -181,7 +193,7 @@ Spaceroids.Bullet = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "Spaceroids.Bullet";
+      return "SpaceroidsBullet";
    },
 
    // Why we have this, I don't know...
@@ -190,4 +202,8 @@ Spaceroids.Bullet = Object2D.extend({
 
    // The tip of the player at zero rotation (up)
    tip: new Point2D(0, -1)
+});
+
+return SpaceroidsBullet;
+
 });
