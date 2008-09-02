@@ -31,7 +31,7 @@
 
 // Includes
 Engine.include("/platform/engine.math2d.js");
-Engine.include("/textrender/text.abstractrenderer.js");
+Engine.include("/textrender/text.abstractrender.js");
 
 Engine.initObject("VectorText", "AbstractTextRenderer", function() {
 

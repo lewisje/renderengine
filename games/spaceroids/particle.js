@@ -31,6 +31,11 @@
  *
  */
 
+Engine.include("/platform/engine.math2d.js");
+Engine.include("/platform/engine.particles.js");
+
+Engine.initObject("SimpleParticle", "Particle", function() {
+
 /**
  * @class A simple particle
  *
@@ -79,4 +84,8 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
 
    // A simple reference point for the "up" vector
    ref: new Point2D(0, -1)
+});
+
+return SimpleParticle;
+
 });

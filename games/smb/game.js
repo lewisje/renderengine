@@ -170,12 +170,12 @@ var SpriteTest = Game.extend({
    play: function() {
       //this.soundLoader.get("bgm").play();
 
-      var player = SpriteTest.Actor.create();
+      var player = SpriteTestActor.create();
       player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
       player.setPosition(Point2D.create(100, 338));
       this.renderContext.add(player);
 
-      var mario = SpriteTest.Actor.create();
+      var mario = SpriteTestActor.create();
       mario.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "mario_walk"));
       mario.setPosition(Point2D.create(228, 370));
       this.renderContext.add(mario);
@@ -317,7 +317,7 @@ var SpriteTest = Game.extend({
    },
 
    createActor: function(actorName) {
-      var actor = SpriteTest.Actor.create();
+      var actor = SpriteTestActor.create();
       actor.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", actorName));
 
       // Adjust for scroll
@@ -333,7 +333,7 @@ var SpriteTest = Game.extend({
    },
 
    createCollisionBox: function() {
-      var cbox = SpriteTest.CollisionBox.create();
+      var cbox = SpriteTestCollisionBox.create();
 
       // Adjust for scroll
       var s = this.renderContext.getHorizontalScroll();

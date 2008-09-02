@@ -36,14 +36,14 @@ Engine.include("/components/component.sprite.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/platform/engine.object2d.js");
 
-Engine.initObject("SpriteTest.Actor", "Object2D", function() {
+Engine.initObject("SpriteTestActor", "Object2D", function() {
 
 /**
  * @class The player object.  Creates the player and assigns the
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-SpriteTest.Actor = Object2D.extend({
+SpriteTestActor = Object2D.extend({
 
    editing: false,
 
@@ -143,10 +143,10 @@ SpriteTest.Actor = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "SpriteTest.Actor";
+      return "SpriteTestActor";
    }
 });
 
-return SpriteTest.Actor;
+return SpriteTestActor;
 
 });

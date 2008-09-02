@@ -31,6 +31,13 @@
  *
  */
 
+Engine.include("/components/component.mover2d.js");
+Engine.include("/components/component.vector2d.js");
+Engine.include("/components/component.collider.js");
+Engine.include("/platform/engine.object2d.js");
+
+Engine.initObject("SpaceroidsRock", "Object2D", function() {
+
 /**
  * @class An asteroid
  *
@@ -40,7 +47,7 @@
  * @param pWidth {Number} The width of the playfield in pixels
  * @param pHeight {Number} The height of the playfield in pixels
  */
-Spaceroids.Rock = Object2D.extend({
+SpaceroidsRock = Object2D.extend({
 
    size: 10,
 
@@ -63,7 +70,7 @@ Spaceroids.Rock = Object2D.extend({
 
       // Set size and position
       this.size = size || 10;
-      this.scoreValue = Spaceroids.Rock.values[String(this.size)];
+      this.scoreValue = SpaceroidsRock.values[String(this.size)];
       if (!position)
       {
          // Set the position
@@ -169,7 +176,7 @@ Spaceroids.Rock = Object2D.extend({
 
       // Pick one of the three shapes
       var tmp = [];
-      tmp = Spaceroids.Rock.shapes[Math.floor(Math.random() * 3)];
+      tmp = SpaceroidsRock.shapes[Math.floor(Math.random() * 3)];
 
       // Scale the shape
       var s = [];
@@ -244,7 +251,7 @@ Spaceroids.Rock = Object2D.extend({
       {
          for (var p = 0; p < 3; p++)
          {
-            var rock = Spaceroids.Rock.create(this.size - 4, this.getPosition());
+            var rock = SpaceroidsRock.create(this.size - 4, this.getPosition());
             this.getRenderContext().add(rock);
             rock.setup(this.pBox.getDims().x, this.pBox.getDims().y);
             if (Spaceroids.isAttractMode) {
@@ -268,7 +275,7 @@ Spaceroids.Rock = Object2D.extend({
     * object.
     */
    onCollide: function(obj) {
-      if (obj instanceof Spaceroids.Player &&
+      if (obj instanceof SpaceroidsPlayer &&
           (Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
       {
          if (obj.isAlive())
@@ -281,7 +288,7 @@ Spaceroids.Rock = Object2D.extend({
 
       if (Spaceroids.isAttractMode &&
             obj.killTimer < Engine.worldTime &&
-            obj instanceof Spaceroids.Rock &&
+            obj instanceof SpaceroidsRock &&
             obj != this &&
             (Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
       {
@@ -301,7 +308,7 @@ Spaceroids.Rock = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "Spaceroids.Rock";
+      return "SpaceroidsRock";
    },
 
    /**
@@ -317,6 +324,10 @@ Spaceroids.Rock = Object2D.extend({
     * @private
     */
    values: { "10": 10, "6": 15, "2": 20 }
+
+});
+
+return SpaceroidsRock;
 
 });
 

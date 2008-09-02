@@ -36,22 +36,12 @@
  */
 
 // Load required engine components
-Game.loadEngineScripts([
-   "/rendercontexts/context.canvascontext.js",
-   "/platform/engine.spatialgrid.js",
-   "/textrender/text.vector.js",
-   "/components/component.transform2d.js",
-   "/components/component.mover2d.js",
-   "/components/component.render.js",
-   "/components/component.vector2d.js",
-   "/components/component.collider.js",
-   "/components/component.input.js",
-   "/components/component.keyboardinput.js",
-   "/components/component.wiimoteinput.js",
-   "/resourceloaders/loader.sound.js",
-]);
-
-Engine.initObject("Spaceroids", "EngineInitialized", function() {
+Engine.include("/rendercontexts/context.canvascontext.js");
+Engine.include("/platform/engine.spatialgrid.js");
+Engine.include("/platform/engine.timers.js");
+Engine.include("/textrender/text.vector.js");
+Engine.include("/textrender/text.renderer.js");
+Engine.include("/resourceloaders/loader.sound.js");
 
 // Load game objects
 Game.load("/rock.js");
@@ -59,8 +49,7 @@ Game.load("/player.js");
 Game.load("/bullet.js");
 Game.load("/particle.js");
 
-// Start the game when all the scripts are loaded.
-Engine.setQueueCallback(function() { Spaceroids.setup(); });
+Engine.initObject("Spaceroids", "Game", function() {
 
 /**
  * @class The game.
@@ -148,7 +137,7 @@ var Spaceroids = Game.extend({
       // Add some asteroids
       for (var a = 0; a < 3; a++)
       {
-         var rock = Spaceroids.Rock.create(null, null, pWidth, pHeight);
+         var rock = SpaceroidsRock.create(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
          rock.setup();
          rock.killTimer = Engine.worldTime + 2000;
@@ -208,8 +197,8 @@ var Spaceroids = Game.extend({
 
       // Create a new rock every 20 seconds
       Spaceroids.attractTimer = Interval.create("attract", 20000,
-         function _createRock() {
-            var rock = Spaceroids.Rock.create(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
+         function() {
+            var rock = SpaceroidsRock.create(null, null, Spaceroids.fieldWidth, Spaceroids.fieldHeight);
             Spaceroids.renderContext.add(rock);
             rock.setup();
             rock.killTimer = Engine.worldTime + 2000;
@@ -281,7 +270,7 @@ var Spaceroids = Game.extend({
 
       this.nextLevel();
 
-      this.playerObj = Spaceroids.Player.create();
+      this.playerObj = SpaceroidsPlayer.create();
       this.renderContext.add(this.playerObj);
       this.playerObj.setup(pWidth, pHeight);
 
@@ -321,7 +310,7 @@ var Spaceroids = Game.extend({
 
       for (var a = 0; a < Spaceroids.level + 1; a++)
       {
-         var rock = Spaceroids.Rock.create(null, null, pWidth, pHeight);
+         var rock = SpaceroidsRock.create(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
          rock.setup();
       }
@@ -432,7 +421,7 @@ var Spaceroids = Game.extend({
 
       EventEngine.removeHandler(document, "keypress", Spaceroids.onKeyPress);
 
-      renderContext.destroy();
+      this.renderContext.destroy();
    },
 
    /**
@@ -492,6 +481,9 @@ var Spaceroids = Game.extend({
    }
 
 });
+
+// Start the game when all the scripts are loaded.
+Engine.setQueueCallback(function() { Spaceroids.setup(); });
 
 return Spaceroids;
 
