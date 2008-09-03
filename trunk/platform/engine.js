@@ -1451,52 +1451,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // This is the Google "ExplorerCanvas" object we need for IE
          //this.loadNow("/libs/excanvas.js");
       }
-
-      // Sound manager
-      this.load("/libs/soundmanager2.js");
-
-      // Initialize the sounds engine
-      this.setQueueCallback(function() {
-         Engine.pauseQueue(true);
-
-         if (typeof SoundManager != "undefined") {
-            window.soundManager = new SoundManager();
-
-            // Create a link to the object
-            Engine.soundManager = window.soundManager;
-
-            // directory where SM2 .SWFs live
-            Engine.soundManager.url = Engine.getEnginePath() + '/libs/';
-
-            // Debugging enabled?
-            var p = EngineSupport.getQueryParams();
-            if (p["debugSound"] != null && p["debugSound"] == "true") {
-               Engine.soundManager.debugMode = true;
-            } else {
-               Engine.soundManager.debugMode = false;
-            }
-
-            Engine.soundManager.onload = function() {
-               Engine.soundsEnabled = true;
-               Console.warn("SoundManager loaded successfully");
-               Engine.pauseQueue(false);
-            };
-
-            Engine.soundManager.onerror = function() {
-               Engine.soundsEnabled = false;
-               Console.warn("SoundManager not loaded - sound disabled");
-               Engine.pauseQueue(false);
-            };
-
-            if (Engine.getEnginePath().indexOf("file:") == 0) {
-               Engine.soundManager.sandbox.type = "localWithFile";
-            }
-
-            Engine.soundManager.go();
-         } else {
-            Engine.soundsEnabled = false;
-         }
-      });
    },
 
    /**
@@ -1720,20 +1674,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Check for nulls and circular references
       for (var d in objDeps) {
-			if (objDeps[d] != null) {
-				if (objDeps[d].split(".")[0] != objectName) {
-					newDeps.push(objDeps[d]);
-				} else {
-					Console.warn("Object references itself: ", objectName);
-				}
-			}
+         if (objDeps[d] != null) {
+            if (objDeps[d].split(".")[0] != objectName) {
+               newDeps.push(objDeps[d]);
+            } else {
+               Console.warn("Object references itself: ", objectName);
+            }
+         }
       }
 
       Engine.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Console.log(objectName + " depends on: " + newDeps);
 
-		// Check for 1st level circular references
-		this.checkCircularRefs(objectName);
+      // Check for 1st level circular references
+      this.checkCircularRefs(objectName);
 
       if (!Engine.dependencyProcessor) {
          Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
@@ -1798,13 +1752,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             if (deps[dep] != null && window[deps[dep]] == null) {
                miss = true;
             } else {
-					resolved.push(deps[dep]);
-				}
+               resolved.push(deps[dep]);
+            }
          }
 
-			for (var x in resolved) {
-				EngineSupport.arrayRemove(Engine.dependencyList[d].deps, resolved[x]);
-			}
+         for (var x in resolved) {
+            EngineSupport.arrayRemove(Engine.dependencyList[d].deps, resolved[x]);
+         }
 
          if (!miss && Engine.checkNSDeps(d)) {
             // We can initialize it
@@ -1829,10 +1783,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
    },
 
-	/*
-	 * The following set of functions breaks apart a function into its
-	 * components.  It is used to determine the dependencies of classes.
-	 */
+   /*
+    * The following set of functions breaks apart a function into its
+    * components.  It is used to determine the dependencies of classes.
+    */
 
    /**
     * Find variables defined in a function
@@ -2012,34 +1966,34 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          }
       }
 
-		// This is useful for debugging dependency problems...
-		//console.debug(objectName, fTable);
+      // This is useful for debugging dependency problems...
+      //console.debug(objectName, fTable);
 
       return Engine.getFunctionDependencies(objectName, fTable);
    },
 
-	/**
-	 * Perform a quick resolution on first-level circular references.
-	 * @private
-	 */
+   /**
+    * Perform a quick resolution on first-level circular references.
+    * @private
+    */
    checkCircularRefs: function(objectName) {
-		var deps = Engine.dependencyList[objectName].deps;
-		var r = [];
-		for (var dep in deps) {
-			if (Engine.dependencyList[deps[dep]] && EngineSupport.indexOf(Engine.dependencyList[deps[dep]].deps, objectName) != -1) {
-				// Try removing the circular reference
-				EngineSupport.arrayRemove(Engine.dependencyList[objectName].deps, deps[dep]);
-			}
-		}
-	},
+      var deps = Engine.dependencyList[objectName].deps;
+      var r = [];
+      for (var dep in deps) {
+         if (Engine.dependencyList[deps[dep]] && EngineSupport.indexOf(Engine.dependencyList[deps[dep]].deps, objectName) != -1) {
+            // Try removing the circular reference
+            EngineSupport.arrayRemove(Engine.dependencyList[objectName].deps, deps[dep]);
+         }
+      }
+   },
 
-	/**
-	 * Dump out any unresolved class dependencies.
-	 * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
-	 */
-	dumpDependencies: function() {
-		Console.debug(Engine.dependencyList);
-	},
+   /**
+    * Dump out any unresolved class dependencies.
+    * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
+    */
+   dumpDependencies: function() {
+      Console.debug(Engine.dependencyList);
+   },
 
  }, { // Interface
    globalTimer: null

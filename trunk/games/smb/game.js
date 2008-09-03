@@ -127,7 +127,8 @@ var SpriteTest = Game.extend({
    waitForResources: function() {
       //Console.debug("checking");
       if (SpriteTest.spriteLoader.isReady("smbtiles") &&
-          SpriteTest.levelLoader.isReady("level1"))
+          SpriteTest.levelLoader.isReady("level1") &&
+          SpriteTest.soundLoader.isReady("bgm"))
       {
          SpriteTest.loadTimeout.destroy();
          SpriteTest.run();
@@ -168,7 +169,7 @@ var SpriteTest = Game.extend({
    },
 
    play: function() {
-      //this.soundLoader.get("bgm").play();
+      this.soundLoader.get("bgm").play();
 
       var player = SpriteTestActor.create();
       player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));

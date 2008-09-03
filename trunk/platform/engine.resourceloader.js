@@ -49,26 +49,26 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
    length: 0,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(name) {
       this.base(name || "ResourceLoader");
       this.cache = {};
    },
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.cache = null;
       this.length = 0;
    },
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    destroy: function() {
       this.clear();
       this.base();
@@ -83,32 +83,33 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     *                          is ready to use.
     */
    load: function(name, data, isReady) {
-		Engine.scriptLoadCount++;
+      Engine.scriptLoadCount++;
       var obj = { data: data, ready: isReady || false};
       this.cache[name] = obj;
       this.length++;
       Console.log("Loading " + this.getResourceType() + ": " + name);
    },
 
-	/**
-	 * Set the "ready" state of the resource.  When a resource has been completely
-	 * loaded, set the resource "ready" state to <tt>true</tt> to allow objects
-	 * waiting for those resources to utilize them.
-	 *
-	 * @param name {String} The name of the resource
-	 * @param isReady {Boolean} <tt>true</tt> to set the resource to "ready for use"
-	 */
+   /**
+    * Set the "ready" state of the resource.  When a resource has been completely
+    * loaded, set the resource "ready" state to <tt>true</tt> to allow objects
+    * waiting for those resources to utilize them.
+    *
+    * @param name {String} The name of the resource
+    * @param isReady {Boolean} <tt>true</tt> to set the resource to "ready for use"
+    */
    setReady: function(name, isReady) {
       this.cache[name].isReady = isReady;
       if (isReady) {
-			Engine.handleScriptDone();
-		}
+         Engine.handleScriptDone();
+         Console.log(this.getResourceType() + " " + name + " loaded...");
+      }
    },
 
-	/**
-	 * Check to see if a named resource is "ready for use".
-	 * @return {Boolean} <tt>true</tt> if the resource is loaded and ready to use
-	 */
+   /**
+    * Check to see if a named resource is "ready for use".
+    * @return {Boolean} <tt>true</tt> if the resource is loaded and ready to use
+    */
    isReady: function(name) {
       return this.cache[name] ? this.cache[name].isReady : false;
    },
@@ -120,10 +121,10 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     * @param name {String} The name of the object to remove
     */
    unload: function(name) {
-		if (this.cache[name].data.destroy) {
-			// Make sure that cached objects have a chance to clean up
-			this.cache[name].data.destroy();
-		}
+      if (this.cache[name].data.destroy) {
+         // Make sure that cached objects have a chance to clean up
+         this.cache[name].data.destroy();
+      }
 
       this.cache[name] = null;
       delete this.cache[name];
@@ -150,8 +151,8 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
     * @return {Object} The cache
     */
    getCachedObjects: function() {
-		return this.cache;
-	},
+      return this.cache;
+   },
 
    /**
     * Clear the objects contained in the cache.
