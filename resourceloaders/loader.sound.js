@@ -29,6 +29,7 @@
  */
 
 // Includes
+Engine.include("/libs/soundmanager2.js");
 Engine.include("/platform/engine.pooledobject.js");
 Engine.include("/platform/engine.resourceloader.js");
 
@@ -48,9 +49,13 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
 
    init: false,
 
-   loadingSounds: 0,
+   queuedSounds: null,
 
    checkReady: null,
+
+   soundManager: null,
+
+   queueingSounds: true,
 
    /**
     * @private
@@ -58,7 +63,50 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
    constructor: function(name) {
       this.base(name || "SoundLoader");
       this.init = false;
-      this.loadingSounds = 0;
+      this.queuedSounds = [];
+      this.queueingSounds = true;
+
+      if (typeof SoundManager != "undefined") {
+
+         // Create a link to the object
+         this.soundManager = window.soundManager;
+
+         // directory where SM2 .SWFs live
+         this.soundManager.url = Engine.getEnginePath() + '/libs/';
+
+         // Debugging enabled?
+         var p = EngineSupport.getQueryParams();
+         if (p["debugSound"] != null && p["debugSound"] == "true") {
+            this.soundManager.debugMode = true;
+         } else {
+            this.soundManager.debugMode = false;
+         }
+
+         var self = this;
+
+         this.soundManager.onload = function() {
+            Engine.soundsEnabled = true;
+            Console.warn("SoundManager loaded successfully");
+            self.queueingSounds = false
+            self.loadQueuedSounds();
+         };
+
+         this.soundManager.onerror = function() {
+            Engine.soundsEnabled = false;
+            Console.warn("SoundManager not loaded");
+            self.queueingSounds = false;
+            self.loadQueuedSounds();
+         };
+
+         if (Engine.getEnginePath().indexOf("file:") == 0) {
+            this.soundManager.sandbox.type = "localWithFile";
+         }
+
+         this.soundManager.go();
+
+      } else {
+         Engine.soundsEnabled = false;
+      }
    },
 
    /**
@@ -70,6 +118,11 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
     */
    load: function(name, url) {
 
+      if (this.queueingSounds) {
+         this.queuedSounds.push({n: name, u: url});
+         return;
+      }
+
       var soundObj = null;
 
       if (Engine.isSoundEnabled()) {
@@ -78,7 +131,7 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
          Assert(url.indexOf(".mp3") > 0, "Only MP3 sound format is supported!");
 
          // Create the sound object
-         var sound = Engine.soundManager.createSound({
+         var sound = this.soundManager.createSound({
             "id": name,
             "url": url,
             "autoPlay": false,
@@ -122,6 +175,13 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
       }
 
       this.base(name, soundObj);
+   },
+
+   loadQueuedSounds: function() {
+      for (var s in this.queuedSounds) {
+         this.load(this.queuedSounds[s].n, this.queuedSounds[s].u);
+      }
+      this.queuedSounds = null;
    },
 
    /**
@@ -199,7 +259,7 @@ Engine.initObject("Sound", "PooledObject", function() {
  */
 var Sound = PooledObject.extend(/** @scope Sound.prototype */{
 
-   smSmound: null,
+   smSound: null,
 
    volume: -1,
 
@@ -238,6 +298,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
       this.pan = -1;
       this.paused = false;
       this.muted = false;
+      this.smSound = null;
    },
 
    /**

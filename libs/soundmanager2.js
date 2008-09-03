@@ -1043,4 +1043,4 @@ function SoundManager(smURL,smID) {
 
 }; // SoundManager()
 
-//var soundManager = new SoundManager();
+var soundManager = new SoundManager();
