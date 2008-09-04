@@ -361,7 +361,6 @@ var SpriteTest = Game.extend({
       itr.reverse();
       while (itr.hasNext()) {
          var obj = itr.next();
-         Console.debug(obj);
          if (obj.isEditable &&
                obj.getWorldBox().containsPoint(pt))
          {
