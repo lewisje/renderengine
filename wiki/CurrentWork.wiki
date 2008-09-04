@@ -1,8 +1,8 @@
 = Current Work =
 
-I've got the examples working again (except for sound, and I haven't verified on Safari and Opera)... phew.  These interpreted languages make things difficult when one wants to check for dependencies in a browser!!
+I've got the examples working again (except for sound~~, and I haven't verified on Safari and Opera~~)... phew.  These interpreted languages make things difficult when one wants to check for dependencies in a browser!!
 
-I've got dependency checking working in Firefox.  The engine now processes a file, determining what objects and classes a class is dependent on before initializing it.  It has some interesting implications, but is a little shaky at the moment.  The exact same error is showing up in Opera and Safari, so that'll make tracking the problem down a tad easier.
+I've got dependency checking working in Firefox _and Safari_.  The engine now processes a file, determining what classes a class object is dependent on before initializing it.  It has some interesting implications, but is ~~a little shaky at the moment~~ much more stable now.  ~~The exact same error is showing up in Opera and Safari, so that'll make tracking the problem down a tad easier.~~ Only Opera is still exhibiting an error.
 
 The sound engine has also stopped working.  Not exactly sure what's going on there...
 
