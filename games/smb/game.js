@@ -169,7 +169,7 @@ var SpriteTest = Game.extend({
    },
 
    play: function() {
-      this.soundLoader.get("bgm").play();
+      //this.soundLoader.get("bgm").play();
 
       var player = SpriteTestActor.create();
       player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
@@ -385,7 +385,7 @@ var SpriteTest = Game.extend({
 });
 
 // Start the game when all the scripts are loaded.
-Game.setQueueCallback(function() { SpriteTest.setup(); });
+//Game.setQueueCallback(function() { SpriteTest.setup(); });
 
 return SpriteTest;
 

@@ -47,7 +47,7 @@ Engine.initObject("SpaceroidsRock", "Object2D", function() {
  * @param pWidth {Number} The width of the playfield in pixels
  * @param pHeight {Number} The height of the playfield in pixels
  */
-SpaceroidsRock = Object2D.extend({
+var SpaceroidsRock = Object2D.extend({
 
    size: 10,
 

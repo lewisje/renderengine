@@ -44,7 +44,7 @@ Engine.initObject("SpaceroidsBullet", "Object2D", function() {
  *
  * @param player {Spaceroids.Player} The player object this bullet comes from,
  */
-SpaceroidsBullet = Object2D.extend({
+var SpaceroidsBullet = Object2D.extend({
 
    player: null,
 

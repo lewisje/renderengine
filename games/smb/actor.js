@@ -43,7 +43,7 @@ Engine.initObject("SpriteTestActor", "Object2D", function() {
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-SpriteTestActor = Object2D.extend({
+var SpriteTestActor = Object2D.extend({
 
    editing: false,
 
