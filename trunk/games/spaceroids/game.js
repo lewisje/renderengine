@@ -482,9 +482,6 @@ var Spaceroids = Game.extend({
 
 });
 
-// Start the game when all the scripts are loaded.
-Engine.setQueueCallback(function() { Spaceroids.setup(); });
-
 return Spaceroids;
 
 });

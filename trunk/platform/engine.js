@@ -1359,7 +1359,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             // Start the game when it's ready
             if (gameObjectName) {
                Engine.gameRunTimer = setInterval(function() {
-                  if (window[gameObjectName]) {
+                  if (typeof window[gameObjectName] != "undefined") {
                      clearInterval(Engine.gameRunTimer);
                      window[gameObjectName].setup();
                   }
@@ -1665,7 +1665,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param fn {Function} The function to run when the object can be initialized.
     */
    initObject: function(objectName, dependency, fn) {
-      var objDeps = Engine.findFunctionDeps(objectName, fn);
+      var objDeps = Engine.findAllDependencies(objectName, fn);
 
       // Add the known dependency to the list of object
       // dependencies we discovered
@@ -1853,11 +1853,120 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       return dTable;
    },
 
+	/**
+	 * Process anonymous functions
+	 * @private
+	 */
+	findAnonDeps: function(objectName, str) {
+		var fTable = {};
+		var strR = /(["|']).*?\1/g;
+
+		var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
+		var a = 0;
+		while ((m = aFnRE.exec(str)) != null) {
+			var f = "_" + (a++);
+			var fdef = m[2].replace(strR, "");
+
+			// Process each function
+			fTable[f] = { vars: Engine.findVars(objectName, fdef),
+							  deps: Engine.findDependencies(objectName, fdef) };
+			fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
+				return (e != "" && e != "this" && e != "arguments");
+			});
+
+			var args = m[1].split(",");
+			var vs = fTable[f].vars;
+			for (var a in args) {
+				if (EngineSupport.indexOf(vs, args[a]) == -1) {
+					vs.push(args[a].replace(" ",""));
+				}
+			}
+		}
+
+		return Engine.procDeps(objectName, fTable);
+	},
+
    /**
-    * Get a list of all object dependencies within a function table.
+    * Finds all of the dependencies within an object class.
     * @private
     */
-   getFunctionDependencies: function(objectName, fTable) {
+   findAllDependencies: function(objectName, obj) {
+		var defs;
+		var fTable = {};
+
+		try {
+			var k = obj();
+		} catch (ex) {
+			// The class probably extends a non-existent class. Replace the parent
+			// class with a known class and evaluate as a dummy class
+			var extRE = new RegExp("(var\\s*)?([\\$_\\w\\.]*?)\\s*=\\s*([\\$_\\w\\.]*?)\\.extend\\(");
+			var classDef = obj.toString();
+			var nm = null;
+			classDef = classDef.replace(extRE, function(str, varDef, classname, parent, offs, s) {
+				nm = classname;
+				return "return Base.extend(";
+			});
+			try {
+				k = eval("(" + classDef.replace("return " + nm + ";", "") + ")();");
+			} catch (inEx) {
+				Console.error("Cannot parse class '" + nm + "'");
+			}
+		}
+
+		if ($.isFunction(k)) {
+			// If the class is an instance, get it's class object
+			k = k.prototype;
+		}
+
+		// Find the internal functions
+		for (var f in k) {
+			if ($.isFunction(k[f]) && k.hasOwnProperty(f)) {
+				var def = k[f].toString();
+
+				var m;
+
+				var nR = "([\\$_\\w\\.]*)";
+				var strR = /(["|']).*?\1/g;
+
+				var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*)\\}","g");
+				while ((m = fR.exec(def)) != null) {
+					var fdef = m[2].replace(strR, "");
+
+					// Process, then remove anonymous functions
+					var anonDeps = Engine.findAnonDeps(objectName, fdef);
+					var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
+					fdef = fdef.replace(aFnRE, "");
+
+					// Process each function
+					fTable[f] = { vars: Engine.findVars(objectName, fdef),
+									  deps: Engine.findDependencies(objectName, fdef) };
+					fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
+						return (e != "" && e != "this" && e != "arguments");
+					});
+
+					var args = m[1].split(",");
+					var vs = fTable[f].vars;
+					for (var a in args) {
+						if (EngineSupport.indexOf(vs, args[a]) == -1) {
+							vs.push(args[a].replace(" ",""));
+						}
+					}
+
+					// Combine in the anonymous dependencies
+					for (var a in anonDeps) {
+						fTable[f].deps.push(anonDeps[a]);
+					}
+				}
+			}
+		}
+
+		// This is useful for debugging dependency problems...
+		//console.debug(objectName, fTable);
+
+		return Engine.procDeps(objectName, fTable);
+   },
+
+   procDeps: function(objectName, fTable) {
       // Remove dependencies resolved by local variables and arguments
       var r = [];
       var allDeps = [];
@@ -1884,119 +1993,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       return allDeps;
-   },
-
-   /**
-    * Find the dependencies that exist within an anonymous function.
-    * @private
-    */
-   findAnonFunctionDeps: function(objectName, obj) {
-      var def = obj.toString();
-      var m;
-
-      var strR = /(["|']).*?\1/g;
-
-      // Find internal functions
-      var fTable = {};
-      var fR = new RegExp("(function\\s*.*?\\((.*?)\\)\\s*\\{(.*?)\\};)","g");
-      var anon = 0;
-      while ((m = fR.exec(def)) != null) {
-         var fdef = m[3].replace(strR, "");
-         fTable["_" + anon] = { vars: Engine.findVars(objectName, fdef),
-                                deps: Engine.findDependencies(objectName, fdef) };
-         fTable["_" + anon].deps = EngineSupport.filter(fTable["_" + anon].deps, function(e) {
-            return (e != "" && e != "this" && e != "arguments" && e != objectName);
-         });
-
-         var args = m[2].split(",");
-         var vs = fTable["_" + anon].vars;
-         for (var a in args) {
-            if (EngineSupport.indexOf(vs, args[a]) == -1) {
-               vs.push(args[a].replace(" ",""));
-            }
-         }
-         anon++;
-      }
-
-      return Engine.getFunctionDependencies(objectName, fTable);
-   },
-
-   /**
-    * Find all of the function dependencies within an object class.
-    * @private
-    */
-   findFunctionDeps: function(objectName, obj) {
-		try {
-			var k = obj();
-		} catch (ex) {
-			// Class probably extends another, replace all of the base classes with a known class
-			// and evaluate dummy class
-			var extRE = new RegExp("var\\s*([\\$_\\w\\.]*?)\\s*=\\s*([\\$_\\w\\.]*?)\\.extend\\(");
-			var classDef = obj.toString();
-			var nm = null;
-			classDef = classDef.replace(extRE, function(str, classname, parent, offs, s) {
-				nm = classname;
-				return "return Base.extend(";
-			});
-			classDef = "(" + classDef.replace("return " + nm + ";", "") + ")();";
-			k = eval(classDef);
-		}
-
-		if ($.isFunction(k)) {
-			k = k.prototype;
-		}
-
-		var defs;
-		for (var f in k) {
-			if ($.isFunction(k[f]) && k.hasOwnProperty(f)) {
-				def = k[f].toString();
-
-				var m;
-
-				var nR = "([\\$_\\w\\.]*)";
-				var strR = /(["|']).*?\1/g;
-				var afnR = new RegExp("(function\\s*.*?\\(.*?\\)\\s*\{.*?\\};?)","g");
-
-				// Find internal functions
-				var fTable = {};
-				var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*)\\}","g");
-				while ((m = fR.exec(def)) != null) {
-					var fdef = m[2].replace(strR, "");
-
-					// Process anonymous function dependencies, then remove the functions
-					//var aDeps = Engine.findAnonFunctionDeps(objectName, fdef);
-					//fdef = fdef.replace(afnR, "");
-
-					// Process each function
-					fTable[f] = { vars: Engine.findVars(objectName, fdef),
-									  deps: Engine.findDependencies(objectName, fdef) };
-					fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
-						return (e != "" && e != "this" && e != "arguments");
-					});
-
-					// Add anonymous function dependencies
-					//EngineSupport.forEach(aDeps, function(e) {
-					//	if (EngineSupport.indexOf(fTable[f].deps, e) == -1) {
-					//		fTable[f].deps.push(e);
-					//	}
-					//});
-
-					var args = m[1].split(",");
-					var vs = fTable[f].vars;
-					for (var a in args) {
-						if (EngineSupport.indexOf(vs, args[a]) == -1) {
-							vs.push(args[a].replace(" ",""));
-						}
-					}
-				}
-
-				// This is useful for debugging dependency problems...
-				//console.debug(objectName, fTable);
-			}
-		}
-
-      return Engine.getFunctionDependencies(objectName, fTable);
-   },
+	},
 
 	/**
 	 * Perform a quick resolution on first-level circular references.

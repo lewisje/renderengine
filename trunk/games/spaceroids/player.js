@@ -45,7 +45,7 @@ Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-SpaceroidsPlayer = Object2D.extend({
+var SpaceroidsPlayer = Object2D.extend({
 
    size: 4,
 

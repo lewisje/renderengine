@@ -43,7 +43,7 @@ Engine.initObject("SpriteTestCollisionBox", "Object2D", function() {
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-SpriteTestCollisionBox = Object2D.extend({
+var SpriteTestCollisionBox = Object2D.extend({
 
    editing: false,
 
