@@ -2,6 +2,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 09/04/2008 ||The dependency check is extremely solid now.  I changed the method by which functions are identified and dependencies collected. It's using the browser's built-in evaluation of objects to gather function dependencies, evaluating a dummy class when creating the class would require a nonexistent dependency. ||
 || 09/02/2008 ||The dependency checker is more solid today.  I've gotten the examples working in Firefox 3 (still no Opera and Safari, but soon I promise).  I need to start using the issue tracker so I can get ready for an initial Beta release. ||
 || 08/30/2008 ||Safari and Opera are *broken* again... sigh. I've got an even better dependency checker working.  It actually scrapes classes, looking for object and class dependencies.  It's a little bit shaky, as it only understands certain coding styles. Hopefully I'll get it working in Safari and Opera again soon.  It's getting closer to an actual release.  Oh, yeah, for some reason sound isn't working now. ||
 || 08/20/2008 ||Safari and Opera are loading again... WOOT! Didn't have to sacrifice the new loading code, either. Added a Safari console for debug messages. I've got a basic editor started for the sprite testing.  The scrolling background is now just the canvas with a slice of the background showing. Updated the rendering pipeline to ignore objects that aren't in the viewport. Added an XML resource loader. ||
