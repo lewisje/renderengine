@@ -14,4 +14,4 @@ In the case where you just want to have the engine warn you that something is wr
    AssertWarn((livesRemaining < 0), "Why are we still playing?");
 }}}
 
-Asserts are a little easier to use than having to write out a complete `if/then` check each time you want to test a condition.
+For `AssertWarn` to function, your debug level must be at 0,1, or 2.  Asserts are a little easier to use than having to write out a complete `if/then` check each time you want to test a condition.
