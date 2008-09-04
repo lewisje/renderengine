@@ -8,7 +8,7 @@ The following table lists query parameters you can pass to the engine to configu
 
 || *Query Parameter* || *Description* ||
 || `debug` ||Set this vale to `true` to enable debugging output from the engine.  The engine will try to utilize a method best suited for the browser you are running within. ||
-|| `debugLevel` || The level determines the amount of output in debugging mode.  0 = Verbose, 1 = Debug messages, 2 = Warnings, 3 = Errors.  Each level, starting at Warn(2) will also display messages of the following level.  So, Debug(1) shows Warnings and Errors too. ||
+|| `debugLevel` || The level determines the amount of output in debugging mode.  0 = Verbose, 1 = Debug messages, 2 = Warnings, 3 = Errors.  Each level, starting at Warn(2) will also display messages of the following level.  So, Debug(1) shows Warnings and Errors too. See the article about the EngineConsole for more information. ||
 || `metrics` ||Setting this value to `true` will enable the display of engine metrics collected during runtime.  You can use these values to tune your game. See the list below for metric values. ||
 || `debugSound` ||To see the sound engine initialization messages, and get a better idea of what !SoundManager2 is doing, set this value to `true`.||
 || `fps` ||The FPS to default the engine to.||
