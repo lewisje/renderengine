@@ -165,6 +165,10 @@ var SpaceroidsPlayer = Object2D.extend({
       return this.getComponent("move").getPosition();
    },
 
+   getRenderPosition: function() {
+      return this.getComponent("move").getRenderPosition();
+   },
+
    /**
     * Get the last position the ship was at before the current move.
     * @type Point2D

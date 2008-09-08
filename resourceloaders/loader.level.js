@@ -222,7 +222,7 @@ var Level = PooledObject.extend(/** @scope Level.prototype */{
       // Check the collision map for possible collisions
       var pcl = [];
       for (var r in this.collisionMap) {
-         if (this.collisionMap[r].isOverlapped(cRect)) {
+         if (this.collisionMap[r].isIntersecting(cRect)) {
             pcl.push(this.collisionMap[r]);
          }
       }

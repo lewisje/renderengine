@@ -53,9 +53,9 @@ Engine.initObject("ScrollingBackground", "CanvasContext", function() {
  */
 var ScrollingBackground = CanvasContext.extend(/** @scope ScrollingBackground.prototype */{
 
-   visRect: null,
-
    level: null,
+
+   visRect: null,
 
    /**
     * @private
@@ -65,7 +65,6 @@ var ScrollingBackground = CanvasContext.extend(/** @scope ScrollingBackground.pr
       this.base(name || "ScrollingBackground", windowWidth, windowHeight);
       this.visRect = Rectangle2D.create(0, 0, windowWidth, windowHeight);
       this.level = level;
-      this.setViewport(this.visRect);
    },
 
    /**
@@ -121,7 +120,7 @@ var ScrollingBackground = CanvasContext.extend(/** @scope ScrollingBackground.pr
       this.base(time);
 
       // Render the slice of the level image first
-      this.drawImage(this.worldRect, this.level.getSourceImage(), this.visRect);
+      this.drawImage(this.getViewport(), this.level.getSourceImage(), this.visRect);
    },
 
 }, /** @scope ScrollingBackground.prototype */{

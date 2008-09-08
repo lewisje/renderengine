@@ -112,6 +112,13 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
       }
    },
 
+	destroy: function() {
+      // Stop the sound manager
+      if (Engine.isSoundEnabled()) {
+         this.soundManager.destruct();
+      }
+	},
+
    /**
     * Load a sound resource from a URL. If the sound system does not initialize, for whatever
     * reason, you can still call the sound's methods.

@@ -76,7 +76,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       }
       canvas.id = this.getId();
 
-      this.worldRect = Rectangle2D.create(0, 0, this.width, this.height);
+      this.setViewport(Rectangle2D.create(0, 0, this.width * worldScale, this.height * worldScale));
       this.base(name || "CanvasContext", canvas);
    },
 
@@ -87,7 +87,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.base();
       this.context2D = null;
       this.mouseHandler = false;
-      this.worldRect = null;
    },
 
    setWorldScale: function(scaleX, scaleY) {
@@ -99,7 +98,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
          .attr("width", this.getWidth() * scaleX)
          .attr("height", this.getHeight() * scaleY);
 
-      this.worldRect = Rectangle2D.create(0, 0, this.getWidth() * scaleX, this.getHeight() * scaleY);
+      this.setViewport(Rectangle2D.create(0, 0, this.getWidth() * scaleX, this.getHeight() * scaleY));
    },
 
    /**
@@ -139,17 +138,13 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * Reset the context, clearing it and preparing it for drawing.
     */
    reset: function(rect) {
-      var cRect = (rect != null ? rect : this.worldRect);
+      var cRect = (rect != null ? rect : this.getViewport());
       this.get2DContext().clearRect(cRect.getTopLeft().x, cRect.getTopLeft().y, cRect.getDims().x, cRect.getDims().y);
    },
 
    setupWorld: function(time) {
+      this.setScale(this.getWorldScale());
       this.base(time);
-
-      // Set the scaling of the world
-//      this.setPosition(this.getWorldPosition());
-//      this.setRotation(this.getWorldRotation());
-//      this.setScale(this.getWorldScale(), this.getWorldScale());
    },
 
    /**

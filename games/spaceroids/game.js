@@ -62,7 +62,7 @@ var Spaceroids = Game.extend({
 
    fieldBox: null,
    centerPoint: null,
-   areaScale: 0.9,
+   areaScale: 0.8,
 
    engineFPS: 60,
 
@@ -135,7 +135,7 @@ var Spaceroids = Game.extend({
       var pHeight = this.fieldHeight;
 
       // Add some asteroids
-      for (var a = 0; a < 3; a++)
+      for (var a = 0; a < 1; a++)
       {
          var rock = SpaceroidsRock.create(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
@@ -445,35 +445,33 @@ var Spaceroids = Game.extend({
     */
    wrap: function(pos, bBox) {
 
-      // Get XY radius and set new collision box
-      var rX = Math.floor(bBox.len_x() / 2);
-      var rY = Math.floor(bBox.len_y() / 2);
+      var rX = bBox.len_x();
+      var rY = bBox.len_y();
 
       // Wrap if it's off the playing field
       var p = new Point2D(pos);
       var x = p.x;
       var y = p.y;
-      var fTL = this.fieldBox.getTopLeft();
-      var fDM = this.fieldBox.getDims();
+      var fb = this.renderContext.getViewport().get();
 
-      if (pos.x < fTL.x || pos.x > fTL.x + fDM.x ||
-          pos.y < fTL.y || pos.y > fTL.y + fDM.y)
+      if (pos.x < fb.x || pos.x > fb.r ||
+          pos.y < fb.y || pos.y > fb.h)
       {
-         if (pos.x > fTL.x + fDM.x + rX)
+         if (pos.x > fb.r + (rX * 2))
          {
-            x = (fTL.x - (rX - 10));
+            x = (fb.x - rX);
          }
-         if (pos.y > fTL.y + fDM.y + rY)
+         if (pos.y > fb.h + (rY * 2))
          {
-            y = (fTL.y - (rY - 10));
+            y = (fb.y - rY);
          }
-         if (pos.x < fTL.x - rX)
+         if (pos.x < fb.x - rX)
          {
-            x = (fTL.x + fDM.x + (rX - 10));
+            x = (fb.r + (rX * 2));
          }
-         if (pos.y < fTL.y - rY)
+         if (pos.y < fb.y - rY)
          {
-            y = (fTL.y + fDM.y + (rX - 10));
+            y = (fb.h + (rY * 2));
          }
          p.set(x,y);
       }

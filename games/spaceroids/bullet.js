@@ -109,6 +109,10 @@ var SpaceroidsBullet = Object2D.extend({
       return this.getComponent("move").getPosition();
    },
 
+   getRenderPosition: function() {
+      return this.getComponent("move").getRenderPosition();
+   },
+
    /**
     * Returns the last position of the bullet
     * @type Point2D
@@ -167,7 +171,7 @@ var SpaceroidsBullet = Object2D.extend({
     */
    onCollide: function(obj) {
       if ((obj instanceof SpaceroidsRock) &&
-          ( (Math2D.boxPointCollision(obj.getWorldBox(), this.getPosition())) ||
+          ( (obj.getWorldBox().containsPoint(this.getPosition())) ||
             (Math2D.lineBoxCollision(this.getPosition(), this.getLastPosition(), obj.getWorldBox())) )
          )
       {
