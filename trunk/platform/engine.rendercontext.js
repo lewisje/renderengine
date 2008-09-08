@@ -69,7 +69,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.base(contextName || "RenderContext");
       this.surface = surface;
       this.setElement(surface);
-      this.worldScale = [1, 1];
+      this.worldScale = 1;
       this.worldPosition = Point2D.create(0, 0);
       this.worldRotation = 0;
       this.viewport = Rectangle2D.create(0, 0, 100, 100);
@@ -127,12 +127,10 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Set the world scale of the rendering context.  All objects should
     * be adjusted by this scale when the context renders.
     *
-    * @param scaleX {Number} The scale along the X dimension
-    * @param scaleY {Number} The scale along the Y dimension
+    * @param scale {Number} The uniform scale of the world
     */
-   setWorldScale: function(scaleX, scaleY) {
-      this.worldScale[0] = scaleX;
-      this.worldScale[1] = scaleY ? scaleY : scaleX;
+   setWorldScale: function(scale) {
+      this.worldScale = scale;
    },
 
    setWorldRotation: function(rotation) {
@@ -243,17 +241,16 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
       // Setup the world
       this.reset();
-      this.setupWorld(time);
 
       // Push the world transform
       this.pushTransform();
+      this.setupWorld(time);
 
       // Render the visible objects into the world
-      //this.viewport.setTopLeft(this.getWorldPosition());
       var objs = this.getObjects();
       for (var o in objs)
       {
-         if (!objs[o].getWorldBox || this.getViewport().isOverlapped(objs[o].getWorldBox())) {
+         if (!objs[o].getWorldBox || this.getViewport().isIntersecting(objs[o].getWorldBox())) {
             this.updateObject(objs[o], time);
             Engine.vObj++;
          }

@@ -90,7 +90,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     */
    boxBoxCollision: function(box1, box2)
    {
-      return box1.isOverlapped(box2);
+      return box1.isIntersecting(box2);
    },
 
    /**
@@ -572,7 +572,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    get: function() {
       var tl = this.getTopLeft();
       var d = this.getDims();
-      return {x: tl.x, y: tl.y, w: d.x, h: d.y};
+      return {x: tl.x, y: tl.y, w: d.x, h: d.y, r: tl.x + d.x, b: tl.y + d.y};
    },
 
    /**
@@ -651,25 +651,34 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Determine if this rectangle overlaps another rectangle.
+    * Determine if this rectangle overlaps another rectangle along
+    * any axis.  If an overlap occurs, a vector is returned that will
+    * resolve the overlap.
     *
     * @param rect A {@link Rectangle} to compare against
-    * @return <code>true</code> if the two rectangles overlap.
+    * @return {Vector2D} The vector to resolve the overlap
     * @type Boolean
     */
    isOverlapped: function(rect)
    {
-      var r = rect.get();
-      var b = this.get();
-      if ((r.x > (b.x + b.w)) ||
-          (r.y > (b.y + b.h)))
-      {
-         return false;
-      }
-
-      return !((r.x + r.w) < b.x ||
-               (r.y + r.h) < b.y);
+		// TODO: This will implement the Separating Axis Theorem, eventually...
    },
+
+   /**
+    * Determine if this rectangle intersects another rectangle.
+    *
+    * @param rect A {@link Rectangle} to compare against
+    * @return <code>true</code> if the two rectangles intersect.
+    * @type Boolean
+    */
+   isIntersecting: function(rect) {
+		var r1 = this.get();
+		var r2 = rect.get();
+		return !(r1.r < r2.x ||
+				   r1.x > r2.r ||
+				   r1.y > r2.b ||
+				   r1.b < r2.y);
+	},
 
    /**
     * Determine if this rectangle is contained within the specified rectangle.
@@ -680,10 +689,12 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    isContained: function(rect)
    {
-      return (this.topLeft.x >= rect.topLeft.x) &&
-             (this.topLeft.y >= rect.topLeft.y) &&
-             ((this.topLeft.x + this.dims.x) <= (rect.topLeft.x + rect.dims.x)) &&
-             ((this.topLeft.y + this.dims.y) <= (rect.topLeft.y + rect.dims.y));
+		var r1 = this.get();
+		var r2 = rect.get();
+      return ((r1.x >= r2.x) &&
+              (r1.y >= r2.y) &&
+              (r1.r <= r2.r) &&
+              (r1.b <= r2.b));
    },
 
    /**
@@ -695,10 +706,12 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    containsRect: function(rect)
    {
-      return (rect.topLeft.x >= this.topLeft.x) &&
-             (rect.topLeft.y >= this.topLeft.y) &&
-             ((rect.topLeft.x + rect.dims.x) <= (this.topLeft.x + this.dims.x)) &&
-             ((rect.topLeft.y + rect.dims.y) <= (this.topLeft.y + this.dims.y));
+		var r1 = this.get();
+		var r2 = rect.get();
+      return ((r2.x >= r1.x) &&
+              (r2.y >= r1.y) &&
+              (r2.r <= r1.r) &&
+              (r2.b <= r1.b));
 
    },
 
@@ -710,11 +723,11 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    containsPoint: function(point)
    {
-      var b = this.get();
-      return (point.x >= b.x &&
-              point.y >= b.y &&
-              point.x <= b.x + b.w &&
-              point.y <= b.y + b.h);
+      var r1 = this.get();
+      return (point.x >= r1.x &&
+              point.y >= r1.y &&
+              point.x <= r1.r &&
+              point.y <= r1.b);
    },
 
    /**
@@ -726,6 +739,14 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    {
       return new Point2D(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
    },
+
+	getHalfWidth: function() {
+		return this.len_x() * 0.5;
+	},
+
+	getHalfHeight: function() {
+		return this.len_y() * 0.5;
+	},
 
    /**
     * Returns the positive length of this rectangle, along the X axis.

@@ -109,7 +109,7 @@ var SpaceroidsRock = Object2D.extend({
    update: function(renderContext, time) {
 
       var c_mover = this.getComponent("move");
-      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
+      c_mover.setPosition(Spaceroids.wrap(c_mover.getRenderPosition(), this.getWorldBox()));
 
       renderContext.pushTransform();
       this.base(renderContext, time);
@@ -129,6 +129,10 @@ var SpaceroidsRock = Object2D.extend({
     */
    getPosition: function() {
       return this.getComponent("move").getPosition();
+   },
+
+   getRenderPosition: function() {
+      return this.getComponent("move").getRenderPosition();
    },
 
    /**
@@ -276,7 +280,7 @@ var SpaceroidsRock = Object2D.extend({
     */
    onCollide: function(obj) {
       if (obj instanceof SpaceroidsPlayer &&
-          (Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
+          (this.getWorldBox().isIntersecting(obj.getWorldBox())))
       {
          if (obj.isAlive())
          {
@@ -290,7 +294,7 @@ var SpaceroidsRock = Object2D.extend({
             obj.killTimer < Engine.worldTime &&
             obj instanceof SpaceroidsRock &&
             obj != this &&
-            (Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
+            this.getWorldBox().isIntersecting(obj.getWorldBox()))
       {
          this.kill();
          obj.kill();
