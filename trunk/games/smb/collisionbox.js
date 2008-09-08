@@ -61,6 +61,18 @@ var SpriteTestCollisionBox = Object2D.extend({
       this.boxRect = Rectangle2D.create(0, 0, 80, 80);
    },
 
+   getProperties: function() {
+      var self = this;
+      return {
+         "Position" :      [function() { return self.getPosition(); },
+                            function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0], p[1])); }],
+         "Width" :         [function() { return self.boxRect.get().w; },
+                            function(i) { self.setWidth(i); }],
+         "Height" :        [function() { return self.boxRect.get().h; },
+                            function(i) { self.setHeight(i); }]
+      };
+   },
+
    /**
     * Update the player within the rendering context.  This draws
     * the shape to the context, after updating the transform of the
@@ -75,14 +87,12 @@ var SpriteTestCollisionBox = Object2D.extend({
       this.base(renderContext, time);
 
       if (this.editing) {
-         renderContext.setLineStyle("yellow");
-         renderContext.setLineWidth(2);
+         renderContext.setFillStyle("rgba(255,255,0,0.85)");
       } else {
-         renderContext.setLineStyle("red");
-         renderContext.setLineWidth(1.5);
+         renderContext.setFillStyle("rgba(255,255,0,0.4)");
       }
 
-      renderContext.drawRectangle(this.boxRect);
+      renderContext.drawFilledRectangle(this.boxRect);
 
       renderContext.popTransform();
    },
@@ -101,6 +111,16 @@ var SpriteTestCollisionBox = Object2D.extend({
 
    setBoxSize: function(width, height) {
       this.boxRect.setDims(Point2D.create(width, height));
+      this.setBoundingBox(this.boxRect);
+   },
+
+   setWidth: function(width) {
+      this.boxRect.setWidth(width);
+      this.setBoundingBox(this.boxRect);
+   },
+
+   setHeight: function(height) {
+      this.boxRect.setHeight(height);
       this.setBoundingBox(this.boxRect);
    },
 

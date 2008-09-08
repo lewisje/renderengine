@@ -57,6 +57,8 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
 
    queueingSounds: true,
 
+   loadingSounds: 0,
+
    /**
     * @private
     */
@@ -65,6 +67,7 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
       this.init = false;
       this.queuedSounds = [];
       this.queueingSounds = true;
+      this.loadingSounds = 0;
 
       if (typeof SoundManager != "undefined") {
 
@@ -148,7 +151,7 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
             this.checkReady = window.setTimeout(function() {
                var sounds = self.getResources();
                for (var s in sounds) {
-                  if (self.get(sounds[s]).smSound.readyState == SoundLoader.LOAD_SUCCESS) {
+                  if (!self.isReady(sounds[s]) && self.get(sounds[s]).smSound.readyState == SoundLoader.LOAD_SUCCESS) {
                      self.setReady(sounds[s], true);
                      self.loadingSounds--;
                   } else if (self.get(sounds[s]).smSound.readyState == SoundLoader.LOAD_ERROR) {

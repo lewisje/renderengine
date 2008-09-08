@@ -62,6 +62,18 @@ var SpriteTestActor = Object2D.extend({
       this.setPosition(Point2D.create(100, 100));
    },
 
+   getProperties: function() {
+      var self = this;
+      return {
+         "Sprite" :     [function() { return self.sprite.getName(); },
+                         function(i) { SpriteTest.spriteLoader.getSprite("smbtiles", i); }],
+         "Position" :   [function() { return self.getPosition(); },
+                         function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }],
+         "Scale" :      [function() { return self.getScale(); },
+                         function(i) { self.setScale(i); }]
+      };
+   },
+
    /**
     * Update the player within the rendering context.  This draws
     * the shape to the context, after updating the transform of the
@@ -114,6 +126,14 @@ var SpriteTestActor = Object2D.extend({
    setPosition: function(point) {
       this.base(point);
       this.getComponent("move").setPosition(point);
+   },
+
+   getScale: function() {
+      return this.getComponent("move").getScale();
+   },
+
+   setScale: function(s) {
+      this.getComponent("move").setScale(s);
    },
 
    /**
