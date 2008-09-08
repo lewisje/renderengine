@@ -425,7 +425,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * Returns a printable version of this object.
     */
    toString: function() {
-      return this._vec.inspect();
+      return this._vec.e(1) + "," + this._vec.e(2);
    }
 
 }, {
@@ -638,7 +638,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param width {Number} The new width of the rectangle
     */
    setWidth: function(width) {
-      this.dims.set(width, this.dims.y);
+      this.setDims(Point2D.create(width, this.get().h));
    },
 
    /**
@@ -647,7 +647,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param height {Number} The new height of the rectangle
     */
    setHeight: function(height) {
-      this.dims.set(this.dims.x, height);
+      this.setDims(Point2D.create(this.get().w, height));
    },
 
    /**
@@ -659,15 +659,16 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    isOverlapped: function(rect)
    {
-      var rTL = rect.getTopLeft();
-      if ((rTL.x > (this.topLeft.x + this.dims.x)) ||
-          (rTL.y > (this.topLeft.y + this.dims.y)))
+      var r = rect.get();
+      var b = this.get();
+      if ((r.x > (b.x + b.w)) ||
+          (r.y > (b.y + b.h)))
       {
          return false;
       }
 
-      return !((rTL.x + rect.dims.x) < this.topLeft.x ||
-               (rTL.y + rect.dims.y) < this.topLeft.y);
+      return !((r.x + r.w) < b.x ||
+               (r.y + r.h) < b.y);
    },
 
    /**
@@ -709,10 +710,11 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    containsPoint: function(point)
    {
-      return (point.x >= this.topLeft.x &&
-              point.y >= this.topLeft.y &&
-              point.x <= this.topLeft.x + this.dims.x &&
-              point.y <= this.topLeft.y + this.dims.y);
+      var b = this.get();
+      return (point.x >= b.x &&
+              point.y >= b.y &&
+              point.x <= b.x + b.w &&
+              point.y <= b.y + b.h);
    },
 
    /**

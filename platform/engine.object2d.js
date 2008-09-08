@@ -81,13 +81,17 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    },
 
    getWorldBox: function() {
-      return new Rectangle2D(this.getBoundingBox()).offset(this.getPosition());
+      return new Rectangle2D(this.getBoundingBox()).offset(this.getRenderPosition());
    },
 
    setPosition: function(point) {
    },
 
    getPosition: function() {
+      return Point2D.ZERO;
+   },
+
+   getRenderPosition: function() {
       return Point2D.ZERO;
    },
 

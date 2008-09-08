@@ -253,7 +253,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       var objs = this.getObjects();
       for (var o in objs)
       {
-         if (!objs[o].getRenderPosition || this.viewport.containsPoint(objs[o].getRenderPosition())) {
+         if (!objs[o].getWorldBox || this.getViewport().isOverlapped(objs[o].getWorldBox())) {
             this.updateObject(objs[o], time);
             Engine.vObj++;
          }

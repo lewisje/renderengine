@@ -256,6 +256,62 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
    }
 });
 
+/**
+ * @class A debug console that will use a pre-defined element to display its output.  You must create
+ *        an element with the class "debug-console" for this to function properly.  This object is created,
+ *        as necessary, by the {@link Console} object.
+ * @extends ConsoleRef
+ */
+var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
+
+   constructor: function() {
+   },
+
+   fixArgs: function(a) {
+      var x = [];
+      for (var i=0; i < a.length; i++) {
+         x.push(a[i]);
+      }
+      return x;
+   },
+
+   /**
+    * Write a debug message to the console
+    * @param msg {String} The message to write
+    */
+   info: function() {
+      window.opera.postError(this.fixArgs(arguments));
+   },
+
+   /**
+    * Write a debug message to the console
+    * @param msg {String} The message to write
+    */
+   debug: function() {
+      window.opera.postError(["[D]", this.fixArgs(arguments)]);
+   },
+
+   /**
+    * Write a warning message to the console
+    * @param msg {String} The message to write
+    */
+   warn: function() {
+      window.opera.postError(["[W]", this.fixArgs(arguments)]);
+   },
+
+   /**
+    * Write an error message to the console
+    * @param msg {String} The message to write
+    */
+   error: function() {
+      window.opera.postError(["[E!]", this.fixArgs(arguments)]);
+   },
+
+   /** @private **/
+   init: function() {
+   }
+});
+
 
 /**
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
@@ -350,6 +406,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
       }
       else if (jQuery.browser.safari) {
          this.consoleRef = new SafariConsoleRef();
+      }
+      else if (jQuery.browser.opera) {
+         this.consoleRef = new OperaConsoleRef();
       }
       else
       {

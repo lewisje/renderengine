@@ -41,6 +41,7 @@ Engine.include("/resourceloaders/loader.level.js");
 Engine.include("/platform/engine.timers.js");
 
 // Load game objects
+Game.load("/editor.js");
 Game.load("/actor.js");
 Game.load("/collisionbox.js");
 
@@ -69,9 +70,6 @@ var SpriteTest = Game.extend({
    soundLoader: null,
    levelLoader: null,
 
-   nextZ: 0,
-
-   gridSize: 16,
    level: null,
 
    /**
@@ -162,7 +160,7 @@ var SpriteTest = Game.extend({
       Engine.getDefaultContext().add(this.renderContext);
 
       if (EngineSupport.checkBooleanParam("edit")) {
-         this.editor();
+         SpriteTestEditor.edit();
       } else {
          this.play();
       }
@@ -195,193 +193,14 @@ var SpriteTest = Game.extend({
       return newPos.equals(pos);
    },
 
-   /**
-    * Called to wrap an object around the edges of the playfield.
-    *
-    * @param pos {Point2D} The position of the object
-    * @param bBox {Rectangle2D} The bounding box of the playfield
-    */
-   wrap: function(pos, bBox) {
-
-      // Get XY radius and set new collision box
-      var rX = Math.floor(bBox.len_x() / 2);
-      var rY = Math.floor(bBox.len_y() / 2);
-
-      // Wrap if it's off the playing field
-      var p = new Point2D(pos);
-      var x = p.x;
-      var y = p.y;
-      var fTL = this.fieldBox.getTopLeft();
-      var fDM = this.fieldBox.getDims();
-
-      if (pos.x < fTL.x || pos.x > fTL.x + fDM.x ||
-          pos.y < fTL.y || pos.y > fTL.y + fDM.y)
-      {
-         if (pos.x > fTL.x + fDM.x + rX)
-         {
-            x = (fTL.x - (rX - 10));
-         }
-         if (pos.y > fTL.y + fDM.y + rY)
-         {
-            y = (fTL.y - (rY - 10));
-         }
-         if (pos.x < fTL.x - rX)
-         {
-            x = (fTL.x + fDM.x + (rX - 10));
-         }
-         if (pos.y < fTL.y - rY)
-         {
-            y = (fTL.y + fDM.y + (rX - 10));
-         }
-         p.set(x,y);
-      }
-      return p;
+   getLevel: function() {
+      return this.level;
    },
 
-   editor: function() {
-      // Render the editor controls
-      var tbar = $("<div class='toolbar'/>");
-      var self = this;
-
-      // Create actor
-      tbar.append($("<span class='tool'>Actors:</span>"));
-      var s = $("<select id='actor' class='tool'>");
-      var spr = SpriteTest.spriteLoader.getSpriteNames("smbtiles");
-      $.each(spr, function() {
-         s.append($("<option value='" + this + "'>" + this + "</option>"));
-      });
-      tbar.append(s);
-      tbar.append($("<input type='button' value='Add' class='tool'/>").click(function() {
-         self.createActor($("#actor option:selected").val());
-      }));
-
-      // Remove actor
-      tbar.append($("<input type='button' value='Delete' class='tool'/>").click(function() {
-         if (SpriteTest.currentSelectedObject) {
-            self.renderContext.remove(SpriteTest.currentSelectedObject);
-            SpriteTest.currentSelectedObject = null;
-         }
-      }));
-
-      // Update grid size
-      tbar.append($("<span class='tool'>Grid Size:</span>"));
-      tbar.append($("<input class='tool' type='text' size='3' value='16'/>").change(function() {
-         if (!isNaN($(this).val())) {
-            SpriteTest.gridSize = $(this).val();
-         } else {
-            $(this).val(SpriteTest.gridSize);
-         }
-      }));
-
-      // Create collision rect
-      tbar.append($("<input type='button' value='Collision Box' class='tool'/>").click(function() {
-         self.createCollisionBox();
-      }));
-
-      // We need a scrollbar to move the world
-      var sb = $("<div style='height: 20px; width: " + this.fieldWidth + "px; overflow-x: auto;'><div style='width: " +
-         this.level.getFrame().get().w + "px; border: 1px dashed'></div></div>").bind("scroll", function() {
-            self.renderContext.setHorizontalScroll(this.scrollLeft);
-      });
-
-      $(document.body).append(sb);
-
-      $(document.body).append(tbar);
-
-
-      // Add an event handler to the context
-      this.renderContext.addEvent("mousedown", function(evt) {
-         self.selectObject(evt.pageX, evt.pageY);
-         self.mouseDown = true;
-      });
-
-      this.renderContext.addEvent("mouseup", function() {
-         self.mouseDown = false;
-      });
-
-      this.renderContext.addEvent("mousemove", function(evt) {
-         if (self.mouseDown) {
-            self.moveSelected(evt.pageX, evt.pageY);
-         }
-      });
-   },
-
-   deselectObject: function(obj) {
-      if (obj == null) {
-         if (SpriteTest.currentSelectedObject) {
-            SpriteTest.currentSelectedObject.setEditing(false);
-            SpriteTest.currentSelectedObject = null;
-         }
-      } else {
-         obj.setEditing(false);
-      }
-   },
-
-   createActor: function(actorName) {
-      var actor = SpriteTestActor.create();
-      actor.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", actorName));
-
-      // Adjust for scroll
-      var s = this.renderContext.getHorizontalScroll();
-      var pT = Point2D.create(this.centerPoint.x + s, this.centerPoint.y);
-
-      actor.setPosition(pT);
-      actor.setZIndex(SpriteTest.nextZ++);
-      this.renderContext.add(actor);
-      this.deselectObject();
-      SpriteTest.currentSelectedObject = actor;
-      actor.setEditing(true);
-   },
-
-   createCollisionBox: function() {
-      var cbox = SpriteTestCollisionBox.create();
-
-      // Adjust for scroll
-      var s = this.renderContext.getHorizontalScroll();
-      var pT = Point2D.create(this.centerPoint.x + s, this.centerPoint.y);
-
-      cbox.setPosition(pT);
-      cbox.setBoxSize(80, 80);
-      cbox.setZIndex(SpriteTest.nextZ++);
-      this.renderContext.add(cbox);
-      this.deselectObject();
-      SpriteTest.currentSelectedObject = cbox;
-      cbox.setEditing(true);
-   },
-
-   selectObject: function(x, y) {
-      this.deselectObject();
-
-      // Adjust for scroll
-      x += this.renderContext.getHorizontalScroll();
-
-      // Check to see if this object falls on top of an object
-      var pt = Point2D.create(x,y);
-      var itr = Iterator.create(this.renderContext);
-      itr.reverse();
-      while (itr.hasNext()) {
-         var obj = itr.next();
-         if (obj.isEditable &&
-               obj.getWorldBox().containsPoint(pt))
-         {
-            SpriteTest.currentSelectedObject = obj;
-            obj.setEditing(true);
-            break;
-         }
-      }
-   },
-
-   moveSelected: function(x, y) {
-      // Adjust for scroll
-      x += this.renderContext.getHorizontalScroll();
-
-      if (SpriteTest.currentSelectedObject) {
-         var grid = this.fieldWidth / SpriteTest.gridSize;
-         x = x - x % SpriteTest.gridSize;
-         y = y - y % SpriteTest.gridSize;
-         SpriteTest.currentSelectedObject.setPosition(Point2D.create(x, y));
-      }
+   getRenderContext: function() {
+      return this.renderContext;
    }
+
 });
 
 // Start the game when all the scripts are loaded.
