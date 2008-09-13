@@ -120,9 +120,6 @@ var SpaceroidsPlayer = Object2D.extend({
     * @param time {Number} The engine time in milliseconds
     */
    update: function(renderContext, time) {
-
-      renderContext.pushTransform();
-
       var c_mover = this.getComponent("move");
       c_mover.setPosition(this.field.wrap(c_mover.getPosition(), this.getBoundingBox()));
       c_mover.setRotation(c_mover.getRotation() + this.rotDir);
@@ -134,6 +131,7 @@ var SpaceroidsPlayer = Object2D.extend({
          c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.08)));
       }
 
+      renderContext.pushTransform();
       this.base(renderContext, time);
       renderContext.popTransform();
 

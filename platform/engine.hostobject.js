@@ -53,7 +53,6 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    /**
     * Destroy all of the components within this object and
     * remove this object from it's render context.
-    * @memberOf HostObject
     */
    destroy: function() {
       if (this.getRenderContext()) {
@@ -67,7 +66,6 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * Set the rendering context this object will be drawn upon.
     *
     * @param renderContext {RenderContext} The context
-    * @memberOf HostObject
     */
    setRenderContext: function(renderContext) {
       this.renderContext = renderContext;
@@ -76,23 +74,10 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    /**
     * Get the rendering context this object will be drawn upon.
     *
-    * @type RenderContext
-    * @memberOf HostObject
+    * @return {RenderContext} The render context the object belongs to
     */
    getRenderContext: function() {
       return this.renderContext;
-   },
-
-   /**
-    * Allows the object a chance to perform setup before all of
-    * its components are executed.  Usually used to push the
-    * render context's transform.
-    *
-    * @param renderContext {RenderContext} The context the object will be rendered within.
-    * @param time {Number} The global time within the engine.
-    * @memberOf HostObject
-    */
-   preUpdate: function(renderContext, time) {
    },
 
    /**
@@ -100,30 +85,17 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     *
     * @param renderContext {RenderContext} The context the object will be rendered within.
     * @param time {Number} The global time within the engine.
-    * @memberOf HostObject
     */
    update: function(renderContext, time) {
+
+      // Run the components
       var components = this.getObjects();
 
-      this.preUpdate(renderContext, time);
-
       for (var c in components) {
-         components[c].execute(renderContext, time);
+         components[c].execute(renderContext, time, false);
       }
 
-      this.postUpdate(renderContext, time);
-   },
-
-   /**
-    * Allows the object a chance to perform actions after all of
-    * its components have been executed.  Usually used to pop the
-    * transformations this object performed.
-    *
-    * @param renderContext {RenderContext} The context the object will be rendered within.
-    * @param time {Number} The global time within the engine.
-    * @memberOf HostObject
-    */
-   postUpdate: function(renderContext, time) {
+      this.base(renderContext, time);
    },
 
    /**
@@ -133,13 +105,13 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * with a lower priority.  The sorting order for type is:
     * <ul>
     * <li>Input</li>
+    * <li>Transform</li>
     * <li>Logic</li>
     * <li>Collision</li>
     * <li>Rendering</li>
     * </ul>
     *
     * @param component {BaseComponent} A component to add to the host
-    * @memberOf HostObject
     */
    add: function(component) {
 
@@ -160,7 +132,6 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     *
     * @param name {String} The unique name of the component to get
     * @type BaseComponent
-    * @memberOf HostObject
     */
    getComponent: function(name) {
       return this.get(name.toUpperCase());
@@ -172,7 +143,6 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * Sort components within this object based upon their component
     * type, and the priority within that type.  Components with a higher
     * priority will be sorted before components with a lower priority.
-    * @memberOf HostObject
     * @static
     */
    componentSort: function(component1, component2) {
@@ -183,8 +153,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf HostObject
+    * @return {String} The string "HostObject"
     */
    getClassName: function() {
       return "HostObject";

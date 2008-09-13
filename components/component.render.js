@@ -76,22 +76,23 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
 
    /**
     * Handles whether or not the component should draw to the
-    * render context, or not.
+    * render context.
     *
     * @param renderContext {RenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
 
-      if (this.drawMode == RenderComponent.NO_DRAW)
+      // Check visibility
+      if ((this.drawMode == RenderComponent.NO_DRAW) ||
+          this.getHostObject().getWorldBox &&
+          (!renderContext.getViewport().isIntersecting(this.getHostObject().getWorldBox())))
       {
          return false;
       }
 
-      // Set up drawing state
-      // Xor, source-in, dest-in, etc...
-
-      // Tear down drawing state
+      // The object is visible
+      Engine.vObj++;
       return true;
    }
 

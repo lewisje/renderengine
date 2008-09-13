@@ -39,9 +39,10 @@ Engine.initObject("BaseComponent", "BaseObject", function() {
  * @class All components extend from this object class.  A component is one
  *        part of an operating whole object (a {@link HostObject}) which is
  *        responsible for only a portion of the overall operation of an in-
- *        game object.  Components are broken down into four major categories:
+ *        game object.  Components are broken down into five major categories:
  *        <ul>
  *          <li><b>TYPE_INPUT</b> - Input from controllers (keyboard, mouse, etc.)</li>
+ *          <li><b>TYPE_TRANSFORM</b> - Performs transformations on the host object</li>
  *          <li><b>TYPE_LOGIC</b> - Handles logical operations that are not related to
  *              input and collision</li>
  *          <li><b>TYPE_COLLIDER</b> - Determines what this object is possibly colliding
@@ -122,7 +123,8 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
 
    /**
     * Get the type of this component.  Will be one of:
-    * {@link #TYPE_INPUT}, {@link #TYPE_LOGIC}, {@link #TYPE_COLLIDER}, {@link #TYPE_RENDERING}
+    * {@link #TYPE_INPUT}, {@link #TYPE_TRANSFORM}, {@link #TYPE_LOGIC},
+    * {@link #TYPE_COLLIDER}, or {@link #TYPE_RENDERING}
     *
     * @type Number
     */
@@ -158,8 +160,9 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
     *
     * @param renderContext {RenderContext} The context the component will render within.
     * @param time {Number} The global engine time
+    * @param rendering {Boolean} <tt>true</tt> during the rendering phase
     */
-   execute: function(renderContext, time) {
+   execute: function(renderContext, time, rendering) {
       // Does nothing...
    },
 
@@ -172,6 +175,7 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
       var ts = "";
       switch (this.getType()) {
          case BaseComponent.TYPE_INPUT: ts = "TYPE_INPUT"; break;
+         case BaseComponent.TYPE_TRANSFORM: ts = "TYPE_TRANSFORM"; break;
          case BaseComponent.TYPE_LOGIC: ts = "TYPE_LOGIC"; break;
          case BaseComponent.TYPE_COLLIDER: ts = "TYPE_COLLIDER"; break;
          case BaseComponent.TYPE_RENDERING: ts = "TYPE_RENDERING"; break;
@@ -200,22 +204,28 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    TYPE_INPUT:          1,
 
    /**
+    * A transformation (move,rotate,scale) component
+    * @type Number
+    */
+   TYPE_TRANSFORM:      2,
+
+   /**
     * A logic component
     * @type Number
     */
-   TYPE_LOGIC:          2,
+   TYPE_LOGIC:          3,
 
    /**
     * A collider component
     * @type Number
     */
-   TYPE_COLLIDER:       3,
+   TYPE_COLLIDER:       4,
 
    /**
     * A rendering component
     * @type Number
     */
-   TYPE_RENDERING:      4
+   TYPE_RENDERING:      5
 });
 
 return BaseComponent;

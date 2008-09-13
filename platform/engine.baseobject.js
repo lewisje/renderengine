@@ -80,6 +80,9 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    update: function(renderContext, time) {
    },
 
+   renderObject: function() {
+   },
+
    /**
     * Add an event handler to objects that have an associated HTML element.
     *

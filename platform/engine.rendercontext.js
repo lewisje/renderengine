@@ -237,8 +237,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param time {Number} The current render time in milliseconds from the engine.
     */
    render: function(time) {
-
-
       // Setup the world
       this.reset();
 
@@ -246,18 +244,19 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.pushTransform();
       this.setupWorld(time);
 
-      // Render the visible objects into the world
+      // Run the objects if they are visible
       var objs = this.getObjects();
       for (var o in objs)
       {
-         if (!objs[o].getWorldBox || this.getViewport().isIntersecting(objs[o].getWorldBox())) {
-            this.updateObject(objs[o], time);
-            Engine.vObj++;
-         }
+         this.renderObject(objs[o], time);
       }
 
       // Restore the world transform
       this.popTransform();
+   },
+
+   renderObject: function(obj, time) {
+      obj.update(this, time);
    },
 
    /**
@@ -267,16 +266,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param time {Number} The current world time
     */
    setupWorld: function(time) {
-   },
-
-   /**
-    * Update an object in the render context
-    *
-    * @param obj {BaseObject} An object to update
-    * @param time {Number} The current time in milliseconds
-    */
-   updateObject: function(obj, time) {
-      obj.update(this, time);
    },
 
    /**

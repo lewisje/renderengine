@@ -36,7 +36,7 @@ Engine.include("/components/component.base.js");
 Engine.initObject("Transform2DComponent", "BaseComponent", function() {
 
 /**
- * @class A simple component that has position, rotation, and scale.
+ * @class A simple component that maintains position, rotation, and scale.
  * @extends BaseComponent
  */
 var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.prototype */{
@@ -56,7 +56,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     * @memberOf Transform2DComponent
     */
    constructor: function(name, priority) {
-      this.base(name, BaseComponent.TYPE_RENDERING, priority || 1.0);
+      this.base(name, BaseComponent.TYPE_TRANSFORM, priority || 1.0);
       this.position = Point2D.create(0,0);
       this.lastPosition = Point2D.create(0,0);
       this.lastRenderPosition = Point2D.create(0,0);
@@ -96,10 +96,10 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     * @type Point2D
     */
    getRenderPosition: function() {
-		var wP = Point2D.create(this.getHostObject().getRenderContext().getWorldPosition());
-		var p = Point2D.create(this.position).sub(wP);
-		return p;
-	},
+      var wP = Point2D.create(this.getHostObject().getRenderContext().getWorldPosition());
+      var p = Point2D.create(this.position).sub(wP);
+      return p;
+   },
 
    /**
     * Set the last position that the transform was at.
@@ -108,7 +108,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     */
    setLastPosition: function(point) {
       this.lastPosition.set(point);
-		//var wP = Point2D.create(this.getHostObject().getRenderContext().getWorldPosition());
+      //var wP = Point2D.create(this.getHostObject().getRenderContext().getWorldPosition());
       //this.lastRenderPosition.set(wP.sub(point));
    },
 
@@ -150,7 +150,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     * @type Number
     */
    getRenderRotation: function() {
-		var wR = this.getHostObject().getRenderContext().getWorldRotation();
+      var wR = this.getHostObject().getRenderContext().getWorldRotation();
       return wR + this.rotation;
    },
 
@@ -177,9 +177,9 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     * @type Number
     */
    getRenderScale: function() {
-//		var wS = this.getHostObject().getRenderContext().getWorldScale();
+//    var wS = this.getHostObject().getRenderContext().getWorldScale();
 //      return wS * this.scale;
-		return this.scale;
+      return this.scale;
    },
 
    /**
@@ -188,6 +188,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     *
     * @param renderContext {RenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
+    * @param rendering {Boolean} <tt>true</tt> during the rendering phase
     */
    execute: function(renderContext, time) {
       renderContext.setPosition(this.getRenderPosition());

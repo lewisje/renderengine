@@ -135,7 +135,7 @@ var Spaceroids = Game.extend({
       var pHeight = this.fieldHeight;
 
       // Add some asteroids
-      for (var a = 0; a < 1; a++)
+      for (var a = 0; a < 3; a++)
       {
          var rock = SpaceroidsRock.create(null, null, pWidth, pHeight);
          this.renderContext.add(rock);
@@ -454,24 +454,26 @@ var Spaceroids = Game.extend({
       var y = p.y;
       var fb = this.renderContext.getViewport().get();
 
+      //console.debug(p, fb);
+
       if (pos.x < fb.x || pos.x > fb.r ||
-          pos.y < fb.y || pos.y > fb.h)
+          pos.y < fb.y || pos.y > fb.b)
       {
-         if (pos.x > fb.r + (rX * 2))
+         if (pos.x > fb.r + rX)
          {
-            x = (fb.x - rX);
+            x = (fb.x - (rX - 1));
          }
-         if (pos.y > fb.h + (rY * 2))
+         if (pos.y > fb.b + rY)
          {
-            y = (fb.y - rY);
+            y = (fb.y - (rY - 1));
          }
          if (pos.x < fb.x - rX)
          {
-            x = (fb.r + (rX * 2));
+            x = (fb.r + (rX - 1));
          }
          if (pos.y < fb.y - rY)
          {
-            y = (fb.h + (rY * 2));
+            y = (fb.b + (rY - 1));
          }
          p.set(x,y);
       }
