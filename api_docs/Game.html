@@ -108,6 +108,30 @@ The game object represents an instance of a game.  It isthe controlling entity 
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFilePath">getFilePath</a></b>(fileName) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getGamePath">getGamePath</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>&lt;static&gt; </code></font> 
          </td>
          <td>
@@ -138,6 +162,42 @@ The game object represents an instance of a game.  It isthe controlling entity 
             <code> <b> <a href="#load">load</a></b>(scriptSource) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Load a script relative to this game.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#loadEngineScripts">loadEngineScripts</a></b>(scripts) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#scriptLoaded">scriptLoaded</a></b>(scriptPath) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setQueueCallback">setQueueCallback</a></b>(cb) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Abstracted to keep games separate from Engine
  
          </td>
       </tr>
@@ -226,6 +286,43 @@ The game object represents an instance of a game.  It isthe controlling entity 
 </table>
 
 
+   <a name="getFilePath"> </a> <h3>getFilePath</h3>
+      <pre><b>getFilePath</b>(fileName)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>fileName </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getGamePath"> </a> <h3>getGamePath</h3>
+      <pre><b>getGamePath</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getName"> </a> <h3>getName</h3>
       <pre>&lt;static&gt;&nbsp;<b>getName</b>()</pre> 
    <ul>
@@ -279,6 +376,69 @@ The game object represents an instance of a game.  It isthe controlling entity 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="loadEngineScripts"> </a> <h3>loadEngineScripts</h3>
+      <pre><b>loadEngineScripts</b>(scripts)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>scripts </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="scriptLoaded"> </a> <h3>scriptLoaded</h3>
+      <pre><b>scriptLoaded</b>(scriptPath)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>scriptPath </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setQueueCallback"> </a> <h3>setQueueCallback</h3>
+      <pre><b>setQueueCallback</b>(cb)</pre> 
+   <ul>
+      Abstracted to keep games separate from Engine
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>cb </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setup"> </a> <h3>setup</h3>
       <pre>&lt;static&gt;&nbsp;<b>setup</b>()</pre> 
    <ul>
@@ -322,6 +482,6 @@ The game object represents an instance of a game.  It isthe controlling entity 
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:04 GMT-0400 (EDT)</div>
 </body>
 </html>

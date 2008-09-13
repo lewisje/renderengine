@@ -61,18 +61,22 @@
 
    <pre>Object
    |
-   +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
       |
-      +--<a href='ImageResourceLoader.html' target='main'>ImageResourceLoader</a>
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<b>BitmapFontLoader</b></pre>
+         +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
+            |
+            +--<a href='ImageLoader.html' target='main'>ImageLoader</a>
+               |
+               +--<b>BitmapFontLoader</b></pre>
    <hr>
    Class <b>BitmapFontLoader</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
 
 
 
-   Extends <a href="ImageResourceLoader.html">ImageResourceLoader</a>.<br/>
+   Extends <a href="ImageLoader.html">ImageLoader</a>.<br/>
 
 <p>
 Loads bitmap fonts and makes them available to the system.</p>
@@ -99,7 +103,7 @@ Loads bitmap fonts and makes them available to the system.</p>
       <td>
    
       <code>
-      <b><a href="#BitmapFontLoader">BitmapFontLoader</a></b>()
+      <b><a href="#BitmapFontLoader">BitmapFontLoader</a></b>(name)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -124,19 +128,9 @@ Loads bitmap fonts and makes them available to the system.</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#constructor">constructor</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#get">get</a></b>(name) </code> 
@@ -149,7 +143,7 @@ Loads bitmap fonts and makes them available to the system.</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;String
             </code></font> 
          </td>
          <td>
@@ -193,15 +187,13 @@ Loads bitmap fonts and makes them available to the system.</p>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="ResourceLoader.html#release">release</a>,
-            
-               <a href="ResourceLoader.html#destroy">destroy</a>,
-            
                <a href="ResourceLoader.html#setReady">setReady</a>,
             
                <a href="ResourceLoader.html#isReady">isReady</a>,
             
                <a href="ResourceLoader.html#unload">unload</a>,
+            
+               <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
             
                <a href="ResourceLoader.html#clear">clear</a>,
             
@@ -212,13 +204,57 @@ Loads bitmap fonts and makes them available to the system.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="ImageResourceLoader.html">ImageResourceLoader</a></b>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="ImageResourceLoader.html#loadImageResource">loadImageResource</a>,
+               <a href="PooledObject.html#destroy">destroy</a>,
+            
+               <a href="PooledObject.html#serialize">serialize</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="ImageLoader.html">ImageLoader</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="ImageLoader.html#loadImageResource">loadImageResource</a>,
+            
+               <a href="ImageLoader.html#getClassName">getClassName</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#release">release</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#renderObject">renderObject</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -249,12 +285,21 @@ Loads bitmap fonts and makes them available to the system.</p>
 <a name="BitmapFontLoader"> </a>
 <h3>BitmapFontLoader</h3>
 
-   <pre><b>BitmapFontLoader</b>()</pre>
+   <pre><b>BitmapFontLoader</b>(name)</pre>
    <ul>
       
    </ul>
    
    <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String=BitmapFontLoader</i>]&nbsp;name</code> - The name of the resource loader 
+      </ul>
+      
+   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -275,24 +320,8 @@ Loads bitmap fonts and makes them available to the system.</p>
 </table>
 
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>()</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="get"> </a> <h3>get</h3>
-      <pre><b>get</b>(name)</pre> 
+      <pre>Object&nbsp;<b>get</b>(name)</pre> 
    <ul>
       Get the font with the specified name from the cache.  Theobject returned contains the bitmap as <tt>image</tt> andthe font definition as <tt>info</tt>.
       
@@ -307,13 +336,18 @@ Loads bitmap fonts and makes them available to the system.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The object representing the named font 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getResourceType"> </a> <h3>getResourceType</h3>
-      <pre>&nbsp;<b>getResourceType</b>()</pre> 
+      <pre>String&nbsp;<b>getResourceType</b>()</pre> 
    <ul>
       The name of the resource this loader will get.
       
@@ -326,7 +360,7 @@ Loads bitmap fonts and makes them available to the system.</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A String that represents the resource type. 
+         <code><i>String</i>&nbsp;</code>The string "bitmap font" 
       </ul>
    </ul>
    
@@ -368,6 +402,6 @@ Loads bitmap fonts and makes them available to the system.</p>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:04 GMT-0400 (EDT)</div>
 </body>
 </html>

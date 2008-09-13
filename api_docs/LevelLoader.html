@@ -61,18 +61,22 @@
 
    <pre>Object
    |
-   +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
       |
-      +--<a href='ImageResourceLoader.html' target='main'>ImageResourceLoader</a>
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<b>LevelLoader</b></pre>
+         +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
+            |
+            +--<a href='ImageLoader.html' target='main'>ImageLoader</a>
+               |
+               +--<b>LevelLoader</b></pre>
    <hr>
    Class <b>LevelLoader</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
 
 
 
-   Extends <a href="ImageResourceLoader.html">ImageResourceLoader</a>.<br/>
+   Extends <a href="ImageLoader.html">ImageLoader</a>.<br/>
 
 <p>
 Loads levels and makes them available to the system.  Levels are defined       by a specific type of resource file.  A level is comprised of its bitmap       file, a collision map, and objects that make up the level with their       constructor states.<pre>{   // A level file   bitmapImage: "level1.png",   bitmapWidth: 6768,   bitmapHeight: 448,   collisionMap: [      [0, 400, 6768, 48]   ],   objects: {}}</pre></p>
@@ -99,7 +103,7 @@ Loads levels and makes them available to the system.  Levels are defined       
       <td>
    
       <code>
-      <b><a href="#LevelLoader">LevelLoader</a></b>()
+      <b><a href="#LevelLoader">LevelLoader</a></b>(name)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -124,19 +128,9 @@ Loads levels and makes them available to the system.  Levels are defined       
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(name) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#get">get</a></b>(name) </code> 
@@ -149,13 +143,13 @@ Loads levels and makes them available to the system.  Levels are defined       
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;String
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#getLevel">getLevel</a></b>(level) </code> 
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Creates a <a href='Level.html'>Level</a> object representing the named sprite.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object.
  
          </td>
       </tr>
@@ -163,7 +157,21 @@ Loads levels and makes them available to the system.  Levels are defined       
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Level
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getLevel">getLevel</a></b>(level) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Creates a <a href='Level.html'>Level</a> object representing the named level.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
             </code></font> 
          </td>
          <td>
@@ -207,15 +215,13 @@ Loads levels and makes them available to the system.  Levels are defined       
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="ResourceLoader.html#release">release</a>,
-            
-               <a href="ResourceLoader.html#destroy">destroy</a>,
-            
                <a href="ResourceLoader.html#setReady">setReady</a>,
             
                <a href="ResourceLoader.html#isReady">isReady</a>,
             
                <a href="ResourceLoader.html#unload">unload</a>,
+            
+               <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
             
                <a href="ResourceLoader.html#clear">clear</a>,
             
@@ -226,13 +232,55 @@ Loads levels and makes them available to the system.  Levels are defined       
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="ImageResourceLoader.html">ImageResourceLoader</a></b>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="ImageResourceLoader.html#loadImageResource">loadImageResource</a>,
+               <a href="PooledObject.html#destroy">destroy</a>,
+            
+               <a href="PooledObject.html#serialize">serialize</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="ImageLoader.html">ImageLoader</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="ImageLoader.html#loadImageResource">loadImageResource</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#release">release</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#renderObject">renderObject</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -263,12 +311,21 @@ Loads levels and makes them available to the system.  Levels are defined       
 <a name="LevelLoader"> </a>
 <h3>LevelLoader</h3>
 
-   <pre><b>LevelLoader</b>()</pre>
+   <pre><b>LevelLoader</b>(name)</pre>
    <ul>
       
    </ul>
    
    <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String=LevelLoader</i>]&nbsp;name</code> - The name of the resource loader 
+      </ul>
+      
+   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -289,29 +346,8 @@ Loads levels and makes them available to the system.  Levels are defined       
 </table>
 
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(name)</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>name </code> 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="get"> </a> <h3>get</h3>
-      <pre><b>get</b>(name)</pre> 
+      <pre>Object&nbsp;<b>get</b>(name)</pre> 
    <ul>
       Get the level resource with the specified name from the cache.  Theobject returned contains the bitmap as <tt>image</tt> andthe level definition as <tt>info</tt>.
       
@@ -326,15 +362,41 @@ Loads levels and makes them available to the system.  Levels are defined       
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The level resource specified by the name 
+      </ul>
+   </ul>
    
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "LevelLoader" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getLevel"> </a> <h3>getLevel</h3>
-      <pre>&nbsp;<b>getLevel</b>(level)</pre> 
+      <pre>Level&nbsp;<b>getLevel</b>(level)</pre> 
    <ul>
-      Creates a <a href='Level.html'>Level</a> object representing the named sprite.
+      Creates a <a href='Level.html'>Level</a> object representing the named level.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -350,7 +412,7 @@ Loads levels and makes them available to the system.  Levels are defined       
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A <a href='Sprite.html'>Sprite</a> object 
+         <code><i>Level</i>&nbsp;</code>A <a href='Level.html'>Level</a> object 
       </ul>
    </ul>
    
@@ -358,7 +420,7 @@ Loads levels and makes them available to the system.  Levels are defined       
    <hr>
 
    <a name="getResourceType"> </a> <h3>getResourceType</h3>
-      <pre>&nbsp;<b>getResourceType</b>()</pre> 
+      <pre>String&nbsp;<b>getResourceType</b>()</pre> 
    <ul>
       The name of the resource this loader will get.
       
@@ -371,7 +433,7 @@ Loads levels and makes them available to the system.  Levels are defined       
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A String that represents the resource type. 
+         <code><i>String</i>&nbsp;</code>The string "level" 
       </ul>
    </ul>
    
@@ -413,6 +475,6 @@ Loads levels and makes them available to the system.  Levels are defined       
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:14 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:03 GMT-0400 (EDT)</div>
 </body>
 </html>

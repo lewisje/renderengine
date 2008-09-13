@@ -121,7 +121,7 @@ Engine support class.  Provides extra functions the engine or games       can u
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -135,7 +135,7 @@ Engine support class.  Provides extra functions the engine or games       can u
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -149,7 +149,7 @@ Engine support class.  Provides extra functions the engine or games       can u
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -186,7 +186,23 @@ Engine support class.  Provides extra functions the engine or games       can u
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getNumericParam">getNumericParam</a></b>(paramName, defaultVal) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a numeric query parameter, or the default specified if the parameterdoesn't exist.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getPath">getPath</a></b>(url) </code> 
@@ -199,13 +215,27 @@ Engine support class.  Provides extra functions the engine or games       can u
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Object
             </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getQueryParams">getQueryParams</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the query parameters from the window location object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getStringParam">getStringParam</a></b>(paramName, defaultVal) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a string query parameter, or the default specified if the parameterdoesn't exist.
  
          </td>
       </tr>
@@ -361,7 +391,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <hr>
 
    <a name="checkBooleanParam"> </a> <h3>checkBooleanParam</h3>
-      <pre>&nbsp;<b>checkBooleanParam</b>(paramName)</pre> 
+      <pre>Boolean&nbsp;<b>checkBooleanParam</b>(paramName)</pre> 
    <ul>
       Check for a query parameter and to see if it evaluates to one of the following:<tt>true</tt>, <tt>1</tt>, <tt>yes</tt>, or <tt>y</tt>.  If so, returns <tt>true</tt>.
       
@@ -379,7 +409,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the query parameter exists and is one of the specified values. 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the query parameter exists and is one of the specified values. 
       </ul>
    </ul>
    
@@ -387,7 +417,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <hr>
 
    <a name="checkNumericParam"> </a> <h3>checkNumericParam</h3>
-      <pre>&nbsp;<b>checkNumericParam</b>(paramName, val)</pre> 
+      <pre>Boolean&nbsp;<b>checkNumericParam</b>(paramName, val)</pre> 
    <ul>
       Check for a query parameter and to see if it evaluates to the specified number.If so, returns <tt>true</tt>.
       
@@ -408,7 +438,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the query parameter exists and is the value specified 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the query parameter exists and is the value specified 
       </ul>
    </ul>
    
@@ -416,7 +446,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <hr>
 
    <a name="checkStringParam"> </a> <h3>checkStringParam</h3>
-      <pre>&nbsp;<b>checkStringParam</b>(paramName, val)</pre> 
+      <pre>Boolean&nbsp;<b>checkStringParam</b>(paramName, val)</pre> 
    <ul>
       Check for a query parameter and to see if it evaluates to the specified value.If so, returns <tt>true</tt>.
       
@@ -437,7 +467,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the query parameter exists and is the value specified 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the query parameter exists and is the value specified 
       </ul>
    </ul>
    
@@ -498,8 +528,37 @@ Engine support class.  Provides extra functions the engine or games       can u
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getNumericParam"> </a> <h3>getNumericParam</h3>
+      <pre>Number&nbsp;<b>getNumericParam</b>(paramName, defaultVal)</pre> 
+   <ul>
+      Get a numeric query parameter, or the default specified if the parameterdoesn't exist.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The name of the parameter 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;defaultVal </code> - The number to return if the parameter doesn't exist 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The value 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getPath"> </a> <h3>getPath</h3>
-      <pre><b>getPath</b>(url)</pre> 
+      <pre>String&nbsp;<b>getPath</b>(url)</pre> 
    <ul>
       Get the path from a fully qualified URL.
       
@@ -514,13 +573,18 @@ Engine support class.  Provides extra functions the engine or games       can u
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The path 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getQueryParams"> </a> <h3>getQueryParams</h3>
-      <pre>&nbsp;<b>getQueryParams</b>()</pre> 
+      <pre>Object&nbsp;<b>getQueryParams</b>()</pre> 
    <ul>
       Get the query parameters from the window location object.  Theobject returned will contain a key/value pair for each argumentfound.
       
@@ -533,7 +597,36 @@ Engine support class.  Provides extra functions the engine or games       can u
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>An <tt>Object</tt> with a key and value for each query argument. 
+         <code><i>Object</i>&nbsp;</code>An <tt>Object</tt> with a key and value for each query argument. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getStringParam"> </a> <h3>getStringParam</h3>
+      <pre>String&nbsp;<b>getStringParam</b>(paramName, defaultVal)</pre> 
+   <ul>
+      Get a string query parameter, or the default specified if the parameterdoesn't exist.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The name of the parameter 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;defaultVal </code> - The string to return if the parameter doesn't exist 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The value 
       </ul>
    </ul>
    
@@ -672,6 +765,6 @@ Engine support class.  Provides extra functions the engine or games       can u
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:04 GMT-0400 (EDT)</div>
 </body>
 </html>

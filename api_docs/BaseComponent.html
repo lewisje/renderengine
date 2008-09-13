@@ -75,7 +75,7 @@
    Extends <a href="BaseObject.html">BaseObject</a>.<br/>
 
 <p>
-All components extend from this object class.  A component is one       part of an operating whole object (a <a href='HostObject.html'>HostObject</a>) which is       responsible for only a portion of the overall operation of an in-       game object.  Components are broken down into four major categories:       <ul>         <li><b>TYPE_INPUT</b> - Input from controllers (keyboard, mouse, etc.)</li>         <li><b>TYPE_LOGIC</b> - Handles logical operations that are not related to             input and collision</li>         <li><b>TYPE_COLLIDER</b> - Determines what this object is possibly colliding             with, and reports those collisions via callbacks to the host.</li>         <li><b>TYPE_RENDER</b> - Performs some sort of rendering operation to the context</li>       </ul>       Components are executed in the order listed.  First, all inputs are       checked, then logic is performed.  Logic may be internal to a host object       itself, but some components perform an object-centric type of logic that       can be reused.  Next, collisions are checked.  And finally, rendering can       occur.       <p/>       Within each component type set, components can be prioritized so that       one component will execute before others.  Such an ordering allows for       multiple components of each type to perform their tasks in an order       that the host defines.</p>
+All components extend from this object class.  A component is one       part of an operating whole object (a <a href='HostObject.html'>HostObject</a>) which is       responsible for only a portion of the overall operation of an in-       game object.  Components are broken down into five major categories:       <ul>         <li><b>TYPE_INPUT</b> - Input from controllers (keyboard, mouse, etc.)</li>         <li><b>TYPE_TRANSFORM</b> - Performs transformations on the host object</li>         <li><b>TYPE_LOGIC</b> - Handles logical operations that are not related to             input and collision</li>         <li><b>TYPE_COLLIDER</b> - Determines what this object is possibly colliding             with, and reports those collisions via callbacks to the host.</li>         <li><b>TYPE_RENDER</b> - Performs some sort of rendering operation to the context</li>       </ul>       Components are executed in the order listed.  First, all inputs are       checked, then logic is performed.  Logic may be internal to a host object       itself, but some components perform an object-centric type of logic that       can be reused.  Next, collisions are checked.  And finally, rendering can       occur.       <p/>       Within each component type set, components can be prioritized so that       one component will execute before others.  Such an ordering allows for       multiple components of each type to perform their tasks in an order       that the host defines.</p>
 
 
 
@@ -137,6 +137,17 @@ All components extend from this object class.  A component is one       part of
          </td>
       </tr>
    
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#TYPE_TRANSFORM">TYPE_TRANSFORM</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A transformation (move,rotate,scale) component
+         </td>
+      </tr>
+   
 </table>
 &nbsp;
 
@@ -194,7 +205,7 @@ All components extend from this object class.  A component is one       part of
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#execute">execute</a></b>(renderContext, time) </code> 
+            <code> <b> <a href="#execute">execute</a></b>(renderContext, time, rendering) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Run the component, updating its state.
  
@@ -324,6 +335,8 @@ All components extend from this object class.  A component is one       part of
             
                <a href="BaseObject.html#update">update</a>,
             
+               <a href="BaseObject.html#renderObject">renderObject</a>,
+            
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
                <a href="BaseObject.html#removeEvent">removeEvent</a>,
@@ -411,6 +424,17 @@ All components extend from this object class.  A component is one       part of
    </ul>
    <hr>
 
+   <!-- One single method detail entry -->
+   <a name="TYPE_TRANSFORM">
+   <!-- -->
+   </a> <h3>TYPE_TRANSFORM</h3>
+      <pre>Number <b>TYPE_TRANSFORM</b></pre> 
+   <ul>
+      A transformation (move,rotate,scale) component
+      
+   </ul>
+   <hr>
+
 
 <!-- ============ FIELD DETAIL END ========== -->
 
@@ -483,7 +507,7 @@ All components extend from this object class.  A component is one       part of
    <hr>
 
    <a name="execute"> </a> <h3>execute</h3>
-      <pre><b>execute</b>(renderContext, time)</pre> 
+      <pre><b>execute</b>(renderContext, time, rendering)</pre> 
    <ul>
       Run the component, updating its state.  Not all components will need an executemethod.  However, it is important to include one if you need to run calculationsor update the state of the component each engine cycle.
       
@@ -496,6 +520,9 @@ All components extend from this object class.  A component is one       part of
       </ul>
       <ul>
          <code>[<i>Number</i>]&nbsp;time </code> - The global engine time 
+      </ul>
+      <ul>
+         <code>[<i>Boolean</i>]&nbsp;rendering </code> - <tt>true</tt> during the rendering phase 
       </ul>
    </ul>
    
@@ -557,7 +584,7 @@ All components extend from this object class.  A component is one       part of
    <a name="getType"> </a> <h3>getType</h3>
       <pre><b>getType</b>()</pre> 
    <ul>
-      Get the type of this component.  Will be one of:<a href='#TYPE_INPUT'>TYPE_INPUT</a>, <a href='#TYPE_LOGIC'>TYPE_LOGIC</a>, <a href='#TYPE_COLLIDER'>TYPE_COLLIDER</a>, <a href='#TYPE_RENDERING'>TYPE_RENDERING</a>
+      Get the type of this component.  Will be one of:<a href='#TYPE_INPUT'>TYPE_INPUT</a>, <a href='#TYPE_TRANSFORM'>TYPE_TRANSFORM</a>, <a href='#TYPE_LOGIC'>TYPE_LOGIC</a>,<a href='#TYPE_COLLIDER'>TYPE_COLLIDER</a>, or <a href='#TYPE_RENDERING'>TYPE_RENDERING</a>
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -655,6 +682,6 @@ All components extend from this object class.  A component is one       part of
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:03 GMT-0400 (EDT)</div>
 </body>
 </html>

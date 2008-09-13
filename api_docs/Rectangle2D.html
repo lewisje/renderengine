@@ -158,6 +158,20 @@ A 2D rectangle class with helpful manipulation methods.</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#get">get</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get an object with the elements containing left, top, width, height aselements x, y, w, h.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
@@ -197,6 +211,30 @@ A 2D rectangle class with helpful manipulation methods.</p>
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#getHalfHeight">getHalfHeight</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getHalfWidth">getHalfWidth</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#getTopLeft">getTopLeft</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets a <a href='Point2D.html'>Point2D</a> representing the top-left corner of this rectangle.
@@ -225,9 +263,23 @@ A 2D rectangle class with helpful manipulation methods.</p>
             </code></font> 
          </td>
          <td>
+            <code> <b> <a href="#isIntersecting">isIntersecting</a></b>(rect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Determine if this rectangle intersects another rectangle.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#isOverlapped">isOverlapped</a></b>(rect) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Determine if this rectangle overlaps another rectangle.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Determine if this rectangle overlaps another rectangle alongany axis.
  
          </td>
       </tr>
@@ -297,9 +349,33 @@ A 2D rectangle class with helpful manipulation methods.</p>
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#setDims">setDims</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#setHeight">setHeight</a></b>(height) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the height of the rectangle
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setTopLeft">setTopLeft</a></b>(ptOrX, y) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the top left of the rectangle to the point, or coordinates specified.
  
          </td>
       </tr>
@@ -486,6 +562,27 @@ A 2D rectangle class with helpful manipulation methods.</p>
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="get"> </a> <h3>get</h3>
+      <pre>Object&nbsp;<b>get</b>()</pre> 
+   <ul>
+      Get an object with the elements containing left, top, width, height aselements x, y, w, h.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>An object with the elements x, y, w, h 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getBottomRight"> </a> <h3>getBottomRight</h3>
       <pre><b>getBottomRight</b>()</pre> 
    <ul>
@@ -522,6 +619,38 @@ A 2D rectangle class with helpful manipulation methods.</p>
       <pre><b>getDims</b>()</pre> 
    <ul>
       Gets a {@link Point2D) representing the width and height of this rectangle.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getHalfHeight"> </a> <h3>getHalfHeight</h3>
+      <pre><b>getHalfHeight</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getHalfWidth"> </a> <h3>getHalfWidth</h3>
+      <pre><b>getHalfWidth</b>()</pre> 
+   <ul>
+      undocumented
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -576,10 +705,10 @@ A 2D rectangle class with helpful manipulation methods.</p>
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="isOverlapped"> </a> <h3>isOverlapped</h3>
-      <pre>&nbsp;<b>isOverlapped</b>(rect)</pre> 
+   <a name="isIntersecting"> </a> <h3>isIntersecting</h3>
+      <pre>&nbsp;<b>isIntersecting</b>(rect)</pre> 
    <ul>
-      Determine if this rectangle overlaps another rectangle.
+      Determine if this rectangle intersects another rectangle.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -595,7 +724,33 @@ A 2D rectangle class with helpful manipulation methods.</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><code>true</code> if the two rectangles overlap. 
+         <code></code><code>true</code> if the two rectangles intersect. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isOverlapped"> </a> <h3>isOverlapped</h3>
+      <pre>Vector2D&nbsp;<b>isOverlapped</b>(rect)</pre> 
+   <ul>
+      Determine if this rectangle overlaps another rectangle alongany axis.  If an overlap occurs, a vector is returned that willresolve the overlap.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>rect </code> - A <a href='Rectangle.html'>Rectangle</a> to compare against 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>The vector to resolve the overlap 
       </ul>
    </ul>
    
@@ -704,6 +859,27 @@ A 2D rectangle class with helpful manipulation methods.</p>
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setDims"> </a> <h3>setDims</h3>
+      <pre><b>setDims</b>(point)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>point </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setHeight"> </a> <h3>setHeight</h3>
       <pre><b>setHeight</b>(height)</pre> 
    <ul>
@@ -715,6 +891,30 @@ A 2D rectangle class with helpful manipulation methods.</p>
       <b>Parameters:</b>
       <ul>
          <code>[<i>Number</i>]&nbsp;height </code> - The new height of the rectangle 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setTopLeft"> </a> <h3>setTopLeft</h3>
+      <pre><b>setTopLeft</b>(ptOrX, y)</pre> 
+   <ul>
+      Set the top left of the rectangle to the point, or coordinates specified.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D/Number</i>]&nbsp;ptOrX </code> - The top left point, or the X coordinate 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;y </code> - If the top left wasn't specified as the first argument, this is the Y coordinate 
       </ul>
    </ul>
    
@@ -773,6 +973,6 @@ A 2D rectangle class with helpful manipulation methods.</p>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:14 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:03 GMT-0400 (EDT)</div>
 </body>
 </html>

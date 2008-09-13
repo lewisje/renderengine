@@ -155,6 +155,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#constructor">constructor</a></b>(name, surface) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#drawArc">drawArc</a></b>(point, radius, startAngle, endAngle) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an un-filled arc on the context.
@@ -421,6 +433,42 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#getRenderPosition">getRenderPosition</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRenderRotation">getRenderRotation</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRenderScale">getRenderScale</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#getRotation">getRotation</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the current transform rotation.
@@ -541,18 +589,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#reset">reset</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reset the context, clearing it and preparing it for drawing.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
             <code> <b> <a href="#setBackgroundColor">setBackgroundColor</a></b>(color) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the background color of the context.
@@ -616,6 +652,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <code> <b> <a href="#setPosition">setPosition</a></b>(point) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the current transform position (translation).
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setRenderTransform">setRenderTransform</a></b>(position, rotation, scale) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the transformation of the world.
  
          </td>
       </tr>
@@ -721,7 +769,19 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             
                <a href="RenderContext.html#setWorldScale">setWorldScale</a>,
             
+               <a href="RenderContext.html#setWorldRotation">setWorldRotation</a>,
+            
+               <a href="RenderContext.html#setWorldPosition">setWorldPosition</a>,
+            
                <a href="RenderContext.html#getWorldScale">getWorldScale</a>,
+            
+               <a href="RenderContext.html#getWorldRotation">getWorldRotation</a>,
+            
+               <a href="RenderContext.html#getWorldPosition">getWorldPosition</a>,
+            
+               <a href="RenderContext.html#setViewport">setViewport</a>,
+            
+               <a href="RenderContext.html#getViewport">getViewport</a>,
             
                <a href="RenderContext.html#add">add</a>,
             
@@ -729,11 +789,15 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             
                <a href="RenderContext.html#sort">sort</a>,
             
+               <a href="RenderContext.html#reset">reset</a>,
+            
                <a href="RenderContext.html#update">update</a>,
             
                <a href="RenderContext.html#render">render</a>,
             
-               <a href="RenderContext.html#updateObject">updateObject</a>,
+               <a href="RenderContext.html#renderObject">renderObject</a>,
+            
+               <a href="RenderContext.html#setupWorld">setupWorld</a>,
             
                <a href="RenderContext.html#pushTransform">pushTransform</a>,
             
@@ -772,8 +836,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
-            
-               <a href="Container.html#constructor">constructor</a>,
             
                <a href="Container.html#size">size</a>,
             
@@ -917,6 +979,30 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="constructor"> </a> <h3>constructor</h3>
+      <pre><b>constructor</b>(name, surface)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>name </code> 
+      </ul>
+      <ul>
+         <code>surface </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="drawArc"> </a> <h3>drawArc</h3>
       <pre><b>drawArc</b>(point, radius, startAngle, endAngle)</pre> 
    <ul>
@@ -1029,7 +1115,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that specifies the position and					dimensions of the image rectangle. 
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that specifies the position and            dimensions of the image rectangle. 
       </ul>
       <ul>
          <code>[<i>Object</i>]&nbsp;image </code> - The image to draw onto the context 
@@ -1369,6 +1455,54 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getRenderPosition"> </a> <h3>getRenderPosition</h3>
+      <pre><b>getRenderPosition</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getRenderRotation"> </a> <h3>getRenderRotation</h3>
+      <pre><b>getRenderRotation</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getRenderScale"> </a> <h3>getRenderScale</h3>
+      <pre><b>getRenderScale</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getRotation"> </a> <h3>getRotation</h3>
       <pre><b>getRotation</b>()</pre> 
    <ul>
@@ -1560,22 +1694,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="reset"> </a> <h3>reset</h3>
-      <pre><b>reset</b>()</pre> 
-   <ul>
-      Reset the context, clearing it and preparing it for drawing.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="setBackgroundColor"> </a> <h3>setBackgroundColor</h3>
       <pre><b>setBackgroundColor</b>(color)</pre> 
    <ul>
@@ -1692,6 +1810,33 @@ All 2D contexts should extend from this to inherit themethods which abstract th
       <b>Parameters:</b>
       <ul>
          <code>[<i>Point2D</i>]&nbsp;point </code> - The translation 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setRenderTransform"> </a> <h3>setRenderTransform</h3>
+      <pre><b>setRenderTransform</b>(position, rotation, scale)</pre> 
+   <ul>
+      Set the transformation of the world.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;position </code> 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;rotation </code> 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;scale </code> 
       </ul>
    </ul>
    
@@ -1832,6 +1977,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:16 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:05 GMT-0400 (EDT)</div>
 </body>
 </html>

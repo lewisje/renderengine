@@ -162,7 +162,9 @@ A host object is a container of components which provide some sortof action, be
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
@@ -186,36 +188,14 @@ A host object is a container of components which provide some sortof action, be
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;RenderContext
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getRenderContext">getRenderContext</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the rendering context this object will be drawn upon.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#postUpdate">postUpdate</a></b>(renderContext, time) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Allows the object a chance to perform actions after all ofits components have been executed.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#preUpdate">preUpdate</a></b>(renderContext, time) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Allows the object a chance to perform setup before all ofits components are executed.
  
          </td>
       </tr>
@@ -280,6 +260,8 @@ A host object is a container of components which provide some sortof action, be
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#renderObject">renderObject</a>,
             
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
@@ -381,7 +363,7 @@ A host object is a container of components which provide some sortof action, be
    <a name="add"> </a> <h3>add</h3>
       <pre><b>add</b>(component)</pre> 
    <ul>
-      Add a component to the host object.  The components will besorted based on their type, and priority within that type.Components with a higher priority will be sorted before componentswith a lower priority.  The sorting order for type is:<ul><li>Input</li><li>Logic</li><li>Collision</li><li>Rendering</li></ul>
+      Add a component to the host object.  The components will besorted based on their type, and priority within that type.Components with a higher priority will be sorted before componentswith a lower priority.  The sorting order for type is:<ul><li>Input</li><li>Transform</li><li>Logic</li><li>Collision</li><li>Rendering</li></ul>
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -440,7 +422,7 @@ A host object is a container of components which provide some sortof action, be
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
-      <pre><b>getClassName</b>()</pre> 
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
    <ul>
       Get the class name of this object
       
@@ -450,7 +432,12 @@ A host object is a container of components which provide some sortof action, be
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "HostObject" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -477,7 +464,7 @@ A host object is a container of components which provide some sortof action, be
    <hr>
 
    <a name="getRenderContext"> </a> <h3>getRenderContext</h3>
-      <pre><b>getRenderContext</b>()</pre> 
+      <pre>RenderContext&nbsp;<b>getRenderContext</b>()</pre> 
    <ul>
       Get the rendering context this object will be drawn upon.
       
@@ -487,55 +474,12 @@ A host object is a container of components which provide some sortof action, be
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="postUpdate"> </a> <h3>postUpdate</h3>
-      <pre><b>postUpdate</b>(renderContext, time)</pre> 
    <ul>
-      Allows the object a chance to perform actions after all ofits components have been executed.  Usually used to pop thetransformations this object performed.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
+      <b>Returns:</b>
       <ul>
-         <code>[<i>RenderContext</i>]&nbsp;renderContext </code> - The context the object will be rendered within. 
-      </ul>
-      <ul>
-         <code>[<i>Number</i>]&nbsp;time </code> - The global time within the engine. 
+         <code><i>RenderContext</i>&nbsp;</code>The render context the object belongs to 
       </ul>
    </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="preUpdate"> </a> <h3>preUpdate</h3>
-      <pre><b>preUpdate</b>(renderContext, time)</pre> 
-   <ul>
-      Allows the object a chance to perform setup before all ofits components are executed.  Usually used to push therender context's transform.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>RenderContext</i>]&nbsp;renderContext </code> - The context the object will be rendered within. 
-      </ul>
-      <ul>
-         <code>[<i>Number</i>]&nbsp;time </code> - The global time within the engine. 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -612,6 +556,6 @@ A host object is a container of components which provide some sortof action, be
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:03 GMT-0400 (EDT)</div>
 </body>
 </html>
