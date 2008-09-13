@@ -77,7 +77,7 @@
    Extends <a href="Container.html">Container</a>.<br/>
 
 <p>
-A base rendering context.  Game objects are rendered to a contextduring engine runtime.</p>
+A base rendering context.  Game objects are rendered to a contextduring engine runtime.  A render context is a container of all of the objectsadded to it so that each object is given the chance to render.</p>
 
 
 
@@ -101,7 +101,7 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
       <td>
    
       <code>
-      <b><a href="#RenderContext">RenderContext</a></b>()
+      <b><a href="#RenderContext">RenderContext</a></b>(contextName, surface)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -150,7 +150,9 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
@@ -162,7 +164,9 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getContextData">getContextData</a></b>(obj) </code> 
@@ -188,7 +192,9 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;HTMLElement
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getSurface">getSurface</a></b>() </code> 
@@ -203,9 +209,47 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#getWorldScale">getWorldScale</a></b>() </code> 
+            <code> <b> <a href="#getViewport">getViewport</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getWorldPosition">getWorldPosition</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getWorldRotation">getWorldRotation</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Array
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getWorldScale">getWorldScale</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets an array representing the rendering scale of the world.
  
          </td>
       </tr>
@@ -239,7 +283,19 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#release">release</a></b>() </code> 
+            <code> <b> <a href="#render">render</a></b>(time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Called after the update to render all of the objects to the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#renderObject">renderObject</a></b>(obj, time) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
@@ -251,9 +307,9 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#render">render</a></b>(time) </code> 
+            <code> <b> <a href="#reset">reset</a></b>(rect) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Called after the update to render all of the objects to the rendering context.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Clear the context and prepare it for rendering.
  
          </td>
       </tr>
@@ -277,7 +333,7 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
          <td>
             <code> <b> <a href="#setScale">setScale</a></b>(scaleX, scaleY) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the scale of the rendering context.
  
          </td>
       </tr>
@@ -299,7 +355,19 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#setWorldScale">setWorldScale</a></b>(scaleX, scaleY) </code> 
+            <code> <b> <a href="#setupWorld">setupWorld</a></b>(time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gives the render context a chance to initialize the world.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setViewport">setViewport</a></b>(rect) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
@@ -311,9 +379,45 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#setWorldPosition">setWorldPosition</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setWorldRotation">setWorldRotation</a></b>(rotation) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setWorldScale">setWorldScale</a></b>(scale) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the world scale of the rendering context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#sort">sort</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sort the render context's objects by Z-index
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sort the render context's objects by their respective Z-index value.
  
          </td>
       </tr>
@@ -338,18 +442,6 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
             <code> <b> <a href="#update">update</a></b>(parentContext, time) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update the render context before rendering the objects to the surface.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#updateObject">updateObject</a></b>(obj, time) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update an object in the render context
  
          </td>
       </tr>
@@ -411,6 +503,8 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
             
                <a href="Container.html#constructor">constructor</a>,
             
+               <a href="Container.html#release">release</a>,
+            
                <a href="Container.html#size">size</a>,
             
                <a href="Container.html#remove">remove</a>,
@@ -454,12 +548,25 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
 <a name="RenderContext"> </a>
 <h3>RenderContext</h3>
 
-   <pre><b>RenderContext</b>()</pre>
+   <pre><b>RenderContext</b>(contextName, surface)</pre>
    <ul>
       
    </ul>
    
    <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;contextName</code> - The name of this context.  Default: RenderContext 
+      </ul>
+      
+      <ul>
+         <code>[<i>HTMLElement</i>]&nbsp;surface</code> - The surface node that all objects will be rendered to. 
+      </ul>
+      
+   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -483,7 +590,7 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <a name="add"> </a> <h3>add</h3>
       <pre><b>add</b>(obj)</pre> 
    <ul>
-      Add an object to the render list.  Only objectswithin the render list will be rendered.
+      Add an object to the render list.  Only objectswithin the render list will be rendered.  If an object declaredan <tt>afterAdd</tt> method, it will be called after the objecthas been added to the context.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -518,7 +625,7 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
-      <pre><b>getClassName</b>()</pre> 
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
    <ul>
       Get the class name of this object
       
@@ -528,13 +635,18 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "RenderContext" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getContextData"> </a> <h3>getContextData</h3>
-      <pre><b>getContextData</b>(obj)</pre> 
+      <pre>Object&nbsp;<b>getContextData</b>(obj)</pre> 
    <ul>
       Returns the structure that contains information held aboutthe rendering context.  This object allows a context to storeextra information on an object that an object wouldn't know about.
       
@@ -549,7 +661,12 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>An object with data used by the context 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -581,9 +698,62 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <hr>
 
    <a name="getSurface"> </a> <h3>getSurface</h3>
-      <pre><b>getSurface</b>()</pre> 
+      <pre>HTMLElement&nbsp;<b>getSurface</b>()</pre> 
    <ul>
       Get the surface node that all objects will be rendered to.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>HTMLElement</i>&nbsp;</code>The document node that represents the rendering surface 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getViewport"> </a> <h3>getViewport</h3>
+      <pre><b>getViewport</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getWorldPosition"> </a> <h3>getWorldPosition</h3>
+      <pre><b>getWorldPosition</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getWorldRotation"> </a> <h3>getWorldRotation</h3>
+      <pre><b>getWorldRotation</b>()</pre> 
+   <ul>
+      undocumented
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -597,9 +767,9 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <hr>
 
    <a name="getWorldScale"> </a> <h3>getWorldScale</h3>
-      <pre><b>getWorldScale</b>()</pre> 
+      <pre>Array&nbsp;<b>getWorldScale</b>()</pre> 
    <ul>
-      undocumented
+      Gets an array representing the rendering scale of the world.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -607,7 +777,12 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Array</i>&nbsp;</code>The first element is the X axis, the second is the Y axis 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -644,14 +819,19 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="release"> </a> <h3>release</h3>
-      <pre><b>release</b>()</pre> 
+   <a name="render"> </a> <h3>render</h3>
+      <pre><b>render</b>(time)</pre> 
    <ul>
-      undocumented
+      Called after the update to render all of the objects to the context.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The current render time in milliseconds from the engine. 
+      </ul>
+   </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -660,17 +840,41 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="render"> </a> <h3>render</h3>
-      <pre><b>render</b>(time)</pre> 
+   <a name="renderObject"> </a> <h3>renderObject</h3>
+      <pre><b>renderObject</b>(obj, time)</pre> 
    <ul>
-      Called after the update to render all of the objects to the rendering context.
+      undocumented
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Number</i>]&nbsp;time </code> - The current render time in milliseconds from the engine. 
+         <code>obj </code> 
+      </ul>
+      <ul>
+         <code>time </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="reset"> </a> <h3>reset</h3>
+      <pre><b>reset</b>(rect)</pre> 
+   <ul>
+      Clear the context and prepare it for rendering.  If you pass arectangle, only that portion of the world will be cleared.  Ifyou don't pass a rectangle, the entire context is cleared.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The area to clear in the context, or            <tt>null</tt> to clear the entire context. 
       </ul>
    </ul>
    
@@ -700,17 +904,17 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <a name="setScale"> </a> <h3>setScale</h3>
       <pre><b>setScale</b>(scaleX, scaleY)</pre> 
    <ul>
-      undocumented
+      Set the scale of the rendering context.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>scaleX </code> 
+         <code>[<i>Number</i>]&nbsp;scaleX </code> - The scale along the X dimension 
       </ul>
       <ul>
-         <code>scaleY </code> 
+         <code>[<i>Number</i>]&nbsp;scaleY </code> - The scale along the Y dimension 
       </ul>
    </ul>
    
@@ -731,7 +935,91 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>HTMLElement</i>]&nbsp;element </code> - The surface node that all objects will be rendered to. 
+         <code>[<i>HTMLElement</i>]&nbsp;element </code> - The document node that all objects will be rendered to. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setupWorld"> </a> <h3>setupWorld</h3>
+      <pre><b>setupWorld</b>(time)</pre> 
+   <ul>
+      Gives the render context a chance to initialize the world.Use this method to change the world position, rotation, scale, etc.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The current world time 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setViewport"> </a> <h3>setViewport</h3>
+      <pre><b>setViewport</b>(rect)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>rect </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setWorldPosition"> </a> <h3>setWorldPosition</h3>
+      <pre><b>setWorldPosition</b>(point)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>point </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setWorldRotation"> </a> <h3>setWorldRotation</h3>
+      <pre><b>setWorldRotation</b>(rotation)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>rotation </code> 
       </ul>
    </ul>
    
@@ -743,19 +1031,16 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <hr>
 
    <a name="setWorldScale"> </a> <h3>setWorldScale</h3>
-      <pre><b>setWorldScale</b>(scaleX, scaleY)</pre> 
+      <pre><b>setWorldScale</b>(scale)</pre> 
    <ul>
-      undocumented
+      Set the world scale of the rendering context.  All objects shouldbe adjusted by this scale when the context renders.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>scaleX </code> 
-      </ul>
-      <ul>
-         <code>scaleY </code> 
+         <code>[<i>Number</i>]&nbsp;scale </code> - The uniform scale of the world 
       </ul>
    </ul>
    
@@ -769,7 +1054,7 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <a name="sort"> </a> <h3>sort</h3>
       <pre><b>sort</b>()</pre> 
    <ul>
-      Sort the render context's objects by Z-index
+      Sort the render context's objects by their respective Z-index value.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -830,30 +1115,6 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="updateObject"> </a> <h3>updateObject</h3>
-      <pre><b>updateObject</b>(obj, time)</pre> 
-   <ul>
-      Update an object in the render context
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>BaseObject</i>]&nbsp;obj </code> - An object to update 
-      </ul>
-      <ul>
-         <code>[<i>Number</i>]&nbsp;time </code> - The current time in milliseconds 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -865,6 +1126,6 @@ A base rendering context.  Game objects are rendered to a contextduring engine 
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:04 GMT-0400 (EDT)</div>
 </body>
 </html>

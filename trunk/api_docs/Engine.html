@@ -59,7 +59,7 @@
 
 
 <p>
-The main engine class which is responsible for tracking objectsand rendering a frame.  Additionally, the Engine will track some simplemetrics for optimizing a game. Finally, the Engine is responsible formaintaining the local client's <tt>worldTime</tt>.</p>
+The main engine class which is responsible for keeping the world up to date.Additionally, the Engine will track and display metrics for optimizing a game. Finally,the Engine is responsible for maintaining the local client's <tt>worldTime</tt>.<p/>The engine includes methods to load scripts and stylesheets in a serialized fashionand report on the sound engine status.  Since objects are tracked by the engine, a listof all game objects can be obtained from the engine.  The engine also contains the rootrendering context, or "default" context.  For anything to be rendered, or updated by theengine, it will need to be added to a child of the default context.<p/>Other methods allow for starting or shutting down then engine, toggling metric display,setting of the base "frames per second", toggling of the debug mode, and processing ofthe script and function queue.<p/>Since JavaScript is a single-threaded environment, frames are generated serially.  Oneframe must complete before another can be rendered.  Frames are not currently skippedby the engine.  It is up to objects to determine if frames have been skipped and adjustthemselves appropriately.</p>
 
 
 
@@ -132,13 +132,13 @@ The main engine class which is responsible for tracking objectsand rendering a 
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;String
             </code></font> 
          </td>
          <td>
             <code> <b> <a href="#create">create</a></b>(obj) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Create an instance of an object, managed by the Engine.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Track an instance of an object managed by the Engine.
  
          </td>
       </tr>
@@ -150,7 +150,33 @@ The main engine class which is responsible for tracking objectsand rendering a 
          <td>
             <code> <b> <a href="#destroy">destroy</a></b>(obj) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Destroys an object instance managed by the Engine.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Removes an object instance managed by the Engine.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#doLoad">doLoad</a></b>(scriptPath, simplePath, cb) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#dumpDependencies">dumpDependencies</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dump out any unresolved class dependencies.
  
          </td>
       </tr>
@@ -169,7 +195,9 @@ The main engine class which is responsible for tracking objectsand rendering a 
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getDebugMode">getDebugMode</a></b>() </code> 
@@ -182,7 +210,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;RenderContext
             </code></font> 
          </td>
          <td>
@@ -195,7 +223,9 @@ The main engine class which is responsible for tracking objectsand rendering a 
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getEnginePath">getEnginePath</a></b>() </code> 
@@ -208,13 +238,25 @@ The main engine class which is responsible for tracking objectsand rendering a 
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;PooledObject
             </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getObject">getObject</a></b>(id) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get an object by it's Id that is managed by the Engine.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get an object by it's Id that was assigned during the call to <a href='#create'>create</a>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#handleScriptDone">handleScriptDone</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -233,8 +275,32 @@ The main engine class which is responsible for tracking objectsand rendering a 
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#include">include</a></b>(scriptURL) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Include a script file.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#initObject">initObject</a></b>(objectName, dependencies, fn) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -265,6 +331,18 @@ The main engine class which is responsible for tracking objectsand rendering a 
             <code> <b> <a href="#loadGame">loadGame</a></b>(gameSource) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Load a game script.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#loadNow">loadNow</a></b>(scriptPath, cb) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -322,6 +400,18 @@ The main engine class which is responsible for tracking objectsand rendering a 
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#procDeps">procDeps</a></b>(objectName, fTable) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#removeMetric">removeMetric</a></b>(metricName) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove a metric from the display
@@ -337,6 +427,18 @@ The main engine class which is responsible for tracking objectsand rendering a 
             <code> <b> <a href="#run">run</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Runs the engine.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#runScriptQueue">runScriptQueue</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -420,7 +522,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
          <td>
             <code> <b> <a href="#startup">startup</a></b>(debugMode) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts the engine and initializes the timer to update theworld managed by the engine.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts the engine and loads the basic engine scripts.
  
          </td>
       </tr>
@@ -445,6 +547,18 @@ The main engine class which is responsible for tracking objectsand rendering a 
             <code> <b> <a href="#toString">toString</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Prints the version of the engine.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#updateProgress">updateProgress</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -548,16 +662,16 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <hr>
 
    <a name="create"> </a> <h3>create</h3>
-      <pre>&nbsp;<b>create</b>(obj)</pre> 
+      <pre>String&nbsp;<b>create</b>(obj)</pre> 
    <ul>
-      Create an instance of an object, managed by the Engine.  Calledby any object that extends from <a href='BaseObject.html'>BaseObject</a>.
+      Track an instance of an object managed by the Engine.  This is calledby any object that extends from <a href='PooledObject.html'>PooledObject</a>.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>BaseObject</i>]&nbsp;obj </code> - A managed object within the engine 
+         <code>[<i>PooledObject</i>]&nbsp;obj </code> - A managed object within the engine 
       </ul>
    </ul>
    
@@ -566,7 +680,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The global Id of the object 
+         <code><i>String</i>&nbsp;</code>The global Id of the object 
       </ul>
    </ul>
    
@@ -576,20 +690,68 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <a name="destroy"> </a> <h3>destroy</h3>
       <pre><b>destroy</b>(obj)</pre> 
    <ul>
-      Destroys an object instance managed by the Engine.
+      Removes an object instance managed by the Engine.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object, managed by the engine, to destroy 
+         <code>[<i>PooledObject</i>]&nbsp;obj </code> - The object, managed by the engine, to destroy 
       </ul>
    </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
    
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="doLoad"> </a> <h3>doLoad</h3>
+      <pre><b>doLoad</b>(scriptPath, simplePath, cb)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>scriptPath </code> 
+      </ul>
+      <ul>
+         <code>simplePath </code> 
+      </ul>
+      <ul>
+         <code>cb </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="dumpDependencies"> </a> <h3>dumpDependencies</h3>
+      <pre>Object&nbsp;<b>dumpDependencies</b>()</pre> 
+   <ul>
+      Dump out any unresolved class dependencies.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>A list of all classes that haven't been loaded due to resolution conflicts. 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -611,7 +773,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <hr>
 
    <a name="getDebugMode"> </a> <h3>getDebugMode</h3>
-      <pre><b>getDebugMode</b>()</pre> 
+      <pre>Boolean&nbsp;<b>getDebugMode</b>()</pre> 
    <ul>
       Query the debugging mode of the engine.
       
@@ -621,13 +783,18 @@ The main engine class which is responsible for tracking objectsand rendering a 
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the engine is in debug mode 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getDefaultContext"> </a> <h3>getDefaultContext</h3>
-      <pre>&nbsp;<b>getDefaultContext</b>()</pre> 
+      <pre>RenderContext&nbsp;<b>getDefaultContext</b>()</pre> 
    <ul>
       Get the default rendering context for the Engine.  Thisis the <tt>document.body</tt> element in the browser.
       
@@ -640,7 +807,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The default rendering context 
+         <code><i>RenderContext</i>&nbsp;</code>The default rendering context 
       </ul>
    </ul>
    
@@ -648,7 +815,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <hr>
 
    <a name="getEnginePath"> </a> <h3>getEnginePath</h3>
-      <pre><b>getEnginePath</b>()</pre> 
+      <pre>String&nbsp;<b>getEnginePath</b>()</pre> 
    <ul>
       Get the path to the engine.
       
@@ -658,15 +825,20 @@ The main engine class which is responsible for tracking objectsand rendering a 
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The path/URL where the engine is located 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getObject"> </a> <h3>getObject</h3>
-      <pre>&nbsp;<b>getObject</b>(id)</pre> 
+      <pre>PooledObject&nbsp;<b>getObject</b>(id)</pre> 
    <ul>
-      Get an object by it's Id that is managed by the Engine.
+      Get an object by it's Id that was assigned during the call to <a href='#create'>create</a>.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -682,9 +854,25 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The object 
+         <code><i>PooledObject</i>&nbsp;</code>The object 
       </ul>
    </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="handleScriptDone"> </a> <h3>handleScriptDone</h3>
+      <pre><b>handleScriptDone</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -705,8 +893,56 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="include"> </a> <h3>include</h3>
+      <pre><b>include</b>(scriptURL)</pre> 
+   <ul>
+      Include a script file.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;scriptURL </code> - The URL of the script file 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="initObject"> </a> <h3>initObject</h3>
+      <pre><b>initObject</b>(objectName, dependencies, fn)</pre> 
+   <ul>
+      
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;objectName </code> - The name of the object class 
+      </ul>
+      <ul>
+         <code>[<i>Array</i>]&nbsp;dependencies </code> - An array of object names the object to initialize                    is dependent on.  When all objects have been created, the                    object will be initialized. 
+      </ul>
+      <ul>
+         <code>[<i>Function</i>]&nbsp;fn </code> - The function to run when the object can be initialized. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="isSoundEnabled"> </a> <h3>isSoundEnabled</h3>
-      <pre>&nbsp;<b>isSoundEnabled</b>()</pre> 
+      <pre>Boolean&nbsp;<b>isSoundEnabled</b>()</pre> 
    <ul>
       Returns <tt>true</tt> if SoundManager2 is loaded and initializedproperly.  The resource loader and play manager will use thisvalue to execute properly.
       
@@ -719,7 +955,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the sound engine was loaded properly 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the sound engine was loaded properly 
       </ul>
    </ul>
    
@@ -758,6 +994,30 @@ The main engine class which is responsible for tracking objectsand rendering a 
       <b>Parameters:</b>
       <ul>
          <code>[<i>String</i>]&nbsp;gameSource </code> - The URL of the game script. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="loadNow"> </a> <h3>loadNow</h3>
+      <pre><b>loadNow</b>(scriptPath, cb)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>scriptPath </code> 
+      </ul>
+      <ul>
+         <code>cb </code> 
       </ul>
    </ul>
    
@@ -847,6 +1107,30 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="procDeps"> </a> <h3>procDeps</h3>
+      <pre><b>procDeps</b>(objectName, fTable)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>objectName </code> 
+      </ul>
+      <ul>
+         <code>fTable </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="removeMetric"> </a> <h3>removeMetric</h3>
       <pre><b>removeMetric</b>(metricName)</pre> 
    <ul>
@@ -884,6 +1168,22 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="runScriptQueue"> </a> <h3>runScriptQueue</h3>
+      <pre><b>runScriptQueue</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setDebugMode"> </a> <h3>setDebugMode</h3>
       <pre><b>setDebugMode</b>(mode)</pre> 
    <ul>
@@ -894,7 +1194,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Boolean</i>]&nbsp;mode </code> - <tt>true</tt> to debug the engine 
+         <code>[<i>Boolean</i>]&nbsp;mode </code> - <tt>true</tt> to set debugging mode 
       </ul>
    </ul>
    
@@ -908,7 +1208,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <a name="setFPS"> </a> <h3>setFPS</h3>
       <pre><b>setFPS</b>(fps)</pre> 
    <ul>
-      Set the FPS (frames per second) the engine runs at.  This valueis mainly a suggestion to the engine as to how fast you want toredraw frames.  If frame execution time is long, frames may bemissed.  See the metrics to understand available time versusrender time.
+      Set the FPS (frames per second) the engine runs at.  This valueis mainly a suggestion to the engine as to how fast you want toredraw frames.  If frame execution time is long, frames will beprocessed as time is available. See the metrics to understandavailable time versus render time.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -1003,7 +1303,7 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <a name="startup"> </a> <h3>startup</h3>
       <pre><b>startup</b>(debugMode)</pre> 
    <ul>
-      Starts the engine and initializes the timer to update theworld managed by the engine.
+      Starts the engine and loads the basic engine scripts.  When all scripts requiredby the engine have been loaded the <a href='#run'>run</a> method will be called.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -1053,6 +1353,22 @@ The main engine class which is responsible for tracking objectsand rendering a 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="updateProgress"> </a> <h3>updateProgress</h3>
+      <pre><b>updateProgress</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -1064,6 +1380,6 @@ The main engine class which is responsible for tracking objectsand rendering a 
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:16 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:05 GMT-0400 (EDT)</div>
 </body>
 </html>

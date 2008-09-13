@@ -57,6 +57,22 @@
 
 <h2>Class ResourceLoader</h2>
 
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<b>ResourceLoader</b></pre>
+   <hr>
+   Class <b>ResourceLoader</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="BaseObject.html">BaseObject</a>.<br/>
 
 <p>
 A resource loader is a generalized interface used by all resource        loaders.  It is designed to provide a common set of routines for        loading resources (fonts, images, game data, etc...) from some        location.</p>
@@ -120,31 +136,9 @@ A resource loader is a generalized interface used by all resource        loader
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(name) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#get">get</a></b>(name) </code> 
@@ -157,7 +151,35 @@ A resource loader is a generalized interface used by all resource        loader
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getCachedObjects">getCachedObjects</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the cache.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Array
             </code></font> 
          </td>
          <td>
@@ -171,7 +193,7 @@ A resource loader is a generalized interface used by all resource        loader
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;String
             </code></font> 
          </td>
          <td>
@@ -184,12 +206,14 @@ A resource loader is a generalized interface used by all resource        loader
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#isReady">isReady</a></b>(name) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Check to see if a named resource is "ready for use".
  
          </td>
       </tr>
@@ -211,21 +235,9 @@ A resource loader is a generalized interface used by all resource        loader
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#release">release</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
             <code> <b> <a href="#setReady">setReady</a></b>(name, isReady) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the "ready" state of the resource.
  
          </td>
       </tr>
@@ -252,6 +264,53 @@ A resource loader is a generalized interface used by all resource        loader
 
 
 <!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#release">release</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#renderObject">renderObject</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#destroy">destroy</a>,
+            
+               <a href="PooledObject.html#serialize">serialize</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
 
 <br/>
 
@@ -287,7 +346,7 @@ A resource loader is a generalized interface used by all resource        loader
       <b>Parameters:</b>
       
       <ul>
-         <code>[<i>String</i>]&nbsp;name</code> - The name of the resource loader. Default: ResourceLoader 
+         <code>[<i>String=ResourceLoader</i>]&nbsp;name</code> - The name of the resource loader. 
       </ul>
       
    </ul>
@@ -327,45 +386,8 @@ A resource loader is a generalized interface used by all resource        loader
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(name)</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>name </code> 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="destroy"> </a> <h3>destroy</h3>
-      <pre><b>destroy</b>()</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="get"> </a> <h3>get</h3>
-      <pre><b>get</b>(name)</pre> 
+      <pre>Object&nbsp;<b>get</b>(name)</pre> 
    <ul>
       Get the object with the specified name from the cache.
       
@@ -380,13 +402,60 @@ A resource loader is a generalized interface used by all resource        loader
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The object stored within the cache 
+      </ul>
+   </ul>
    
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getCachedObjects"> </a> <h3>getCachedObjects</h3>
+      <pre>Object&nbsp;<b>getCachedObjects</b>()</pre> 
+   <ul>
+      Returns the cache.  You should not manipulate the cache directly.instead, call methods to update the cache.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The cache 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "ResourceLoader" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getResources"> </a> <h3>getResources</h3>
-      <pre>&nbsp;<b>getResources</b>()</pre> 
+      <pre>Array&nbsp;<b>getResources</b>()</pre> 
    <ul>
       Get the names of all the resources available in this resource loader.
       
@@ -399,7 +468,7 @@ A resource loader is a generalized interface used by all resource        loader
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>An Array of resource names 
+         <code><i>Array</i>&nbsp;</code>An array of resource names 
       </ul>
    </ul>
    
@@ -407,7 +476,7 @@ A resource loader is a generalized interface used by all resource        loader
    <hr>
 
    <a name="getResourceType"> </a> <h3>getResourceType</h3>
-      <pre>&nbsp;<b>getResourceType</b>()</pre> 
+      <pre>String&nbsp;<b>getResourceType</b>()</pre> 
    <ul>
       The name of the resource this loader will get.
       
@@ -420,7 +489,7 @@ A resource loader is a generalized interface used by all resource        loader
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A String that represents the resource type. 
+         <code><i>String</i>&nbsp;</code>The string "default" 
       </ul>
    </ul>
    
@@ -428,9 +497,9 @@ A resource loader is a generalized interface used by all resource        loader
    <hr>
 
    <a name="isReady"> </a> <h3>isReady</h3>
-      <pre><b>isReady</b>(name)</pre> 
+      <pre>Boolean&nbsp;<b>isReady</b>(name)</pre> 
    <ul>
-      undocumented
+      Check to see if a named resource is "ready for use".
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -443,7 +512,12 @@ A resource loader is a generalized interface used by all resource        loader
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the resource is loaded and ready to use 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -475,36 +549,20 @@ A resource loader is a generalized interface used by all resource        loader
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="release"> </a> <h3>release</h3>
-      <pre><b>release</b>()</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="setReady"> </a> <h3>setReady</h3>
       <pre><b>setReady</b>(name, isReady)</pre> 
    <ul>
-      undocumented
+      Set the "ready" state of the resource.  When a resource has been completelyloaded, set the resource "ready" state to <tt>true</tt> to allow objectswaiting for those resources to utilize them.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>name </code> 
+         <code>[<i>String</i>]&nbsp;name </code> - The name of the resource 
       </ul>
       <ul>
-         <code>isReady </code> 
+         <code>[<i>Boolean</i>]&nbsp;isReady </code> - <tt>true</tt> to set the resource to "ready for use" 
       </ul>
    </ul>
    
@@ -547,6 +605,6 @@ A resource loader is a generalized interface used by all resource        loader
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:04 GMT-0400 (EDT)</div>
 </body>
 </html>

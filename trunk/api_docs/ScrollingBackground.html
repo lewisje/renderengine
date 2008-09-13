@@ -71,7 +71,7 @@
                |
                +--<a href='RenderContext2D.html' target='main'>RenderContext2D</a>
                   |
-                  +--<a href='HTMLElementContext.html' target='main'>HTMLElementContext</a>
+                  +--<a href='CanvasContext.html' target='main'>CanvasContext</a>
                      |
                      +--<b>ScrollingBackground</b></pre>
    <hr>
@@ -80,14 +80,14 @@
 
 
 
-   Extends <a href="HTMLElementContext.html">HTMLElementContext</a>.<br/>
+   Extends <a href="CanvasContext.html">CanvasContext</a>.<br/>
 
 <p>
 A scrolling background render context with an associated       collision map.  The render context loads a level which defines       the image that will be displayed within a rendering context.</p>
 
 
 
-<br/><i>Defined in <a href="object.background.src.html">object.background.js</a></i>
+<br/><i>Defined in <a href="context.scrollingbackground.src.html">context.scrollingbackground.js</a></i>
 
 <hr>
 
@@ -132,24 +132,42 @@ A scrolling background render context with an associated       collision map.  
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(name, level, windowWidth, windowHeight) </code> 
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#release">release</a></b>() </code> 
+            <code> <b> <a href="#getHorizontalScroll">getHorizontalScroll</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the horizontal scroll amount in pixels.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getVerticalScroll">getVerticalScroll</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the vertical scroll amount in pixels.
  
          </td>
       </tr>
@@ -161,7 +179,7 @@ A scrolling background render context with an associated       collision map.  
          <td>
             <code> <b> <a href="#setHorizontalScroll">setHorizontalScroll</a></b>(x) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the horizontal scroll amount in pixels.
  
          </td>
       </tr>
@@ -171,7 +189,7 @@ A scrolling background render context with an associated       collision map.  
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#setScrollPosition">setScrollPosition</a></b>(point) </code> 
+            <code> <b> <a href="#setupWorld">setupWorld</a></b>(time) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
@@ -185,7 +203,19 @@ A scrolling background render context with an associated       collision map.  
          <td>
             <code> <b> <a href="#setVerticalScroll">setVerticalScroll</a></b>(y) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the vertical scroll amount in pixels.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setWorldPosition">setWorldPosition</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the scroll position for the background using a <a href='Point2D.html'>Point2D</a> todefine the X and Y scroll amount.
  
          </td>
       </tr>
@@ -217,9 +247,17 @@ A scrolling background render context with an associated       collision map.  
             
                <a href="RenderContext.html#getSurface">getSurface</a>,
             
-               <a href="RenderContext.html#setWorldScale">setWorldScale</a>,
+               <a href="RenderContext.html#setWorldRotation">setWorldRotation</a>,
             
                <a href="RenderContext.html#getWorldScale">getWorldScale</a>,
+            
+               <a href="RenderContext.html#getWorldRotation">getWorldRotation</a>,
+            
+               <a href="RenderContext.html#getWorldPosition">getWorldPosition</a>,
+            
+               <a href="RenderContext.html#setViewport">setViewport</a>,
+            
+               <a href="RenderContext.html#getViewport">getViewport</a>,
             
                <a href="RenderContext.html#add">add</a>,
             
@@ -231,19 +269,13 @@ A scrolling background render context with an associated       collision map.  
             
                <a href="RenderContext.html#render">render</a>,
             
-               <a href="RenderContext.html#updateObject">updateObject</a>,
-            
-               <a href="RenderContext.html#pushTransform">pushTransform</a>,
-            
-               <a href="RenderContext.html#popTransform">popTransform</a>,
+               <a href="RenderContext.html#renderObject">renderObject</a>,
             
                <a href="RenderContext.html#resetTransformStack">resetTransformStack</a>,
             
                <a href="RenderContext.html#getNearObjects">getNearObjects</a>,
             
                <a href="RenderContext.html#sortFn">sortFn</a>,
-            
-               <a href="RenderContext.html#getClassName">getClassName</a>,
             
          </code></td>
       </tr>
@@ -256,9 +288,7 @@ A scrolling background render context with an associated       collision map.  
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="RenderContext2D.html#reset">reset</a>,
-            
-               <a href="RenderContext2D.html#setBackgroundColor">setBackgroundColor</a>,
+               <a href="RenderContext2D.html#constructor">constructor</a>,
             
                <a href="RenderContext2D.html#getBackgroundColor">getBackgroundColor</a>,
             
@@ -272,41 +302,27 @@ A scrolling background render context with an associated       collision map.  
             
                <a href="RenderContext2D.html#getBoundingBox">getBoundingBox</a>,
             
-               <a href="RenderContext2D.html#setPosition">setPosition</a>,
-            
                <a href="RenderContext2D.html#getPosition">getPosition</a>,
             
-               <a href="RenderContext2D.html#setRotation">setRotation</a>,
-            
                <a href="RenderContext2D.html#getRotation">getRotation</a>,
-            
-               <a href="RenderContext2D.html#setScale">setScale</a>,
             
                <a href="RenderContext2D.html#getScaleX">getScaleX</a>,
             
                <a href="RenderContext2D.html#getScaleY">getScaleY</a>,
             
-               <a href="RenderContext2D.html#setTransform">setTransform</a>,
+               <a href="RenderContext2D.html#setRenderTransform">setRenderTransform</a>,
             
-               <a href="RenderContext2D.html#setLineStyle">setLineStyle</a>,
+               <a href="RenderContext2D.html#getRenderPosition">getRenderPosition</a>,
+            
+               <a href="RenderContext2D.html#getRenderRotation">getRenderRotation</a>,
+            
+               <a href="RenderContext2D.html#getRenderScale">getRenderScale</a>,
             
                <a href="RenderContext2D.html#getLineStyle">getLineStyle</a>,
             
-               <a href="RenderContext2D.html#setLineWidth">setLineWidth</a>,
-            
                <a href="RenderContext2D.html#getLineWidth">getLineWidth</a>,
             
-               <a href="RenderContext2D.html#setFillStyle">setFillStyle</a>,
-            
                <a href="RenderContext2D.html#getFillStyle">getFillStyle</a>,
-            
-               <a href="RenderContext2D.html#drawRectangle">drawRectangle</a>,
-            
-               <a href="RenderContext2D.html#drawFilledRectangle">drawFilledRectangle</a>,
-            
-               <a href="RenderContext2D.html#drawArc">drawArc</a>,
-            
-               <a href="RenderContext2D.html#drawFilledArc">drawFilledArc</a>,
             
                <a href="RenderContext2D.html#drawPolygon">drawPolygon</a>,
             
@@ -314,39 +330,88 @@ A scrolling background render context with an associated       collision map.  
             
                <a href="RenderContext2D.html#drawFilledPolygon">drawFilledPolygon</a>,
             
-               <a href="RenderContext2D.html#drawLine">drawLine</a>,
-            
-               <a href="RenderContext2D.html#drawPoint">drawPoint</a>,
-            
-               <a href="RenderContext2D.html#drawSprite">drawSprite</a>,
-            
-               <a href="RenderContext2D.html#drawImage">drawImage</a>,
-            
-               <a href="RenderContext2D.html#getImage">getImage</a>,
-            
-               <a href="RenderContext2D.html#putImage">putImage</a>,
-            
-               <a href="RenderContext2D.html#drawText">drawText</a>,
-            
-               <a href="RenderContext2D.html#startPath">startPath</a>,
-            
-               <a href="RenderContext2D.html#endPath">endPath</a>,
-            
-               <a href="RenderContext2D.html#strokePath">strokePath</a>,
-            
-               <a href="RenderContext2D.html#fillPath">fillPath</a>,
-            
-               <a href="RenderContext2D.html#moveTo">moveTo</a>,
-            
-               <a href="RenderContext2D.html#lineTo">lineTo</a>,
-            
                <a href="RenderContext2D.html#lineSeg">lineSeg</a>,
             
-               <a href="RenderContext2D.html#quadraticCurveTo">quadraticCurveTo</a>,
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="CanvasContext.html">CanvasContext</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
             
-               <a href="RenderContext2D.html#bezierCurveTo">bezierCurveTo</a>,
+               <a href="CanvasContext.html#afterAdd">afterAdd</a>,
             
-               <a href="RenderContext2D.html#arcTo">arcTo</a>,
+               <a href="CanvasContext.html#release">release</a>,
+            
+               <a href="CanvasContext.html#setWorldScale">setWorldScale</a>,
+            
+               <a href="CanvasContext.html#get2DContext">get2DContext</a>,
+            
+               <a href="CanvasContext.html#pushTransform">pushTransform</a>,
+            
+               <a href="CanvasContext.html#popTransform">popTransform</a>,
+            
+               <a href="CanvasContext.html#reset">reset</a>,
+            
+               <a href="CanvasContext.html#setBackgroundColor">setBackgroundColor</a>,
+            
+               <a href="CanvasContext.html#setPosition">setPosition</a>,
+            
+               <a href="CanvasContext.html#setRotation">setRotation</a>,
+            
+               <a href="CanvasContext.html#setScale">setScale</a>,
+            
+               <a href="CanvasContext.html#setTransform">setTransform</a>,
+            
+               <a href="CanvasContext.html#setLineStyle">setLineStyle</a>,
+            
+               <a href="CanvasContext.html#setLineWidth">setLineWidth</a>,
+            
+               <a href="CanvasContext.html#setFillStyle">setFillStyle</a>,
+            
+               <a href="CanvasContext.html#drawRectangle">drawRectangle</a>,
+            
+               <a href="CanvasContext.html#drawFilledRectangle">drawFilledRectangle</a>,
+            
+               <a href="CanvasContext.html#drawArc">drawArc</a>,
+            
+               <a href="CanvasContext.html#drawFilledArc">drawFilledArc</a>,
+            
+               <a href="CanvasContext.html#drawLine">drawLine</a>,
+            
+               <a href="CanvasContext.html#drawPoint">drawPoint</a>,
+            
+               <a href="CanvasContext.html#drawSprite">drawSprite</a>,
+            
+               <a href="CanvasContext.html#drawImage">drawImage</a>,
+            
+               <a href="CanvasContext.html#getImage">getImage</a>,
+            
+               <a href="CanvasContext.html#putImage">putImage</a>,
+            
+               <a href="CanvasContext.html#drawText">drawText</a>,
+            
+               <a href="CanvasContext.html#startPath">startPath</a>,
+            
+               <a href="CanvasContext.html#endPath">endPath</a>,
+            
+               <a href="CanvasContext.html#strokePath">strokePath</a>,
+            
+               <a href="CanvasContext.html#fillPath">fillPath</a>,
+            
+               <a href="CanvasContext.html#moveTo">moveTo</a>,
+            
+               <a href="CanvasContext.html#lineTo">lineTo</a>,
+            
+               <a href="CanvasContext.html#quadraticCurveTo">quadraticCurveTo</a>,
+            
+               <a href="CanvasContext.html#bezierCurveTo">bezierCurveTo</a>,
+            
+               <a href="CanvasContext.html#arcTo">arcTo</a>,
             
          </code></td>
       </tr>
@@ -459,7 +524,7 @@ A scrolling background render context with an associated       collision map.  
       </ul>
       
       <ul>
-         <code>windowHeight</code> - (Number} The height of the viewable window, in pixels 
+         <code>[<i>Number</i>]&nbsp;windowHeight</code> - The height of the viewable window, in pixels 
       </ul>
       
    </ul>
@@ -483,40 +548,31 @@ A scrolling background render context with an associated       collision map.  
 </table>
 
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(name, level, windowWidth, windowHeight)</pre> 
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
    <ul>
-      undocumented
+      Get the class name of this object
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>name </code> 
-      </ul>
-      <ul>
-         <code>level </code> 
-      </ul>
-      <ul>
-         <code>windowWidth </code> 
-      </ul>
-      <ul>
-         <code>windowHeight </code> 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "ScrollingBackground" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="release"> </a> <h3>release</h3>
-      <pre><b>release</b>()</pre> 
+   <a name="getHorizontalScroll"> </a> <h3>getHorizontalScroll</h3>
+      <pre>Number&nbsp;<b>getHorizontalScroll</b>()</pre> 
    <ul>
-      undocumented
+      Get the horizontal scroll amount in pixels.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -524,7 +580,33 @@ A scrolling background render context with an associated       collision map.  
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The horizontal scroll 
+      </ul>
+   </ul>
    
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getVerticalScroll"> </a> <h3>getVerticalScroll</h3>
+      <pre>Number&nbsp;<b>getVerticalScroll</b>()</pre> 
+   <ul>
+      Get the vertical scroll amount in pixels.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The vertical scroll 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -532,14 +614,14 @@ A scrolling background render context with an associated       collision map.  
    <a name="setHorizontalScroll"> </a> <h3>setHorizontalScroll</h3>
       <pre><b>setHorizontalScroll</b>(x)</pre> 
    <ul>
-      undocumented
+      Set the horizontal scroll amount in pixels.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>x </code> 
+         <code>[<i>Number</i>]&nbsp;x </code> - The horizontal scroll in pixels 
       </ul>
    </ul>
    
@@ -550,8 +632,8 @@ A scrolling background render context with an associated       collision map.  
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="setScrollPosition"> </a> <h3>setScrollPosition</h3>
-      <pre><b>setScrollPosition</b>(point)</pre> 
+   <a name="setupWorld"> </a> <h3>setupWorld</h3>
+      <pre><b>setupWorld</b>(time)</pre> 
    <ul>
       undocumented
       
@@ -560,7 +642,7 @@ A scrolling background render context with an associated       collision map.  
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>point </code> 
+         <code>time </code> 
       </ul>
    </ul>
    
@@ -574,14 +656,35 @@ A scrolling background render context with an associated       collision map.  
    <a name="setVerticalScroll"> </a> <h3>setVerticalScroll</h3>
       <pre><b>setVerticalScroll</b>(y)</pre> 
    <ul>
-      undocumented
+      Set the vertical scroll amount in pixels.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>y </code> 
+         <code>[<i>Number</i>]&nbsp;y </code> - The vertical scroll in pixels 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setWorldPosition"> </a> <h3>setWorldPosition</h3>
+      <pre><b>setWorldPosition</b>(point)</pre> 
+   <ul>
+      Set the scroll position for the background using a <a href='Point2D.html'>Point2D</a> todefine the X and Y scroll amount.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The scroll position along X and Y 
       </ul>
    </ul>
    
@@ -603,6 +706,6 @@ A scrolling background render context with an associated       collision map.  
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:03 GMT-0400 (EDT)</div>
 </body>
 </html>

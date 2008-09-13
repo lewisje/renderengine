@@ -61,9 +61,13 @@
 
    <pre>Object
    |
-   +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
       |
-      +--<b>ObjectLoader</b></pre>
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
+            |
+            +--<b>ObjectLoader</b></pre>
    <hr>
    Class <b>ObjectLoader</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -97,7 +101,7 @@ Loads JSON objects from a specified URL.</p>
       <td>
    
       <code>
-      <b><a href="#ObjectLoader">ObjectLoader</a></b>()
+      <b><a href="#ObjectLoader">ObjectLoader</a></b>(name)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -127,7 +131,7 @@ Loads JSON objects from a specified URL.</p>
          <td>
             <code> <b> <a href="#constructor">constructor</a></b>(name) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; private
  
          </td>
       </tr>
@@ -135,7 +139,21 @@ Loads JSON objects from a specified URL.</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
             </code></font> 
          </td>
          <td>
@@ -173,15 +191,36 @@ Loads JSON objects from a specified URL.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="ResourceLoader.html#release">release</a>,
+               <a href="BaseObject.html#release">release</a>,
             
-               <a href="ResourceLoader.html#destroy">destroy</a>,
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#renderObject">renderObject</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
             
                <a href="ResourceLoader.html#setReady">setReady</a>,
             
@@ -191,9 +230,28 @@ Loads JSON objects from a specified URL.</p>
             
                <a href="ResourceLoader.html#get">get</a>,
             
+               <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
+            
                <a href="ResourceLoader.html#clear">clear</a>,
             
                <a href="ResourceLoader.html#getResources">getResources</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#destroy">destroy</a>,
+            
+               <a href="PooledObject.html#serialize">serialize</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
             
          </code></td>
       </tr>
@@ -224,12 +282,21 @@ Loads JSON objects from a specified URL.</p>
 <a name="ObjectLoader"> </a>
 <h3>ObjectLoader</h3>
 
-   <pre><b>ObjectLoader</b>()</pre>
+   <pre><b>ObjectLoader</b>(name)</pre>
    <ul>
       
    </ul>
    
    <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String=ObjectLoader</i>]&nbsp;name</code> - The name of the resource loader 
+      </ul>
+      
+   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -253,7 +320,7 @@ Loads JSON objects from a specified URL.</p>
    <a name="constructor"> </a> <h3>constructor</h3>
       <pre><b>constructor</b>(name)</pre> 
    <ul>
-      undocumented
+      private
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -271,8 +338,29 @@ Loads JSON objects from a specified URL.</p>
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "SpriteLoader" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getResourceType"> </a> <h3>getResourceType</h3>
-      <pre>&nbsp;<b>getResourceType</b>()</pre> 
+      <pre>String&nbsp;<b>getResourceType</b>()</pre> 
    <ul>
       The name of the resource this loader will get.
       
@@ -285,7 +373,7 @@ Loads JSON objects from a specified URL.</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A String that represents the resource type. 
+         <code><i>String</i>&nbsp;</code>The string "object" 
       </ul>
    </ul>
    
@@ -330,6 +418,6 @@ Loads JSON objects from a specified URL.</p>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:15 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:03 GMT-0400 (EDT)</div>
 </body>
 </html>

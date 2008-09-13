@@ -77,7 +77,7 @@
    Extends <a href="BaseComponent.html">BaseComponent</a>.<br/>
 
 <p>
-A simple component that has position, rotation, and scale.</p>
+A simple component that maintains position, rotation, and scale.</p>
 
 
 
@@ -129,7 +129,7 @@ A simple component that has position, rotation, and scale.</p>
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#execute">execute</a></b>(renderContext, time) </code> 
+            <code> <b> <a href="#execute">execute</a></b>(renderContext, time, rendering) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the components of a transformation: position, rotation,and scale, within the rendering context.
  
@@ -153,9 +153,57 @@ A simple component that has position, rotation, and scale.</p>
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#getLastRenderPosition">getLastRenderPosition</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the last position of the transform.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#getPosition">getPosition</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the position of the transform.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRenderPosition">getRenderPosition</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the render position of the transform.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRenderRotation">getRenderRotation</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the render rotation of the transform.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRenderScale">getRenderScale</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the uniform render scale of the transform.
  
          </td>
       </tr>
@@ -271,6 +319,8 @@ A simple component that has position, rotation, and scale.</p>
             
                <a href="BaseObject.html#update">update</a>,
             
+               <a href="BaseObject.html#renderObject">renderObject</a>,
+            
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
                <a href="BaseObject.html#removeEvent">removeEvent</a>,
@@ -375,7 +425,7 @@ A simple component that has position, rotation, and scale.</p>
 
 
    <a name="execute"> </a> <h3>execute</h3>
-      <pre><b>execute</b>(renderContext, time)</pre> 
+      <pre><b>execute</b>(renderContext, time, rendering)</pre> 
    <ul>
       Set the components of a transformation: position, rotation,and scale, within the rendering context.
       
@@ -388,6 +438,9 @@ A simple component that has position, rotation, and scale.</p>
       </ul>
       <ul>
          <code>[<i>Number</i>]&nbsp;time </code> - The engine time in milliseconds 
+      </ul>
+      <ul>
+         <code>[<i>Boolean</i>]&nbsp;rendering </code> - <tt>true</tt> during the rendering phase 
       </ul>
    </ul>
    
@@ -414,10 +467,74 @@ A simple component that has position, rotation, and scale.</p>
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getLastRenderPosition"> </a> <h3>getLastRenderPosition</h3>
+      <pre><b>getLastRenderPosition</b>()</pre> 
+   <ul>
+      Get the last position of the transform.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getPosition"> </a> <h3>getPosition</h3>
       <pre><b>getPosition</b>()</pre> 
    <ul>
       Returns the position of the transform.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getRenderPosition"> </a> <h3>getRenderPosition</h3>
+      <pre><b>getRenderPosition</b>()</pre> 
+   <ul>
+      Returns the render position of the transform.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getRenderRotation"> </a> <h3>getRenderRotation</h3>
+      <pre><b>getRenderRotation</b>()</pre> 
+   <ul>
+      Get the render rotation of the transform.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getRenderScale"> </a> <h3>getRenderScale</h3>
+      <pre><b>getRenderScale</b>()</pre> 
+   <ul>
+      Get the uniform render scale of the transform.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -573,6 +690,6 @@ A simple component that has position, rotation, and scale.</p>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:16 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:05 GMT-0400 (EDT)</div>
 </body>
 </html>

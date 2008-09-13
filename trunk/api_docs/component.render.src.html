@@ -74,7 +74,7 @@ The base component class for components which render       to a context.
 <span class='linenumber'>  6</span>  *
 <span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  8</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  9</span>  * @version: $Revision: 190 $
+<span class='linenumber'>  9</span>  * @version: $Revision: 298 $
 <span class='linenumber'> 10</span>  *
 <span class='linenumber'> 11</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 12</span>  *
@@ -98,92 +98,102 @@ The base component class for components which render       to a context.
 <span class='linenumber'> 30</span>  *
 <span class='linenumber'> 31</span>  */</span><span class="WHIT">
 <span class='linenumber'> 32</span> 
-<span class='linenumber'> 33</span> </span><span class="COMM">/**
-<span class='linenumber'> 34</span>  * @class The base component class for components which render
-<span class='linenumber'> 35</span>  *        to a context.
-<span class='linenumber'> 36</span>  *
-<span class='linenumber'> 37</span>  * @param name {String} The name of the component
-<span class='linenumber'> 38</span>  * @param priority {Number} The priority of the component between 0.0 and 1.0
-<span class='linenumber'> 39</span>  */</span><span class="WHIT">
-<span class='linenumber'> 40</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">RenderComponent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseComponent.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope RenderComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 41</span> 
-<span class='linenumber'> 42</span> </span><span class="WHIT">   </span><span class="NAME">drawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 43</span> 
-<span class='linenumber'> 44</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 45</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_RENDERING</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">0.1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 46</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 47</span> 
-<span class='linenumber'> 48</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 49</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 50</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 33</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 34</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/components/component.base.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 35</span> 
+<span class='linenumber'> 36</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"RenderComponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"BaseComponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 37</span> 
+<span class='linenumber'> 38</span> </span><span class="COMM">/**
+<span class='linenumber'> 39</span>  * @class The base component class for components which render
+<span class='linenumber'> 40</span>  *        to a context.
+<span class='linenumber'> 41</span>  *
+<span class='linenumber'> 42</span>  * @param name {String} The name of the component
+<span class='linenumber'> 43</span>  * @param priority {Number} The priority of the component between 0.0 and 1.0
+<span class='linenumber'> 44</span>  */</span><span class="WHIT">
+<span class='linenumber'> 45</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">RenderComponent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseComponent.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope RenderComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 46</span> 
+<span class='linenumber'> 47</span> </span><span class="WHIT">   </span><span class="NAME">drawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 48</span> 
+<span class='linenumber'> 49</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 50</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_RENDERING</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">0.1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'> 51</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 52</span> 
-<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 54</span>     * Set the draw mode of the component.  Currently this determines
-<span class='linenumber'> 55</span>     * if the component should render itself to the context or not.
-<span class='linenumber'> 56</span>     *
-<span class='linenumber'> 57</span>     * @param drawMode {Number} One of &lt;tt>RenderComponent.DRAW&lt;/tt> or
-<span class='linenumber'> 58</span>     *                 &lt;tt>RenderComponent.NO_DRAW&lt;/tt>
-<span class='linenumber'> 59</span>     */</span><span class="WHIT">
-<span class='linenumber'> 60</span> </span><span class="WHIT">   </span><span class="NAME">setDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">drawMode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 61</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drawMode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 63</span> 
-<span class='linenumber'> 64</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 65</span>     * Get the drawing mode of the component.
-<span class='linenumber'> 66</span>     * @type Number
-<span class='linenumber'> 67</span>     */</span><span class="WHIT">
-<span class='linenumber'> 68</span> </span><span class="WHIT">   </span><span class="NAME">getDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 69</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.drawMode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 71</span> 
-<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 73</span>     * Handles whether or not the component should draw to the
-<span class='linenumber'> 74</span>     * render context, or not.
-<span class='linenumber'> 75</span>     *
-<span class='linenumber'> 76</span>     * @param renderContext {RenderContext} The rendering context
-<span class='linenumber'> 77</span>     * @param time {Number} The engine time in milliseconds
-<span class='linenumber'> 78</span>     */</span><span class="WHIT">
-<span class='linenumber'> 79</span> </span><span class="WHIT">   </span><span class="NAME">execute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 80</span> 
-<span class='linenumber'> 81</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">RenderContext.NO_DRAW</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'> 82</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 83</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 84</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 55</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 57</span> 
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 59</span>     * Set the draw mode of the component.  Currently this determines
+<span class='linenumber'> 60</span>     * if the component should render itself to the context or not.
+<span class='linenumber'> 61</span>     *
+<span class='linenumber'> 62</span>     * @param drawMode {Number} One of &lt;tt>RenderComponent.DRAW&lt;/tt> or
+<span class='linenumber'> 63</span>     *                 &lt;tt>RenderComponent.NO_DRAW&lt;/tt>
+<span class='linenumber'> 64</span>     */</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="NAME">setDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">drawMode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drawMode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 68</span> 
+<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 70</span>     * Get the drawing mode of the component.
+<span class='linenumber'> 71</span>     * @type Number
+<span class='linenumber'> 72</span>     */</span><span class="WHIT">
+<span class='linenumber'> 73</span> </span><span class="WHIT">   </span><span class="NAME">getDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 74</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.drawMode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 76</span> 
+<span class='linenumber'> 77</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 78</span>     * Handles whether or not the component should draw to the
+<span class='linenumber'> 79</span>     * render context.
+<span class='linenumber'> 80</span>     *
+<span class='linenumber'> 81</span>     * @param renderContext {RenderContext} The rendering context
+<span class='linenumber'> 82</span>     * @param time {Number} The engine time in milliseconds
+<span class='linenumber'> 83</span>     */</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">   </span><span class="NAME">execute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 85</span> 
-<span class='linenumber'> 86</span> </span><span class="WHIT">      </span><span class="COMM">// Set up drawing state</span><span class="WHIT">
-<span class='linenumber'> 87</span> </span><span class="WHIT">      </span><span class="COMM">// Xor, source-in, dest-in, etc...</span><span class="WHIT">
-<span class='linenumber'> 88</span> 
-<span class='linenumber'> 89</span> </span><span class="WHIT">      </span><span class="COMM">// Tear down drawing state</span><span class="WHIT">
-<span class='linenumber'> 90</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 91</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 92</span> 
-<span class='linenumber'> 93</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// Static</span><span class="WHIT">
-<span class='linenumber'> 94</span> 
-<span class='linenumber'> 95</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 96</span>     * Get the class name of this object
-<span class='linenumber'> 97</span>     *
-<span class='linenumber'> 98</span>     * @type String
-<span class='linenumber'> 99</span>     */</span><span class="WHIT">
-<span class='linenumber'>100</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>101</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RenderComponent"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>102</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>103</span> 
-<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>105</span>     * The component should render itself to the rendering context.
-<span class='linenumber'>106</span>     */</span><span class="WHIT">
-<span class='linenumber'>107</span> </span><span class="WHIT">   </span><span class="NAME">DRAW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>108</span> 
-<span class='linenumber'>109</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>110</span>     * The component &lt;i>should not&lt;/i> render itself to the rendering context.
-<span class='linenumber'>111</span>     */</span><span class="WHIT">
-<span class='linenumber'>112</span> </span><span class="WHIT">   </span><span class="NAME">NO_DRAW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='linenumber'>113</span> 
-<span class='linenumber'>114</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'> 86</span> </span><span class="WHIT">      </span><span class="COMM">// Check visibility</span><span class="WHIT">
+<span class='linenumber'> 87</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">RenderComponent.NO_DRAW</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
+<span class='linenumber'> 88</span> </span><span class="WHIT">          </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getWorldBox</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='linenumber'> 89</span> </span><span class="WHIT">          </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">renderContext.getViewport</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">isIntersecting</span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getWorldBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 92</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 93</span> 
+<span class='linenumber'> 94</span> </span><span class="WHIT">      </span><span class="COMM">// The object is visible</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">      </span><span class="NAME">Engine.vObj</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 98</span> 
+<span class='linenumber'> 99</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// Static</span><span class="WHIT">
+<span class='linenumber'>100</span> 
+<span class='linenumber'>101</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>102</span>     * Get the class name of this object
+<span class='linenumber'>103</span>     *
+<span class='linenumber'>104</span>     * @type String
+<span class='linenumber'>105</span>     */</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>107</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RenderComponent"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>109</span> 
+<span class='linenumber'>110</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>111</span>     * The component should render itself to the rendering context.
+<span class='linenumber'>112</span>     */</span><span class="WHIT">
+<span class='linenumber'>113</span> </span><span class="WHIT">   </span><span class="NAME">DRAW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>114</span> 
+<span class='linenumber'>115</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>116</span>     * The component &lt;i>should not&lt;/i> render itself to the rendering context.
+<span class='linenumber'>117</span>     */</span><span class="WHIT">
+<span class='linenumber'>118</span> </span><span class="WHIT">   </span><span class="NAME">NO_DRAW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='linenumber'>119</span> 
+<span class='linenumber'>120</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>121</span> 
+<span class='linenumber'>122</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">RenderComponent</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>123</span> 
+<span class='linenumber'>124</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Aug 12 2008 23:59:58 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:17:35 GMT-0400 (EDT)</div>
 </body>
 </html>

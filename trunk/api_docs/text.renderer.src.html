@@ -76,7 +76,7 @@ A 2d text rendering object.
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 11</span>  * @version: $Revision: 190 $
+<span class='linenumber'> 11</span>  * @version: $Revision: 298 $
 <span class='linenumber'> 12</span>  *
 <span class='linenumber'> 13</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 14</span>  *
@@ -100,208 +100,239 @@ A 2d text rendering object.
 <span class='linenumber'> 32</span>  *
 <span class='linenumber'> 33</span>  */</span><span class="WHIT">
 <span class='linenumber'> 34</span> 
-<span class='linenumber'> 35</span> </span><span class="COMM">/**
-<span class='linenumber'> 36</span>  * @class A 2d text rendering object.  The object hosts the given text
-<span class='linenumber'> 37</span>  *        renderer, and a way to position and size the text.  It is up
-<span class='linenumber'> 38</span>  *        to the rendered provided to present the text within the render
-<span class='linenumber'> 39</span>  *        context.
-<span class='linenumber'> 40</span>  *
-<span class='linenumber'> 41</span>  * @constructor
-<span class='linenumber'> 42</span>  * @param renderer {AbstractTextRenderer} The text renderer to use
-<span class='linenumber'> 43</span>  * @param text {String} The text to render
-<span class='linenumber'> 44</span>  * @param size {Number} The size of the text to render
-<span class='linenumber'> 45</span>  * @see VectorText
-<span class='linenumber'> 46</span>  * @see BitmapText
-<span class='linenumber'> 47</span>  */</span><span class="WHIT">
-<span class='linenumber'> 48</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">TextRenderer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object2D.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope TextRenderer.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 49</span> 
-<span class='linenumber'> 50</span> </span><span class="WHIT">   </span><span class="NAME">drawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 51</span> 
-<span class='linenumber'> 52</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderer</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">text</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">size</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 53</span> 
-<span class='linenumber'> 54</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">renderer</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Text renderer must extend AbstractTextRenderer"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 35</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 36</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/platform/engine.object2d.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 37</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/components/component.transform2d.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 38</span> 
+<span class='linenumber'> 39</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"TextRenderer"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Object2D"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 40</span> 
+<span class='linenumber'> 41</span> </span><span class="COMM">/**
+<span class='linenumber'> 42</span>  * @class A 2d text rendering object.  The object hosts the given text
+<span class='linenumber'> 43</span>  *        renderer, and a way to position and size the text.  It is up
+<span class='linenumber'> 44</span>  *        to the rendered provided to present the text within the render
+<span class='linenumber'> 45</span>  *        context.
+<span class='linenumber'> 46</span>  *
+<span class='linenumber'> 47</span>  * @constructor
+<span class='linenumber'> 48</span>  * @param renderer {AbstractTextRenderer} The text renderer to use
+<span class='linenumber'> 49</span>  * @param text {String} The text to render
+<span class='linenumber'> 50</span>  * @param size {Number} The size of the text to render
+<span class='linenumber'> 51</span>  * @see VectorText
+<span class='linenumber'> 52</span>  * @see BitmapText
+<span class='linenumber'> 53</span>  */</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">TextRenderer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Object2D.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope TextRenderer.prototype */</span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 55</span> 
-<span class='linenumber'> 56</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"TextRenderer"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="NAME">drawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 57</span> 
-<span class='linenumber'> 58</span> </span><span class="WHIT">      </span><span class="COMM">// Add components to move and draw the asteroid</span><span class="WHIT">
-<span class='linenumber'> 59</span> </span><span class="WHIT">      </span><span class="NAME">this.renderer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">renderer</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 60</span> </span><span class="WHIT">      </span><span class="NAME">this.add</span><span class="PUNC">(</span><span class="NAME">this.renderer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 61</span> </span><span class="WHIT">      </span><span class="NAME">this.add</span><span class="PUNC">(</span><span class="NAME">Transform2DComponent.create</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 62</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setText</span><span class="PUNC">(</span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 63</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setScale</span><span class="PUNC">(</span><span class="NAME">size</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 64</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 65</span> 
-<span class='linenumber'> 66</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 67</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 68</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 70</span> 
-<span class='linenumber'> 71</span> </span><span class="WHIT">   </span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 72</span> 
-<span class='linenumber'> 73</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">TextRenderer.DRAW_TEXT</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'> 74</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 75</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.pushTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 76</span> </span><span class="WHIT">         </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 77</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.popTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 78</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 79</span> 
-<span class='linenumber'> 80</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 81</span> 
-<span class='linenumber'> 82</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 83</span>     * Set the text for this object to render.
-<span class='linenumber'> 84</span>     *
-<span class='linenumber'> 85</span>     * @param text {String} The text to render.
-<span class='linenumber'> 86</span>     */</span><span class="WHIT">
-<span class='linenumber'> 87</span> </span><span class="WHIT">   </span><span class="NAME">setText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 88</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setText</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 89</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 59</span>     * @private
+<span class='linenumber'> 60</span>     */</span><span class="WHIT">
+<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderer</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">text</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">size</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 62</span> 
+<span class='linenumber'> 63</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">renderer</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Text renderer must extend AbstractTextRenderer"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 64</span> 
+<span class='linenumber'> 65</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"TextRenderer"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 66</span> 
+<span class='linenumber'> 67</span> </span><span class="WHIT">      </span><span class="COMM">// Add components to move and draw the asteroid</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="WHIT">      </span><span class="NAME">this.renderer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">renderer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 69</span> </span><span class="WHIT">      </span><span class="NAME">this.add</span><span class="PUNC">(</span><span class="NAME">this.renderer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 70</span> </span><span class="WHIT">      </span><span class="NAME">this.add</span><span class="PUNC">(</span><span class="NAME">Transform2DComponent.create</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setText</span><span class="PUNC">(</span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 72</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setScale</span><span class="PUNC">(</span><span class="NAME">size</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 73</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 74</span> 
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 76</span>     * @private
+<span class='linenumber'> 77</span>     */</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 80</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 82</span> 
+<span class='linenumber'> 83</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 84</span>     * Called to render the text to the context.
+<span class='linenumber'> 85</span>     *
+<span class='linenumber'> 86</span>     * @param renderContext {RenderContext} The context to render the text upon
+<span class='linenumber'> 87</span>     * @param time {Number} The engine time in milliseconds
+<span class='linenumber'> 88</span>     */</span><span class="WHIT">
+<span class='linenumber'> 89</span> </span><span class="WHIT">   </span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 90</span> 
-<span class='linenumber'> 91</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 92</span>     * Get the text for this object to render.
-<span class='linenumber'> 93</span>     *
-<span class='linenumber'> 94</span>     * @type String
-<span class='linenumber'> 95</span>     */</span><span class="WHIT">
-<span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="NAME">getText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 97</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getText</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">TextRenderer.DRAW_TEXT</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 92</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 93</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.pushTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT">         </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">         </span><span class="NAME">renderContext.popTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 97</span> 
 <span class='linenumber'> 98</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 99</span> 
 <span class='linenumber'>100</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>101</span>     * Set the size of the text to render.
+<span class='linenumber'>101</span>     * Set the text for this object to render.
 <span class='linenumber'>102</span>     *
-<span class='linenumber'>103</span>     * @param size {Number} Defaults to 1
+<span class='linenumber'>103</span>     * @param text {String} The text to render.
 <span class='linenumber'>104</span>     */</span><span class="WHIT">
-<span class='linenumber'>105</span> </span><span class="WHIT">   </span><span class="NAME">setTextSize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">size</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>106</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setScale</span><span class="PUNC">(</span><span class="NAME">size</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>105</span> </span><span class="WHIT">   </span><span class="NAME">setText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setText</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>107</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>108</span> 
 <span class='linenumber'>109</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>110</span>     * Get the size of the text to render.
-<span class='linenumber'>111</span>     * @type Number
+<span class='linenumber'>110</span>     * Get the text for this object to render.
+<span class='linenumber'>111</span>     * @return {String} The text to draw
 <span class='linenumber'>112</span>     */</span><span class="WHIT">
-<span class='linenumber'>113</span> </span><span class="WHIT">   </span><span class="NAME">getTextSize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>114</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getScale</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>113</span> </span><span class="WHIT">   </span><span class="NAME">getText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>114</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getText</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>115</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>116</span> 
 <span class='linenumber'>117</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>118</span>     * Set the weight (boldness) of the text.
+<span class='linenumber'>118</span>     * Set the size of the text to render.
 <span class='linenumber'>119</span>     *
-<span class='linenumber'>120</span>     * @param weight {Number} The boldness of the text
+<span class='linenumber'>120</span>     * @param size {Number} Defaults to 1
 <span class='linenumber'>121</span>     */</span><span class="WHIT">
-<span class='linenumber'>122</span> </span><span class="WHIT">   </span><span class="NAME">setTextWeight</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">weight</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>123</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setTextWeight</span><span class="PUNC">(</span><span class="NAME">weight</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>122</span> </span><span class="WHIT">   </span><span class="NAME">setTextSize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">size</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>123</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setScale</span><span class="PUNC">(</span><span class="NAME">size</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>124</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>125</span> 
 <span class='linenumber'>126</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>127</span>     * Get the weight of the text.
-<span class='linenumber'>128</span>     * @type Number
+<span class='linenumber'>127</span>     * Get the size of the text to render.
+<span class='linenumber'>128</span>     * @return {Number} The size/scale of the text
 <span class='linenumber'>129</span>     */</span><span class="WHIT">
-<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="NAME">getTextWeight</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>131</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getTextWeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="NAME">getTextSize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getScale</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>132</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>133</span> 
 <span class='linenumber'>134</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>135</span>     * Get the position where the text will render.
-<span class='linenumber'>136</span>     * @type Point2D
-<span class='linenumber'>137</span>     */</span><span class="WHIT">
-<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="NAME">getPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>139</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>140</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>141</span> 
-<span class='linenumber'>142</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>143</span>     * Set the position where the text will render.
-<span class='linenumber'>144</span>     *
-<span class='linenumber'>145</span>     * @param point {Point2D} The position to render the text
+<span class='linenumber'>135</span>     * Set the weight (boldness) of the text.
+<span class='linenumber'>136</span>     *
+<span class='linenumber'>137</span>     * @param weight {Number} The boldness of the text
+<span class='linenumber'>138</span>     */</span><span class="WHIT">
+<span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="NAME">setTextWeight</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">weight</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>140</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setTextWeight</span><span class="PUNC">(</span><span class="NAME">weight</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>141</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>142</span> 
+<span class='linenumber'>143</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>144</span>     * Get the weight of the text.
+<span class='linenumber'>145</span>     * @return {Number} The text weight
 <span class='linenumber'>146</span>     */</span><span class="WHIT">
-<span class='linenumber'>147</span> </span><span class="WHIT">   </span><span class="NAME">setPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>148</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setPosition</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">   </span><span class="NAME">getTextWeight</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getTextWeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>149</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>150</span> 
 <span class='linenumber'>151</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>152</span>     * Set the horizontal alignment of the text.
-<span class='linenumber'>153</span>     *
-<span class='linenumber'>154</span>     * @param alignment {Boolean} One of {@link #ALIGN_LEFT} or {@link #ALIGN_RIGHT}
-<span class='linenumber'>155</span>     */</span><span class="WHIT">
-<span class='linenumber'>156</span> </span><span class="WHIT">   </span><span class="NAME">setTextAlignment</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">alignment</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>157</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setAlignment</span><span class="PUNC">(</span><span class="NAME">alignment</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>158</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>159</span> 
-<span class='linenumber'>160</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>161</span>     * Get the horizontal alignment of the text.
-<span class='linenumber'>162</span>     * @type Number
+<span class='linenumber'>152</span>     * Get the position where the text will render.
+<span class='linenumber'>153</span>     * @return {Point2D} The position of the text
+<span class='linenumber'>154</span>     */</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="WHIT">   </span><span class="NAME">getPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>156</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>158</span> 
+<span class='linenumber'>159</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>160</span>     * Set the position where the text will render.
+<span class='linenumber'>161</span>     *
+<span class='linenumber'>162</span>     * @param point {Point2D} The position to render the text
 <span class='linenumber'>163</span>     */</span><span class="WHIT">
-<span class='linenumber'>164</span> </span><span class="WHIT">   </span><span class="NAME">getTextAlignment</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>165</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getAlignment</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="WHIT">   </span><span class="NAME">setPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"transform"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setPosition</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>166</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>167</span> 
 <span class='linenumber'>168</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>169</span>     * Set the color of the text to render.
+<span class='linenumber'>169</span>     * Set the horizontal alignment of the text.
 <span class='linenumber'>170</span>     *
-<span class='linenumber'>171</span>     * @param color {String} The color of the text
-<span class='linenumber'>172</span>     */</span><span class="WHIT">
-<span class='linenumber'>173</span> </span><span class="WHIT">   </span><span class="NAME">setColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">color</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>174</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setColor</span><span class="PUNC">(</span><span class="NAME">color</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>175</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>176</span> 
-<span class='linenumber'>177</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>178</span>     * Get the color of the text to render
-<span class='linenumber'>179</span>     * @type String
-<span class='linenumber'>180</span>     */</span><span class="WHIT">
-<span class='linenumber'>181</span> </span><span class="WHIT">   </span><span class="NAME">getColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>182</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getColor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>183</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>184</span> 
-<span class='linenumber'>185</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>186</span>     * Set the color of the text.
-<span class='linenumber'>187</span>     *
-<span class='linenumber'>188</span>     * @param textColor {String} Color of the text.
-<span class='linenumber'>189</span>     */</span><span class="WHIT">
-<span class='linenumber'>190</span> </span><span class="WHIT">   </span><span class="NAME">setTextColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">textColor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>191</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setColor</span><span class="PUNC">(</span><span class="NAME">textColor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>192</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>193</span> 
-<span class='linenumber'>194</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>195</span>     * Get the line style
-<span class='linenumber'>196</span>     * @type String
-<span class='linenumber'>197</span>     */</span><span class="WHIT">
-<span class='linenumber'>198</span> </span><span class="WHIT">   </span><span class="NAME">getTextColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>199</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getColor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>200</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>201</span> 
-<span class='linenumber'>202</span> </span><span class="WHIT">   </span><span class="NAME">setDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">drawMode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>203</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drawMode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>204</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>205</span> 
-<span class='linenumber'>206</span> </span><span class="WHIT">   </span><span class="NAME">getDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>207</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.drawMode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>208</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>209</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope TextRenderer.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>210</span> 
-<span class='linenumber'>211</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>212</span>     * Get the class name of this object
-<span class='linenumber'>213</span>     *
-<span class='linenumber'>214</span>     * @type String
-<span class='linenumber'>215</span> 
-<span class='linenumber'>216</span>     */</span><span class="WHIT">
-<span class='linenumber'>217</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>218</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"TextRenderer"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>219</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>220</span> 
-<span class='linenumber'>221</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>222</span>     * Draw the text to the context.
-<span class='linenumber'>223</span>     */</span><span class="WHIT">
-<span class='linenumber'>224</span> </span><span class="WHIT">   </span><span class="NAME">DRAW_TEXT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>225</span> 
-<span class='linenumber'>226</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>227</span>     * Don't draw the text to the context.
-<span class='linenumber'>228</span>     */</span><span class="WHIT">
-<span class='linenumber'>229</span> </span><span class="WHIT">   </span><span class="NAME">NO_DRAW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='linenumber'>230</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>231</span> 
-<span class='linenumber'>232</span> </span></pre>
+<span class='linenumber'>171</span>     * @param alignment {Number} One of {@link AbstractTextRenderer#ALIGN_LEFT}, {@link AbstractTextRenderer#ALIGN_RIGHT}
+<span class='linenumber'>172</span>     *                  or {@link AbstractTextRenderer#ALIGN_CENTER}
+<span class='linenumber'>173</span>     */</span><span class="WHIT">
+<span class='linenumber'>174</span> </span><span class="WHIT">   </span><span class="NAME">setTextAlignment</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">alignment</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>175</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setAlignment</span><span class="PUNC">(</span><span class="NAME">alignment</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>177</span> 
+<span class='linenumber'>178</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>179</span>     * Get the horizontal alignment of the text.
+<span class='linenumber'>180</span>     * @return {Number} The alignment constant for the text
+<span class='linenumber'>181</span>     */</span><span class="WHIT">
+<span class='linenumber'>182</span> </span><span class="WHIT">   </span><span class="NAME">getTextAlignment</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>183</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getAlignment</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>184</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>185</span> 
+<span class='linenumber'>186</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>187</span>     * Set the color of the text to render.
+<span class='linenumber'>188</span>     *
+<span class='linenumber'>189</span>     * @param color {String} The color of the text
+<span class='linenumber'>190</span>     */</span><span class="WHIT">
+<span class='linenumber'>191</span> </span><span class="WHIT">   </span><span class="NAME">setColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">color</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>192</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setColor</span><span class="PUNC">(</span><span class="NAME">color</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>193</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>194</span> 
+<span class='linenumber'>195</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>196</span>     * Get the color of the text to render
+<span class='linenumber'>197</span>     * @return {String} The text color
+<span class='linenumber'>198</span>     */</span><span class="WHIT">
+<span class='linenumber'>199</span> </span><span class="WHIT">   </span><span class="NAME">getColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>200</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getColor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>201</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>202</span> 
+<span class='linenumber'>203</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>204</span>     * Set the color of the text.
+<span class='linenumber'>205</span>     *
+<span class='linenumber'>206</span>     * @param textColor {String} Color of the text.
+<span class='linenumber'>207</span>     */</span><span class="WHIT">
+<span class='linenumber'>208</span> </span><span class="WHIT">   </span><span class="NAME">setTextColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">textColor</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>209</span> </span><span class="WHIT">      </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setColor</span><span class="PUNC">(</span><span class="NAME">textColor</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>210</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>211</span> 
+<span class='linenumber'>212</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>213</span>     * Get the text color
+<span class='linenumber'>214</span>     * @return {String} The color or style of the line
+<span class='linenumber'>215</span>     */</span><span class="WHIT">
+<span class='linenumber'>216</span> </span><span class="WHIT">   </span><span class="NAME">getTextColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>217</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getComponent</span><span class="PUNC">(</span><span class="STRN">"TextRenderObject"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getColor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>218</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>219</span> 
+<span class='linenumber'>220</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>221</span>     * Set the text drawing mode to either {@link #DRAW_TEXT} or {@link #NO_DRAW}.
+<span class='linenumber'>222</span>     *
+<span class='linenumber'>223</span>     * @param drawMode {Number} The drawing mode for the text.
+<span class='linenumber'>224</span>     */</span><span class="WHIT">
+<span class='linenumber'>225</span> </span><span class="WHIT">   </span><span class="NAME">setDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">drawMode</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>226</span> </span><span class="WHIT">      </span><span class="NAME">this.drawMode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">drawMode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>227</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>228</span> 
+<span class='linenumber'>229</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>230</span>     * Get the current drawing mode for the text.
+<span class='linenumber'>231</span>     * @return {Number} The text drawing mode
+<span class='linenumber'>232</span>     */</span><span class="WHIT">
+<span class='linenumber'>233</span> </span><span class="WHIT">   </span><span class="NAME">getDrawMode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>234</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.drawMode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>235</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>236</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope TextRenderer.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>237</span> 
+<span class='linenumber'>238</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>239</span>     * Get the class name of this object
+<span class='linenumber'>240</span>     * @return {String} The string "TextRenderer"
+<span class='linenumber'>241</span>     */</span><span class="WHIT">
+<span class='linenumber'>242</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>243</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"TextRenderer"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>244</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>245</span> 
+<span class='linenumber'>246</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>247</span>     * Draw the text to the context.
+<span class='linenumber'>248</span>     * @type Number
+<span class='linenumber'>249</span>     */</span><span class="WHIT">
+<span class='linenumber'>250</span> </span><span class="WHIT">   </span><span class="NAME">DRAW_TEXT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>251</span> 
+<span class='linenumber'>252</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>253</span>     * Don't draw the text to the context.
+<span class='linenumber'>254</span>     * @type Number
+<span class='linenumber'>255</span>     */</span><span class="WHIT">
+<span class='linenumber'>256</span> </span><span class="WHIT">   </span><span class="NAME">NO_DRAW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='linenumber'>257</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>258</span> 
+<span class='linenumber'>259</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">TextRenderer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>260</span> 
+<span class='linenumber'>261</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>262</span> 
+<span class='linenumber'>263</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:13 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:02 GMT-0400 (EDT)</div>
 </body>
 </html>

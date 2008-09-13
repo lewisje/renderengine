@@ -83,6 +83,61 @@ Represents a sprite</p>
 
 <!-- =========== FIELD SUMMARY =========== -->
 
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#MODE_LOOP">MODE_LOOP</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The sprite animation loops
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#MODE_TOGGLE">MODE_TOGGLE</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The sprite animation toggles - Plays from the first to the last frame then plays backwards to the first frame and repeats.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#TYPE_ANIMATION">TYPE_ANIMATION</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The sprite is an animation
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#TYPE_SINGLE">TYPE_SINGLE</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The sprite is a single frame
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
 <!-- =========== END FIELD SUMMARY =========== -->
 
 
@@ -97,7 +152,7 @@ Represents a sprite</p>
       <td>
    
       <code>
-      <b><a href="#Sprite">Sprite</a></b>()
+      <b><a href="#Sprite">Sprite</a></b>(name, spriteObj, spriteResource)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -122,20 +177,8 @@ Represents a sprite</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(name, spriteObj, spriteResource) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Creates an instance of a Sprite object.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Rectangle2D
             </code></font> 
          </td>
          <td>
@@ -149,13 +192,13 @@ Represents a sprite</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;String
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#getFrame">getFrame</a></b>(time) </code> 
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets the frame (rectangle defining what portion of the image mapthe sprite frame occupies) of the sprite.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets the class name of this object.
  
          </td>
       </tr>
@@ -163,7 +206,21 @@ Represents a sprite</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Rectangle2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFrame">getFrame</a></b>(time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets the frame of the sprite.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;HTMLImage
             </code></font> 
          </td>
          <td>
@@ -176,7 +233,9 @@ Represents a sprite</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getSpeed">getSpeed</a></b>() </code> 
@@ -189,7 +248,7 @@ Represents a sprite</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -203,7 +262,7 @@ Represents a sprite</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -217,25 +276,13 @@ Represents a sprite</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
             <code> <b> <a href="#isToggle">isToggle</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if the sprite is an animation and toggles.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#release">release</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -273,6 +320,8 @@ Represents a sprite</p>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
+               <a href="PooledObject.html#release">release</a>,
+            
                <a href="PooledObject.html#destroy">destroy</a>,
             
                <a href="PooledObject.html#serialize">serialize</a>,
@@ -291,6 +340,61 @@ Represents a sprite</p>
 
 <!-- ============ FIELD DETAIL START ========= -->
 
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="MODE_LOOP">
+   <!-- -->
+   </a> <h3>MODE_LOOP</h3>
+      <pre>Number <b>MODE_LOOP</b></pre> 
+   <ul>
+      The sprite animation loops
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="MODE_TOGGLE">
+   <!-- -->
+   </a> <h3>MODE_TOGGLE</h3>
+      <pre>Number <b>MODE_TOGGLE</b></pre> 
+   <ul>
+      The sprite animation toggles - Plays from the first to the last frame then plays backwards to the first frame and repeats.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="TYPE_ANIMATION">
+   <!-- -->
+   </a> <h3>TYPE_ANIMATION</h3>
+      <pre>Number <b>TYPE_ANIMATION</b></pre> 
+   <ul>
+      The sprite is an animation
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="TYPE_SINGLE">
+   <!-- -->
+   </a> <h3>TYPE_SINGLE</h3>
+      <pre>Number <b>TYPE_SINGLE</b></pre> 
+   <ul>
+      The sprite is a single frame
+      
+   </ul>
+   <hr>
+
+
 <!-- ============ FIELD DETAIL END ========== -->
 
 
@@ -308,12 +412,29 @@ Represents a sprite</p>
 <a name="Sprite"> </a>
 <h3>Sprite</h3>
 
-   <pre><b>Sprite</b>()</pre>
+   <pre><b>Sprite</b>(name, spriteObj, spriteResource)</pre>
    <ul>
       
    </ul>
    
    <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the sprite within the resource 
+      </ul>
+      
+      <ul>
+         <code>[<i>Object</i>]&nbsp;spriteObj</code> - Passed in by a <a href='SpriteLoader.html'>SpriteLoader</a>.  An array which defines the                 sprite frame, and parameters. 
+      </ul>
+      
+      <ul>
+         <code>[<i>Object</i>]&nbsp;spriteResource</code> - The sprite resource loaded by the <a href='SpriteLoader.html'>SpriteLoader</a> 
+      </ul>
+      
+   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -334,35 +455,8 @@ Represents a sprite</p>
 </table>
 
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(name, spriteObj, spriteResource)</pre> 
-   <ul>
-      Creates an instance of a Sprite object.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;name </code> - The name of the object 
-      </ul>
-      <ul>
-         <code>[<i>Object</i>]&nbsp;spriteObj </code> - Passed in by a SpriteLoader 
-      </ul>
-      <ul>
-         <code>[<i>Object</i>]&nbsp;spriteResource </code> - The sprite resource loaded by the SpriteLoader 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="getBoundingBox"> </a> <h3>getBoundingBox</h3>
-      <pre>&nbsp;<b>getBoundingBox</b>()</pre> 
+      <pre>Rectangle2D&nbsp;<b>getBoundingBox</b>()</pre> 
    <ul>
       Get the bounding box for the sprite.
       
@@ -375,7 +469,28 @@ Represents a sprite</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A <a href='Rectangle2D.html'>Rectangle2D</a> 
+         <code><i>Rectangle2D</i>&nbsp;</code>The bounding box which contains the entire sprite 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Gets the class name of this object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "Sprite" 
       </ul>
    </ul>
    
@@ -383,16 +498,16 @@ Represents a sprite</p>
    <hr>
 
    <a name="getFrame"> </a> <h3>getFrame</h3>
-      <pre>&nbsp;<b>getFrame</b>(time)</pre> 
+      <pre>Rectangle2D&nbsp;<b>getFrame</b>(time)</pre> 
    <ul>
-      Gets the frame (rectangle defining what portion of the image mapthe sprite frame occupies) of the sprite.
+      Gets the frame of the sprite. The frame is the rectangle that defining whatportion of the image map the sprite frame occupies, given the specified time.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Number</i>]&nbsp;time </code> - Current world time 
+         <code>[<i>Number</i>]&nbsp;time </code> - Current world time (can be obtained with <a href='Engine.html#worldTime'>Engine.worldTime</a> 
       </ul>
    </ul>
    
@@ -401,7 +516,7 @@ Represents a sprite</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A <a href='Rectangle2D.html'>Rectangle2D</a> which defines the frame of the sprite in        the source image map. 
+         <code><i>Rectangle2D</i>&nbsp;</code>A rectangle which defines the frame of the sprite in        the source image map. 
       </ul>
    </ul>
    
@@ -409,7 +524,7 @@ Represents a sprite</p>
    <hr>
 
    <a name="getSourceImage"> </a> <h3>getSourceImage</h3>
-      <pre>&nbsp;<b>getSourceImage</b>()</pre> 
+      <pre>HTMLImage&nbsp;<b>getSourceImage</b>()</pre> 
    <ul>
       The source image loaded by the <a href='SpriteLoader.html'>SpriteLoader</a> when the sprite wascreated.
       
@@ -422,7 +537,7 @@ Represents a sprite</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The source image the sprite is contained within 
+         <code><i>HTMLImage</i>&nbsp;</code>The source image the sprite is contained within 
       </ul>
    </ul>
    
@@ -430,7 +545,7 @@ Represents a sprite</p>
    <hr>
 
    <a name="getSpeed"> </a> <h3>getSpeed</h3>
-      <pre><b>getSpeed</b>()</pre> 
+      <pre>Number&nbsp;<b>getSpeed</b>()</pre> 
    <ul>
       Get the number of milliseconds each frame is displayed for an animation
       
@@ -440,13 +555,18 @@ Represents a sprite</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The milliseconds per frame 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="isAnimation"> </a> <h3>isAnimation</h3>
-      <pre>&nbsp;<b>isAnimation</b>()</pre> 
+      <pre>Boolean&nbsp;<b>isAnimation</b>()</pre> 
    <ul>
       Returns <tt>true</tt> if the sprite is an animation.
       
@@ -459,7 +579,7 @@ Represents a sprite</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the sprite is an animation 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the sprite is an animation 
       </ul>
    </ul>
    
@@ -467,7 +587,7 @@ Represents a sprite</p>
    <hr>
 
    <a name="isLoop"> </a> <h3>isLoop</h3>
-      <pre>&nbsp;<b>isLoop</b>()</pre> 
+      <pre>Boolean&nbsp;<b>isLoop</b>()</pre> 
    <ul>
       Returns <tt>true</tt> if the sprite is an animation and loops.
       
@@ -480,7 +600,7 @@ Represents a sprite</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the sprite is an animation and loops 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the sprite is an animation and loops 
       </ul>
    </ul>
    
@@ -488,7 +608,7 @@ Represents a sprite</p>
    <hr>
 
    <a name="isToggle"> </a> <h3>isToggle</h3>
-      <pre>&nbsp;<b>isToggle</b>()</pre> 
+      <pre>Boolean&nbsp;<b>isToggle</b>()</pre> 
    <ul>
       Returns <tt>true</tt> if the sprite is an animation and toggles.
       
@@ -501,25 +621,9 @@ Represents a sprite</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the sprite is an animation and toggles 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the sprite is an animation and toggles 
       </ul>
    </ul>
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="release"> </a> <h3>release</h3>
-      <pre><b>release</b>()</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -527,7 +631,7 @@ Represents a sprite</p>
    <a name="setSpeed"> </a> <h3>setSpeed</h3>
       <pre><b>setSpeed</b>(speed)</pre> 
    <ul>
-      Set the speed, in milliseconds, that an animation runs at.
+      Set the speed, in milliseconds, that an animation runs at.  If the sprite isnot an animation, this has no effect.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -556,6 +660,6 @@ Represents a sprite</p>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Aug 13 2008 00:00:16 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:05 GMT-0400 (EDT)</div>
 </body>
 </html>

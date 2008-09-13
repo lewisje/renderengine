@@ -75,7 +75,7 @@ A collider component handles collisions by updating the       collision model a
 <span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  8</span>  *
 <span class='linenumber'>  9</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 10</span>  * @version: $Revision: 190 $
+<span class='linenumber'> 10</span>  * @version: $Revision: 269 $
 <span class='linenumber'> 11</span>  *
 <span class='linenumber'> 12</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 13</span>  *
@@ -99,137 +99,146 @@ A collider component handles collisions by updating the       collision model a
 <span class='linenumber'> 31</span>  *
 <span class='linenumber'> 32</span>  */</span><span class="WHIT">
 <span class='linenumber'> 33</span> 
-<span class='linenumber'> 34</span> </span><span class="COMM">/**
-<span class='linenumber'> 35</span>  * @class A collider component handles collisions by updating the
-<span class='linenumber'> 36</span>  *        collision model and checking for possible collisions.
-<span class='linenumber'> 37</span>  *
-<span class='linenumber'> 38</span>  * @param name {String} Name of the component
-<span class='linenumber'> 39</span>  * @param collisionModel {SpatialCollection} The collision model
-<span class='linenumber'> 40</span>  * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
-<span class='linenumber'> 41</span>  *
-<span class='linenumber'> 42</span>  * @extends BaseComponent
-<span class='linenumber'> 43</span>  */</span><span class="WHIT">
-<span class='linenumber'> 44</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ColliderComponent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseComponent.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope ColliderComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 45</span> 
-<span class='linenumber'> 46</span> </span><span class="WHIT">   </span><span class="NAME">collisionModel</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 47</span> 
-<span class='linenumber'> 48</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">collisionModel</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 49</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_COLLIDER</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">1.0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 50</span> </span><span class="WHIT">      </span><span class="NAME">this.collisionModel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">collisionModel</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 51</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 34</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 35</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/components/component.base.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 36</span> 
+<span class='linenumber'> 37</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"ColliderComponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"BaseComponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 38</span> 
+<span class='linenumber'> 39</span> </span><span class="COMM">/**
+<span class='linenumber'> 40</span>  * @class A collider component handles collisions by updating the
+<span class='linenumber'> 41</span>  *        collision model and checking for possible collisions.
+<span class='linenumber'> 42</span>  *
+<span class='linenumber'> 43</span>  * @param name {String} Name of the component
+<span class='linenumber'> 44</span>  * @param collisionModel {SpatialCollection} The collision model
+<span class='linenumber'> 45</span>  * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
+<span class='linenumber'> 46</span>  *
+<span class='linenumber'> 47</span>  * @extends BaseComponent
+<span class='linenumber'> 48</span>  */</span><span class="WHIT">
+<span class='linenumber'> 49</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ColliderComponent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseComponent.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope ColliderComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 50</span> 
+<span class='linenumber'> 51</span> </span><span class="WHIT">   </span><span class="NAME">collisionModel</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 52</span> 
-<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 54</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 55</span> </span><span class="WHIT">      </span><span class="NAME">this.collisionModel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">collisionModel</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_COLLIDER</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">1.0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 55</span> </span><span class="WHIT">      </span><span class="NAME">this.collisionModel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">collisionModel</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 57</span> 
-<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 59</span>     * Update the collision model that this component was initialized with.
-<span class='linenumber'> 60</span>     * Creates an object called &lt;tt>ModelData&lt;/tt> on the host object which contains
-<span class='linenumber'> 61</span>     * information relative to the collision model.  This data contains:
-<span class='linenumber'> 62</span>     * &lt;ul>
-<span class='linenumber'> 63</span>     * &lt;li>lastNode - The last node the object was reported within.
-<span class='linenumber'> 64</span>     * &lt;/ul>
-<span class='linenumber'> 65</span>     */</span><span class="WHIT">
-<span class='linenumber'> 66</span> </span><span class="WHIT">   </span><span class="NAME">updateModel</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 67</span> 
-<span class='linenumber'> 68</span> </span><span class="WHIT">      </span><span class="COMM">// Get the model data for the object</span><span class="WHIT">
-<span class='linenumber'> 69</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 70</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">obj.ModelData</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 72</span> </span><span class="WHIT">         </span><span class="NAME">obj.ModelData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">lastNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 73</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 74</span> 
-<span class='linenumber'> 75</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">obj.ModelData.lastNode</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">obj.ModelData.lastNode.getRect</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">containsPoint</span><span class="PUNC">(</span><span class="NAME">obj.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 59</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 60</span> </span><span class="WHIT">      </span><span class="NAME">this.collisionModel</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 62</span> 
+<span class='linenumber'> 63</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 64</span>     * Update the collision model that this component was initialized with.
+<span class='linenumber'> 65</span>     * Creates an object called &lt;tt>ModelData&lt;/tt> on the host object which contains
+<span class='linenumber'> 66</span>     * information relative to the collision model.  This data contains:
+<span class='linenumber'> 67</span>     * &lt;ul>
+<span class='linenumber'> 68</span>     * &lt;li>lastNode - The last node the object was reported within.
+<span class='linenumber'> 69</span>     * &lt;/ul>
+<span class='linenumber'> 70</span>     */</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">   </span><span class="NAME">updateModel</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 72</span> 
+<span class='linenumber'> 73</span> </span><span class="WHIT">      </span><span class="COMM">// Get the model data for the object</span><span class="WHIT">
+<span class='linenumber'> 74</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">obj.ModelData</span><span class="PUNC">)</span><span class="WHIT">
 <span class='linenumber'> 76</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 77</span> </span><span class="WHIT">         </span><span class="COMM">// The object is within the same node</span><span class="WHIT">
-<span class='linenumber'> 78</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 79</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 80</span> 
-<span class='linenumber'> 81</span> </span><span class="WHIT">      </span><span class="COMM">// Find the node that contains the object</span><span class="WHIT">
-<span class='linenumber'> 82</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.collisionModel.findNodePoint</span><span class="PUNC">(</span><span class="NAME">obj.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 83</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aNode</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'> 84</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 85</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj.ModelData.lastNode</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj.ModelData.lastNode.getIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">aNode.getIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'> 86</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 87</span> </span><span class="WHIT">            </span><span class="NAME">obj.ModelData.lastNode.removeObject</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 88</span> </span><span class="WHIT">            </span><span class="NAME">aNode.addObject</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 89</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 90</span> </span><span class="WHIT">         </span><span class="NAME">obj.ModelData.lastNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aNode</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 91</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 92</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 93</span> 
-<span class='linenumber'> 94</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 95</span>     * Updates the object within the collision model and determines if
-<span class='linenumber'> 96</span>     * the host object wants to be alerted whenever a potential collision
-<span class='linenumber'> 97</span>     * has occurred.  If a potential collision occurs, an array (referred to
-<span class='linenumber'> 98</span>     * as a Potentail Collision List, or PCL) will be created which
-<span class='linenumber'> 99</span>     * contains objects that might be colliding with the host object.  It
-<span class='linenumber'>100</span>     * is up to the host object to make the final determination that a
-<span class='linenumber'>101</span>     * collision has occurred.
-<span class='linenumber'>102</span>     * &lt;p/>
-<span class='linenumber'>103</span>     * The list of objects within the PCL will be passed to the &lt;tt>onCollide&lt;/tt>
-<span class='linenumber'>104</span>     * method (if declared) on the host object.  If a collision occurred and was
-<span class='linenumber'>105</span>     * handled, the &lt;tt>onCollide&lt;/tt> method should return &lt;tt>CollisionComponent.STOP&lt;/tt>,
-<span class='linenumber'>106</span>     * otherwise, it should return &lt;tt>CollisionComponent.CONTINUE&lt;/tt> to continue
-<span class='linenumber'>107</span>     * checking objects from the PCL against the host object.
-<span class='linenumber'>108</span>     *
-<span class='linenumber'>109</span>     * @param renderContext {RenderContext} The render context for the component
-<span class='linenumber'>110</span>     * @param time {Number} The current engine time in milliseconds
-<span class='linenumber'>111</span>     */</span><span class="WHIT">
-<span class='linenumber'>112</span> </span><span class="WHIT">   </span><span class="NAME">execute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>113</span> 
-<span class='linenumber'>114</span> </span><span class="WHIT">      </span><span class="COMM">// Update the collision model</span><span class="WHIT">
-<span class='linenumber'>115</span> </span><span class="WHIT">      </span><span class="NAME">this.updateModel</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>116</span> 
-<span class='linenumber'>117</span> </span><span class="WHIT">      </span><span class="COMM">// If the host object needs to know about collisions...</span><span class="WHIT">
-<span class='linenumber'>118</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onCollide</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>119</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>120</span> </span><span class="WHIT">         </span><span class="COMM">// Get the PCL and check for collisions</span><span class="WHIT">
-<span class='linenumber'>121</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pcl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.collisionModel.getPCL</span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>122</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ColliderComponent.CONTINUE</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>123</span> </span><span class="WHIT">         </span><span class="NAME">EngineSupport.forEach</span><span class="PUNC">(</span><span class="NAME">pcl</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>124</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">status</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">ColliderComponent.CONTINUE</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>125</span> </span><span class="WHIT">            </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>126</span> </span><span class="WHIT">               </span><span class="NAME">status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onCollide</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>127</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>128</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>129</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>131</span> 
-<span class='linenumber'>132</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope ColliderComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// Statics</span><span class="WHIT">
-<span class='linenumber'>133</span> 
-<span class='linenumber'>134</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>135</span>     * Get the class name of this object
-<span class='linenumber'>136</span>     *
-<span class='linenumber'>137</span>     * @type String
-<span class='linenumber'>138</span>     */</span><span class="WHIT">
-<span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>140</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"ColliderComponent"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>141</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>142</span> 
-<span class='linenumber'>143</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>144</span>     * When &lt;tt>onCollide&lt;/tt> is called on the host object, it should
-<span class='linenumber'>145</span>     * return &lt;tt>ColliderComponent.CONTINUE&lt;/tt> if it hasn't handled
-<span class='linenumber'>146</span>     * the collision, or if it wishes to be notified about other potential
-<span class='linenumber'>147</span>     * collisions.
-<span class='linenumber'>148</span>     * @type Number
-<span class='linenumber'>149</span>     */</span><span class="WHIT">
-<span class='linenumber'>150</span> </span><span class="WHIT">   </span><span class="NAME">CONTINUE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>151</span> 
-<span class='linenumber'>152</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>153</span>     * When &lt;tt>onCollide&lt;/tt> is called on the host object, it should
-<span class='linenumber'>154</span>     * return &lt;tt>ColliderComponent.STOP&lt;/tt> if no more collisions
-<span class='linenumber'>155</span>     * should be reported.
-<span class='linenumber'>156</span>     * @type Number
-<span class='linenumber'>157</span>     */</span><span class="WHIT">
-<span class='linenumber'>158</span> </span><span class="WHIT">   </span><span class="NAME">STOP</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='linenumber'>159</span> 
-<span class='linenumber'>160</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'> 77</span> </span><span class="WHIT">         </span><span class="NAME">obj.ModelData</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">lastNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 79</span> 
+<span class='linenumber'> 80</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">obj.ModelData.lastNode</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">obj.ModelData.lastNode.getRect</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">containsPoint</span><span class="PUNC">(</span><span class="NAME">obj.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 82</span> </span><span class="WHIT">         </span><span class="COMM">// The object is within the same node</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 85</span> 
+<span class='linenumber'> 86</span> </span><span class="WHIT">      </span><span class="COMM">// Find the node that contains the object</span><span class="WHIT">
+<span class='linenumber'> 87</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.collisionModel.findNodePoint</span><span class="PUNC">(</span><span class="NAME">obj.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 88</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aNode</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 89</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj.ModelData.lastNode</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj.ModelData.lastNode.getIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NAME">aNode.getIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 92</span> </span><span class="WHIT">            </span><span class="NAME">obj.ModelData.lastNode.removeObject</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 93</span> </span><span class="WHIT">            </span><span class="NAME">aNode.addObject</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">         </span><span class="NAME">obj.ModelData.lastNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">aNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 98</span> 
+<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>100</span>     * Updates the object within the collision model and determines if
+<span class='linenumber'>101</span>     * the host object wants to be alerted whenever a potential collision
+<span class='linenumber'>102</span>     * has occurred.  If a potential collision occurs, an array (referred to
+<span class='linenumber'>103</span>     * as a Potentail Collision List, or PCL) will be created which
+<span class='linenumber'>104</span>     * contains objects that might be colliding with the host object.  It
+<span class='linenumber'>105</span>     * is up to the host object to make the final determination that a
+<span class='linenumber'>106</span>     * collision has occurred.
+<span class='linenumber'>107</span>     * &lt;p/>
+<span class='linenumber'>108</span>     * The list of objects within the PCL will be passed to the &lt;tt>onCollide&lt;/tt>
+<span class='linenumber'>109</span>     * method (if declared) on the host object.  If a collision occurred and was
+<span class='linenumber'>110</span>     * handled, the &lt;tt>onCollide&lt;/tt> method should return &lt;tt>CollisionComponent.STOP&lt;/tt>,
+<span class='linenumber'>111</span>     * otherwise, it should return &lt;tt>CollisionComponent.CONTINUE&lt;/tt> to continue
+<span class='linenumber'>112</span>     * checking objects from the PCL against the host object.
+<span class='linenumber'>113</span>     *
+<span class='linenumber'>114</span>     * @param renderContext {RenderContext} The render context for the component
+<span class='linenumber'>115</span>     * @param time {Number} The current engine time in milliseconds
+<span class='linenumber'>116</span>     */</span><span class="WHIT">
+<span class='linenumber'>117</span> </span><span class="WHIT">   </span><span class="NAME">execute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>118</span> 
+<span class='linenumber'>119</span> </span><span class="WHIT">      </span><span class="COMM">// Update the collision model</span><span class="WHIT">
+<span class='linenumber'>120</span> </span><span class="WHIT">      </span><span class="NAME">this.updateModel</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>121</span> 
+<span class='linenumber'>122</span> </span><span class="WHIT">      </span><span class="COMM">// If the host object needs to know about collisions...</span><span class="WHIT">
+<span class='linenumber'>123</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onCollide</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>124</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>125</span> </span><span class="WHIT">         </span><span class="COMM">// Get the PCL and check for collisions</span><span class="WHIT">
+<span class='linenumber'>126</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pcl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.collisionModel.getPCL</span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>127</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ColliderComponent.CONTINUE</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>128</span> </span><span class="WHIT">         </span><span class="NAME">EngineSupport.forEach</span><span class="PUNC">(</span><span class="NAME">pcl</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>129</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">status</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">ColliderComponent.CONTINUE</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">            </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">               </span><span class="NAME">status</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onCollide</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>132</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>133</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>136</span> 
+<span class='linenumber'>137</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope ColliderComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// Statics</span><span class="WHIT">
+<span class='linenumber'>138</span> 
+<span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>140</span>     * Get the class name of this object
+<span class='linenumber'>141</span>     *
+<span class='linenumber'>142</span>     * @type String
+<span class='linenumber'>143</span>     */</span><span class="WHIT">
+<span class='linenumber'>144</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>145</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"ColliderComponent"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>146</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>147</span> 
+<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>149</span>     * When &lt;tt>onCollide&lt;/tt> is called on the host object, it should
+<span class='linenumber'>150</span>     * return &lt;tt>ColliderComponent.CONTINUE&lt;/tt> if it hasn't handled
+<span class='linenumber'>151</span>     * the collision, or if it wishes to be notified about other potential
+<span class='linenumber'>152</span>     * collisions.
+<span class='linenumber'>153</span>     * @type Number
+<span class='linenumber'>154</span>     */</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="WHIT">   </span><span class="NAME">CONTINUE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>156</span> 
+<span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>158</span>     * When &lt;tt>onCollide&lt;/tt> is called on the host object, it should
+<span class='linenumber'>159</span>     * return &lt;tt>ColliderComponent.STOP&lt;/tt> if no more collisions
+<span class='linenumber'>160</span>     * should be reported.
+<span class='linenumber'>161</span>     * @type Number
+<span class='linenumber'>162</span>     */</span><span class="WHIT">
+<span class='linenumber'>163</span> </span><span class="WHIT">   </span><span class="NAME">STOP</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='linenumber'>164</span> 
+<span class='linenumber'>165</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>166</span> 
+<span class='linenumber'>167</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ColliderComponent</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>168</span> 
+<span class='linenumber'>169</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Aug 12 2008 23:59:57 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:17:34 GMT-0400 (EDT)</div>
 </body>
 </html>
