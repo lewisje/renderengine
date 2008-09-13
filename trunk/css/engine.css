@@ -9,3 +9,31 @@ div.metrics {
    padding: 2px;
    font: 10px Arial, Helvetica;
 }
+
+div.metrics .items {
+   clear: both;
+   position: relative;
+   width: 200px;
+   background: ghostwhite;
+}
+
+div.metric-button {
+   background-color: silver;
+   width: 15px;
+   height: 15px;
+   border: 1px outset white;
+   float: left;
+   margin-right: 3px;
+}
+
+.run {
+   background: url('$<enginePath>/css/run.png') no-repeat;
+}
+
+.pause {
+   background: url('$<enginePath>/css/pause.png') no-repeat;
+}
+
+.shutdown {
+   background: url('$<enginePath>/css/shutdown.png') no-repeat;
+}

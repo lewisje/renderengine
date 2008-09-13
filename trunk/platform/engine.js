@@ -966,6 +966,81 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    pauseReps: 0,
 
+   //====================================================================================================
+   //====================================================================================================
+   //                                      ENGINE PROPERTIES
+   //====================================================================================================
+   //====================================================================================================
+
+   /**
+    * Set the debug mode of the engine.  Affects message ouput and
+    * can be queried for additional debugging operations.
+    *
+    * @param mode {Boolean} <tt>true</tt> to set debugging mode
+    * @memberOf Engine
+    */
+   setDebugMode: function(mode) {
+      this.debugMode = mode;
+   },
+
+   /**
+    * Query the debugging mode of the engine.
+    *
+    * @return {Boolean} <tt>true</tt> if the engine is in debug mode
+    * @memberOf Engine
+    */
+   getDebugMode: function() {
+      return this.debugMode;
+   },
+
+   /**
+    * Returns <tt>true</tt> if SoundManager2 is loaded and initialized
+    * properly.  The resource loader and play manager will use this
+    * value to execute properly.
+    * @return {Boolean} <tt>true</tt> if the sound engine was loaded properly
+    * @memberOf Engine
+    */
+   isSoundEnabled: function() {
+      return this.soundsEnabled;
+   },
+
+   /**
+    * Set the FPS (frames per second) the engine runs at.  This value
+    * is mainly a suggestion to the engine as to how fast you want to
+    * redraw frames.  If frame execution time is long, frames will be
+    * processed as time is available. See the metrics to understand
+    * available time versus render time.
+    *
+    * @param fps {Number} The number of frames per second to refresh
+    *                     Engine objects.
+    * @memberOf Engine
+    */
+   setFPS: function(fps) {
+      Assert((fps != 0), "You cannot have a framerate of zero!");
+      this.fpsClock = Math.floor(1000 / fps);
+   },
+
+   /**
+    * Get the default rendering context for the Engine.  This
+    * is the <tt>document.body</tt> element in the browser.
+    *
+    * @return {RenderContext} The default rendering context
+    * @memberOf Engine
+    */
+   getDefaultContext: function() {
+      if (this.defaultContext == null) {
+         this.defaultContext = DocumentContext.create();
+      }
+
+      return this.defaultContext;
+   },
+
+   //====================================================================================================
+   //====================================================================================================
+   //                                  GLOBAL OBJECT MANAGEMENT
+   //====================================================================================================
+   //====================================================================================================
+
    /**
     * Track an instance of an object managed by the Engine.  This is called
     * by any object that extends from {@link PooledObject}.
@@ -1012,40 +1087,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       return this.gameObjects[id];
    },
 
-   /**
-    * Set the debug mode of the engine.  Affects message ouput and
-    * can be queried for additional debugging operations.
-    *
-    * @param mode {Boolean} <tt>true</tt> to debug the engine
-    * @memberOf Engine
-    */
-   setDebugMode: function(mode) {
-      this.debugMode = mode;
-   },
+   //====================================================================================================
+   //====================================================================================================
+   //                                    ENGINE PROCESS CONTROL
+   //====================================================================================================
+   //====================================================================================================
 
    /**
-    * Query the debugging mode of the engine.
-    *
-    * @return {Boolean}
-    * @memberOf Engine
-    */
-   getDebugMode: function() {
-      return this.debugMode;
-   },
-
-   /**
-    * Returns <tt>true</tt> if SoundManager2 is loaded and initialized
-    * properly.  The resource loader and play manager will use this
-    * value to execute properly.
-    * @return {Boolean} <tt>true</tt> if the sound engine was loaded properly
-    * @memberOf Engine
-    */
-   isSoundEnabled: function() {
-      return this.soundsEnabled;
-   },
-
-   /**
-    * Starts the engine and loads the engine scripts.  When all scripts required
+    * Starts the engine and loads the basic engine scripts.  When all scripts required
     * by the engine have been loaded the {@link #run} method will be called.
     *
     * @param debugMode {Boolean} <tt>true</tt> to set the engine into debug mode
@@ -1149,20 +1198,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       $("head script", document).remove();
    },
 
-   /**
-    * Get the default rendering context for the Engine.  This
-    * is the <tt>document.body</tt> element in the browser.
-    *
-    * @return {RenderContext} The default rendering context
-    * @memberOf Engine
-    */
-   getDefaultContext: function() {
-      if (this.defaultContext == null) {
-         this.defaultContext = DocumentContext.create();
-      }
-
-      return this.defaultContext;
-   },
+   //====================================================================================================
+   //====================================================================================================
+   //                                     SCRIPT PROCESSING
+   //====================================================================================================
+   //====================================================================================================
 
    /**
     * Load a stylesheet and append it to the document.  Allows for
@@ -1176,16 +1216,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    loadStylesheet: function(stylesheetPath) {
       stylesheetPath = this.getEnginePath() + stylesheetPath;
       var f = function() {
-         var n = document.createElement("link");
-         n.rel = "stylesheet";
-         n.href = stylesheetPath;
-         n.type = "text/css";
-         $(n).load(function() {
+         $.get(stylesheetPath, function(data) {
+            // process the data to replace the "enginePath" variable
+            var epRE = /(\$<enginePath>)/g;
+            data = data.replace(epRE, Engine.getEnginePath());
+            $("head", document).append($("<style type='text/css'/>").text(data));
             Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
             Engine.readyForNextScript = true;
-         });
-         var h = document.getElementsByTagName("head")[0];
-         h.appendChild(n);
+         }, "text");
       };
 
       this.setQueueCallback(f);
@@ -1529,69 +1567,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadedScripts = {};
    },
 
-   /**
-    * Set the FPS (frames per second) the engine runs at.  This value
-    * is mainly a suggestion to the engine as to how fast you want to
-    * redraw frames.  If frame execution time is long, frames may be
-    * missed.  See the metrics to understand available time versus
-    * render time.
-    *
-    * @param fps {Number} The number of frames per second to refresh
-    *                     Engine objects.
-    * @memberOf Engine
-    */
-   setFPS: function(fps) {
-      Assert((fps != 0), "You cannot have a framerate of zero!");
-      this.fpsClock = Math.floor(1000 / fps);
-   },
-
-   /**
-    * The global engine timer which updates the world.
-    * @private
-    * @memberOf Engine
-    */
-   engineTimer: function() {
-
-      if (!this.running) {
-         return;
-      }
-
-      var b = new Date().getTime();
-      Engine.worldTime = b;
-
-      // Update the world
-      if (Engine.getDefaultContext() != null)
-      {
-         Engine.vObj = 0;
-         Engine.getDefaultContext().update(null, new Date().getTime());
-
-         if (this.showMetricsWindow && !this.metricDisplay) {
-            this.metricDisplay = jQuery("<div/>").addClass("metrics");
-            this.metricDisplay.appendTo($("body"));
-         }
-         else if (!this.showMetricsWindow && this.metricDisplay) {
-            this.metricDisplay.remove();
-            this.metricDisplay = null;
-         }
-
-         if (this.showMetricsWindow && this.lastMetricSample-- == 0)
-         {
-            var d = new Date().getTime() - b;
-            Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
-            Engine.addMetric("aFPS", Math.floor((1 / d) * 1000), true, "#");
-            Engine.addMetric("avail", this.fpsClock, false, "#ms");
-            Engine.addMetric("frame", d, true, "#ms");
-            Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
-            Engine.addMetric("visObj", Engine.vObj, false, "#");
-
-            this.updateMetrics();
-            this.lastMetricSample = this.metricSampleRate;
-         }
-      }
-
-      // Another process interval
-      Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, this.fpsClock);
-   },
+   //====================================================================================================
+   //====================================================================================================
+   //                                     METRICS MANAGEMENT
+   //====================================================================================================
+   //====================================================================================================
 
    /**
     * Toggle the display of the metrics window.  Any metrics
@@ -1616,6 +1596,50 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    hideMetrics: function() {
       this.showMetricsWindow = false;
+   },
+
+   /**
+    * Creates a button for the metrics window
+    * @private
+    */
+   metricButton: function(cssClass, fn) {
+      return $("<div class='metric-button " + cssClass + "' title='" + cssClass + "'><!-- --></div>").click(fn);
+   },
+
+   /**
+    * Render the metrics window
+    * @private
+    */
+   renderMetrics: function() {
+
+      if (this.showMetricsWindow && !this.metricDisplay) {
+         this.metricDisplay = $("<div/>").addClass("metrics");
+         this.metricDisplay.append(this.metricButton("run", function() { Engine.run(); }));
+         this.metricDisplay.append(this.metricButton("pause", function() { Engine.pause(); }));
+         this.metricDisplay.append(this.metricButton("shutdown", function() { Engine.shutdown(); }));
+
+         this.metricDisplay.append($("<div class='items'/>"));
+         this.metricDisplay.appendTo($("body"));
+      }
+      else if (!this.showMetricsWindow && this.metricDisplay) {
+         this.metricDisplay.remove();
+         this.metricDisplay = null;
+      }
+
+      if (this.showMetricsWindow && this.lastMetricSample-- == 0)
+      {
+         // Add some metrics to assist the developer
+         var d = new Date().getTime() - Engine.worldTime;
+         Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
+         Engine.addMetric("aFPS", Math.floor((1 / d) * 1000), true, "#");
+         Engine.addMetric("avail", this.fpsClock, false, "#ms");
+         Engine.addMetric("frame", d, true, "#ms");
+         Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
+         Engine.addMetric("visObj", Engine.vObj, false, "#");
+
+         this.updateMetrics();
+         this.lastMetricSample = this.metricSampleRate;
+      }
    },
 
    /**
@@ -1684,7 +1708,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       {
          h += m + ": " + this.metrics[m].val + "<br/>";
       }
-      this.metricDisplay.html(h);
+      $(".items", this.metricDisplay).html(h);
    },
 
    /**
@@ -1695,9 +1719,16 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       return "The Render Engine " + this.version;
    },
 
-   //=====================================================================================
+   //====================================================================================================
+   //====================================================================================================
+   //                                   DEPENDENCY PROCESSOR
+   //
    // These methods handle object dependencies so that each object will be
-   // initialized as soon as its dependencies become available.
+   // initialized as soon as its dependencies become available.  Using this method
+   // scripts can be loaded immediately, using the browsers threading model, and
+   // executed when dependencies are fulfilled.
+   //====================================================================================================
+   //====================================================================================================
 
    dependencyList: {},
    dependencyProcessor: null,
@@ -1728,20 +1759,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Check for nulls and circular references
       for (var d in objDeps) {
-			if (objDeps[d] != null) {
-				if (objDeps[d].split(".")[0] != objectName) {
-					newDeps.push(objDeps[d]);
-				} else {
-					Console.warn("Object references itself: ", objectName);
-				}
-			}
+         if (objDeps[d] != null) {
+            if (objDeps[d].split(".")[0] != objectName) {
+               newDeps.push(objDeps[d]);
+            } else {
+               Console.warn("Object references itself: ", objectName);
+            }
+         }
       }
 
       Engine.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Console.log(objectName + " depends on: " + newDeps);
 
-		// Check for 1st level circular references
-		this.checkCircularRefs(objectName);
+      // Check for 1st level circular references
+      this.checkCircularRefs(objectName);
 
       if (!Engine.dependencyProcessor) {
          Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
@@ -1806,13 +1837,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             if (deps[dep] != null && window[deps[dep]] == null) {
                miss = true;
             } else {
-					resolved.push(deps[dep]);
-				}
+               resolved.push(deps[dep]);
+            }
          }
 
-			for (var x in resolved) {
-				EngineSupport.arrayRemove(Engine.dependencyList[d].deps, resolved[x]);
-			}
+         for (var x in resolved) {
+            EngineSupport.arrayRemove(Engine.dependencyList[d].deps, resolved[x]);
+         }
 
          if (!miss && Engine.checkNSDeps(d)) {
             // We can initialize it
@@ -1837,10 +1868,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
    },
 
-	/*
-	 * The following set of functions breaks apart a function into its
-	 * components.  It is used to determine the dependencies of classes.
-	 */
+   /*
+    * The following set of functions breaks apart a function into its
+    * components.  It is used to determine the dependencies of classes.
+    */
 
    /**
     * Find variables defined in a function
@@ -1907,117 +1938,117 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       return dTable;
    },
 
-	/**
-	 * Process anonymous functions
-	 * @private
-	 */
-	findAnonDeps: function(objectName, str) {
-		var fTable = {};
-		var strR = /(["|']).*?\1/g;
+   /**
+    * Process anonymous functions
+    * @private
+    */
+   findAnonDeps: function(objectName, str) {
+      var fTable = {};
+      var strR = /(["|']).*?\1/g;
 
-		var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
-		var a = 0;
-		while ((m = aFnRE.exec(str)) != null) {
-			var f = "_" + (a++);
-			var fdef = m[2].replace(strR, "");
+      var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
+      var a = 0;
+      while ((m = aFnRE.exec(str)) != null) {
+         var f = "_" + (a++);
+         var fdef = m[2].replace(strR, "");
 
-			// Process each function
-			fTable[f] = { vars: Engine.findVars(objectName, fdef),
-							  deps: Engine.findDependencies(objectName, fdef) };
-			fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
-				return (e != "" && e != "this" && e != "arguments");
-			});
+         // Process each function
+         fTable[f] = { vars: Engine.findVars(objectName, fdef),
+                       deps: Engine.findDependencies(objectName, fdef) };
+         fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
+            return (e != "" && e != "this" && e != "arguments");
+         });
 
-			var args = m[1].split(",");
-			var vs = fTable[f].vars;
-			for (var a in args) {
-				if (EngineSupport.indexOf(vs, args[a]) == -1) {
-					vs.push(args[a].replace(" ",""));
-				}
-			}
-		}
+         var args = m[1].split(",");
+         var vs = fTable[f].vars;
+         for (var a in args) {
+            if (EngineSupport.indexOf(vs, args[a]) == -1) {
+               vs.push(args[a].replace(" ",""));
+            }
+         }
+      }
 
-		return Engine.procDeps(objectName, fTable);
-	},
+      return Engine.procDeps(objectName, fTable);
+   },
 
    /**
     * Finds all of the dependencies within an object class.
     * @private
     */
    findAllDependencies: function(objectName, obj) {
-		var defs;
-		var fTable = {};
+      var defs;
+      var fTable = {};
 
-		try {
-			var k = obj();
-		} catch (ex) {
-			// The class probably extends a non-existent class. Replace the parent
-			// class with a known class and evaluate as a dummy class
-			var extRE = new RegExp("(var\\s*)?([\\$_\\w\\.]*?)\\s*=\\s*([\\$_\\w\\.]*?)\\.extend\\(");
-			var classDef = obj.toString();
-			var nm = null;
-			classDef = classDef.replace(extRE, function(str, varDef, classname, parent, offs, s) {
-				nm = classname;
-				return "return Base.extend(";
-			});
-			try {
-				k = eval("(" + classDef.replace("return " + nm + ";", "") + ")();");
-			} catch (inEx) {
-				Console.error("Cannot parse class '" + nm + "'");
-			}
-		}
+      try {
+         var k = obj();
+      } catch (ex) {
+         // The class probably extends a non-existent class. Replace the parent
+         // class with a known class and evaluate as a dummy class
+         var extRE = new RegExp("(var\\s*)?([\\$_\\w\\.]*?)\\s*=\\s*([\\$_\\w\\.]*?)\\.extend\\(");
+         var classDef = obj.toString();
+         var nm = null;
+         classDef = classDef.replace(extRE, function(str, varDef, classname, parent, offs, s) {
+            nm = classname;
+            return "return Base.extend(";
+         });
+         try {
+            k = eval("(" + classDef.replace("return " + nm + ";", "") + ")();");
+         } catch (inEx) {
+            Console.error("Cannot parse class '" + nm + "'");
+         }
+      }
 
-		if ($.isFunction(k)) {
-			// If the class is an instance, get it's class object
-			k = k.prototype;
-		}
+      if ($.isFunction(k)) {
+         // If the class is an instance, get it's class object
+         k = k.prototype;
+      }
 
-		// Find the internal functions
-		for (var f in k) {
-			if ($.isFunction(k[f]) && k.hasOwnProperty(f)) {
-				var def = k[f].toString();
+      // Find the internal functions
+      for (var f in k) {
+         if ($.isFunction(k[f]) && k.hasOwnProperty(f)) {
+            var def = k[f].toString();
 
-				var m;
+            var m;
 
-				var nR = "([\\$_\\w\\.]*)";
-				var strR = /(["|']).*?\1/g;
+            var nR = "([\\$_\\w\\.]*)";
+            var strR = /(["|']).*?\1/g;
 
-				var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*)\\}","g");
-				while ((m = fR.exec(def)) != null) {
-					var fdef = m[2].replace(strR, "");
+            var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*)\\}","g");
+            while ((m = fR.exec(def)) != null) {
+               var fdef = m[2].replace(strR, "");
 
-					// Process, then remove anonymous functions
-					var anonDeps = Engine.findAnonDeps(objectName, fdef);
-					var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
-					fdef = fdef.replace(aFnRE, "");
+               // Process, then remove anonymous functions
+               var anonDeps = Engine.findAnonDeps(objectName, fdef);
+               var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
+               fdef = fdef.replace(aFnRE, "");
 
-					// Process each function
-					fTable[f] = { vars: Engine.findVars(objectName, fdef),
-									  deps: Engine.findDependencies(objectName, fdef) };
-					fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
-						return (e != "" && e != "this" && e != "arguments");
-					});
+               // Process each function
+               fTable[f] = { vars: Engine.findVars(objectName, fdef),
+                             deps: Engine.findDependencies(objectName, fdef) };
+               fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
+                  return (e != "" && e != "this" && e != "arguments");
+               });
 
-					var args = m[1].split(",");
-					var vs = fTable[f].vars;
-					for (var a in args) {
-						if (EngineSupport.indexOf(vs, args[a]) == -1) {
-							vs.push(args[a].replace(" ",""));
-						}
-					}
+               var args = m[1].split(",");
+               var vs = fTable[f].vars;
+               for (var a in args) {
+                  if (EngineSupport.indexOf(vs, args[a]) == -1) {
+                     vs.push(args[a].replace(" ",""));
+                  }
+               }
 
-					// Combine in the anonymous dependencies
-					for (var a in anonDeps) {
-						fTable[f].deps.push(anonDeps[a]);
-					}
-				}
-			}
-		}
+               // Combine in the anonymous dependencies
+               for (var a in anonDeps) {
+                  fTable[f].deps.push(anonDeps[a]);
+               }
+            }
+         }
+      }
 
-		// This is useful for debugging dependency problems...
-		//console.debug(objectName, fTable);
+      // This is useful for debugging dependency problems...
+      //console.debug(objectName, fTable);
 
-		return Engine.procDeps(objectName, fTable);
+      return Engine.procDeps(objectName, fTable);
    },
 
    procDeps: function(objectName, fTable) {
@@ -2047,34 +2078,75 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       return allDeps;
-	},
+   },
 
-	/**
-	 * Perform a quick resolution on first-level circular references.
-	 * @private
-	 */
+   /**
+    * Perform a quick resolution on first-level circular references.
+    * @private
+    */
    checkCircularRefs: function(objectName) {
-		var deps = Engine.dependencyList[objectName].deps;
-		var r = [];
-		for (var dep in deps) {
-			if (Engine.dependencyList[deps[dep]] && EngineSupport.indexOf(Engine.dependencyList[deps[dep]].deps, objectName) != -1) {
-				// Try removing the circular reference
-				EngineSupport.arrayRemove(Engine.dependencyList[objectName].deps, deps[dep]);
-			}
-		}
-	},
+      var deps = Engine.dependencyList[objectName].deps;
+      var r = [];
+      for (var dep in deps) {
+         if (Engine.dependencyList[deps[dep]] && EngineSupport.indexOf(Engine.dependencyList[deps[dep]].deps, objectName) != -1) {
+            // Try removing the circular reference
+            EngineSupport.arrayRemove(Engine.dependencyList[objectName].deps, deps[dep]);
+         }
+      }
+   },
 
-	/**
-	 * Dump out any unresolved class dependencies.
-	 * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
-	 */
-	dumpDependencies: function() {
-		Console.debug(Engine.dependencyList);
-	},
+   /**
+    * Dump out any unresolved class dependencies.
+    * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
+    */
+   dumpDependencies: function() {
+      Console.debug(Engine.dependencyList);
+   },
+
+   //====================================================================================================
+   //====================================================================================================
+   //                                        THE WORLD TIMER
+   //====================================================================================================
+   //====================================================================================================
+
+   /**
+    * This is the process which updates the world.  It starts with the default
+    * context, telling it to update itself.  Since each context is a container,
+    * all of the objects in the container will be called to update, and then
+    * render themselves.
+    *
+    * @private
+    * @memberOf Engine
+    */
+   engineTimer: function() {
+
+      if (!this.running) {
+         return;
+      }
+
+      Engine.worldTime = new Date().getTime();
+
+      // Update the world
+      if (Engine.getDefaultContext() != null)
+      {
+         Engine.vObj = 0;
+         Engine.getDefaultContext().update(null, Engine.worldTime);
+         Engine.renderMetrics();
+     }
+
+      // When the process is done, start all over again
+      Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, this.fpsClock);
+   }
 
  }, { // Interface
    globalTimer: null
  });
+
+//=================================================================================================
+//=================================================================================================
+//                                      INITIALIZATION
+//=================================================================================================
+//=================================================================================================
 
 // Start the console so logging can take place immediately
 Console.startup();
@@ -2082,7 +2154,7 @@ Console.startup();
 // Start the engine
 Engine.startup();
 
-// Read any engine-level query params
+// Set up the engine using whatever query params were passed
 Engine.setDebugMode(EngineSupport.checkBooleanParam("debug"));
 
 if (Engine.getDebugMode())

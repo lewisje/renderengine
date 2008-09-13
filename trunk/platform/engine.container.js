@@ -228,12 +228,39 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    },
 
    /**
-    * Get the array of objects within this container.
+    * Get the array of all objects within this container.  If a filtering
+    * function is provided, only objects matching the filter will be
+    * returned from the object collection.
+    * <p/>
+    * The filter function needs to return <tt>true</tt> for each element
+    * that should be contained in the filtered set.  The function will be
+    * passed the following arguments:
+    * <ul>
+    * <li>element - The array element being operated upon</li>
+    * <li>index - The index of the element in the array</li>
+    * <li>array - The entire array of elements in the container</li>
+    * </ul>
+    * Say you wanted to filter a host objects components based on a
+    * particular type.  You might do something like the following:
+    * <pre>
+    * var logicComponents = host.getObjects(function(el, idx) {
+    *    if (el.getType() == BaseComponent.TYPE_LOGIC) {
+    *       return true;
+    *    }
+    * });
+    * </pre>
     *
+    * @param filterFn {Function} A function to filter the set of
+    *                 elements with.  If you pass <tt>null</tt> the
+    *                 entire set of objects will be returned.
     * @type Array
     */
-   getObjects: function() {
-      return this.objects;
+   getObjects: function(filterFn) {
+      if (filterFn) {
+         return EngineSupport.filter(this.objects, filterFn);
+      } else {
+         return this.objects;
+      }
    },
 
    /**

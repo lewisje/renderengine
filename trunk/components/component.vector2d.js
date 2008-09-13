@@ -198,11 +198,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
-      if (!this.points) {
-         return;
-      }
-
-      if (this.getDrawMode() != RenderComponent.DRAW)
+      if (!(this.points && this.base(renderContext, time)))
       {
          return;
       }

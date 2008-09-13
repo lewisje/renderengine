@@ -76,7 +76,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       }
       canvas.id = this.getId();
 
-      this.setViewport(Rectangle2D.create(0, 0, this.width * worldScale, this.height * worldScale));
+      this.setViewport(Rectangle2D.create(0, 0, this.width, this.height));
       this.base(name || "CanvasContext", canvas);
    },
 
@@ -98,7 +98,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
          .attr("width", this.getWidth() * scaleX)
          .attr("height", this.getHeight() * scaleY);
 
-      this.setViewport(Rectangle2D.create(0, 0, this.getWidth() * scaleX, this.getHeight() * scaleY));
+      this.setViewport(Rectangle2D.create(0, 0, this.getWidth(), this.getHeight()));
    },
 
    /**
@@ -144,6 +144,13 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
    setupWorld: function(time) {
       this.setScale(this.getWorldScale());
+
+      if (Engine.getDebugMode()) {
+         this.setLineStyle("yellow");
+         this.setLineWidth(1);
+         this.drawRectangle(this.getViewport());
+      }
+
       this.base(time);
    },
 

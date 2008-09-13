@@ -55,9 +55,9 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    drawMode: 0,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(renderer, text, size) {
 
       Assert((renderer instanceof AbstractTextRenderer), "Text renderer must extend AbstractTextRenderer");
@@ -72,20 +72,20 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
       this.getComponent("transform").setScale(size || 1);
    },
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.drawMode = 0;
    },
 
-	/**
-	 * Called to render the text to the context.
-	 *
-	 * @param renderContext {RenderContext} The context to render the text upon
-	 * @param time {Number} The engine time in milliseconds
-	 */
+   /**
+    * Called to render the text to the context.
+    *
+    * @param renderContext {RenderContext} The context to render the text upon
+    * @param time {Number} The engine time in milliseconds
+    */
    update: function(renderContext, time) {
 
       if (this.drawMode == TextRenderer.DRAW_TEXT)
@@ -169,7 +169,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * Set the horizontal alignment of the text.
     *
     * @param alignment {Number} One of {@link AbstractTextRenderer#ALIGN_LEFT}, {@link AbstractTextRenderer#ALIGN_RIGHT}
-    *						  or {@link AbstractTextRenderer#ALIGN_CENTER}
+    *                  or {@link AbstractTextRenderer#ALIGN_CENTER}
     */
    setTextAlignment: function(alignment) {
       this.getComponent("TextRenderObject").setAlignment(alignment);
@@ -217,19 +217,19 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
       return this.getComponent("TextRenderObject").getColor();
    },
 
-	/**
-	 * Set the text drawing mode to either {@link #DRAW_TEXT} or {@link #NO_DRAW}.
-	 *
-	 * @param drawMode {Number} The drawing mode for the text.
-	 */
+   /**
+    * Set the text drawing mode to either {@link #DRAW_TEXT} or {@link #NO_DRAW}.
+    *
+    * @param drawMode {Number} The drawing mode for the text.
+    */
    setDrawMode: function(drawMode) {
       this.drawMode = drawMode;
    },
 
-	/**
-	 * Get the current drawing mode for the text.
-	 * @return {Number} The text drawing mode
-	 */
+   /**
+    * Get the current drawing mode for the text.
+    * @return {Number} The text drawing mode
+    */
    getDrawMode: function() {
       return this.drawMode;
    }

@@ -107,9 +107,8 @@ var SpaceroidsRock = Object2D.extend({
     * @param time {Number} The engine time in milliseconds
     */
    update: function(renderContext, time) {
-
       var c_mover = this.getComponent("move");
-      c_mover.setPosition(Spaceroids.wrap(c_mover.getRenderPosition(), this.getWorldBox()));
+      c_mover.setPosition(Spaceroids.wrap(c_mover.getPosition(), this.getBoundingBox()));
 
       renderContext.pushTransform();
       this.base(renderContext, time);

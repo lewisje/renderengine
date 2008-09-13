@@ -53,8 +53,8 @@ var SpaceroidsBullet = Object2D.extend({
    constructor: function(player) {
       this.base("Bullet");
 
-		// This is a hack!
-		this.field = Spaceroids;
+      // This is a hack!
+      this.field = Spaceroids;
 
       // Track the player that created us
       this.player = player;
@@ -138,7 +138,6 @@ var SpaceroidsBullet = Object2D.extend({
     * @param time {Number} The engine time in milliseconds
     */
    update: function(renderContext, time) {
-
       var c_mover = this.getComponent("move");
 
       // Is this bullet in field any more?
@@ -154,7 +153,6 @@ var SpaceroidsBullet = Object2D.extend({
       renderContext.pushTransform();
       this.base(renderContext, time);
       renderContext.popTransform();
-
    },
 
    /**

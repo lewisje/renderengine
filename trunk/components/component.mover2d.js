@@ -36,7 +36,7 @@ Engine.include("/components/component.transform2d.js");
 Engine.initObject("Mover2DComponent", "Transform2DComponent", function() {
 
 /**
- * @class A simple mover component that adjusts the translation of a component
+ * @class A simple mover component that adjusts the transformation of a component
  * over time.  This component handles velocity, acceleration, and
  * deceleration.
  *
@@ -57,9 +57,9 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    lPos: null,
 
    constructor: function(name, priority) {
+      this.base(name, priority || 1.0);
       this.velocity = new Vector2D(0,0);
       this.acceleration = new Vector2D(0,0);
-      this.base(name, priority || 1.0);
       this.lPos = new Point2D(0,0);
       this.vDecay = 0;
    },
@@ -82,37 +82,40 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
     *
     * @param renderContext {RenderContext} The render context for the component
     * @param time {Number} The engine time in milliseconds
+    * @param rendering {Boolean} <tt>true</tt> during the render phase
     */
-   execute: function(renderContext, time) {
-      this.lPos.set(this.getPosition());
-      var rot = this.getRotation();
+   execute: function(renderContext, time, rendering) {
+      if (!rendering) {
+         this.lPos.set(this.getPosition());
+         var rot = this.getRotation();
 
-      // If we've just come into the world, we can short circuit with a
-      // quick addition of the velocity.
-      if (this.lastTime == -1)
-      {
-         this.setPosition(this.lPos.add(this.velocity));
-      }
-      else
-      {
-         if (this.vDecay != 0 && this.velocity.len() > 0) {
-            // We need to decay the velocity by the amount
-            // specified until velocity is zero, or less than zero
-            var invVelocity = new Vector2D(this.velocity).neg();
-            invVelocity.mul(this.vDecay);
-
-            this.velocity.add(invVelocity);
+         // If we've just come into the world, we can short circuit with a
+         // quick addition of the velocity.
+         if (this.lastTime == -1)
+         {
+            this.setPosition(this.lPos.add(this.velocity));
          }
+         else
+         {
+            if (this.vDecay != 0 && this.velocity.len() > 0) {
+               // We need to decay the velocity by the amount
+               // specified until velocity is zero, or less than zero
+               var invVelocity = new Vector2D(this.velocity).neg();
+               invVelocity.mul(this.vDecay);
 
-         var diff = (time - this.lastTime) * 0.1;
-         var vz = new Vector2D(this.velocity).mul(diff);
-         this.setPosition(this.lPos.add(vz));
+               this.velocity.add(invVelocity);
+            }
 
-         this.setRotation(rot + this.angularVelocity * (diff));
+            var diff = (time - this.lastTime) * 0.1;
+            var vz = new Vector2D(this.velocity).mul(diff);
+            this.setPosition(this.lPos.add(vz));
+
+            this.setRotation(rot + this.angularVelocity * (diff));
+         }
       }
 
-      this.base(renderContext, time);
       this.lastTime = time;
+      this.base(renderContext, time);
    },
 
    /**
