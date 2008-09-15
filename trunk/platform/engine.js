@@ -117,6 +117,10 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
     */
    error: function() {
       //this.out("<span class='error'>" + this.dump(arguments) + "</span>");
+   },
+
+   getClassName: function() {
+      return "ConsoleRef";
    }
 
 });
@@ -197,7 +201,12 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
    /** @private **/
    init: function() {
+   },
+
+   getClassName: function() {
+      return "HTMLConsoleRef";
    }
+
 });
 
 /**
@@ -214,7 +223,15 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
    fixArgs: function(a) {
       var x = [];
       for (var i=0; i < a.length; i++) {
-         x.push(a[i]);
+         if (a[i].length && (a[i] instanceof Array) || typeof a[i] == "object") {
+            var s = "";
+            for (var o in a[i]) {
+               s += o + ": " + a[i][o] + "\n";
+            }
+            x.push(s);
+         } else {
+            x.push(a[i]);
+         }
       }
       return x;
    },
@@ -253,7 +270,12 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
    /** @private **/
    init: function() {
+   },
+
+   getClassName: function() {
+      return "SafariConsoleRef";
    }
+
 });
 
 /**
@@ -309,7 +331,12 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
    /** @private **/
    init: function() {
+   },
+
+   getClassName: function() {
+      return "OperaConsoleRef";
    }
+
 });
 
 
@@ -368,7 +395,12 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
       } else {
          console.error.apply(console, arguments);
       }
+   },
+
+   getClassName: function() {
+      return "FirebugConsoleRef";
    }
+
 });
 
 /**
@@ -1731,6 +1763,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //====================================================================================================
 
    dependencyList: {},
+   dependencyCount: 0,
    dependencyProcessor: null,
 
    /**
@@ -1769,6 +1802,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       Engine.dependencyList[objectName] = {deps: newDeps, objFn: fn};
+      Engine.dependencyCount++;
       Console.log(objectName + " depends on: " + newDeps);
 
       // Check for 1st level circular references
