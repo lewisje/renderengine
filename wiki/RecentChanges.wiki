@@ -2,6 +2,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 09/16/2008 ||Opera is working again. _Chrome is now supported!_ The examples are working across all browsers.  Sound is still causing me problems. ||
 || 09/13/2008 ||I've changed the method of object rendering.  The RenderComponent will now return true iff the object is supposed to draw and the [HostComponents HostObject] is in the RenderContext viewport.  I also added some buttons to the metrics display to allow a dev to pause the engine and inspect objects and the game. ||
 || 09/04/2008 ||The dependency checker is complete now.  I changed the method by which functions are identified and dependencies collected. It's using the browser's built-in evaluation of objects to gather function dependencies, evaluating a dummy class when creating the class would require a nonexistent dependency. Still isn't working in Opera, but that's most likely a regex issue. ||
 || 09/02/2008 ||The dependency checker is more solid today.  I've gotten the examples working in Firefox 3 (still no Opera and Safari, but soon I promise).  I need to start using the issue tracker so I can get ready for an initial Beta release. ||
