@@ -50,6 +50,8 @@ var SpaceroidsBullet = Object2D.extend({
 
    field: null,
 
+   rot: null,
+
    constructor: function(player) {
       this.base("Bullet");
 
@@ -58,6 +60,7 @@ var SpaceroidsBullet = Object2D.extend({
 
       // Track the player that created us
       this.player = player;
+      this.rot = player.getRotation();
 
       // Add components to move and draw the bullet
       this.add(Mover2DComponent.create("move"));
@@ -139,6 +142,11 @@ var SpaceroidsBullet = Object2D.extend({
     */
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
+
+		// Particle trail
+		if (EngineSupport.checkBooleanParam("2k")) {
+			this.field.pEngine.addParticle(TrailParticle.create(this.getPosition(), this.rot, 45, "#aaaaff", 250));
+		}
 
       // Is this bullet in field any more?
       var p = c_mover.getPosition();

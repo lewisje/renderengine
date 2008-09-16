@@ -129,6 +129,12 @@ var SpaceroidsPlayer = Object2D.extend({
          var r = c_mover.getRotation();
          var dir = Math2D.getDirectionVector(Point2D.ZERO, this.tip, r);
          c_mover.setVelocity(c_mover.getVelocity().add(dir.mul(0.08)));
+
+			// Particle trail
+			if (EngineSupport.checkBooleanParam("2k")) {
+				var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
+				this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, "yellow", 5000));
+			}
       }
 
       renderContext.pushTransform();
