@@ -1,3 +1,4 @@
+#summary A few options that can be used to set up The Render Engine
 = Introduction =
 
 There are a few ways to configure The Render Engine to your liking. The query parameters are meant to give you a method to intialize the engine with values before it runs anything.
