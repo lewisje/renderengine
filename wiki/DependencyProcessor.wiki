@@ -61,10 +61,10 @@ The `Engine.initObject()` method is as follows:
 
 `Engine.initObject(objectName, primaryDependency, classDeclarationFunction)`
 
-|| *Argument* || *Description* ||
-|| `objectName` || The name of the object contained in the `classDeclarationFunction`.  There is no way for Javascript to tell us these things, so it's easier for the developer to tell us. ||
-|| `primaryDependency` || The name of the object that `objectName` extends.  Again, easier for the developer to tell us rather than try to figure it out. ||
-|| `classDeclarationFunction` || A function whose only content is a class object being assigned to a variable, that returns that class object as its only value. ||
+|| *Argument* || *Type* || *Description* ||
+|| `objectName` || String || The name of the object contained in the `classDeclarationFunction`.  There is no way for Javascript to tell us these things, so it's easier for the developer to tell us. ||
+|| `primaryDependency` || String || The name of the object that `objectName` extends.  Again, easier for the developer to tell us rather than try to figure it out. ||
+|| `classDeclarationFunction` || Function || A function whose only content is a class object being assigned to a variable, that returns that class object as its only value. ||
 
 The `Engine.initObject()` method should be preceded by any include calls.  The includes should only be the immediate objects that the class depends upon.  You don't need to include dependencies of dependent classes.  That should be handled automatically by each included class file.
 
