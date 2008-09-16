@@ -1,3 +1,4 @@
+#summary Get to know The Render Engine's internals
 #labels Featured
 = Engine Process Overview =
 
