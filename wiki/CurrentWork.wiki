@@ -1,3 +1,4 @@
+#summary A quick synopsis of what I'm currently working on
 = Current Work =
 
 I've got the engine working again (except for sound in some cases)... phew.
