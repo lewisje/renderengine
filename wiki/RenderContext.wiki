@@ -1,0 +1,9 @@
+= Render Contexts... What Are They? =
+
+I'll be including some documentation soon about this...
+
+  * HTMLElementContext
+  * DocumentBodyContext
+  * CanvasContext
+  * ScrollingBackground
+  * SVGContext
