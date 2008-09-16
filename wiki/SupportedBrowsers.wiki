@@ -2,11 +2,20 @@
 
 The following is a list of browsers that I have tested the engine and examples in.  As more browsers are tested and pass, I will add them to this list.
 
-||  *Browser*  ||  *Version*  ||  *Platforms* ||
-|| Firefox || 1.5+ || Windows ||
-|| Safari || 3.0+ || Windows, Mac, iPhone ||
-|| Opera || 9.5+ || Windows ||
-|| Chrome || 0.2beta || Windows ||
+||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  |
+|| Firefox || 1.5+ || Windows || Great ||
+|| Safari || 3.0+ || Windows, Mac, iPhone || Great - Win/Mac, Ok - iPhone ||
+|| Opera || 9.5+ || Windows || Good - No sound ||
+|| Chrome || 0.2beta || Windows || Good - No Sound ||
+
+Levels of support:
+  * Poor - Most features not working
+  * Ok - Runs, missing features, poor performance
+  * Good - Baseline, works well with notes
+  * Great - Fully functional with minor issues
+  * Perfect - All features working as expected
+
+----
 
 _Notes:_
 
