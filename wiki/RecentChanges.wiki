@@ -1,3 +1,4 @@
+#summary A table of changes that have been recently made to the engine
 #labels Featured
 = Recent Changes =
 
