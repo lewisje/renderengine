@@ -53,7 +53,7 @@ Dependencies which can be resolved by function arguments or by internal variable
 
 This leaves us with three _actual dependencies_.  Of those dependencies, one is availble natively within each browser: `Math` so it could be discarded.  However, we'll leave it since it doesn't hurt to have it there.  Really, there are only the remaining two dependencies which need to be resolved.
 
-`Point2D` and `Container` will have dependencies of their own, which will need to be resolved before `MyObject` can initialize.  Once `Point2D` and `Container` exist on the `window` object of the browser, `MyObject` will be added to the `window` object as well -- possibly satisfying a dependency of another object, itself.
+`Point2D` and `Container` will have dependencies of their own, which will need to be resolved before `MyObject` can initialize.  Once `Point2D` and `Container` exist on the `window` object of the browser, `MyObject` will be added to the `window` object as well -- possibly satisfying a dependency for another object.
 
 == Engine.initObject() ==
 
