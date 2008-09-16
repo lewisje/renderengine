@@ -9,8 +9,9 @@ The following is a list of browsers that I have tested the engine and examples i
 || Chrome || 0.2beta || Windows || Good - No Sound ||
 
 Levels of support:
+  * Fail - Engine not working on this browser
   * Poor - Most features not working
-  * Ok - Runs, missing features, poor performance
+  * Ok - Runs, missing features or poor performance
   * Good - Baseline, works well with notes
   * Great - Fully functional with minor issues
   * Perfect - All features working as expected
@@ -22,3 +23,4 @@ _Notes:_
   * At some point I would like to get myself a Wii so I can test Opera on that platform.
   * Additional tests for different browsers on multiple platforms would be nice.  I only have a Windows PC and occasional access to a Mac and/or iPhone.
   * Requests for additional browsers should be added to the comments of this page.
+  * There is a project to bring the Firefox canvas to Internet Explorer.  When this works, I will test and add IE to my list of browsers.  The !ExCanvas object doesn't perform fast enough for this engine.
