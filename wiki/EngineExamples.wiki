@@ -1,4 +1,4 @@
-#summary A list of examples of The Render Engine in operation
+#summary A list of examples using The Render Engine
 #labels Featured
 
 The following are links to works in progress.  They are the tests that I've put together to work out the various parts of the engine:
