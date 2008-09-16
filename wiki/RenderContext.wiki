@@ -1,6 +1,6 @@
 = Render Contexts... What Are They? =
 
-# A document about rendering contexts and how the engine uses them
+#summary A document about rendering contexts and how the engine uses them
 
 I'll be including some documentation soon about this...
 
