@@ -223,17 +223,20 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
    fixArgs: function(a) {
       var x = [];
       for (var i=0; i < a.length; i++) {
-         if (a[i].length && (a[i] instanceof Array) || typeof a[i] == "object") {
-            var s = "";
-            for (var o in a[i]) {
-               s += o + ": " + a[i][o] + "\n";
-            }
-            x.push(s);
+         if (!a[i]) {
+            x.push("null");
+         } else if ((a[i].length && (a[i] instanceof Array)) || typeof a[i] == "object") {
+            /* var s = "";
+            var obj = a[i];
+            for (var o in obj) {
+               s += o + ": " + obj[o] + "\n";
+            } */
+            x.push(a[i]);
          } else {
             x.push(a[i]);
          }
       }
-      return x;
+      return x.join(" ");
    },
 
    /**
@@ -1956,9 +1959,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // method dependencies
       while ((m = fcR.exec(def)) != null) {
-         var k = m[2].split(".")[0];
-         if (EngineSupport.indexOf(dTable, k) == -1) {
-            dTable.push(k);
+         if (m[2].indexOf(".") != -1) {
+            var k = m[2].split(".")[0];
+            if (EngineSupport.indexOf(dTable, k) == -1) {
+               dTable.push(k);
+            }
          }
       }
 
@@ -1980,7 +1985,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       var fTable = {};
       var strR = /(["|']).*?\1/g;
 
-      var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
+      var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\r|\\n)*?)\\};?","g");
       var a = 0;
       while ((m = aFnRE.exec(str)) != null) {
          var f = "_" + (a++);
@@ -2042,18 +2047,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          if ($.isFunction(k[f]) && k.hasOwnProperty(f)) {
             var def = k[f].toString();
 
-            var m;
-
-            var nR = "([\\$_\\w\\.]*)";
-            var strR = /(["|']).*?\1/g;
-
-            var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*)\\}","g");
-            while ((m = fR.exec(def)) != null) {
-               var fdef = m[2].replace(strR, "");
+            var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\s)*)","g");
+            var m = fR.exec(def);
+            if (m) {
+               // Remove strings, then comments
+               var fdef = m[2].replace(/(["|']).*?\1/g, "");
+               fdef = fdef.replace(/\/\/.*\r\n/g, "");
+               fdef = fdef.replace("\/\*(.|\s)*?\*\/", "");
 
                // Process, then remove anonymous functions
                var anonDeps = Engine.findAnonDeps(objectName, fdef);
-               var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\n)*?)\\};?","g");
+               var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\r|\\n)*?)\\};?","g");
                fdef = fdef.replace(aFnRE, "");
 
                // Process each function
@@ -2080,7 +2084,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       // This is useful for debugging dependency problems...
-      //console.debug(objectName, fTable);
+      //Console.log("DepTable: ", objectName, fTable);
 
       return Engine.procDeps(objectName, fTable);
    },
