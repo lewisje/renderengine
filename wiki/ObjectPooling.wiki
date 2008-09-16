@@ -1,3 +1,4 @@
+#summary Minimizing garbage collection through object pooling
 #labels Phase-Design
 = Introduction =
 
