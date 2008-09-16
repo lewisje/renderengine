@@ -79,4 +79,4 @@ Secondary, tertiary, and so forth are not currently handled.  If you find a clas
 
 == Coding Style ==
 
-Please be sure to read the article on CodingStyle to get a good feel for how the current engine is structured.  This method makes dependency processing much simpler.  Introducing new coding styles will only make dependency checking harder and should be avoided.
+Please be sure to read the article on EngineCodingStyle to get a good feel for how the current engine is structured.  This method makes dependency processing much simpler.  Introducing new coding styles will only make dependency checking harder and should be avoided.
