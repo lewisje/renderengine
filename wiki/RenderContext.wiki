@@ -3,7 +3,7 @@
 I'll be including some documentation soon about this...
 
   * HTMLElementContext
-  * DocumentBodyContext
+  * DocumentContext
   * CanvasContext
   * ScrollingBackground
   * SVGContext
