@@ -44,7 +44,7 @@ When the engine receives this call, it will examine the function's return object
 
   * Variable declarations
   * Objects created with the `new` operator
-  * Objects created with the `.create()` method of PooledObjects
+  * Objects created with the `.create()` method of [ObjectPooling PooledObjects]
   * Method calls of objects
 
 Dependencies which can be resolved by function arguments or by internal variables are discarded as "internal dependencies".  Method calls and new objects are what we're most interested in.  If a function contains internal anonymous functions, they are handled just like class functions and examined for possible dependencies.
