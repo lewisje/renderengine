@@ -1,0 +1,11 @@
+= Introduction to the Dependency Processor =
+
+This will document the dependency processor.  Things to explain:
+
+  * The `Engine.initObject()` method
+  * Object name and primary dependency
+  * How dependencies are located
+  * Coding style so dependencies can be found
+  * Circular references
+
+
