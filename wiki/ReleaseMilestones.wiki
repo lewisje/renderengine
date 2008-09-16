@@ -1,3 +1,4 @@
+#summary A list of goals to be reached
 = Release Goals and Milestones =
 
 *Beta 0.1*
