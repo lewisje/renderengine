@@ -1,3 +1,4 @@
+#summary Processing dependencies in Javascript
 = Introduction to the Dependency Processor =
 
 Unlike compiled languages, that have a "linker" phase, which check for dependencies, Javascript does not.  Traditionally, Javascript libraries have been monolithic.  Each of the dependencies is contained in the same file so that all of the objects will exist once the syntax has checked out and the file is parsed and compiled.
