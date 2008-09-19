@@ -34,7 +34,7 @@
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.collider.js");
-Engine.include("/platform/engine.object2d.js");
+Engine.include("/engine/engine.object2d.js");
 
 Engine.initObject("SpaceroidsRock", "Object2D", function() {
 

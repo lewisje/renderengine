@@ -1545,7 +1545,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          for (var x = 0; x < scripts.length; x++)
          {
             var src = scripts[x].src;
-            if (src != null && src.indexOf("/platform/engine.js") != -1)
+            if (src != null && src.indexOf("/engine/engine.js") != -1)
             {
                // Get the path
                this.engineLocation = src.match(/(.*)\/platform\/engine\.js/)[1];
@@ -1568,8 +1568,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadStylesheet("/css/engine.css");
 
       // The basics needed by the engine to get started
-      this.loadNow("/platform/engine.game.js");
-      this.loadNow("/platform/engine.rendercontext.js");
+      this.loadNow("/engine/engine.game.js");
+      this.loadNow("/engine/engine.rendercontext.js");
       this.loadNow("/rendercontexts/context.render2d.js");
       this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");

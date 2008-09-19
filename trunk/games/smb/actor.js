@@ -34,7 +34,7 @@
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.sprite.js");
 Engine.include("/components/component.keyboardinput.js");
-Engine.include("/platform/engine.object2d.js");
+Engine.include("/engine/engine.object2d.js");
 
 Engine.initObject("SpriteTestActor", "Object2D", function() {
 

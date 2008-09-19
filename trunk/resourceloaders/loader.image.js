@@ -29,7 +29,7 @@
  */
 
 // Includes
-Engine.include("/platform/engine.resourceloader.js");
+Engine.include("/engine/engine.resourceloader.js");
 
 Engine.initObject("ImageLoader", "ResourceLoader", function() {
 

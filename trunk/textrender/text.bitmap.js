@@ -30,7 +30,7 @@
  */
 
 // Includes
-Engine.include("/platform/engine.math2d.js");
+Engine.include("/engine/engine.math2d.js");
 Engine.include("/textrender/text.abstractrender.js");
 
 Engine.initObject("BitmapText", "AbstractTextRenderer", function() {

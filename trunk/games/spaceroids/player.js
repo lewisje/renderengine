@@ -36,7 +36,7 @@ Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/components/component.collider.js");
-Engine.include("/platform/engine.object2d.js");
+Engine.include("/engine/engine.object2d.js");
 
 Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
 
