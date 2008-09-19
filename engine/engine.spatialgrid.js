@@ -34,8 +34,8 @@
  */
 
 // Includes
-Engine.include("/platform/engine.spatialcontainer.js");
-Engine.include("/platform/engine.math2d.js");
+Engine.include("/engine/engine.spatialcontainer.js");
+Engine.include("/engine/engine.math2d.js");
 
 Engine.initObject("GridNode", "SpatialNode", function() {
 

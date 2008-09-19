@@ -31,8 +31,8 @@
  *
  */
 
-Engine.include("/platform/engine.math2d.js");
-Engine.include("/platform/engine.particles.js");
+Engine.include("/engine/engine.math2d.js");
+Engine.include("/engine/engine.particles.js");
 
 Engine.initObject("SimpleParticle", "Particle", function() {
 

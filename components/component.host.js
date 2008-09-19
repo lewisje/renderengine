@@ -30,7 +30,7 @@
  */
 
 // Includes
-Engine.include("/platform/engine.container.js");
+Engine.include("/engine/engine.container.js");
 Engine.include("/components/component.base.js");
 
 Engine.initObject("HostComponent", "LogicComponent", function() {

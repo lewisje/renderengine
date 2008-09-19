@@ -29,7 +29,7 @@
  */
 
 // Includes
-Engine.include("/platform/engine.events.js");
+Engine.include("/engine/engine.events.js");
 Engine.include("/components/component.input.js");
 
 Engine.initObject("WiimoteInputComponent", "InputComponent", function() {

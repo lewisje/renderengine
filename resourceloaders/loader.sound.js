@@ -30,8 +30,8 @@
 
 // Includes
 Engine.include("/libs/soundmanager2.js");
-Engine.include("/platform/engine.pooledobject.js");
-Engine.include("/platform/engine.resourceloader.js");
+Engine.include("/engine/engine.pooledobject.js");
+Engine.include("/engine/engine.resourceloader.js");
 
 Engine.initObject("SoundLoader", "ResourceLoader", function() {
 

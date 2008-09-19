@@ -33,8 +33,8 @@
  */
 
 // Includes
-Engine.include("/platform/engine.baseobject.js");
-Engine.include("/platform/engine.container.js");
+Engine.include("/engine/engine.baseobject.js");
+Engine.include("/engine/engine.container.js");
 
 /**
  * An index assigned to a node.

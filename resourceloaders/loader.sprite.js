@@ -29,8 +29,8 @@
  */
 
 // Includes
-Engine.include("/platform/engine.pooledobject.js");
-Engine.include("/platform/engine.math2d.js");
+Engine.include("/engine/engine.pooledobject.js");
+Engine.include("/engine/engine.math2d.js");
 Engine.include("/resourceloaders/loader.image.js");
 
 Engine.initObject("SpriteLoader", "ImageLoader", function() {

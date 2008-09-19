@@ -31,8 +31,8 @@
  */
 
 // Includes
-Engine.include("/platform/engine.pooledobject.js");
-Engine.include("/platform/engine.baseobject.js");
+Engine.include("/engine/engine.pooledobject.js");
+Engine.include("/engine/engine.baseobject.js");
 
 Engine.initObject("Iterator", "PooledObject", function() {
 

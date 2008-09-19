@@ -30,9 +30,9 @@
  */
 
 // Includes
-Engine.include("/platform/engine.container.js");
-Engine.include("/platform/engine.math2d.js");
-Engine.include("/platform/engine.hostobject.js");
+Engine.include("/engine/engine.container.js");
+Engine.include("/engine/engine.math2d.js");
+Engine.include("/engine/engine.hostobject.js");
 
 Engine.initObject("RenderContext", "Container", function() {
 
