@@ -108,6 +108,10 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 
    setScale: function(scaleX, scaleY) {
    },
+	
+	getScale: function() {
+		return 1;
+	},
 
    getScaleX: function() {
       return 1;
@@ -141,7 +145,29 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     */
    getZIndex: function() {
       return this.zIndex;
-   }
+   },
+	
+	getProperties: function() {
+		var self = this;
+		var prop = this.base(self);
+		return $.extend(prop, {
+			"ZIndex" 		: [function() { return self.getZIndex(); },
+						 			function(i){	self.setZIndex(i); }],
+			"BoundingBox" 	: [function() { return self.getBoundingBox().toString(); },
+								  	null],
+			"WorldBox" 		: [function() { return self.getWorldBox().toString(); }, 
+							  		null],
+			"Position" 		: [function() { return self.getPosition(); },
+							  		function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }],
+			"RenderPos" 	: [function() { return self.getRenderPosition() }, 
+									null],
+			"Rotation" 		: [function() { return self.getRotation(); }, 
+							  		function(i) { self.setRotation(i); }],
+			"Scale" 			: [function() { return self.getScale(); }, 
+						  			function(i) {self.setScale(i,i); }]
+		});
+	}
+
 }, {
    /**
     * Get the class name of this object

@@ -62,17 +62,14 @@ var SpriteTestActor = Object2D.extend({
       this.setPosition(Point2D.create(100, 100));
    },
 
-   getProperties: function() {
-      var self = this;
-      return {
+	getProperties: function() {
+		var self = this;
+		var prop = this.base(self);
+		return $.extend(prop, {
          "Sprite" :     [function() { return self.sprite.getName(); },
-                         function(i) { SpriteTest.spriteLoader.getSprite("smbtiles", i); }],
-         "Position" :   [function() { return self.getPosition(); },
-                         function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }],
-         "Scale" :      [function() { return self.getScale(); },
-                         function(i) { self.setScale(i); }]
-      };
-   },
+                         function(i) { self.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", i)); }]
+		});
+	},
 
    /**
     * Update the player within the rendering context.  This draws

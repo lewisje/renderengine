@@ -61,17 +61,16 @@ var SpriteTestCollisionBox = Object2D.extend({
       this.boxRect = Rectangle2D.create(0, 0, 80, 80);
    },
 
-   getProperties: function() {
-      var self = this;
-      return {
-         "Position" :      [function() { return self.getPosition(); },
-                            function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0], p[1])); }],
-         "Width" :         [function() { return self.boxRect.get().w; },
+	getProperties: function() {
+		var self = this;
+		var prop = this.base(self);
+		return $.extend(prop, {
+        "Width" :         [function() { return self.boxRect.get().w; },
                             function(i) { self.setWidth(i); }],
          "Height" :        [function() { return self.boxRect.get().h; },
                             function(i) { self.setHeight(i); }]
-      };
-   },
+		});
+	},
 
    /**
     * Update the player within the rendering context.  This draws
