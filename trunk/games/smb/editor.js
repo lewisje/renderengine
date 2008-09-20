@@ -226,13 +226,19 @@ var SpriteTestEditor = Base.extend({
       for (var p in bean) {
          var r = $("<tr>");
          r.append($("<td class='propName'>" + p + "</td>"));
+			var e;
+			
+         if (bean[p][1]) {
+				var fn = function() {
+	            arguments.callee.cb(this.value);
+	         };
+	         fn.cb = bean[p][1];
+	
+	         e = $("<input type='text' size='15' value='" + bean[p][0]() + "'/>").change(fn);
+			} else {
+				e = $("<div>").text(bean[p][0]().toString());
+			}
 
-         var fn = function() {
-            arguments.callee.cb(this.value);
-         };
-         fn.cb = bean[p][1];
-
-         var e = $("<input type='text' size='15' value='" + bean[p][0]() + "'/>").change(fn);
          r.append(e);
          pTable.append(r);
       }

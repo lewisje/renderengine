@@ -276,7 +276,16 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       Assert((fn != null), "A function must be provided to sort the Container");
       Console.log("Sorting ", this.getName(), "[" + this.getId() + "]");
       this.objects.sort(fn);
-   }
+   },
+	
+	getProperties: function() {
+		var self = this;
+		var prop = this.base(self);
+		return $.extend(prop, {
+			"Contains" 	: [function() { return self.objects.length; },
+						 		null]
+		});
+	}
 
 }, /** @scope Container */{
    /**

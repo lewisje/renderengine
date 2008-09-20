@@ -201,7 +201,16 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          // Kill off dead particles
          this.kill();
       }
-   }
+   },
+	
+	getProperties: function() {
+		var self = this;
+		return $.extend(prop, {
+			"Count" : [function() { return self.particles.length; },
+						  null]
+		});
+	}
+	
 
 }, {
    /**

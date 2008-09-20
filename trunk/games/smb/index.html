@@ -50,13 +50,15 @@
       <script type="text/javascript" src="../../libs/sylvester.js"></script>
 
       <!-- Load the main engine script -->
-      <script type="text/javascript" src="../../platform/engine.js"></script>
+      <script type="text/javascript" src="../../engine/engine.js"></script>
       <style type="text/css">
          .toolbar {
             font: 9px Verdana, Arial, Helvetica;
             border: 1px outset black;
             background: silver;
-            height: 24px;
+            height: 96px;
+				width: 640px;
+				margin-top: 3px;
          }
 
          .tool {
@@ -76,19 +78,29 @@
          }
 
          #propTable {
+         	font-family: Verdana, Arial, Helvetica, sans-serif;
+				font-size: 9px;
          	position: absolute;
          	top: 10px;
          	left: 700px;
+				border: 1px solid #0088AA;
          }
+			
+			#propTable input {
+         	font-family: Verdana, Arial, Helvetica, sans-serif;
+				font-size: 9px;
+				border: none;
+				background: #ffff88;
+			}
 
-         .propName {
+         #propTable .propName {
          	background: silver;
          	font-weight: bold;
          }
 
          #levelData {
          	position: absolute;
-         	top: 250px;
+         	top: 350px;
          	left: 680px;
          	height: 220px;
          	width: 500px;

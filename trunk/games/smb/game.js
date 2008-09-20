@@ -71,6 +71,8 @@ var SpriteTest = Game.extend({
    levelLoader: null,
 
    level: null,
+	
+	nextZ: 1,
 
    /**
     * Handle the keypress which starts the game

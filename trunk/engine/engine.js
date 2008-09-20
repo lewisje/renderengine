@@ -1,4 +1,4 @@
-/**
+1/**
  * The Render Engine
  *
  * The startup library is a collection of methods which will
@@ -1532,7 +1532,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Get the path to the engine.
+    * Get the path to the engine.  Uses the location of the <tt>engine.js</tt>
+    * file that was loaded.
     * @return {String} The path/URL where the engine is located
     * @memberOf Engine
     */
@@ -1548,7 +1549,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             if (src != null && src.indexOf("/engine/engine.js") != -1)
             {
                // Get the path
-               this.engineLocation = src.match(/(.*)\/platform\/engine\.js/)[1];
+               this.engineLocation = src.match(/(.*)\/engine\/engine\.js/)[1];
                break;
             }
          }
@@ -1573,11 +1574,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadNow("/rendercontexts/context.render2d.js");
       this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");
-
-      if ($.browser.msie) {
-         // This is the Google "ExplorerCanvas" object we need for IE
-         //this.loadNow("/libs/excanvas.js");
-      }
    },
 
    /**

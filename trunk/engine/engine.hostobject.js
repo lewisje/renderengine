@@ -135,7 +135,16 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     */
    getComponent: function(name) {
       return this.get(name.toUpperCase());
-   }
+   },
+	
+	getProperties: function() {
+		var self = this;
+		var prop = this.base(self);
+		return $.extend(prop, {
+			"RenderContext" : [function() { return self.renderContext.getName(); },
+						 			 null]
+		});
+	}
 
 }, /** @scope HostObject.prototype */{  // Interface
 
