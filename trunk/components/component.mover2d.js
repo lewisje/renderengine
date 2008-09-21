@@ -55,6 +55,10 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    angularVelocity: 0,
 
    lPos: null,
+	
+	maxVelocity: 0,
+
+	acceleration: null,
 
    constructor: function(name, priority) {
       this.base(name, priority || 1.0);
@@ -62,6 +66,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.acceleration = new Vector2D(0,0);
       this.lPos = new Point2D(0,0);
       this.vDecay = 0;
+		this.maxVelocity = -1;
    },
 
    release: function() {
@@ -71,6 +76,8 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.vDecay = 0;
       this.angularVelocity = 0;
       this.lPos = null;
+		this.maxVelocity = -1;
+		this.acceleration = null;
    },
 
    /**
@@ -84,34 +91,36 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
     * @param time {Number} The engine time in milliseconds
     * @param rendering {Boolean} <tt>true</tt> during the render phase
     */
-   execute: function(renderContext, time, rendering) {
-      if (!rendering) {
-         this.lPos.set(this.getPosition());
-         var rot = this.getRotation();
+   execute: function(renderContext, time) {
+      this.lPos.set(this.getPosition());
+      var rot = this.getRotation();
 
-         // If we've just come into the world, we can short circuit with a
-         // quick addition of the velocity.
-         if (this.lastTime == -1)
-         {
-            this.setPosition(this.lPos.add(this.velocity));
+      // If we've just come into the world, we can short circuit with a
+      // quick addition of the velocity.
+      if (this.lastTime == -1)
+      {
+         this.setPosition(this.lPos.add(this.velocity));
+      }
+      else
+      {
+         if (this.vDecay != 0 && this.velocity.len() > 0) {
+            // We need to decay the velocity by the amount
+            // specified until velocity is zero, or less than zero
+            var invVelocity = Vector2D.create(this.velocity).neg();
+            invVelocity.mul(this.vDecay);
+
+            this.velocity.add(invVelocity);
          }
-         else
-         {
-            if (this.vDecay != 0 && this.velocity.len() > 0) {
-               // We need to decay the velocity by the amount
-               // specified until velocity is zero, or less than zero
-               var invVelocity = new Vector2D(this.velocity).neg();
-               invVelocity.mul(this.vDecay);
 
-               this.velocity.add(invVelocity);
-            }
-
-            var diff = (time - this.lastTime) * 0.1;
-            var vz = new Vector2D(this.velocity).mul(diff);
-            this.setPosition(this.lPos.add(vz));
-
-            this.setRotation(rot + this.angularVelocity * (diff));
-         }
+         var diff = (time - this.lastTime) * 0.1;
+			var oldVel = Vector2D.create(this.velocity);
+			this.velocity.add(this.getAcceleration());
+			if (this.maxVelocity != -1 && this.velocity.len() > this.maxVelocity) {
+				this.velocity.set(oldVel);
+			}
+         var vz = Vector2D.create(this.velocity).mul(diff);
+         this.setPosition(this.lPos.add(vz));
+         this.setRotation(rot + this.angularVelocity * (diff));
       }
 
       this.lastTime = time;
@@ -134,11 +143,47 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    getVelocity: function() {
       return this.velocity;
    },
+	
+	/**
+	 * Set the acceleration vector.  Acceleration will
+	 * be constantly applied to the last position.
+	 * @param {Vector2D} The acceleration vector
+	 */
+	setAcceleration: function(vector) {
+		this.acceleration.set(vector);
+	},
+	
+	/**
+	 * Get the acceleration vector.
+	 * @return {Vector2D} The acceleration vector
+	 */
+	getAcceleration: function() {
+		return this.acceleration;
+	},
+	
+	/**
+	 * Set the maximum velocity magnitude.  Setting this
+	 * value to <tt>-1</tt> indicates that there is no
+	 * maximum velocity.
+	 * @param {Number} The maximum velocity
+	 */
+	setMaxVelocity: function(maxVel) {
+		this.maxVelocity = maxVel;
+	},
+	
+	/**
+	 * Get the maximum velocity.
+	 * @return {Number} The maximum velocity
+	 */
+	getMaxVelocity: function() {
+		return this.maxVelocity;
+	},
 
    /**
     * Set the decay rate at which the velocity will
     * approach zero.  You can use this value to cause
-    * a moving object to eventually stop moving.
+    * a moving object to eventually stop moving. i.e. similar
+    * to friction.
     *
     * @param decay {Number} The rate at which velocity decays
     */

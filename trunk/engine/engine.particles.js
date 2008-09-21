@@ -207,7 +207,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 		var self = this;
 		return $.extend(prop, {
 			"Count" : [function() { return self.particles.length; },
-						  null]
+						  null, false]
 		});
 	}
 	

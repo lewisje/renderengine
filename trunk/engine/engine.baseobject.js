@@ -102,25 +102,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
       if (this.getElement()) {
          EventEngine.clearHandler(this.getElement(), type, fn);
       }
-   },
-   
-	/**
-	 * Returns an object that assigns getter and setter methods
-	 * for exposed properties of an object.
-	 * @param {BaseObject} self The reference to the object being
-	 * 					 inspected.
-	 * @return {Object} An object which contains getter and setter methods.
-	 */
-	getProperties: function() {
-		var self = this;
-		var prop = {};
-		return $.extend(prop, {
-	  		"Id" 				: [function() { return self.getId(); }, 
-							 		null],
-	  		"ObjectName" 	: [function() { return self.getName(); }, 
-							 		null]
-		});
-	}
+   }   
 	
  }, /** @scope BaseObject */{
 

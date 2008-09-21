@@ -66,9 +66,9 @@ var SpriteTestCollisionBox = Object2D.extend({
 		var prop = this.base(self);
 		return $.extend(prop, {
         "Width" :         [function() { return self.boxRect.get().w; },
-                            function(i) { self.setWidth(i); }],
+                            function(i) { self.setWidth(i); }, true],
          "Height" :        [function() { return self.boxRect.get().h; },
-                            function(i) { self.setHeight(i); }]
+                            function(i) { self.setHeight(i); }, true]
 		});
 	},
 

@@ -31,7 +31,7 @@
  *
  */
 
-Engine.include("/components/component.transform2d.js");
+Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.sprite.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/engine/engine.object2d.js");
@@ -48,6 +48,8 @@ var SpriteTestActor = Object2D.extend({
    editing: false,
 
    sprite: null,
+	
+	velocityVec: null,
 
    constructor: function() {
       this.base("Actor");
@@ -56,10 +58,11 @@ var SpriteTestActor = Object2D.extend({
 
       // Add components to move and draw the player
       this.add(KeyboardInputComponent.create("input"));
-      this.add(Transform2DComponent.create("move"));
+      this.add(Mover2DComponent.create("move"));
       this.add(SpriteComponent.create("draw"));
 
       this.setPosition(Point2D.create(100, 100));
+		this.velocityVec = Point2D.create(0, 0); 
    },
 
 	getProperties: function() {
@@ -67,7 +70,7 @@ var SpriteTestActor = Object2D.extend({
 		var prop = this.base(self);
 		return $.extend(prop, {
          "Sprite" :     [function() { return self.sprite.getName(); },
-                         function(i) { self.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", i)); }]
+                         function(i) { self.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", i)); }, true]
 		});
 	},
 

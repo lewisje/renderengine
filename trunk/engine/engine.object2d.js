@@ -152,19 +152,19 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		var prop = this.base(self);
 		return $.extend(prop, {
 			"ZIndex" 		: [function() { return self.getZIndex(); },
-						 			function(i){	self.setZIndex(i); }],
+						 			function(i){	self.setZIndex(i); }, true],
 			"BoundingBox" 	: [function() { return self.getBoundingBox().toString(); },
-								  	null],
+								  	null, false],
 			"WorldBox" 		: [function() { return self.getWorldBox().toString(); }, 
-							  		null],
+							  		null, false],
 			"Position" 		: [function() { return self.getPosition(); },
-							  		function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }],
+							  		function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }, true],
 			"RenderPos" 	: [function() { return self.getRenderPosition() }, 
-									null],
+									null, false],
 			"Rotation" 		: [function() { return self.getRotation(); }, 
-							  		function(i) { self.setRotation(i); }],
+							  		function(i) { self.setRotation(i); }, true],
 			"Scale" 			: [function() { return self.getScale(); }, 
-						  			function(i) {self.setScale(i,i); }]
+						  			function(i) {self.setScale(i,i); }, true]
 		});
 	}
 
