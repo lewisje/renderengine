@@ -37,7 +37,7 @@
 
 // Load required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine/engine.spatialgrid.js");
+Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
 Engine.include("/textrender/text.vector.js");
 Engine.include("/textrender/text.renderer.js");

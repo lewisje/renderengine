@@ -420,9 +420,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
 
    consoleRef: null,
 
-   DEBUGLEVEL_ERRORS:      3,
-   DEBUGLEVEL_WARNINGS:    2,
-   DEBUGLEVEL_DEBUG:       1,
+   DEBUGLEVEL_ERRORS:      4,
+   DEBUGLEVEL_WARNINGS:    3,
+   DEBUGLEVEL_DEBUG:       2,
+	DEBUGLEVEL_INFO:			1,
    DEBUGLEVEL_VERBOSE:     0,
    DEBUGLEVEL_NONE:       -1,
 
@@ -455,9 +456,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
    /**
     * Set the debug output level of the console.  The available levels are:
     * <ul>
-    * <li>Console.DEBUGLEVEL_ERRORS = 3</li>
-    * <li>Console.DEBUGLEVEL_WARNINGS = 2</li>
-    * <li>Console.DEBUGLEVEL_DEBUG = 1</li>
+    * <li>Console.DEBUGLEVEL_ERRORS = 4</li>
+    * <li>Console.DEBUGLEVEL_WARNINGS = 3</li>
+    * <li>Console.DEBUGLEVEL_DEBUG = 2</li>
+    * <li>Console.DEBUGLEVEL_INFO = 1</li>
     * <li>Console.DEBUGLEVEL_VERBOSE = 0</li>
     * <li>Console.DEBUGLEVEL_NONE = -1</li>
     * </ul>
@@ -487,6 +489,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
       if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_VERBOSE))
          this.consoleRef.debug.apply(this.consoleRef, arguments);
    },
+	
+	/**
+	 * Outputs an info message. These messages will only show when DEBUGLEVEL_INFO is the level.
+	 */
+	info: function() {
+		if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_INFO))
+			this.consoleRef.debug.apply(this.consoleRef, arguments);
+	},
 
    /**
     * Outputs a debug message.  These messages will only show when DEBUGLEVEL_DEBUG is the level.
@@ -1388,56 +1398,45 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Store the request in the cache
          this.loadedScripts[s] = scriptPath;
 
-         // A hack to allow us to do filesystem testing
-         if (!Engine.localMode)
-         {
-            jQuery.getScript(scriptPath, function() {
+         // We'll use our own script loader so we can detect errors (i.e. missing files).
+         var n = document.createElement("script");
+         n.src = scriptPath;
+         n.type = "text/javascript";
+
+         // When the file is loaded
+         var fn = function() {
+            if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
                Console.debug("Loaded '" + scriptPath + "'");
                Engine.handleScriptDone();
                if (cb) {
                   cb(simplePath);
                }
-               Engine.readyForNextScript = true;
-            });
-         }
-         else
-         {
-            // If we're running locally, don't use jQuery to get the script.
-            // This allows us to see and debug the loaded scripts.
-            var n = document.createElement("script");
-            n.src = scriptPath;
-            n.type = "text/javascript";
+		         if (!Engine.localMode) {
+						// Delete the script node
+						$(n).remove();
+					}
 
-            // When the file is loaded
-            var fn = function() {
-               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-                  Console.debug("Loaded '" + scriptPath + "'");
-                  Engine.handleScriptDone();
-                  if (cb) {
-                     cb(simplePath);
-                  }
-               }
-               Engine.readyForNextScript = true;
-            };
-
-            // When an error occurs
-            var eFn = function() {
-               Console.error("File not found: ", scriptPath);
-               Engine.readyForNextScript = true;
-            };
-
-            if ($.browser.msie) {
-               n.defer = true;
-               n.onreadystatechange = fn;
-               n.onerror = eFn;
-            } else {
-               n.onload = fn;
-               n.onerror = eFn;
             }
+            Engine.readyForNextScript = true;
+         };
 
-            var h = document.getElementsByTagName("head")[0];
-            h.appendChild(n);
+         // When an error occurs
+         var eFn = function() {
+            Console.error("File not found: ", scriptPath);
+            Engine.readyForNextScript = true;
+         };
+
+         if ($.browser.msie) {
+            n.defer = true;
+            n.onreadystatechange = fn;
+            n.onerror = eFn;
+         } else {
+            n.onload = fn;
+            n.onerror = eFn;
          }
+
+         var h = document.getElementsByTagName("head")[0];
+         h.appendChild(n);
       } else {
          // Already have this script
          Engine.readyForNextScript = true;
@@ -1802,7 +1801,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       Engine.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Engine.dependencyCount++;
-      Console.log(objectName + " depends on: " + newDeps);
+      Console.info(objectName + " depends on: " + newDeps);
 
       // Check for 1st level circular references
       this.checkCircularRefs(objectName);
@@ -1882,7 +1881,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             // We can initialize it
             var parentObj = Engine.getParentClass(d);
             parentObj[d] = Engine.dependencyList[d].objFn();
-            Console.log("Initializing", d);
+            Console.info("Initializing", d);
 
             // Remember what we processed so we don't process them again
             pDeps.push(d);
