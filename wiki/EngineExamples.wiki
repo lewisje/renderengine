@@ -4,7 +4,6 @@
 The following are links to works in progress.  They are the tests that I've put together to work out the various parts of the engine:
 
    * [http://renderengine.googlecode.com/svn/trunk/games/spaceroids/index.html?metrics=true Asteroids clone]
-   * [http://renderengine.googlecode.com/svn/trunk/games/spaceroids/index.html?metrics=true&2k=true Asteroids clone (particle test)]
    * [http://renderengine.googlecode.com/svn/trunk/games/smb/index.html?metrics=true Super Mario clone]
    * [http://renderengine.googlecode.com/svn/trunk/games/smb/index.html?edit=true&metrics=true Super Mario editor]
 
