@@ -251,18 +251,9 @@ var SpriteTestEditor = Base.extend({
    updateLevelData: function() {
       var level = "<?xml version='1.0' encoding='UTF-8'?>\n";
       level += "<level resource='" + SpriteTest.getLevel().getName() + "'>\n";
-      var itr = Iterator.create(SpriteTest.getRenderContext());
-      while (itr.hasNext()) {
-         // Get the objects properties and bean methods
-         var bean = itr.next();
-         var obj = "   <object class='" + bean.constructor.getClassName() + "'>\n";
-         for (var p in bean.getProperties()) {
-            obj += "      <property name='" + p + "' ";
-            obj += "value='" + bean.getProperties()[p][0]() + "'/>\n";
-         }
-         obj += "   </object>\n";
-         level += obj;
-      }
+
+		level += SpriteTest.renderContext.toString("   ");
+
       level += "</level>";
       $("#levelData").remove();
       $("body", document).append($("<textarea id='levelData'>" + level + "</textarea>"));

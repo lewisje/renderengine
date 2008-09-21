@@ -115,29 +115,41 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       return this.name;
    },
 
+	/**
+	 * Returns an object that assigns getter and setter methods
+	 * for exposed properties of an object.
+	 * @param {BaseObject} self The reference to the object being
+	 * 					 inspected.
+	 * @return {Object} An object which contains getter and setter methods.
+	 */
+	getProperties: function() {
+		var self = this;
+		var prop = {};
+		return $.extend(prop, {
+	  		"Id" 				: [function() { return self.getId(); }, 
+							 		null, false],
+	  		"ObjectName" 	: [function() { return self.getName(); }, 
+							 		function(i) { self.setName(i); }, true]
+		});
+	},
+
    /**
-    * Serialize the object to a JSON formatted string.
-    *
+    * Serialize the object to XML.
     * @type String
     */
-   serialize: function() {
-      // Only serialize bean-style properties
-      var o = {};
-      for (var i in this) {
-         try {
-            if (i.length > 3 && i.substring(0,3) == "get") {
-               var v = this[i]();
-               v = (typeof v == "undefined" ? "undefined" : (v != null ? v : "null"));
-               if (v != "[object Object]") {
-                  o[i.substring(3)] = v;
-               }
-            }
-         } catch(ex) {
-            // empty
-         }
-      }
-      Console.debug(o);
-      return EngineSupport.toJSONString(o);
+   toString: function(indent) {
+		indent = indent ? indent : "";
+		var props = this.getProperties();
+		var xml = indent + "<" + this.constructor.getClassName();
+		for (var p in props) {
+			// If the value should be serialized, call it's getter
+			if (props[p][2]) {
+				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";		
+			}
+		}
+		
+		xml += "/>\n"; 
+		return xml;
    }
 
 }, /** @scope PooledObject **/{

@@ -142,7 +142,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 		var prop = this.base(self);
 		return $.extend(prop, {
 			"RenderContext" : [function() { return self.renderContext.getName(); },
-						 			 null]
+						 			 null, false]
 		});
 	}
 

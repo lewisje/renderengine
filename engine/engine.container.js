@@ -283,8 +283,30 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 		var prop = this.base(self);
 		return $.extend(prop, {
 			"Contains" 	: [function() { return self.objects.length; },
-						 		null]
+						 		null, false]
 		});
+	},
+	
+	toString: function(indent) {
+		indent = indent ? indent : "";
+		var props = this.getProperties();
+		var xml = indent + "<" + this.constructor.getClassName();
+		for (var p in props) {
+			// If the value should be serialized, call it's getter
+			if (props[p][2]) {
+				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";		
+			}
+		}
+		xml += ">\n";
+		
+		// Dump children
+		for (var o in this.objects) {
+			xml += this.objects[o].toString(indent + "   ");
+		}
+		
+		// Closing tag
+		xml += indent + "</" + this.constructor.getClassName() + ">\n";
+		return xml;
 	}
 
 }, /** @scope Container */{
