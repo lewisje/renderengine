@@ -6,6 +6,7 @@ The following are links to works in progress.  They are the tests that I've put 
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true Asteroids clone]
    * [http://renderengine.googlecode.com/svn/trunk/demos/smb/index.html?metrics=true Super Mario clone]
    * [http://renderengine.googlecode.com/svn/trunk/demos/smb/index.html?edit=true&metrics=true Super Mario editor]
+   * [http://renderengine.googlecode.com/svn/truns/demos/sprite_editor/index.html?metrics=true Sprite Editor]
 
 
 I'll add more as I get them completed and into the repo...
