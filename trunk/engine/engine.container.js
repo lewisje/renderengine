@@ -163,7 +163,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    add: function(obj) {
       this.objects.push(obj);
-      Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
+		if (obj.getId) {
+	      Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
+		}
    },
 
    /**
@@ -173,7 +175,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {BaseObject} The object to remove from the container.
     */
    remove: function(obj) {
-      Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
+		if (obj.getId) {
+	      Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
+		}
       EngineSupport.arrayRemove(this.objects, obj);
    },
 
