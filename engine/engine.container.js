@@ -281,7 +281,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       Console.log("Sorting ", this.getName(), "[" + this.getId() + "]");
       this.objects.sort(fn);
    },
-	
+
 	getProperties: function() {
 		var self = this;
 		var prop = this.base(self);
@@ -290,7 +290,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 						 		null, false]
 		});
 	},
-	
+
 	toString: function(indent) {
 		indent = indent ? indent : "";
 		var props = this.getProperties();
@@ -298,16 +298,16 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 		for (var p in props) {
 			// If the value should be serialized, call it's getter
 			if (props[p][2]) {
-				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";		
+				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
 			}
 		}
 		xml += ">\n";
-		
+
 		// Dump children
 		for (var o in this.objects) {
 			xml += this.objects[o].toString(indent + "   ");
 		}
-		
+
 		// Closing tag
 		xml += indent + "</" + this.constructor.getClassName() + ">\n";
 		return xml;
@@ -404,7 +404,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    },
 
    /**
-    * Remove the object with the given name from the hash.
+    * Remove the object with the given key name from the container.
     *
     * @param name {String} The object to remove
     * @return the object removed from the hash
@@ -412,8 +412,8 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
     */
    removeHash: function(key) {
       var obj = this.objHash["_" + String(key)];
+		EngineSupport.arrayRemove(this.objects, this.objHash["_" + String(key)]);
       delete this.objHash["_" + String(key)];
-
       return obj;
    },
 

@@ -50,7 +50,7 @@ var SpriteLayer = Object2D.extend({
 
       this.pixels = HashContainer.create();
    },
-	
+
 	release: function() {
 		this.base();
 		this.pixels = null;
@@ -82,8 +82,8 @@ var SpriteLayer = Object2D.extend({
 
    addPixel: function(x, y) {
 		var pSize = SpriteEditor.pixSize;
-      x = x - x % SpriteEditor.pixSize;
-      y = y - y % SpriteEditor.pixSize;
+      x = x - x % pSize;
+      y = y - y % pSize;
 		var pix = {
 			color: SpriteEditor.currentColor,
 			rect: Rectangle2D.create(x, y, pSize, pSize)
@@ -93,10 +93,13 @@ var SpriteLayer = Object2D.extend({
    },
 
 	clearPixel: function(x, y) {
+		var pSize = SpriteEditor.pixSize;
+      x = x - x % pSize;
+      y = y - y % pSize;
 		var p = "[" + x + "," + y + "]";
 		this.pixels.removeHash(p);
 	}
-	
+
 }, { // Static
 
    /**

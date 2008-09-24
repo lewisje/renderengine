@@ -308,8 +308,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     */
    drawLine: function(point1, point2) {
       this.startPath();
-      this.moveTo(point1.x, point1.y);
-      this.lineTo(point2.x, point2.y);
+      this.moveTo(point1);
+      this.lineTo(point2);
       this.endPath();
       this.strokePath();
       this.base(point1, point2);
