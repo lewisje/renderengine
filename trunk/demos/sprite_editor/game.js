@@ -51,7 +51,7 @@ var SpriteEditor = Game.extend({
 
    editorContext: null,
 
-   pixSize: 32,
+   pixSize: 16,
 
 	editorSize: 512,
 
@@ -148,12 +148,12 @@ var SpriteEditor = Game.extend({
 				SpriteEditor.pixSize = 8;
 			}));
 		cPanel.append($("<span class='tool'>8 </span>"));
-		cPanel.append($("<input name='gridsize' type='radio' value='16'/>")
+		cPanel.append($("<input name='gridsize' type='radio' value='16' checked/>")
 			.change(function() {
 				SpriteEditor.pixSize = 16;
 			}));
 		cPanel.append($("<span class='tool'>16 </span>"));
-		cPanel.append($("<input name='gridsize' type='radio' value='32' checked/>")
+		cPanel.append($("<input name='gridsize' type='radio' value='32'/>")
 			.change(function() {
 				SpriteEditor.pixSize = 32;
 			}));

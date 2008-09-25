@@ -378,6 +378,11 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    add: function(key, obj) {
       AssertWarn(!this.isInHash(key), "Object already exists within hash!");
 
+		if (this.isInHash(key)) {
+			// Remove the old one first
+			this.removeHash(key);
+		}
+
       // Some keys weren't being accepted (like "MOVE") so added
       // an underscore to prevent keyword collisions
       this.objHash["_" + String(key)] = obj;
