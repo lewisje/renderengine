@@ -35,10 +35,12 @@
 
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
+Engine.loadStylesheet("resources/color_select.css", true);
 
 // Load game objects
 Game.load("/layer.js");
 Game.load("/grid.js");
+Game.load("/color_select.js");
 
 Engine.initObject("SpriteEditor", "Game", function() {
 
@@ -62,6 +64,8 @@ var SpriteEditor = Game.extend({
 	mouseBtn: 0,
 
 	drawMode: true,
+
+	colorSelector: null,
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -132,14 +136,22 @@ var SpriteEditor = Game.extend({
 		SpriteEditor.currentLayer.clearPixel(x, y);
 	},
 
+	setNewColor: function(hexColor) {
+		$("#curColor").val(hexColor);
+		SpriteEditor.currentColor = hexColor;
+	},
+
 	addControls: function() {
 		var ctx = $(Engine.getDefaultContext().getSurface());
 		var cPanel = $("<div id='controls'/>");
 		ctx.append(cPanel);
 		cPanel.append($("<span class='tool'>Color: </span>"));
-		cPanel.append($("<input name='color' type='text' size='8' value='#ffffff'/>")
+		cPanel.append($("<input id='curColor' name='color' type='text' size='8' value='#ffffff'/>")
 			.change(function() {
 				SpriteEditor.currentColor = this.value;
+			})
+			.dblclick(function() {
+				SpriteEditor.colorSelector.show(520, 10);
 			}));
 
 		cPanel.append($("<span class='tool'> Grid Size:</span>"));
@@ -175,6 +187,7 @@ var SpriteEditor = Game.extend({
 			}));
 		cPanel.append($("<span class='tool'>Erase </span>"));
 
+		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
 	}
 });
 
