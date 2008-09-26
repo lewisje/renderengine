@@ -489,7 +489,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
       if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_VERBOSE))
          this.consoleRef.debug.apply(this.consoleRef, arguments);
    },
-	
+
 	/**
 	 * Outputs an info message. These messages will only show when DEBUGLEVEL_INFO is the level.
 	 */
@@ -1258,8 +1258,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     *                                the engine path.
     * @memberOf Engine
     */
-   loadStylesheet: function(stylesheetPath) {
-      stylesheetPath = this.getEnginePath() + stylesheetPath;
+   loadStylesheet: function(stylesheetPath, relative) {
+      stylesheetPath = (relative ? "" : this.getEnginePath()) + stylesheetPath;
+      console.debug(stylesheetPath);
       var f = function() {
          $.get(stylesheetPath, function(data) {
             // process the data to replace the "enginePath" variable
