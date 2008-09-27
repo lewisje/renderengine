@@ -1260,7 +1260,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    loadStylesheet: function(stylesheetPath, relative) {
       stylesheetPath = (relative ? "" : this.getEnginePath()) + stylesheetPath;
-      console.debug(stylesheetPath);
       var f = function() {
          $.get(stylesheetPath, function(data) {
             // process the data to replace the "enginePath" variable

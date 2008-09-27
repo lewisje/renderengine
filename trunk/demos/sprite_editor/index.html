@@ -70,6 +70,43 @@
 				border: 1px outset white;
 				padding: 10px;
 			}
+			
+			.colors {
+				width: 170px;
+				height: 132px;
+				border: 1px inset white;
+				float: left;
+			}
+			
+			.grid {
+				width: 220px;
+				height: 60px;
+				border: 1px inset white;
+				float: right;
+			}
+
+			.paint {
+				margin-top: 10px;
+				width: 220px;
+				height: 60px;
+				border: 1px inset white;
+				float: right;
+			}
+			
+			.preColor {
+				width: 16px;
+				height: 18px;
+			}
+			
+			.colorTable {
+				margin-top: 10px;
+				margin-left: 5px;
+				clear: none;
+			}
+			
+			.selectedColor {
+				width: 50px;
+			}
       </style>
    </head>
    <body>
@@ -80,5 +117,54 @@
          // Load the game script
          Engine.loadGame('game.js','SpriteEditor');
       </script>
+		
+		<div id="controls">
+			<div class="colors">
+				Color: <input type="text" size="8" id="curColor" value="#FFFFFF"/>
+				<input type="button" id="selBtn" name="selBtn" value="..."/><br/>
+				<table class="colorTable" border="1" cellspacing="2">
+					<tr>
+						<td class="preColor" style="background: white"><!-- --></td>
+						<td class="preColor" style="background: black"><!-- --></td>
+						<td class="preColor" style="background: silver"><!-- --></td>
+						<td class="preColor" style="background: gray"><!-- --></td>
+						<td class="selectedColor" rowspan="4"><!-- --></td>
+					</tr>
+					<tr>
+						<td class="preColor" style="background: yellow"><!-- --></td>
+						<td class="preColor" style="background: red"><!-- --></td>
+						<td class="preColor" style="background: blue"><!-- --></td>
+						<td class="preColor" style="background: green"><!-- --></td>
+					</tr>
+					<tr>
+						<td class="preColor" style="background: fuchsia"><!-- --></td>
+						<td class="preColor" style="background: purple"><!-- --></td>
+						<td class="preColor" style="background: maroon"><!-- --></td>
+						<td class="preColor" style="background: aqua"><!-- --></td>
+					</tr>
+					<tr>
+						<td class="preColor" style="background: lime"><!-- --></td>
+						<td class="preColor" style="background: teal"><!-- --></td>
+						<td class="preColor" style="background: navy"><!-- --></td>
+						<td class="preColor" style="background: maroon"><!-- --></td>
+					</tr>
+				</table>
+				<table class="selectedColor">
+					<tr><td><!-- --></td></tr>
+				</table>
+			</div>
+			<div class="grid">
+				Grid:<br/>
+				<input type="radio" id="grid8" name="gridsize" value="8"/>8&nbsp;
+				<input type="radio" id="grid16" name="gridsize" value="16"/>16&nbsp;
+				<input type="radio" id="grid32" name="gridsize" value="32" checked/>32&nbsp;
+				<input type="radio" id="grid64" name="gridsize" value="64"/>64&nbsp;
+			</div>
+			<div class="paint">
+				Drawmode:<br/>
+				<input type="radio" id="paint" name="drawmode" value="paint">Paint&nbsp;
+				<input type="radio" id="erase" name="drawmode" value="erase">Erase&nbsp;
+			</div>
+		</div>
    </body>
 </html>

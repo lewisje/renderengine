@@ -53,7 +53,7 @@ var SpriteEditor = Game.extend({
 
    editorContext: null,
 
-   pixSize: 16,
+   pixSize: 32,
 
 	editorSize: 512,
 
@@ -139,53 +139,75 @@ var SpriteEditor = Game.extend({
 	setNewColor: function(hexColor) {
 		$("#curColor").val(hexColor);
 		SpriteEditor.currentColor = hexColor;
+		$(".colorTable .selectedColor").css("background", hexColor);
 	},
 
 	addControls: function() {
-		var ctx = $(Engine.getDefaultContext().getSurface());
-		var cPanel = $("<div id='controls'/>");
-		ctx.append(cPanel);
-		cPanel.append($("<span class='tool'>Color: </span>"));
-		cPanel.append($("<input id='curColor' name='color' type='text' size='8' value='#ffffff'/>")
+		$("#curColor")
 			.change(function() {
 				SpriteEditor.currentColor = this.value;
+				$(".colorTable .selectedColor").css("background", colr);
 			})
 			.dblclick(function() {
 				SpriteEditor.colorSelector.show(520, 10);
-			}));
+			});
+		
+		$("#selBtn")
+			.click(function() { 
+				SpriteEditor.colorSelector.show(520, 10);
+			});
 
-		cPanel.append($("<span class='tool'> Grid Size:</span>"));
-		cPanel.append($("<input name='gridsize' type='radio' value='8'/>")
+		$("#grid8")
 			.change(function() {
 				SpriteEditor.pixSize = 8;
-			}));
-		cPanel.append($("<span class='tool'>8 </span>"));
-		cPanel.append($("<input name='gridsize' type='radio' value='16' checked/>")
+			});
+
+		$("#grid16")
 			.change(function() {
 				SpriteEditor.pixSize = 16;
-			}));
-		cPanel.append($("<span class='tool'>16 </span>"));
-		cPanel.append($("<input name='gridsize' type='radio' value='32'/>")
+			});
+
+		$("#grid32")
 			.change(function() {
 				SpriteEditor.pixSize = 32;
-			}));
-		cPanel.append($("<span class='tool'>32 </span>"));
-		cPanel.append($("<input name='gridsize' type='radio' value='64'/>")
+			});
+		
+		$("#grid64")
 			.change(function() {
 				SpriteEditor.pixSize = 64;
-			}));
-		cPanel.append($("<span class='tool'>64 </span><br/>"));
+			});
 
-		cPanel.append($("<input name='drawmode' type='radio' value='paint' checked/>")
+		$("#paint")
 			.change(function() {
 				SpriteEditor.drawMode = true;
-			}));
-		cPanel.append($("<span class='tool'>Paint </span>"));
-		cPanel.append($("<input name='drawmode' type='radio' value='erase'/>")
+			});
+
+		$("#erase")
 			.change(function() {
 				SpriteEditor.drawMode = false;
-			}));
-		cPanel.append($("<span class='tool'>Erase </span>"));
+			});
+
+		$(".preColor")
+			.click(function() {
+				
+				function pad(n) {
+					if (parseInt(n, 10) < 10) {
+						return "0" + n;
+					}
+					return n;
+				}
+				
+				var colr = $(this).css("background-color");
+				colr.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)/, function(str, r, g, b) {
+					colr = "#";
+					colr += pad(Number(r).toString(16));
+					colr += pad(Number(g).toString(16));
+					colr += pad(Number(b).toString(16));
+				});
+				$("#curColor").val(colr);
+				$(".colorTable .selectedColor").css("background", colr);
+				SpriteEditor.currentColor = colr;
+			});
 
 		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
 	}
