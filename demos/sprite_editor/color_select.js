@@ -171,12 +171,15 @@ var ColorSelector = Base.extend(/** @scope ColorSelector.prototype */{
 
 	// these functions are tied to events (usually).
 	// they are the entry points for whatever color_select does
-	show: function(x, y)
+	show: function(x, y, initialColor)
 	{
 		this.x = x || 0;
 		this.y = y || 0;
 		// alert ("show color select");
 		this.color_select_bounding_box = [];
+		if (initialColor) {
+			this.setrgb(initialColor);
+		}
 
 		// in mozilla, insert the saturation-value background image
 //		if (!document.all && this.sv_image) {

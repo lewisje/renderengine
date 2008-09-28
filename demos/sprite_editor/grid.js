@@ -43,10 +43,13 @@ Engine.initObject("SpriteGrid", "Object2D", function() {
 var SpriteGrid = Object2D.extend({
 
 	pixels: null,
+	
+	visible: true,
 
    constructor: function() {
       this.base("Grid");
       this.setZIndex(1000);
+		this.visible = true;
    },
 
    /**
@@ -61,6 +64,10 @@ var SpriteGrid = Object2D.extend({
    update: function(renderContext, time) {
       renderContext.pushTransform();
       this.base(renderContext, time);
+
+		if (!this.visible) {
+			return;
+		}
 
 		renderContext.setLineStyle("silver");
 		renderContext.setLineWidth(0.25);
@@ -81,7 +88,11 @@ var SpriteGrid = Object2D.extend({
 		}
 
       renderContext.popTransform();
-   }
+   },
+	
+	setVisible: function(state)  {
+		this.visible = state;
+	}
 
 }, { // Static
 

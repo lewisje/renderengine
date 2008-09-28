@@ -71,26 +71,28 @@
 				padding: 10px;
 			}
 			
+			.tool {
+				font: 11pt "Lucida Console",Verdana,Arial,Helvetica;
+				background: #a0a0a0;
+			}
+			
+			.tool H5 {
+				font-weight: bold;
+				background: maroon;
+				color: white;
+				margin: 1px 1px 2px 1px;
+				padding:2px;
+			}
+			
 			.colors {
 				width: 170px;
-				height: 132px;
+				height: 142px;
 				border: 1px inset white;
 				float: left;
 			}
 			
-			.grid {
-				width: 220px;
-				height: 60px;
-				border: 1px inset white;
-				float: right;
-			}
-
-			.paint {
-				margin-top: 10px;
-				width: 220px;
-				height: 60px;
-				border: 1px inset white;
-				float: right;
+			.colors input {
+				margin-left: 5px;
 			}
 			
 			.preColor {
@@ -99,7 +101,7 @@
 			}
 			
 			.colorTable {
-				margin-top: 10px;
+				margin-top: 2px;
 				margin-left: 5px;
 				clear: none;
 			}
@@ -107,6 +109,62 @@
 			.selectedColor {
 				width: 50px;
 			}
+
+			.grid {
+				width: 220px;
+				height: 70px;
+				border: 1px inset white;
+				float: right;
+			}
+
+			.drawmode {
+				margin-top: 10px;
+				width: 220px;
+				height: 60px;
+				border: 1px inset white;
+				float: right;
+			}
+			
+			.brushsize {
+				margin-top: 10px;
+				width: 170px;
+				height: 102px;
+				border: 1px inset white;
+				float: left;
+			}
+			
+			.brushTable {
+				margin-top: 2px;
+				margin-left: 5px;
+				clear: none;
+			}
+			
+			.brushTable .brushPix {
+				width: 16px;
+				height: 18px;
+			}
+
+			.brushTable .brushPix.enabled {
+				background: navy;
+			}
+			
+			.preview {
+				margin-top: 10px;
+				width: 170px;
+				height: 102px;
+				border: 1px inset white;
+				float: right;
+			}
+			
+			.preview img {
+				background: black;
+				margin-left: 50px;
+				margin-top: 5px;
+				border: 1px solid white;
+				width: 64px;
+				height: 64px;
+			}
+			
       </style>
    </head>
    <body>
@@ -119,9 +177,8 @@
       </script>
 		
 		<div id="controls">
-			<div class="colors">
-				Color: <input type="text" size="8" id="curColor" value="#FFFFFF"/>
-				<input type="button" id="selBtn" name="selBtn" value="..."/><br/>
+			<div class="tool colors">
+				<h5>Color</h5>
 				<table class="colorTable" border="1" cellspacing="2">
 					<tr>
 						<td class="preColor" style="background: white"><!-- --></td>
@@ -131,39 +188,65 @@
 						<td class="selectedColor" rowspan="4"><!-- --></td>
 					</tr>
 					<tr>
-						<td class="preColor" style="background: yellow"><!-- --></td>
 						<td class="preColor" style="background: red"><!-- --></td>
-						<td class="preColor" style="background: blue"><!-- --></td>
-						<td class="preColor" style="background: green"><!-- --></td>
+						<td class="preColor" style="background: maroon"><!-- --></td>
+						<td class="preColor" style="background: yellow"><!-- --></td>
+						<td class="preColor" style="background: olive"><!-- --></td>
 					</tr>
 					<tr>
+						<td class="preColor" style="background: blue"><!-- --></td>
+						<td class="preColor" style="background: navy"><!-- --></td>
 						<td class="preColor" style="background: fuchsia"><!-- --></td>
 						<td class="preColor" style="background: purple"><!-- --></td>
-						<td class="preColor" style="background: maroon"><!-- --></td>
-						<td class="preColor" style="background: aqua"><!-- --></td>
 					</tr>
 					<tr>
 						<td class="preColor" style="background: lime"><!-- --></td>
+						<td class="preColor" style="background: green"><!-- --></td>
+						<td class="preColor" style="background: aqua"><!-- --></td>
 						<td class="preColor" style="background: teal"><!-- --></td>
-						<td class="preColor" style="background: navy"><!-- --></td>
-						<td class="preColor" style="background: maroon"><!-- --></td>
 					</tr>
 				</table>
-				<table class="selectedColor">
-					<tr><td><!-- --></td></tr>
-				</table>
+				<input type="text" size="8" id="curColor" value="#FFFFFF"/>
+				<input type="button" id="selBtn" name="selBtn" value="..."/><br/>			
 			</div>
-			<div class="grid">
-				Grid:<br/>
+			<div class="tool grid">
+				<h5>Grid</h5>
 				<input type="radio" id="grid8" name="gridsize" value="8"/>8&nbsp;
 				<input type="radio" id="grid16" name="gridsize" value="16"/>16&nbsp;
 				<input type="radio" id="grid32" name="gridsize" value="32" checked/>32&nbsp;
-				<input type="radio" id="grid64" name="gridsize" value="64"/>64&nbsp;
+				<input type="radio" id="grid64" name="gridsize" value="64"/>64&nbsp;<br/>
+				<input type="checkbox" id="gridVis" checked/>Draw Grid
 			</div>
-			<div class="paint">
-				Drawmode:<br/>
-				<input type="radio" id="paint" name="drawmode" value="paint">Paint&nbsp;
+			<div class="tool drawmode">
+				<h5>Drawmode</h5>
+				<input type="radio" id="paint" name="drawmode" value="paint" checked>Paint&nbsp;
 				<input type="radio" id="erase" name="drawmode" value="erase">Erase&nbsp;
+				<input type="radio" id="dropper" name="drawmode" value="dropper">Select&nbsp;
+			</div>
+			<div style="clear: both"><!-- --></div>
+			<div class="tool brushsize">
+				<h5>Brush Size</h5>
+				<table class="brushTable" border="1" cellspacing="2">
+					<tr>
+						<td class="brushPix enabled"><!-- --></td>
+						<td class="brushPix"><!-- --></td>
+						<td class="brushPix"><!-- --></td>
+					</tr>
+					<tr>
+						<td class="brushPix"><!-- --></td>
+						<td class="brushPix"><!-- --></td>
+						<td class="brushPix"><!-- --></td>
+					</tr>
+					<tr>
+						<td class="brushPix"><!-- --></td>
+						<td class="brushPix"><!-- --></td>
+						<td class="brushPix"><!-- --></td>
+					</tr>
+				</table>
+			</div>
+			<div class="tool preview">
+				<h5>Sprite Preview</h5>
+				<img id="spritePreview" width="64" height="64" src="resources/b64.gif">
 			</div>
 		</div>
    </body>

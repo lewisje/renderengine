@@ -2,7 +2,7 @@
 /**
  * The Render Engine
  *
- * A sprite layer
+ * The preview canvas
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -31,36 +31,48 @@
  *
  */
 
-Engine.include("/engine/engine.object2d.js");
-Engine.include("/engine/engine.container.js");
+Engine.include("/rendercontexts/context.canvascontext.js");
 
-Engine.initObject("SpriteLayer", "Object2D", function() {
+Engine.initObject("SpritePreview", "CanvasContext", function() {
 
 /**
  * @class The player object.  Creates the player and assigns the
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-var SpriteLayer = Object2D.extend({
+var SpritePreview = CanvasContext.extend({
 
-	pixels: null,
-
+	imgData: null,
+	
    constructor: function() {
-      this.base("Layer");
-
-      this.pixels = HashContainer.create();
+      this.base("Preview", 64, 64);
+		this.imgData = this.get2DContext().getImageData(0,0,64,64);
    },
-
-	release: function() {
-		this.base();
-		this.pixels = null;
+	
+	addPixel: function(x, y, colr) {
+		colr = colr.replace("#", "");
+		var rgb = [];
+		var c = /(\w{2})(\w{2})(\w{2})/.exec();
+		if (c) {
+			rgb[0] = parseInt(c[1], 16);
+			rgb[1] = parseInt(c[2], 16);
+			rgb[2] = parseInt(c[3], 16);
+		}
+		this.imgData.data[(y*64 + x)*4] = rgb[0];	
+		this.imgData.data[((y*64 + x)*4) + 1] = rgb[1];	
+		this.imgData.data[((y*64 + x)*4) + 2] = rgb[2];	
+		this.imgData.data[((y*64 + x)*4) + 3] = 255;
+	},
+	
+	removePixel: function(x, y) {
+		this.imgData.data[(y*64 + x)*4] = 0;	
+		this.imgData.data[((y*64 + x)*4) + 1] = 0;	
+		this.imgData.data[((y*64 + x)*4) + 2] = 0;	
+		this.imgData.data[((y*64 + x)*4) + 3] = 0;	
 	},
 
    /**
-    * Update the player within the rendering context.  This draws
-    * the shape to the context, after updating the transform of the
-    * object.  If the player is thrusting, draw the thrust flame
-    * under the ship.
+    * Update the context.
     *
     * @param renderContext {RenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
@@ -69,46 +81,14 @@ var SpriteLayer = Object2D.extend({
       renderContext.pushTransform();
       this.base(renderContext, time);
 
-		var itr = Iterator.create(this.pixels);
-		while (itr.hasNext())
-		{
-			var pix = itr.next();
-			renderContext.setFillStyle(pix.color);
-			renderContext.drawFilledRectangle(pix.rect);
-		}
-		itr.destroy();
+		this.get2DContext().putImageData(this.imgData, 0, 0);
+
+		// Now copy across the image to the preview in the editor
+		SpriteEditor.previewImage.attr("src", this.getDataURL());
+
       renderContext.popTransform();
-   },
-
-   addPixel: function(x, y) {
-		var pSize = SpriteEditor.pixSize;
-      x = x - x % pSize;
-      y = y - y % pSize;
-		var pix = {
-			color: SpriteEditor.currentColor,
-			rect: Rectangle2D.create(x, y, pSize, pSize)
-		};
-		var p = "[" + x + "," + y + "]";
-		this.pixels.add(p, pix);
-   },
-
-	clearPixel: function(x, y) {
-		var pSize = SpriteEditor.pixSize;
-      x = x - x % pSize;
-      y = y - y % pSize;
-		var p = "[" + x + "," + y + "]";
-		this.pixels.removeHash(p);
-	},
+   }
 	
-	getPixel: function(x, y) {
-		var pSize = SpriteEditor.pixSize;
-      x = x - x % pSize;
-      y = y - y % pSize;
-		var p = "[" + x + "," + y + "]";
-		var pixl = this.pixels.get(p);
-		return (pixl ? pixl.color : null);
-	}
-
 }, { // Static
 
    /**
@@ -117,10 +97,10 @@ var SpriteLayer = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "SpriteLayer";
+      return "SpritePreview";
    }
 });
 
-return SpriteLayer;
+return SpritePreview;
 
 });

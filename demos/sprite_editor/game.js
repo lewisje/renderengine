@@ -40,6 +40,7 @@ Engine.loadStylesheet("resources/color_select.css", true);
 // Load game objects
 Game.load("/layer.js");
 Game.load("/grid.js");
+Game.load("/preview.js");
 Game.load("/color_select.js");
 
 Engine.initObject("SpriteEditor", "Game", function() {
@@ -63,9 +64,15 @@ var SpriteEditor = Game.extend({
 
 	mouseBtn: 0,
 
-	drawMode: true,
+	drawMode: 0,
 
 	colorSelector: null,
+	
+	brushSize: [0,0],
+	
+	grid: null,
+	
+	previewImage: null,
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -78,19 +85,27 @@ var SpriteEditor = Game.extend({
       Engine.setFPS(5);
 
       // Create the 2D context
-      this.editorContext = new CanvasContext("editor", this.editorSize, this.editorSize);
+      this.editorContext = CanvasContext.create("editor", this.editorSize, this.editorSize);
 		this.editorContext.setWorldScale(1);
       Engine.getDefaultContext().add(this.editorContext);
       this.editorContext.setBackgroundColor("black");
+		
+		// The place where previews will be generated
+		this.previewContext = SpritePreview.create();
+		this.previewContext.setWorldScale(1);
+		Engine.getDefaultContext().add(this.previewContext);
 
 		// Set some event handlers
 		var self = this;
 		this.editorContext.addEvent("mousedown", function(evt) {
 			self.mouseBtn = true;
-			if (self.drawMode) {
-				self.setPixel(evt.pageX, evt.pageY);
-			} else {
-				self.clearPixel(evt.pageX, evt.pageY);
+			switch (self.drawMode) {
+				case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
+											break;
+				case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
+											break;
+				case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
+											break;
 			}
 		});
 
@@ -100,18 +115,22 @@ var SpriteEditor = Game.extend({
 
 		this.editorContext.addEvent("mousemove", function(evt) {
 			if (self.mouseBtn) {
-				if (self.drawMode) {
-					self.setPixel(evt.pageX, evt.pageY);
-				} else {
-					self.clearPixel(evt.pageX, evt.pageY);
+				switch (self.drawMode) {
+					case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
+												break;
+					case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
+												break;
+					case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
+												break;
 				}
 			}
 		});
 
 		// Add the default layer
 		this.currentLayer = SpriteLayer.create();
+		this.grid = SpriteGrid.create();
 		this.editorContext.add(this.currentLayer);
-		this.editorContext.add(SpriteGrid.create());
+		this.editorContext.add(this.grid);
 
 		this.addControls();
    },
@@ -129,11 +148,42 @@ var SpriteEditor = Game.extend({
 	// Editor Functions
 
 	setPixel: function(x, y) {
-		SpriteEditor.currentLayer.addPixel(x, y);
+		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
+		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
+		  		SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+				this.addPreviewPix(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+		  	}
+		}
 	},
 
 	clearPixel: function(x, y) {
-		SpriteEditor.currentLayer.clearPixel(x, y);
+		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
+		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
+		  		SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+				this.removePreviewPix(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+		  	}
+		}
+	},
+	
+	getPixel: function(x, y) {
+		var colr = SpriteEditor.currentLayer.getPixel(x, y);
+		if (colr) {
+			$("#curColor").val(colr);
+			SpriteEditor.currentColor = colr;
+			$(".colorTable .selectedColor").css("background", colr);
+		}
+	},
+	
+	addPreviewPix: function(x, y) {
+		x = Math.floor(x / SpriteEditor.pixSize);
+		y = Math.floor(y / SpriteEditor.pixSize);
+		this.previewContext.addPixel(x, y, SpriteEditor.currentColor);	
+	},
+
+	removePreviewPix: function(x, y) {
+		x = Math.floor(x / SpriteEditor.pixSize);
+		y = Math.floor(y / SpriteEditor.pixSize);
+		this.previewContext.removePixel(x, y);	
 	},
 
 	setNewColor: function(hexColor) {
@@ -149,13 +199,17 @@ var SpriteEditor = Game.extend({
 				$(".colorTable .selectedColor").css("background", colr);
 			})
 			.dblclick(function() {
-				SpriteEditor.colorSelector.show(520, 10);
+				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
 			});
 		
 		$("#selBtn")
 			.click(function() { 
-				SpriteEditor.colorSelector.show(520, 10);
+				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
 			});
+
+		$("#gridVis").change(function() {
+			SpriteEditor.grid.setVisible(this.checked);
+		});
 
 		$("#grid8")
 			.change(function() {
@@ -179,12 +233,17 @@ var SpriteEditor = Game.extend({
 
 		$("#paint")
 			.change(function() {
-				SpriteEditor.drawMode = true;
+				SpriteEditor.drawMode = SpriteEditor.PAINT;
 			});
 
 		$("#erase")
 			.change(function() {
-				SpriteEditor.drawMode = false;
+				SpriteEditor.drawMode = SpriteEditor.ERASE;
+			});
+
+		$("#dropper")
+			.change(function() {
+				SpriteEditor.drawMode = SpriteEditor.SELECT;
 			});
 
 		$(".preColor")
@@ -204,13 +263,57 @@ var SpriteEditor = Game.extend({
 					colr += pad(Number(g).toString(16));
 					colr += pad(Number(b).toString(16));
 				});
-				$("#curColor").val(colr);
+				// For browsers that use the named 16 colors
+				colr.replace(/(.*)/,function(str) {
+					var newColr = SpriteEditor.colorTable[str.toLowerCase()];
+					colr = newColr || colr;
+				});
+				$("#curColor").val(colr.toUpperCase());
 				$(".colorTable .selectedColor").css("background", colr);
 				SpriteEditor.currentColor = colr;
 			});
 
+		$(".brushPix").click(function() {
+			var idx = $(".brushPix").index(this);
+			$(".brushPix").removeClass("enabled");
+			SpriteEditor.brushSize = [Math.floor(idx % 3), Math.floor(idx / 3)];
+			for (var x = 0; x < 3; x++) {
+				for (var y = 0; y < 3; y++) {
+					if (x <= SpriteEditor.brushSize[0] &&
+						 y <= SpriteEditor.brushSize[1]) {
+						 	$(".brushPix:eq(" + ((y * 3) + x) + ")").addClass("enabled");
+						 }
+				}
+			}
+		});
+
 		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
-	}
+		
+		SpriteEditor.previewImage = $(".preview img");
+	},
+
+	colorTable: {
+		"white":"#FFFFFF",
+		"yellow":"#FFFF00",
+		"fuchsia":"#FF00FF",
+		"red":"#FF0000",
+		"silver":"#C0C0C0",
+		"gray":"#808080",
+		"olive":"#808000",
+		"purple":"#800080",
+		"maroon":"#800000",
+		"aqua":"#00FFFF",
+		"lime":"#00FF00",
+		"teal":"#008080",
+		"green":"#008000",
+		"blue":"#0000FF",
+		"navy":"#000080",
+		"black":"#000000"		
+	},
+	
+	PAINT: 0,
+	ERASE: 1,
+	SELECT: 2
 });
 
 return SpriteEditor;
