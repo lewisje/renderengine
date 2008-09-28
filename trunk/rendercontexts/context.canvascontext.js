@@ -74,10 +74,11 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
          canvas.width = this.width * worldScale;
          canvas.height = this.height * worldScale;
       }
-      canvas.id = this.getId();
 
       this.setViewport(Rectangle2D.create(0, 0, this.width, this.height));
       this.base(name || "CanvasContext", canvas);
+
+      canvas.id = this.getId();
    },
 
    afterAdd: function(parent) {
@@ -385,6 +386,19 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
       return this.get2DContext().getImageData(tr.x, tr.y, wh.x, wh.y);
    },
+	
+	/**
+	 * Useful method which returns a data URL which represents the
+	 * current state of the canvas context.  The URL can be passed to
+	 * an image element.
+	 * 
+	 * @param {String} format The format of the output, or <tt>null</tt> for
+	 * 					 the PNG default.
+	 * @return {String} The data URL
+	 */
+	getDataURL: function(format) {
+		return this.getSurface().toDataURL();
+	},
 
    /**
     * Draw an image, captured with {@link #getImage}, to
