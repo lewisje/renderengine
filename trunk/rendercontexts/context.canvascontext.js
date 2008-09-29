@@ -388,7 +388,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 	/**
 	 * Useful method which returns a data URL which represents the
 	 * current state of the canvas context.  The URL can be passed to
-	 * an image element.
+	 * an image element. <i>Note: Only works in Firefox and Opera!</i>
 	 *
 	 * @param {String} format The format of the output, or <tt>null</tt> for
 	 * 					 the PNG default.
