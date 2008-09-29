@@ -43,7 +43,7 @@ Engine.initObject("SpriteGrid", "Object2D", function() {
 var SpriteGrid = Object2D.extend({
 
 	pixels: null,
-	
+
 	visible: true,
 
    constructor: function() {
@@ -62,6 +62,13 @@ var SpriteGrid = Object2D.extend({
     * @param time {Number} The engine time in milliseconds
     */
    update: function(renderContext, time) {
+
+		// Before we draw the grid, let's capture the canvas to the preview window
+		SpriteEditor.previewContext.clear();
+		SpriteEditor.previewContext.drawImage(Rectangle2D.create(0, 0, 64, 64),
+			renderContext.getSurface(),
+			Rectangle2D.create(0, 0, 512, 512));
+
       renderContext.pushTransform();
       this.base(renderContext, time);
 
@@ -89,7 +96,7 @@ var SpriteGrid = Object2D.extend({
 
       renderContext.popTransform();
    },
-	
+
 	setVisible: function(state)  {
 		this.visible = state;
 	}

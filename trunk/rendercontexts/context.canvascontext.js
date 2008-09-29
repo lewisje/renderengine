@@ -346,18 +346,16 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @param rect {Rectangle2D} The rectangle that specifies the position and
     *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
-    * @param srcRect {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
+    * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
     *                <tt>null</tt> the entire image is used
     */
    drawImage: function(rect, image, srcRect) {
+		var d = rect.get();
       if (srcRect) {
          var s = srcRect.get();
-         var d = rect.get();
-
          this.get2DContext().drawImage(image,
             s.x, s.y, s.w, s.h, d.x, d.y, d.w, d.h);
       } else {
-         var d = rect.get();
          this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
       }
       this.base(rect, image);
@@ -386,12 +384,12 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
       return this.get2DContext().getImageData(tr.x, tr.y, wh.x, wh.y);
    },
-	
+
 	/**
 	 * Useful method which returns a data URL which represents the
 	 * current state of the canvas context.  The URL can be passed to
 	 * an image element.
-	 * 
+	 *
 	 * @param {String} format The format of the output, or <tt>null</tt> for
 	 * 					 the PNG default.
 	 * @return {String} The data URL

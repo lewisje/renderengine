@@ -43,32 +43,19 @@ Engine.initObject("SpritePreview", "CanvasContext", function() {
 var SpritePreview = CanvasContext.extend({
 
 	imgData: null,
-	
+
    constructor: function() {
       this.base("Preview", 64, 64);
-		this.imgData = this.get2DContext().getImageData(0,0,64,64);
+		$(this.getSurface()).css("display", "none");
    },
-	
-	addPixel: function(x, y, colr) {
-		colr = colr.replace("#", "");
-		var rgb = [];
-		var c = /(\w{2})(\w{2})(\w{2})/.exec();
-		if (c) {
-			rgb[0] = parseInt(c[1], 16);
-			rgb[1] = parseInt(c[2], 16);
-			rgb[2] = parseInt(c[3], 16);
-		}
-		this.imgData.data[(y*64 + x)*4] = rgb[0];	
-		this.imgData.data[((y*64 + x)*4) + 1] = rgb[1];	
-		this.imgData.data[((y*64 + x)*4) + 2] = rgb[2];	
-		this.imgData.data[((y*64 + x)*4) + 3] = 255;
-	},
-	
-	removePixel: function(x, y) {
-		this.imgData.data[(y*64 + x)*4] = 0;	
-		this.imgData.data[((y*64 + x)*4) + 1] = 0;	
-		this.imgData.data[((y*64 + x)*4) + 2] = 0;	
-		this.imgData.data[((y*64 + x)*4) + 3] = 0;	
+
+   clear: function() {
+      var cRect = this.getViewport();
+      this.get2DContext().clearRect(cRect.getTopLeft().x, cRect.getTopLeft().y, cRect.getDims().x, cRect.getDims().y);
+   },
+
+	reset: function(rect) {
+		// Overloaded so the rectangle doesn't clear
 	},
 
    /**
@@ -81,14 +68,14 @@ var SpritePreview = CanvasContext.extend({
       renderContext.pushTransform();
       this.base(renderContext, time);
 
-		this.get2DContext().putImageData(this.imgData, 0, 0);
+		//this.get2DContext().putImageData(this.imgData, 0, 0);
 
 		// Now copy across the image to the preview in the editor
 		SpriteEditor.previewImage.attr("src", this.getDataURL());
 
       renderContext.popTransform();
    }
-	
+
 }, { // Static
 
    /**

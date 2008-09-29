@@ -99,7 +99,7 @@ var SpriteLayer = Object2D.extend({
 		var p = "[" + x + "," + y + "]";
 		this.pixels.removeHash(p);
 	},
-	
+
 	getPixel: function(x, y) {
 		var pSize = SpriteEditor.pixSize;
       x = x - x % pSize;

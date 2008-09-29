@@ -67,11 +67,11 @@ var SpriteEditor = Game.extend({
 	drawMode: 0,
 
 	colorSelector: null,
-	
+
 	brushSize: [0,0],
-	
+
 	grid: null,
-	
+
 	previewImage: null,
 
    /**
@@ -89,7 +89,7 @@ var SpriteEditor = Game.extend({
 		this.editorContext.setWorldScale(1);
       Engine.getDefaultContext().add(this.editorContext);
       this.editorContext.setBackgroundColor("black");
-		
+
 		// The place where previews will be generated
 		this.previewContext = SpritePreview.create();
 		this.previewContext.setWorldScale(1);
@@ -151,7 +151,6 @@ var SpriteEditor = Game.extend({
 		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
 		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
 		  		SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				this.addPreviewPix(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
 		  	}
 		}
 	},
@@ -160,11 +159,10 @@ var SpriteEditor = Game.extend({
 		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
 		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
 		  		SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				this.removePreviewPix(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
 		  	}
 		}
 	},
-	
+
 	getPixel: function(x, y) {
 		var colr = SpriteEditor.currentLayer.getPixel(x, y);
 		if (colr) {
@@ -172,18 +170,6 @@ var SpriteEditor = Game.extend({
 			SpriteEditor.currentColor = colr;
 			$(".colorTable .selectedColor").css("background", colr);
 		}
-	},
-	
-	addPreviewPix: function(x, y) {
-		x = Math.floor(x / SpriteEditor.pixSize);
-		y = Math.floor(y / SpriteEditor.pixSize);
-		this.previewContext.addPixel(x, y, SpriteEditor.currentColor);	
-	},
-
-	removePreviewPix: function(x, y) {
-		x = Math.floor(x / SpriteEditor.pixSize);
-		y = Math.floor(y / SpriteEditor.pixSize);
-		this.previewContext.removePixel(x, y);	
 	},
 
 	setNewColor: function(hexColor) {
@@ -201,9 +187,9 @@ var SpriteEditor = Game.extend({
 			.dblclick(function() {
 				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
 			});
-		
+
 		$("#selBtn")
-			.click(function() { 
+			.click(function() {
 				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
 			});
 
@@ -225,7 +211,7 @@ var SpriteEditor = Game.extend({
 			.change(function() {
 				SpriteEditor.pixSize = 32;
 			});
-		
+
 		$("#grid64")
 			.change(function() {
 				SpriteEditor.pixSize = 64;
@@ -248,14 +234,14 @@ var SpriteEditor = Game.extend({
 
 		$(".preColor")
 			.click(function() {
-				
+
 				function pad(n) {
 					if (parseInt(n, 10) < 10) {
 						return "0" + n;
 					}
 					return n;
 				}
-				
+
 				var colr = $(this).css("background-color");
 				colr.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)/, function(str, r, g, b) {
 					colr = "#";
@@ -288,7 +274,7 @@ var SpriteEditor = Game.extend({
 		});
 
 		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
-		
+
 		SpriteEditor.previewImage = $(".preview img");
 	},
 
@@ -308,9 +294,9 @@ var SpriteEditor = Game.extend({
 		"green":"#008000",
 		"blue":"#0000FF",
 		"navy":"#000080",
-		"black":"#000000"		
+		"black":"#000000"
 	},
-	
+
 	PAINT: 0,
 	ERASE: 1,
 	SELECT: 2
