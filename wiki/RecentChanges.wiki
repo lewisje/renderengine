@@ -3,6 +3,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 09/29/2008 ||The sprite editor is working in Firefox and Opera.  WebKit, for all its wonders, doesn't support the `.toDataURL()` method of the Canvas element.  This means that Safari and Chrome are, as of yet, unsupported. ||
 || 09/28/2008 ||Working on a sprite editor for the engine.  It only works in Firefox because it supports the getImageData() method of Canvas. Go to the EngineExamples page and check it out... ||
 || 09/16/2008 ||Opera is working again. _Chrome is now supported!_ The examples are working across all browsers.  Sound is still causing me problems.  Added a page for SupportedBrowsers. ||
 || 09/13/2008 ||I've changed the method of object rendering.  The RenderComponent will now return true iff the object is supposed to draw and the [HostComponents HostObject] is in the RenderContext viewport.  I also added some buttons to the metrics display to allow a dev to pause the engine and inspect objects and the game. ||
