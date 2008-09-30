@@ -46,11 +46,18 @@ var SpriteGrid = Object2D.extend({
 
 	visible: true,
 
+	color: null,
+
    constructor: function() {
       this.base("Grid");
       this.setZIndex(1000);
 		this.visible = true;
+		this.color = "#c0c0c0";
    },
+
+	setGridColor: function(colr) {
+		this.color = colr;
+	},
 
    /**
     * Update the player within the rendering context.  This draws
@@ -76,7 +83,7 @@ var SpriteGrid = Object2D.extend({
 			return;
 		}
 
-		renderContext.setLineStyle("silver");
+		renderContext.setLineStyle(this.color);
 		renderContext.setLineWidth(0.25);
 		var sT = Point2D.create(0,0);
 		var eD = Point2D.create(0,0);

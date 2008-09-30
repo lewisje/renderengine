@@ -74,6 +74,8 @@ var SpriteEditor = Game.extend({
 
 	previewImage: null,
 
+	editColor: 0,
+
    /**
     * Called to set up the game, download any resources, and initialize
     * the game to its running state.
@@ -173,9 +175,15 @@ var SpriteEditor = Game.extend({
 	},
 
 	setNewColor: function(hexColor) {
-		$("#curColor").val(hexColor);
-		SpriteEditor.currentColor = hexColor;
-		$(".colorTable .selectedColor").css("background", hexColor);
+		if (SpriteEditor.editColor == SpriteEditor.COLOR_FOREGROUND) {
+			$("#curColor").val(hexColor);
+			SpriteEditor.currentColor = hexColor;
+			$(".colorTable .selectedColor").css("background", hexColor);
+		} else {
+			$(".colorTable .backgroundColor").css("background", hexColor);
+			$(SpriteEditor.editorContext.getSurface()).css("background", hexColor);
+			SpriteEditor.grid.setGridColor(SpriteEditor.getContrast(hexColor));
+		}
 	},
 
 	addControls: function() {
@@ -188,10 +196,19 @@ var SpriteEditor = Game.extend({
 				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
 			});
 
-		$("#selBtn")
+		$(".colorTable .selectedColor")
 			.click(function() {
+				SpriteEditor.editColor = SpriteEditor.COLOR_FOREGROUND;
 				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
 			});
+
+		$(".colorTable .backgroundColor")
+			.click(function() {
+				SpriteEditor.editColor = SpriteEditor.COLOR_BACKGROUND;
+				var colr = SpriteEditor.fixupColor($(this).css("background-color"));
+				SpriteEditor.colorSelector.show(520, 10, colr);
+			});
+
 
 		$("#gridVis").change(function() {
 			SpriteEditor.grid.setVisible(this.checked);
@@ -234,26 +251,7 @@ var SpriteEditor = Game.extend({
 
 		$(".preColor")
 			.click(function() {
-
-				function pad(n) {
-					if (parseInt(n, 10) < 10) {
-						return "0" + n;
-					}
-					return n;
-				}
-
-				var colr = $(this).css("background-color");
-				colr.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)/, function(str, r, g, b) {
-					colr = "#";
-					colr += pad(Number(r).toString(16));
-					colr += pad(Number(g).toString(16));
-					colr += pad(Number(b).toString(16));
-				});
-				// For browsers that use the named 16 colors
-				colr.replace(/(.*)/,function(str) {
-					var newColr = SpriteEditor.colorTable[str.toLowerCase()];
-					colr = newColr || colr;
-				});
+				var colr = SpriteEditor.fixupColor($(this).css("background-color"));
 				$("#curColor").val(colr.toUpperCase());
 				$(".colorTable .selectedColor").css("background", colr);
 				SpriteEditor.currentColor = colr;
@@ -278,6 +276,39 @@ var SpriteEditor = Game.extend({
 		SpriteEditor.previewImage = $(".preview img");
 	},
 
+	fixupColor: function(colr) {
+
+		function pad(n) {
+			if (parseInt(n, 10) < 10) {
+				return "0" + n;
+			}
+			return n;
+		}
+
+		colr.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)/, function(str, r, g, b) {
+			colr = "#";
+			colr += pad(Number(r).toString(16));
+			colr += pad(Number(g).toString(16));
+			colr += pad(Number(b).toString(16));
+		});
+		// For browsers that use the named 16 colors
+		colr.replace(/(.*)/,function(str) {
+			var newColr = SpriteEditor.colorTable[str.toLowerCase()];
+			colr = newColr || colr;
+		});
+
+		return colr;
+	},
+
+	getContrast: function(colr) {
+		colr = colr.substring(1);
+		var cont = colr.replace(/(\w{2})(\w{2})(\w{2})/, function(str, r, g, b) {
+			return Math.max(Math.max(parseInt(r, 16), parseInt(g, 16)), parseInt(b, 16));
+		});
+		var n = (255 - cont).toString(16);
+		return "#" + n + n + n;
+	},
+
 	colorTable: {
 		"white":"#FFFFFF",
 		"yellow":"#FFFF00",
@@ -299,7 +330,9 @@ var SpriteEditor = Game.extend({
 
 	PAINT: 0,
 	ERASE: 1,
-	SELECT: 2
+	SELECT: 2,
+	COLOR_FOREGROUND: 0,
+	COLOR_BACKGROUND: 1
 });
 
 return SpriteEditor;
