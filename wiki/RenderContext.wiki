@@ -2,10 +2,20 @@
 
 = Render Contexts... What Are They? =
 
-I'll be including some documentation soon about this...
+A render context is where the engine displays the game world.  By default, The Render Engine has one context which it "creates" for you.  In fact, it doesn't really create it -- it wraps a browser's `document` in a render context.  Each processing cycle, the engine will start at it's default rendering context and render it.
 
-  * HTMLElementContext
-  * DocumentContext
-  * CanvasContext
-  * ScrollingBackground
-  * SVGContext
+From there, a chain reaction occurs whereby objects that are containers (rendering contexts included) will render their objects, and on-and-on until all objects have been rendered.  At the end of this cycle, one frame is displayed on-screen and the cycle begins again.
+
+A rendering context has a "surface" to which the contents are drawn.  This surface is typically a reference to a DOM element.  It isn't a requirement, but since browsers don't currently know how to render to anything else... 'nuff said?  =)
+
+== !HTMLElementContext ==
+
+The !HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base !RenderContext2D since that context is aimed at 2D rendering with vectors, paths, and sprites.
+
+== !RenderContext2D ==
+
+This context is the base class for the !CanvasContext and !SVGContext which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.  A context could be created from this which would also wrap the DOM in such a mechanism, but since line drawing isn't natively supported by the DOM it doesn't make much sense.
+
+== Transformation Stack ==
+
+Some contexts implement a transformation stack which stores the state of position, rotation, and scale (among other things) in a stack structure. States can be pushed onto the stack (effectively combining them) and popped when no longer needed.  With no transformations on the stack the engine would be rendering in world space.  As transformations are pushed onto the stack, we move into object space.  An unbalanced stack can lead to strange rendering artifacts.  As such, the engine enforces the balance and will inform you if it becomes unbalanced.
