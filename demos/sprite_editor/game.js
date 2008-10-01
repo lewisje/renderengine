@@ -36,6 +36,7 @@
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.loadStylesheet("resources/color_select.css", true);
+Engine.loadStylesheet("resources/editor.css", true);
 
 // Load game objects
 Game.load("/layer.js");
@@ -54,7 +55,7 @@ var SpriteEditor = Game.extend({
 
    editorContext: null,
 
-   pixSize: 32,
+   pixSize: 16,
 
 	editorSize: 512,
 

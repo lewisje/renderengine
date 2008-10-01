@@ -60,117 +60,6 @@
             background: blue;
          }
 
-         #controls {
-            position: absolute;
-            background: silver;
-            width: 400px;
-            top: 5px;
-            height: 500px;
-            left: 520px;
-            border: 1px outset white;
-            padding: 10px;
-         }
-
-         .tool {
-            font: 11pt "Lucida Console",Verdana,Arial,Helvetica;
-            background: #a0a0a0;
-         }
-
-         .tool H5 {
-            font-weight: bold;
-            background: maroon;
-            color: white;
-            margin: 1px 1px 2px 1px;
-            padding:2px;
-         }
-
-         .colors {
-            width: 170px;
-            height: 142px;
-            border: 1px inset white;
-            float: left;
-         }
-
-         .colors input {
-            margin-left: 5px;
-         }
-
-         .preColor {
-            width: 16px;
-            height: 18px;
-         }
-
-         .colorTable {
-            margin-top: 2px;
-            margin-left: 5px;
-            clear: none;
-         }
-
-         .selectedColor {
-            background-color: white;
-            width: 50px;
-         }
-
-         .backgroundColor {
-            background-color: black;
-            width: 50px;
-         }
-
-         .grid {
-            width: 220px;
-            height: 70px;
-            border: 1px inset white;
-            float: right;
-         }
-
-         .drawmode {
-            margin-top: 10px;
-            width: 220px;
-            height: 60px;
-            border: 1px inset white;
-            float: right;
-         }
-
-         .brushsize {
-            margin-top: 10px;
-            width: 170px;
-            height: 102px;
-            border: 1px inset white;
-            float: left;
-         }
-
-         .brushTable {
-            margin-top: 2px;
-            margin-left: 5px;
-            clear: none;
-         }
-
-         .brushTable .brushPix {
-            width: 16px;
-            height: 18px;
-         }
-
-         .brushTable .brushPix.enabled {
-            background: navy;
-         }
-
-         .preview {
-            margin-top: 10px;
-            width: 170px;
-            height: 102px;
-            border: 1px inset white;
-            float: right;
-         }
-
-         .preview img {
-            background: black;
-            margin-left: 50px;
-            margin-top: 5px;
-            border: 1px solid white;
-            width: 64px;
-            height: 64px;
-         }
-
       </style>
    </head>
    <body>
@@ -218,16 +107,19 @@
          <div class="tool grid">
             <h5>Grid</h5>
             <input type="radio" id="grid8" name="gridsize" value="8"/>8&nbsp;
-            <input type="radio" id="grid16" name="gridsize" value="16"/>16&nbsp;
-            <input type="radio" id="grid32" name="gridsize" value="32" checked/>32&nbsp;
+            <input type="radio" id="grid16" name="gridsize" value="16" checked/>16&nbsp;
+            <input type="radio" id="grid32" name="gridsize" value="32"/>32&nbsp;
             <input type="radio" id="grid64" name="gridsize" value="64"/>64&nbsp;<br/>
             <input type="checkbox" id="gridVis" checked/>Draw Grid
          </div>
          <div class="tool drawmode">
             <h5>Drawmode</h5>
-            <input type="radio" id="paint" name="drawmode" value="paint" checked>Paint&nbsp;
-            <input type="radio" id="erase" name="drawmode" value="erase">Erase&nbsp;
-            <input type="radio" id="dropper" name="drawmode" value="dropper">Select&nbsp;
+            <input type="radio" id="paint" name="drawmode" value="paint" checked>
+					<div class="paintbrush"><!-- --></div>
+            <input type="radio" id="erase" name="drawmode" value="erase">
+					<div class="eraser"><!-- --></div>
+            <input type="radio" id="dropper" name="drawmode" value="dropper">
+					<div class="dropper"><!-- --></div>
          </div>
          <div style="clear: both"><!-- --></div>
          <div class="tool brushsize">

@@ -1,0 +1,142 @@
+#controls {
+   position: absolute;
+   background: silver;
+   width: 400px;
+   top: 5px;
+   height: 500px;
+   left: 520px;
+   border: 1px outset white;
+   padding: 10px;
+}
+
+.tool {
+   font: 11pt "Lucida Console",Verdana,Arial,Helvetica;
+   background: #a0a0a0;
+}
+
+.tool H5 {
+   font-weight: bold;
+   background: maroon;
+   color: white;
+   margin: 1px 1px 2px 1px;
+   padding:2px;
+}
+
+.colors {
+   width: 170px;
+   height: 142px;
+   border: 1px inset white;
+   float: left;
+}
+
+.colors input {
+   margin-left: 5px;
+}
+
+.preColor {
+   width: 16px;
+   height: 18px;
+}
+
+.colorTable {
+   margin-top: 2px;
+   margin-left: 5px;
+   clear: none;
+}
+
+.selectedColor {
+   background-color: white;
+   width: 50px;
+}
+
+.backgroundColor {
+   background-color: black;
+   width: 50px;
+}
+
+.grid {
+   width: 220px;
+   height: 70px;
+   border: 1px inset white;
+   float: right;
+}
+
+.drawmode {
+   margin-top: 10px;
+   width: 220px;
+   height: 60px;
+   border: 1px inset white;
+   float: right;
+}
+
+.brushsize {
+   margin-top: 10px;
+   width: 170px;
+   height: 102px;
+   border: 1px inset white;
+   float: left;
+}
+
+.brushTable {
+   margin-top: 2px;
+   margin-left: 5px;
+   clear: none;
+	border: none;
+}
+
+.brushTable .brushPix {
+   width: 16px;
+   height: 18px;
+	border: 1px solid white;
+}
+
+.brushTable .brushPix.enabled {
+   background: navy;
+}
+
+.preview {
+   margin-top: 10px;
+   width: 220px;
+   height: 102px;
+   border: 1px inset white;
+   float: left;
+	margin-left: 5px;
+}
+
+.preview img {
+   background: black;
+   margin-left: 20px;
+   margin-top: 5px;
+   border: 1px solid white;
+   width: 64px;
+   height: 64px;
+}
+
+div.paintbrush {
+	background: url(resources/paint.png) no-repeat;
+	width: 32px;
+	height: 32px;
+	float: left;
+	padding-right: 15px;
+	border-right: 1px solid;
+}
+
+div.eraser {
+	background: url(resources/erase.png) no-repeat;
+	width: 32px;
+	height: 32px;
+	float: left;
+	padding-right: 15px;
+	border-right: 1px solid;
+}
+
+div.dropper {
+	background: url(resources/dropper.png) no-repeat;
+	width: 32px;
+	height: 32px;
+	float: left;
+}
+
+.drawmode input {
+	float: left;
+}
