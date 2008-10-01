@@ -8,9 +8,9 @@ From there, a chain reaction occurs whereby objects that are containers (renderi
 
 A rendering context has a "surface" to which the contents are drawn.  This surface is typically a reference to a DOM element.  It isn't a requirement, but since browsers don't currently know how to render to anything else... 'nuff said?  =)
 
-== !HTMLElementContext ==
+== HTMLElementContext ==
 
-The !HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base !RenderContext2D since that context is aimed at 2D rendering with vectors, paths, and sprites.
+The HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base !RenderContext2D since that context is aimed at 2D rendering with vectors, paths, and sprites.
 
 == !RenderContext2D ==
 
