@@ -1,10 +1,27 @@
 #summary A list of goals to be reached
 = Release Goals and Milestones =
 
-*Beta 0.1*
-----
-  * Engine dependency processing
-  * Rendering contexts
-  * Examples
-  * Working sound
-  * Browser Support
+The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
+
+== Beta 1 ==
+
+|| *Status* || *Goal* || *Description* ||
+||  *Complete* || Script processing || Script includes, loading, caching ||
+|| *Complete* || Engine processing || Object rendering cycle ||
+|| *Complete* || Dependency processor || Handle object detection and requirements ||
+|| *Complete* || Rendering contexts || Element, document, canvas ||
+|| *Complete* || Host objects || Objects to host components ||
+|| *Complete* || Basic components || Base, input, rendering, collision, logic, transformation ||
+|| _Incomplete_ || Sound system || Load and play sounds ||
+|| *Complete* || Browser support || Firefox, Safari, Opera, Chrome ||
+
+== Beta 2 ==
+
+|| *Status* || *Goal* || *Description* ||
+|| _Incomplete_ || Demo || Vector demo - Asteroids clone ||
+|| _Incomplete_ || Demo || 2D Sprite demo - Super Mario clone w/ editor ||
+|| _Incomplete_ || Tool || Sprite editor ||
+|| - || Tool || Simple 2D game editor base on sprite demo editor ||
+|| _Incomplete_ || Browser support || Safari/iPhone ||
+|| _Incomplete_ || Browser support || Opera/Wii ||
+ 
