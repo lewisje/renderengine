@@ -3,25 +3,42 @@
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Beta 1 ==
+== Alpha versions / Beta 1 ==
 
 || *Status* || *Goal* || *Description* ||
-||  *Complete* || Script processing || Script includes, loading, caching ||
-|| *Complete* || Engine processing || Object rendering cycle ||
-|| *Complete* || Dependency processor || Handle object detection and requirements ||
-|| *Complete* || Rendering contexts || Element, document, canvas ||
-|| *Complete* || Host objects || Objects to host components ||
-|| *Complete* || Basic components || Base, input, rendering, collision, logic, transformation ||
-|| _Incomplete_ || Sound system || Load and play sounds ||
-|| *Complete* || Browser support || Firefox, Safari, Opera, Chrome ||
+||  *Complete* || Script processing || Script includes, loading, caching.  A method to load scripts and execute them as needed by the engine and games. ||
+|| *Complete* || Engine processing || Object rendering cycle, options handling, and subsystem intialization. ||
+|| *Complete* || Dependency processor || Handle object detection and requirements. Determine which objects are needed and establish loaded dependencies before processing object initializations. ||
+|| *Complete* || Rendering contexts || Element, document, canvas. Basic contexts for most game rendering.  Handle rendering of objects in each context. ||
+|| *Complete* || Host objects || Objects to host components.  Game objects. ||
+|| *Complete* || Basic components || Base, input, rendering, collision, logic, transformation. A set of components from which other components can be derived. ||
+|| _Incomplete_ || Sound system || Load and play sounds. ||
+|| *Complete* || Browser support || Firefox, Safari, Opera, Chrome.  Basic engine features supported by most, if not all, major browsers with the exception of Internet Explorer due it its lack of a sufficient 2D rendering context. ||
 
 == Beta 2 ==
 
 || *Status* || *Goal* || *Description* ||
-|| _Incomplete_ || Demo || Vector demo - Asteroids clone ||
-|| _Incomplete_ || Demo || 2D Sprite demo - Super Mario clone w/ editor ||
-|| _Incomplete_ || Tool || Sprite editor ||
-|| - || Tool || Simple 2D game editor base on sprite demo editor ||
-|| _Incomplete_ || Browser support || Safari/iPhone ||
-|| _Incomplete_ || Browser support || Opera/Wii ||
+|| _Incomplete_ || Demo || Vector demo - Asteroids clone.  Test for game logic, component loading, dependency checking, vector rendering to 2D context. ||
+|| _Incomplete_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
+|| _Incomplete_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
+|| - || Tool || Simple 2D game editor based on the sprite demo editor. ||
+|| _Incomplete_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
+|| _Incomplete_ || Browser support || Opera/Wii.  Better support for Opera on the Wii for a wider audience. ||
+
+== Release Candidate 1 ==
+
+|| *Status* || *Goal* || *Description* ||
  
+
+== Release Candidate 2 ==
+
+|| *Status* || *Goal* || *Description* ||
+
+
+== Gold Candidate ==
+
+|| *Status* || *Goal* || *Description* ||
+
+== Version 1.0 ==
+
+|| *Status* || *Goal* || *Description* ||
