@@ -21,7 +21,7 @@ This creates a `CanvasContext` (itself, a container) and adds it to the engine's
    // Add some asteroids
    for (var a = 0; a < 3; a++)
    {
-      var rock = Spaceroids.Rock.create(null, null, pWidth, pHeight);
+      var rock = SpaceroidsRock.create(null, null, pWidth, pHeight);
       this.renderContext.add(rock);
       rock.setup();
       rock.killTimer = Engine.worldTime + 2000;
@@ -38,6 +38,7 @@ Components break down into one of four functional areas.  Those areas, in order 
   * *TYPE_INPUT* - Components that interact with an input device, such as the keyboard.
   * *TYPE_LOGIC* - A component which performs logic functions, such as score calculations, or what animation to run.
   * *TYPE_COLLIDER* - Components that can interact with a collision model and determine when a host object might collide with another game object.
+  * *TYPE_TRANSFORM* - A component which updates the transformation of the host game object.
   * *TYPE_RENDERING* - A component that can update a render context with a visual representation.
 
 Not every host object will use components of each type.  Some game objects may only have a logic and rendering component, while others may have just a collider component.  Plus, there isn't a limit on the number of components of _one type_ that can be used.  A host might have two input components and five rendering components.  The thing is that each component does one thing, and does it well.
