@@ -16,7 +16,7 @@ As was stated in the EngineProcessOverview, host objects contain components.  Th
 
       // Set size and position
       this.size = size || 10;
-      this.scoreValue = Spaceroids.Rock.values[String(this.size)];
+      this.scoreValue = SpaceroidsRock.values[String(this.size)];
       if (!position)
       {
          // Set the position
@@ -33,7 +33,7 @@ setShape: function() {
 
    // Pick one of the three shapes
    var tmp = [];
-   tmp = Spaceroids.Rock.shapes[Math.floor(Math.random() * 3)];
+   tmp = SpaceroidsRock.shapes[Math.floor(Math.random() * 3)];
 
    // Scale the shape
    var s = [];
@@ -61,7 +61,7 @@ Some components need to interact with the host object.  Those components will ca
 The rock object has one method that it needs to implement for the collider component to be effective.  The method, as long as it is defined, will be called by the component whenever it needs to update the host object.  In this case, the rock needs to know if it has collided with the player object:
 {{{
    onCollide: function(obj) {
-      if (obj instanceof Spaceroids.Player &&
+      if (obj instanceof SpaceroidsPlayer &&
           (Math2D.boxBoxCollision(this.getWorldBox(), obj.getWorldBox())))
       {
          if (obj.isAlive())
