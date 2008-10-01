@@ -48,7 +48,7 @@ var SpriteTestActor = Object2D.extend({
    editing: false,
 
    sprite: null,
-	
+
 	velocityVec: null,
 
    constructor: function() {
@@ -62,7 +62,7 @@ var SpriteTestActor = Object2D.extend({
       this.add(SpriteComponent.create("draw"));
 
       this.setPosition(Point2D.create(100, 100));
-		this.velocityVec = Point2D.create(0, 0); 
+		this.velocityVec = Point2D.create(0, 0);
    },
 
 	getProperties: function() {
@@ -135,6 +135,14 @@ var SpriteTestActor = Object2D.extend({
    setScale: function(s) {
       this.getComponent("move").setScale(s);
    },
+
+   getRotation: function() {
+		return this.getComponent("move").getRotation();
+	},
+
+	setRotation: function(r) {
+		this.getComponent("move").setRotation(r);
+	},
 
    /**
     * Set up the player object on the playfield.  The width and
