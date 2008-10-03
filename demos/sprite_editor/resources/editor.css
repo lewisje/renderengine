@@ -81,13 +81,13 @@
    margin-top: 2px;
    margin-left: 5px;
    clear: none;
-	border: none;
+   border: none;
 }
 
 .brushTable .brushPix {
    width: 16px;
    height: 18px;
-	border: 1px solid white;
+   border: 1px solid white;
 }
 
 .brushTable .brushPix.enabled {
@@ -100,7 +100,7 @@
    height: 102px;
    border: 1px inset white;
    float: left;
-	margin-left: 5px;
+   margin-left: 5px;
 }
 
 .preview img {
@@ -112,31 +112,82 @@
    height: 64px;
 }
 
-div.paintbrush {
-	background: url(resources/paint.png) no-repeat;
-	width: 32px;
-	height: 32px;
-	float: left;
-	padding-right: 15px;
-	border-right: 1px solid;
+div.drawicon {
+   width: 32px;
+   height: 32px;
+   float: left;
 }
 
-div.eraser {
-	background: url(resources/erase.png) no-repeat;
-	width: 32px;
-	height: 32px;
-	float: left;
-	padding-right: 15px;
-	border-right: 1px solid;
+div.drawicon.paintbrush {
+   background: url(resources/paint.png) no-repeat;
+   padding-right: 15px;
+   border-right: 1px solid;
 }
 
-div.dropper {
-	background: url(resources/dropper.png) no-repeat;
-	width: 32px;
-	height: 32px;
-	float: left;
+div.drawicon.eraser {
+   background: url(resources/erase.png) no-repeat;
+   padding-right: 15px;
+   border-right: 1px solid;
+}
+
+div.drawicon.dropper {
+   background: url(resources/dropper.png) no-repeat;
 }
 
 .drawmode input {
-	float: left;
+   float: left;
+}
+
+.shift {
+   margin-top: 10px;
+   width: 170px;
+   height: 62px;
+   border: 1px inset white;
+   float: left;
+}
+
+div.button {
+   width: 32px;
+   height: 32px;
+   border: 1px outset silver;
+   margin: 2px;
+   float: left;
+   background-position: 50% 50%;
+   background-repeat: no-repeat;
+}
+
+div.button.mouseover {
+   background-color: silver;
+}
+
+div.button.shift-up {
+   background-image: url(resources/arrowup.png);
+}
+
+div.button.shift-down {
+   background-image: url(resources/arrowdn.png);
+}
+
+div.button.shift-left {
+   background-image: url(resources/arrowlt.png);
+}
+
+div.button.shift-right {
+   background-image: url(resources/arrowrt.png);
+}
+
+.flip-mirror {
+   margin-top: 10px;
+   width: 220px;
+   height: 62px;
+   border: 1px inset white;
+   float: left;
+}
+
+div.button.flip-vertical {
+   background-image: url(resources/flipv.png);
+}
+
+div.button.flip-horizontal {
+   background-image: url(resources/fliph.png);
 }
