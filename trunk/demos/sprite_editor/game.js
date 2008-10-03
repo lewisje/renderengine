@@ -272,6 +272,12 @@ var SpriteEditor = Game.extend({
 			}
 		});
 
+		$(".button").hover(function() {
+			$(this).addClass("mouseover");
+		}, function() {
+			$(this).removeClass("mouseover");
+		});
+
 		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
 
 		SpriteEditor.previewImage = $(".preview img");
