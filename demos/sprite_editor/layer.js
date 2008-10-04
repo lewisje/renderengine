@@ -44,16 +44,20 @@ Engine.initObject("SpriteLayer", "Object2D", function() {
 var SpriteLayer = Object2D.extend({
 
 	pixels: null,
+	
+	mirror: null,
 
    constructor: function() {
       this.base("Layer");
 
       this.pixels = HashContainer.create();
+		this.mirror = [false, false];
    },
 
 	release: function() {
 		this.base();
 		this.pixels = null;
+		this.mirror = null;
 	},
 
    /**
@@ -80,33 +84,58 @@ var SpriteLayer = Object2D.extend({
       renderContext.popTransform();
    },
 
-   addPixel: function(x, y) {
+	getGridPixel: function(x, y) {
 		var pSize = SpriteEditor.pixSize;
       x = x - x % pSize;
       y = y - y % pSize;
+		
+		return [x,y];		
+	},
+
+   addPixel: function(x, y) {
+		var pSize = SpriteEditor.pixSize;
+		var gP = this.getGridPixel(x, y);
 		var pix = {
 			color: SpriteEditor.currentColor,
-			rect: Rectangle2D.create(x, y, pSize, pSize)
+			rect: Rectangle2D.create(gP[0], gP[1], pSize, pSize)
 		};
-		var p = "[" + x + "," + y + "]";
+		var p = "[" + gP[0] + "," + gP[1] + "]";
 		this.pixels.add(p, pix);
    },
 
 	clearPixel: function(x, y) {
-		var pSize = SpriteEditor.pixSize;
-      x = x - x % pSize;
-      y = y - y % pSize;
-		var p = "[" + x + "," + y + "]";
+		var gP = this.getGridPixel(x, y);
+		var p = "[" + gP[0] + "," + gP[1] + "]";
 		this.pixels.removeHash(p);
 	},
 
 	getPixel: function(x, y) {
-		var pSize = SpriteEditor.pixSize;
-      x = x - x % pSize;
-      y = y - y % pSize;
-		var p = "[" + x + "," + y + "]";
+		var gP = this.getGridPixel(x, y);
+		var p = "[" + gP[0] + "," + gP[1] + "]";
 		var pixl = this.pixels.get(p);
 		return (pixl ? pixl.color : null);
+	},
+	
+	flipVertical: function() {
+	},
+	
+	flipHorizontal: function() {
+	},
+	
+	shiftLeft: function() {
+		
+	},
+	
+	shiftRight: function() {
+		
+	},
+	
+	shiftUp: function() {
+		
+	},
+	
+	shiftDown: function() {
+		
 	}
 
 }, { // Static

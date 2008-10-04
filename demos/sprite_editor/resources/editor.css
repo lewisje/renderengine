@@ -119,19 +119,15 @@ div.drawicon {
 }
 
 div.drawicon.paintbrush {
-   background: url(resources/paint.png) no-repeat;
-   padding-right: 15px;
-   border-right: 1px solid;
+   background-image: url(resources/paint.png);
 }
 
 div.drawicon.eraser {
-   background: url(resources/erase.png) no-repeat;
-   padding-right: 15px;
-   border-right: 1px solid;
+   background-image: url(resources/erase.png);
 }
 
 div.drawicon.dropper {
-   background: url(resources/dropper.png) no-repeat;
+   background-image: url(resources/dropper.png);
 }
 
 .drawmode input {
@@ -154,6 +150,11 @@ div.button {
    float: left;
    background-position: 50% 50%;
    background-repeat: no-repeat;
+}
+
+div.button.on {
+	border: 1px inset silver;
+	background-color: gray;
 }
 
 div.button.mouseover {
@@ -190,4 +191,12 @@ div.button.flip-vertical {
 
 div.button.flip-horizontal {
    background-image: url(resources/fliph.png);
+}
+
+div.button.mirror-vertical {
+   background-image: url(resources/mirrorv.png);
+}
+
+div.button.mirror-horizontal {
+   background-image: url(resources/mirrorh.png);
 }

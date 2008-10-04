@@ -47,6 +47,8 @@ var SpriteGrid = Object2D.extend({
 	visible: true,
 
 	color: null,
+	
+	mirror: [false, false],
 
    constructor: function() {
       this.base("Grid");
@@ -89,6 +91,7 @@ var SpriteGrid = Object2D.extend({
 		var eD = Point2D.create(0,0);
 		for (var x=0; x < SpriteEditor.editorSize; x += SpriteEditor.pixSize)
 		{
+			// X-Lines
 			sT.set(x, 0);
 			eD.set(x, SpriteEditor.editorSize);
 			renderContext.drawLine(sT, eD);
@@ -96,8 +99,26 @@ var SpriteGrid = Object2D.extend({
 
 		for (var y=0; y < SpriteEditor.editorSize; y += SpriteEditor.pixSize)
 		{
+			// Y-Lines
 			sT.set(0, y);
 			eD.set(SpriteEditor.editorSize, y);
+			renderContext.drawLine(sT, eD);
+		}
+
+		// Mirror Lines
+		if (this.mirror[0]) {
+			// Horizontal
+			renderContext.setLineWidth(0.75);
+			sT.set(256, 0);
+			eD.set(256, 512);
+			renderContext.drawLine(sT, eD);
+		}
+
+		if (this.mirror[1]) {
+			// Vertical
+			renderContext.setLineWidth(0.75);
+			sT.set(0, 256);
+			eD.set(512, 256);
 			renderContext.drawLine(sT, eD);
 		}
 
@@ -106,6 +127,14 @@ var SpriteGrid = Object2D.extend({
 
 	setVisible: function(state)  {
 		this.visible = state;
+	},
+	
+	setMirrorVertical: function(state) {
+		this.mirror[1] = state;
+	},
+	
+	setMirrorHorizontal: function(state) {
+		this.mirror[0] = state;	
 	}
 
 }, { // Static
