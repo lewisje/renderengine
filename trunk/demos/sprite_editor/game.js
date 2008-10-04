@@ -76,6 +76,10 @@ var SpriteEditor = Game.extend({
 	previewImage: null,
 
 	editColor: 0,
+	
+	mirrorVert: false,
+	
+	mirrorHorz: false,
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -154,6 +158,13 @@ var SpriteEditor = Game.extend({
 		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
 		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
 		  		SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+				var d = [256 - x, 256 -y]; 
+				if (this.mirrorHorz) {
+			  		SpriteEditor.currentLayer.addPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+				}
+				if (this.mirrorVert) {
+			  		SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), (256 + d[1]) + (yB * SpriteEditor.pixSize));
+				}
 		  	}
 		}
 	},
@@ -162,7 +173,42 @@ var SpriteEditor = Game.extend({
 		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
 		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
 		  		SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+				var d = [256 - x, 256 -y]; 
+				if (this.mirrorHorz) {
+			  		SpriteEditor.currentLayer.clearPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+				}
+				if (this.mirrorVert) {
+			  		SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), (256 + d[1]) + (yB * SpriteEditor.pixSize));
+				}
 		  	}
+		}
+	},
+	
+	hMirrorToggle: function() {
+		var mode = $(".mirror-horizontal").hasClass("on");
+		this.grid.setMirrorHorizontal(mode);
+		this.mirrorHorz = mode;
+	},
+
+	vMirrorToggle: function() {
+		var mode = $(".mirror-vertical").hasClass("on");
+		this.grid.setMirrorVertical(mode);
+		this.mirrorVert = mode;
+	},
+
+	setDrawMode: function(obj) {
+		if ($(obj).hasClass("paintbrush")) {
+			SpriteEditor.drawMode = SpriteEditor.PAINT;
+			$(".drawicon.eraser").removeClass("on");
+			$(".drawicon.dropper").removeClass("on");
+		} else if ($(obj).hasClass("eraser")) {
+			SpriteEditor.drawMode = SpriteEditor.ERASE;
+			$(".drawicon.paintbrush").removeClass("on");
+			$(".drawicon.dropper").removeClass("on");
+		} else if ($(obj).hasClass("dropper")) {
+			SpriteEditor.drawMode = SpriteEditor.SELECT;
+			$(".drawicon.paintbrush").removeClass("on");
+			$(".drawicon.eraser").removeClass("on");
 		}
 	},
 
@@ -182,6 +228,7 @@ var SpriteEditor = Game.extend({
 			$(".colorTable .selectedColor").css("background", hexColor);
 		} else {
 			$(".colorTable .backgroundColor").css("background", hexColor);
+			$(".preview img").css("background", hexColor);
 			$(SpriteEditor.editorContext.getSurface()).css("background", hexColor);
 			SpriteEditor.grid.setGridColor(SpriteEditor.getContrast(hexColor));
 		}
@@ -235,20 +282,6 @@ var SpriteEditor = Game.extend({
 				SpriteEditor.pixSize = 64;
 			});
 
-		$("#paint")
-			.change(function() {
-				SpriteEditor.drawMode = SpriteEditor.PAINT;
-			});
-
-		$("#erase")
-			.change(function() {
-				SpriteEditor.drawMode = SpriteEditor.ERASE;
-			});
-
-		$("#dropper")
-			.change(function() {
-				SpriteEditor.drawMode = SpriteEditor.SELECT;
-			});
 
 		$(".preColor")
 			.click(function() {
@@ -277,10 +310,29 @@ var SpriteEditor = Game.extend({
 		}, function() {
 			$(this).removeClass("mouseover");
 		});
+		
+		$(".stateful").mousedown(function() {
+			if ($(this).hasClass("on")) {
+				$(this).removeClass("on");
+			} else {
+				$(this).addClass("on");
+			}
+			SpriteEditor.callFunction($(this).attr("func"), this);
+		})
 
 		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
 
 		SpriteEditor.previewImage = $(".preview img");
+	},
+
+	callFunction: function(fName, obj) {
+		fName = fName.split(".");
+		var o = window;
+		var i = fName.length - 1;
+		while (i--) {
+			o = o[fName.shift()];
+		}
+		o[fName.shift()](obj);
 	},
 
 	fixupColor: function(colr) {

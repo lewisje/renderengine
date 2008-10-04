@@ -114,12 +114,9 @@
          </div>
          <div class="tool drawmode">
             <h5>Drawmode</h5>
-            <input type="radio" id="paint" name="drawmode" value="paint" checked>
-               <div class="drawicon paintbrush"><!-- --></div>
-            <input type="radio" id="erase" name="drawmode" value="erase">
-               <div class="drawicon eraser"><!-- --></div>
-            <input type="radio" id="dropper" name="drawmode" value="dropper">
-               <div class="drawicon dropper"><!-- --></div>
+            <div class="stateful button on drawicon paintbrush" func="SpriteEditor.setDrawMode" title="Draw Pixels"><!-- --></div>
+            <div class="stateful button drawicon eraser" func="SpriteEditor.setDrawMode" title="Erase Pixels"><!-- --></div>
+            <div class="stateful button drawicon dropper" func="SpriteEditor.setDrawMode" title="Get Pixel Color"><!-- --></div>
          </div>
          <div style="clear: both"><!-- --></div>
          <div class="tool brushsize">
@@ -158,6 +155,8 @@
             <h5>Flip/Mirror</h5>
             <div class="button flip-vertical" title="Flip Vertically"><!-- --></div>
             <div class="button flip-horizontal" title="Flip Horizontally"><!-- --></div>
+            <div class="stateful button mirror-vertical" func="SpriteEditor.vMirrorToggle" title="Mirror Vertically"><!-- --></div>
+            <div class="stateful button mirror-horizontal" func="SpriteEditor.hMirrorToggle" title="Mirror Horizontally"><!-- --></div>
          </div>
       </div>
    </body>
