@@ -714,6 +714,19 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          }
       }
    },
+	
+	/**
+	 * Fill the specified array of <tt>size</tt> the 
+	 * <tt>value</tt> at each index.
+	 * @param {Array} arr The array to fill
+	 * @param {Number} size The size of the array to fill
+	 * @param {Object} value The value to put at each index
+	 */
+	fillArray: function(arr, size, value) {
+		for (var i = 0; i < size; i++) {
+			arr[i] = value;
+		}
+	},
 
    /**
     * Get the path from a fully qualified URL.
