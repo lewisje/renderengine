@@ -71,7 +71,7 @@
          Engine.loadGame('game.js','SpriteEditor');
       </script>
 
-      <div id="controls">
+      <div id="controls" style="display: none;">
          <div class="tool colors">
             <h5>Color</h5>
             <table class="colorTable" border="1" cellspacing="2">
@@ -106,10 +106,10 @@
          </div>
          <div class="tool grid">
             <h5>Grid</h5>
-            <input type="radio" id="grid8" name="gridsize" value="8"/>8&nbsp;
-            <input type="radio" id="grid16" name="gridsize" value="16" checked/>16&nbsp;
+            <input type="radio" id="grid8" name="gridsize" disabled value="8"/>8&nbsp;
+            <input type="radio" id="grid16" name="gridsize" disabled value="16"/>16&nbsp;
             <input type="radio" id="grid32" name="gridsize" value="32"/>32&nbsp;
-            <input type="radio" id="grid64" name="gridsize" value="64"/>64&nbsp;<br/>
+            <input type="radio" id="grid64" name="gridsize" disabled value="64"/>64&nbsp;<br/>
             <input type="checkbox" id="gridVis" checked/>Draw Grid
          </div>
          <div class="tool drawmode">
@@ -146,15 +146,15 @@
          <div style="clear: both"><!-- --></div>
          <div class="tool shift">
             <h5>Shift</h5>
-            <div class="button shift-left" title="Shift Left 1 Pixel"><!-- --></div>
-            <div class="button shift-up" title="Shift Up 1 Pixel"><!-- --></div>
-            <div class="button shift-down" title="Shift Down 1 Pixel"><!-- --></div>
-            <div class="button shift-right" title="Shift Right 1 Pixel"><!-- --></div>
+            <div class="button shift-left" func="SpriteEditor.shiftLeft" title="Shift Left 1 Pixel"><!-- --></div>
+            <div class="button shift-up" func="SpriteEditor.shiftUp" title="Shift Up 1 Pixel"><!-- --></div>
+            <div class="button shift-down" func="SpriteEditor.shiftDown" title="Shift Down 1 Pixel"><!-- --></div>
+            <div class="button shift-right" func="SpriteEditor.shiftRight" title="Shift Right 1 Pixel"><!-- --></div>
          </div>
          <div class="tool flip-mirror">
             <h5>Flip/Mirror</h5>
-            <div class="button flip-vertical" title="Flip Vertically"><!-- --></div>
-            <div class="button flip-horizontal" title="Flip Horizontally"><!-- --></div>
+            <div class="button flip-vertical" func="SpriteEditor.flipVertical" title="Flip Vertically"><!-- --></div>
+            <div class="button flip-horizontal" func="SpriteEditor.flipHorizontal" title="Flip Horizontally"><!-- --></div>
             <div class="stateful button mirror-vertical" func="SpriteEditor.vMirrorToggle" title="Mirror Vertically"><!-- --></div>
             <div class="stateful button mirror-horizontal" func="SpriteEditor.hMirrorToggle" title="Mirror Horizontally"><!-- --></div>
          </div>

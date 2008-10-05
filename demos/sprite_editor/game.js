@@ -55,7 +55,7 @@ var SpriteEditor = Game.extend({
 
    editorContext: null,
 
-   pixSize: 16,
+   pixSize: 32,
 
 	editorSize: 512,
 
@@ -87,6 +87,7 @@ var SpriteEditor = Game.extend({
     */
    setup: function() {
      $("#loading").remove();
+	  $("#controls").css("display", "block");
 
       // Set the FPS of the game
       Engine.setFPS(5);
@@ -182,6 +183,30 @@ var SpriteEditor = Game.extend({
 				}
 		  	}
 		}
+	},
+	
+	shiftUp: function() {
+		SpriteEditor.currentLayer.shiftUp();
+	},
+	
+	shiftDown: function() {
+		SpriteEditor.currentLayer.shiftDown();
+	},
+	
+	shiftLeft: function() {
+		SpriteEditor.currentLayer.shiftLeft();
+	},
+	
+	shiftRight: function() {
+		SpriteEditor.currentLayer.shiftRight();
+	},
+	
+	flipVertical: function() {
+		SpriteEditor.currentLayer.flipVertical();
+	},
+	
+	flipHorizontal: function() {
+		SpriteEditor.currentLayer.flipHorizontal();
 	},
 	
 	hMirrorToggle: function() {
@@ -309,6 +334,12 @@ var SpriteEditor = Game.extend({
 			$(this).addClass("mouseover");
 		}, function() {
 			$(this).removeClass("mouseover");
+		}).each(function() {
+			if ($(this).attr("func")) {
+				$(this).mousedown(function() {
+					SpriteEditor.callFunction($(this).attr("func"), this);
+				});
+			}
 		});
 		
 		$(".stateful").mousedown(function() {
@@ -318,7 +349,9 @@ var SpriteEditor = Game.extend({
 				$(this).addClass("on");
 			}
 			SpriteEditor.callFunction($(this).attr("func"), this);
-		})
+		});
+		
+		$("#grid" + SpriteEditor.pixSize).attr("checked", true);
 
 		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
 
