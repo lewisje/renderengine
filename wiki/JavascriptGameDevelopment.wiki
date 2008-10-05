@@ -4,7 +4,7 @@
 
 I realize that some people will question my motives, considering that [http://www.adobe.com/products/flash/ Adobe Flash] is available and offers more capability than Javascript does (at this point), however, the entry fee is fairly steep for most individuals.  The Render Engine is targeted at those individuals who would like to create games but who don't have access to Flash, don't want to pirate Flash and risk their future, or don't have the skills necessary to create games with it.  
 
-That being said, game programming _isn't easy_.  Working with The Render Engine will take some hard work to build an understanding and begin to use it efficiently.  Someone once said to me that "not every game idea is a great idea," which is true.  However, there are some ideas that turn out to be the next great game.
+That being said, _game programming isn't easy_!  Working with The Render Engine will take some hard work to build an understanding and begin to use it efficiently.  Someone once said to me that "not every game idea is a great idea," which is true.  However, there are some ideas that turn out to be the next great game.
 
 The Render Engine will include some examples of ways to use the engine, from simple vector graphics, to 2D sprite examples.  The examples aren't full games, but will hopefully be a place where you can get started.  The concepts will give you an understanding of the engine and how it works.
 
