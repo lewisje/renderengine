@@ -12,4 +12,4 @@ The HostComponents system in the game simplifies the overall development of game
 
 Ideally, you can develop for one RenderContext, and then swap it with another and things should still mostly work.  This is because a render context will only support what it can handle.  Operations not supported by a particular render context will do nothing -- not break the game.
 
-Many of the concepts in the engine, such as ObjectPooling and the EngineDependencyProcessor, will keep things running smoothly while you focus on making a great game.  If you follow [EngineCodingStyle good coding styles], maintenance of your code and code reuse becomes a lot easier.
+Many of the concepts in the engine, such as ObjectPooling and the DependencyProcessor, will keep things running smoothly while you focus on making a great game.  If you follow [EngineCodingStyle good coding styles], maintenance of your code and code reuse becomes a lot easier.
