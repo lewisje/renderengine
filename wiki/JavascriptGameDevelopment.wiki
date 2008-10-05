@@ -6,7 +6,7 @@ I realize that some people will question my motives, considering that [http://ww
 
 That being said, _game programming isn't easy_!  While The Render Engine's goal is to relieve you of some of the burden of engine development, it will take some hard work to build an understanding and begin to use it efficiently.  A friend once said to me that "not every game idea is a great idea," which is very true.  However, there are some ideas that turn out to be the next great game.  With the engine being open source, and anything created with it as well, you will be provided with the tools and examples that might help you to make the next Tetris.
 
-The Render Engine includes an ever growing library of examples that use the engine, from simple vector graphics, to 2D sprite demos.  The examples aren't meant to be full games, but will hopefully be a place where you can get started.  The concepts and structure will give you an understanding of the engine and how it works.
+The Render Engine includes an ever growing [EngineExamples library of examples] that use the engine, from simple vector graphics, to 2D sprite demos.  The examples aren't meant to be full games, but will hopefully be a place where you can get started.  The concepts and structure will give you an understanding of the engine and how it works.
 
 The HostComponents system in the game simplifies the overall development of game objects since it is possible to reuse these components again and again.  You interact with these components using a common set of interface calls, and most of the work is handled for you.  
 
