@@ -3,6 +3,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 10/05/2008 ||The Sprite Editor has been modified to handle pixels a bit differently.  This was necessary for the pixel manipulation routines (flip, shift, mirror, rotate). ||
 || 09/30/2008 ||Updated the sprite editor a little bit.  It's functional, but incomplete at this point.  I've updated the ReleaseMilestones page... Beta 1 is close to being cut. ||
 || 09/29/2008 ||The sprite editor is working in Firefox and Opera.  !WebKit, for all its wonders, doesn't appear to support the `.toDataURL()` method of the Canvas element.  This means that Safari and Chrome are, as of yet, unsupported. ||
 || 09/28/2008 ||Working on a sprite editor for the engine.  It only works in Firefox because it supports the getImageData() method of Canvas. Go to the EngineExamples page and check it out... ||
