@@ -8,4 +8,8 @@ That being said, _game programming isn't easy_!  While The Render Engine's goal 
 
 The Render Engine includes an ever growing library of examples that use the engine, from simple vector graphics, to 2D sprite demos.  The examples aren't meant to be full games, but will hopefully be a place where you can get started.  The concepts and structure will give you an understanding of the engine and how it works.
 
-The HostComponents system in the game simplifies the overall development of game objects since it is possible to reuse these components again and again.  You interact with these components using a common set of interface calls, and most of the work is handled for you.  Ideally, you can develop for one render context, and then swap it with another and things should still work.  This is because a render context will only support what it can handle.  Operations not supported by a particular render context will do nothing -- not break the game.
+The HostComponents system in the game simplifies the overall development of game objects since it is possible to reuse these components again and again.  You interact with these components using a common set of interface calls, and most of the work is handled for you.  
+
+Ideally, you can develop for one RenderContext, and then swap it with another and things should still mostly work.  This is because a render context will only support what it can handle.  Operations not supported by a particular render context will do nothing -- not break the game.
+
+Many of the concepts in the engine, such as ObjectPooling, will keep things running smoothly while you focus on making a great game.  If you follow good coding styles, maintenance of your code and code reuse becomes a lot easier.
