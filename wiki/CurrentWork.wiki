@@ -1,4 +1,12 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-I'm working on the Sprite Editor and finalizing Beta 1.
+The Sprite Editor is getting more feature complete, however there's still the issue of WebKit not supporting "toDataURL()".  I changed the method by which pixels were stored in the current layer.  This will make it easier to manipulate the pixels when shifting, flipping, and mirroring.
+
+I plan to add some sort of loading mechanism to the editor.  But, again, WebKit doesn't support the "getImageData()" method either so it makes it difficult.  Supposedly the current nightlies of WebKit contain these two methods.  That will make the Sprite Editor able to reach its full potential.
+
+Beta 1 is nearing release status.  There are a couple of small bugs that are bothering me and I want to address.  I've decided that the engine is at a point where it would be changing too much more.  It's more tools and engine demos, at this point, that I'm working on.  That should mean that moving from Beta 1 to the initial v1.0 release should progress rather quickly.
+
+The largest tool that I want to have completed before v1.0 is the level editor for 2D game creation.  It's currently being built as part of the SMB Sprite Demo, but as I was developing it I realized just how much it would add if someone could set up the framework for a game in it.
+
+The three tools which I hope will be released with v1.0 are the Sprite Editor, 2D Level Editor, and Font Editor.  The latter is more of a "wishful thinking" kind of tool, but it would be nice to have a tool which makes splitting a bitmap font into an alphabet for browsers that don't support text in the Canvas element.
