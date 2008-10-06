@@ -240,14 +240,15 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
     * @private
     */
    execute: function(renderContext, time) {
-      if (!(window.opera && opera.wiiremote)) {
+      if (!$.browser.Wii) {
          // If this isn't Opera for Wii, don't do anything
          return;
       }
 
       // Run through the available Wiimotes
       for (var w = 0; w < 4; w++) {
-         var remote = opera.wiiremote.update(w);
+			var op = opera.wiiremote;
+         var remote = op.update(w);	// This fixes a dependency problem
          // Cannot perform this check on the primary remote,
          // that's why this object extends the keyboard input component...
          if (remote.isEnabled) {
