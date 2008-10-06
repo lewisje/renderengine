@@ -51,72 +51,48 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
       return out;
    },
 
-   /** @private */
-   out: function(msg) {
-      if (this.dumpWindow == null)
-      {
-         this.dumpWindow = window.open("about:blank", "console", "width=640,height=480,resizeable=yes,toolbar=no,location=no,status=no");
-         this.dumpWindow.document.body.innerHTML =
-            "<style> " +
-            "BODY { font-family: 'Lucida Console',Courier; font-size: 10pt; color: black; } " +
-            ".debug { background: white; } " +
-            ".warn { font-style: italics; background: #ffffdd; } " +
-            ".error { color: white; background: red; font-weight: bold; } " +
-            "</style>"
-      }
-
-      // Using jQuery to handle adding new messages
-      $(this.dumpWindow.document.body).append(msg);
-
-      // this.dumpWindow.document.body.innerHTML += this.dumpWindow.document.body.innerHTML + msg;
-   },
-
-   /** @private */
-   dump: function() {
-      var s = "";
-      for (var x = 0; x < arguments.length; x++) {
-         if (arguments[x].length) {
-            for (var z = 0; z < arguments[x].length; z++) {
-               s += arguments[x][z].toString() + "\n";
-            }
+	/** @private */
+   fixArgs: function(a) {
+      var x = [];
+      for (var i=0; i < a.length; i++) {
+         if (!a[i]) {
+            x.push("null");
+         } else if ((a[i].length && (a[i] instanceof Array)) || typeof a[i] == "object") {
+            /* var s = "";
+            var obj = a[i];
+            for (var o in obj) {
+               s += o + ": " + obj[o] + "\n";
+            } */
+            x.push(a[i]);
          } else {
-            s += arguments[x].toString() + "\n";
+            x.push(a[i]);
          }
       }
-      return s;
-   },
-
-   /** @private */
-   fix: function(msg) {
-      return msg.replace(/\\n/g, "<br>").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      return x.join(" ");
    },
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    debug: function() {
-      //this.out("<span class='debug'>" + this.dump(arguments) + "</span>");
    },
 
+   /**
+    * Write an info message to the console
+    */
    info: function() {
-      //this.debug(arguments);
    },
 
    /**
     * Write a warning message to the console
-    * @param msg {String} The message to write
     */
    warn: function() {
-      //this.out("<span class='warn'>" + this.dump(arguments) + "</span>");
    },
 
    /**
     * Write an error message to the console
-    * @param msg {String} The message to write
     */
    error: function() {
-      //this.out("<span class='error'>" + this.dump(arguments) + "</span>");
    },
 
    getClassName: function() {
@@ -136,27 +112,31 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
    constructor: function() {
       $("head", document).append(
             "<style> " +
-            ".debug-console { font-family: 'Lucida Console',Courier; font-size: 8pt; color: black; } " +
-            ".debug-console .console-debug { background: white; } " +
-            ".debug-console .console-warn { font-style: italics; background: #00ffff; } " +
-            ".debug-console .console-error { color: red; background: yellow; font-weight: bold; } " +
+            "#debug-console { position: absolute; width: 400px; right: 10px; bottom: 5px; height: 98%; border: 1px solid; overflow: auto; " +
+            "font-family: 'Lucida Console',Courier; font-size: 8pt; color: black; } " +
+            "#debug-console .console-debug, #debug-console .console-info { background: white; } " +
+            "#debug-console .console-warn { font-style: italics; background: #00ffff; } " +
+            "#debug-console .console-error { color: red; background: yellow; font-weight: bold; } " +
             "</style>"
       );
+      $(document).ready(function() {
+			$(document.body).append($("<div id='debug-console'><!-- --></div>"));
+		});
    },
 
+	/** @private */
    clean: function() {
-      if ($(".debug-console > span").length > 150) {
-         $(".debug-console > span:lt(150)").remove();
+      if ($("#debug-console > span").length > 150) {
+         $("#debug-console > span:lt(150)").remove();
       }
    },
 
+	/** @private */
    scroll: function() {
-      var w = $(".debug-console")[0];
-      if (w.scrollTop <= w.scrollHeight - 50) {
-         return;
-      } else {
-         $(".debug-console")[0].scrollTop = 10000;
-      }
+      var w = $("#debug-console")[0];
+      if (w) {
+			$("#debug-console")[0].scrollTop = w.scrollHeight + 1;
+		}
    },
 
    /**
@@ -165,7 +145,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    info: function() {
       this.clean();
-      $(".debug-console").append($("<span class='console-info'>" + this.dump(arguments) + "</span>"));
+      $("#debug-console").append($("<div class='console-info'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
 
@@ -175,7 +155,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    debug: function() {
       this.clean();
-      $(".debug-console").append($("<span class='console-debug'>" + this.dump(arguments) + "</span>"));
+      $("#debug-console").append($("<div class='console-debug'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
 
@@ -185,7 +165,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    warn: function() {
       this.clean();
-      $(".debug-console").append($("<span class='console-warn'>" + this.dump(arguments) + "</span>"));
+      $("#debug-console").append($("<div class='console-warn'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
 
@@ -195,48 +175,22 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    error: function() {
       this.clean();
-      $(".debug-console").append($("<span class='console-error'>" + this.dump(arguments) + "</span>"));
+      $("#debug-console").append($("<div class='console-error'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
-   },
-
-   /** @private **/
-   init: function() {
    },
 
    getClassName: function() {
       return "HTMLConsoleRef";
    }
-
 });
 
 /**
- * @class A debug console that will use a pre-defined element to display its output.  You must create
- *        an element with the class "debug-console" for this to function properly.  This object is created,
- *        as necessary, by the {@link Console} object.
+ * @class A debug console for Safari browsers.
  * @extends ConsoleRef
  */
 var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
    constructor: function() {
-   },
-
-   fixArgs: function(a) {
-      var x = [];
-      for (var i=0; i < a.length; i++) {
-         if (!a[i]) {
-            x.push("null");
-         } else if ((a[i].length && (a[i] instanceof Array)) || typeof a[i] == "object") {
-            /* var s = "";
-            var obj = a[i];
-            for (var o in obj) {
-               s += o + ": " + obj[o] + "\n";
-            } */
-            x.push(a[i]);
-         } else {
-            x.push(a[i]);
-         }
-      }
-      return x.join(" ");
    },
 
    /**
@@ -271,10 +225,6 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
       console.log(["[E!]", this.fixArgs(arguments)]);
    },
 
-   /** @private **/
-   init: function() {
-   },
-
    getClassName: function() {
       return "SafariConsoleRef";
    }
@@ -282,22 +232,12 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 });
 
 /**
- * @class A debug console that will use a pre-defined element to display its output.  You must create
- *        an element with the class "debug-console" for this to function properly.  This object is created,
- *        as necessary, by the {@link Console} object.
+ * @class A debug console for Opera browsers.
  * @extends ConsoleRef
  */
 var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
    constructor: function() {
-   },
-
-   fixArgs: function(a) {
-      var x = [];
-      for (var i=0; i < a.length; i++) {
-         x.push(a[i]);
-      }
-      return x;
    },
 
    /**
@@ -330,10 +270,6 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
     */
    error: function() {
       window.opera.postError(["[E!]", this.fixArgs(arguments)]);
-   },
-
-   /** @private **/
-   init: function() {
    },
 
    getClassName: function() {
@@ -433,9 +369,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * Start up the console.
     */
    startup: function() {
-      if ($(".debug-console").length == 1) {
-         this.consoleRef = new HTMLConsoleRef();
-      }
+		if (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii) {
+			this.consoleRef = new HTMLConsoleRef();
+		}
       else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
          // Firebug or firebug lite
          this.consoleRef = new FirebugConsoleRef();
@@ -446,10 +382,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
       else if (jQuery.browser.opera) {
          this.consoleRef = new OperaConsoleRef();
       }
-      else
-      {
-         // Default (simple popup window)
-         this.consoleRef = new ConsoleRef();
+      else {
+         this.consoleRef = new ConsoleRef(); // (null console)
       }
    },
 
@@ -540,25 +474,6 @@ var Assert = function(test, error) {
    if (!test)
    {
       Engine.shutdown();
-      if (this.caller) {
-         var funcName = "";
-         if (this.caller.name)
-         {
-            funcName = this.caller.name;
-         }
-         else
-         {
-            // Try to determine the function name that called this Assert
-            var fRE = /((function\s+([\$_\.\w]+))|(var\s+([\$_\.\w]+)\s+=\s+function)|(function\(.*?\)))/;
-            var m = fRE.exec(this.caller.toString());
-            if (m)
-            {
-               funcName = (m[3] || m[5] || "anonymous");
-            }
-         }
-         error += "\nin function " + funcName;
-      }
-
       // This will provide a stacktrace for browsers that support it
       throw new Error(error);
    }
@@ -714,9 +629,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          }
       }
    },
-	
+
 	/**
-	 * Fill the specified array of <tt>size</tt> the 
+	 * Fill the specified array of <tt>size</tt> the
 	 * <tt>value</tt> at each index.
 	 * @param {Array} arr The array to fill
 	 * @param {Number} size The size of the array to fill
@@ -2206,9 +2121,6 @@ Engine.setDebugMode(EngineSupport.checkBooleanParam("debug"));
 if (Engine.getDebugMode())
 {
    Console.setDebugLevel(EngineSupport.getNumericParam("debugLevel", Console.DEBUGLEVEL_DEBUG));
-   if (!typeof console == "undefined" && console.open) {
-      console.open();
-   }
 }
 
 if (EngineSupport.checkBooleanParam("metrics"))

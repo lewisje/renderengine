@@ -155,7 +155,8 @@ var Spaceroids = Game.extend({
       this.renderContext.add(copy);
 
       var startText;
-      if (window.opera && opera.wiiremote) {
+      if ($.browser.Wii) {
+			// We'll prompt differently for the Wii
          startText = "[ Press =A Button= to Start ]";
 
          var wii = TextRenderer.create(VectorText.create(), "(Wii Detected)", 1);

@@ -73,17 +73,13 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
 
          // Create a link to the object
          this.soundManager = window.soundManager;
+         this.soundManager.debugMode = false;
 
          // directory where SM2 .SWFs live
          this.soundManager.url = Engine.getEnginePath() + '/libs/';
 
          // Debugging enabled?
-         var p = EngineSupport.getQueryParams();
-         if (p["debugSound"] != null && p["debugSound"] == "true") {
-            this.soundManager.debugMode = true;
-         } else {
-            this.soundManager.debugMode = false;
-         }
+         this.soundManager.debugMode = EngineSupport.checkBooleanParam("debugSound");
 
          var self = this;
 
