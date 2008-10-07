@@ -217,6 +217,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    clear: function() {
       this.objects.length = 0;
+      this.objects = [];
    },
 
    /**

@@ -108,7 +108,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 
    setScale: function(scaleX, scaleY) {
    },
-	
+
 	getScale: function() {
 		return 1;
 	},
@@ -146,7 +146,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    getZIndex: function() {
       return this.zIndex;
    },
-	
+
 	getProperties: function() {
 		var self = this;
 		var prop = this.base(self);
@@ -155,15 +155,15 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 						 			function(i){	self.setZIndex(i); }, true],
 			"BoundingBox" 	: [function() { return self.getBoundingBox().toString(); },
 								  	null, false],
-			"WorldBox" 		: [function() { return self.getWorldBox().toString(); }, 
+			"WorldBox" 		: [function() { return self.getWorldBox().toString(); },
 							  		null, false],
 			"Position" 		: [function() { return self.getPosition(); },
 							  		function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }, true],
-			"RenderPos" 	: [function() { return self.getRenderPosition() }, 
+			"RenderPos" 	: [function() { return self.getRenderPosition() },
 									null, false],
-			"Rotation" 		: [function() { return self.getRotation(); }, 
+			"Rotation" 		: [function() { return self.getRotation(); },
 							  		function(i) { self.setRotation(i); }, true],
-			"Scale" 			: [function() { return self.getScale(); }, 
+			"Scale" 			: [function() { return self.getScale(); },
 						  			function(i) {self.setScale(i,i); }, true]
 		});
 	}
