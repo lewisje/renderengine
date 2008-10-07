@@ -98,20 +98,20 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
          return false;
       };
 
-      var context = this.getHostObject().getRenderContext();
+      var context = hostObject.getRenderContext();
       if (this.getHostObject().onKeyDown)
       {
-         EventEngine.setHandler(context, {owner: this}, "keydown", this.downFn);
+			context.addEvent("keydown", {owner: this}, this.downFn);
       }
 
       if (this.getHostObject().onKeyUp)
       {
-         EventEngine.setHandler(context, {owner: this}, "keyup", this.upFn);
+			context.addEvent("keyup", {owner: this}, this.upFn);
       }
 
       if (this.getHostObject().onKeyPress)
       {
-         EventEngine.setHandler(context, {owner: this}, "keypress", this.pressFn);
+			context.addEvent("keypress", {owner: this}, this.pressFn);
       }
    },
 
@@ -122,19 +122,18 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       var context = this.getHostObject().getRenderContext();
       if (this.getHostObject().onKeyDown)
       {
-         EventEngine.clearHandler(context, "keydown", this.downFn);
+			context.removeEvent("keydown");
       }
 
       if (this.getHostObject().onKeyUp)
       {
-         EventEngine.clearHandler(context, "keyup", this.upFn);
+			context.removeEvent("keyup");
       }
 
       if (this.getHostObject().onKeyPress)
       {
-         EventEngine.clearHandler(context, "keypress", this.pressFn);
+			context.removeEvent("keypress");
       }
-      this.notifyLists = null;
       this.downFn = null;
       this.upFn = null;
       this.pressFn = null;

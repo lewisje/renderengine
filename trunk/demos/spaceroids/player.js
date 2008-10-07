@@ -92,10 +92,10 @@ var SpaceroidsPlayer = Object2D.extend({
    },
 
    destroy: function() {
-      AssertWarn(this.ModelData.lastNode, "Player not located in a node!");
-      if (this.ModelData && this.modelData.lastNode) {
+      if (this.ModelData && this.ModelData.lastNode) {
          this.ModelData.lastNode.removeObject(this);
       }
+      this.base();
    },
 
    release: function() {
@@ -128,7 +128,7 @@ var SpaceroidsPlayer = Object2D.extend({
       {
          var r = c_mover.getRotation();
          var dir = Math2D.getDirectionVector(Point2D.ZERO, this.tip, r);
-			
+
 			c_mover.setAcceleration(dir.mul(0.08));
 
 			// Particle trail

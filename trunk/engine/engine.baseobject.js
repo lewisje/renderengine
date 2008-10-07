@@ -47,9 +47,17 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
 
    element: null,
 
+   events: null,
+
+	constructor: function(name) {
+		this.base(name);
+		this.events = {};
+	},
+
    release: function() {
       this.base();
       this.element = null;
+      this.events = null;
    },
 
    /**
@@ -84,26 +92,28 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * Add an event handler to objects that have an associated HTML element.
     *
     * @param type {String} The event type to respond to
+    * @param [data] {Array} Optional data to pass to the handler when it is invoked.
     * @param fn {Function} The function to trigger when the event fires
     */
-   addEvent: function(type, fn) {
+   addEvent: function(type, data, fn) {
       if (this.getElement()) {
-         EventEngine.setHandler(this.getElement(), type, fn);
+         EventEngine.setHandler(this.getElement(), type, data || fn, fn);
       }
    },
 
    /**
-    * Remove an event handler assigned to the object's associated HTML element.
+    * Remove the event handler assigned to the object's associated HTML element
+    * for the given type.
     *
     * @param type {String} The event type to remove
-    * @param fn {Function} The handler function to remove
+    * @param fn {Function} The handler to remove, or null for all handlers
     */
-   removeEvent: function(type, fn) {
+   removeEvent: function(type) {
       if (this.getElement()) {
          EventEngine.clearHandler(this.getElement(), type, fn);
       }
-   }   
-	
+   }
+
  }, /** @scope BaseObject */{
 
    /**

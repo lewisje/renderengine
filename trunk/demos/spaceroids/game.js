@@ -258,6 +258,8 @@ var Spaceroids = Game.extend({
          return;
       }
 
+      this.gameRunning = true;
+
       Spaceroids.attractTimer.destroy();
       Spaceroids.isAttractMode = false;
 
@@ -294,8 +296,6 @@ var Spaceroids = Game.extend({
             Spaceroids.soundNum = 1;
          }
       });
-
-      this.gameRunning = true;
    },
 
    nextLevel: function() {
@@ -343,7 +343,8 @@ var Spaceroids = Game.extend({
       // Remove the player
       if (this.playerObj)
       {
-         this.renderContext.remove(this.playerObj);
+         //this.renderContext.remove(this.playerObj);
+         this.playerObj.destroy();
       }
 
       // Back to attract mode in 10sec
@@ -373,16 +374,8 @@ var Spaceroids = Game.extend({
 
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
 
-      // Load our font
-//      Spaceroids.fontLoader = new BitmapFontLoader();
-//      Spaceroids.fontLoader.load("lucida", "lucida_sans_36.js");
-
-//      Spaceroids.loadTimeout = new Timeout("wait", 250, Spaceroids.waitForResources);
-//      this.waitForResources();
-
-      this.soundLoader = SoundLoader.create();
-
       // Load the sounds
+      this.soundLoader = SoundLoader.create();
       this.soundLoader.load("explode", this.getFilePath("resources/explode1.mp3"));
       this.soundLoader.load("shoot", this.getFilePath("resources/shoot.mp3"));
       this.soundLoader.load("death", this.getFilePath("resources/explode2.mp3"));
@@ -391,24 +384,6 @@ var Spaceroids = Game.extend({
       this.soundLoader.load("hiboop", this.getFilePath("resources/hi.mp3"));
 
       Spaceroids.attractMode();
-   },
-
-   /**
-    * Wait for resources to become available before starting the game
-    * @private
-    */
-   waitForResources: function() {
-      //Console.debug("checking");
-      if (Spaceroids.fontLoader.isReady("lucida"))
-      {
-         Spaceroids.loadTimeout.destroy();
-         Spaceroids.attractMode();
-         return;
-      }
-      else
-      {
-         Spaceroids.loadTimeout.restart();
-      }
    },
 
    /**
