@@ -99,6 +99,12 @@ Base.extend = function(_instance, _static) {
    var object = constructor ? klass : _prototype;
    // class initialisation
    if (object.init instanceof Function) object.init();
+
+   if (klass.getClassName) {
+		// remember the class name
+		object.className = klass.getClassName();
+	}
+
    return object;
 };
 
