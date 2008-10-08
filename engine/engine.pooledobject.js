@@ -126,9 +126,9 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 		var self = this;
 		var prop = {};
 		return $.extend(prop, {
-	  		"Id" 				: [function() { return self.getId(); }, 
+	  		"Id" 				: [function() { return self.getId(); },
 							 		null, false],
-	  		"ObjectName" 	: [function() { return self.getName(); }, 
+	  		"ObjectName" 	: [function() { return self.getName(); },
 							 		function(i) { self.setName(i); }, true]
 		});
 	},
@@ -144,15 +144,15 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 		for (var p in props) {
 			// If the value should be serialized, call it's getter
 			if (props[p][2]) {
-				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";		
+				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
 			}
 		}
-		
-		xml += "/>\n"; 
+
+		xml += "/>\n";
 		return xml;
    }
 
-}, /** @scope PooledObject **/{
+}, /** @scope PooledObject.prototype **/{
 
    /**
     * <tt>true</tt> for all objects within the engine.
