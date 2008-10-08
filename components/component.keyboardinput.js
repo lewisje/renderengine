@@ -48,12 +48,6 @@ Engine.initObject("KeyboardInputComponent", "InputComponent", function() {
  */
 var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputComponent.prototype */{
 
-   downFn: null,
-
-   upFn: null,
-
-   pressFn: null,
-
    /**
     * Create an instance of a keyboard input component.
     *
@@ -63,81 +57,32 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
     */
    constructor: function(name, priority) {
       this.base(name, priority);
-   },
 
-   release: function() {
-      this.base();
-      this.downFn = null;
-      this.upFn = null;
-      this.pressFn = null;
-   },
+      var ctx = Engine.getDefaultContext();
+      var self = this;
 
-   /**
-    * Set the host object this component exists within.  Additionally, this
-    * component sets up the event listeners.  Due to key events occurring
-    * less often than mouse events, every component listening for them will
-    * attach a listener.
-    *
-    * @param hostObject {HostObject} The object which hosts this component
-    */
-   setHostObject: function(hostObject) {
-      this.base(hostObject);
-
-      this.downFn = function(eventObj) {
-         eventObj.data.owner._keyDownListener(eventObj);
-         return false;
-      };
-
-      this.upFn = function(eventObj) {
-         eventObj.data.owner._keyUpListener(eventObj);
-         return false;
-      };
-
-      this.pressFn = function(eventObj) {
-         eventObj.data.owner._keyPressListener(eventObj);
-         return false;
-      };
-
-      var context = hostObject.getRenderContext();
-      if (this.getHostObject().onKeyDown)
-      {
-			context.addEvent("keydown", {owner: this}, this.downFn);
-      }
-
-      if (this.getHostObject().onKeyUp)
-      {
-			context.addEvent("keyup", {owner: this}, this.upFn);
-      }
-
-      if (this.getHostObject().onKeyPress)
-      {
-			context.addEvent("keypress", {owner: this}, this.pressFn);
-      }
+      // Add the event handlers
+		ctx.addEvent(this, "keydown", function(evt) {
+			self._keyDownListener(evt);
+		});
+		ctx.addEvent(this, "keyup", function(evt) {
+			self._keyUpListener(evt);
+		});
+		ctx.addEvent(this, "keypress", function(evt) {
+			self._keyPressListener(evt);
+		});
    },
 
    /**
     * Destroy this instance and remove all references.
     */
    destroy: function() {
-      var context = this.getHostObject().getRenderContext();
-      if (this.getHostObject().onKeyDown)
-      {
-			context.removeEvent("keydown");
-      }
+      var ctx = Engine.getDefaultContext();
 
-      if (this.getHostObject().onKeyUp)
-      {
-			context.removeEvent("keyup");
-      }
-
-      if (this.getHostObject().onKeyPress)
-      {
-			context.removeEvent("keypress");
-      }
-      this.downFn = null;
-      this.upFn = null;
-      this.pressFn = null;
-
+      // Clean up event handlers
+		ctx.removeEvent(this, "keydown");
+		ctx.removeEvent(this, "keyup");
+		ctx.removeEvent(this, "keypress");
       this.base();
    },
 
