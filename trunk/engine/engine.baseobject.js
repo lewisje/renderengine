@@ -54,6 +54,20 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
 		this.events = {};
 	},
 
+	destroy: function() {
+		// We need to make sure to remove any event's attached to us
+		// that weren't already cleaned up
+		for (var ref in this.events) {
+			var fn = this.events[ref];
+			var type = ref.split(",")[1];
+			if (fn) {
+				EventEngine.clearHandler(this.getElement(), type, fn);
+			}
+		}
+
+		this.base();
+	},
+
    release: function() {
       this.base();
       this.element = null;
@@ -89,15 +103,20 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    },
 
    /**
-    * Add an event handler to objects that have an associated HTML element.
+    * Add an event handler to this object if it has an associated HTML element.
     *
+    * @param ref {Object} The object reference which is assigning the event
     * @param type {String} The event type to respond to
     * @param [data] {Array} Optional data to pass to the handler when it is invoked.
     * @param fn {Function} The function to trigger when the event fires
     */
-   addEvent: function(type, data, fn) {
+   addEvent: function(ref, type, data, fn) {
       if (this.getElement()) {
          EventEngine.setHandler(this.getElement(), type, data || fn, fn);
+
+         // Remember the handler by the reference object's name and event type
+         var func = $.isFunction(data) ? data : fn;
+         this.events[ref.getName() + "," + type] = func;
       }
    },
 
@@ -105,12 +124,18 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * Remove the event handler assigned to the object's associated HTML element
     * for the given type.
     *
+    * @param ref {Object} The object reference which assigned the event
     * @param type {String} The event type to remove
-    * @param fn {Function} The handler to remove, or null for all handlers
     */
-   removeEvent: function(type) {
+   removeEvent: function(ref, type) {
       if (this.getElement()) {
-         EventEngine.clearHandler(this.getElement(), type, fn);
+			// Find the handler to remove
+			var fn = this.events[ref.getName() + "," + type];
+			if (fn) {
+	         EventEngine.clearHandler(this.getElement(), type, fn);
+			}
+         // Remove the reference
+         delete this.events[ref.getName() + "," + type];
       }
    }
 

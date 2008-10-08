@@ -76,9 +76,9 @@ var SpriteEditor = Game.extend({
 	previewImage: null,
 
 	editColor: 0,
-	
+
 	mirrorVert: false,
-	
+
 	mirrorHorz: false,
 
    /**
@@ -105,7 +105,7 @@ var SpriteEditor = Game.extend({
 
 		// Set some event handlers
 		var self = this;
-		this.editorContext.addEvent("mousedown", function(evt) {
+		this.editorContext.addEvent(this, "mousedown", function(evt) {
 			self.mouseBtn = true;
 			switch (self.drawMode) {
 				case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
@@ -117,11 +117,11 @@ var SpriteEditor = Game.extend({
 			}
 		});
 
-		this.editorContext.addEvent("mouseup", function(evt) {
+		this.editorContext.addEvent(this, "mouseup", function(evt) {
 			self.mouseBtn = false;
 		});
 
-		this.editorContext.addEvent("mousemove", function(evt) {
+		this.editorContext.addEvent(this, "mousemove", function(evt) {
 			if (self.mouseBtn) {
 				switch (self.drawMode) {
 					case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
@@ -159,7 +159,7 @@ var SpriteEditor = Game.extend({
 		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
 		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
 		  		SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				var d = [256 - x, 256 -y]; 
+				var d = [256 - x, 256 -y];
 				if (this.mirrorHorz) {
 			  		SpriteEditor.currentLayer.addPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
 				}
@@ -174,7 +174,7 @@ var SpriteEditor = Game.extend({
 		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
 		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
 		  		SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				var d = [256 - x, 256 -y]; 
+				var d = [256 - x, 256 -y];
 				if (this.mirrorHorz) {
 			  		SpriteEditor.currentLayer.clearPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
 				}
@@ -184,31 +184,31 @@ var SpriteEditor = Game.extend({
 		  	}
 		}
 	},
-	
+
 	shiftUp: function() {
 		SpriteEditor.currentLayer.shiftUp();
 	},
-	
+
 	shiftDown: function() {
 		SpriteEditor.currentLayer.shiftDown();
 	},
-	
+
 	shiftLeft: function() {
 		SpriteEditor.currentLayer.shiftLeft();
 	},
-	
+
 	shiftRight: function() {
 		SpriteEditor.currentLayer.shiftRight();
 	},
-	
+
 	flipVertical: function() {
 		SpriteEditor.currentLayer.flipVertical();
 	},
-	
+
 	flipHorizontal: function() {
 		SpriteEditor.currentLayer.flipHorizontal();
 	},
-	
+
 	hMirrorToggle: function() {
 		var mode = $(".mirror-horizontal").hasClass("on");
 		this.grid.setMirrorHorizontal(mode);
@@ -341,7 +341,7 @@ var SpriteEditor = Game.extend({
 				});
 			}
 		});
-		
+
 		$(".stateful").mousedown(function() {
 			if ($(this).hasClass("on")) {
 				$(this).removeClass("on");
@@ -350,7 +350,7 @@ var SpriteEditor = Game.extend({
 			}
 			SpriteEditor.callFunction($(this).attr("func"), this);
 		});
-		
+
 		$("#grid" + SpriteEditor.pixSize).attr("checked", true);
 
 		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());

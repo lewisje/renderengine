@@ -97,17 +97,17 @@ var SpriteTestEditor = Base.extend({
 
       // Add an event handler to the context
       var ctx = SpriteTest.getRenderContext();
-      ctx.addEvent("mousedown", function(evt) {
+      ctx.addEvent(this, "mousedown", function(evt) {
          self.selectObject(evt.pageX, evt.pageY);
          self.mouseDown = true;
       });
 
-      ctx.addEvent("mouseup", function() {
+      ctx.addEvent(this, "mouseup", function() {
          self.mouseDown = false;
          SpriteTestEditor.createPropertiesTable(SpriteTestEditor.currentSelectedObject);
       });
 
-      ctx.addEvent("mousemove", function(evt) {
+      ctx.addEvent(this, "mousemove", function(evt) {
          if (self.mouseDown) {
             self.moveSelected(evt.pageX, evt.pageY);
          }
@@ -227,13 +227,13 @@ var SpriteTestEditor = Base.extend({
          var r = $("<tr>");
          r.append($("<td class='propName'>" + p + "</td>"));
 			var e;
-			
+
          if (bean[p][1]) {
 				var fn = function() {
 	            arguments.callee.cb(this.value);
 	         };
 	         fn.cb = bean[p][1];
-	
+
 	         e = $("<input type='text' size='15' value='" + bean[p][0]() + "'/>").change(fn);
 			} else {
 				e = $("<div>").text(bean[p][0]().toString());
