@@ -132,8 +132,11 @@ var SpaceroidsPlayer = Object2D.extend({
 			c_mover.setAcceleration(dir.mul(0.08));
 
 			// Particle trail
-			var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
-			this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, "yellow", 5000));
+			if (Spaceroids.evolved) {
+				var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
+				var colr = SpaceroidsPlayer.trailColors[Math.floor(Math.random() * 3)];
+				this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
+			}
       } else {
 			c_mover.setAcceleration(Point2D.ZERO);
 		}
@@ -329,8 +332,10 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
       this.field.soundLoader.get("thrust").stop();
 
+		var pCount = Spaceroids.evolved ? 40 : 8;
+
       // Make some particles
-      for (var x = 0; x < 8; x++)
+      for (var x = 0; x < pCount; x++)
       {
          this.field.pEngine.addParticle(SimpleParticle.create(this.getPosition(), 3000));
       }
@@ -465,7 +470,9 @@ var SpaceroidsPlayer = Object2D.extend({
    /** The player's thrust shape
     * @private
     */
-   thrust: [ [-1,  2], [0,  3], [ 1,  2] ]
+   thrust: [ [-1,  2], [0,  3], [ 1,  2] ],
+
+   trailColors: ["red", "orange", "yellow", "white", "lime"]
 
 });
 

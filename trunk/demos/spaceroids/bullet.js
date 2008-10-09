@@ -144,7 +144,9 @@ var SpaceroidsBullet = Object2D.extend({
       var c_mover = this.getComponent("move");
 
 		// Particle trail
-		this.field.pEngine.addParticle(TrailParticle.create(this.getPosition(), this.rot, 45, "#aaaaff", 250));
+		if (Spaceroids.evolved) {
+			this.field.pEngine.addParticle(TrailParticle.create(this.getPosition(), this.rot, 45, "#aaaaff", 250));
+		}
 
       // Is this bullet in field any more?
       var p = c_mover.getPosition();

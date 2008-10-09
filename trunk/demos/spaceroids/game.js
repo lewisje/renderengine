@@ -88,6 +88,8 @@ var Spaceroids = Game.extend({
 
    level: 0,
 
+   evolved: false,
+
    /**
     * Handle the keypress which starts the game
     *
@@ -166,6 +168,15 @@ var Spaceroids = Game.extend({
       } else {
          startText = "[ Press =Enter= to Start ]";
       }
+
+      if (EngineSupport.checkBooleanParam("evolved")) {
+			Spaceroids.evolved = true;
+
+         var evolved = TextRenderer.create(VectorText.create(), "(-- Evolved --)", 1);
+         evolved.setColor("#ff0000");
+         evolved.setPosition(Point2D.create(160, 560));
+         this.renderContext.add(evolved);
+		}
 
       Spaceroids.start = TextRenderer.create(VectorText.create(), startText, 1);
       Spaceroids.start.setPosition(Point2D.create(96, 450));

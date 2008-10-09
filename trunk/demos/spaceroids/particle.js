@@ -73,7 +73,22 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
    draw: function(renderContext, time) {
       this.pos.add(this.vec);
       renderContext.setPosition(this.pos);
-      renderContext.setFillStyle("white");
+
+      var colr = "#fff";
+ 		if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
+			var s = time - this.getBirth();
+			var e = this.getTTL() - this.getBirth();
+			colr = 255 - Math.floor(255 * (s / e));
+			colr += (-10 + (Math.floor(Math.random() * 20)));
+			var fb = (Math.random() * 100);
+			if (fb > 90) {
+				colr = 255;
+			}
+
+			colr = "#" + (colr.toString(16) + colr.toString(16) + colr.toString(16));
+		}
+
+      renderContext.setFillStyle(colr);
       renderContext.drawPoint(Point2D.ZERO);
    }
 
