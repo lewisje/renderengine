@@ -48,20 +48,25 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
 
    engine: null,
 
+   birth: 0,
+
    constructor: function(lifetime) {
       this.base("Particle");
       this.life = lifetime;
+      this.birth = 0;
    },
 
    release: function() {
       this.base();
       this.life = 0;
       this.engine = null;
+      this.birth = 0;
    },
 
    init: function(pEngine, time) {
       this.engine = pEngine;
       this.life += time;
+      this.birth = time;
    },
 
    update: function(renderContext, time) {
@@ -78,6 +83,14 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
          this.engine.removeParticle(this);
       }
    },
+
+   getTTL: function() {
+		return this.life;
+	},
+
+	getBirth: function() {
+		return this.birth;
+	},
 
    draw: function(renderContext, time) {
    }
