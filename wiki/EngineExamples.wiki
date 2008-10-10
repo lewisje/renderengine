@@ -15,7 +15,7 @@ Wii test links:
 
 Tools:
 
-   * [http://renderengine.googlecode.com/svn/trunk/demos/sprite_editor/index.html?metrics=true Sprite Editor]
+   * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor]
 
 
 I'll add more as I get them completed and into the repo...
