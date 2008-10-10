@@ -204,7 +204,19 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
       var v = Vector2D.create(x, y).sub(origin);
       return v.normalize();
-   }
+   },
+
+   /**
+    * Given a {@link Rectangle2D}, generate a random point within it.
+    *
+    * @param rect {Rectangle2D} The rectangle
+    * @return {Point2D} A random point within the rectangle
+    */
+   randomPoint: function(rect) {
+		var r = rect.get();
+		return Point2D.create(Math.floor(r.x + Math.random() * r.w),
+									 Math.floor(r.y + Math.random() * r.h));
+	}
 
 });
 

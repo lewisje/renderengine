@@ -225,13 +225,14 @@ Engine.initObject("OneShotTimeout", "Timeout", function() {
  */
 var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
 
-   constructor: function(name, interval, fn) {
+   constructor: function(name, interval, callback) {
 
       var cb = function() {
-         arguments.callee.timer.destroy();
-         arguments.callee.cbFn();
+			var aC = arguments.callee;
+         aC.timer.destroy();
+         aC.cbFn();
       };
-      cb.cbFn = fn;
+      cb.cbFn = callback;
       cb.timer = this;
 
       this.base(name, interval, cb);
@@ -261,6 +262,48 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
 });
 
 return OneShotTimeout;
+
+});
+
+Engine.initObject("OneShotTrigger", "OneShotTimeout", function() {
+
+/**
+ * @class A one-shot timer that triggers a callback, at regular intervals,
+ *			 until the timer has expired.  When the timer expires, the trigger
+ *			 will automatically destroy itself.
+ *
+ * @param name {String} The name of the timer
+ * @param interval {Number} The interval for the timer, in milliseconds
+ * @param callback {Function} The function to call when the interval is reached
+ * @param triggerInterval {Number} The interval between triggers, in milliseconds
+ * @param triggerCallback {Function} The function to call for each trigger interval
+ */
+var OneShotTrigger = OneShotTimeout.extend(/** @scope OneShotTimeout.prototype */{
+
+   constructor: function(name, interval, callback, triggerInterval, triggerCallback) {
+		var doneFn = function() {
+			var aC = arguments.callee;
+			aC.intv.destroy();
+			aC.cb();
+		};
+		// Create an Interval internally
+		doneFn.intv = Interval.create(name + "_trigger", triggerInterval, triggerCallback);
+		doneFn.cb = callback;
+
+      this.base(name, interval, doneFn);
+   }
+}, {
+
+   /**
+    * Get the class name of this object
+    * @type String
+    */
+   getClassName: function() {
+      return "OneShotTrigger";
+   }
+});
+
+return OneShotTrigger;
 
 });
 
@@ -304,3 +347,4 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
 return Interval;
 
 });
+

@@ -37,6 +37,7 @@ Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/components/component.collider.js");
 Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine/engine.timers.js");
 
 Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
 
@@ -213,6 +214,15 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("move").setRotation(angle);
    },
 
+   getScale: function() {
+		return this.getComponent("move").getScale();
+	},
+
+	setScale: function(scale) {
+		this.base(scale);
+		this.getComponent("move").setScale(scale);
+	},
+
    /**
     * Set up the player object on the playfield.  The width and
     * heigh of the playfield are used to determine the center point
@@ -362,6 +372,47 @@ var SpaceroidsPlayer = Object2D.extend({
 
    },
 
+	/**
+	 * Randomly jump the player somewhere when they get into a tight spot.
+	 * The point is NOT guaranteed to be free of a collision.
+	 */
+   hyperSpace: function() {
+
+		if (this.hyperjump) {
+			return;
+		}
+
+		// Hide the player
+      this.alive = false;
+      this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
+      this.field.soundLoader.get("thrust").stop();
+      this.thrusting = false;
+		this.hyperjump = true;
+
+		var self = this;
+		if (Spaceroids.evolved) {
+			OneShotTrigger.create("hyper", 250, function() {
+	      	self.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
+			}, 10, function() {
+	      	self.setScale(self.getScale() - 0.09);
+			});
+		} else {
+      	this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
+		}
+
+
+		// Give it some time and move the player somewhere random
+		OneShotTimeout.create("hyperspace", 800, function() {
+			self.getComponent("move").setVelocity(0);
+			var randPt = Math2D.randomPoint(self.getRenderContext().getBoundingBox());
+			self.getComponent("move").setPosition(randPt);
+      	self.setScale(1);
+			self.getComponent("draw").setDrawMode(RenderComponent.DRAW);
+			self.alive = true;
+			self.hyperjump = false;
+		});
+	},
+
    /**
     * Called by the keyboard input component to handle a key down event.
     *
@@ -372,6 +423,10 @@ var SpaceroidsPlayer = Object2D.extend({
       {
          return;
       }
+
+		if (event.ctrlKey || event.shiftKey) {
+			this.hyperSpace();
+		}
 
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
