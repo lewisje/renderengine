@@ -83,8 +83,8 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
       if (!context.MouseInputComponent_mouseInfo)
       {
          context.MouseInputComponent_mouseInfo = {
-            position: new Point2D(0,0);
-            lastPosition: new Point2D(0,0);
+            position: new Point2D(0,0),
+            lastPosition: new Point2D(0,0),
             button: EventEngine.MOUSE_NO_BUTTON,
             lastOver: null
          };

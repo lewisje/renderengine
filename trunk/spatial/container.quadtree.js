@@ -81,7 +81,7 @@ var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
       return "QuadtreeNode";
    }
 
-};
+});
 
 return QuadtreeNode;
 
