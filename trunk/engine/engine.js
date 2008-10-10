@@ -388,6 +388,18 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
+    * Set the console reference object to a new type of console which isn't
+    * natively supported.
+    *
+    * @param refObj {ConsoleRef} A descendent of <tt>ConsoleRef</tt>
+    */
+   setConsoleRef: function(refObj) {
+		if (refObj instanceof ConsoleRef) {
+			this.consoleRef = refObj;
+		}
+	},
+
+   /**
     * Set the debug output level of the console.  The available levels are:
     * <ul>
     * <li>Console.DEBUGLEVEL_ERRORS = 4</li>
