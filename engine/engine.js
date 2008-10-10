@@ -616,7 +616,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * Executes a callback for each element within an array.
     *
     * @param array {Array} The array to operate on
-    * @param fn {Function} The function to apply to each element
+    * @param fn {Function} The function to apply to each element.  It will be passed three
+    *                      arguments: The element value, the index of the element,
+    *                      and the array being traversed.
     * @param [thisp] {Object} An optional "this" pointer to use in the callback
     * @memberOf EngineSupport
     */
@@ -1161,12 +1163,16 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.gameObjects = null;
 
       // Dump the object pool
-      PooledObject.objectPool = null;
+      if (typeof PooledObject != "undefined") {
+	      PooledObject.objectPool = null;
+		}
 
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
 
-      // Perform final cleanup
-      this.cleanup();
+      // Perform final cleanup (silly hack for unit testing)
+      if (!Engine.UNIT_TESTING) {
+	      this.cleanup();
+		}
    },
 
    /**
