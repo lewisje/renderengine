@@ -150,10 +150,10 @@ function test(name, callback, nowait) {
 		b.innerHTML = name + " <b style='color:black;'>(<b class='fail'>" + bad + "</b>, <b class='pass'>" + good + "</b>, " + _config.Test.length + ")</b>";
 		b.onclick = function(){
 			var n = this.nextSibling;
-			if ( ElementUtil.getStyleValue(n, "display") == "none" )
-				n.style.display = "block";
+			if ( jQuery(n).css("display") == "none" )
+				jQuery(n).css("display", "block");
 			else
-				n.style.display = "none";
+				jQuery(n).css("display", "none");
 		};
 		/*
 		b.ondblclick = function(event) {
@@ -238,21 +238,11 @@ function isObj(a, b, msg) {
 /**
  * Asserts that the object has the specified keys
  * @param obj
- * @param keys An array of key names
+ * @param key A key to test for
  * @msg
  */
-function hasKeys(obj, keys, msg) {
-	var m = 0;
-
-	for (var i in obj)
-	{
-		if (ObjectUtil.inArray(keys, i))
-		{
-			m++;
-		}
-	}
-
-	_config.Test.push( [ m == keys.length, msg ]);
+function hasKey(obj, key, msg) {
+	_config.Test.push( [ obj[key] != null, msg ]);
 }
 
 function serialArray( a ) {

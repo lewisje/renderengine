@@ -6,13 +6,17 @@
       <script type="text/javascript" src="testrunner.js"></script>
 
       <!-- Supporting Libraries -->
-      <script type="text/javascript" src="../../libs/base.js"></script>
-      <script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
-      <script type="text/javascript" src="../../libs/jquery.ext.engine.js"></script>
-      <script type="text/javascript" src="../../libs/sylvester.js"></script>
+      <script type="text/javascript" src="../libs/base.js"></script>
+      <script type="text/javascript" src="../libs/jquery-1.2.2.min.js"></script>
+      <script type="text/javascript" src="../libs/jquery.ext.engine.js"></script>
+      <script type="text/javascript" src="../libs/sylvester.js"></script>
 
-      <!-- Load the main engine script -->
-      <script type="text/javascript" src="../../engine/engine.js"></script>
+      <!-- Load the engine scripts -->
+      <script type="text/javascript" src="../engine/engine.js"></script>
+
+      <!-- Unit testing scripts -->
+      <script type="text/javascript" src="unit_engine.js"></script>
+
    </head>
    <body id="body">
       <h1 id="header">The Render Engine - Unit Tests</h1>
@@ -29,6 +33,12 @@
          <span id="noclass">This span has no style class</span>
       </div>
       <ol id="tests"></ol>
+
+
+      <script type="text/javascript">
+         Engine.UNIT_TESTING = true;
+         runTest();
+      </script>
 
    </body>
 </html>
