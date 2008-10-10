@@ -54,6 +54,11 @@ var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
          name = data;
          data = null;
       }
+
+      if (target == document.body) {
+			target = document;
+		}
+
       jQuery(target).bind(name, data || handler, handler);
    },
 
@@ -67,6 +72,9 @@ var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
     * @param handler {Function} The handler function to unassign from the target
     */
    clearHandler: function(target, name, handler) {
+      if (target == document.body) {
+			target = document;
+		}
       jQuery(target).unbind(name, handler);
    },
 
