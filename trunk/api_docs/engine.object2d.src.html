@@ -73,7 +73,7 @@ An object for use in a 2D environment.
 <span class='linenumber'>  5</span>  *
 <span class='linenumber'>  6</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  7</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  8</span>  * @version: $Revision: 296 $
+<span class='linenumber'>  8</span>  * @version: $Revision: 411 $
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 11</span>  *
@@ -98,7 +98,7 @@ An object for use in a 2D environment.
 <span class='linenumber'> 30</span>  */</span><span class="WHIT">
 <span class='linenumber'> 31</span> 
 <span class='linenumber'> 32</span> </span><span class="COMM">// Includes</span><span class="WHIT">
-<span class='linenumber'> 33</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/platform/engine.hostobject.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 33</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.hostobject.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'> 34</span> 
 <span class='linenumber'> 35</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"Object2D"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"HostObject"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 36</span> 
@@ -177,58 +177,84 @@ An object for use in a 2D environment.
 <span class='linenumber'>109</span> </span><span class="WHIT">   </span><span class="NAME">setScale</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scaleX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scaleY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>110</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>111</span> 
-<span class='linenumber'>112</span> </span><span class="WHIT">   </span><span class="NAME">getScaleX</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>113</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>114</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>112</span> </span><span class="WHIT">	</span><span class="NAME">getScale</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>113</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>114</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>115</span> 
-<span class='linenumber'>116</span> </span><span class="WHIT">   </span><span class="NAME">getScaleY</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>116</span> </span><span class="WHIT">   </span><span class="NAME">getScaleX</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>117</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>118</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>119</span> 
-<span class='linenumber'>120</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>121</span>     * Set the depth at which this object will render to
-<span class='linenumber'>122</span>     * the context.  The lower the z-index, the further
-<span class='linenumber'>123</span>     * away from the front the object will draw.
-<span class='linenumber'>124</span>     *
-<span class='linenumber'>125</span>     * @param zIndex {Number} The z-index of this object
-<span class='linenumber'>126</span>     * @memberOf HostObject
-<span class='linenumber'>127</span>     */</span><span class="WHIT">
-<span class='linenumber'>128</span> </span><span class="WHIT">   </span><span class="NAME">setZIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">zIndex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>129</span> </span><span class="WHIT">      </span><span class="NAME">this.zIndex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">zIndex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>130</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>131</span> </span><span class="WHIT">         </span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">sort</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>132</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>133</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>134</span> 
-<span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>136</span>     * Get the depth at which this object will render to
-<span class='linenumber'>137</span>     * the context.
-<span class='linenumber'>138</span>     *
-<span class='linenumber'>139</span>     * @type Number
-<span class='linenumber'>140</span>     * @memberOf HostObject
-<span class='linenumber'>141</span>     */</span><span class="WHIT">
-<span class='linenumber'>142</span> </span><span class="WHIT">   </span><span class="NAME">getZIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>143</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.zIndex</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>144</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>145</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>146</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>147</span>     * Get the class name of this object
-<span class='linenumber'>148</span>     *
-<span class='linenumber'>149</span>     * @type String
-<span class='linenumber'>150</span>     * @memberOf HostObject
-<span class='linenumber'>151</span>     */</span><span class="WHIT">
-<span class='linenumber'>152</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>153</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Object2D"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>154</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>155</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>156</span> 
-<span class='linenumber'>157</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Object2D</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>158</span> 
-<span class='linenumber'>159</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>120</span> </span><span class="WHIT">   </span><span class="NAME">getScaleY</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>121</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>122</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>123</span> 
+<span class='linenumber'>124</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>125</span>     * Set the depth at which this object will render to
+<span class='linenumber'>126</span>     * the context.  The lower the z-index, the further
+<span class='linenumber'>127</span>     * away from the front the object will draw.
+<span class='linenumber'>128</span>     *
+<span class='linenumber'>129</span>     * @param zIndex {Number} The z-index of this object
+<span class='linenumber'>130</span>     * @memberOf HostObject
+<span class='linenumber'>131</span>     */</span><span class="WHIT">
+<span class='linenumber'>132</span> </span><span class="WHIT">   </span><span class="NAME">setZIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">zIndex</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>133</span> </span><span class="WHIT">      </span><span class="NAME">this.zIndex</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">zIndex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">         </span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">sort</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>138</span> 
+<span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>140</span>     * Get the depth at which this object will render to
+<span class='linenumber'>141</span>     * the context.
+<span class='linenumber'>142</span>     *
+<span class='linenumber'>143</span>     * @type Number
+<span class='linenumber'>144</span>     * @memberOf HostObject
+<span class='linenumber'>145</span>     */</span><span class="WHIT">
+<span class='linenumber'>146</span> </span><span class="WHIT">   </span><span class="NAME">getZIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.zIndex</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>149</span> 
+<span class='linenumber'>150</span> </span><span class="WHIT">	</span><span class="NAME">getProperties</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">self</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">self</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>153</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">$.extend</span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>154</span> </span><span class="WHIT">			</span><span class="STRN">"ZIndex"</span><span class="WHIT"> 		</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.getZIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="WHIT">						 			</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">	</span><span class="NAME">self.setZIndex</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>156</span> </span><span class="WHIT">			</span><span class="STRN">"BoundingBox"</span><span class="WHIT"> 	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.getBoundingBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>157</span> </span><span class="WHIT">								  	</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>158</span> </span><span class="WHIT">			</span><span class="STRN">"WorldBox"</span><span class="WHIT"> 		</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.getWorldBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>159</span> </span><span class="WHIT">							  		</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>160</span> </span><span class="WHIT">			</span><span class="STRN">"Position"</span><span class="WHIT"> 		</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.getPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>161</span> </span><span class="WHIT">							  		</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">i.split</span><span class="PUNC">(</span><span class="STRN">","</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">self.setPosition</span><span class="PUNC">(</span><span class="NAME">Point2D.create</span><span class="PUNC">(</span><span class="NAME">p</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="NAME">p</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>162</span> </span><span class="WHIT">			</span><span class="STRN">"RenderPos"</span><span class="WHIT"> 	</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.getRenderPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>163</span> </span><span class="WHIT">									</span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="WHIT">			</span><span class="STRN">"Rotation"</span><span class="WHIT"> 		</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.getRotation</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">							  		</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">self.setRotation</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>166</span> </span><span class="WHIT">			</span><span class="STRN">"Scale"</span><span class="WHIT"> 			</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.getScale</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>167</span> </span><span class="WHIT">						  			</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">self.setScale</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">,</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">]</span><span class="WHIT">
+<span class='linenumber'>168</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>169</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>170</span> 
+<span class='linenumber'>171</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>172</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>173</span>     * Get the class name of this object
+<span class='linenumber'>174</span>     *
+<span class='linenumber'>175</span>     * @type String
+<span class='linenumber'>176</span>     * @memberOf HostObject
+<span class='linenumber'>177</span>     */</span><span class="WHIT">
+<span class='linenumber'>178</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>179</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Object2D"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>180</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>181</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>182</span> 
+<span class='linenumber'>183</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Object2D</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>184</span> 
+<span class='linenumber'>185</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:17:57 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:02 GMT-0400 (EDT)</div>
 </body>
 </html>
