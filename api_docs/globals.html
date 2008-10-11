@@ -64,72 +64,6 @@
 
 <!-- =========== FIELD SUMMARY =========== -->
 
-<a name="field_summary"> </a> 
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
-      <td colspan=2>
-         <font size="+2"> <b>Field Summary</b></font>
-      </td>
-   </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt;&nbsp;object</code></font>
-         </td>
-         <td>
-            <code><b><a href="#PooledObject.isPooledObject">PooledObject.isPooledObject</a></b></code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>true</tt> for all objects that are pooled.
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt;&nbsp;object</code></font>
-         </td>
-         <td>
-            <code><b><a href="#PooledObject.isRenderEngineObject">PooledObject.isRenderEngineObject</a></b></code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>true</tt> for all objects within the engine.
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt;&nbsp;object</code></font>
-         </td>
-         <td>
-            <code><b><a href="#PooledObject.objectPool">PooledObject.objectPool</a></b></code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The pool of all objects.
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt;&nbsp;object</code></font>
-         </td>
-         <td>
-            <code><b><a href="#XMLDOC.Parser">XMLDOC.Parser</a></b></code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XML Parser object.
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt;&nbsp;Boolean</code></font>
-         </td>
-         <td>
-            <code><b><a href="#XMLDOC.Parser.strictMode">XMLDOC.Parser.strictMode</a></b></code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Strict mode setting.
-         </td>
-      </tr>
-   
-</table>
-&nbsp;
-
 <!-- =========== END FIELD SUMMARY =========== -->
 
 
@@ -254,30 +188,6 @@
          </td>
       </tr>
    
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt; </code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#XMLDOC.Parser.node">XMLDOC.Parser.node</a></b>(parent, name, type) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A node in an XML Document.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt; </code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#XMLDOC.Parser.parse">XMLDOC.Parser.parse</a></b>(src) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Parse an XML Document from the specified source.
- 
-         </td>
-      </tr>
-   
 </table>
 &nbsp;
 
@@ -292,72 +202,6 @@
 <!-- ========== END INHERITED METHODS SUMMARY =========== -->
 
 <!-- ============ FIELD DETAIL START ========= -->
-
-<a name="field_detail"> </a> 
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
-      <td colspan=1>
-         <font size="+2"> <b>Field Detail</b></font> 
-      </td>
-   </tr>
-</table>
-
-
-   <!-- One single method detail entry -->
-   <a name="PooledObject.isPooledObject">
-   <!-- -->
-   </a> <h3>PooledObject.isPooledObject</h3>
-      <pre>&lt;static&gt;&nbsp;object <b>PooledObject.isPooledObject</b></pre> 
-   <ul>
-      <tt>true</tt> for all objects that are pooled.
-      
-   </ul>
-   <hr>
-
-   <!-- One single method detail entry -->
-   <a name="PooledObject.isRenderEngineObject">
-   <!-- -->
-   </a> <h3>PooledObject.isRenderEngineObject</h3>
-      <pre>&lt;static&gt;&nbsp;object <b>PooledObject.isRenderEngineObject</b></pre> 
-   <ul>
-      <tt>true</tt> for all objects within the engine.
-      
-   </ul>
-   <hr>
-
-   <!-- One single method detail entry -->
-   <a name="PooledObject.objectPool">
-   <!-- -->
-   </a> <h3>PooledObject.objectPool</h3>
-      <pre>&lt;static&gt;&nbsp;object <b>PooledObject.objectPool</b></pre> 
-   <ul>
-      The pool of all objects.  Each object is storedby it's classname, retrieved from <tt>getClassName()</tt>that should be defined by all objects.
-      
-   </ul>
-   <hr>
-
-   <!-- One single method detail entry -->
-   <a name="XMLDOC.Parser">
-   <!-- -->
-   </a> <h3>XMLDOC.Parser</h3>
-      <pre>&lt;static&gt;&nbsp;object <b>XMLDOC.Parser</b></pre> 
-   <ul>
-      XML Parser object.  Returns an <a href='#XMLDOC'>.Parser.node</a> which isthe root element of the parsed document.<p/>By default, this parser will only handle well formed XML.  Toallow the parser to handle HTML, set the <tt>XMLDOC.Parser.strictMode</tt>variable to <tt>false</tt> before calling <tt>XMLDOC.Parser.parse()</tt>.<p/><i>Note: If you pass poorly formed XML, it will cause the parser to throwan exception.</i>
-      
-   </ul>
-   <hr>
-
-   <!-- One single method detail entry -->
-   <a name="XMLDOC.Parser.strictMode">
-   <!-- -->
-   </a> <h3>XMLDOC.Parser.strictMode</h3>
-      <pre>&lt;static&gt;&nbsp;Boolean <b>XMLDOC.Parser.strictMode</b></pre> 
-   <ul>
-      Strict mode setting.  Setting this to false allows HTML-style source tobe parsed.  Normally, well formed XML has defined end tags, or empty tagsare properly formed.  Default: <tt>true</tt>
-      
-   </ul>
-   <hr>
-
 
 <!-- ============ FIELD DETAIL END ========== -->
 
@@ -540,54 +384,6 @@
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="XMLDOC.Parser.node"> </a> <h3>XMLDOC.Parser.node</h3>
-      <pre>&lt;static&gt;&nbsp;<b>XMLDOC.Parser.node</b>(parent, name, type)</pre> 
-   <ul>
-      A node in an XML Document.  Node types are ROOT, ELEMENT, COMMENT, PI, and TEXT.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>XMLDOC.Parser.node</i>]&nbsp;parent </code> - The parent node 
-      </ul>
-      <ul>
-         <code>[<i>String</i>]&nbsp;name </code> - The node name 
-      </ul>
-      <ul>
-         <code>[<i>String</i>]&nbsp;type </code> - One of the types 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="XMLDOC.Parser.parse"> </a> <h3>XMLDOC.Parser.parse</h3>
-      <pre>&lt;static&gt;&nbsp;<b>XMLDOC.Parser.parse</b>(src)</pre> 
-   <ul>
-      Parse an XML Document from the specified source.  The XML should bewell formed, unless strict mode is disabled, then the parser willhandle HTML-style XML documents.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;src </code> - The source to parse 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -597,6 +393,6 @@
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:05 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:12 GMT-0400 (EDT)</div>
 </body>
 </html>

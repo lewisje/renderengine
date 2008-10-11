@@ -152,12 +152,40 @@ A simple mover component that adjusts the transformation of a componentover tim
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getAcceleration">getAcceleration</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the acceleration vector.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
             <code> <b> <a href="#getAngularVelocity">getAngularVelocity</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the angle change per second of the component.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getMaxVelocity">getMaxVelocity</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the maximum velocity.
  
          </td>
       </tr>
@@ -205,9 +233,33 @@ A simple mover component that adjusts the transformation of a componentover tim
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#setAcceleration">setAcceleration</a></b>(The) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the acceleration vector.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#setAngularVelocity">setAngularVelocity</a></b>(angularVelocity) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the angular velocity as a number of degrees per second.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setMaxVelocity">setMaxVelocity</a></b>(The) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the maximum velocity magnitude.
  
          </td>
       </tr>
@@ -257,9 +309,9 @@ A simple mover component that adjusts the transformation of a componentover tim
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="PooledObject.html#destroy">destroy</a>,
+               <a href="PooledObject.html#getProperties">getProperties</a>,
             
-               <a href="PooledObject.html#serialize">serialize</a>,
+               <a href="PooledObject.html#toString">toString</a>,
             
                <a href="PooledObject.html#create">create</a>,
             
@@ -334,13 +386,13 @@ A simple mover component that adjusts the transformation of a componentover tim
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
             
                <a href="BaseObject.html#update">update</a>,
-            
-               <a href="BaseObject.html#renderObject">renderObject</a>,
             
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
@@ -465,6 +517,27 @@ A simple mover component that adjusts the transformation of a componentover tim
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getAcceleration"> </a> <h3>getAcceleration</h3>
+      <pre>Vector2D&nbsp;<b>getAcceleration</b>()</pre> 
+   <ul>
+      Get the acceleration vector.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>The acceleration vector 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getAngularVelocity"> </a> <h3>getAngularVelocity</h3>
       <pre><b>getAngularVelocity</b>()</pre> 
    <ul>
@@ -477,6 +550,27 @@ A simple mover component that adjusts the transformation of a componentover tim
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
    
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getMaxVelocity"> </a> <h3>getMaxVelocity</h3>
+      <pre>Number&nbsp;<b>getMaxVelocity</b>()</pre> 
+   <ul>
+      Get the maximum velocity.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The maximum velocity 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -534,6 +628,27 @@ A simple mover component that adjusts the transformation of a componentover tim
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setAcceleration"> </a> <h3>setAcceleration</h3>
+      <pre><b>setAcceleration</b>(The)</pre> 
+   <ul>
+      Set the acceleration vector.  Acceleration willbe constantly applied to the last position.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;The </code> - acceleration vector 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setAngularVelocity"> </a> <h3>setAngularVelocity</h3>
       <pre><b>setAngularVelocity</b>(angularVelocity)</pre> 
    <ul>
@@ -545,6 +660,27 @@ A simple mover component that adjusts the transformation of a componentover tim
       <b>Parameters:</b>
       <ul>
          <code>[<i>Number</i>]&nbsp;angularVelocity </code> - The angle change per second 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setMaxVelocity"> </a> <h3>setMaxVelocity</h3>
+      <pre><b>setMaxVelocity</b>(The)</pre> 
+   <ul>
+      Set the maximum velocity magnitude.  Setting thisvalue to <tt>-1</tt> indicates that there is nomaximum velocity.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;The </code> - maximum velocity 
       </ul>
    </ul>
    
@@ -579,7 +715,7 @@ A simple mover component that adjusts the transformation of a componentover tim
    <a name="setVelocityDecay"> </a> <h3>setVelocityDecay</h3>
       <pre><b>setVelocityDecay</b>(decay)</pre> 
    <ul>
-      Set the decay rate at which the velocity willapproach zero.  You can use this value to causea moving object to eventually stop moving.
+      Set the decay rate at which the velocity willapproach zero.  You can use this value to causea moving object to eventually stop moving. i.e. similarto friction.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -608,6 +744,6 @@ A simple mover component that adjusts the transformation of a componentover tim
 
    <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Sep 13 2008 13:18:05 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:12 GMT-0400 (EDT)</div>
 </body>
 </html>
