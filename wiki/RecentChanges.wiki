@@ -3,6 +3,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 10/11/2008 ||*Beta 1 has been tagged* ||
 || 10/08/2008 ||Assigned event handlers are now properly removed on BaseObject. Updated Asteroids clone to use new method so that events for the player are properly added and removed. ||
 || 10/05/2008 ||The Sprite Editor has been modified to handle pixels a bit differently.  This was necessary for the pixel manipulation routines (flip, shift, mirror, rotate). ||
 || 09/30/2008 ||Updated the sprite editor a little bit.  It's functional, but incomplete at this point.  I've updated the ReleaseMilestones page... Beta 1 is close to being cut. ||
