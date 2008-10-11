@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+Need to make an Ant build file for the engine.
+
 The Sprite Editor is getting more feature complete, however there's still the issue of WebKit not supporting "toDataURL()".  I changed the method by which pixels were stored in the current layer.  This will make it easier to manipulate the pixels when shifting, flipping, and mirroring.
 
 I plan to add some sort of loading mechanism to the editor.  But, again, WebKit doesn't support the "getImageData()" method either so it makes it difficult.  Supposedly the current nightlies of WebKit contain these two methods.  That will make the Sprite Editor able to reach its full potential.
