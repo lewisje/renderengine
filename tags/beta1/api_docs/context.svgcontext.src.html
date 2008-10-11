@@ -1,0 +1,380 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>context.svgcontext.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>context.svgcontext.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * SVGContext
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * An implementation of the SVG (Scalable Vector Graphics) as a canvas
+<span class='linenumber'>  6</span>  * for The Render Engine.
+<span class='linenumber'>  7</span>  *
+<span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'>  9</span>  *
+<span class='linenumber'> 10</span>  * @author: $Author: bfattori $
+<span class='linenumber'> 11</span>  * @version: $Revision: 349 $
+<span class='linenumber'> 12</span>  *
+<span class='linenumber'> 13</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 14</span>  *
+<span class='linenumber'> 15</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 16</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 17</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 18</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 19</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 20</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 21</span>  *
+<span class='linenumber'> 22</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 23</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 24</span>  *
+<span class='linenumber'> 25</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 26</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 27</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 28</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 29</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 30</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 31</span>  * THE SOFTWARE.
+<span class='linenumber'> 32</span>  *
+<span class='linenumber'> 33</span>  */</span><span class="WHIT">
+<span class='linenumber'> 34</span> 
+<span class='linenumber'> 35</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 36</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.math2d.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 37</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/rendercontexts/context.render2d.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 38</span> 
+<span class='linenumber'> 39</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"SVGContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"RenderContext2D"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 40</span> 
+<span class='linenumber'> 41</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">SVGContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">RenderContext2D.extend</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 42</span> 
+<span class='linenumber'> 43</span> </span><span class="WHIT">   </span><span class="NAME">context2D</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 44</span> 
+<span class='linenumber'> 45</span> </span><span class="WHIT">   </span><span class="NAME">transformStack</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 46</span> 
+<span class='linenumber'> 47</span> </span><span class="WHIT">   </span><span class="NAME">currentTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 48</span> 
+<span class='linenumber'> 49</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 50</span>     * Create an instance of a 2D rendering context using the canvas element.
+<span class='linenumber'> 51</span>     *
+<span class='linenumber'> 52</span>     * @param contextName {String} The name of this context.  Default: CanvasContext
+<span class='linenumber'> 53</span>     * @param width {Number} The width (in pixels) of the canvas context.
+<span class='linenumber'> 54</span>     * @param height {Number} The height (in pixels) of the canvas context.
+<span class='linenumber'> 55</span>     */</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 57</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">width</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">height</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Width and height must be specified in CanvasContext"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 58</span> 
+<span class='linenumber'> 59</span> </span><span class="WHIT">      </span><span class="NAME">this.setWidth</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 60</span> </span><span class="WHIT">      </span><span class="NAME">this.setHeight</span><span class="PUNC">(</span><span class="NAME">height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 61</span> 
+<span class='linenumber'> 62</span> </span><span class="WHIT">      </span><span class="COMM">// Create the canvas element</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">svg</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.createElement</span><span class="PUNC">(</span><span class="STRN">"svg"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 64</span> </span><span class="WHIT">      </span><span class="NAME">svg.xmlns</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"http://www.w3.org/2000/svg"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">      </span><span class="NAME">svg.version</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"1.1"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="NAME">svg.width</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.width</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"px"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">      </span><span class="NAME">svg.height</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.height</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"px"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="WHIT">      </span><span class="NAME">svg.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 69</span> 
+<span class='linenumber'> 70</span> </span><span class="WHIT">      </span><span class="NAME">this.transformStack</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">SVGTransformList</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="NAME">this.transformStack.initialize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 72</span> 
+<span class='linenumber'> 73</span> </span><span class="WHIT">      </span><span class="NAME">this.currentTransform</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">SVGTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 74</span> 
+<span class='linenumber'> 75</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"SVGContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">svg</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 76</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 77</span> 
+<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 79</span>     * Push a transform state onto the stack.
+<span class='linenumber'> 80</span>     */</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">   </span><span class="NAME">pushTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 82</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT">      </span><span class="NAME">this.transformList.appendItem</span><span class="PUNC">(</span><span class="NAME">this.currentTransform</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 85</span> 
+<span class='linenumber'> 86</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 87</span>     * Pop a transform state off the stack.
+<span class='linenumber'> 88</span>     */</span><span class="WHIT">
+<span class='linenumber'> 89</span> </span><span class="WHIT">   </span><span class="NAME">popTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">      </span><span class="NAME">this.currentTransform</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.transformList.removeItem</span><span class="PUNC">(</span><span class="NAME">this.transformList.numberOfItems</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 92</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 93</span> 
+<span class='linenumber'> 94</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 95</span>     * Get the current transform
+<span class='linenumber'> 96</span>     */</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">   </span><span class="NAME">getCurrentTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 98</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.currentTransform</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>100</span> 
+<span class='linenumber'>101</span> </span><span class="WHIT">   </span><span class="COMM">//================================================================</span><span class="WHIT">
+<span class='linenumber'>102</span> </span><span class="WHIT">   </span><span class="COMM">// Drawing functions</span><span class="WHIT">
+<span class='linenumber'>103</span> 
+<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="NAME">reset</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>105</span> </span><span class="WHIT">      </span><span class="NAME">this.get2DContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">clearRect</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NAME">this.width</span><span class="PUNC">,</span><span class="NAME">this.height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>107</span> 
+<span class='linenumber'>108</span> </span><span class="WHIT">   </span><span class="NAME">setBackgroundColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">color</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">      </span><span class="NAME">jQuery</span><span class="PUNC">(</span><span class="NAME">this.getSurface</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="STRN">"background-color"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">color</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>110</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">color</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>111</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>112</span> 
+<span class='linenumber'>113</span> </span><span class="WHIT">   </span><span class="NAME">setPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>114</span> </span><span class="WHIT">      </span><span class="NAME">this.currentTransform</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.currentTransform.setTranslate</span><span class="PUNC">(</span><span class="NAME">point.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point.y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>115</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>116</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>117</span> 
+<span class='linenumber'>118</span> </span><span class="WHIT">   </span><span class="NAME">setRotation</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">angle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>119</span> </span><span class="WHIT">      </span><span class="NAME">this.currentTransform</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.currentTransform.setRotate</span><span class="PUNC">(</span><span class="NAME">angle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>120</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">angle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>121</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>122</span> 
+<span class='linenumber'>123</span> </span><span class="WHIT">   </span><span class="NAME">setScale</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scaleX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scaleY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>124</span> </span><span class="WHIT">      </span><span class="NAME">scaleX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">scaleX</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>125</span> </span><span class="WHIT">      </span><span class="NAME">scaleY</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">scaleY</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">scaleX</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="NAME">this.currentTransform</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.currentTransform.setScale</span><span class="PUNC">(</span><span class="NAME">scaleX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scaleY</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>127</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">scaleX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">scaleY</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>128</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>129</span> 
+<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="NAME">setTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">matrix</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>132</span> 
+<span class='linenumber'>133</span> </span><span class="WHIT">   </span><span class="NAME">setLineStyle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">lineStyle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">lineStyle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>136</span> 
+<span class='linenumber'>137</span> </span><span class="WHIT">   </span><span class="NAME">setLineWidth</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>138</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>140</span> 
+<span class='linenumber'>141</span> </span><span class="WHIT">   </span><span class="NAME">setFillStyle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fillStyle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>142</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">fillStyle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>143</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>144</span> 
+<span class='linenumber'>145</span> </span><span class="WHIT">   </span><span class="NAME">drawRectangle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>146</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>148</span> 
+<span class='linenumber'>149</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledRectangle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>150</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>152</span> 
+<span class='linenumber'>153</span> </span><span class="WHIT">   </span><span class="NAME">_arc</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radiusX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>154</span> </span><span class="WHIT">      </span><span class="NAME">this.startPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="COMM">//      this.get2DContext().arc(point.x, point.y, startAngle, endAngle, true);</span><span class="WHIT">
+<span class='linenumber'>156</span> </span><span class="WHIT">      </span><span class="NAME">this.endPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>158</span> 
+<span class='linenumber'>159</span> </span><span class="WHIT">   </span><span class="NAME">drawArc</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radiusX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>160</span> </span><span class="WHIT">      </span><span class="NAME">this.strokePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>161</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radiusX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>162</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>163</span> 
+<span class='linenumber'>164</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledArc</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radiusX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">      </span><span class="NAME">this.fillPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>166</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radiusX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>167</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>168</span> 
+<span class='linenumber'>169</span> </span><span class="WHIT">   </span><span class="NAME">_poly</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>170</span> </span><span class="WHIT">      </span><span class="NAME">this.startPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>171</span> </span><span class="WHIT">      </span><span class="NAME">this.moveTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>172</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>173</span> 
+<span class='linenumber'>174</span> </span><span class="WHIT">      </span><span class="COMM">// Using Duff's device with loop inversion</span><span class="WHIT">
+<span class='linenumber'>175</span> </span><span class="WHIT">      </span><span class="KEYW">switch</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">pointArray.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&</span><span class="WHIT"> </span><span class="NUMB">0x3</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>177</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">:</span><span class="WHIT">
+<span class='linenumber'>178</span> </span><span class="WHIT">            </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>179</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">:</span><span class="WHIT">
+<span class='linenumber'>180</span> </span><span class="WHIT">            </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>181</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">:</span><span class="WHIT">
+<span class='linenumber'>182</span> </span><span class="WHIT">            </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>183</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>184</span> 
+<span class='linenumber'>185</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">pointArray.length</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>187</span> </span><span class="WHIT">         </span><span class="KEYW">do</span><span class="WHIT">
+<span class='linenumber'>188</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>189</span> </span><span class="WHIT">            </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>190</span> </span><span class="WHIT">            </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>191</span> </span><span class="WHIT">            </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>192</span> </span><span class="WHIT">            </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>193</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">pointArray.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>194</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>195</span> 
+<span class='linenumber'>196</span> </span><span class="WHIT">      </span><span class="NAME">this.endPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>197</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>198</span> 
+<span class='linenumber'>199</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>200</span>     * Creates a render list which will make inline calls to the
+<span class='linenumber'>201</span>     * line drawing methods instead of looping over them.  Logically
+<span class='linenumber'>202</span>     * this method returns a function which will draw the polygon.
+<span class='linenumber'>203</span>     *
+<span class='linenumber'>204</span>     * @param pointArray {Array} An array of Point2D objects
+<span class='linenumber'>205</span>     * @type Function
+<span class='linenumber'>206</span>     */</span><span class="WHIT">
+<span class='linenumber'>207</span> </span><span class="WHIT">   </span><span class="NAME">buildRenderList</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>208</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">f</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"arguments.callee.ctx.startPath(); arguments.callee.ctx.moveTo(arguments.callee.ptArr[0]);"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>209</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">pointArray.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>211</span> </span><span class="WHIT">         </span><span class="NAME">f</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"arguments.callee.ctx.lineTo(arguments.callee.ptArr["</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"]);"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>212</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>213</span> </span><span class="WHIT">      </span><span class="NAME">f</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"arguments.callee.ctx.endPath();arguments.callee.ctx.strokePath();"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>214</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_fastPoly</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Function</span><span class="PUNC">(</span><span class="NAME">f</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>215</span> </span><span class="WHIT">      </span><span class="NAME">_fastPoly.ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>216</span> </span><span class="WHIT">      </span><span class="NAME">_fastPoly.ptArr</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pointArray</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>217</span> </span><span class="WHIT">      </span><span class="NAME">_fastPoly.isRenderList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>218</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">_fastPoly</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>219</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>220</span> 
+<span class='linenumber'>221</span> </span><span class="WHIT">   </span><span class="NAME">drawPolygon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>222</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pointArray.isRenderList</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>223</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>224</span> </span><span class="WHIT">         </span><span class="NAME">pointArray</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>225</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>226</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>227</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>228</span> </span><span class="WHIT">      </span><span class="NAME">this.strokePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>229</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>230</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>231</span> 
+<span class='linenumber'>232</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledPolygon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>233</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pointArray.isRenderList</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>234</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>235</span> </span><span class="WHIT">         </span><span class="NAME">pointArray</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>236</span> </span><span class="WHIT">      </span><span class="NAME">this.fillPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>237</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>238</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>239</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>240</span> </span><span class="WHIT">      </span><span class="NAME">this.fillPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>241</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>242</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>243</span> 
+<span class='linenumber'>244</span> </span><span class="WHIT">   </span><span class="NAME">drawLine</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>245</span> </span><span class="WHIT">      </span><span class="NAME">this.startPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>246</span> </span><span class="WHIT">      </span><span class="NAME">this.moveTo</span><span class="PUNC">(</span><span class="NAME">point1.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point1.y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>247</span> </span><span class="WHIT">      </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">point2.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2.y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>248</span> </span><span class="WHIT">      </span><span class="NAME">this.endPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>249</span> </span><span class="WHIT">      </span><span class="NAME">this.strokePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>250</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>251</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>252</span> 
+<span class='linenumber'>253</span> </span><span class="WHIT">   </span><span class="NAME">drawPoint</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>254</span> </span><span class="WHIT">      </span><span class="NAME">this.drawLine</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>255</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>256</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>257</span> 
+<span class='linenumber'>258</span> </span><span class="WHIT">   </span><span class="NAME">drawImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">resource</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>259</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">resource</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>260</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>261</span> 
+<span class='linenumber'>262</span> </span><span class="WHIT">   </span><span class="NAME">drawText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">text</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>263</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">text</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>264</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>265</span> 
+<span class='linenumber'>266</span> </span><span class="WHIT">   </span><span class="NAME">startPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>267</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>268</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>269</span> 
+<span class='linenumber'>270</span> </span><span class="WHIT">   </span><span class="NAME">endPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>271</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>272</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>273</span> 
+<span class='linenumber'>274</span> </span><span class="WHIT">   </span><span class="NAME">strokePath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>275</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>276</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>277</span> 
+<span class='linenumber'>278</span> </span><span class="WHIT">   </span><span class="NAME">fillPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>279</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>280</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>281</span> 
+<span class='linenumber'>282</span> </span><span class="WHIT">   </span><span class="NAME">moveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>283</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>284</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>285</span> 
+<span class='linenumber'>286</span> </span><span class="WHIT">   </span><span class="NAME">lineTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>287</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>288</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>289</span> 
+<span class='linenumber'>290</span> </span><span class="WHIT">   </span><span class="NAME">quadraticCurveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cPoint</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>291</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">cPoint</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>292</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>293</span> 
+<span class='linenumber'>294</span> </span><span class="WHIT">   </span><span class="NAME">bezierCurveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cPoint1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cPoint2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>295</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">cPoint1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cPoint2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>296</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>297</span> 
+<span class='linenumber'>298</span> </span><span class="WHIT">   </span><span class="NAME">arcTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>299</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>300</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>301</span> 
+<span class='linenumber'>302</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope SVGContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>303</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>304</span>     * Get the class name of this object
+<span class='linenumber'>305</span>     *
+<span class='linenumber'>306</span>     * @type String
+<span class='linenumber'>307</span>     */</span><span class="WHIT">
+<span class='linenumber'>308</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>309</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"SVGContext"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>310</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>311</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>312</span> 
+<span class='linenumber'>313</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">SVGContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>314</span> 
+<span class='linenumber'>315</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:06 GMT-0400 (EDT)</div>
+</body>
+</html>

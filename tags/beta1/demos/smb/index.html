@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!--
+   /**
+    * The Render Engine
+    * SpriteTest
+    *
+    * This example tests the sprite engine and its capabilities.  It also
+    * shows off the scrolling background context.  The example is a simple
+    * implementation of the first level of Super Mario Bros (c)Nintendo
+    * Corporation.  The images used in this example were acquired via the
+    * Internet.
+    *
+    *
+    * @author: Brett Fattori (brettf@renderengine.com)
+    *
+    * @author: $Author: bfattori $
+    * @version: $Revision: 173 $
+    *
+    * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+    *
+    * Permission is hereby granted, free of charge, to any person obtaining a copy
+    * of this software and associated documentation files (the "Software"), to deal
+    * in the Software without restriction, including without limitation the rights
+    * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    * copies of the Software, and to permit persons to whom the Software is
+    * furnished to do so, subject to the following conditions:
+    *
+    * The above copyright notice and this permission notice shall be included in
+    * all copies or substantial portions of the Software.
+    *
+    * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    * THE SOFTWARE.
+    *
+    */
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+   <head>
+      <title>The Render Engine - Sprite Testing</title>
+
+      <!-- Supporting Libraries -->
+      <script type="text/javascript" src="../../libs/base.js"></script>
+      <script type="text/javascript" src="../../libs/jquery-1.2.2.min.js"></script>
+      <script type="text/javascript" src="../../libs/jquery.ext.engine.js"></script>
+      <script type="text/javascript" src="../../libs/sylvester.js"></script>
+
+      <!-- Load the main engine script -->
+      <script type="text/javascript" src="../../engine/engine.js"></script>
+      <style type="text/css">
+         .toolbar {
+            font: 9px Verdana, Arial, Helvetica;
+            border: 1px outset black;
+            background: silver;
+            height: 96px;
+            width: 640px;
+            margin-top: 3px;
+         }
+
+         .tool {
+            float: left;
+            margin-right: 8px;
+         }
+
+         #engine-load-progress {
+            position: relative;
+            border: 1px solid;
+            width: 300px;
+            height: 10px;
+         }
+
+         #engine-load-progress .bar {
+            background: blue;
+         }
+
+         #propTable {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            position: absolute;
+            top: 10px;
+            left: 700px;
+            border: 1px solid #0088AA;
+         }
+
+         #propTable input {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 9px;
+            border: none;
+            background: #ffff88;
+         }
+
+         #propTable .propName {
+            background: silver;
+            font-weight: bold;
+         }
+
+         #levelData {
+            position: absolute;
+            top: 350px;
+            left: 680px;
+            height: 220px;
+            width: 500px;
+            border: 1px solid;
+         }
+      </style>
+   </head>
+   <body>
+      <span id="loading">Loading...
+         <div id="engine-load-progress"></div>
+      </span>
+      <script type="text/javascript">
+         // Load the game script
+         Engine.loadGame('game.js','SpriteTest');
+      </script>
+   </body>
+</html>
