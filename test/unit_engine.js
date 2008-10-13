@@ -116,8 +116,20 @@ test("EngineSupport", function() {
 	ok( copyArr.length == arr.length, "forEach");
 
 	var fArr = [];
+	var rand = [];
+	for (var x = 0; x < 10; x++) {
+		rand[x] = Math.floor(Math.random() * 49);
+	}
 	EngineSupport.fillArray(fArr, 50, "dog");
-	ok( fArr.length == 50 && fArr[0] == "dog" && fArr[25] == "dog" && fArr[49] == "dog", "fillArray");
+	// Test a 10-point random sampling of the array
+	ok( (function(){
+			for (var k = 0; k < 10; k++) {
+				if (fArr[rand[k]] != "dog") {
+					return false;
+				}
+			}
+			return true;
+		  })(), "fillArray");
 
 	var path = EngineSupport.getPath("http://www.google.com/ip/index.html");
 	equals( path, "http://www.google.com/ip", "getPath" );
@@ -130,4 +142,29 @@ test("EngineSupport", function() {
 	ok( EngineSupport.getNumericParam("notExist", 42) == 42, "getNumericParam" );
 
 	hasKey( EngineSupport.sysInfo(), "browser", "sysInfo has 'browser'" );
+});
+
+test("Engine", function() {
+	expect(6);
+
+	Engine.setDebugMode(true);
+	ok( Engine.getDebugMode(), "set/getDebugMode" );
+	Engine.setDebugMode(false);
+
+	Engine.setFPS(10);
+	equals( Engine.fpsClock, 100, "setFPS" );
+
+	var dannyId = Engine.create(PooledObject.create("Danny"));
+	ok( Engine.getObject(dannyId) != null, "create" );
+
+	Engine.destroy(Engine.getObject(dannyId));
+	ok( Engine.getObject(dannyId) == null, "destroy" );
+
+	Engine.pause();
+	ok( !Engine.running, "pause" );
+
+	Engine.run();
+	ok( Engine.running, "run" );
+
+
 });
