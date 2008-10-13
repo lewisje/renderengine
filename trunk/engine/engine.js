@@ -51,7 +51,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
       return out;
    },
 
-	/** @private */
+   /** @private */
    fixArgs: function(a) {
       var x = [];
       for (var i=0; i < a.length; i++) {
@@ -120,23 +120,29 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
             "</style>"
       );
       $(document).ready(function() {
-			$(document.body).append($("<div id='debug-console'><!-- --></div>"));
-		});
+         $(document.body).append($("<div id='debug-console'><!-- --></div>"));
+      });
    },
 
-	/** @private */
+   /** @private */
    clean: function() {
       if ($("#debug-console > span").length > 150) {
          $("#debug-console > span:lt(150)").remove();
       }
    },
 
-	/** @private */
+   /** @private */
    scroll: function() {
       var w = $("#debug-console")[0];
       if (w) {
-			$("#debug-console")[0].scrollTop = w.scrollHeight + 1;
-		}
+         $("#debug-console")[0].scrollTop = w.scrollHeight + 1;
+      }
+   },
+
+   /** @private */
+   fixArgs: function(a) {
+      var o = this.base(a);
+      return o.replace(/\n/g, "<br/>");
    },
 
    /**
@@ -359,7 +365,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
    DEBUGLEVEL_ERRORS:      4,
    DEBUGLEVEL_WARNINGS:    3,
    DEBUGLEVEL_DEBUG:       2,
-	DEBUGLEVEL_INFO:			1,
+   DEBUGLEVEL_INFO:        1,
    DEBUGLEVEL_VERBOSE:     0,
    DEBUGLEVEL_NONE:       -1,
 
@@ -369,9 +375,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * Start up the console.
     */
    startup: function() {
-		if (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii) {
-			this.consoleRef = new HTMLConsoleRef();
-		}
+      if (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii) {
+         this.consoleRef = new HTMLConsoleRef();
+      }
       else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
          // Firebug or firebug lite
          this.consoleRef = new FirebugConsoleRef();
@@ -394,10 +400,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @param refObj {ConsoleRef} A descendent of <tt>ConsoleRef</tt>
     */
    setConsoleRef: function(refObj) {
-		if (refObj instanceof ConsoleRef) {
-			this.consoleRef = refObj;
-		}
-	},
+      if (refObj instanceof ConsoleRef) {
+         this.consoleRef = refObj;
+      }
+   },
 
    /**
     * Set the debug output level of the console.  The available levels are:
@@ -436,13 +442,13 @@ var Console = Base.extend(/** @scope Console.prototype */{
          this.consoleRef.debug.apply(this.consoleRef, arguments);
    },
 
-	/**
-	 * Outputs an info message. These messages will only show when DEBUGLEVEL_INFO is the level.
-	 */
-	info: function() {
-		if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_INFO))
-			this.consoleRef.debug.apply(this.consoleRef, arguments);
-	},
+   /**
+    * Outputs an info message. These messages will only show when DEBUGLEVEL_INFO is the level.
+    */
+   info: function() {
+      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_INFO))
+         this.consoleRef.debug.apply(this.consoleRef, arguments);
+   },
 
    /**
     * Outputs a debug message.  These messages will only show when DEBUGLEVEL_DEBUG is the level.
@@ -470,7 +476,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @param msg {String} The message to output
     */
    error: function() {
-      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
+      if (this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
          this.consoleRef.error.apply(this.consoleRef, arguments);
    }
 });
@@ -644,18 +650,18 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
-	/**
-	 * Fill the specified array of <tt>size</tt> the
-	 * <tt>value</tt> at each index.
-	 * @param {Array} arr The array to fill
-	 * @param {Number} size The size of the array to fill
-	 * @param {Object} value The value to put at each index
-	 */
-	fillArray: function(arr, size, value) {
-		for (var i = 0; i < size; i++) {
-			arr[i] = value;
-		}
-	},
+   /**
+    * Fill the specified array of <tt>size</tt> the
+    * <tt>value</tt> at each index.
+    * @param {Array} arr The array to fill
+    * @param {Number} size The size of the array to fill
+    * @param {Object} value The value to put at each index
+    */
+   fillArray: function(arr, size, value) {
+      for (var i = 0; i < size; i++) {
+         arr[i] = value;
+      }
+   },
 
    /**
     * Get the path from a fully qualified URL.
@@ -1164,15 +1170,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Dump the object pool
       if (typeof PooledObject != "undefined") {
-	      PooledObject.objectPool = null;
-		}
+         PooledObject.objectPool = null;
+      }
 
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
 
       // Perform final cleanup (silly hack for unit testing)
       if (!Engine.UNIT_TESTING) {
-	      this.cleanup();
-		}
+         this.cleanup();
+      }
    },
 
    /**
@@ -1182,8 +1188,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @private
     */
    cleanup: function() {
+      // Protect the HTML console, if visible
+      var hdc = $("#debug-console").remove();
+   
       // Remove the body contents
       $(document.body).empty();
+
+      if (hdc.length != 0) {
+         $(document.body).append(hdc);
+      }
 
       // Remove all scripts from the <head>
       $("head script", document).remove();
@@ -1357,10 +1370,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
                if (cb) {
                   cb(simplePath);
                }
-		         if (!Engine.localMode) {
-						// Delete the script node
-						$(n).remove();
-					}
+               if (!Engine.localMode) {
+                  // Delete the script node
+                  $(n).remove();
+               }
 
             }
             Engine.readyForNextScript = true;
@@ -1709,6 +1722,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    dependencyList: {},
    dependencyCount: 0,
    dependencyProcessor: null,
+   dependencyTimer: null,
+   dependencyCheckTimeout: 2500,
 
    /**
     * Include a script file.
@@ -1751,6 +1766,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Check for 1st level circular references
       this.checkCircularRefs(objectName);
+
+      // After a period of time has passed, we'll check our dependency list.
+      // If anything remains, we'll drop the bomb that certain files didn't resolve...
+      if (Engine.dependencyTimer) {
+         window.clearTimeout(Engine.dependencyTimer);
+      }
+      Engine.dependencyTimer = window.setTimeout(Engine.checkDependencyList, Engine.dependencyCheckTimeout);
 
       if (!Engine.dependencyProcessor) {
          Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
@@ -2071,6 +2093,37 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             // Try removing the circular reference
             EngineSupport.arrayRemove(Engine.dependencyList[objectName].deps, deps[dep]);
          }
+      }
+   },
+
+   /**
+    * Check the dependency list for any unresolved dependencies.  Anything that hasn't
+    * been resolved will be dumped to the console as an error.
+    * @private
+    */
+   checkDependencyList: function() {
+      // Stop processing
+      window.clearTimeout(Engine.dependencyTimer);
+      Engine.dependencyTimer = null;
+      window.clearTimeout(Engine.dependencyProcessor);
+      Engine.dependencyProcessor = null;      
+
+      // Build the list
+      var unresDeps = "", dCount = 0;
+      for (var obj in Engine.dependencyList) {
+         dCount++;
+         unresDeps += "Object '" + obj + "' has the following unresolved dependencies:\n";
+         for (var d in Engine.dependencyList[obj].deps) {
+            unresDeps += "   " + Engine.dependencyList[obj].deps[d] + "\n";
+         }
+         unresDeps += "\n";
+      }
+      
+      if (dCount != 0) {
+         // Dump the dependency list
+         Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+         Console.error(unresDeps);
+         Engine.shutdown();
       }
    },
 

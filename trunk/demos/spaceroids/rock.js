@@ -237,21 +237,21 @@ var SpaceroidsRock = Object2D.extend({
     */
    kill: function() {
       // Make some particles
-		var pCount = Spaceroids.evolved && !Spaceroids.isAttractMode ? 30 : 4;
+      var pCount = Spaceroids.evolved && !Spaceroids.isAttractMode ? 30 : 4;
 
       for (var x = 0; x < pCount; x++)
       {
          Spaceroids.pEngine.addParticle(SimpleParticle.create(this.getPosition()));
       }
 
-		if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
-			$(this.getRenderContext().getSurface()).css("background", "white");
-			var surf = this.getRenderContext().getSurface();
-			//window.setTimeout
-			OneShotTimeout.create("blink", 100, function() {
-				$(surf).css("background", "black");
-			});
-		}
+      if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
+         $(this.getRenderContext().getSurface()).css("background", "white");
+         var surf = this.getRenderContext().getSurface();
+         //window.setTimeout
+         OneShotTimeout.create("blink", 100, function() {
+            $(surf).css("background", "black");
+         });
+      }
 
       Spaceroids.rocks--;
 
