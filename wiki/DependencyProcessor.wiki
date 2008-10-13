@@ -76,7 +76,7 @@ Two types of circular references can be resolved for you:
   * A class that refers to itself
   * Two classes that have immediate references to each other
 
-Secondary, tertiary, and so forth are not currently handled.  If you find a class isn't loading, it will be helpful to enable the debug mode of the engine and set the debug level to `DEBUGLEVEL_VERBOSE`.  Since there is no way to really tell when all class files have been loaded, a game will appear to "hang" when loading.  You can see the dependencies by issuing a `Engine.dumpDependencies()` call to the console.
+Secondary, tertiary, and so forth are not currently handled.  If you find a class isn't loading, it will be helpful to enable the debug mode of the engine and set the debug level to `DEBUGLEVEL_LOG`.  Since there is no way to really tell when all class files have been loaded, a game will appear to "hang" when loading.  You can see the dependencies by issuing a `Engine.dumpDependencies()` call to the console.
 
 == Coding Style ==
 
