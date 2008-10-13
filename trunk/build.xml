@@ -11,7 +11,7 @@
    <property name="full.home" value="${dist.home}/full"/>
    
    <!-- ======================== ENGINE COMPLETE DISTRIBUTION ======================= -->
-   <target name="engine.dist" depends="engine.clean,engine.min,engine.full,engine.zip" description="Creates the full and compressed distribution for The Render Engine"/>
+   <target name="engine.dist" depends="engine.clean,engine.zip" description="Creates the full and compressed distribution for The Render Engine"/>
    
    
    <!-- =============================== ENGINE CLEAN ========================== -->
@@ -29,7 +29,7 @@
    
 
    <!-- ============================= ENGINE ZIP ============================ -->
-   <target name="engine.zip" description="Zip the engine distributions">
+   <target name="engine.zip" depends="engine.min,engine.full" description="Create and zip the engine distributions">
       <zip basedir="${min.home}" destfile="${dist.home}/${app.name}_${app.version}-min.zip"/>
       <zip basedir="${full.home}" destfile="${dist.home}/${app.name}_${app.version}.zip"/>
    </target>
