@@ -1208,6 +1208,16 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //====================================================================================================
    //====================================================================================================
 
+	/**
+	 * Status message when a script is not found
+	 */
+	SCRIPT_NOT_FOUND: false,
+	
+	/**
+	 * Status message when a script is successfully loaded
+	 */
+	SCRIPT_LOADED: true,
+
    /**
     * Load a stylesheet and append it to the document.  Allows for
     * scripts to specify additional stylesheets that can be loaded
@@ -1368,7 +1378,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
                Console.debug("Loaded '" + scriptPath + "'");
                Engine.handleScriptDone();
                if (cb) {
-                  cb(simplePath);
+                  cb(simplePath, Engine.SCRIPT_LOADED);
                }
                if (!Engine.localMode) {
                   // Delete the script node
@@ -1382,6 +1392,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // When an error occurs
          var eFn = function() {
             Console.error("File not found: ", scriptPath);
+            if (cb) {
+               cb(simplePath, Engine.SCRIPT_NOT_FOUND);
+            }
             Engine.readyForNextScript = true;
          };
 
@@ -1402,19 +1415,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
    },
 
+	/**
+	 * Perform an immediate load on the specified script.  Objects within
+	 * the script may not immediately initialize, unless their dependencies
+	 * have been resolved.
+	 * 
+	 * @param {String} scriptPath The path to the script to load
+	 * @param {Function} [cb] The function to call when the script is loaded.
+	 * 						the path of the script loaded and a status message
+	 * 						will be passed as the two parameters.
+	 */
    loadNow: function(scriptPath, cb) {
       Engine.scriptLoadCount++;
       Engine.updateProgress();
-      if ($.browser.safari) {
-         Engine.load(scriptPath);
-         if (cb) {
-            Engine.setQueueCallback(function() {
-               cb(scriptPath);
-            });
-         }
-      } else {
-         this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
-      }
+      this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
    },
 
    /**
