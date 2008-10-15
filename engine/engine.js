@@ -32,9 +32,9 @@
  */
 
 /**
- * @class A stand-in class when other debugger output options are not
- *        available.  This object is created, as necessary, by the
- *        {@link Console}
+ * @class The base class for all console objects. Each type of supported console outputs
+ *        its data differently.  This class allows abstraction between the console and the
+ *        browser's console object so the {@link Console} can report to it.
  */
 var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    constructor: function() {
@@ -72,29 +72,38 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    },
 
    /**
-    * Write a debug message to the console
+    * Write a debug message to the console.  The arguments to the method call will be
+    * concatenated into one string message.
     */
    debug: function() {
    },
 
    /**
-    * Write an info message to the console
+    * Write an info message to the console.  The arguments to the method call will be
+    * concatenated into one string message.
     */
    info: function() {
    },
 
    /**
-    * Write a warning message to the console
+    * Write a warning message to the console.  The arguments to the method call will be
+    * concatenated into one string message.
     */
    warn: function() {
    },
 
    /**
-    * Write an error message to the console
+    * Write an error message to the console.  The arguments to the method call will be
+    * concatenated into one string message.
     */
    error: function() {
    },
 
+   /**
+    * Get the class name of this object
+    *
+    * @return {String} The string "ConsoleRef"
+    */
    getClassName: function() {
       return "ConsoleRef";
    }
@@ -102,9 +111,9 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
 });
 
 /**
- * @class A debug console that will use a pre-defined element to display its output.  You must create
- *        an element with the class "debug-console" for this to function properly.  This object is created,
- *        as necessary, by the {@link Console} object.
+ * @class A debug console that will use a pre-defined element to display its output.  The element with the id 
+ *        "debug-console" will be created an appended to the DOM for you.  This object is created when no other
+ *        option is available from the browser, or when developer tools cannot be accessed.
  * @extends ConsoleRef
  */
 var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
@@ -146,8 +155,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
    },
 
    /**
-    * Write a debug message to the console
-    * @param msg {String} The message to write
+    * Write a debug message to the console.
     */
    info: function() {
       this.clean();
@@ -157,7 +165,6 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    debug: function() {
       this.clean();
@@ -167,7 +174,6 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
    /**
     * Write a warning message to the console
-    * @param msg {String} The message to write
     */
    warn: function() {
       this.clean();
@@ -177,7 +183,6 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
    /**
     * Write an error message to the console
-    * @param msg {String} The message to write
     */
    error: function() {
       this.clean();
@@ -185,13 +190,18 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
       this.scroll();
    },
 
+   /**
+    * Get the class name of this object
+    *
+    * @return {String} The string "HTMLConsoleRef"
+    */
    getClassName: function() {
       return "HTMLConsoleRef";
    }
 });
 
 /**
- * @class A debug console for Safari browsers.
+ * @class A debug console abstraction for Safari browsers.
  * @extends ConsoleRef
  */
 var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
@@ -201,7 +211,6 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    info: function() {
       console.log(this.fixArgs(arguments));
@@ -209,7 +218,6 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    debug: function() {
       console.log(["[D]", this.fixArgs(arguments)]);
@@ -217,7 +225,6 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
    /**
     * Write a warning message to the console
-    * @param msg {String} The message to write
     */
    warn: function() {
       console.log(["[W]", this.fixArgs(arguments)]);
@@ -225,12 +232,16 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
    /**
     * Write an error message to the console
-    * @param msg {String} The message to write
     */
    error: function() {
       console.log(["[E!]", this.fixArgs(arguments)]);
    },
 
+   /**
+    * Get the class name of this object
+    *
+    * @return {String} The string "SafariConsoleRef"
+    */
    getClassName: function() {
       return "SafariConsoleRef";
    }
@@ -248,7 +259,6 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    info: function() {
       window.opera.postError(this.fixArgs(arguments));
@@ -256,7 +266,6 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    debug: function() {
       window.opera.postError(["[D]", this.fixArgs(arguments)]);
@@ -264,7 +273,6 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
    /**
     * Write a warning message to the console
-    * @param msg {String} The message to write
     */
    warn: function() {
       window.opera.postError(["[W]", this.fixArgs(arguments)]);
@@ -272,12 +280,16 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
    /**
     * Write an error message to the console
-    * @param msg {String} The message to write
     */
    error: function() {
       window.opera.postError(["[E!]", this.fixArgs(arguments)]);
    },
 
+   /**
+    * Get the class name of this object
+    *
+    * @return {String} The string "OperaConsoleRef"
+    */
    getClassName: function() {
       return "OperaConsoleRef";
    }
@@ -296,7 +308,6 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    info: function() {
       if (typeof firebug != "undefined") {
@@ -308,7 +319,6 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
    /**
     * Write a debug message to the console
-    * @param msg {String} The message to write
     */
    debug: function() {
       if (typeof firebug != "undefined") {
@@ -320,7 +330,6 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
    /**
     * Write a warning message to the console
-    * @param msg {String} The message to write
     */
    warn: function() {
       if (typeof firebug != "undefined") {
@@ -332,7 +341,6 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
    /**
     * Write an error message to the console
-    * @param msg {String} The message to write
     */
    error: function() {
       if (typeof firebug != "undefined") {
@@ -342,10 +350,14 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
       }
    },
 
+   /**
+    * Get the class name of this object
+    *
+    * @return {String} The string "FirebugConsoleRef"
+    */
    getClassName: function() {
       return "FirebugConsoleRef";
    }
-
 });
 
 /**
@@ -362,17 +374,41 @@ var Console = Base.extend(/** @scope Console.prototype */{
 
    consoleRef: null,
 
+   /**
+    * Output only errors to the console.
+    */
    DEBUGLEVEL_ERRORS:      4,
+
+   /**
+    * Output warnings and errors to the console.
+    */
    DEBUGLEVEL_WARNINGS:    3,
+
+   /**
+    * Output warnings, errors, and debug messages to the console.
+    */
    DEBUGLEVEL_DEBUG:       2,
+
+   /**
+    * Output warnings, errors, debug, and low-level info messages to the console.
+    */
    DEBUGLEVEL_INFO:        1,
+
+   /**
+    * Output all messages to the console.
+    */
    DEBUGLEVEL_VERBOSE:     0,
+
+   /**
+    * Output nothing to the console.
+    */
    DEBUGLEVEL_NONE:       -1,
 
+   /** @private */
    verbosity: this.DEBUGLEVEL_NONE,
 
    /**
-    * Start up the console.
+    * Starts up the console.
     */
    startup: function() {
       if (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii) {
@@ -397,7 +433,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * Set the console reference object to a new type of console which isn't
     * natively supported.
     *
-    * @param refObj {ConsoleRef} A descendent of <tt>ConsoleRef</tt>
+    * @param refObj {ConsoleRef} A descendent of the <tt>ConsoleRef</tt> class.
     */
    setConsoleRef: function(refObj) {
       if (refObj instanceof ConsoleRef) {
@@ -408,15 +444,15 @@ var Console = Base.extend(/** @scope Console.prototype */{
    /**
     * Set the debug output level of the console.  The available levels are:
     * <ul>
-    * <li>Console.DEBUGLEVEL_ERRORS = 4</li>
-    * <li>Console.DEBUGLEVEL_WARNINGS = 3</li>
-    * <li>Console.DEBUGLEVEL_DEBUG = 2</li>
-    * <li>Console.DEBUGLEVEL_INFO = 1</li>
-    * <li>Console.DEBUGLEVEL_VERBOSE = 0</li>
-    * <li>Console.DEBUGLEVEL_NONE = -1</li>
+    * <li><tt>Console.DEBUGLEVEL_ERRORS</tt> = 4</li>
+    * <li><tt>Console.DEBUGLEVEL_WARNINGS</tt> = 3</li>
+    * <li><tt>Console.DEBUGLEVEL_DEBUG</tt> = 2</li>
+    * <li><tt>Console.DEBUGLEVEL_INFO</tt> = 1</li>
+    * <li><tt>Console.DEBUGLEVEL_VERBOSE</tt> = 0</li>
+    * <li><tt>Console.DEBUGLEVEL_NONE</tt> = -1</li>
     * </ul>
     * Messages of the same (or lower) level as the specified level will be logged.
-    * For instance, if you set the level to DEBUGLEVEL_DEBUG, errors and warnings
+    * For instance, if you set the level to <tt>DEBUGLEVEL_DEBUG</tt>, errors and warnings
     * will also be logged.  The engine must also be in debug mode for warnings,
     * debug, and log messages to be output.
     *
@@ -426,6 +462,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
       this.verbosity = level;
    },
 
+   /**
+    * Verifies that the debug level is the same as the message to output
+    * @private
+    */
    checkVerbosity: function(debugLevel) {
       return (this.verbosity != this.DEBUGLEVEL_NONE &&
               this.verbosity == this.DEBUGLEVEL_VERBOSE ||
@@ -433,9 +473,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Outputs a log message.  These messages will only show when DEBUGLEVEL_VERBOSE is the level.
-    *
-    * @param msg {String} The message to output
+    * Outputs a log message.  These messages will only show when <tt>DEBUGLEVEL_VERBOSE</tt> is the level.
+    * You can pass as many parameters as you want to this method.  The parameters will be combined into
+    * one message to output to the console.
     */
    log: function() {
       if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_VERBOSE))
@@ -443,7 +483,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Outputs an info message. These messages will only show when DEBUGLEVEL_INFO is the level.
+    * Outputs an info message. These messages will only show when <tt>DEBUGLEVEL_INFO</tt> is the level.
+    * You can pass as many parameters as you want to this method.  The parameters will be combined into
+    * one message to output to the console.
     */
    info: function() {
       if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_INFO))
@@ -451,9 +493,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Outputs a debug message.  These messages will only show when DEBUGLEVEL_DEBUG is the level.
-    *
-    * @param msg {String} The message to output
+    * Outputs a debug message.  These messages will only show when <tt>DEBUGLEVEL_DEBUG</tt> is the level.
+    * You can pass as many parameters as you want to this method.  The parameters will be combined into
+    * one message to output to the console.
     */
    debug: function() {
       if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_DEBUG))
@@ -461,9 +503,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Outputs a warning message.  These messages will only show when DEBUGLEVEL_WARNINGS is the level.
-    *
-    * @param msg {String} The message to output
+    * Outputs a warning message.  These messages will only show when <tt>DEBUGLEVEL_WARNINGS</tt> is the level.
+    * You can pass as many parameters as you want to this method.  The parameters will be combined into
+    * one message to output to the console.
     */
    warn: function() {
       if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_WARNINGS))
@@ -471,9 +513,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Output an error message.  These messages will only show when DEBUGLEVEL_ERRORS is the level.
-    *
-    * @param msg {String} The message to output
+    * Output an error message.  These messages will only show when <tt>DEBUGLEVEL_ERRORS</tt> is the level.
+    * You can pass as many parameters as you want to this method.  The parameters will be combined into
+    * one message to output to the console.
     */
    error: function() {
       if (this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
@@ -483,7 +525,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
 
 
 /**
- * Halts the engine if the test fails, throwing the error as a result.
+ * Assert that a condition is <tt>true</tt>, stopping the engine if it is <tt>false</tt>.  
+ * If the condifion fails an exception will be thrown.
  *
  * @param test {Boolean} A simple test that should evaluate to <tt>true</tt>
  * @param error {String} The error message to throw if the test fails
@@ -498,7 +541,7 @@ var Assert = function(test, error) {
 };
 
 /**
- * Reports a warning if the test fails.
+ * Assert that a condition is <tt>true</tt>, reporting a warning if the test fails.
  *
  * @param test {Boolean} A simple test that should evaluate to <tt>true</tt>
  * @param error {String} The warning to display if the test fails
@@ -511,9 +554,11 @@ var AssertWarn = function(test, warning) {
 };
 
 /**
- * @class Engine support class.  Provides extra functions the engine or games
- *        can use.  Mainly contains functions that can manipulate arrays and
- *        generate/read JSON.
+ * @class A static class with support methods the engine or games can use.  
+ *        Many of the methods can be used to manipulate arrays.  Additional
+ *        methods are provided to access query parameters, and generate and/or 
+ *        read JSON.
+ * @static
  */
 var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    constructor: null,
@@ -523,7 +568,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *
     * @param array {Array} The array to scan
     * @param obj {Object} The object to find
-    * @param from {Number=0} The index to start at, defaults to zero.
+    * @param [from=0] {Number} The index to start at, defaults to zero.
     * @memberOf EngineSupport
     */
    indexOf: function(array, obj, from) {
@@ -554,7 +599,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    },
 
    /**
-    * Remove an element from an array.
+    * Remove an element from an array.  This method modifies the array
+    * directly.
     *
     * @param array {Array} The array to modify
     * @param obj {Object} The object to remove
@@ -585,8 +631,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @param fn {Function} The callback to invoke.  It will be passed three
     *                      arguments: The element value, the index of the element,
     *                      and the array being traversed.
-    * @param thisp {Object} Used as <tt>this</tt> for each invocation of the
-    *                       callback.  Default: <tt>null</tt>
+    * @param [thisp=null] {Object} Used as <tt>this</tt> for each invocation of the
+    *                       callback.
     * @memberOf EngineSupport
     */
    filter: function(array, fn, thisp) {
@@ -625,7 +671,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @param fn {Function} The function to apply to each element.  It will be passed three
     *                      arguments: The element value, the index of the element,
     *                      and the array being traversed.
-    * @param [thisp] {Object} An optional "this" pointer to use in the callback
+    * @param [thisp=null] {Object} An optional "this" pointer to use in the callback
     * @memberOf EngineSupport
     */
    forEach: function(array, fn, thisp) {
@@ -651,11 +697,14 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    },
 
    /**
-    * Fill the specified array of <tt>size</tt> the
-    * <tt>value</tt> at each index.
+    * Fill the specified array with <tt>size</tt> elements
+    * each with the value "<tt>value</tt>".  Modifies the provided
+    * array directly.
+    *
     * @param {Array} arr The array to fill
     * @param {Number} size The size of the array to fill
     * @param {Object} value The value to put at each index
+    * @memberOf EngineSupport
     */
    fillArray: function(arr, size, value) {
       for (var i = 0; i < size; i++) {
@@ -664,7 +713,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    },
 
    /**
-    * Get the path from a fully qualified URL.
+    * Get the path from a fully qualified URL, not including the trailing
+    * slash character.
     *
     * @param url {String} The URL
     * @return {String} The path
@@ -680,7 +730,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * object returned will contain a key/value pair for each argument
     * found.
     *
-    * @return {Object} An <tt>Object</tt> with a key and value for each query argument.
+    * @return {Object} A generic <tt>Object</tt> with a key and value for each query argument.
     * @memberOf EngineSupport
     */
    getQueryParams: function() {
@@ -780,39 +830,10 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    toJSONString: function(o)
    {
-      if(o == null)
-      {
-         return "null";
-      }
-
-      switch(o.constructor)
-      {
-         case Array:
-            var a = [], i;
-            for(i = 0; i < o.length; i++)
-            {
-               a[i] = EngineSupport.toJSONString(o[i]);
-            }
-            return "[" + a.join() + "]";
-         case String:
-            return EngineSupport.quoteString(o);
-         case Boolean:
-         case Number:
-            return o.toString();
-         default:
-            var a = [], i;
-            for(i in o)
-            {
-               if(o[i] == null)
-               {
-                  a.push(EngineSupport.quoteString(i) + ":null");
-               }
-               else if(o[i].constructor != Function)
-               {
-                  a.push(EngineSupport.quoteString(i) + ':' + EngineSupport.toJSONString(o[i]));
-               }
-            }
-            return '{' + a.join() + '}';
+      if (!typeof JSON == "undefined") {
+         return JSON.stringify(o);
+      } else {
+         return null;
       }
    },
 
@@ -826,30 +847,36 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    parseJSON: function(jsonString)
    {
-      var obj = eval('(function(){return ' + jsonString + ';})();');
-      return obj;
+      if (!typeof JSON == "undefined") {
+         return JSON.parse(text, function (key, value) {
+                   var a;
+                   if (typeof value === 'string') {
+                       a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                       if (a) {
+                           return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
+                       }
+                   }
+                   return value;
+               });
+      } else {
+         return null;
+      }
    },
 
    /**
     * Return a string, enclosed in quotes.
     *
-    * @param string
-    * @type String
+    * @param text {String} The string to quote
+    * @return {String} The string in quotes
     * @memberOf EngineSupport
     */
-   quoteString: function(o)
+   quoteString: function(text)
    {
-      return '"'+o.replace(/[\\"\r\n]/g, function(s)
-         {
-            switch(s)
-            {
-               case "\\":return "\\\\";
-               case "\r":return "\\r";
-               case "\n":return "\\n";
-               case '"':return '\\"';
-            }
-         }
-      )+'"';
+      if (!typeof JSON == "undefined") {
+         return JSON.quote(text);
+      } else {
+         return null;
+      }
    },
 
    /**
@@ -1208,15 +1235,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //====================================================================================================
    //====================================================================================================
 
-	/**
-	 * Status message when a script is not found
-	 */
-	SCRIPT_NOT_FOUND: false,
-	
-	/**
-	 * Status message when a script is successfully loaded
-	 */
-	SCRIPT_LOADED: true,
+   /**
+    * Status message when a script is not found
+    */
+   SCRIPT_NOT_FOUND: false,
+   
+   /**
+    * Status message when a script is successfully loaded
+    */
+   SCRIPT_LOADED: true,
 
    /**
     * Load a stylesheet and append it to the document.  Allows for
@@ -1415,16 +1442,16 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
    },
 
-	/**
-	 * Perform an immediate load on the specified script.  Objects within
-	 * the script may not immediately initialize, unless their dependencies
-	 * have been resolved.
-	 * 
-	 * @param {String} scriptPath The path to the script to load
-	 * @param {Function} [cb] The function to call when the script is loaded.
-	 * 						the path of the script loaded and a status message
-	 * 						will be passed as the two parameters.
-	 */
+   /**
+    * Perform an immediate load on the specified script.  Objects within
+    * the script may not immediately initialize, unless their dependencies
+    * have been resolved.
+    * 
+    * @param {String} scriptPath The path to the script to load
+    * @param {Function} [cb] The function to call when the script is loaded.
+    *                   the path of the script loaded and a status message
+    *                   will be passed as the two parameters.
+    */
    loadNow: function(scriptPath, cb) {
       Engine.scriptLoadCount++;
       Engine.updateProgress();
