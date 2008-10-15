@@ -1,15 +1,15 @@
 
 /**
  * The Render Engine
- * SpriteEditor
+ * FontEditor
  *
- * Demonstration of using The Render Engine.
+ * A tool for marking glyph boundaries in bitmapped fonts.
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 426 $
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  *
@@ -34,52 +34,22 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.loadStylesheet("resources/color_select.css", true);
-Engine.loadStylesheet("resources/editor.css", true);
+Engine.include("/rendercontexts/context.scrollingbackground.js");
 
 // Load game objects
-Game.load("/layer.js");
-Game.load("/grid.js");
-Game.load("/preview.js");
-Game.load("/color_select.js");
+//Game.load("/layer.js");
 
-Engine.initObject("SpriteEditor", "Game", function() {
+Engine.initObject("FontEditor", "Game", function() {
 
 /**
  * @class The game.
  */
-var SpriteEditor = Game.extend({
+var FontEditor = Game.extend({
 
    constructor: null,
 
    editorContext: null,
 
-   pixSize: 32,
-
-	editorSize: 512,
-
-	currentColor: "white",
-
-	currentLayer: null,
-
-	mouseBtn: 0,
-
-	drawMode: 0,
-
-	colorSelector: null,
-
-	brushSize: [0,0],
-
-	grid: null,
-
-	previewImage: null,
-
-	editColor: 0,
-
-	mirrorVert: false,
-
-	mirrorHorz: false,
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -87,10 +57,15 @@ var SpriteEditor = Game.extend({
     */
    setup: function() {
      $("#loading").remove();
-	  $("#controls").css("display", "block");
 
       // Set the FPS of the game
       Engine.setFPS(5);
+
+		// The font file will be specified as a command parameter
+		var fontFile = EngineSupport.getStringParam("font");
+		
+		// First check for a JS file
+		var fontJS = Game.loadEngineScript("fonts/" + fontFile + ".js");
 
       // Create the 2D context
       this.editorContext = CanvasContext.create("editor", this.editorSize, this.editorSize);
@@ -427,7 +402,7 @@ var SpriteEditor = Game.extend({
 	COLOR_BACKGROUND: 1
 });
 
-return SpriteEditor;
+return FontEditor;
 
 });
 
