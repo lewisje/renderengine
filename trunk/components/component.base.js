@@ -96,6 +96,9 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
       this.base(name);
    },
 
+   /**
+    * Release the object back into the object pool.
+    */
    release: function() {
       this.base();
       this.priority = 0;
@@ -191,7 +194,7 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} The string "BaseComponent"
     */
    getClassName: function() {
       return "BaseComponent";

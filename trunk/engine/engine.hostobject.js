@@ -36,15 +36,20 @@ Engine.include("/components/component.base.js");
 Engine.initObject("HostObject", "HashContainer", function() {
 
 /**
- * @class A host object is a container of components which provide some sort
- * of action, be it rendering, collision detection, effects, or whatever.
- * This way, an object can be anything, depending on it's components.
+ * @class A host object is a container for components.  Each component within
+ *        the host provides a portion of the overall functionality.  A host object
+ *        can have any number of components of any type within it.  Components provide
+ *        functionality for things like rendering, collision detection, effects, or 
+ *        transformations. This way, an object can be anything, depending on it's components.
  * @extends HashContainer
  */
 var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    renderContext: null,
 
+   /**
+    * Release the object back into the object pool.
+    */
    release: function() {
       this.base();
       this.renderContext = null;
@@ -63,7 +68,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
 
    /**
-    * Set the rendering context this object will be drawn upon.
+    * Set the rendering context this object will be drawn within.
     *
     * @param renderContext {RenderContext} The context
     */
@@ -81,7 +86,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    },
 
    /**
-    * Update this object within the render context, and for the specified time.
+    * Update this object within the render context, at the specified timeslice.
     *
     * @param renderContext {RenderContext} The context the object will be rendered within.
     * @param time {Number} The global time within the engine.
@@ -136,15 +141,18 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    getComponent: function(name) {
       return this.get(name.toUpperCase());
    },
-	
-	getProperties: function() {
-		var self = this;
-		var prop = this.base(self);
-		return $.extend(prop, {
-			"RenderContext" : [function() { return self.renderContext.getName(); },
-						 			 null, false]
-		});
-	}
+   
+   /**
+    * Returns a property object with accessor methods.
+    */
+   getProperties: function() {
+      var self = this;
+      var prop = this.base(self);
+      return $.extend(prop, {
+         "RenderContext" : [function() { return self.renderContext.getName(); },
+                            null, false]
+      });
+   }
 
 }, /** @scope HostObject.prototype */{  // Interface
 

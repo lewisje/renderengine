@@ -49,25 +49,32 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
 
    events: null,
 
-	constructor: function(name) {
-		this.base(name);
-		this.events = {};
-	},
+   constructor: function(name) {
+      this.base(name);
+      this.events = {};
+   },
 
-	destroy: function() {
-		// We need to make sure to remove any event's attached to us
-		// that weren't already cleaned up
-		for (var ref in this.events) {
-			var fn = this.events[ref];
-			var type = ref.split(",")[1];
-			if (fn) {
-				EventEngine.clearHandler(this.getElement(), type, fn);
-			}
-		}
+   /**
+    * Destroy the object, cleaning up any events that have been
+    * attached to this object.
+    */
+   destroy: function() {
+      // We need to make sure to remove any event's attached to us
+      // that weren't already cleaned up
+      for (var ref in this.events) {
+         var fn = this.events[ref];
+         var type = ref.split(",")[1];
+         if (fn) {
+            EventEngine.clearHandler(this.getElement(), type, fn);
+         }
+      }
 
-		this.base();
-	},
+      this.base();
+   },
 
+   /**
+    * Release the object back into the object pool.
+    */
    release: function() {
       this.base();
       this.element = null;
@@ -112,7 +119,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     */
    addEvent: function(ref, type, data, fn) {
       if (this.getElement()) {
-			Console.info(ref.getName() + " attach event '" + type + "' to " + this.getName());
+         Console.info(ref.getName() + " attach event '" + type + "' to " + this.getName());
          EventEngine.setHandler(this.getElement(), type, data || fn, fn);
 
          // Remember the handler by the reference object's name and event type
@@ -130,12 +137,12 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     */
    removeEvent: function(ref, type) {
       if (this.getElement()) {
-			// Find the handler to remove
-			var fn = this.events[ref.getName() + "," + type];
-			if (fn) {
-				Console.info(ref.getName() + " remove event '" + type + "' from " + this.getName());
-	         EventEngine.clearHandler(this.getElement(), type, fn);
-			}
+         // Find the handler to remove
+         var fn = this.events[ref.getName() + "," + type];
+         if (fn) {
+            Console.info(ref.getName() + " remove event '" + type + "' from " + this.getName());
+            EventEngine.clearHandler(this.getElement(), type, fn);
+         }
          // Remove the reference
          delete this.events[ref.getName() + "," + type];
       }
@@ -146,7 +153,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} The string "BaseObject"
     */
    getClassName: function() {
       return "BaseObject";
