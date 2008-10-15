@@ -82,19 +82,17 @@ var Game = Base.extend(/** @scope Game.prototype */{
       Engine.loadScript( (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource );
    },
 
-   loadEngineScripts: function(scripts) {
-      Game.scriptsToLoad = scripts;
-      for (var i in scripts) {
-         Engine.loadNow(scripts[i], Game.scriptLoaded);
-      }
+	/**
+	 * Load a script, relative to the game engine.  Scripts cannot be loaded
+	 * with an absolute URL.
+	 * 
+	 * @param scriptPath {String} The relative path of the script to load.
+	 */
+   loadEngineScript: function(scriptPath) {
+      Engine.loadNow(scriptPath, Game.scriptLoaded);
    },
 
    scriptLoaded: function(scriptPath) {
-      EngineSupport.arrayRemove(Game.scriptsToLoad, scriptPath);
-      if (Game.scriptsToLoad.length == 0) {
-         // A dummy object that can be looked for
-         window["GameInitialized"] = {};
-      }
    },
 
    /**
