@@ -58,6 +58,9 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       this.objs = new Array().concat(container.getObjects());
    },
 
+   /**
+    * Release the object back into the object pool.
+    */
    release: function() {
       this.base();
       this.idx = 0;
@@ -70,9 +73,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * iterating over them.  You cannot call this method after you have called {@link #next}.
     */
    reverse: function() {
-      if (this.idx != 0) {
-         throw new Error("Cannot reverse Iterator after calling next()");
-      }
+      Assert(this.idx == 0, "Cannot reverse Iterator after calling next()");
       this.objs.reverse();
    },
 
@@ -100,7 +101,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} The string "Iterator"
     */
    getClassName: function() {
       return "Iterator";
@@ -115,9 +116,9 @@ Engine.initObject("Container", "BaseObject", function() {
 
 /**
  * @class A container is a logical collection of objects.  A container
- * is responsible for maintaining the list of objects within it.
- * When a container is destroyed, all objects within the container
- * are destroyed with it.
+ *        is responsible for maintaining the list of objects within it.
+ *        When a container is destroyed, all objects within the container
+ *        are destroyed with it.
  *
  * @param {String} The name of the container. Default: Container
  * @extends BaseObject
@@ -131,6 +132,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       this.objects = [];
    },
 
+   /**
+    * Release the object back into the object pool.
+    */
    release: function() {
       this.base();
       this.objects = null;
@@ -163,9 +167,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    add: function(obj) {
       this.objects.push(obj);
-		if (obj.getId) {
-	      Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
-		}
+      if (obj.getId) {
+         Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
+      }
    },
 
    /**
@@ -175,9 +179,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {BaseObject} The object to remove from the container.
     */
    remove: function(obj) {
-		if (obj.getId) {
-	      Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
-		}
+      if (obj.getId) {
+         Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
+      }
       EngineSupport.arrayRemove(this.objects, obj);
    },
 
@@ -283,42 +287,48 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       this.objects.sort(fn);
    },
 
-	getProperties: function() {
-		var self = this;
-		var prop = this.base(self);
-		return $.extend(prop, {
-			"Contains" 	: [function() { return self.objects.length; },
-						 		null, false]
-		});
-	},
+   /**
+    * Returns a property object with accessor methods.
+    */
+   getProperties: function() {
+      var self = this;
+      var prop = this.base(self);
+      return $.extend(prop, {
+         "Contains"  : [function() { return self.objects.length; },
+                        null, false]
+      });
+   },
 
-	toString: function(indent) {
-		indent = indent ? indent : "";
-		var props = this.getProperties();
-		var xml = indent + "<" + this.constructor.getClassName();
-		for (var p in props) {
-			// If the value should be serialized, call it's getter
-			if (props[p][2]) {
-				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
-			}
-		}
-		xml += ">\n";
+   /**
+    * Serializes a container to XML.
+    */
+   toString: function(indent) {
+      indent = indent ? indent : "";
+      var props = this.getProperties();
+      var xml = indent + "<" + this.constructor.getClassName();
+      for (var p in props) {
+         // If the value should be serialized, call it's getter
+         if (props[p][2]) {
+            xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
+         }
+      }
+      xml += ">\n";
 
-		// Dump children
-		for (var o in this.objects) {
-			xml += this.objects[o].toString(indent + "   ");
-		}
+      // Dump children
+      for (var o in this.objects) {
+         xml += this.objects[o].toString(indent + "   ");
+      }
 
-		// Closing tag
-		xml += indent + "</" + this.constructor.getClassName() + ">\n";
-		return xml;
-	}
+      // Closing tag
+      xml += indent + "</" + this.constructor.getClassName() + ">\n";
+      return xml;
+   }
 
 }, /** @scope Container */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} The string "Container"
     */
    getClassName: function() {
       return "Container";
@@ -333,10 +343,10 @@ Engine.initObject("HashContainer", "Container", function() {
 
 /**
  * @class A hash container is a logical collection of objects.  A hash container
- * is a container with a backing object for faster lookups.  Objects within
- * the container must have unique names. When a container is destroyed, all
- * objects within the container are destroyed with it.
- * @extends BaseObject
+ *        is a container with a backing object for faster lookups.  Objects within
+ *        the container must have unique names. When a container is destroyed, all
+ *        objects within the container are destroyed with it.
+ * @extends Container
  */
 var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
 
@@ -353,6 +363,9 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
       this.objHash = {};
    },
 
+   /**
+    * Release the object back into the object pool.
+    */
    release: function() {
       this.base();
       this.objHash = null;
@@ -379,10 +392,10 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    add: function(key, obj) {
       AssertWarn(!this.isInHash(key), "Object already exists within hash!");
 
-		if (this.isInHash(key)) {
-			// Remove the old one first
-			this.removeHash(key);
-		}
+      if (this.isInHash(key)) {
+         // Remove the old one first
+         this.removeHash(key);
+      }
 
       // Some keys weren't being accepted (like "MOVE") so added
       // an underscore to prevent keyword collisions
@@ -418,7 +431,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
     */
    removeHash: function(key) {
       var obj = this.objHash["_" + String(key)];
-		EngineSupport.arrayRemove(this.objects, this.objHash["_" + String(key)]);
+      EngineSupport.arrayRemove(this.objects, this.objHash["_" + String(key)]);
       delete this.objHash["_" + String(key)];
       return obj;
    },
@@ -481,12 +494,11 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
       this.clear();
    }
 
-}, {
+}, /** @scope HashContainer.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf Container
+    * @return {String} The string "HashContainer"
     */
    getClassName: function() {
       return "HashContainer";
