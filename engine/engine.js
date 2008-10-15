@@ -928,7 +928,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 var Engine = Base.extend(/** @scope Engine.prototype */{
    constructor: null,
 
-   version: "1.0.3 (alpha)",
+   version: "1.0.2 (beta2)",
 
    idRef: 0,
 
@@ -1293,6 +1293,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Engine.runScriptQueue();
    },
 
+   /**
+    * Internal method which runs the script queue to handle scripts and functions
+    * which are queued to run sequentially.
+    * @private
+    */
    runScriptQueue: function() {
       if (!Engine.scriptQueueTimer) {
          // Process any waiting scripts
@@ -1383,6 +1388,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
    },
 
+   /**
+    * This method performs the actual script loading.
+    * @private
+    */
    doLoad: function(scriptPath, simplePath, cb) {
       if (!this.started) {
          return;
@@ -1459,10 +1468,25 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Load a game script.  Creates the default rendering context
-    * also.
+    * Loads a game's script.  This will wait until the specified
+    * <tt>gameObjectName</tt> is available before running it.  Doing so will
+    * ensure that all dependencies have been resolved before starting a game.
+    * Also creates the default rendering context for the engine.
+    * <p/>
+    * All games should execute this method to start their processing, rather than
+    * using the script loading mechanism for engine or game scripts.  This is used
+    * for the main game script only.  Normally it would appear in the game's "index" file.
+    * <pre>
+    *  &lt;script type="text/javascript"&gt;
+    *     // Load the game script
+    *     Engine.loadGame('game.js','Spaceroids');
+    *  &lt;/script&gt;
+    * </pre>
     *
     * @param gameSource {String} The URL of the game script.
+    * @param gameObjectName {String} The string name of the game object to execute.  When
+    *                       the framework if ready, the <tt>startup()</tt> method of this
+    *                       object will be called.
     * @memberOf Engine
     */
    loadGame: function(gameSource, gameObjectName) {
@@ -1496,7 +1520,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Load a script relative to the engine path.
+    * Load a script relative to the engine path.  A simple helper method which calls
+    * {@link #loadScript} and prepends the engine path to the supplied script source.
     *
     * @param scriptSource {String} A URL to load that is relative to the engine path.
     * @memberOf Engine
@@ -1505,6 +1530,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadScript(this.getEnginePath() + scriptSource);
    },
 
+   /**
+    * After a script has been loaded, updates the progress
+    * @private
+    */
    handleScriptDone: function() {
       Engine.scriptsProcessed++;
       Engine.scriptRatio = Engine.scriptsProcessed / Engine.scriptLoadCount;
@@ -1512,6 +1541,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Engine.updateProgress();
    },
 
+   /**
+    * Updates the progress bar (if available)
+    * @private
+    */
    updateProgress: function() {
       var pBar = jQuery("#engine-load-progress");
       if (pBar.length > 0) {
@@ -1776,6 +1809,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
+    * Initializes an object for use in the engine.  Calling this method is required to make sure
+    * that all dependencies are resolved before actually instantiating an object of the specified
+    * class.
+    *
     * @param objectName {String} The name of the object class
     * @param dependencies {Array} An array of object names the object to initialize
     *                     is dependent on.  When all objects have been created, the
@@ -1860,7 +1897,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Dependency processor.
+    * The dependency processor and link checker.
     * @private
     */
    processDependencies: function() {
@@ -2093,6 +2130,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       return Engine.procDeps(objectName, fTable);
    },
 
+   /**
+    * Process dependencies and clear any that have been resolved.
+    * @private
+    */
    procDeps: function(objectName, fTable) {
       // Remove dependencies resolved by local variables and arguments
       var r = [];
@@ -2169,7 +2210,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Dump out any unresolved class dependencies.
+    * Dump out any unresolved class dependencies to the console.
     * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
     */
    dumpDependencies: function() {
