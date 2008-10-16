@@ -6,6 +6,7 @@ The following list is a set of goals to be reached for the intended release.  So
 == Beta 2 ==
 
 || *Status* || *Goal* || *Description* ||
+|| _Complete_ || Tool || Ant build script. ||
 || _90%_ || Demo || Vector demo - Asteroids clone.  Test for game logic, component loading, dependency checking, vector rendering to 2D context. ||
 || _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
