@@ -11,6 +11,7 @@ The following list is a set of goals to be reached for the intended release.  So
 || _Incomplete_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 || - || Tool || Simple 2D game editor based on the sprite demo editor. ||
 || - || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
+|| - || Tool || Particle editor. ||
 || _Incomplete_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
 || _Incomplete_ || Browser support || Opera/Wii.  Better support for Opera on the Wii for a wider audience. ||
 || - || Rendering Context || SVG rendering context. ||
