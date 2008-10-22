@@ -77,7 +77,7 @@
             <include name="json.src.js"/>
             <include name="jquery-1.2.6.js"/>
             <include name="jquery.ext.engine.src.js"/>
-            <include name="soundmanager2.js"/>
+            <include name="soundmanager2.src.js"/>
             <include name="soundmanager2.swf"/>
             <include name="soundmanager2_flash9.swf"/>
             <include name="sylvester.src.js"/>
