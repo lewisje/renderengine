@@ -4,6 +4,7 @@
 As was stated in the EngineProcessOverview, host objects contain components.  Those components perform one specific function very well.  This allows a host object to segment its processing without having to handle all of the functionality itself.  Each host object need only add components to itself to gain the functionality of that component.  From the example game:
 {{{
    constructor: function(size, position, pWidth, pHeight) {
+      // Call the super class' method
       this.base("Spaceroid");
 
       // Add components to move and draw the asteroid
