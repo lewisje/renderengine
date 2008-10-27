@@ -13,7 +13,7 @@ The following table lists query parameters you can pass to the engine to configu
 || `metrics` ||Setting this value to `true` will enable the display of engine metrics collected during runtime.  You can use these values to tune your game. See the list below for metric values. ||
 || `debugSound` ||To see the sound engine initialization messages, and get a better idea of what !SoundManager2 is doing, set this value to `true`.||
 || `fps` ||The FPS to default the engine to.||
-|| `simWii` || true/false.  Simulates running on a Wii so the console appears in the browser's window. ||
+|| `simWii` || `true` to simulate running on a Wii. Uses the HTMLConsole which appears in the browser's window. ||
 
 === Metrics Values ===
 
