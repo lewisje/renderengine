@@ -14,7 +14,7 @@ The HTMLElementContext is an object that can wrap any HTML element as a context.
 
 == RenderContext2D ==
 
-This context is the base class for the !CanvasContext and !SVGContext which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.  A context could be created from this which would also wrap the DOM in such a mechanism, but since line drawing isn't natively supported by the DOM it doesn't make much sense.
+This context is the base class for the !CanvasContext and SVGContext which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.  A context could be created from this which would also wrap the DOM in such a mechanism, but since line drawing isn't natively supported by the DOM it doesn't make much sense.
 
 == Transformation Stack ==
 
