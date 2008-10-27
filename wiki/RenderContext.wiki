@@ -10,7 +10,7 @@ A rendering context has a "surface" to which the contents are drawn.  This surfa
 
 == HTMLElementContext ==
 
-The HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base !RenderContext2D since that context is aimed at 2D rendering with vectors, paths, and sprites.
+The HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base RenderContext2D since that context is aimed at 2D rendering with vectors, paths, and sprites.
 
 == RenderContext2D ==
 
