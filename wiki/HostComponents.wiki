@@ -69,10 +69,13 @@ The rock object has one method that it needs to implement for the collider compo
          {
             obj.kill();
             this.kill();
+
+            // Let the collider component we're handling it
             return ColliderComponent.STOP;
          }
       }
 
+      // Let the collider component know to keep processing
       return ColliderComponent.CONTINUE;
    }
 }}}
