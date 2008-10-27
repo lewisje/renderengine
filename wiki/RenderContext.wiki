@@ -16,6 +16,8 @@ The HTMLElementContext is an object that can wrap any HTML element as a context.
 
 This context is the base class for the !CanvasContext and SVGContext which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.  A context could be created from this which would also wrap the DOM in such a mechanism, but since line drawing isn't natively supported by the DOM it doesn't make much sense.
 
+(I've have an experiment in wrapping up [http://www.walterzorn.com/jsgraphics/jsgraphics_e.htm Walter Zorn's JS Graphics library] in a context, but have found that the performance doesn't lend itself to games.  It's useful for drawing vector graphics, but anything higher than a single fps is futile.)
+
 == Transformation Stack ==
 
 Some contexts implement a transformation stack which stores the state of position, rotation, and scale (among other things) in a stack structure. States can be pushed onto the stack (effectively combining them) and popped when no longer needed.  With no transformations on the stack the engine would be rendering in world space.  As transformations are pushed onto the stack, we move into object space.  An unbalanced stack can lead to strange rendering artifacts.  As such, the engine enforces the balance and will inform you if it becomes unbalanced.
