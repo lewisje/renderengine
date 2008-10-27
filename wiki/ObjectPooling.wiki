@@ -96,3 +96,22 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    }
 });
 }}}
+
+== Areas Needing Improvement ==
+
+There are objects that are still created and discarded on the fly.  Many times, objects are created within a method (either using pooling or not) and are left to die when a method ends.  This is where the garbage collector does its most work.  These objects consume memory and are lost when the method completes.  For example:
+
+{{{
+   checkMotion: function() {
+      // Get our position
+      var curPos = this.getComponent("move").getPosition();
+      
+      var motion = Vector2D.create(curPos).sub(this.lastPos);
+      if (lastPos.len() > 0) {
+         // We're moving, update the velocity display
+         // ...
+      }
+   }
+}}}
+
+In this case, `motion ` is created and then left to die when `checkMotion` exits.  It isn't used anywhere else but in this method.  Ideally we would call the `release()` method of `motion` before exiting the method, but that would become rather inefficient.  If this happens each frame, we're creating an unfortunately large number of objects which need to be collected.
