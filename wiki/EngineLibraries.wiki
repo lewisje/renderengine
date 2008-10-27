@@ -2,7 +2,7 @@
 
 =Libraries used by The Render Engine=
 
-The Render Engine uses the following libraries:
+I believe fully in code-reuse and find that it is also important to recognize those who have made my job easier.  Many times I like to reinvent the wheel, but have to catch myself so that I don't waste a lot of time.  These libraries have saved me hundreds, if not thousands of hours of development.  Thanks to the developers of these libraries sharing their work, I have been able to focus on the engine and not on supporting code.
 
   * Dean Edwards: [http://dean.edwards.name/weblog/2006/03/base/ Base] class
   * John Resig and the jQuery team: [http://www.jquery.com jQuery] library
@@ -10,5 +10,3 @@ The Render Engine uses the following libraries:
   * Willie Lau: [http://www.brainjacked.com Brainjacked] miscellaneous rountines
   * Michael Mathews: [http://www.jsdoctoolkit.org JSDocToolkit] for documentation
   * Scott Schiller: [http://www.schillmania.com/projects/soundmanager2/ SoundManager2] JS sound library
-
-I believe fully in code-reuse and find that it is also important to recognize those who have made my job easier.  Many times I like to reinvent the wheel, but have to catch myself so that I don't waste a lot of time.  These libraries have saved me hundreds, if not thousands of hours of development.  Thanks to the developers of these libraries sharing their work, I have been able to focus on the engine and not on supporting code.
