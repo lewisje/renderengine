@@ -7,13 +7,13 @@ Due to this fact, The Render Engine uses a simple "dependency processor" which p
 
 == The Process ==
 
-Except for `/platform/engine.js` which is loaded via a game's `index.html` page, the remainder of the classes are loaded as needed.  A simple method of including classes is provided so that only the classes needed to execute an object are loaded.  Before this dependency processor, all of the engine was loaded.  This caused examples to take _at least_ 30 seconds to start up.
+Except for `/engine/engine.js` which is loaded via a game's `index.html` page, the remainder of the classes are loaded as needed.  A simple method of including classes is provided so that only the classes needed to execute an object are loaded.  Before this dependency processor, all of the engine was loaded.  This caused examples to take _at least_ 30 seconds to start up.
 
 Each object is declared in a very strict fashion.  First, includes are handled, then an object is passed to the dependency processor via the `Engine.initObject()` method.  A simple example would be like the following:
 
 {{{
-Engine.include("/platform/engine.math2d.js");
-Engine.include("/platform/engine.container.js");
+Engine.include("/engine/engine.math2d.js");
+Engine.include("/engine/engine.container.js");
 
 Engine.initObject("MyObject", "Container", function() {
 
