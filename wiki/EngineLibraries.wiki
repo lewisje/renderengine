@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary A list of libraries that The Render Engine uses.
 
 =Libraries used by The Render Engine=
 
