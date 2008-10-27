@@ -114,4 +114,4 @@ There are objects that are still created and discarded on the fly.  Many times, 
    }
 }}}
 
-In this case, `motion ` is created and then left to die when `checkMotion` exits.  It isn't used anywhere else but in this method.  Ideally we would call the `release()` method of `motion` before exiting the method, but that would become rather inefficient.  If this happens each frame, we're creating an unfortunately large number of objects which need to be collected.
+In this case, `motion ` is created and then left to die when `checkMotion` exits.  It isn't used anywhere else but in this method.  Ideally we would call the `release()` method of `motion` before exiting the method, but that would become rather inefficient, what with all of the places where this type of situation occurs.  If this happens each frame, we're creating an unfortunately large number of objects which need to be collected.
