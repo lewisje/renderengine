@@ -3,6 +3,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 10/27/2008 || I forgot to add that I updated to the latest version of Soundmanager2 ||
 || 10/14/2008 || I've updated the script loading routines to pass back a status flag. Updated dependency checker to report unresolved links. ||
 
 ----
