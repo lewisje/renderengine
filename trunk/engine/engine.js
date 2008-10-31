@@ -1952,7 +1952,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
 
    /**
-    * Find variables defined in a function
+    * Find variables defined in a function:
+    *   var x = 10;
+    *   var y;
+    *   for (var z=3; z < 10; z++)
+    *   -- Still need to handle:  var x,y,z;
+    *
     * @private
     */
    findVars: function(objectName, obj) {
@@ -1960,7 +1965,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       var def = obj.toString();
       var vTable = [];
       var nR = "([\\$_\\w\\.]*)";
-      var vR = new RegExp("(var\\s*" + nR + "\\s*=?)","g");
+      var vR = new RegExp("(var\\s*" + nR + "\\s*)","g");
       var m;
       while ((m = vR.exec(def)) != null) {
          vTable.push(m[2]);
