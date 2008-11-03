@@ -30,14 +30,11 @@ The following list is a set of goals to be reached for the intended release.  So
 || - || Final feature matrix || A list of features to be included in the final release. ||
 
 
-== Gold Candidate ==
+== Gold Candidate - Version 1.0 ==
 
 || *Status* || *Goal* || *Description* ||
 || - || *Code freeze* || *No additional features* ||
 || - || Bugs from RC2 || Fix bugs from release candidate 2. ||
-
-
-== Version 1.0 ==
 
 
 = Future work =
