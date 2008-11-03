@@ -19,6 +19,7 @@ The following list is a set of goals to be reached for the intended release.  So
 == Release Candidate 1 ==
 
 || *Status* || *Goal* || *Description* ||
+|| - || *Code freeze* || *No additional features* ||
 || - || Bugs from beta 2 || Fix bugs from beta 2 ||
  
 
@@ -32,7 +33,6 @@ The following list is a set of goals to be reached for the intended release.  So
 == Gold Candidate - Version 1.0 ==
 
 || *Status* || *Goal* || *Description* ||
-|| - || *Code freeze* || *No additional features* ||
 || - || Bugs from RC2 || Fix bugs from release candidate 2. ||
 
 ----
