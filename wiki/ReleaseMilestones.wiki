@@ -15,7 +15,6 @@ The following list is a set of goals to be reached for the intended release.  So
 || - || Tool || Particle editor. ||
 || _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
 || _Incomplete_ || Browser support || Opera/Wii.  Better support for Opera on the Wii for a wider audience. ||
-|| - || Rendering Context || SVG rendering context. ||
 
 == Release Candidate 1 ==
 
@@ -42,5 +41,6 @@ The following list is a set of goals to be reached for the intended release.  So
 == Version 2.0 ==
 
 || *Status* || *Goal* || *Description* ||
-|| - || New feature || Multiplayer networking using AJAX polling and COMET. ||
-|| - || New feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
+|| - || New Feature || Multiplayer networking using AJAX polling and COMET. ||
+|| - || New Feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
+|| - || Rendering Context || SVG rendering context. ||
