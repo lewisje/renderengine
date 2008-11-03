@@ -1,19 +1,21 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+It's been a busy couple of weeks at my job, so I haven't had a lot of time to work on the engine.  But, we just finished our release last Friday so I can start to devote more time again.
 
-I've updated the dependency checker to validate links as the game loads and keep track of what links don't resolve.  If, after a short period, no more files have been parsed and there are outstanding unresolved links, it will be reported and the engine shutdown.  I've decided on this route because it's important to know why a game isn't loading.  There wasn't any kind of reporting which would appear as if the game was just hung.
+I've been spending some time trying to abstract the resource loaders.  Most of them are based on the idea that a file exists remotely.  I wanted a way that I can check for the existence of a file as well as read it.  I toyed with the idea of creating some sort of remote file class which handled reading, writing, and general file management tasks.
 
-There's now an Ant build file for the engine distributions. ~~Need to make an Ant build file for the engine.~~
+From that I expanded to a remote filesystem.  I played around with the idea, basically trying to bridge the gap between client and server.  However, it's not what I feel is a solid idea.  I may end up writing something that uses a virtual filesystem defined in a MySQL database or something similar.  I really don't want to open up the system's disks directly.
 
-The Sprite Editor is getting more feature complete, however there's still the issue of WebKit not supporting "toDataURL()".  I changed the method by which pixels were stored in the current layer.  This will make it easier to manipulate the pixels when shifting, flipping, and mirroring.
-
-I plan to add some sort of loading mechanism to the editor.  But, again, WebKit doesn't support the "getImageData()" method either so it makes it difficult.  Supposedly the current nightlies of WebKit contain these two methods.  That will make the Sprite Editor able to reach its full potential.
-
-Beta 1 ~~is nearing release status~~ has been tagged!!  It's now time to build tools and more engine demos.  That should mean that moving from Beta 1 to the initial v1.0 release should progress rather quickly.
+I fixed a small bug in the dependency checker.  I was considering the pattern "var xxx =" to be the declaration of a variable.  Silly me... Basically having "var xxx" is what the pattern should be.  In fact, "var xxx,yyy,zzz;" should be considered as well.  I fixed the prior, but haven't addressed the latter.
 
 The largest tool that I want to have completed before v1.0 is the level editor for 2D game creation.  It's currently being built as part of the SMB Sprite Demo, but as I was developing it I realized just how much it would add if someone could set up the framework for a game in it.
 
-The three tools which I hope will be released with v1.0 are the Sprite Editor, 2D Level Editor, and Font Editor.  The latter is more of a "wishful thinking" kind of tool, but it would be nice to have a tool which makes splitting a bitmap font into an alphabet for browsers that don't support text in the Canvas element.
+There are four tools that I'm currently working on:
 
-I've added a fourth tool that I want to implement: A particle editor.  I don't have a lot of details, but I can see some use in having some predefined particle types available.  Most likely they will be stored as configurations to a general-purpose particle object.
+  # 2D Level Editor
+  # Sprite Editor
+  # Font Editor
+  # Particle Effect Editor
+
+I think that these four tools will be enough to launch a v1.0 release.  They are arranged in completion priority order.
