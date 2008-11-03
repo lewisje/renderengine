@@ -38,3 +38,12 @@ The following list is a set of goals to be reached for the intended release.  So
 
 
 == Version 1.0 ==
+
+
+= Future work =
+
+== Version 2.0 ==
+
+|| *Status* || *Goal* || *Description* ||
+|| - || New feature || Multiplayer networking using AJAX polling and COMET. ||
+|| - || New feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
