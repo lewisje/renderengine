@@ -1,3 +1,81 @@
+#summary How to code for The Render Engine
+
 = Coding Styles Used in the Engine =
 
-This page will outline the coding styles used in the engine so that code written by developers will work with the engine and DependencyProcessor.
+When writing code to work with The Render Engine, it's important to follow some coding guidelines.  Developers all have their own way of writing Javascript, which makes it difficult to impose a certain style.  However, ignoring some basic styles will cause the DependencyProcessor to fail.
+
+All classes must be declared using Base style.  No Prototype, no moo-tools, no Script.aculo.us... I know there are some libraries out there that people have adjusted to.  They understand how they work and they accept them as being _the way to code in Javascript._  The problem is that there isn't just _one way_ to code in Javascript.  But, this engine uses Base by Dean Edwards.  I suggest you read up on it, but here's the basic pattern:
+
+{{{
+   /**
+    * @class Document the class, be sure to include as much information
+    * as you can about it.  This will keep the API clean and make the
+    * documentation effective.  You can never be too verbose with your
+    * documentation.  If your class extends from a class other than
+    * Base, which it most likely will, be sure to let the documentation
+    * system know that.
+    *
+    * @extends SuperClass
+    */
+   var NewClass = SuperClass.extend(/** @scope NewClass.prototype */{
+
+      /** Document your fields that are on the prototype */
+      field1: null,
+
+      /**
+       * Document the constructor, let the end user know what
+       * the arguments are for using:
+       * @param arg1 {Type} Description of argument 1
+       * @param [arg2=default] {Type} Description of argument 2
+       */
+      constructor: function(arg1, arg2) {
+         // The constructor for the class
+      },
+
+      /**
+       * Methods intended to be private to the class should be
+       * marked as such so that they aren't documented as usable in
+       * the API.
+       * @param x {Type} Still document arguments, even for private methods
+       * @private
+       */
+      internalMethod: function(x) {
+         // Be sure to use inline comments where possible.
+         // It's important to describe what is going on, especially
+         // when it cannot be inferred from the code.
+      },
+
+      /**
+       * Public methods should be well documented.  There should be
+       * a short sentence which describes the method, followed by
+       * a paragraph of information (if warranted) to make it absolutely
+       * clear what the method does.
+       *
+       * @param y {Type} Always document arguments
+       * @param [z=default] {Type} Especially optional arguments and their
+       *                    default values.
+       */
+      extMethod: function(y, z) {
+
+      }
+   }, /** @scope NewClass.prototype */{
+
+      /** Static members of a class should be well documented. */
+      STATUS_OK: 1,
+
+      /** These will show up as fields of the class in the documentation. */
+      STATUS_FAIL: -1,
+
+      /** The uppercase name indicates a constant. */
+      STATUS_INIT: 0,
+
+      /**
+       * Remember to include the method to get your class's name.
+       * @return {String} Returns the string "NewClass"
+       */
+      getClassName: function() {
+         return "NewClass";
+      }
+
+   });
+}}}
