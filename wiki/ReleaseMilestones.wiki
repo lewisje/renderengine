@@ -20,20 +20,20 @@ The following list is a set of goals to be reached for the intended release.  So
 
 || *Status* || *Goal* || *Description* ||
 || - || *Code freeze* || *No additional features* ||
-|| - || Bugs from beta 2 || Fix bugs from beta 2 ||
+|| - || Bug Fixing || Fix bugs from beta 2 ||
  
 
 == Release Candidate 2 ==
 
 || *Status* || *Goal* || *Description* ||
-|| - || Bugs from RC1 || Fix bugs found during RC1. ||
-|| - || Final feature matrix || A list of features to be included in the final release. ||
+|| - || Bugs Fixing || Fix bugs found during RC1. ||
 
 
 == Gold Candidate - Version 1.0 ==
 
 || *Status* || *Goal* || *Description* ||
-|| - || Bugs from RC2 || Fix bugs found during RC2. ||
+|| - || Bugs Fixing || Fix bugs found during RC2. ||
+|| - || Final || This release will be tagged v1.0 ||
 
 ----
 
