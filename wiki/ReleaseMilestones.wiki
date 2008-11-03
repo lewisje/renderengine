@@ -35,8 +35,11 @@ The following list is a set of goals to be reached for the intended release.  So
 || - || *Code freeze* || *No additional features* ||
 || - || Bugs from RC2 || Fix bugs from release candidate 2. ||
 
+----
 
 = Future work =
+
+Ideas for the next release.  This list is evolving...
 
 == Version 2.0 ==
 
