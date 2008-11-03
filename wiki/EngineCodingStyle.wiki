@@ -4,7 +4,7 @@
 
 When writing code to work with The Render Engine, it's important to follow some coding guidelines.  Developers all have their own way of writing Javascript, which makes it difficult to impose a certain style.  However, ignoring some basic styles will cause the DependencyProcessor to fail.
 
-All classes must be declared using Base style.  No Prototype, no moo-tools, no Script.aculo.us... I know there are some libraries out there that people have adjusted to.  They understand how they work and they accept them as being _the way to code in Javascript._  The problem is that there isn't just _one way_ to code in Javascript.  But, this engine uses Base by Dean Edwards.  I suggest you read up on it, but here's the basic pattern:
+All classes must be declared using Base style.  No Prototype, no moo-tools, no Script.aculo.us... I know there are some libraries out there that people have adjusted to.  They understand how they work and they accept them as being _the way to code in Javascript._  The problem is that there isn't just _one way_ to code in Javascript.  But, this engine uses Base by Dean Edwards.  I suggest you [http://dean.edwards.name/weblog/2006/03/base/ read up on it], but here's the basic class pattern in the engine:
 
 {{{
    /**
