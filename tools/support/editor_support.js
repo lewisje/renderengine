@@ -30,22 +30,23 @@
 
 jQuery.extend({
 
-	/*
-	 * Call a function by it's string representation.
-	 * The function will be passed the DOM element which triggered
-	 * the call.
-	 */
-	callNSFunction: function(fName, obj) {
-		fName = fName.split(".");
-		var o = window;
-		var i = fName.length - 1;
-		while (i--) {
-			o = o[fName.shift()];
-		}
-		o[fName.shift()](obj);
-	}
+   /*
+    * Call a function by it's string representation.
+    * The function will be passed the DOM element which triggered
+    * the call.
+    */
+   callNSFunction: function(fName, obj) {
+      fName = fName.split(".");
+      var o = window;
+      var i = fName.length - 1;
+      while (i--) {
+         o = o[fName.shift()];
+      }
+      o[fName.shift()](obj);
+   }
 
 });
+   
 
 $(document).ready(function() {
 
@@ -66,25 +67,47 @@ $(document).ready(function() {
       }
    });
 
-	/* For buttons which are part of a group (i.e. they share
-	 * the same value for the attribute "groupname") only
-	 * one of the buttons will have the "selected" class.
-	 */
+   /* For buttons which are part of a group (i.e. they share
+    * the same value for the attribute "groupname") only
+    * one of the buttons will have the "selected" class.
+    */
    $(".button.grouped").mousedown(function() {
-		var gName = $(this).attr("groupname");
-		$(".button.stateful[groupname=" + gName + "]").removeClass("selected");
-		$(this).addClass("selected");
+      var gName = $(this).attr("groupname");
+      $(".button.stateful[groupname=" + gName + "]").removeClass("selected");
+      $(this).addClass("selected");
    });
 
-	/* For buttons which have a state this will toggle that
-	 * state automatically, either assigning or removing the "on"
-	 * class.
-	 */
-	$(".button.stateful").mousedown(function() {
-		if ($(this).hasClass("on")) {
-			$(this).removeClass("on");
-		} else {
-			$(this).addClass("on");
-		}
-	});
+   /* For buttons which have a state this will toggle that
+    * state automatically, either assigning or removing the "on"
+    * class.
+    */
+   $(".button.stateful").mousedown(function() {
+      if ($(this).hasClass("on")) {
+         $(this).removeClass("on");
+      } else {
+         $(this).addClass("on");
+      }
+   });
+   
+   /* For menubar controls
+    */
+   $(".menuItem").hover(function() {
+      $(this).addClass("mouseover");
+   }, function() {
+      $(this).removeClass("mouseover").removeClass("open");
+   }).click(function() {
+      $(".menu", this).css("left", $(this).css("left")).css("top", $(this).css("top") + 28).parent().addClass("open");
+   });
+
+   $(".menu .item").hover(function() {
+      $(this).addClass("mouseover");
+   }, function() {
+      $(this).removeClass("mouseover");
+   }).mousedown(function() {
+      if (!$(this).hasClass("disabled")) {
+         $.callNSFunction($(this).attr("func"), this);
+      }
+   });
+   
+   
 });

@@ -47,6 +47,7 @@
       <script type="text/javascript" src="../../libs/sylvester.js"></script>
 
       <!-- Load the main engine script -->
+      <script type="text/javascript" src="../support/editor_support.js"></script>
       <script type="text/javascript" src="../../engine/engine.js"></script>
 
       <style type="text/css">
@@ -71,6 +72,50 @@
          // Load the game script
          Engine.loadGame('game.js','SpriteEditor');
       </script>
+
+		<div id="menuBar" style="display: none;">
+			<div class="menuItem">File
+				<div class="menu">
+					<div class="item" func="SpriteEditor.actionNew">New</div>
+					<div class="item disabled" func="SpriteEditor.actionOpen">Open</div>
+					<div class="item disabled" func="SpriteEditor.actionSave">Save</div>
+					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionExit">Exit</div>
+				</div>
+			</div>
+			<div class="menuItem">Edit
+				<div class="menu">
+					<div class="item disabled" func="SpriteEditor.actionUndo">Undo</div>
+					<div class="item disabled" func="SpriteEditor.actionRedo">Redo</div>
+					<div class="sep"><!-- --></div>
+					<div class="item disabled" func="SpriteEditor.actionCopy">Copy</div>
+					<div class="item disabled" func="SpriteEditor.actionPaste">Paste</div>
+					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionFlipHoriz">Flip Horizontal</div>
+					<div class="item" func="SpriteEditor.actionFlipVert">Flip Vertical</div>
+					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionShiftUp">Shift Up</div>
+					<div class="item" func="SpriteEditor.actionShiftDown">Shift Down</div>
+					<div class="item" func="SpriteEditor.actionShiftLeft">Shift Left</div>
+					<div class="item" func="SpriteEditor.actionShiftRight">Shift Right</div>
+				</div>
+			</div>
+			<div class="menuItem">Options
+				<div class="menu">
+					<div class="item toggle" func="SpriteEditor.actionMirrorVert">Vertical Mirror</div>
+					<div class="item toggle" func="SpriteEditor.actionMirrorHoriz">Horizontal Mirror</div>
+					<div class="sep"><!-- --></div>
+					<div class="item toggle checked" func="SpriteEditor.actionToggleGrid">Show Grid</div>
+				</div>
+			</div>
+			<div class="menuItem">Help
+				<div class="menu">
+					<div class="item" func="SpriteEditor.actionHelp">Help Contents</div>
+					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionAbout">About Sprite Editor</div>
+				</div>
+			</div>
+		</div>
 
       <div id="controls" style="display: none;">
          <div class="tool colors">
