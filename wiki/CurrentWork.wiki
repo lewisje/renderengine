@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+I'm working on creating a set of functions to simplify UI design for the editors.  It's kind of like a set of "widget" methods that will take the DOM and manipulate elements with predefined classes into functional UI elements.  This should assist in developing the UI's for each editor.
+
 It's been a busy couple of weeks at my job, so I haven't had a lot of time to work on the engine.  But, we just finished our release last Friday so I can start to devote more time again.
 
 I've been spending some time trying to abstract the resource loaders.  Most of them are based on the idea that a file exists remotely.  I wanted a way that I can check for the existence of a file as well as read it.  I toyed with the idea of creating some sort of remote file class which handled reading, writing, and general file management tasks.
