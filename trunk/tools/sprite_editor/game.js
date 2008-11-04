@@ -57,29 +57,29 @@ var SpriteEditor = Game.extend({
 
    pixSize: 32,
 
-	editorSize: 512,
+   editorSize: 512,
 
-	currentColor: "white",
+   currentColor: "white",
 
-	currentLayer: null,
+   currentLayer: null,
 
-	mouseBtn: 0,
+   mouseBtn: 0,
 
-	drawMode: 0,
+   drawMode: 0,
 
-	colorSelector: null,
+   colorSelector: null,
 
-	brushSize: [0,0],
+   brushSize: [0,0],
 
-	grid: null,
+   grid: null,
 
-	previewImage: null,
+   previewImage: null,
 
-	editColor: 0,
+   editColor: 0,
 
-	mirrorVert: false,
+   mirrorVert: false,
 
-	mirrorHorz: false,
+   mirrorHorz: false,
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -87,60 +87,61 @@ var SpriteEditor = Game.extend({
     */
    setup: function() {
      $("#loading").remove();
-	  $("#controls").css("display", "block");
+     $("#controls").css("display", "block");
+     $("#menuBar").css("display", "block");
 
       // Set the FPS of the game
       Engine.setFPS(5);
 
       // Create the 2D context
       this.editorContext = CanvasContext.create("editor", this.editorSize, this.editorSize);
-		this.editorContext.setWorldScale(1);
+      this.editorContext.setWorldScale(1);
       Engine.getDefaultContext().add(this.editorContext);
       this.editorContext.setBackgroundColor("black");
 
-		// The place where previews will be generated
-		this.previewContext = SpritePreview.create();
-		this.previewContext.setWorldScale(1);
-		Engine.getDefaultContext().add(this.previewContext);
+      // The place where previews will be generated
+      this.previewContext = SpritePreview.create();
+      this.previewContext.setWorldScale(1);
+      Engine.getDefaultContext().add(this.previewContext);
 
-		// Set some event handlers
-		var self = this;
-		this.editorContext.addEvent(this, "mousedown", function(evt) {
-			self.mouseBtn = true;
-			switch (self.drawMode) {
-				case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
-											break;
-				case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
-											break;
-				case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
-											break;
-			}
-		});
+      // Set some event handlers
+      var self = this;
+      this.editorContext.addEvent(this, "mousedown", function(evt) {
+         self.mouseBtn = true;
+         switch (self.drawMode) {
+            case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
+                                 break;
+            case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
+                                 break;
+            case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
+                                 break;
+         }
+      });
 
-		this.editorContext.addEvent(this, "mouseup", function(evt) {
-			self.mouseBtn = false;
-		});
+      this.editorContext.addEvent(this, "mouseup", function(evt) {
+         self.mouseBtn = false;
+      });
 
-		this.editorContext.addEvent(this, "mousemove", function(evt) {
-			if (self.mouseBtn) {
-				switch (self.drawMode) {
-					case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
-												break;
-					case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
-												break;
-					case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
-												break;
-				}
-			}
-		});
+      this.editorContext.addEvent(this, "mousemove", function(evt) {
+         if (self.mouseBtn) {
+            switch (self.drawMode) {
+               case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
+                                    break;
+               case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
+                                    break;
+               case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
+                                    break;
+            }
+         }
+      });
 
-		// Add the default layer
-		this.currentLayer = SpriteLayer.create();
-		this.grid = SpriteGrid.create();
-		this.editorContext.add(this.currentLayer);
-		this.editorContext.add(this.grid);
+      // Add the default layer
+      this.currentLayer = SpriteLayer.create();
+      this.grid = SpriteGrid.create();
+      this.editorContext.add(this.currentLayer);
+      this.editorContext.add(this.grid);
 
-		this.addControls();
+      this.addControls();
    },
 
    /**
@@ -148,283 +149,269 @@ var SpriteEditor = Game.extend({
     * any objects, remove event handlers, destroy the rendering context, etc.
     */
    teardown: function() {
-		this.editorContext.removeEvent("mousedown");
+      this.editorContext.removeEvent("mousedown");
       this.editorContext.destroy();
    },
 
-	//===============================================================================================
-	// Editor Functions
+   //===============================================================================================
+   // Editor Functions
 
-	setPixel: function(x, y) {
-		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
-		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
-		  		SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				var d = [256 - x, 256 -y];
-				if (this.mirrorHorz) {
-			  		SpriteEditor.currentLayer.addPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				}
-				if (this.mirrorVert) {
-			  		SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), (256 + d[1]) + (yB * SpriteEditor.pixSize));
-				}
-		  	}
-		}
-	},
+   setPixel: function(x, y) {
+      for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
+         for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
+            SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+            var d = [256 - x, 256 -y];
+            if (this.mirrorHorz) {
+               SpriteEditor.currentLayer.addPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+            }
+            if (this.mirrorVert) {
+               SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), (256 + d[1]) + (yB * SpriteEditor.pixSize));
+            }
+         }
+      }
+   },
 
-	clearPixel: function(x, y) {
-		for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
-		  	for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
-		  		SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				var d = [256 - x, 256 -y];
-				if (this.mirrorHorz) {
-			  		SpriteEditor.currentLayer.clearPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
-				}
-				if (this.mirrorVert) {
-			  		SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), (256 + d[1]) + (yB * SpriteEditor.pixSize));
-				}
-		  	}
-		}
-	},
+   clearPixel: function(x, y) {
+      for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
+         for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
+            SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+            var d = [256 - x, 256 -y];
+            if (this.mirrorHorz) {
+               SpriteEditor.currentLayer.clearPixel((256 + d[0]) + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
+            }
+            if (this.mirrorVert) {
+               SpriteEditor.currentLayer.clearPixel(x + (xB * SpriteEditor.pixSize), (256 + d[1]) + (yB * SpriteEditor.pixSize));
+            }
+         }
+      }
+   },
 
-	shiftUp: function() {
-		SpriteEditor.currentLayer.shiftUp();
-	},
+   shiftUp: function() {
+      SpriteEditor.currentLayer.shiftUp();
+   },
 
-	shiftDown: function() {
-		SpriteEditor.currentLayer.shiftDown();
-	},
+   shiftDown: function() {
+      SpriteEditor.currentLayer.shiftDown();
+   },
 
-	shiftLeft: function() {
-		SpriteEditor.currentLayer.shiftLeft();
-	},
+   shiftLeft: function() {
+      SpriteEditor.currentLayer.shiftLeft();
+   },
 
-	shiftRight: function() {
-		SpriteEditor.currentLayer.shiftRight();
-	},
+   shiftRight: function() {
+      SpriteEditor.currentLayer.shiftRight();
+   },
 
-	flipVertical: function() {
-		SpriteEditor.currentLayer.flipVertical();
-	},
+   flipVertical: function() {
+      SpriteEditor.currentLayer.flipVertical();
+   },
 
-	flipHorizontal: function() {
-		SpriteEditor.currentLayer.flipHorizontal();
-	},
+   flipHorizontal: function() {
+      SpriteEditor.currentLayer.flipHorizontal();
+   },
 
-	hMirrorToggle: function() {
-		var mode = $(".mirror-horizontal").hasClass("on");
-		this.grid.setMirrorHorizontal(mode);
-		this.mirrorHorz = mode;
-	},
+   hMirrorToggle: function() {
+      var mode = $(".mirror-horizontal").hasClass("on");
+      this.grid.setMirrorHorizontal(mode);
+      this.mirrorHorz = mode;
+   },
 
-	vMirrorToggle: function() {
-		var mode = $(".mirror-vertical").hasClass("on");
-		this.grid.setMirrorVertical(mode);
-		this.mirrorVert = mode;
-	},
+   vMirrorToggle: function() {
+      var mode = $(".mirror-vertical").hasClass("on");
+      this.grid.setMirrorVertical(mode);
+      this.mirrorVert = mode;
+   },
 
-	setDrawMode: function(obj) {
-		if ($(obj).hasClass("paintbrush")) {
-			SpriteEditor.drawMode = SpriteEditor.PAINT;
-			$(".drawicon.eraser").removeClass("on");
-			$(".drawicon.dropper").removeClass("on");
-		} else if ($(obj).hasClass("eraser")) {
-			SpriteEditor.drawMode = SpriteEditor.ERASE;
-			$(".drawicon.paintbrush").removeClass("on");
-			$(".drawicon.dropper").removeClass("on");
-		} else if ($(obj).hasClass("dropper")) {
-			SpriteEditor.drawMode = SpriteEditor.SELECT;
-			$(".drawicon.paintbrush").removeClass("on");
-			$(".drawicon.eraser").removeClass("on");
-		}
-	},
+   setDrawMode: function(obj) {
+      if ($(obj).hasClass("paintbrush")) {
+         SpriteEditor.drawMode = SpriteEditor.PAINT;
+         $(".drawicon.eraser").removeClass("on");
+         $(".drawicon.dropper").removeClass("on");
+      } else if ($(obj).hasClass("eraser")) {
+         SpriteEditor.drawMode = SpriteEditor.ERASE;
+         $(".drawicon.paintbrush").removeClass("on");
+         $(".drawicon.dropper").removeClass("on");
+      } else if ($(obj).hasClass("dropper")) {
+         SpriteEditor.drawMode = SpriteEditor.SELECT;
+         $(".drawicon.paintbrush").removeClass("on");
+         $(".drawicon.eraser").removeClass("on");
+      }
+   },
 
-	getPixel: function(x, y) {
-		var colr = SpriteEditor.currentLayer.getPixel(x, y);
-		if (colr) {
-			$("#curColor").val(colr);
-			SpriteEditor.currentColor = colr;
-			$(".colorTable .selectedColor").css("background", colr);
-		}
-	},
+   getPixel: function(x, y) {
+      var colr = SpriteEditor.currentLayer.getPixel(x, y);
+      if (colr) {
+         $("#curColor").val(colr);
+         SpriteEditor.currentColor = colr;
+         $(".colorTable .selectedColor").css("background", colr);
+      }
+   },
 
-	setNewColor: function(hexColor) {
-		if (SpriteEditor.editColor == SpriteEditor.COLOR_FOREGROUND) {
-			$("#curColor").val(hexColor);
-			SpriteEditor.currentColor = hexColor;
-			$(".colorTable .selectedColor").css("background", hexColor);
-		} else {
-			$(".colorTable .backgroundColor").css("background", hexColor);
-			$(".preview img").css("background", hexColor);
-			$(SpriteEditor.editorContext.getSurface()).css("background", hexColor);
-			SpriteEditor.grid.setGridColor(SpriteEditor.getContrast(hexColor));
-		}
-	},
+   setNewColor: function(hexColor) {
+      if (SpriteEditor.editColor == SpriteEditor.COLOR_FOREGROUND) {
+         $("#curColor").val(hexColor);
+         SpriteEditor.currentColor = hexColor;
+         $(".colorTable .selectedColor").css("background", hexColor);
+      } else {
+         $(".colorTable .backgroundColor").css("background", hexColor);
+         $(".preview img").css("background", hexColor);
+         $(SpriteEditor.editorContext.getSurface()).css("background", hexColor);
+         SpriteEditor.grid.setGridColor(SpriteEditor.getContrast(hexColor));
+      }
+   },
 
-	addControls: function() {
-		$("#curColor")
-			.change(function() {
-				SpriteEditor.currentColor = this.value;
-				$(".colorTable .selectedColor").css("background", colr);
-			})
-			.dblclick(function() {
-				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
-			});
+   addControls: function() {
+      $("#curColor")
+         .change(function() {
+            SpriteEditor.currentColor = this.value;
+            $(".colorTable .selectedColor").css("background", colr);
+         })
+         .dblclick(function() {
+            SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
+         });
 
-		$(".colorTable .selectedColor")
-			.click(function() {
-				SpriteEditor.editColor = SpriteEditor.COLOR_FOREGROUND;
-				SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
-			});
+      $(".colorTable .selectedColor")
+         .click(function() {
+            SpriteEditor.editColor = SpriteEditor.COLOR_FOREGROUND;
+            SpriteEditor.colorSelector.show(520, 10, SpriteEditor.currentColor);
+         });
 
-		$(".colorTable .backgroundColor")
-			.click(function() {
-				SpriteEditor.editColor = SpriteEditor.COLOR_BACKGROUND;
-				var colr = SpriteEditor.fixupColor($(this).css("background-color"));
-				SpriteEditor.colorSelector.show(520, 10, colr);
-			});
-
-
-		$("#gridVis").change(function() {
-			SpriteEditor.grid.setVisible(this.checked);
-		});
-
-		$("#grid8")
-			.change(function() {
-				SpriteEditor.pixSize = 8;
-			});
-
-		$("#grid16")
-			.change(function() {
-				SpriteEditor.pixSize = 16;
-			});
-
-		$("#grid32")
-			.change(function() {
-				SpriteEditor.pixSize = 32;
-			});
-
-		$("#grid64")
-			.change(function() {
-				SpriteEditor.pixSize = 64;
-			});
+      $(".colorTable .backgroundColor")
+         .click(function() {
+            SpriteEditor.editColor = SpriteEditor.COLOR_BACKGROUND;
+            var colr = SpriteEditor.fixupColor($(this).css("background-color"));
+            SpriteEditor.colorSelector.show(520, 10, colr);
+         });
 
 
-		$(".preColor")
-			.click(function() {
-				var colr = SpriteEditor.fixupColor($(this).css("background-color"));
-				$("#curColor").val(colr.toUpperCase());
-				$(".colorTable .selectedColor").css("background", colr);
-				SpriteEditor.currentColor = colr;
-			});
+      $("#gridVis").change(function() {
+         SpriteEditor.grid.setVisible(this.checked);
+      });
 
-		$(".brushPix").click(function() {
-			var idx = $(".brushPix").index(this);
-			$(".brushPix").removeClass("enabled");
-			SpriteEditor.brushSize = [Math.floor(idx % 3), Math.floor(idx / 3)];
-			for (var x = 0; x < 3; x++) {
-				for (var y = 0; y < 3; y++) {
-					if (x <= SpriteEditor.brushSize[0] &&
-						 y <= SpriteEditor.brushSize[1]) {
-						 	$(".brushPix:eq(" + ((y * 3) + x) + ")").addClass("enabled");
-						 }
-				}
-			}
-		});
+      $("#grid8")
+         .change(function() {
+            SpriteEditor.pixSize = 8;
+         });
 
-		$(".button").hover(function() {
-			$(this).addClass("mouseover");
-		}, function() {
-			$(this).removeClass("mouseover");
-		}).each(function() {
-			if ($(this).attr("func")) {
-				$(this).mousedown(function() {
-					SpriteEditor.callFunction($(this).attr("func"), this);
-				});
-			}
-		});
+      $("#grid16")
+         .change(function() {
+            SpriteEditor.pixSize = 16;
+         });
 
-		$(".stateful").mousedown(function() {
-			if ($(this).hasClass("on")) {
-				$(this).removeClass("on");
-			} else {
-				$(this).addClass("on");
-			}
-			SpriteEditor.callFunction($(this).attr("func"), this);
-		});
+      $("#grid32")
+         .change(function() {
+            SpriteEditor.pixSize = 32;
+         });
 
-		$("#grid" + SpriteEditor.pixSize).attr("checked", true);
+      $("#grid64")
+         .change(function() {
+            SpriteEditor.pixSize = 64;
+         });
 
-		SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
 
-		SpriteEditor.previewImage = $(".preview img");
-	},
+      $(".preColor")
+         .click(function() {
+            var colr = SpriteEditor.fixupColor($(this).css("background-color"));
+            $("#curColor").val(colr.toUpperCase());
+            $(".colorTable .selectedColor").css("background", colr);
+            SpriteEditor.currentColor = colr;
+         });
 
-	callFunction: function(fName, obj) {
-		fName = fName.split(".");
-		var o = window;
-		var i = fName.length - 1;
-		while (i--) {
-			o = o[fName.shift()];
-		}
-		o[fName.shift()](obj);
-	},
+      $(".brushPix").click(function() {
+         var idx = $(".brushPix").index(this);
+         $(".brushPix").removeClass("enabled");
+         SpriteEditor.brushSize = [Math.floor(idx % 3), Math.floor(idx / 3)];
+         for (var x = 0; x < 3; x++) {
+            for (var y = 0; y < 3; y++) {
+               if (x <= SpriteEditor.brushSize[0] &&
+                   y <= SpriteEditor.brushSize[1]) {
+                     $(".brushPix:eq(" + ((y * 3) + x) + ")").addClass("enabled");
+                   }
+            }
+         }
+      });
 
-	fixupColor: function(colr) {
+      $("#grid" + SpriteEditor.pixSize).attr("checked", true);
 
-		function pad(n) {
-			if (parseInt(n, 10) < 10) {
-				return "0" + n;
-			}
-			return n;
-		}
+      SpriteEditor.colorSelector = new ColorSelector("cs", SpriteEditor.setNewColor, $("#curColor").val());
 
-		colr.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)/, function(str, r, g, b) {
-			colr = "#";
-			colr += pad(Number(r).toString(16));
-			colr += pad(Number(g).toString(16));
-			colr += pad(Number(b).toString(16));
-		});
-		// For browsers that use the named 16 colors
-		colr.replace(/(.*)/,function(str) {
-			var newColr = SpriteEditor.colorTable[str.toLowerCase()];
-			colr = newColr || colr;
-		});
+      SpriteEditor.previewImage = $(".preview img");
+   },
 
-		return colr;
-	},
+   callFunction: function(fName, obj) {
+      fName = fName.split(".");
+      var o = window;
+      var i = fName.length - 1;
+      while (i--) {
+         o = o[fName.shift()];
+      }
+      o[fName.shift()](obj);
+   },
 
-	getContrast: function(colr) {
-		colr = colr.substring(1);
-		var cont = colr.replace(/(\w{2})(\w{2})(\w{2})/, function(str, r, g, b) {
-			return Math.max(Math.max(parseInt(r, 16), parseInt(g, 16)), parseInt(b, 16));
-		});
-		var n = (255 - cont).toString(16);
-		return "#" + n + n + n;
-	},
+   fixupColor: function(colr) {
 
-	colorTable: {
-		"white":"#FFFFFF",
-		"yellow":"#FFFF00",
-		"fuchsia":"#FF00FF",
-		"red":"#FF0000",
-		"silver":"#C0C0C0",
-		"gray":"#808080",
-		"olive":"#808000",
-		"purple":"#800080",
-		"maroon":"#800000",
-		"aqua":"#00FFFF",
-		"lime":"#00FF00",
-		"teal":"#008080",
-		"green":"#008000",
-		"blue":"#0000FF",
-		"navy":"#000080",
-		"black":"#000000"
-	},
+      function pad(n) {
+         if (parseInt(n, 10) < 10) {
+            return "0" + n;
+         }
+         return n;
+      }
 
-	PAINT: 0,
-	ERASE: 1,
-	SELECT: 2,
-	COLOR_FOREGROUND: 0,
-	COLOR_BACKGROUND: 1
+      colr.replace(/rgb\((\d+),\s*(\d+),\s*(\d+)/, function(str, r, g, b) {
+         colr = "#";
+         colr += pad(Number(r).toString(16));
+         colr += pad(Number(g).toString(16));
+         colr += pad(Number(b).toString(16));
+      });
+      // For browsers that use the named 16 colors
+      colr.replace(/(.*)/,function(str) {
+         var newColr = SpriteEditor.colorTable[str.toLowerCase()];
+         colr = newColr || colr;
+      });
+
+      return colr;
+   },
+
+   getContrast: function(colr) {
+      colr = colr.substring(1);
+      var cont = colr.replace(/(\w{2})(\w{2})(\w{2})/, function(str, r, g, b) {
+         return Math.max(Math.max(parseInt(r, 16), parseInt(g, 16)), parseInt(b, 16));
+      });
+      var n = (255 - cont).toString(16);
+      return "#" + n + n + n;
+   },
+   
+   //--------------------------------------------------------------------------------------------
+   // MENUBAR ACTIONS
+   
+   actionAbout: function() {
+      alert("SpriteEditor\n\n(c)2008 Brett Fattori - The Render Engine");
+   },
+
+   colorTable: {
+      "white":"#FFFFFF",
+      "yellow":"#FFFF00",
+      "fuchsia":"#FF00FF",
+      "red":"#FF0000",
+      "silver":"#C0C0C0",
+      "gray":"#808080",
+      "olive":"#808000",
+      "purple":"#800080",
+      "maroon":"#800000",
+      "aqua":"#00FFFF",
+      "lime":"#00FF00",
+      "teal":"#008080",
+      "green":"#008000",
+      "blue":"#0000FF",
+      "navy":"#000080",
+      "black":"#000000"
+   },
+
+   PAINT: 0,
+   ERASE: 1,
+   SELECT: 2,
+   COLOR_FOREGROUND: 0,
+   COLOR_BACKGROUND: 1
 });
 
 return SpriteEditor;
