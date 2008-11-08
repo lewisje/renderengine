@@ -6,8 +6,8 @@ The following is a list of browsers that I have tested the engine and examples i
 ||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||
 || *Firefox* || 1.5+ || Windows || Great ||
 || *Safari* || 3.0+ || Windows, Mac, iPhone || Great - Win/Mac, Ok - iPhone ||
-|| *Opera* || 9.5+ || Windows || Good - No sound ||
-|| *Chrome* || 0.2beta || Windows || Good - No Sound ||
+|| *Opera* || 9.5+ || Windows || Great ||
+|| *Chrome* || 0.2beta || Windows || Great ||
 
 Levels of support:
   * Fail - Engine not working on this browser
