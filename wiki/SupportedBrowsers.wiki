@@ -14,7 +14,7 @@ Levels of support:
   * Fail - Engine not working on this browser
   * Poor - Most features not working
   * Ok - Runs, missing features or poor performance
-  * Good - Baseline, works well with notes
+  * Good - Baseline, functioning
   * Great - Fully functional with minor issues
   * Perfect - All features working as expected
 
