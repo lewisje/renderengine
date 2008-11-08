@@ -26,3 +26,4 @@ _Notes:_
   * Additional tests for different browsers on multiple platforms would be nice.  I only have a Windows PC and occasional access to a Mac and/or iPhone.
   * Requests for additional browsers should be added to the comments of this page.
   * There is a project to bring the Cairo (Firefox's renderer) canvas to Internet Explorer.  When this works, I will test and add IE to my list of browsers.  The !ExCanvas object doesn't perform fast enough for this engine.
+  * In Firefox 1.5 and 2.0 the garbage collection, in tandem with the older Javascript engine, is passable.
