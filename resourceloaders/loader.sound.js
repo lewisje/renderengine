@@ -31,9 +31,9 @@
 // Includes
 Engine.include("/libs/soundmanager2.js");
 Engine.include("/engine/engine.pooledobject.js");
-Engine.include("/engine/engine.resourceloader.js");
+Engine.include("/resourceloaders/loader.remote.js");
 
-Engine.initObject("SoundLoader", "ResourceLoader", function() {
+Engine.initObject("SoundLoader", "RemoteLoader", function() {
 
 /**
  * @class Loads sounds and stores the reference to them.  Provides a simple
@@ -43,9 +43,9 @@ Engine.initObject("SoundLoader", "ResourceLoader", function() {
  *
  * @constructor
  * @param name {String=SoundLoader} The name of the resource loader
- * @extends ResourceLoader
+ * @extends RemoteLoader
  */
-var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
+var SoundLoader = RemoteLoader.extend(/** @scope SoundLoader.prototype */{
 
    init: false,
 
@@ -108,12 +108,12 @@ var SoundLoader = ResourceLoader.extend(/** @scope SoundLoader.prototype */{
       }
    },
 
-	destroy: function() {
+   destroy: function() {
       // Stop the sound manager
       if (Engine.isSoundEnabled()) {
          this.soundManager.destruct();
       }
-	},
+   },
 
    /**
     * Load a sound resource from a URL. If the sound system does not initialize, for whatever

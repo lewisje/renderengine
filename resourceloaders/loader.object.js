@@ -29,24 +29,24 @@
  */
 
 // Includes
-Engine.include("/engine/engine.resourceloader.js");
+Engine.include("/resourceloaders/loader.remote.js");
 
-Engine.initObject("ObjectLoader", "ResourceLoader", function() {
+Engine.initObject("ObjectLoader", "RemoteLoader", function() {
 
 /**
  * @class Loads JSON objects from a specified URL.
  *
  * @constructor
  * @param name {String=ObjectLoader} The name of the resource loader
- * @extends ResourceLoader
+ * @extends RemoteLoader
  */
-var ObjectLoader = ResourceLoader.extend(/** @scope ObjectLoader.prototype */{
+var ObjectLoader = RemoteLoader.extend(/** @scope ObjectLoader.prototype */{
 
    objects: null,
 
-	/**
-	 * private
-	 */
+   /**
+    * private
+    */
    constructor: function(name) {
       this.base(name || "ObjectLoader");
       this.objects = {};
@@ -62,21 +62,21 @@ var ObjectLoader = ResourceLoader.extend(/** @scope ObjectLoader.prototype */{
    load: function(name, url, obj) {
 
       if (url) {
-			Assert(url.indexOf("http") == -1, "Objects must be located relative to this server");
-			var thisObj = this;
+         Assert(url.indexOf("http") == -1, "Objects must be located relative to this server");
+         var thisObj = this;
 
-			// Get the file from the server
-			$.get(url, function(data) {
-				var objectInfo = EngineSupport.parseJSON(data);
+         // Get the file from the server
+         $.get(url, function(data) {
+            var objectInfo = EngineSupport.parseJSON(data);
 
-				// 2nd pass - store the object
-				thisObj.load(name, null, objectInfo);
-			});
-		} else {
-			// The object has been loaded and is ready for use
-			this.setReady(true);
-			this.base(name, obj);
-		}
+            // 2nd pass - store the object
+            thisObj.load(name, null, objectInfo);
+         });
+      } else {
+         // The object has been loaded and is ready for use
+         this.setReady(true);
+         this.base(name, obj);
+      }
    },
 
    /**
