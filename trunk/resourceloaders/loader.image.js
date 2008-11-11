@@ -29,22 +29,22 @@
  */
 
 // Includes
-Engine.include("/engine/engine.resourceloader.js");
+Engine.include("/resourceloaders/loader.remote.js");
 
-Engine.initObject("ImageLoader", "ResourceLoader", function() {
+Engine.initObject("ImageLoader", "RemoteLoader", function() {
 
 /**
  * @class Loads images and stores the reference to those images.
  *
  * @constructor
  * @param name {String=ImageLoader} The name of the resource loader
- * @extends ResourceLoader
+ * @extends RemoteLoader
  */
-var ImageLoader = ResourceLoader.extend(/** @scope ImageLoader.prototype */{
+var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(name) {
       this.base(name || "ImageLoader");
    },
@@ -83,9 +83,9 @@ var ImageLoader = ResourceLoader.extend(/** @scope ImageLoader.prototype */{
       this.base(name, image);
    },
 
-	/**
-	 * Lazy loads an image resource when the information for it becomes available.
-	 *
+   /**
+    * Lazy loads an image resource when the information for it becomes available.
+    *
     * @param name {String} The name of the resource
     * @param url {String} The URL where the resource is located
     * @param width {Number} The width of this resource, in pixels
@@ -104,13 +104,13 @@ var ImageLoader = ResourceLoader.extend(/** @scope ImageLoader.prototype */{
       return image;
    },
 
-	/**
-	 * Get the image from the resource stored with the specified name, or <tt>null</tt>
-	 * if no such image exists.
-	 *
-	 * @param name {String} The name of the image resource
-	 * @return {HTMLImage} The image
-	 */
+   /**
+    * Get the image from the resource stored with the specified name, or <tt>null</tt>
+    * if no such image exists.
+    *
+    * @param name {String} The name of the image resource
+    * @return {HTMLImage} The image
+    */
    get: function(name) {
       var img = this.base(name);
       return img ? img[0] : null;

@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * XMLLoader
+ * RemoteLoader
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -29,72 +29,66 @@
  */
 
 // Includes
-Engine.include("/resourceloaders/loader.remote.js");
+Engine.include("/engine/engine.resourceloader.js");
 
-Engine.initObject("XMLLoader", "RemoteLoader", function() {
+Engine.initObject("RemoteLoader", "ResourceLoader", function() {
 
 /**
- * @class Loads XML files from a specified URL.
+ * @class Loads JSON objects from a specified URL.
  *
  * @constructor
- * @param name {String=XMLLoader} The name of the resource loader
- * @extends RemoteLoader
+ * @param name {String=ObjectLoader} The name of the resource loader
+ * @extends ResourceLoader
  */
-var XMLLoader = RemoteLoader.extend(/** @scope XMLLoader.prototype */{
-
-   objects: null,
+var RemoteLoader = ResourceLoader.extend(/** @scope RemoteLoader.prototype */{
 
    /**
     * private
     */
    constructor: function(name) {
-      this.base(name || "XMLLoader");
-      this.objects = {};
+      this.base(name || "RemoteLoader");
    },
 
    /**
-    * Load an XML file from a URL.
+    * Performs a synchronous check for a file on the server.  While this approach will
+    * work in most cases, there is the possibility that the server will become unavailable
+    * before the request is made.  In this case, the application will hang until the
+    * request is satisfied (which may be never).
     *
-    * @param name {String} The name of the resource
-    * @param url {String} The URL where the resource is located
-    * @param doc {Object} The document that was loaded
+    * @param url {String} The URL to check
+    * @return {Boolean} <tt>true</tt> if the file exists on the server or is in
+    *          the cache.
     */
-   load: function(name, url, doc) {
-
-      if (url) {
-         Assert(url.indexOf("http") == -1, "XML must be located relative to this server");
-         var thisObj = this;
-
-         // Get the file from the server
-         $.get(url, function(data) {
-            // 2nd pass - store the XML
-            thisObj.load(name, null, data);
-         }, "xml");
-      } else {
-         // The object has been loaded and is ready for use
-         this.setReady(true);
-         this.base(name, doc);
-      }
+   exists: function(url) {
+      var stat = jQuery.ajax({
+         type: "GET",
+         url: url,
+         async: false,
+         dataType: "text"
+      }).status;      
+      
+      // If it returns OK or Cache not modified...
+      return (stat == 200 || stat == 304);
    },
 
    /**
     * The name of the resource this loader will get.
-    * @returns {String} The string "object"
+    * @returns {String} The string "remote"
     */
    getResourceType: function() {
-      return "xml";
+      return "remote";
    }
 
-}, /** @scope XMLLoader.prototype */{
+}, /** @scope RemoteLoader.prototype */{
    /**
     * Get the class name of this object.
     * @return {String} The string "SpriteLoader"
     */
    getClassName: function() {
-      return "XMLLoader";
+      return "RemoteLoader";
    }
 });
 
-return XMLLoader;
+return RemoteLoader;
 
 });
