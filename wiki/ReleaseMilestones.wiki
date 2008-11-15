@@ -43,7 +43,7 @@ Ideas for the next release.  This list is evolving...
 
 || *Status* || *Goal* || *Description* ||
 || _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
-|| - || Browser support || Opera/Wii.  Support for Opera on the Wii for a wider audience. ||
+|| 90% || Browser support || Opera/Wii.  Optimize performance for the Wii. ||
 || - || New Feature || Multiplayer networking using AJAX polling and COMET. ||
 || - || New Feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
 || - || Rendering Context || SVG rendering context. ||
