@@ -12,6 +12,7 @@ The following list is a set of goals to be reached for the intended release.  So
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 || _10%_ || Tool || Simple 2D game editor based on the sprite demo editor. ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
+|| _Complete_ || Browser Support || Opera for Wii - It's sloooow ||
 || - || Tool || Particle editor. ||
 
 == Release Candidate 1 ==
@@ -43,7 +44,7 @@ Ideas for the next release.  This list is evolving...
 
 || *Status* || *Goal* || *Description* ||
 || _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
-|| 90% || Browser support || Opera/Wii.  Optimize performance for the Wii. ||
+|| - || Browser support || Optimize performance for the Wii. ||
 || - || New Feature || Multiplayer networking using AJAX polling and COMET. ||
 || - || New Feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
 || - || Rendering Context || SVG rendering context. ||
