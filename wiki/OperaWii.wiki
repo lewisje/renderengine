@@ -25,3 +25,7 @@ Instead, just drop an intermediate variable in the loop, like so:
 }}}
 
 Now the dependency checker will properly handle the reference for `r` and not miss the reference to `ref`.
+
+=== Debugging ===
+
+Since debugging isn't the best on the Wii, The Render Engine contains some aid.  To enable the console for the Wii, just supply the URL parameter `debug=true` and set `debugLevel=1`.  Doing so will output a lot of helpful information.  Class dependency resolution has, historically, been one of the most troublesome areas.  The debugger will help determine which classes are having an issue.
