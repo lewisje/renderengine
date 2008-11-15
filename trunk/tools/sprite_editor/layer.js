@@ -163,7 +163,6 @@ var SpriteLayer = Object2D.extend({
    },
    
    shiftUp: function() {
-      console.debug("up");
       // Remove the top row of pixels and add to the bottom
       var start = 0;
       var end = SpriteEditor.editorSize / SpriteEditor.pixSize; 

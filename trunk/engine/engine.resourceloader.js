@@ -144,6 +144,18 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
          return null;
       }
    },
+	
+	/**
+	 * Set the data associated with the name.  The ready state is set
+	 * to <tt>false</tt>, so it will be up to the developer to call
+	 * {@link #setReady} on the object if the object is truly ready for use.
+	 * @param name {String} The name of the cache record
+	 * @param data {Object} Data to store
+	 */
+	set: function(name, data) {
+      var obj = { data: data, ready: false};
+		this.cache[name] = obj;
+	},
 
    /**
     * Returns the cache.  You should not manipulate the cache directly.
