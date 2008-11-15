@@ -1,17 +1,9 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-I spent some time last night working with the Wii.  I don't think that it would be wise to hang the release of v1.0 on getting Wii support working.  I'm not going to skip Wii support entirely, but I think I'll push it out (along with better iPhone support) to a later release.
+I got the Wii working! It took a little doing, since the debugging tools I have aren't the best.  But, I'm happy to announce that the Spaceroids demo and Sprite Editor are working.  The performance is horrible, at the moment, but there might be some optimizations to be had.  I should start a page with Wii guidelines so that people know what I ran into and how to overcome problems.
 
 I'm working on creating a set of functions to simplify UI design for the editors.  It's kind of like a set of "widget" methods that will take the DOM and manipulate elements with predefined classes into functional UI elements.  This should assist in developing the UI's for each editor.
-
-It's been a busy couple of weeks at my job, so I haven't had a lot of time to work on the engine.  But, we just finished our release last Friday so I can start to devote more time again.
-
-I've been spending some time trying to abstract the resource loaders.  Most of them are based on the idea that a file exists remotely.  I wanted a way that I can check for the existence of a file as well as read it.  I toyed with the idea of creating some sort of remote file class which handled reading, writing, and general file management tasks.
-
-From that I expanded to a remote filesystem.  I played around with the idea, basically trying to bridge the gap between client and server.  However, it's not what I feel is a solid idea.  I may end up writing something that uses a virtual filesystem defined in a MySQL database or something similar.  I really don't want to open up the system's disks directly.
-
-I fixed a small bug in the dependency checker.  I was considering the pattern "var xxx =" to be the declaration of a variable.  Silly me... Basically having "var xxx" is what the pattern should be.  In fact, "var xxx,yyy,zzz;" should be considered as well.  I fixed the prior, but haven't addressed the latter.
 
 The largest tool that I want to have completed before v1.0 is the level editor for 2D game creation.  It's currently being built as part of the SMB Sprite Demo, but as I was developing it I realized just how much it would add if someone could set up the framework for a game in it.
 
