@@ -51,21 +51,36 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
       return out;
    },
 
+	cleanup: function(o) {
+		if (typeof o == "undefined") {
+			return "";
+		} else if (typeof o == "function") {
+			return "function";
+		} else if (o instanceof Array) {
+			var s = "[";
+			for (var e in o) {
+				s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
+			}
+			return s + "]";
+		} else if (typeof o == "object") {
+			var s = "{\n";
+			for (var e in o) {
+				s += e + ": " + this.cleanup(o[e]) + "\n";
+			}
+			return s + "}\n";
+		} else {
+			return String(o);
+		}
+	},
+
    /** @private */
    fixArgs: function(a) {
       var x = [];
       for (var i=0; i < a.length; i++) {
          if (!a[i]) {
             x.push("null");
-         } else if ((a[i].length && (a[i] instanceof Array)) || typeof a[i] == "object") {
-            /* var s = "";
-            var obj = a[i];
-            for (var o in obj) {
-               s += o + ": " + obj[o] + "\n";
-            } */
-            x.push(a[i]);
          } else {
-            x.push(a[i]);
+				x.push(this.cleanup(a[i]));
          }
       }
       return x.join(" ");
@@ -118,7 +133,13 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  */
 var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
+	msgStore: null,
+	
+	firstTime: null,
+
    constructor: function() {
+		this.msgStore = [];
+		this.firstTime = true;
       $("head", document).append(
             "<style> " +
             "#debug-console { position: absolute; width: 400px; right: 10px; bottom: 5px; height: 98%; border: 1px solid; overflow: auto; " +
@@ -147,11 +168,34 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
          $("#debug-console")[0].scrollTop = w.scrollHeight + 1;
       }
    },
+	
+	store: function(type, args) {
+		if (!this.firstTime) {
+			return;
+		}
+		if (!document.getElementById("debug-console")) {
+			this.msgStore.push({
+			 	t: type,
+			 	a: this.fixArgs(args)
+		 	});	
+		} else {
+			this.firstTime = false;
+			for (var i = 0; i < this.msgStore.length; i++) {
+				switch (this.msgStore[i].t) {
+					case "i": this.info(this.msgStore[i].a); break;
+					case "d": this.debug(this.msgStore[i].a); break;
+					case "w": this.warn(this.msgStore[i].a); break;
+					case "e": this.error(this.msgStore[i].a); break;
+				}
+			}
+			this.msgStore = null;
+		}
+	},
 
    /** @private */
    fixArgs: function(a) {
       var o = this.base(a);
-      return o.replace(/\n/g, "<br/>");
+      return o.replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;");
    },
 
    /**
@@ -159,6 +203,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    info: function() {
       this.clean();
+		this.store("i",arguments);
       $("#debug-console").append($("<div class='console-info'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -168,6 +213,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    debug: function() {
       this.clean();
+		this.store("d",arguments);
       $("#debug-console").append($("<div class='console-debug'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -177,6 +223,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    warn: function() {
       this.clean();
+		this.store("w",arguments);
       $("#debug-console").append($("<div class='console-warn'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -186,6 +233,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    error: function() {
       this.clean();
+		this.store("e",arguments);
       $("#debug-console").append($("<div class='console-error'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -411,8 +459,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * Starts up the console.
     */
    startup: function() {
-      if (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii) {
-         this.consoleRef = new HTMLConsoleRef();
+      if (EngineSupport.checkBooleanParam("debug") && (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
+			this.consoleRef = new HTMLConsoleRef();
       }
       else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
          // Firebug or firebug lite
@@ -617,6 +665,17 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          array.splice(idx, 1);
       }
    },
+	
+	/**
+	 * Returns <tt>true</tt> if the string, after trimming, is either
+	 * empty or is null.
+	 * 
+	 * @param str {String} The string to test
+	 * @return {Boolean} <tt>true</tt> if the string is empty or <tt>null</tt>
+	 */
+	isEmpty: function(str) {
+		return (str == null || $.trim(str) === "");		
+	},
 
    /**
     * Calls a provided callback function once for each element in
@@ -1797,7 +1856,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    dependencyCount: 0,
    dependencyProcessor: null,
    dependencyTimer: null,
-   dependencyCheckTimeout: 2500,
+   dependencyCheckTimeout: $.browser.Wii ? 5000 : 2500,
+	dependencyProcessTimeout: 100,
 
    /**
     * Include a script file.
@@ -1840,20 +1900,18 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       Engine.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Engine.dependencyCount++;
-      Console.info(objectName + " depends on: " + newDeps);
+      Console.info(objectName, " depends on: ", newDeps);
 
       // Check for 1st level circular references
       this.checkCircularRefs(objectName);
 
       // After a period of time has passed, we'll check our dependency list.
       // If anything remains, we'll drop the bomb that certain files didn't resolve...
-      if (Engine.dependencyTimer) {
-         window.clearTimeout(Engine.dependencyTimer);
-      }
+      window.clearTimeout(Engine.dependencyTimer);
       Engine.dependencyTimer = window.setTimeout(Engine.checkDependencyList, Engine.dependencyCheckTimeout);
 
       if (!Engine.dependencyProcessor) {
-         Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
+         Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, Engine.dependencyProcessTimeout);
       }
    },
 
@@ -1939,7 +1997,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       if (dCount != 0) {
-         Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, 100);
+         Engine.dependencyProcessor = window.setTimeout(Engine.processDependencies, Engine.dependencyProcessTimeout);
       } else {
          window.clearTimeout(Engine.dependencyProcessor);
          Engine.dependencyProcessor = null;
@@ -1971,7 +2029,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          vTable.push(m[2]);
       }
       return vTable;
-
    },
 
    /**
@@ -2019,7 +2076,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             dTable.push(m[2]);
          }
       }
-
       return dTable;
    },
 
@@ -2063,6 +2119,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    findAllDependencies: function(objectName, obj) {
       var defs;
       var fTable = {};
+		Console.warn("Process: " + objectName);
 
       try {
          var k = obj();
@@ -2130,7 +2187,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       // This is useful for debugging dependency problems...
-      //Console.log("DepTable: ", objectName, fTable);
+      Console.log("DepTable: ", objectName, fTable);
 
       return Engine.procDeps(objectName, fTable);
    },

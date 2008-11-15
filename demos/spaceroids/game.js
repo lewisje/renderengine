@@ -62,9 +62,9 @@ var Spaceroids = Game.extend({
 
    fieldBox: null,
    centerPoint: null,
-   areaScale: 0.93,
+   areaScale: $.browser.Wii ? 0.7 : 0.93,
 
-   engineFPS: 60,
+   engineFPS: 30,
 
    collisionModel: null,
 
@@ -371,6 +371,9 @@ var Spaceroids = Game.extend({
 
       // Set the FPS of the game
       Engine.setFPS(this.engineFPS);
+
+//		this.fieldWidth *= this.areaScale;
+//		this.fieldHeight *= this.areaScale;
 
       // Create the 2D context
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
