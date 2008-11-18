@@ -247,8 +247,8 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
 
       // Run through the available Wiimotes
       for (var w = 0; w < 4; w++) {
-			var op = opera.wiiremote;
-         var remote = op.update(w);	// This fixes a dependency problem
+         var op = opera.wiiremote;
+         var remote = op.update(w); // This fixes a dependency problem
          // Cannot perform this check on the primary remote,
          // that's why this object extends the keyboard input component...
          if (remote.isEnabled) {
@@ -505,27 +505,27 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
 
    KEYCODE_A: 13,
 
-   KEYCODE_B: 32,
+   KEYCODE_B: 32,       // 171
 
-   KEYCODE_C: 67,
+   KEYCODE_C: 67,       // 201
 
-   KEYCODE_Z: 90,
+   KEYCODE_Z: 90,       // 200
 
-   KEYCODE_1: 49,
+   KEYCODE_1: 49,       // 172
 
-   KEYCODE_2: 50,
+   KEYCODE_2: 50,       // 173
 
-   KEYCODE_MINUS: 109,
+   KEYCODE_MINUS: 109,  // 170
 
-   KEYCODE_PLUS: 61,
+   KEYCODE_PLUS: 61,    // 174
 
-   KEYCODE_LEFT: 37,
+   KEYCODE_LEFT: 37,    // 178
 
-   KEYCODE_RIGHT: 39,
+   KEYCODE_RIGHT: 39,   // 177
 
-   KEYCODE_UP: 38,
+   KEYCODE_UP: 38,      // 175
 
-   KEYCODE_DOWN: 40
+   KEYCODE_DOWN: 40     // 176
 });
 
 return WiimoteInputComponent;
