@@ -267,7 +267,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     */
    _arc: function(point, radiusX, startAngle, endAngle) {
       this.startPath();
-      this.get2DContext().arc(point.x, point.y, startAngle, endAngle, true);
+      this.get2DContext().arc(point.x, point.y, radiusX, startAngle, endAngle, false);
       this.endPath();
    },
 
@@ -281,7 +281,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @param endAngle {Number} The end angle of the arc in degrees
     */
    drawArc: function(point, radiusX, startAngle, endAngle) {
-      this._arc(point, radiusX, startAngle, endEngle);
+      this._arc(point, radiusX, startAngle, endAngle);
       this.strokePath();
       this.base(point, radiusX, startAngle, endAngle);
    },
@@ -296,7 +296,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @param endAngle {Number} The end angle of the arc in degrees
     */
    drawFilledArc: function(point, radiusX, startAngle, endAngle) {
-      this._arc(point, radiusX, startAngle, endEngle);
+      this._arc(point, radiusX, startAngle, endAngle);
       this.fillPath();
       this.base(point, radiusX, startAngle, endAngle);
    },
@@ -350,7 +350,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     *                <tt>null</tt> the entire image is used
     */
    drawImage: function(rect, image, srcRect) {
-		var d = rect.get();
+      var d = rect.get();
       if (srcRect) {
          var s = srcRect.get();
          this.get2DContext().drawImage(image,
@@ -385,18 +385,18 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       return this.get2DContext().getImageData(tr.x, tr.y, wh.x, wh.y);
    },
 
-	/**
-	 * Useful method which returns a data URL which represents the
-	 * current state of the canvas context.  The URL can be passed to
-	 * an image element. <i>Note: Only works in Firefox and Opera!</i>
-	 *
-	 * @param {String} format The format of the output, or <tt>null</tt> for
-	 * 					 the PNG default.
-	 * @return {String} The data URL
-	 */
-	getDataURL: function(format) {
-		return this.getSurface().toDataURL();
-	},
+   /**
+    * Useful method which returns a data URL which represents the
+    * current state of the canvas context.  The URL can be passed to
+    * an image element. <i>Note: Only works in Firefox and Opera!</i>
+    *
+    * @param {String} format The format of the output, or <tt>null</tt> for
+    *                 the PNG default.
+    * @return {String} The data URL
+    */
+   getDataURL: function(format) {
+      return this.getSurface().toDataURL();
+   },
 
    /**
     * Draw an image, captured with {@link #getImage}, to
