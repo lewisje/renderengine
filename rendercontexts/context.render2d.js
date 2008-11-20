@@ -343,6 +343,28 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    },
 
    /**
+    * Helper method to draw a circle by calling the {@link #drawArc} method
+    * with predefined start and end angle of zero and 6.28 radians.
+    *
+    * @param point {Point2D} The point around which the circle will be drawn
+    * @param radius {Number} The radius of the circle in pixels
+    */
+   drawCircle: function(point, radius) {
+      this.drawArc(point, radius, 0, 6.28);
+   },
+   
+   /**
+    * Helper method to draw a filled circle by calling the {@link #drawFilledArc} method
+    * with predefined start and end angle of zero and 6.28 radians.
+    *
+    * @param point {Point2D} The point around which the circle will be drawn
+    * @param radius {Number} The radius of the circle in pixels
+    */
+   drawFilledCircle: function(point, radius) {
+      this.drawFilledArc(point, radius, 0, 6.28);
+   },
+
+   /**
     * Draw a polygon or polyline using a Duff's device for
     * efficiency and loop unrolling with inversion for speed.
     *
