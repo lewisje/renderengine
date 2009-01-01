@@ -37,7 +37,7 @@ Engine.initObject("RemoteLoader", "ResourceLoader", function() {
  * @class Loads JSON objects from a specified URL.
  *
  * @constructor
- * @param name {String=ObjectLoader} The name of the resource loader
+ * @param name {String=RemoteLoader} The name of the resource loader
  * @extends ResourceLoader
  */
 var RemoteLoader = ResourceLoader.extend(/** @scope RemoteLoader.prototype */{
@@ -68,7 +68,7 @@ var RemoteLoader = ResourceLoader.extend(/** @scope RemoteLoader.prototype */{
       }).status;      
       
       // If it returns OK or Cache not modified...
-      return (stat == 200 || stat == 304);
+      return (stat == RemoteLoader.STATUS_OK || stat == RemoteLoader.STATUS_CACHED);
    },
 
    /**
@@ -86,7 +86,27 @@ var RemoteLoader = ResourceLoader.extend(/** @scope RemoteLoader.prototype */{
     */
    getClassName: function() {
       return "RemoteLoader";
-   }
+   },
+	
+	/**
+	 * Transmit status ok
+	 */
+	STATUS_OK: 200,
+	
+	/**
+	 * Transmit status - Cached
+	 */
+	STATUS_CACHED: 304,
+	
+	/**
+	 * Transmit status - Not found
+	 */
+	STATUS_NOT_FOUND: 404,
+	
+	/**
+	 * Transmit status - Server error
+	 */
+	STATUS_SERVER_ERROR: 500
 });
 
 return RemoteLoader;
