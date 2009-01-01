@@ -896,6 +896,21 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
+	/**
+	 * Cleans up incoming source by stripping single-line comments,
+	 * multi-line comments, blank lines, new lines, and trims lines.
+	 * In other words, this is a simplification of minification.
+	 * 
+	 * @param inString {String} The source to clean
+	 */
+	cleanSource: function(inString) {
+		return inString.replace(/((\"|').*?\2)|(\/\/.*$)/gm, "$1")
+							.replace(/\/\*(\n|.)*?\*\//gm, "")
+							.replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")
+							.replace(/\s*\n$/gm, "")
+							.replace(/(\n|\r)/gm, "");
+	},
+
    /**
     * Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
     *
@@ -906,8 +921,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    parseJSON: function(jsonString)
    {
-      if (!typeof JSON == "undefined") {
-         return JSON.parse(text, function (key, value) {
+		jsonString = EngineSupport.cleanSource(jsonString);
+      if (!(typeof JSON == "undefined")) {
+         return JSON.parse(jsonString, function (key, value) {
                    var a;
                    if (typeof value === 'string') {
                        a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
@@ -921,6 +937,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          return null;
       }
    },
+	
+	evalJSON: function(jsonString)
+	{
+		jsonString = EngineSupport.cleanSource(jsonString);
+		return eval("(" + jsonString + ")");	
+	},
 
    /**
     * Return a string, enclosed in quotes.
