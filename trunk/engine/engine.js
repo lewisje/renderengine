@@ -923,25 +923,35 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
    {
 		jsonString = EngineSupport.cleanSource(jsonString);
       if (!(typeof JSON == "undefined")) {
-         return JSON.parse(jsonString, function (key, value) {
-                   var a;
-                   if (typeof value === 'string') {
-                       a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-                       if (a) {
-                           return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
-                       }
-                   }
-                   return value;
-               });
+			try {
+	         return JSON.parse(jsonString, function (key, value) {
+	                   var a;
+	                   if (typeof value === 'string') {
+	                       a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+	                       if (a) {
+	                           return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
+	                       }
+	                   }
+	                   return value;
+	               });
+			} catch (ex) {
+				Console.warn("Cannot parse JSON: " + ex.message);
+				return null;
+			}
       } else {
-         return null;
+         return EngineSupport.evalJSON(jsonString);
       }
    },
 	
 	evalJSON: function(jsonString)
 	{
 		jsonString = EngineSupport.cleanSource(jsonString);
-		return eval("(" + jsonString + ")");	
+		try {
+			return eval("(" + jsonString + ")");	
+		} catch (ex) {
+			Console.warn("Cannot eval JSON: " + ex.message);
+			return null;
+		}
 	},
 
    /**

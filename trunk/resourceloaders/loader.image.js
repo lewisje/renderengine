@@ -64,9 +64,8 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
       // be used to load the images from their URL
       if (this.getElement() == null)
       {
-         var div = jQuery("<div/>");
-         div.css({ background: "black" });
-         div.css({ display: "none" });
+         var div = jQuery("<div/>")
+				.css({ background: "black", display: "none" });
 
          this.setElement(div[0]);
 
@@ -84,16 +83,24 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
    },
 
    /**
-    * Lazy loads an image resource when the information for it becomes available.
+    * Lazy loads an image resource when the information for it becomes available.  It
+    * is best to specify the width and height of the resource, but it isn't necessary
+    * to load the image.
     *
     * @param name {String} The name of the resource
     * @param url {String} The URL where the resource is located
-    * @param width {Number} The width of this resource, in pixels
-    * @param height {Number} The height of this resource, in pixels
+    * @param width {Number} The width of this resource, in pixels, or <tt>null</tt>
+    * @param height {Number} The height of this resource, in pixels, or <tt>null</tt>
     * @return {HTMLImage} The image loaded
     */
    loadImageResource: function(name, url, width, height) {
-      var image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
+		var image = null;
+		if (width && height) {
+	      image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
+		} else {
+	      image = $("<img/>").attr("src", url);
+		}
+		
       var thisObj = this;
       image.bind("load", function() {
          thisObj.setReady(name, true);

@@ -52,6 +52,12 @@ var DocumentContext = HTMLElementContext.extend(/** @scope DocumentContext.proto
     */
    constructor: function() {
       this.base("DocumentContext", document.body);
+   },
+	
+	/**
+    * Reset the context, clearing it and preparing it for drawing.
+    */
+   reset: function(rect) {
    }
 
 }, /** @scope DocumentContext */{
