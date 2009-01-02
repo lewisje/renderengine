@@ -42,7 +42,13 @@ Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
  *
  * @extends RenderContext2D
  */
-var HTMLElementContext = RenderContext2D.extend(/** @scope DocumentContext.prototype */{
+var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.prototype */{
+
+	transformStack: null,
+	
+	cursorPos: null,
+	
+	jQObj: null,
 
    /**
     * Create an instance of an HTML element rendering context.  This context
@@ -52,6 +58,12 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope DocumentContext.proto
     */
    constructor: function(name, element) {
       this.base(name || "HTMLElementContext", element);
+		element.id = this.getId();
+		this.cursorPos = Point2D.create(0,0);
+		this.transformStack = [];
+		this.pushTransform();
+		this.jQObj = null;
+      this.setViewport(Rectangle2D.create(0, 0, this.jQ().width(), this.jQ().height()));
    },
 
    /**
@@ -72,13 +84,25 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope DocumentContext.proto
       this.base();
    },
 
+	/**
+	 * Retrieve the jQuery object which represents the element.
+	 * @return jQuery Object
+	 * @type {jQuery}
+	 */
+	jQ: function() {
+		if (this.jQObj == null) {
+			this.jQObj = $(this.getSurface());
+		}
+		return this.jQObj;
+	},
+
    /**
     * @memberOf HTMLElementContext
     */
    add: function(obj) {
       if (obj.getElement())
       {
-         this.getSurface().appendChild(obj.getElement());
+         this.jQ().append(obj.getElement());
       }
       this.base(obj);
    },
@@ -89,11 +113,189 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope DocumentContext.proto
    remove: function(obj) {
       if (obj.getElement())
       {
-         this.getSurface().removeChild(obj.getElement());
+         this.jQ().remove(obj.getElement());
       }
       this.base(obj);
+   },
+	
+   /**
+    * Push a transform state onto the stack.
+    */
+	pushTransform: function() {
+		this.base();
+		this.transformStack.push(this.cursorPos);	
+	},
+	
+   /**
+    * Pop a transform state off the stack.
+    */
+	popTransform: function() {
+		this.base();
+		this.cursorPos = this.transformStack.pop();
+	},
+
+	//================================================================
+   // Drawing functions
+
+   /**
+    * Reset the context, clearing it and preparing it for drawing.
+    */
+   reset: function(rect) {
+		this.jQ().empty();
+   },
+	
+   /**
+    * Set the background color of the context.
+    *
+    * @param color {String} An HTML color
+    */
+   setBackgroundColor: function(color) {
+      this.base(color);
+		this.jQ().css("background-color", color);
+   },
+
+   /**
+    * Set the current transform position (translation).
+    *
+    * @param point {Point2D} The translation
+    */
+   setPosition: function(point) {
+      this.cursorPos = Point2D.create(point);
+      this.base(point);
+   },
+
+  /**
+    * Set the width of the context drawing area.
+    *
+    * @param width {Number} The width in pixels
+    */
+   setWidth: function(width) {
+      this.base(width);
+		this.jQ().width(width);
+   },
+
+   /**
+    * Set the height of the context drawing area
+    *
+    * @param height {Number} The height in pixels
+    */
+   setHeight: function(height) {
+      this.base(height);
+		this.jQ().height(height);
+   },
+
+   /**
+    * Draw an un-filled rectangle on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle to draw
+    */
+   drawRectangle: function(rect) {
+		var rD = rect.getDims();
+		var d = $("<div>").css({
+			borderWidth: this.getLineWidth(),
+			borderColor: this.getLineStyle(),
+			left: rD.l,
+			top: rD.t,
+			width: rD.w,
+			height: rD.h,
+			position: "absolute"
+		});
+		this.jQ().append(d);
+		return d;
+   },
+
+   /**
+    * Draw a filled rectangle on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle to draw
+    */
+   drawFilledRectangle: function(rect) {
+		var rD = rect.getDims();
+		var d = $("<div>").css({
+			borderWidth: this.getLineWidth(),
+			borderColor: this.getLineStyle(),
+			backgroundColor: this.getFillStyle(),
+			left: rD.l,
+			top: rD.t,
+			width: rD.w,
+			height: rD.h,
+			position: "absolute"
+		});
+		this.jQ().append(d);
+		return d;
+   },
+
+   /**
+    * Draw a point on the context.
+    *
+    * @param point {Point2D} The position to draw the point
+    */
+   drawPoint: function(point) {
+		return this.drawFilledRectangle(Rectangle2D.creat(point.x, point.y, 1, 1));
+   },
+
+   /**
+    * Draw a sprite on the context.
+    *
+    * @param point {Point2D} The top-left position to draw the image.
+    * @param imageData {Image} The sprite to draw
+    */
+   drawSprite: function(sprite, time) {
+      var f = sprite.getFrame(time);
+		var tl = f.getTopLeft();
+      var rD = f.getDims();
+
+		var d = $("<div>").css({
+			position: "absolute",
+			top: this.cursorPos.y,
+			left: this.cursorPos.x,
+			width: rD.w,
+			height: rD.h,
+			background: "url(" + f.getSourceImage().src + ")",
+			backgroundX: tl.x,
+			backgroundY: tl.y
+		});
+		this.jQ().append(d);
+		return d;
+   },
+
+   /**
+    * Draw an image on the context.
+    *
+    * @param rect {Rectangle2D} The rectangle that specifies the position and
+    *             dimensions of the image rectangle.
+    * @param image {Object} The image to draw onto the context
+    */
+   drawImage: function(rect, image) {
+		var rD = rect.getDims();
+		var i = $(image).clone().css({
+			position: "absolute",
+			left: rD.l,
+			top: rD.t,
+			width: rD.w,
+			height: rD.h
+		}).attr("width", rD.w).attr("height", rD.h);
+		this.jQ().append(i);
+		return i;
+   },
+
+   /**
+    * Draw text on the context.
+    *
+    * @param point {Point2D} The top-left position to draw the image.
+    * @param text {String} The text to draw
+    */
+   drawText: function(point, text) {
+		var d = $("<span>").css({
+			left: point.x,
+			top: point.y,
+			position: "absolute"
+		}).text(text);
+		this.jQ().append(d);
+		return d;
    }
-}, /** @scope HTMLElementContext */{
+
+}, /** @scope HTMLElementContext.prototype */{
 
    /**
     * Get the class name of this object

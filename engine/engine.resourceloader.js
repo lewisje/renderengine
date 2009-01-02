@@ -108,10 +108,27 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 
    /**
     * Check to see if a named resource is "ready for use".
+    * @param name {String} The name of the resource to check ready status for,
+    * 				or <tt>null</tt> for all resources in loader.
     * @return {Boolean} <tt>true</tt> if the resource is loaded and ready to use
     */
    isReady: function(name) {
-      return this.cache[name] ? this.cache[name].isReady : false;
+		if (name) {
+	      return this.cache[name] ? this.cache[name].isReady : false;
+		} else {
+			// Check the status of all loader elements
+			var rList = this.getResources();
+			if (rList.length == 0) {
+				// Early out, no resources to load
+				return true;
+			}
+			for (var r in rList) {
+				if (!this.isReady(rList[r])) {
+					return false;
+				}
+			}
+			return true;
+		}
    },
 
    /**

@@ -1,15 +1,18 @@
 
 /**
  * The Render Engine
- * Sprite test
+ * PoTris
  *
- * Demonstration of using The Render Engine.
+ * A combination of tetris and poker.  Blocks of the tetris variety will drop
+ * but the tiles will be cards of varying suits and faces.  Make poker hands
+ * across (maybe up/down and diagonally at some point) with wild cards thrown
+ * in to make a hand.
  *
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author$
- * @version: $Revision$
+ * @author: $Author: bfattori $
+ * @version: $Revision: 350 $
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  *
@@ -34,45 +37,37 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.scrollingbackground.js");
+Engine.include("/rendercontexts/context.htmlelement.js");
 Engine.include("/resourceloaders/loader.sound.js");
+Engine.include("/resourceloaders/loader.image.js");
 Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/resourceloaders/loader.level.js");
 Engine.include("/engine/engine.timers.js");
 
 // Load game objects
-Game.load("/editor.js");
-Game.load("/actor.js");
-Game.load("/collisionbox.js");
 
-Engine.initObject("SpriteTest", "Game", function() {
+Engine.initObject("PoTris", "Game", function() {
 
 /**
  * @class The game.
  */
-var SpriteTest = Game.extend({
+var PoTris = Game.extend({
 
    constructor: null,
 
    renderContext: null,
-   scrollBkg: null,
 
    fieldBox: null,
    centerPoint: null,
    areaScale: 1.0,
 
-   engineFPS: 30,
+   engineFPS: 5,
 
-   fieldWidth: 640,
-   fieldHeight: 448,
+   fieldWidth: 210,	// 30px tile width * 7 tiles
+   fieldHeight: 450, // 30px tile height * 15 tiles
 
    spriteLoader: null,
    soundLoader: null,
-   levelLoader: null,
-
-   level: null,
-	
-	nextZ: 1,
+   imageLoader: null,
 
    /**
     * Handle the keypress which starts the game
@@ -104,19 +99,20 @@ var SpriteTest = Game.extend({
       // Set the FPS of the game
       Engine.setFPS(this.engineFPS);
 
-      this.spriteLoader = SpriteLoader.create();
       this.soundLoader = SoundLoader.create();
-      this.levelLoader = LevelLoader.create();
+      this.imageLoader = ImageLoader.create();
 
       // Load the music
-      this.soundLoader.load("bgm", this.getFilePath("resources/smblvl1.mp3"));
+//      this.soundLoader.load("bgm", this.getFilePath("resources/smblvl1.mp3"));
 
-      // Load the level
-      this.levelLoader.load("level1", this.getFilePath("resources/smblevel1.js"));
+      // Load the card images
+      this.imageLoader.load("club", this.getFilePath("resources/club.png"), 30, 30);
+      this.imageLoader.load("spade", this.getFilePath("resources/spade.png"), 30, 30);
+      this.imageLoader.load("diamond", this.getFilePath("resources/diamond.png"), 30, 30);
+      this.imageLoader.load("heart", this.getFilePath("resources/heart.png"), 30, 30);
 
-      // Load the sprites
-      this.spriteLoader.load("smbtiles", this.getFilePath("resources/smbtiles.js"));
-      SpriteTest.loadTimeout = Timeout.create("wait", 250, SpriteTest.waitForResources);
+		// Don't start until all of the resources are loaded
+      PoTris.loadTimeout = Timeout.create("wait", 250, PoTris.waitForResources);
       this.waitForResources();
    },
 
@@ -125,18 +121,17 @@ var SpriteTest = Game.extend({
     * @private
     */
    waitForResources: function() {
-      //Console.debug("checking");
-      if (SpriteTest.spriteLoader.isReady() &&
-          SpriteTest.levelLoader.isReady() &&
-          SpriteTest.soundLoader.isReady())
+      if (PoTris.imageLoader.isReady() &&
+          PoTris.soundLoader.isReady())
       {
-         SpriteTest.loadTimeout.destroy();
-         SpriteTest.run();
+         PoTris.loadTimeout.destroy();
+         PoTris.run();
          return;
       }
       else
       {
-         SpriteTest.loadTimeout.restart();
+			// Continue waiting
+         PoTris.loadTimeout.restart();
       }
    },
 
@@ -151,53 +146,24 @@ var SpriteTest = Game.extend({
    run: function() {
       $("#loading").remove();
 
-      // Create the 2D context
+      // Create the render context
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
 
-      this.level = SpriteTest.levelLoader.getLevel("level1");
+		var field = $("<div>").css({
+			width: this.fieldWidth,
+			height: this.fieldHeight,
+			border: "1px solid black",
+			position: "relative"
+		});
 
-      this.renderContext = ScrollingBackground.create("bkg", this.level, this.fieldWidth, this.fieldHeight);
-      this.renderContext.setWorldScale(this.areaScale);
+      this.renderContext = HTMLElementContext.create("Playfield", field[0]);
       Engine.getDefaultContext().add(this.renderContext);
-
-      if (EngineSupport.checkBooleanParam("edit")) {
-         SpriteTestEditor.edit();
-      } else {
-         this.play();
-      }
+      this.play();
    },
 
    play: function() {
-      //this.soundLoader.get("bgm").play();
-
-      var player = SpriteTestActor.create();
-      player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
-      player.setPosition(Point2D.create(100, 338));
-      this.renderContext.add(player);
-
-      var mario = SpriteTestActor.create();
-      mario.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "mario_walk"));
-      mario.setPosition(Point2D.create(228, 370));
-      this.renderContext.add(mario);
-   },
-
-   /**
-    * A simple method that determines if the position is within the supplied bounding
-    * box.
-    *
-    * @param pos {Point2D} The position to test
-    * @param bBox {Rectangle2D} The bounding box of the playfield
-    * @type Boolean
-    */
-   inField: function(pos, bBox) {
-      var newPos = this.wrap(pos, bBox);
-      return newPos.equals(pos);
-   },
-
-   getLevel: function() {
-      return this.level;
-   },
+	},
 
    getRenderContext: function() {
       return this.renderContext;
@@ -205,9 +171,6 @@ var SpriteTest = Game.extend({
 
 });
 
-// Start the game when all the scripts are loaded.
-//Game.setQueueCallback(function() { SpriteTest.setup(); });
-
-return SpriteTest;
+return PoTris;
 
 });
