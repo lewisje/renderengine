@@ -14,7 +14,6 @@ The following list is a set of goals to be reached for the intended release.  So
 == Beta 2 ==
 
 || *Status* || *Goal* || *Description* ||
-loading, dependency checking, vector rendering to 2D context. ||
 || _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
 || - || Tool || Particle editor. ||
