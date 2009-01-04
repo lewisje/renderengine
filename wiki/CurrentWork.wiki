@@ -1,7 +1,7 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-I got the Wii working! It took a little doing, since the debugging tools I have aren't the best.  But, I'm happy to announce that the Spaceroids demo and Sprite Editor are working.  The performance is horrible, at the moment, but there might be some optimizations to be had.  I should start a page with Wii guidelines so that people know what I ran into and how to overcome problems.
+_After a month off..._ I took about a month off to rest from the development of the engine.  It's a lot of work by oneself to create an engine and demos to show it off (and test new features).  I'm getting back into things slowly, and hope to get a new beta tagged shortly with some feature enhancements.  It'll probably be "Beta 1.2" or something similar.
 
 I'm working on creating a set of functions to simplify UI design for the editors.  It's kind of like a set of "widget" methods that will take the DOM and manipulate elements with predefined classes into functional UI elements.  This should assist in developing the UI's for each editor.
 
