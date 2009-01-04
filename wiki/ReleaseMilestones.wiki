@@ -8,7 +8,6 @@ The following list is a set of goals to be reached for the intended release.  So
 || *Status* || *Goal* || *Description* ||
 || _Complete_ || Tool || Ant build script. ||
 || _Complete_ || Demo || Vector demo - Asteroids clone.  Test for game logic, component loading, dependency checking, vector rendering to 2D context. ||
-editing and object loading, level processing and loading, and level and object editing. ||
 || _Complete_ || Browser Support || Opera for Wii - It's sloooow ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 
