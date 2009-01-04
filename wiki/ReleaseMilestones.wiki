@@ -3,16 +3,22 @@
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Beta 2 ==
+== Beta 1.2 ==
 
 || *Status* || *Goal* || *Description* ||
 || _Complete_ || Tool || Ant build script. ||
-|| _90%_ || Demo || Vector demo - Asteroids clone.  Test for game logic, component loading, dependency checking, vector rendering to 2D context. ||
-|| _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
+|| _Complete_ || Demo || Vector demo - Asteroids clone.  Test for game logic, component loading, dependency checking, vector rendering to 2D context. ||
+editing and object loading, level processing and loading, and level and object editing. ||
+|| _Complete_ || Browser Support || Opera for Wii - It's sloooow ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
+
+== Beta 2 ==
+
+|| *Status* || *Goal* || *Description* ||
+loading, dependency checking, vector rendering to 2D context. ||
+|| _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _10%_ || Tool || Simple 2D game editor based on the sprite demo editor. ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
-|| _Complete_ || Browser Support || Opera for Wii - It's sloooow ||
 || - || Tool || Particle editor. ||
 
 == Release Candidate 1 ==
