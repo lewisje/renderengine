@@ -29,3 +29,7 @@ Now the dependency checker will properly handle the reference for `r` and not mi
 === Debugging ===
 
 Since debugging isn't the best on the Wii, The Render Engine contains some aid.  To enable the console for the Wii, just supply the URL parameter `debug=true` and set `debugLevel=1`.  Doing so will output a lot of helpful information.  Class dependency resolution has, historically, been one of the most troublesome areas.  The debugger will help determine which classes are having an issue.
+
+=== Overall Processing Power ===
+
+Since games developed with the engine are running in a web browser, as script, it is necessary to take overall processing power into consideration.  While the Wii can run the Asteroids demo, it doesn't run it well.  There are many calculations that are occurring every millisecond which require a lot of horsepower.  The Wii doesn't appear to provide that much horsepower.  I plan on getting some specific numbers so that you will have a benchmark against which to develop in the future.
