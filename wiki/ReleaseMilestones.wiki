@@ -17,7 +17,6 @@ editing and object loading, level processing and loading, and level and object e
 || *Status* || *Goal* || *Description* ||
 loading, dependency checking, vector rendering to 2D context. ||
 || _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
-|| _10%_ || Tool || Simple 2D game editor based on the sprite demo editor. ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
 || - || Tool || Particle editor. ||
 
@@ -50,6 +49,7 @@ Ideas for the next release.  This list is evolving...
 
 || *Status* || *Goal* || *Description* ||
 || _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
+|| _10%_ || Tool || Simple 2D game editor based on the sprite demo editor. ||
 || - || Browser support || Optimize performance for the Wii. ||
 || - || New Feature || Multiplayer networking using AJAX polling and COMET. ||
 || - || New Feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
