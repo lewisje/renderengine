@@ -5,7 +5,8 @@
 If you're looking for what is currently supported/available in The Render Engine, you've come to the right page.  See the ReleaseMilestones and FutureGoals page for info on what's up and coming!
 
   # Completely open-source engine
-  # Script loading w/ Dependency processor (linker)
+  # Script loading w/ Dependency processor (DependencyProcessor)
+  # Object pooling to reduce garbage collection (ObjectPooling)
   # Multiple browser support
     * Firefox 1.5+
     * Safari 3.0+
@@ -13,7 +14,7 @@ If you're looking for what is currently supported/available in The Render Engine
     * Chrome b3+
   # 2D Vector-based example game (Asteroids clone)
   # Canvas rendering context
-  # Modular host objects
+  # Modular host objects (HostComponents)
   # Multiple components
     * Transformation
     * Collision
