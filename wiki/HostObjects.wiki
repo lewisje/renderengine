@@ -32,7 +32,7 @@ You might have a power-up which floats about the playfield bouncing off walls, a
 
 == Host Execution ==
 
-Each frame of execution, every host object is processed and all components are executed.  The host object, through its `update()` method, is given the opportunity to modify the actions of its components.  Typically, only transformation (movement) of the host will need to be modified.  The collision component will, typically, automatically notify the host when a collision occurs with something, giving the host an opportunity to respond.
+Each frame of execution, every host object is processed and all components are executed.  The host object, through its `update()` method, is given the opportunity to modify the operation of its components.  Typically, only transformation (movement) of the host will need to be modified.  The collision component will, typically, automatically notify the host when a collision occurs with something, giving the host an opportunity to respond.
 
 Finally, the rendering component will be executed (yes, components are executed in a defined order) and the host will be drawn to the RenderContext.  If your power-up was using an animated sprite, there's no need to even update the frame being displayed as that is done automatically for you.
 
