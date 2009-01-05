@@ -1,5 +1,7 @@
 #summary Listing of archived releases.
 
+See the ReleaseMilestones page for current development track.
+
 == Alpha versions / Beta 1 ==
 
 || *Status* || *Goal* || *Description* ||
