@@ -15,18 +15,25 @@ The following list is a set of goals to be reached for the intended release.  So
 
 || *Status* || *Goal* || *Description* ||
 || _10%_ || Dev || Better handling of DOM as a viable render context.  Include demo game of Poker/Tetris mashup. ||
+
+== Beta 1.4 ==
+|| *Status* || *Goal* || *Description* ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
+
+== Beta 1.5 ==
+
+|| *Status* || *Goal* || *Description* ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
+|| - || Tool || Particle editor. ||
 
 == Beta 2 ==
 
 || *Status* || *Goal* || *Description* ||
-|| - || Tool || Particle editor. ||
+|| - || *Code freeze* || *No additional features* ||
 
 == Release Candidate 1 ==
 
 || *Status* || *Goal* || *Description* ||
-|| - || *Code freeze* || *No additional features* ||
 || - || Bug Fixing || Fix bugs from beta 2 ||
  
 
