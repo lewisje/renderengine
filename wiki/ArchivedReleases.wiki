@@ -1,6 +1,6 @@
 #summary Listing of archived releases.
 
-See the ReleaseMilestones page for current development information.
+See the ReleaseMilestones page for current development information.  The FutureGoals page is where the planning begins for the next major release.
 
 == Alpha versions / Beta 1 ==
 
