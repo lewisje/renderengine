@@ -14,7 +14,7 @@ The following list is a set of goals to be reached for the intended release.  So
 || _Complete_ || Browser Support || Opera for Wii - It's sloooow ||
 || _80%_ || Tool || Update Ant build script to include only complete tools and demos. ||
 
-== Beta 1.3 ==
+== Beta 1.3 (Tentatively January 30, 2009) ==
 
 || *Status* || *Goal* || *Description* ||
 || _10%_ || Dev || Better handling of DOM as a viable render context.  Include demo game of Poker/Tetris mashup. ||
