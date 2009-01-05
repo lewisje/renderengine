@@ -1,17 +1,10 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-_After a month off..._ I took about a month off to rest from the development of the engine.  It's a lot of work by oneself to create an engine and demos to show it off (and test new features).  I'm getting back into things slowly, and hope to get a new beta tagged shortly with some feature enhancements.  It'll probably be "Beta 1.2" or something similar.
+*Update:* I've recently modified the milestones for the v1.0 gold release.  It seems that I was taking too big of a chunk of goals to try to attain an initial full release.  Due to the complexity of the sprite editor, 2D Game editor, 2D sprites example game, etc. I have decided to move those off to a version 2.0 release.  Well, at least the 2D game editor and sprite example game.
 
-I'm working on creating a set of functions to simplify UI design for the editors.  It's kind of like a set of "widget" methods that will take the DOM and manipulate elements with predefined classes into functional UI elements.  This should assist in developing the UI's for each editor.
+The reasoning is that I can release v1.0 with the vector game demo and another game that is intended to test the DOM rendering context.  The latter is coming together quickly, so I feel that it can be what comprises the v1.0 release.  I also feel that 2D sprite-based games will be the future of the engine and I want to _do it right the first time._
 
-The largest tool that I want to have completed before v1.0 is the level editor for 2D game creation.  It's currently being built as part of the SMB Sprite Demo, but as I was developing it I realized just how much it would add if someone could set up the framework for a game in it.
+So, after much wavering, I have locked down a release milestones schedule to get v1.0 out the door sooner rather than later.  The vector-based game is essentially complete (unless someone wants to make a nicer UI and spruce it up a bit) and the Poker/Tetris game are coming along nicely.  And, since the DOM context will support sprites, it's not much of a loss for people to develop games that don't depend on the _Canvas_ element.  I also think that games developed for the DOM will run quickly on the Wii and iPhone.
 
-There are four tools that I'm currently working on:
-
-  # 2D Level Editor
-  # Sprite Editor
-  # Font Editor
-  # Particle Effect Editor
-
-I think that these four tools will be enough to launch a v1.0 release.  They are arranged in completion priority order.
+Check out the ReleaseMilestones for more information...
