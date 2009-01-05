@@ -1,6 +1,6 @@
 #summary Listing of archived releases.
 
-See the ReleaseMilestones page for current development track.
+See the ReleaseMilestones page for current development information.
 
 == Alpha versions / Beta 1 ==
 
