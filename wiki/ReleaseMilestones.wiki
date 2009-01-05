@@ -1,4 +1,7 @@
 #summary A list of goals to be reached
+
+See the ArchivedReleases page for past release information.
+
 = Release Goals and Milestones =
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
