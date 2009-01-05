@@ -34,9 +34,10 @@ Maybe you're looking for FutureGoals?
     * Sprite (animated & static)
     * Bitmapped font
   # Ant build script
-  # 2D Sprite editor
-  # 2D Font editor
-  # 2D Particle effect editor
+  # Game editors and tools
+    * 2D Sprite editor
+    * 2D Font editor
+    * 2D Particle effect editor
   # Multiple platforms
     * Windows
     * Macintosh
