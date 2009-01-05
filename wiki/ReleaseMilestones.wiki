@@ -5,7 +5,7 @@ Maybe you're looking for FutureGoals?
 
 = Planned Release Features for v1.0 =
 
-  # Complete engine
+  # Completely open-source engine
   # Script loading w/ Dependency processor (linker)
   # Multiple browser support
     * Firefox 1.5+
