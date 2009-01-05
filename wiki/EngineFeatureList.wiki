@@ -15,7 +15,7 @@ If you're looking for what is currently supported/available in The Render Engine
   # 2D Vector-based example game - Asteroids clone
   # Rendering contexts (RenderContext)
     * 2D Canvas
-  # Modular host objects
+  # Modular host objects (HostObjects)
   # Multiple components (HostComponents)
     * Transformation
     * Collision
