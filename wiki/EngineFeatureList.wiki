@@ -3,3 +3,36 @@
 = Introduction =
 
 Below is a list of what is currently supported in The Render Engine.  See the ReleaseMilestones and FutureGoals page for info on what's up and coming!
+
+  # Completely open-source engine
+  # Script loading w/ Dependency processor (linker)
+  # Multiple browser support
+    * Firefox 1.5+
+    * Safari 3.0+
+    * Opera 9.5+
+    * Chrome b3+
+  # 2D Vector-based example game (Asteroids clone)
+  # Canvas rendering context
+  # Modular host objects
+  # Multiple components
+    * Transformation
+    * Collision
+    * Input (keyboard, mouse)
+    * Logic 
+    * Rendering (Canvas, DOM)
+  # 2D Sprite support
+  # Sound support
+  # Resource loaders
+    * JSON Object
+    * XML
+    * Sound
+    * Image
+    * Sprite (animated & static)
+    * Bitmapped font
+  # Ant build script
+  # Multiple platforms
+    * Windows
+    * Macintosh
+    * Linux
+    * iPhone
+    * Wii
