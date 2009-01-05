@@ -6,7 +6,7 @@ See the ArchivedReleases page for past release information.
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Beta 1.2 ==
+== Beta 1.2 (January 9, 2009) ==
 
 || *Status* || *Goal* || *Description* ||
 || _Complete_ || Tool || Ant build script. ||
