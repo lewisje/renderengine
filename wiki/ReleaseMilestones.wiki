@@ -3,6 +3,46 @@
 See the ArchivedReleases page for past release information.
 Maybe you're looking for FutureGoals?
 
+= Planned Release Features for v1.0 =
+
+  # Complete engine
+  # Script loading w/ Dependency processor (linker)
+  # Multiple browser support
+    * Firefox 1.5+
+    * Safari 3.0+
+    * Opera 9.5+
+    * Chrome b3+
+  # 2D Vector-based example game (Asteroids clone)
+  # 2D DOM-based example game (Poker/Tetris mashup)
+  # DOM rendering context
+  # Canvas rendering context
+  # Modular host objects
+  # Multiple components
+    * Transformation
+    * Collision
+    * Input (keyboard, mouse, Wii remote)
+    * Logic 
+    * Rendering (Canvas, DOM)
+  # 2D Sprite support
+  # Sound support
+  # Resource loaders
+    * JSON Object
+    * XML
+    * Sound
+    * Image
+    * Sprite (animated & static)
+    * Bitmapped font
+  # Ant build script
+  # 2D Sprite editor
+  # 2D Font editor
+  # 2D Particle effect editor
+  # Multiple platforms
+    * Windows
+    * Macintosh
+    * Linux
+    * iPhone
+    * Wii
+
 = Release Goals and Milestones =
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
