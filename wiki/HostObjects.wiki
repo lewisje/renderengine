@@ -2,7 +2,7 @@
 
 = Introduction =
 
-A game is comprised of objects which represent the game world for the player(s).  Within this game, you might have a player, enemies, projectiles, score elements, powerups, and so on.  Each of this objects, while unique, share a common purpose:  They have to move about within, interact with, and render to their environment.
+A game is comprised of objects which represent the game world for the player(s).  Within this game, you might have a player, enemies, projectiles, score elements, power-ups, and so on.  Each of these objects, while unique, share a common purpose:  They have to move about within, interact with, and render to their environment.
 
 Enter host objects...  A host object "hosts" components which perform discrete tasks, such as positioning and rendering, so that the host doesn't have to perform all of the work.  Or, a host interacts with a component to collect and act upon information from the game's environment.
 
