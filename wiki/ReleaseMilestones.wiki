@@ -14,8 +14,9 @@ Maybe you're looking for FutureGoals?
     * Chrome b3+
   # 2D Vector-based example game (Asteroids clone)
   # 2D DOM-based example game (Poker/Tetris mashup)
-  # DOM rendering context
-  # Canvas rendering context
+  # Rendering contexts
+    * 2D Canvas
+    * DOM
   # Modular host objects
   # Multiple components
     * Transformation
