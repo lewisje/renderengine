@@ -9,13 +9,18 @@ The following list is a set of goals to be reached for the intended release.  So
 || _Complete_ || Tool || Ant build script. ||
 || _Complete_ || Demo || Vector demo - Asteroids clone.  Test for game logic, component loading, dependency checking, vector rendering to 2D context. ||
 || _Complete_ || Browser Support || Opera for Wii - It's sloooow ||
+|| _80%_ || Tool || Update Ant build script to include only complete tools and demos. ||
+
+== Beta 1.3 ==
+
+|| *Status* || *Goal* || *Description* ||
+|| _10%_ || Dev || Better handling of DOM as a viable render context. ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
+|| _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
 
 == Beta 2 ==
 
 || *Status* || *Goal* || *Description* ||
-|| _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
-|| _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
 || - || Tool || Particle editor. ||
 
 == Release Candidate 1 ==
@@ -47,6 +52,7 @@ Ideas for the next release.  This list is evolving...
 
 || *Status* || *Goal* || *Description* ||
 || _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
+|| _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _10%_ || Tool || Simple 2D game editor based on the sprite demo editor. ||
 || - || Browser support || Optimize performance for the Wii. ||
 || - || New Feature || Multiplayer networking using AJAX polling and COMET. ||
