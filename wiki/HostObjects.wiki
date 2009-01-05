@@ -24,7 +24,7 @@ Not every host object will use components of each type.  Some game objects may o
 
 Host objects call the `execute()` method of each component added to it.  This gives the host a chance to update itself before the container it is in moves onto the next object.  Components can be prioritized within their macro type, so that you can assure that one rendering component is executed before another.  Thus, if you need to rotate a shoulder before an elbow, you can prioritize them as such.
 
-== Components ==
+== Quick and Dirty Components ==
 
 Like I said, a component is a discrete part of a whole entity.  You can read more about components in the HostComponents section.  For the sake of this discussion, just know that they perform singular tasks to form the whole.
 
