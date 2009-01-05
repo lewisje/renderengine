@@ -1,8 +1,8 @@
 #summary Features of The Render Engine.
 
-= Introduction =
+= The Render Engine Feature List =
 
-Below is a list of what is currently supported in The Render Engine.  See the ReleaseMilestones and FutureGoals page for info on what's up and coming!
+If you're looking for what is currently supported in The Render Engine, you've come to the right page.  See the ReleaseMilestones and FutureGoals page for info on what's up and coming!
 
   # Completely open-source engine
   # Script loading w/ Dependency processor (linker)
