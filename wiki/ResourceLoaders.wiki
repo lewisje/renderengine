@@ -1,0 +1,28 @@
+#summary What exactly are resource loaders?
+
+= Resource Loaders =
+
+A resource loader is an abstraction of an interface allowing the loading, and caching, of objects of all types by identifiable name.  Resources can be as simple as a text file, to as complex as a Sprite or Level definition encompassing multiple resources.  Each resource loader must implement the `load()` method and the `get()` method at the very least.
+
+Caching is performed to speed up processing, and reduce memory overhead when loading the same resource over and over.  Eventually resource loaders will be able to be pooled so that once resource loader can handle loading resources of many types and properly caching and retrieving them.
+
+Currently, the following resource loaders are available:
+
+== XML Loader ==
+_needs content_
+
+== JSON Object Loader ==
+_needs content_
+
+== Sound Loader ==
+_needs content_
+
+== Image Loader ==
+_needs content_
+
+== Sprite Loader ==
+_needs content_
+
+== Bitmap Font Loader ==
+_needs content_
+
