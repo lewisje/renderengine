@@ -19,34 +19,34 @@ The following list is a set of goals to be reached for the intended release.  So
 || *Status* || *Goal* || *Description* ||
 || _10%_ || Dev || Better handling of DOM as a viable render context.  Include demo game of Poker/Tetris mashup. ||
 
-== Beta 1.4 ==
+== Beta 1.4 (TBA) ==
 || *Status* || *Goal* || *Description* ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 
-== Beta 1.5 ==
+== Beta 1.5 (TBA) ==
 
 || *Status* || *Goal* || *Description* ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
 || - || Tool || Particle editor. ||
 
-== Beta 2 ==
+== Beta 2 (TBA) ==
 
 || *Status* || *Goal* || *Description* ||
 || - || *Code freeze* || *No additional features* - Start logging and addressing major bugs. ||
 
-== Release Candidate 1 ==
+== Release Candidate 1 (TBA) ==
 
 || *Status* || *Goal* || *Description* ||
 || - || Bug Fixing || Fix bugs from beta 2 ||
  
 
-== Release Candidate 2 ==
+== Release Candidate 2 (TBA) ==
 
 || *Status* || *Goal* || *Description* ||
 || - || Bug Fixing || Fix bugs found during RC1. ||
 
 
-== Gold Candidate - Version 1.0 ==
+== Gold Candidate - Version 1.0 (TBA) ==
 
 || *Status* || *Goal* || *Description* ||
 || - || Bug Fixing || Fix bugs found during RC2. ||
