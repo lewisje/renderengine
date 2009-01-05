@@ -37,4 +37,4 @@ If you're looking for what is currently supported/available in The Render Engine
     * Macintosh
     * Linux
     * iPhone
-    * Wii
+    * Wii (OperaWii)
