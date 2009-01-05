@@ -28,21 +28,3 @@ This creates a `CanvasContext` (itself, a container) and adds it to the engine's
    }
 }}}
 The process becomes quite evident after you've explored it and used it a few times.  Container objects update the objects they contain, and so on...  Keep that phrase in your mind and you'll soon understand how simple the process really is.
-
-== Host Objects ==
-
-Host objects are where the COM-like architecture comes into play.  To make game objects easier to work with, we use components to build up the functionality of an in-game object.  Instead of writing each object to understand keyboard or mouse interactions, how to draw themselves, what collisions are important, or how to move, we depend on different components which specialize in those processes.
-
-Components break down into one of four functional areas.  Those areas, in order of macro-level processing, are as follows:
-
-  * *TYPE_INPUT* - Components that interact with an input device, such as the keyboard.
-  * *TYPE_LOGIC* - A component which performs logic functions, such as score calculations, or what animation to run.
-  * *TYPE_COLLIDER* - Components that can interact with a collision model and determine when a host object might collide with another game object.
-  * *TYPE_TRANSFORM* - A component which updates the transformation of the host game object.
-  * *TYPE_RENDERING* - A component that can update a render context with a visual representation.
-
-Not every host object will use components of each type.  Some game objects may only have a logic and rendering component, while others may have just a collider component.  Plus, there isn't a limit on the number of components of _one type_ that can be used.  A host might have two input components and five rendering components.  The thing is that each component does one thing, and does it well.
-
-Host objects call the `execute()` method of each component added to it.  This gives the host a chance to update itself before the container it is in moves onto the next object.  Components can be prioritized within their macro type, so that you can assure that one rendering component is executed before another.  Thus, if you need to rotate a shoulder before an elbow, you can prioritize them as such.
-
-For more information, see the HostComponents Wiki page.
