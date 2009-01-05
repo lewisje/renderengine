@@ -14,7 +14,7 @@ The following list is a set of goals to be reached for the intended release.  So
 == Beta 1.3 ==
 
 || *Status* || *Goal* || *Description* ||
-|| _10%_ || Dev || Better handling of DOM as a viable render context. ||
+|| _10%_ || Dev || Better handling of DOM as a viable render context.  Include demo game of Poker/Tetris mashup. ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
 
