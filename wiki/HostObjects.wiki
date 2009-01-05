@@ -10,13 +10,13 @@ Enter host objects...  A host object "hosts" components which perform discrete t
 
 Like I said, a component is a discrete part of a whole entity.  You can read more about components in the HostComponents section.  For the sake of this discussion, just know that they perform singular tasks to form the whole.
 
-You might have a power-up which floats about the playfield and only collides with the player to grant them a super power.  This object would _host_ transformation, rendering, and collision components.  The host only needs to add each of those components and then tell them how to act.  Some components even have "smarts" which dictate how they operate with little input needed from the host.
+You might have a power-up which floats about the playfield bouncing off walls, and only collides with the player to grant them a super power.  This object would _host_ transformation, rendering, and collision components.  The host only needs to add each of those components and then tell them how to act.  Some components even have "smarts" which dictate how they operate with little input needed from the host.
 
 == Host Execution ==
 
 Each frame of execution, every host object is processed and all components are executed.  The host object, through its `update()` method, is given the opportunity to modify the actions of its components.  Typically, only transformation (movement) of the host will need to be modified.  The collision component will, typically, automatically notify the host when a collision occurs with something giving the host an opportunity to respond.
 
-Finally, the rendering component will be executed (yes, components are executed in a defined order) and the host will be drawn to the [RenderContexts render context].  If your powerup was using an animated sprite, there's no need to even update the frame being displayed as that is done automatically for you.
+Finally, the rendering component will be executed (yes, components are executed in a defined order) and the host will be drawn to the RenderContext.  If your power-up was using an animated sprite, there's no need to even update the frame being displayed as that is done automatically for you.
 
 == Simplicity ==
 
