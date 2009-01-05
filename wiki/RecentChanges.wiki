@@ -3,6 +3,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 01/05/2009 || Updated the Wiki with a ton of information and restructured some pages. ||
 || 01/02/2009 || Working on updating the HTMLElementContext to enhance its functionality.  I've gotten image and sprite rendering working.  Need to get the transform stack working now (position only).  Another example game is in the works to test it out. ||
 || 11/15/2008 || Wii is working! I got the engine up and running on the Wii -- it's a little slow at this point, but I got it working.  =) ||
 || 11/04/2008 || Updating the UI tools for editor design and development. ||
