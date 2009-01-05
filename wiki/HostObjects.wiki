@@ -42,4 +42,4 @@ In addition to the standard components, a special type of component (known as a 
 
 == Simplicity ==
 
-As you can see, by using components effectivly, complex objects can be built with little coding necessary.  As the component library grows, more and more operations will be automated for usage in the engine.  Additionally, your game can extend components to add simple functionality which make your host object more functional.
+As you can see, by using components effectivly, complex objects can be built with little coding necessary.  As the component library grows, more and more operations will be automated for usage in the engine.  Additionally, your game can extend components to add simple functionality which make your host object more interesting.
