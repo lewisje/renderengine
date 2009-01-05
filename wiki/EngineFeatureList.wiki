@@ -4,7 +4,7 @@
 
 If you're looking for what is currently supported/available in The Render Engine, you've come to the right page.  See the ReleaseMilestones and FutureGoals page for info on what's up and coming!
 
-  # Completely open-source engine (EngineProcessOverview)
+  # Completely OOD open-source engine (EngineProcessOverview)
   # Script loading w/ Dependency processor (DependencyProcessor)
   # Object pooling to reduce garbage collection (ObjectPooling)
   # Multiple browser support (SupportedBrowsers)
