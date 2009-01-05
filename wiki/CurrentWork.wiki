@@ -7,4 +7,6 @@ The reasoning is that I can release v1.0 with the vector game demo and another g
 
 So, after much wavering, I have locked down a release milestones schedule to get v1.0 out the door sooner rather than later.  The vector-based game is essentially complete (unless someone wants to make a nicer UI and spruce it up a bit) and the Poker/Tetris game are coming along nicely.  And, since the DOM context will support sprites, it's not much of a loss for people to develop games that don't depend on the _Canvas_ element.  I also think that games developed for the DOM will run quickly on the Wii and iPhone.
 
+_Please Note:_ I'm not going to remove the Canvas context -- I'm just not going to focus on getting a solid demo (other than the vector demo) working on it right now.  2D sprite support for Canvas will still be included!
+
 Check out the ReleaseMilestones for more information...
