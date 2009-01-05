@@ -38,3 +38,9 @@ If you're looking for what is currently supported/available in The Render Engine
     * Linux
     * iPhone
     * Wii (OperaWii)
+  # Uses known libraries
+    * JSON2
+    * jQuery
+    * Sylvester
+    * Soundmanager 2
+    * Base
