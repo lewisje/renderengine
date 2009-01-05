@@ -28,3 +28,5 @@ This creates a `CanvasContext` (itself, a container) and adds it to the engine's
    }
 }}}
 The process becomes quite evident after you've explored it and used it a few times.  Container objects update the objects they contain, and so on...  Keep that phrase in your mind and you'll soon understand how simple the process really is.
+
+_Hint:_ Another type of Container are the HostObjects.
