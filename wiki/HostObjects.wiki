@@ -30,6 +30,44 @@ Like I said, a component is a discrete part of a whole entity.  You can read mor
 
 You might have a power-up which floats about the playfield bouncing off walls, and only collides with the player to grant them a super power.  This object would _host_ transformation, rendering, and collision components.  The host only needs to add each of those components and then tell them how to act.  Some components even have "smarts" which dictate how they operate with little input needed from the host.
 
+From the `SpaceroidsBullet` object's `constructor()` method, you can see how it adds, and then initializes, a few components:
+{{{
+   constructor: function(player) {
+      this.base("Bullet");
+
+      // This is a hack!
+      this.field = Spaceroids;
+
+      // Track the player that created us
+      this.player = player;
+      this.rot = player.getRotation();
+
+      // Add components to move and draw the bullet
+      this.add(Mover2DComponent.create("move"));
+      this.add(Vector2DComponent.create("draw"));
+      this.add(ColliderComponent.create("collide", this.field.collisionModel));
+
+      // Get the player's position and rotation,
+      // then position this at the tip of the ship
+      // moving away from it
+      var p_mover = this.player.getComponent("move");
+      var c_mover = this.getComponent("move");
+      var c_draw = this.getComponent("draw");
+
+      c_draw.setPoints(SpaceroidsBullet.shape);
+      c_draw.setLineStyle("white");
+      c_draw.setFillStyle("white");
+
+      var r = p_mover.getRotation();
+      var dir = Math2D.getDirectionVector(Point2D.ZERO, SpaceroidsBullet.tip, r);
+
+      var p = Point2D.create(p_mover.getPosition());
+
+      c_mover.setPosition(p.add(Point2D.create(dir).mul(10)));
+      c_mover.setVelocity(dir.mul(3));
+   }
+}}}
+
 == Host Execution ==
 
 Each frame of execution, every host object is processed and all components are executed.  The host object, through its `update()` method, is given the opportunity to modify the operation of its components.  Typically, only transformation (movement) of the host will need to be modified.  The collision component will, typically, automatically notify the host when a collision occurs with something, giving the host an opportunity to respond.
