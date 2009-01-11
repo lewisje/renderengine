@@ -152,6 +152,14 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
       $(document).ready(function() {
          $(document.body).append($("<div id='debug-console'><!-- --></div>"));
       });
+		
+		window.error = function(err){
+			if (err instanceof Error) {
+				this.error(err.message);
+			} else {
+		  		this.error(err);
+			}
+	  	};
    },
 
    /** @private */
@@ -1468,7 +1476,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          var scriptPath = Engine.scriptQueue.shift();
 
          // If the queue element is a function, execute it and return
-         if (typeof scriptPath == "function") {
+         if (typeof scriptPath === "function") {
             Engine.handleScriptDone();
             scriptPath();
             Engine.readyForNextScript = true;
@@ -1509,7 +1517,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
                }
                if (!Engine.localMode) {
                   // Delete the script node
-                  $(n).remove();
+						$(n).remove();	
                }
 
             }

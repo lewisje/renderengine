@@ -11,8 +11,8 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 350 $
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
  *
@@ -110,6 +110,7 @@ var PoTris = Game.extend({
       this.imageLoader.load("spade", this.getFilePath("resources/spade.png"), 30, 30);
       this.imageLoader.load("diamond", this.getFilePath("resources/diamond.png"), 30, 30);
       this.imageLoader.load("heart", this.getFilePath("resources/heart.png"), 30, 30);
+      this.imageLoader.load("wild", this.getFilePath("resources/wild.png"), 30, 30);
 
 		// Don't start until all of the resources are loaded
       PoTris.loadTimeout = Timeout.create("wait", 250, PoTris.waitForResources);
