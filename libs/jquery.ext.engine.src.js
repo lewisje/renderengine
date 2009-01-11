@@ -34,7 +34,8 @@ var userAgent = navigator.userAgent.toLowerCase();
 $.extend(jQuery.browser, {
    chrome: /chrome/.test( userAgent ),
    Wii: /nintendo wii/.test( userAgent ),
-   iPhone: /iphone/.test( userAgent) && /safari/.test( userAgent )
+   iPhone: /iphone/.test( userAgent) && /safari/.test( userAgent ),
+	WiiMote: ((window.opera && window.opera.wiiremote) ? window.opera.wiiremote : null)
 });
 
 /* Addition of some selectors that jQuery doesn't provide:
