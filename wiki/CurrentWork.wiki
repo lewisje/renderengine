@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+I completed the Ant build script and tagged beta 1.2 today (1/11/09).  I'm moving onto the single task (well, it's a single task but has many components) for the b1.3 release.  I'm targeting 1/30/09 for the b1.3 release, but that's tentative.
+
 *Update:* I've recently modified the milestones for the v1.0 gold release.  It seems that I was taking too big of a chunk of goals to try to attain an initial full release.  Due to the complexity of the sprite editor, 2D Game editor, 2D sprites example game, etc. I have decided to move those off to a version 2.0 release.  Well, at least the 2D game editor and sprite example game.
 
 The reasoning is that I can release v1.0 with the vector game demo and another game that is intended to test the DOM rendering context.  The latter is coming together quickly, so I feel that it can be what comprises the v1.0 release.  I also feel that 2D sprite-based games will be the future of the engine and I want to _do it right the first time._
