@@ -65,9 +65,11 @@
       |
       +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<a href='HashContainer.html' target='main'>HashContainer</a>
+         +--<a href='Container.html' target='main'>Container</a>
             |
-            +--<b>HostObject</b></pre>
+            +--<a href='HashContainer.html' target='main'>HashContainer</a>
+               |
+               +--<b>HostObject</b></pre>
    <hr>
    Class <b>HostObject</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -77,7 +79,7 @@
    Extends <a href="HashContainer.html">HashContainer</a>.<br/>
 
 <p>
-A host object is a container of components which provide some sortof action, be it rendering, collision detection, effects, or whatever.This way, an object can be anything, depending on it's components.</p>
+A host object is a container for components.  Each component within       the host provides a portion of the overall functionality.  A host object       can have any number of components of any type within it.  Components provide       functionality for things like rendering, collision detection, effects, or        transformations. This way, an object can be anything, depending on it's components.</p>
 
 
 
@@ -193,7 +195,7 @@ A host object is a container of components which provide some sortof action, be
          <td>
             <code> <b> <a href="#getProperties">getProperties</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns a property object with accessor methods.
  
          </td>
       </tr>
@@ -219,7 +221,7 @@ A host object is a container of components which provide some sortof action, be
          <td>
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Release the object back into the object pool.
  
          </td>
       </tr>
@@ -231,7 +233,7 @@ A host object is a container of components which provide some sortof action, be
          <td>
             <code> <b> <a href="#setRenderContext">setRenderContext</a></b>(renderContext) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the rendering context this object will be drawn upon.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the rendering context this object will be drawn within.
  
          </td>
       </tr>
@@ -243,7 +245,7 @@ A host object is a container of components which provide some sortof action, be
          <td>
             <code> <b> <a href="#update">update</a></b>(renderContext, time) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update this object within the render context, and for the specified time.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update this object within the render context, at the specified timeslice.
  
          </td>
       </tr>
@@ -260,27 +262,6 @@ A host object is a container of components which provide some sortof action, be
 <!-- ========== INHERITED METHODS SUMMARY =========== -->
 
    <table border="1" cellpadding="3" cellspacing="0" width="100%">
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseObject.html#constructor">constructor</a>,
-            
-               <a href="BaseObject.html#setElement">setElement</a>,
-            
-               <a href="BaseObject.html#getElement">getElement</a>,
-            
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
-            
-         </code></td>
-      </tr>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
@@ -313,9 +294,49 @@ A host object is a container of components which provide some sortof action, be
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="PooledObject.html#toString">toString</a>,
-            
                <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Container.html">Container</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Container.html#constructor">constructor</a>,
+            
+               <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#clear">clear</a>,
+            
+               <a href="Container.html#getObjects">getObjects</a>,
+            
+               <a href="Container.html#sort">sort</a>,
+            
+               <a href="Container.html#toString">toString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -478,7 +499,7 @@ A host object is a container of components which provide some sortof action, be
    <a name="getProperties"> </a> <h3>getProperties</h3>
       <pre><b>getProperties</b>()</pre> 
    <ul>
-      undocumented
+      Returns a property object with accessor methods.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -515,7 +536,7 @@ A host object is a container of components which provide some sortof action, be
    <a name="release"> </a> <h3>release</h3>
       <pre><b>release</b>()</pre> 
    <ul>
-      undocumented
+      Release the object back into the object pool.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -531,7 +552,7 @@ A host object is a container of components which provide some sortof action, be
    <a name="setRenderContext"> </a> <h3>setRenderContext</h3>
       <pre><b>setRenderContext</b>(renderContext)</pre> 
    <ul>
-      Set the rendering context this object will be drawn upon.
+      Set the rendering context this object will be drawn within.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -552,7 +573,7 @@ A host object is a container of components which provide some sortof action, be
    <a name="update"> </a> <h3>update</h3>
       <pre><b>update</b>(renderContext, time)</pre> 
    <ul>
-      Update this object within the render context, and for the specified time.
+      Update this object within the render context, at the specified timeslice.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -582,8 +603,8 @@ A host object is a container of components which provide some sortof action, be
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:10 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:40 GMT-0500 (EST)</div>
 </body>
 </html>

@@ -59,7 +59,7 @@
 
 
 <p>
-A stand-in class when other debugger output options are not       available.  This object is created, as necessary, by the       <a href='Console.html'>Console</a></p>
+The base class for all console objects. Each type of supported console outputs       its data differently.  This class allows abstraction between the console and the       browser's console object so the <a href='Console.html'>Console</a> can report to it.</p>
 
 
 
@@ -125,7 +125,7 @@ A stand-in class when other debugger output options are not       available.  T
          <td>
             <code> <b> <a href="#debug">debug</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write a debug message to the console
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write a debug message to the console.
  
          </td>
       </tr>
@@ -137,19 +137,21 @@ A stand-in class when other debugger output options are not       available.  T
          <td>
             <code> <b> <a href="#error">error</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write an error message to the console
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write an error message to the console.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
  
          </td>
       </tr>
@@ -161,7 +163,7 @@ A stand-in class when other debugger output options are not       available.  T
          <td>
             <code> <b> <a href="#info">info</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write an info message to the console
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write an info message to the console.
  
          </td>
       </tr>
@@ -173,7 +175,7 @@ A stand-in class when other debugger output options are not       available.  T
          <td>
             <code> <b> <a href="#warn">warn</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write a warning message to the console
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Write a warning message to the console.
  
          </td>
       </tr>
@@ -257,7 +259,7 @@ A stand-in class when other debugger output options are not       available.  T
    <a name="debug"> </a> <h3>debug</h3>
       <pre><b>debug</b>()</pre> 
    <ul>
-      Write a debug message to the console
+      Write a debug message to the console.  The arguments to the method call will beconcatenated into one string message.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -273,7 +275,7 @@ A stand-in class when other debugger output options are not       available.  T
    <a name="error"> </a> <h3>error</h3>
       <pre><b>error</b>()</pre> 
    <ul>
-      Write an error message to the console
+      Write an error message to the console.  The arguments to the method call will beconcatenated into one string message.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -287,9 +289,9 @@ A stand-in class when other debugger output options are not       available.  T
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
-      <pre><b>getClassName</b>()</pre> 
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
    <ul>
-      undocumented
+      Get the class name of this object
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -297,7 +299,12 @@ A stand-in class when other debugger output options are not       available.  T
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "ConsoleRef" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -305,7 +312,7 @@ A stand-in class when other debugger output options are not       available.  T
    <a name="info"> </a> <h3>info</h3>
       <pre><b>info</b>()</pre> 
    <ul>
-      Write an info message to the console
+      Write an info message to the console.  The arguments to the method call will beconcatenated into one string message.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -321,7 +328,7 @@ A stand-in class when other debugger output options are not       available.  T
    <a name="warn"> </a> <h3>warn</h3>
       <pre><b>warn</b>()</pre> 
    <ul>
-      Write a warning message to the console
+      Write a warning message to the console.  The arguments to the method call will beconcatenated into one string message.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -343,8 +350,8 @@ A stand-in class when other debugger output options are not       available.  T
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:11 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:40 GMT-0500 (EST)</div>
 </body>
 </html>

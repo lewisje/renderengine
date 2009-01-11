@@ -65,17 +65,19 @@
       |
       +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<b>HashContainer</b></pre>
+         +--<a href='Container.html' target='main'>Container</a>
+            |
+            +--<b>HashContainer</b></pre>
    <hr>
    Class <b>HashContainer</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
 
 
 
-   Extends <a href="BaseObject.html">BaseObject</a>.<br/>
+   Extends <a href="Container.html">Container</a>.<br/>
 
 <p>
-A hash container is a logical collection of objects.  A hash containeris a container with a backing object for faster lookups.  Objects withinthe container must have unique names. When a container is destroyed, allobjects within the container are destroyed with it.</p>
+A hash container is a logical collection of objects.  A hash container       is a container with a backing object for faster lookups.  Objects within       the container must have unique names. When a container is destroyed, all       objects within the container are destroyed with it.</p>
 
 
 
@@ -160,6 +162,20 @@ A hash container is a logical collection of objects.  A hash containeris a cont
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
@@ -177,7 +193,7 @@ A hash container is a logical collection of objects.  A hash containeris a cont
          <td>
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Release the object back into the object pool.
  
          </td>
       </tr>
@@ -243,10 +259,6 @@ A hash container is a logical collection of objects.  A hash containeris a cont
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="BaseObject.html#constructor">constructor</a>,
-            
-               <a href="BaseObject.html#destroy">destroy</a>,
-            
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
@@ -268,11 +280,34 @@ A hash container is a logical collection of objects.  A hash containeris a cont
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="PooledObject.html#getProperties">getProperties</a>,
-            
-               <a href="PooledObject.html#toString">toString</a>,
-            
                <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Container.html">Container</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Container.html#constructor">constructor</a>,
+            
+               <a href="Container.html#destroy">destroy</a>,
+            
+               <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#clear">clear</a>,
+            
+               <a href="Container.html#getObjects">getObjects</a>,
+            
+               <a href="Container.html#sort">sort</a>,
+            
+               <a href="Container.html#getProperties">getProperties</a>,
+            
+               <a href="Container.html#toString">toString</a>,
             
          </code></td>
       </tr>
@@ -390,6 +425,27 @@ A hash container is a logical collection of objects.  A hash containeris a cont
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "HashContainer" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="isInHash"> </a> <h3>isInHash</h3>
       <pre><b>isInHash</b>(name)</pre> 
    <ul>
@@ -414,7 +470,7 @@ A hash container is a logical collection of objects.  A hash containeris a cont
    <a name="release"> </a> <h3>release</h3>
       <pre><b>release</b>()</pre> 
    <ul>
-      undocumented
+      Release the object back into the object pool.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -509,8 +565,8 @@ A hash container is a logical collection of objects.  A hash containeris a cont
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:12 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:41 GMT-0500 (EST)</div>
 </body>
 </html>
