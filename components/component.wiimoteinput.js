@@ -30,9 +30,9 @@
 
 // Includes
 Engine.include("/engine/engine.events.js");
-Engine.include("/components/component.input.js");
+Engine.include("/components/component.keyboardinput.js");
 
-Engine.initObject("WiimoteInputComponent", "InputComponent", function() {
+Engine.initObject("WiimoteInputComponent", "KeyboardInputComponent", function() {
 
 /**
  * @class A component which responds to the Wiimote (in the Opera browser)
@@ -71,7 +71,7 @@ Engine.initObject("WiimoteInputComponent", "InputComponent", function() {
  *
  * @extends InputComponent
  */
-var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputComponent.prototype */{
+var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInputComponent.prototype */{
 
    enabledRemotes: null,
 
@@ -97,56 +97,22 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
    },
 
    /**
-    * Set the host object this component exists within.  Additionally, this
-    * component sets up the event listeners.  Due to key events occurring
-    * less often than mouse events, every component listening for them will
-    * attach a listener.
-    *
-    * @param hostObject {HostObject} The object which hosts this component
-    */
-   setHostObject: function(hostObject) {
-      this.base(hostObject);
-
-      this.downFn = function(eventObj) {
-         eventObj.data.owner._keyDownListener(eventObj);
-         return false;
-      };
-
-      this.upFn = function(eventObj) {
-         eventObj.data.owner._keyUpListener(eventObj);
-         return false;
-      };
-
-      this.pressFn = function(eventObj) {
-         eventObj.data.owner._keyPressListener(eventObj);
-         return false;
-      };
-
-      var context = this.getHostObject().getRenderContext();
-      EventEngine.setHandler(context, {owner: this}, "keydown", this.downFn);
-      EventEngine.setHandler(context, {owner: this}, "keyup", this.upFn);
-   },
-
-   /**
     * Destroy this instance and remove all references.
     */
    destroy: function() {
-      var context = this.getHostObject().getRenderContext();
-      EventEngine.clearHandler(context, "keydown", this.downFn);
-      EventEngine.clearHandler(context, "keyup", this.upFn);
+		var ctx = Engine.getDefaultContext();
 
-      this.notifyLists = null;
-      this.downFn = null;
-      this.upFn = null;
-      this.pressFn = null;
-
+      // Clean up event handlers
+		ctx.removeEvent(this, "keydown");
+		ctx.removeEvent(this, "keyup");
+		ctx.removeEvent(this, "keypress");
       this.base();
    },
 
    /**
     * @private
     */
-   _keyDownListener: function(eventObj) {
+   _keyDownListener: function(event) {
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
          case WiimoteInputComponent.KEYCODE_LEFT:
@@ -186,12 +152,15 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
             this._wmButtonZ(0, true);
             break;
       }
+		
+		// Pass along for straight keyboard handling
+		this.base(event);
    },
 
    /**
     * @private
     */
-   _keyUpListener: function(eventObj) {
+   _keyUpListener: function(event) {
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
          case WiimoteInputComponent.KEYCODE_LEFT:
@@ -231,6 +200,9 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
             this._wmButtonZ(0, false);
             break;
       }
+		
+		// Pass along for straight keyboard handling
+		this.base(event);
    },
 
    /**
@@ -246,9 +218,9 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
       }
 
       // Run through the available Wiimotes
+		var op = $.browser.WiiMote;
       for (var w = 0; w < 4; w++) {
-         var op = opera.wiiremote;
-         var remote = op.update(w); // This fixes a dependency problem
+         var remote = op.update(w);	// This fixes a dependency problem
          // Cannot perform this check on the primary remote,
          // that's why this object extends the keyboard input component...
          if (remote.isEnabled) {
@@ -466,7 +438,7 @@ var WiimoteInputComponent = InputComponent.extend(/** @scope WiimoteInputCompone
          this.getHostObject().onWiimoteRoll(c, r);
       }
    }
-}, {
+}, { /** @scope WiimoteInputComponent.prototype */
 
    /**
     * Get the class name of this object
