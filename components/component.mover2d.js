@@ -2,6 +2,8 @@
  * The Render Engine
  * 2DMoverComponent
  *
+ * @fileoverview An extension of the transform 2D component which adds velocity
+ * 				  and acceleration calculations automatically.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

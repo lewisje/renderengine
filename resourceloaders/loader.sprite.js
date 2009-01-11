@@ -2,6 +2,9 @@
  * The Render Engine
  * SpriteLoader
  *
+ * @fileoverview An extension of the image resource loader for handling
+ * 				  sprites.  Includes a class for working with loaded sprites.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

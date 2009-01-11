@@ -2,7 +2,7 @@
  * The Render Engine
  * Quadtree
  *
- * A generalized representation of a spatial quadtree.
+ * @fileoverview A generalized representation of a spatial quadtree.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *

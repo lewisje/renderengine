@@ -3,7 +3,7 @@
  * AbstractTextRenderer
  *
  * @fileoverview Abstract class that provides basic interface for all
- *     text render objects used by the text renderer.
+ *     			  text render objects used by the text renderer.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *

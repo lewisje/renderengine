@@ -2,6 +2,8 @@
  * The Render Engine
  * XMLLoader
  *
+ * @fileoverview A resource loader for XML files.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

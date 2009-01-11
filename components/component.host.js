@@ -2,6 +2,8 @@
  * The Render Engine
  * HostComponent
  *
+ * @fileoverview A component which allows chaining of HostObjects for complex
+ * 				  object creation.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

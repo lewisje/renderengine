@@ -2,6 +2,9 @@
  * The Render Engine
  * RenderContext2D
  *
+ * @fileoverview The base 2D render context.  This context implements a number of
+ * 				  methods which are then standard on all contexts which extend from
+ * 				  it.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

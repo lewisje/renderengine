@@ -2,6 +2,9 @@
  * The Render Engine
  * ObjectLoader
  *
+ * @fileoverview An extension of the remote resource loader for loading
+ * 				  JSON objects.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

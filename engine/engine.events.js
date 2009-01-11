@@ -2,7 +2,8 @@
  * The Render Engine
  * Events
  *
- * Event handling
+ * @fileoverview Methods for handling events (adding & removing) and keycodes for
+ * 				  keys like the arrows and function keys.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -33,6 +34,10 @@
 
 Engine.initObject("EventEngine", null, function() {
 
+/**
+ * @class A static object for unformly handling events within all browser
+ * 		 platforms.
+ */
 var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
 
    constructor: null,
@@ -82,100 +87,100 @@ var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
    //====================================================================================================================
    // MOUSE BUTTON CONSTANTS
 
-   /** No mouse button pressed. **/
+   /** No mouse button pressed. */
    MOUSE_NO_BUTTON: 0,
 
-   /** Left mouse button. **/
+   /** Left mouse button. */
    MOUSE_LEFT_BUTTON: 1,
 
-   /** Right mouse button. **/
+   /** Right mouse button. */
    MOUSE_RIGHT_BUTTON: 3,
 
-   /** Middle mouse button. **/
+   /** Middle mouse button. */
    MOUSE_MIDDLE_BUTTON: 2,
 
    //====================================================================================================================
    // KEY CODE CONSTANTS
 
-   /** Constant for the "Tab" key **/
+   /** Constant for the "Tab" key */
    KEYCODE_TAB: 9,
 
-   /** Constant for the "Enter" key **/
+   /** Constant for the "Enter" key */
    KEYCODE_ENTER: 13,
 
-   /** Constant for the "Delete" key **/
+   /** Constant for the "Delete" key */
    KEYCODE_DELETE: 46,
 
-   /** Constant for the "Space" key **/
+   /** Constant for the "Space" key */
    KEYCODE_SPACE: 32,
 
-   /** Constant for the "Backspace" **/
+   /** Constant for the "Backspace" */
    KEYCODE_BACKSPACE: 8,
 
-   /** Constant for the "Up" key  **/
+   /** Constant for the "Up" key  */
    KEYCODE_UP_ARROW: 38,
 
-   /** Constant for the "Down" key **/
+   /** Constant for the "Down" key */
    KEYCODE_DOWN_ARROW: 40,
 
-   /** Constant for the "Left" key **/
+   /** Constant for the "Left" key */
    KEYCODE_LEFT_ARROW: 37,
 
-   /** Constant for the "RIGHT" key **/
+   /** Constant for the "RIGHT" key */
    KEYCODE_RIGHT_ARROW: 39,
 
-   /** Constant for the "Plus" key **/
+   /** Constant for the "Plus" key */
    KEYCODE_KEYPAD_PLUS: 61,
 
-   /** Constant for the "Minus" key **/
+   /** Constant for the "Minus" key */
    KEYCODE_KEYPAD_MINUS: 109,
 
-   /** Constant for the "Home" key **/
+   /** Constant for the "Home" key */
    KEYCODE_HOME: 36,
 
-   /** Constant for the "End" key **/
+   /** Constant for the "End" key */
    KEYCODE_END: 35,
 
-   /** Constant for the "F1" key **/
+   /** Constant for the "F1" key */
    KEYCODE_F1: 112,
 
-   /** Constant for the "F2" key **/
+   /** Constant for the "F2" key */
    KEYCODE_F2: 113,
 
-   /** Constant for the "F3" key **/
+   /** Constant for the "F3" key */
    KEYCODE_F3: 114,
 
-   /** Constant for the "F4" key **/
+   /** Constant for the "F4" key */
    KEYCODE_F4: 115,
 
-   /** Constant for the "F5" key **/
+   /** Constant for the "F5" key */
    KEYCODE_F5: 116,
 
-   /** Constant for the "F6" key **/
+   /** Constant for the "F6" key */
    KEYCODE_F6: 117,
 
-   /** Constant for the "F7" key **/
+   /** Constant for the "F7" key */
    KEYCODE_F7: 118,
 
-   /** Constant for the "F8" key **/
+   /** Constant for the "F8" key */
    KEYCODE_F8: 119,
 
-   /** Constant for the "F9" key **/
+   /** Constant for the "F9" key */
    KEYCODE_F9: 120,
 
-   /** Constant for the "F10" key **/
+   /** Constant for the "F10" key */
    KEYCODE_F10: 121,
 
-   /** Constant for the "F11" key **/
+   /** Constant for the "F11" key */
    KEYCODE_F11: 122,
 
-   /** Constant for the "F12" key **/
+   /** Constant for the "F12" key */
    KEYCODE_F12: 123,
 
-   /** Constant for the "Context Menu" key (Windows) **/
+   /** Constant for the "Context Menu" key (Windows) */
    KEYCODE_MENU: 93,
 
-   /** Constant for the "Windows" key (Windows) **/
+   /** Constant for the "Windows" key (Windows) */
    KEYCODE_WINDOW: 91
 
 });

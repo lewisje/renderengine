@@ -2,7 +2,7 @@
  * The Render Engine
  * ColliderComponent
  *
- * A component which handles collisions.
+ * @fileoverview The base collision component.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *

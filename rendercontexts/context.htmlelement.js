@@ -2,6 +2,7 @@
  * The Render Engine
  * HTMLElementContext
  *
+ * @fileoverview A render context which wraps a specified HTML node.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

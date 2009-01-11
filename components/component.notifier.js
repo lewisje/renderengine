@@ -2,6 +2,8 @@
  * The Render Engine
  * InputComponent
  *
+ * @fileoverview An extension of the logic component which efficiently 
+ * 				  notifies a list of recipients when triggered.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

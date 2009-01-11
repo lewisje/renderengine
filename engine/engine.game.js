@@ -2,9 +2,9 @@
  * The Render Engine
  * Game
  *
- * The game object represents an instance of a game.  It is
- * the controlling entity for all of a game and is responsible
- * for setup and teardown of the game.
+ * @fileoverview The game object represents an instance of a game.  It is
+ * 				  the controlling entity for all of a game and is responsible
+ * 				  for setup and teardown of the game.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

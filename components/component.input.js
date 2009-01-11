@@ -2,6 +2,7 @@
  * The Render Engine
  * InputComponent
  *
+ * @fileoverview The base input component.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

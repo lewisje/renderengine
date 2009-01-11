@@ -2,6 +2,8 @@
  * The Render Engine
  * BaseObject
  *
+ * @fileoverview The object from which most renderable engine objects will
+ * 				  need to derive.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

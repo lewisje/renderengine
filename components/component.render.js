@@ -2,7 +2,7 @@
  * The Render Engine
  * RenderComponent
  *
- * A component which can render itself to a render context.
+ * @fileoverview The base render component.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

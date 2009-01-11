@@ -2,6 +2,7 @@
  * The Render Engine
  * Transform2DComponent
  *
+ * @fileoverview The base 2D transformation component.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

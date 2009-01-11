@@ -2,6 +2,7 @@
  * The Render Engine
  * LogicComponent
  *
+ * @fileoverview The base logic component.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

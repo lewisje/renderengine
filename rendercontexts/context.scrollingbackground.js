@@ -4,6 +4,8 @@
  * @fileoverview An object which loads an image and a collision map
  *               for usage as a single layered scrolling background.
  *
+ * @fileoverview An extension of the canvas context that provides the
+ * 				  display of a scrolling background.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *

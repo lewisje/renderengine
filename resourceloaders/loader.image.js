@@ -2,6 +2,8 @@
  * The Render Engine
  * ImageResourceLoader
  *
+ * @fileoverview A resource loader for images.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

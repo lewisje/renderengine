@@ -2,6 +2,9 @@
  * The Render Engine
  * ResourceLoader
  *
+ * @fileoverview The base class for all resource loaders.  It has the functionality
+ * 				  for managing a local cache of loaded objects.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

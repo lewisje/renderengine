@@ -2,6 +2,9 @@
  * The Render Engine
  * WiimoteInputComponent
  *
+ * @fileoverview An extension of the keyboard input component which handles the
+ * 				  Nintendo Wii remote.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

@@ -2,6 +2,8 @@
  * The Render Engine
  * Object2D
  *
+ * @fileoverview An extension of the HostObject which is specifically geared
+ * 				  towards 2D game development.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

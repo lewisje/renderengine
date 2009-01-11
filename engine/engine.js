@@ -1,15 +1,18 @@
+/**
+ * @fileoverview The engine, console, and engine support static classes.
+ *
+ */
 /*!
  * The Render Engine is a Javascript game engine written from the ground
  * up to be easy to use and fully expandable.  It runs on a number of
  * browser platforms, including Gecko, Webkit, and Opera.  Visit
  * http://code.google.com/p/renderengine for more information.
  *
- *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

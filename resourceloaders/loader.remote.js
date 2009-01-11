@@ -2,6 +2,9 @@
  * The Render Engine
  * RemoteLoader
  *
+ * @fileoverview A resource loader for handling remote objects located on
+ * 				  the server.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

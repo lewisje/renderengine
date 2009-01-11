@@ -2,6 +2,9 @@
  * The Render Engine
  * BitmapFontLoader
  *
+ * @fileoverview An extension of the image resource loader for handling bitmap
+ * 				  fonts.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

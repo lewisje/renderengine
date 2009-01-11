@@ -2,6 +2,8 @@
  * The Render Engine
  * VectorDrawComponent
  *
+ * @fileoverview An extension of the render component which draws 2D
+ * 				  wireframe (vector) models to the render context.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

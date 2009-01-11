@@ -2,8 +2,8 @@
  * The Render Engine
  * SVGContext
  *
- * An implementation of the SVG (Scalable Vector Graphics) as a canvas
- * for The Render Engine.
+ * @fileoverview An extension of the 2D render context using the SVG (Scalable 
+ * 				  Vector Graphics) as a render context.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *

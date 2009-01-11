@@ -122,6 +122,29 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
 
 <!-- ========== METHOD SUMMARY =========== -->
 
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#reset">reset</a></b>(rect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reset the context, clearing it and preparing it for drawing.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
 
 <!-- ========== EVENT SUMMARY =========== -->
 
@@ -139,8 +162,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
-            
-               <a href="RenderContext.html#destroy">destroy</a>,
             
                <a href="RenderContext.html#setSurface">setSurface</a>,
             
@@ -162,13 +183,9 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext.html#getViewport">getViewport</a>,
             
-               <a href="RenderContext.html#add">add</a>,
-            
                <a href="RenderContext.html#getContextData">getContextData</a>,
             
                <a href="RenderContext.html#sort">sort</a>,
-            
-               <a href="RenderContext.html#reset">reset</a>,
             
                <a href="RenderContext.html#update">update</a>,
             
@@ -178,17 +195,11 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext.html#setupWorld">setupWorld</a>,
             
-               <a href="RenderContext.html#pushTransform">pushTransform</a>,
-            
-               <a href="RenderContext.html#popTransform">popTransform</a>,
-            
                <a href="RenderContext.html#resetTransformStack">resetTransformStack</a>,
             
                <a href="RenderContext.html#getNearObjects">getNearObjects</a>,
             
                <a href="RenderContext.html#sortFn">sortFn</a>,
-            
-               <a href="RenderContext.html#getClassName">getClassName</a>,
             
          </code></td>
       </tr>
@@ -205,21 +216,13 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext2D.html#release">release</a>,
             
-               <a href="RenderContext2D.html#setBackgroundColor">setBackgroundColor</a>,
-            
                <a href="RenderContext2D.html#getBackgroundColor">getBackgroundColor</a>,
             
-               <a href="RenderContext2D.html#setWidth">setWidth</a>,
-            
                <a href="RenderContext2D.html#getWidth">getWidth</a>,
-            
-               <a href="RenderContext2D.html#setHeight">setHeight</a>,
             
                <a href="RenderContext2D.html#getHeight">getHeight</a>,
             
                <a href="RenderContext2D.html#getBoundingBox">getBoundingBox</a>,
-            
-               <a href="RenderContext2D.html#setPosition">setPosition</a>,
             
                <a href="RenderContext2D.html#getPosition">getPosition</a>,
             
@@ -255,10 +258,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext2D.html#getFillStyle">getFillStyle</a>,
             
-               <a href="RenderContext2D.html#drawRectangle">drawRectangle</a>,
-            
-               <a href="RenderContext2D.html#drawFilledRectangle">drawFilledRectangle</a>,
-            
                <a href="RenderContext2D.html#drawArc">drawArc</a>,
             
                <a href="RenderContext2D.html#drawFilledArc">drawFilledArc</a>,
@@ -271,17 +270,9 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext2D.html#drawLine">drawLine</a>,
             
-               <a href="RenderContext2D.html#drawPoint">drawPoint</a>,
-            
-               <a href="RenderContext2D.html#drawSprite">drawSprite</a>,
-            
-               <a href="RenderContext2D.html#drawImage">drawImage</a>,
-            
                <a href="RenderContext2D.html#getImage">getImage</a>,
             
                <a href="RenderContext2D.html#putImage">putImage</a>,
-            
-               <a href="RenderContext2D.html#drawText">drawText</a>,
             
                <a href="RenderContext2D.html#startPath">startPath</a>,
             
@@ -321,6 +312,51 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
+            <b>Methods inherited from class <a href="HTMLElementContext.html">HTMLElementContext</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="HTMLElementContext.html#destroy">destroy</a>,
+            
+               <a href="HTMLElementContext.html#jQ">jQ</a>,
+            
+               <a href="HTMLElementContext.html#add">add</a>,
+            
+               <a href="HTMLElementContext.html#remove">remove</a>,
+            
+               <a href="HTMLElementContext.html#pushTransform">pushTransform</a>,
+            
+               <a href="HTMLElementContext.html#popTransform">popTransform</a>,
+            
+               <a href="HTMLElementContext.html#setBackgroundColor">setBackgroundColor</a>,
+            
+               <a href="HTMLElementContext.html#setPosition">setPosition</a>,
+            
+               <a href="HTMLElementContext.html#setWidth">setWidth</a>,
+            
+               <a href="HTMLElementContext.html#setHeight">setHeight</a>,
+            
+               <a href="HTMLElementContext.html#drawRectangle">drawRectangle</a>,
+            
+               <a href="HTMLElementContext.html#drawFilledRectangle">drawFilledRectangle</a>,
+            
+               <a href="HTMLElementContext.html#drawPoint">drawPoint</a>,
+            
+               <a href="HTMLElementContext.html#drawSprite">drawSprite</a>,
+            
+               <a href="HTMLElementContext.html#drawImage">drawImage</a>,
+            
+               <a href="HTMLElementContext.html#drawText">drawText</a>,
+            
+               <a href="HTMLElementContext.html#getClassName">getClassName</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
             <b>Methods inherited from class <a href="Container.html">Container</a></b>
          </td>
       </tr>
@@ -328,8 +364,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
          <td><code>
             
                <a href="Container.html#size">size</a>,
-            
-               <a href="Container.html#remove">remove</a>,
             
                <a href="Container.html#removeAtIndex">removeAtIndex</a>,
             
@@ -409,6 +443,38 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
 
 <!-- ============ METHOD DETAIL START ======= -->
 
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="reset"> </a> <h3>reset</h3>
+      <pre><b>reset</b>(rect)</pre> 
+   <ul>
+      Reset the context, clearing it and preparing it for drawing.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>rect </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
 <!-- ============ METHOD DETAIL END ========== -->
 
 <!-- ============ EVENT DETAIL START ======= -->
@@ -419,6 +485,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:40 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
 </body>
 </html>

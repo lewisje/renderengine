@@ -2,6 +2,8 @@
  * The Render Engine
  * SpriteComponent
  *
+ * @fileoverview An extension of the render component which handles sprite
+ * 				  resource rendering.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
