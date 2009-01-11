@@ -69,6 +69,83 @@ A class for logging messages to a console reference object.  There are       cu
 
 <!-- =========== FIELD SUMMARY =========== -->
 
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DEBUGLEVEL_DEBUG">DEBUGLEVEL_DEBUG</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output warnings, errors, and debug messages to the console.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DEBUGLEVEL_ERRORS">DEBUGLEVEL_ERRORS</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output only errors to the console.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DEBUGLEVEL_INFO">DEBUGLEVEL_INFO</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output warnings, errors, debug, and low-level info messages to the console.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DEBUGLEVEL_NONE">DEBUGLEVEL_NONE</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output nothing to the console.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DEBUGLEVEL_VERBOSE">DEBUGLEVEL_VERBOSE</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output all messages to the console.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DEBUGLEVEL_WARNINGS">DEBUGLEVEL_WARNINGS</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Output warnings and errors to the console.
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
 <!-- =========== END FIELD SUMMARY =========== -->
 
 
@@ -111,19 +188,7 @@ A class for logging messages to a console reference object.  There are       cu
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#checkVerbosity">checkVerbosity</a></b>(debugLevel) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#debug">debug</a></b>(msg) </code> 
+            <code> <b> <a href="#debug">debug</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Outputs a debug message.
  
@@ -135,7 +200,7 @@ A class for logging messages to a console reference object.  There are       cu
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#error">error</a></b>(msg) </code> 
+            <code> <b> <a href="#error">error</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output an error message.
  
@@ -159,7 +224,7 @@ A class for logging messages to a console reference object.  There are       cu
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#log">log</a></b>(msg) </code> 
+            <code> <b> <a href="#log">log</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Outputs a log message.
  
@@ -197,7 +262,7 @@ A class for logging messages to a console reference object.  There are       cu
          <td>
             <code> <b> <a href="#startup">startup</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Start up the console.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts up the console.
  
          </td>
       </tr>
@@ -207,7 +272,7 @@ A class for logging messages to a console reference object.  There are       cu
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#warn">warn</a></b>(msg) </code> 
+            <code> <b> <a href="#warn">warn</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Outputs a warning message.
  
@@ -230,6 +295,83 @@ A class for logging messages to a console reference object.  There are       cu
 <!-- ========== END INHERITED METHODS SUMMARY =========== -->
 
 <!-- ============ FIELD DETAIL START ========= -->
+
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="DEBUGLEVEL_DEBUG">
+   <!-- -->
+   </a> <h3>DEBUGLEVEL_DEBUG</h3>
+      <pre>object <b>DEBUGLEVEL_DEBUG</b></pre> 
+   <ul>
+      Output warnings, errors, and debug messages to the console.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DEBUGLEVEL_ERRORS">
+   <!-- -->
+   </a> <h3>DEBUGLEVEL_ERRORS</h3>
+      <pre>object <b>DEBUGLEVEL_ERRORS</b></pre> 
+   <ul>
+      Output only errors to the console.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DEBUGLEVEL_INFO">
+   <!-- -->
+   </a> <h3>DEBUGLEVEL_INFO</h3>
+      <pre>object <b>DEBUGLEVEL_INFO</b></pre> 
+   <ul>
+      Output warnings, errors, debug, and low-level info messages to the console.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DEBUGLEVEL_NONE">
+   <!-- -->
+   </a> <h3>DEBUGLEVEL_NONE</h3>
+      <pre>object <b>DEBUGLEVEL_NONE</b></pre> 
+   <ul>
+      Output nothing to the console.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DEBUGLEVEL_VERBOSE">
+   <!-- -->
+   </a> <h3>DEBUGLEVEL_VERBOSE</h3>
+      <pre>object <b>DEBUGLEVEL_VERBOSE</b></pre> 
+   <ul>
+      Output all messages to the console.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DEBUGLEVEL_WARNINGS">
+   <!-- -->
+   </a> <h3>DEBUGLEVEL_WARNINGS</h3>
+      <pre>object <b>DEBUGLEVEL_WARNINGS</b></pre> 
+   <ul>
+      Output warnings and errors to the console.
+      
+   </ul>
+   <hr>
+
 
 <!-- ============ FIELD DETAIL END ========== -->
 
@@ -274,40 +416,14 @@ A class for logging messages to a console reference object.  There are       cu
 </table>
 
 
-   <a name="checkVerbosity"> </a> <h3>checkVerbosity</h3>
-      <pre><b>checkVerbosity</b>(debugLevel)</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>debugLevel </code> 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="debug"> </a> <h3>debug</h3>
-      <pre><b>debug</b>(msg)</pre> 
+      <pre><b>debug</b>()</pre> 
    <ul>
-      Outputs a debug message.  These messages will only show when DEBUGLEVEL_DEBUG is the level.
+      Outputs a debug message.  These messages will only show when <tt>DEBUGLEVEL_DEBUG</tt> is the level.You can pass as many parameters as you want to this method.  The parameters will be combined intoone message to output to the console.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;msg </code> - The message to output 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -317,18 +433,13 @@ A class for logging messages to a console reference object.  There are       cu
    <hr>
 
    <a name="error"> </a> <h3>error</h3>
-      <pre><b>error</b>(msg)</pre> 
+      <pre><b>error</b>()</pre> 
    <ul>
-      Output an error message.  These messages will only show when DEBUGLEVEL_ERRORS is the level.
+      Output an error message.  These messages will only show when <tt>DEBUGLEVEL_ERRORS</tt> is the level.You can pass as many parameters as you want to this method.  The parameters will be combined intoone message to output to the console.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;msg </code> - The message to output 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -340,7 +451,7 @@ A class for logging messages to a console reference object.  There are       cu
    <a name="info"> </a> <h3>info</h3>
       <pre><b>info</b>()</pre> 
    <ul>
-      Outputs an info message. These messages will only show when DEBUGLEVEL_INFO is the level.
+      Outputs an info message. These messages will only show when <tt>DEBUGLEVEL_INFO</tt> is the level.You can pass as many parameters as you want to this method.  The parameters will be combined intoone message to output to the console.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -354,18 +465,13 @@ A class for logging messages to a console reference object.  There are       cu
    <hr>
 
    <a name="log"> </a> <h3>log</h3>
-      <pre><b>log</b>(msg)</pre> 
+      <pre><b>log</b>()</pre> 
    <ul>
-      Outputs a log message.  These messages will only show when DEBUGLEVEL_VERBOSE is the level.
+      Outputs a log message.  These messages will only show when <tt>DEBUGLEVEL_VERBOSE</tt> is the level.You can pass as many parameters as you want to this method.  The parameters will be combined intoone message to output to the console.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;msg </code> - The message to output 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -384,7 +490,7 @@ A class for logging messages to a console reference object.  There are       cu
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>ConsoleRef</i>]&nbsp;refObj </code> - A descendent of <tt>ConsoleRef</tt> 
+         <code>[<i>ConsoleRef</i>]&nbsp;refObj </code> - A descendent of the <tt>ConsoleRef</tt> class. 
       </ul>
    </ul>
    
@@ -398,7 +504,7 @@ A class for logging messages to a console reference object.  There are       cu
    <a name="setDebugLevel"> </a> <h3>setDebugLevel</h3>
       <pre><b>setDebugLevel</b>(level)</pre> 
    <ul>
-      Set the debug output level of the console.  The available levels are:<ul><li>Console.DEBUGLEVEL_ERRORS = 4</li><li>Console.DEBUGLEVEL_WARNINGS = 3</li><li>Console.DEBUGLEVEL_DEBUG = 2</li><li>Console.DEBUGLEVEL_INFO = 1</li><li>Console.DEBUGLEVEL_VERBOSE = 0</li><li>Console.DEBUGLEVEL_NONE = -1</li></ul>Messages of the same (or lower) level as the specified level will be logged.For instance, if you set the level to DEBUGLEVEL_DEBUG, errors and warningswill also be logged.  The engine must also be in debug mode for warnings,debug, and log messages to be output.
+      Set the debug output level of the console.  The available levels are:<ul><li><tt>Console.DEBUGLEVEL_ERRORS</tt> = 4</li><li><tt>Console.DEBUGLEVEL_WARNINGS</tt> = 3</li><li><tt>Console.DEBUGLEVEL_DEBUG</tt> = 2</li><li><tt>Console.DEBUGLEVEL_INFO</tt> = 1</li><li><tt>Console.DEBUGLEVEL_VERBOSE</tt> = 0</li><li><tt>Console.DEBUGLEVEL_NONE</tt> = -1</li></ul>Messages of the same (or lower) level as the specified level will be logged.For instance, if you set the level to <tt>DEBUGLEVEL_DEBUG</tt>, errors and warningswill also be logged.  The engine must also be in debug mode for warnings,debug, and log messages to be output.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -419,7 +525,7 @@ A class for logging messages to a console reference object.  There are       cu
    <a name="startup"> </a> <h3>startup</h3>
       <pre><b>startup</b>()</pre> 
    <ul>
-      Start up the console.
+      Starts up the console.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -433,18 +539,13 @@ A class for logging messages to a console reference object.  There are       cu
    <hr>
 
    <a name="warn"> </a> <h3>warn</h3>
-      <pre><b>warn</b>(msg)</pre> 
+      <pre><b>warn</b>()</pre> 
    <ul>
-      Outputs a warning message.  These messages will only show when DEBUGLEVEL_WARNINGS is the level.
+      Outputs a warning message.  These messages will only show when <tt>DEBUGLEVEL_WARNINGS</tt> is the level.You can pass as many parameters as you want to this method.  The parameters will be combined intoone message to output to the console.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;msg </code> - The message to output 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -462,8 +563,8 @@ A class for logging messages to a console reference object.  There are       cu
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:12 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:41 GMT-0500 (EST)</div>
 </body>
 </html>

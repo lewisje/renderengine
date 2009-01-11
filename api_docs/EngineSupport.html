@@ -55,11 +55,11 @@
 
 <hr>
 
-<h2>Class EngineSupport</h2>
+<h2>Static Class EngineSupport</h2>
 
 
 <p>
-Engine support class.  Provides extra functions the engine or games       can use.  Mainly contains functions that can manipulate arrays and       generate/read JSON.</p>
+A static class with support methods the engine or games can use.         Many of the methods can be used to manipulate arrays.  Additional       methods are provided to access query parameters, and generate and/or        read JSON.</p>
 
 
 
@@ -71,29 +71,6 @@ Engine support class.  Provides extra functions the engine or games       can u
 
 <!-- =========== END FIELD SUMMARY =========== -->
 
-
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<a name="constructor_summary"> </a>
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-<tr bgcolor="#CCCCFF" class="TableHeadingColor">
-   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
-</tr>
-
-   <tr bgcolor="white" class="TableRowColor">
-      <td>
-   
-      <code>
-      <b><a href="#EngineSupport">EngineSupport</a></b>()
-      </code>
-        <br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
-        </td>
-   </tr>
-
-</table>
-&nbsp;
-<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
 
 
 <!-- ========== METHOD SUMMARY =========== -->
@@ -167,7 +144,7 @@ Engine support class.  Provides extra functions the engine or games       can u
          <td>
             <code> <b> <a href="#fillArray">fillArray</a></b>(arr, size, value) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fill the specified array of <tt>size</tt> the<tt>value</tt> at each index.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fill the specified array with <tt>size</tt> elementseach with the value "<tt>value</tt>".
  
          </td>
       </tr>
@@ -219,7 +196,7 @@ Engine support class.  Provides extra functions the engine or games       can u
          <td>
             <code> <b> <a href="#getPath">getPath</a></b>(url) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the path from a fully qualified URL.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the path from a fully qualified URL, not including the trailingslash character.
  
          </td>
       </tr>
@@ -280,10 +257,12 @@ Engine support class.  Provides extra functions the engine or games       can u
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#quoteString">quoteString</a></b>(string) </code> 
+            <code> <b> <a href="#quoteString">quoteString</a></b>(text) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Return a string, enclosed in quotes.
  
@@ -338,33 +317,6 @@ Engine support class.  Provides extra functions the engine or games       can u
 <!-- ============ FIELD DETAIL END ========== -->
 
 
-<!-- ========= CONSTRUCTOR DETAIL START ======== -->
-<a name="constructor_detail"> </a>
-<table border="1" cellpadding="3" cellspacing="0" width="100%">
-   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
-      <td colspan=1>
-      <font size="+2"><b>Constructor Detail</b></font>
-      </td>
-   </tr>
-
-</table>
-
-<a name="EngineSupport"> </a>
-<h3>EngineSupport</h3>
-
-   <pre><b>EngineSupport</b>()</pre>
-   <ul>
-      
-   </ul>
-   
-   <!-- PARAMETERS START -->
-   
-   <!-- PARAMETERS END -->
-
-<hr/>
-<!-- END ADDITIONAL ATTRIBUTES  -->
-<!-- ========= CONSTRUCTOR DETAIL END ======== -->
-
 
 <!-- ============ METHOD DETAIL START ======= -->
 
@@ -381,7 +333,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <a name="arrayRemove"> </a> <h3>arrayRemove</h3>
       <pre><b>arrayRemove</b>(array, obj)</pre> 
    <ul>
-      Remove an element from an array.
+      Remove an element from an array.  This method modifies the arraydirectly.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -489,7 +441,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <a name="fillArray"> </a> <h3>fillArray</h3>
       <pre><b>fillArray</b>(arr, size, value)</pre> 
    <ul>
-      Fill the specified array of <tt>size</tt> the<tt>value</tt> at each index.
+      Fill the specified array with <tt>size</tt> elementseach with the value "<tt>value</tt>".  Modifies the providedarray directly.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -529,7 +481,7 @@ Engine support class.  Provides extra functions the engine or games       can u
          <code>[<i>Function</i>]&nbsp;fn </code> - The callback to invoke.  It will be passed three                     arguments: The element value, the index of the element,                     and the array being traversed. 
       </ul>
       <ul>
-         <code>[<i>Object</i>]&nbsp;thisp </code> - Used as <tt>this</tt> for each invocation of the                      callback.  Default: <tt>null</tt> 
+         <code>[<i>Object</i>]&nbsp;thisp </code> - Used as <tt>this</tt> for each invocation of the                      callback. 
       </ul>
    </ul>
    
@@ -599,7 +551,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <a name="getPath"> </a> <h3>getPath</h3>
       <pre>String&nbsp;<b>getPath</b>(url)</pre> 
    <ul>
-      Get the path from a fully qualified URL.
+      Get the path from a fully qualified URL, not including the trailingslash character.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -636,7 +588,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Object</i>&nbsp;</code>An <tt>Object</tt> with a key and value for each query argument. 
+         <code><i>Object</i>&nbsp;</code>A generic <tt>Object</tt> with a key and value for each query argument. 
       </ul>
    </ul>
    
@@ -688,7 +640,7 @@ Engine support class.  Provides extra functions the engine or games       can u
          <code>[<i>Object</i>]&nbsp;obj </code> - The object to find 
       </ul>
       <ul>
-         <code>[<i>Number=0</i>]&nbsp;from </code> - The index to start at, defaults to zero. 
+         <code>[<i>Number</i>]&nbsp;from </code> - The index to start at, defaults to zero. 
       </ul>
    </ul>
    
@@ -726,7 +678,7 @@ Engine support class.  Provides extra functions the engine or games       can u
    <hr>
 
    <a name="quoteString"> </a> <h3>quoteString</h3>
-      <pre><b>quoteString</b>(string)</pre> 
+      <pre>String&nbsp;<b>quoteString</b>(text)</pre> 
    <ul>
       Return a string, enclosed in quotes.
       
@@ -735,13 +687,18 @@ Engine support class.  Provides extra functions the engine or games       can u
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>string </code> 
+         <code>[<i>String</i>]&nbsp;text </code> - The string to quote 
       </ul>
    </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string in quotes 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -802,8 +759,8 @@ Engine support class.  Provides extra functions the engine or games       can u
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:11 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:40 GMT-0500 (EST)</div>
 </body>
 </html>

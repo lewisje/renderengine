@@ -52,7 +52,7 @@
          </td>
          <td>
             
-A host object is a container of components which provide some sortof action, be it rendering, collision detection, effects, or whatever.
+A host object is a container for components.
          </td>
       </tr>
    
@@ -73,7 +73,7 @@ A host object is a container of components which provide some sortof action, be
 <span class='linenumber'>  5</span>  *
 <span class='linenumber'>  6</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  7</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  8</span>  * @version: $Revision: 351 $
+<span class='linenumber'>  8</span>  * @version: $Revision: 455 $
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 11</span>  *
@@ -104,147 +104,155 @@ A host object is a container of components which provide some sortof action, be
 <span class='linenumber'> 36</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"HostObject"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"HashContainer"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 37</span> 
 <span class='linenumber'> 38</span> </span><span class="COMM">/**
-<span class='linenumber'> 39</span>  * @class A host object is a container of components which provide some sort
-<span class='linenumber'> 40</span>  * of action, be it rendering, collision detection, effects, or whatever.
-<span class='linenumber'> 41</span>  * This way, an object can be anything, depending on it's components.
-<span class='linenumber'> 42</span>  * @extends HashContainer
-<span class='linenumber'> 43</span>  */</span><span class="WHIT">
-<span class='linenumber'> 44</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">HashContainer.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope HostObject.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 45</span> 
-<span class='linenumber'> 46</span> </span><span class="WHIT">   </span><span class="NAME">renderContext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 39</span>  * @class A host object is a container for components.  Each component within
+<span class='linenumber'> 40</span>  *        the host provides a portion of the overall functionality.  A host object
+<span class='linenumber'> 41</span>  *        can have any number of components of any type within it.  Components provide
+<span class='linenumber'> 42</span>  *        functionality for things like rendering, collision detection, effects, or 
+<span class='linenumber'> 43</span>  *        transformations. This way, an object can be anything, depending on it's components.
+<span class='linenumber'> 44</span>  * @extends HashContainer
+<span class='linenumber'> 45</span>  */</span><span class="WHIT">
+<span class='linenumber'> 46</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">HashContainer.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope HostObject.prototype */</span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 47</span> 
-<span class='linenumber'> 48</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 49</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 50</span> </span><span class="WHIT">      </span><span class="NAME">this.renderContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 51</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 52</span> 
-<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 54</span>     * Destroy all of the components within this object and
-<span class='linenumber'> 55</span>     * remove this object from it's render context.
-<span class='linenumber'> 56</span>     */</span><span class="WHIT">
-<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 58</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 59</span> </span><span class="WHIT">         </span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">remove</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 60</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 61</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 63</span> 
-<span class='linenumber'> 64</span> 
-<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 66</span>     * Set the rendering context this object will be drawn upon.
-<span class='linenumber'> 67</span>     *
-<span class='linenumber'> 68</span>     * @param renderContext {RenderContext} The context
-<span class='linenumber'> 69</span>     */</span><span class="WHIT">
-<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="NAME">setRenderContext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="NAME">this.renderContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">renderContext</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 73</span> 
-<span class='linenumber'> 74</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 75</span>     * Get the rendering context this object will be drawn upon.
-<span class='linenumber'> 76</span>     *
-<span class='linenumber'> 77</span>     * @return {RenderContext} The render context the object belongs to
-<span class='linenumber'> 78</span>     */</span><span class="WHIT">
-<span class='linenumber'> 79</span> </span><span class="WHIT">   </span><span class="NAME">getRenderContext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 80</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.renderContext</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 81</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 82</span> 
-<span class='linenumber'> 83</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 84</span>     * Update this object within the render context, and for the specified time.
-<span class='linenumber'> 85</span>     *
-<span class='linenumber'> 86</span>     * @param renderContext {RenderContext} The context the object will be rendered within.
-<span class='linenumber'> 87</span>     * @param time {Number} The global time within the engine.
-<span class='linenumber'> 88</span>     */</span><span class="WHIT">
-<span class='linenumber'> 89</span> </span><span class="WHIT">   </span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 90</span> 
-<span class='linenumber'> 91</span> </span><span class="WHIT">      </span><span class="COMM">// Run the components</span><span class="WHIT">
-<span class='linenumber'> 92</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">components</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 93</span> 
-<span class='linenumber'> 94</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">components</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 95</span> </span><span class="WHIT">         </span><span class="NAME">components</span><span class="PUNC">[</span><span class="NAME">c</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">execute</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 96</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 97</span> 
-<span class='linenumber'> 98</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>100</span> 
-<span class='linenumber'>101</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>102</span>     * Add a component to the host object.  The components will be
-<span class='linenumber'>103</span>     * sorted based on their type, and priority within that type.
-<span class='linenumber'>104</span>     * Components with a higher priority will be sorted before components
-<span class='linenumber'>105</span>     * with a lower priority.  The sorting order for type is:
-<span class='linenumber'>106</span>     * &lt;ul>
-<span class='linenumber'>107</span>     * &lt;li>Input&lt;/li>
-<span class='linenumber'>108</span>     * &lt;li>Transform&lt;/li>
-<span class='linenumber'>109</span>     * &lt;li>Logic&lt;/li>
-<span class='linenumber'>110</span>     * &lt;li>Collision&lt;/li>
-<span class='linenumber'>111</span>     * &lt;li>Rendering&lt;/li>
-<span class='linenumber'>112</span>     * &lt;/ul>
-<span class='linenumber'>113</span>     *
-<span class='linenumber'>114</span>     * @param component {BaseComponent} A component to add to the host
-<span class='linenumber'>115</span>     */</span><span class="WHIT">
-<span class='linenumber'>116</span> </span><span class="WHIT">   </span><span class="NAME">add</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">component</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>117</span> 
-<span class='linenumber'>118</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">component</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">BaseComponent</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Cannot add a non-component to a HostObject"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>119</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.isInHash</span><span class="PUNC">(</span><span class="NAME">component.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Components must have a unique name within the host"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>120</span> 
-<span class='linenumber'>121</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">component.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">component</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 48</span> </span><span class="WHIT">   </span><span class="NAME">renderContext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 49</span> 
+<span class='linenumber'> 50</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 51</span>     * Release the object back into the object pool.
+<span class='linenumber'> 52</span>     */</span><span class="WHIT">
+<span class='linenumber'> 53</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 55</span> </span><span class="WHIT">      </span><span class="NAME">this.renderContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 57</span> 
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 59</span>     * Destroy all of the components within this object and
+<span class='linenumber'> 60</span>     * remove this object from it's render context.
+<span class='linenumber'> 61</span>     */</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 64</span> </span><span class="WHIT">         </span><span class="NAME">this.getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">remove</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 68</span> 
+<span class='linenumber'> 69</span> 
+<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 71</span>     * Set the rendering context this object will be drawn within.
+<span class='linenumber'> 72</span>     *
+<span class='linenumber'> 73</span>     * @param renderContext {RenderContext} The context
+<span class='linenumber'> 74</span>     */</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="NAME">setRenderContext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 76</span> </span><span class="WHIT">      </span><span class="NAME">this.renderContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">renderContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 77</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 78</span> 
+<span class='linenumber'> 79</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 80</span>     * Get the rendering context this object will be drawn upon.
+<span class='linenumber'> 81</span>     *
+<span class='linenumber'> 82</span>     * @return {RenderContext} The render context the object belongs to
+<span class='linenumber'> 83</span>     */</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">   </span><span class="NAME">getRenderContext</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.renderContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 86</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 87</span> 
+<span class='linenumber'> 88</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 89</span>     * Update this object within the render context, at the specified timeslice.
+<span class='linenumber'> 90</span>     *
+<span class='linenumber'> 91</span>     * @param renderContext {RenderContext} The context the object will be rendered within.
+<span class='linenumber'> 92</span>     * @param time {Number} The global time within the engine.
+<span class='linenumber'> 93</span>     */</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT">   </span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 95</span> 
+<span class='linenumber'> 96</span> </span><span class="WHIT">      </span><span class="COMM">// Run the components</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">components</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 98</span> 
+<span class='linenumber'> 99</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">components</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>100</span> </span><span class="WHIT">         </span><span class="NAME">components</span><span class="PUNC">[</span><span class="NAME">c</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">execute</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>101</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>102</span> 
+<span class='linenumber'>103</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>105</span> 
+<span class='linenumber'>106</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>107</span>     * Add a component to the host object.  The components will be
+<span class='linenumber'>108</span>     * sorted based on their type, and priority within that type.
+<span class='linenumber'>109</span>     * Components with a higher priority will be sorted before components
+<span class='linenumber'>110</span>     * with a lower priority.  The sorting order for type is:
+<span class='linenumber'>111</span>     * &lt;ul>
+<span class='linenumber'>112</span>     * &lt;li>Input&lt;/li>
+<span class='linenumber'>113</span>     * &lt;li>Transform&lt;/li>
+<span class='linenumber'>114</span>     * &lt;li>Logic&lt;/li>
+<span class='linenumber'>115</span>     * &lt;li>Collision&lt;/li>
+<span class='linenumber'>116</span>     * &lt;li>Rendering&lt;/li>
+<span class='linenumber'>117</span>     * &lt;/ul>
+<span class='linenumber'>118</span>     *
+<span class='linenumber'>119</span>     * @param component {BaseComponent} A component to add to the host
+<span class='linenumber'>120</span>     */</span><span class="WHIT">
+<span class='linenumber'>121</span> </span><span class="WHIT">   </span><span class="NAME">add</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">component</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>122</span> 
-<span class='linenumber'>123</span> </span><span class="WHIT">      </span><span class="NAME">component.setHostObject</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>124</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>125</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>126</span> </span><span class="WHIT">         </span><span class="NAME">this.sort</span><span class="PUNC">(</span><span class="NAME">HostObject.componentSort</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>127</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>128</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>129</span> 
-<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>131</span>     * Get the component with the specified name from this object.
-<span class='linenumber'>132</span>     *
-<span class='linenumber'>133</span>     * @param name {String} The unique name of the component to get
-<span class='linenumber'>134</span>     * @type BaseComponent
-<span class='linenumber'>135</span>     */</span><span class="WHIT">
-<span class='linenumber'>136</span> </span><span class="WHIT">   </span><span class="NAME">getComponent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>137</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="NAME">name.toUpperCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>139</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>140</span> </span><span class="WHIT">	</span><span class="NAME">getProperties</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>141</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">self</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>142</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">self</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>143</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">$.extend</span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>144</span> </span><span class="WHIT">			</span><span class="STRN">"RenderContext"</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.renderContext.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>145</span> </span><span class="WHIT">						 			 </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">]</span><span class="WHIT">
-<span class='linenumber'>146</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>147</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>148</span> 
-<span class='linenumber'>149</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope HostObject.prototype */</span><span class="PUNC">{</span><span class="WHIT">  </span><span class="COMM">// Interface</span><span class="WHIT">
-<span class='linenumber'>150</span> 
-<span class='linenumber'>151</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>152</span>     * Sort components within this object based upon their component
-<span class='linenumber'>153</span>     * type, and the priority within that type.  Components with a higher
-<span class='linenumber'>154</span>     * priority will be sorted before components with a lower priority.
-<span class='linenumber'>155</span>     * @static
-<span class='linenumber'>156</span>     */</span><span class="WHIT">
-<span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="NAME">componentSort</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">component1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">component2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>158</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">component1.getType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">component2.getType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
-<span class='linenumber'>159</span> </span><span class="WHIT">              </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="REGX">/ component1.getPriority()) - (1 /</span><span class="WHIT"> </span><span class="NAME">component2.getPriority</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>160</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>161</span> 
-<span class='linenumber'>162</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>163</span>     * Get the class name of this object
-<span class='linenumber'>164</span>     *
-<span class='linenumber'>165</span>     * @return {String} The string "HostObject"
-<span class='linenumber'>166</span>     */</span><span class="WHIT">
-<span class='linenumber'>167</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>168</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"HostObject"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>169</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>170</span> 
-<span class='linenumber'>171</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>172</span> 
-<span class='linenumber'>173</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>174</span> 
-<span class='linenumber'>175</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>123</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">component</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">BaseComponent</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Cannot add a non-component to a HostObject"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>124</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.isInHash</span><span class="PUNC">(</span><span class="NAME">component.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Components must have a unique name within the host"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>125</span> 
+<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">component.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">component</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>127</span> 
+<span class='linenumber'>128</span> </span><span class="WHIT">      </span><span class="NAME">component.setHostObject</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>129</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">         </span><span class="NAME">this.sort</span><span class="PUNC">(</span><span class="NAME">HostObject.componentSort</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>132</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>133</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>134</span> 
+<span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>136</span>     * Get the component with the specified name from this object.
+<span class='linenumber'>137</span>     *
+<span class='linenumber'>138</span>     * @param name {String} The unique name of the component to get
+<span class='linenumber'>139</span>     * @type BaseComponent
+<span class='linenumber'>140</span>     */</span><span class="WHIT">
+<span class='linenumber'>141</span> </span><span class="WHIT">   </span><span class="NAME">getComponent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>142</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="NAME">name.toUpperCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>143</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>144</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>145</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>146</span>     * Returns a property object with accessor methods.
+<span class='linenumber'>147</span>     */</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="NAME">getProperties</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>149</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">self</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>150</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">prop</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">self</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">$.extend</span><span class="PUNC">(</span><span class="NAME">prop</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="WHIT">         </span><span class="STRN">"RenderContext"</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">self.renderContext.getName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>153</span> </span><span class="WHIT">                            </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">]</span><span class="WHIT">
+<span class='linenumber'>154</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>156</span> 
+<span class='linenumber'>157</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope HostObject.prototype */</span><span class="PUNC">{</span><span class="WHIT">  </span><span class="COMM">// Interface</span><span class="WHIT">
+<span class='linenumber'>158</span> 
+<span class='linenumber'>159</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>160</span>     * Sort components within this object based upon their component
+<span class='linenumber'>161</span>     * type, and the priority within that type.  Components with a higher
+<span class='linenumber'>162</span>     * priority will be sorted before components with a lower priority.
+<span class='linenumber'>163</span>     * @static
+<span class='linenumber'>164</span>     */</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">   </span><span class="NAME">componentSort</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">component1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">component2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>166</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">component1.getType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">component2.getType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='linenumber'>167</span> </span><span class="WHIT">              </span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="REGX">/ component1.getPriority()) - (1 /</span><span class="WHIT"> </span><span class="NAME">component2.getPriority</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>168</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>169</span> 
+<span class='linenumber'>170</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>171</span>     * Get the class name of this object
+<span class='linenumber'>172</span>     *
+<span class='linenumber'>173</span>     * @return {String} The string "HostObject"
+<span class='linenumber'>174</span>     */</span><span class="WHIT">
+<span class='linenumber'>175</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"HostObject"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>177</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>178</span> 
+<span class='linenumber'>179</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>180</span> 
+<span class='linenumber'>181</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>182</span> 
+<span class='linenumber'>183</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:26:43 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:14 GMT-0500 (EST)</div>
 </body>
 </html>

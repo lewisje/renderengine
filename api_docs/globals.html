@@ -85,7 +85,7 @@
          <td>
             <code> <b> <a href="#Assert">Assert</a></b>(test, error) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Halts the engine if the test fails, throwing the error as a result.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Assert that a condition is <tt>true</tt>, stopping the engine if it is <tt>false</tt>.
  
          </td>
       </tr>
@@ -97,14 +97,16 @@
          <td>
             <code> <b> <a href="#AssertWarn">AssertWarn</a></b>(test, error) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reports a warning if the test fails.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Assert that a condition is <tt>true</tt>, reporting a warning if the test fails.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt; </code></font> 
+            <font size="-1"><code>&lt;static&gt; 
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#BaseObject.getClassName">BaseObject.getClassName</a></b>() </code> 
@@ -130,7 +132,9 @@
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt; </code></font> 
+            <font size="-1"><code>&lt;static&gt; 
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#Container.getClassName">Container.getClassName</a></b>() </code> 
@@ -166,7 +170,9 @@
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code>&lt;static&gt; </code></font> 
+            <font size="-1"><code>&lt;static&gt; 
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#Iterator.getClassName">Iterator.getClassName</a></b>() </code> 
@@ -222,7 +228,7 @@
    <a name="Assert"> </a> <h3>Assert</h3>
       <pre>&lt;static&gt;&nbsp;<b>Assert</b>(test, error)</pre> 
    <ul>
-      Halts the engine if the test fails, throwing the error as a result.
+      Assert that a condition is <tt>true</tt>, stopping the engine if it is <tt>false</tt>.  If the condifion fails an exception will be thrown.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -246,7 +252,7 @@
    <a name="AssertWarn"> </a> <h3>AssertWarn</h3>
       <pre>&lt;static&gt;&nbsp;<b>AssertWarn</b>(test, error)</pre> 
    <ul>
-      Reports a warning if the test fails.
+      Assert that a condition is <tt>true</tt>, reporting a warning if the test fails.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -268,7 +274,7 @@
    <hr>
 
    <a name="BaseObject.getClassName"> </a> <h3>BaseObject.getClassName</h3>
-      <pre>&lt;static&gt;&nbsp;<b>BaseObject.getClassName</b>()</pre> 
+      <pre>&lt;static&gt;&nbsp;String&nbsp;<b>BaseObject.getClassName</b>()</pre> 
    <ul>
       Get the class name of this object
       
@@ -278,7 +284,12 @@
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "BaseObject" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -305,7 +316,7 @@
    <hr>
 
    <a name="Container.getClassName"> </a> <h3>Container.getClassName</h3>
-      <pre>&lt;static&gt;&nbsp;<b>Container.getClassName</b>()</pre> 
+      <pre>&lt;static&gt;&nbsp;String&nbsp;<b>Container.getClassName</b>()</pre> 
    <ul>
       Get the class name of this object
       
@@ -315,7 +326,12 @@
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "Container" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -353,7 +369,7 @@
    <hr>
 
    <a name="Iterator.getClassName"> </a> <h3>Iterator.getClassName</h3>
-      <pre>&lt;static&gt;&nbsp;<b>Iterator.getClassName</b>()</pre> 
+      <pre>&lt;static&gt;&nbsp;String&nbsp;<b>Iterator.getClassName</b>()</pre> 
    <ul>
       Get the class name of this object
       
@@ -363,7 +379,12 @@
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "Iterator" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -391,8 +412,8 @@
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2008 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Fri Oct 10 2008 22:27:12 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:42 GMT-0500 (EST)</div>
 </body>
 </html>
