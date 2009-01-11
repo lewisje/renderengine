@@ -49,14 +49,6 @@ Maybe you're looking for FutureGoals?
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Beta 1.2 (January 9, 2009) ==
-
-|| *Status* || *Goal* || *Description* ||
-|| _Complete_ || Tool || Ant build script. ||
-|| _Complete_ || Demo || Vector demo - Asteroids clone.  Test for game logic, component loading, dependency checking, vector rendering to 2D context. ||
-|| _Complete_ || Browser Support || Opera for Wii - It's sloooow ||
-|| _80%_ || Tool || Update Ant build script to include only complete tools and demos. ||
-
 == Beta 1.3 (Tentatively January 30, 2009) ==
 
 || *Status* || *Goal* || *Description* ||
