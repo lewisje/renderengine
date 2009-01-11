@@ -2,6 +2,9 @@
  * The Render Engine
  * KeyboardInputComponent
  *
+ * @fileoverview An extension of the input component which handles
+ * 				  mouse input.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

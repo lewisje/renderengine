@@ -2,6 +2,10 @@
  * The Render Engine
  * LevelLoader
  *
+ * @fileoverview An extension of the image resource loader for loading 2D levels
+ * 				  with an associated collision map and object placement.  Includes
+ * 				  a class for working with loaded levels.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

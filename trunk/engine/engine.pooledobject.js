@@ -2,6 +2,9 @@
  * The Render Engine
  * BaseObject
  *
+ * @fileoverview An object that has functionality to assist in keeping memory
+ * 				  usage down and to minimize the effect of the Javascript garbage
+ * 				  collector.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

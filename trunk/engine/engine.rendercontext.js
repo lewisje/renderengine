@@ -2,6 +2,7 @@
  * The Render Engine
  * RenderContext
  *
+ * @fileoverview The base class for all render contexts.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

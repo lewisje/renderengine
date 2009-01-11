@@ -2,6 +2,8 @@
  * The Render Engine
  * VectorText
  *
+ * @fileoverview A simple text renderer which draws text using lines.  It has a
+ * 				  limited character set.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

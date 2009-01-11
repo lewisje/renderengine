@@ -2,9 +2,9 @@
  * The Render Engine
  * SpatialGrid
  *
- * A simple structure which divides a finite space up into a more
- * coarse grid to assist in quickly finding objects within that
- * space.
+ * @fileoverview A simple structure which divides a finite space up into a more
+ * 				  coarse grid to assist in quickly finding objects within that
+ * 				  space.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *

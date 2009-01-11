@@ -67,14 +67,16 @@
          |
          +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
             |
-            +--<b>ImageLoader</b></pre>
+            +--<a href='RemoteLoader.html' target='main'>RemoteLoader</a>
+               |
+               +--<b>ImageLoader</b></pre>
    <hr>
    Class <b>ImageLoader</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
 
 
 
-   Extends <a href="ResourceLoader.html">ResourceLoader</a>.<br/>
+   Extends <a href="RemoteLoader.html">RemoteLoader</a>.<br/>
 
 <p>
 Loads images and stores the reference to those images.</p>
@@ -207,33 +209,6 @@ Loads images and stores the reference to those images.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseObject.html#constructor">constructor</a>,
-            
-               <a href="BaseObject.html#destroy">destroy</a>,
-            
-               <a href="BaseObject.html#release">release</a>,
-            
-               <a href="BaseObject.html#setElement">setElement</a>,
-            
-               <a href="BaseObject.html#getElement">getElement</a>,
-            
-               <a href="BaseObject.html#update">update</a>,
-            
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
             <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
          </td>
       </tr>
@@ -245,6 +220,8 @@ Loads images and stores the reference to those images.</p>
                <a href="ResourceLoader.html#isReady">isReady</a>,
             
                <a href="ResourceLoader.html#unload">unload</a>,
+            
+               <a href="ResourceLoader.html#set">set</a>,
             
                <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
             
@@ -268,6 +245,46 @@ Loads images and stores the reference to those images.</p>
                <a href="PooledObject.html#toString">toString</a>,
             
                <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="RemoteLoader.html">RemoteLoader</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="RemoteLoader.html#constructor">constructor</a>,
+            
+               <a href="RemoteLoader.html#exists">exists</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
+               <a href="BaseObject.html#release">release</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -434,7 +451,7 @@ Loads images and stores the reference to those images.</p>
    <a name="loadImageResource"> </a> <h3>loadImageResource</h3>
       <pre>HTMLImage&nbsp;<b>loadImageResource</b>(name, url, width, height)</pre> 
    <ul>
-      Lazy loads an image resource when the information for it becomes available.
+      Lazy loads an image resource when the information for it becomes available.  Itis best to specify the width and height of the resource, but it isn't necessaryto load the image.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -447,10 +464,10 @@ Loads images and stores the reference to those images.</p>
          <code>[<i>String</i>]&nbsp;url </code> - The URL where the resource is located 
       </ul>
       <ul>
-         <code>[<i>Number</i>]&nbsp;width </code> - The width of this resource, in pixels 
+         <code>[<i>Number</i>]&nbsp;width </code> - The width of this resource, in pixels, or <tt>null</tt> 
       </ul>
       <ul>
-         <code>[<i>Number</i>]&nbsp;height </code> - The height of this resource, in pixels 
+         <code>[<i>Number</i>]&nbsp;height </code> - The height of this resource, in pixels, or <tt>null</tt> 
       </ul>
    </ul>
    
@@ -477,6 +494,6 @@ Loads images and stores the reference to those images.</p>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 14:14:40 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
 </body>
 </html>

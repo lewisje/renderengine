@@ -2,6 +2,7 @@
  * The Render Engine
  * DocumentContext
  *
+ * @fileoverview A render context which wraps the DOM document node.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

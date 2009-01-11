@@ -2,7 +2,7 @@
  * The Render Engine
  * ParticleEngine
  *
- * A simple particle engine
+ * @fileoverview The particle engine and base particle class.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *

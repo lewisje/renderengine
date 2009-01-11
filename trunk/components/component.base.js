@@ -2,6 +2,8 @@
  * The Render Engine
  * BaseComponent
  *
+ * @fileoverview The base class from which all components extend.  A component
+ * 				  is a piece of functionality used by a HostObject.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

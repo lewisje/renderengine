@@ -2,6 +2,8 @@
  * The Render Engine
  * HostObject
  *
+ * @fileoverview An object which can contain components.  This is a base
+ * 				  class for most in-game objects.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

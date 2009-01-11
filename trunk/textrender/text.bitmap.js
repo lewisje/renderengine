@@ -2,6 +2,8 @@
  * The Render Engine
  * BitmapText
  *
+ * @fileoverview A bitmap font renderer for render contexts that don't
+ * 				  support fonts natively.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

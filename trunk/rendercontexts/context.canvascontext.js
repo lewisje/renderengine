@@ -2,6 +2,8 @@
  * The Render Engine
  * CanvasContext
  *
+ * @fileoverview An extension of the 2D render context which encapsulates 
+ * 				  the Canvas element.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

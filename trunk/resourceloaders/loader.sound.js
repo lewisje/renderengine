@@ -2,6 +2,9 @@
  * The Render Engine
  * SoundResourceLoader
  *
+ * @fileoverview A resource loader for MP3 sounds and a sound class for
+ * 				  working with the loaded sounds via SoundManager 2.
+ *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

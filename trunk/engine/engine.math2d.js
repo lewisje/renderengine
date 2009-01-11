@@ -2,9 +2,8 @@
  * The Render Engine
  * Math2D
  *
- * A simple 2D math library.  The objects exposed in this library wrap
- * the functionality provided by the Sylvester library.  I did this because
- * a lot of the code is currently in use within the engine.
+ * @fileoverview A 2D math library with objects to represent points and rectangles
+ * 				  plus methods to assist in manipulating them.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
