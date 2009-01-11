@@ -1,9 +1,9 @@
-/**
- * The Render Engine
+/*!
+ * The Render Engine is a Javascript game engine written from the ground
+ * up to be easy to use and fully expandable.  It runs on a number of
+ * browser platforms, including Gecko, Webkit, and Opera.  Visit
+ * http://code.google.com/p/renderengine for more information.
  *
- * The startup library is a collection of methods which will
- * simplify the creation of other class files.  It is the starting
- * point of all libraries in the engine itself.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$

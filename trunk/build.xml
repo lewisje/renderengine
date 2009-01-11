@@ -10,9 +10,9 @@
    <property name="min.home" value="${dist.home}/min-js"/>
    <property name="full.home" value="${dist.home}/full"/>
 
-	<!-- Defaults for installation of demos and tools -->
-	<property name="demo.set" value="potris/**,smb/**,spaceroids/**,wii_test/**"/>
-	<property name="tool.set" value="support/**,font_editor/**,sprite_editor/**"/>
+	<!-- Demos and tools won't be copied unless specified in build.properties -->
+	<property name="demo.set" value="NO_COPY"/>
+	<property name="tool.set" value="NO_COPY"/>
 
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
@@ -101,7 +101,7 @@
    </target>
  
  
-   <!-- ======================= COPY DEMOS, TOOLS, & LICENSES =============================== -->
+   <!-- ======================= COPY DEMOS & TOOLS =============================== -->
    <target name="copydemos" description="Copy demonstrations and tools">
 
       <!-- Copy the demonstrations -->
@@ -118,14 +118,18 @@
          </fileset>
       </copy>
   
+   </target>  
+
+   <!-- ======================= COPY LICENSES & DOCS =============================== -->
+	<target name="licenses" description="Copy licenses and docs">
+		
       <!-- Copy the license and readme files -->
       <copy todir="${build.home}">
          <fileset file="${basedir}/MIT_LICENSE.txt"/>
          <fileset file="${basedir}/README.txt"/>
       </copy>
- 
-   </target>  
-  
+		
+	</target>  
   
    <!-- ======================= ENGINE FULL SOURCE DISTIBUTION ========================= -->
    <target name="engine.full" description="Create the full source distribution of the engine">
@@ -141,6 +145,10 @@
       </antcall>
  
       <antcall target="copydemos">
+         <param name="build.home" value="${full.home}"/>
+      </antcall>
+
+      <antcall target="licenses">
          <param name="build.home" value="${full.home}"/>
       </antcall>
       <!-- ### FINISH ### Pre-compilation tasks -->
@@ -204,6 +212,10 @@
       </antcall>
  
       <antcall target="copydemos">
+         <param name="build.home" value="${min.home}"/>
+      </antcall>
+
+      <antcall target="licenses">
          <param name="build.home" value="${min.home}"/>
       </antcall>
       <!-- ### FINISH ### Pre-compilation tasks -->
