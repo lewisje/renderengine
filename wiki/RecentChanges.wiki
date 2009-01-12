@@ -3,7 +3,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
-|| 01/12/2009 || Started work on beta 1.3 ||
+|| 01/12/2009 || Started work on beta 1.3.  Created a beta 1.2.1 tag since all the examples were pointing to the old version of jQuery. ||
 
 ----
 
