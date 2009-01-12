@@ -59,6 +59,7 @@
       <mkdir dir="${build.home}/libs"/>
       <mkdir dir="${build.home}/demos"/>
       <mkdir dir="${build.home}/tools"/>
+      <mkdir dir="${build.home}/setup"/>
            
    </target>
  
@@ -84,6 +85,14 @@
          </fileset>
       </copy>
  
+      <!-- Copy the server setup files -->     
+      <copy todir="${build.home}/setup">
+         <fileset dir="${basedir}/setup">
+            <include name="**/*.*"/>
+            <exclude name="**/.svn"/>
+         </fileset>
+      </copy>
+
       <!-- Copy the supporting libraries -->     
       <copy todir="${build.home}/libs">
          <fileset dir="${basedir}/libs">
@@ -187,7 +196,7 @@
             <include name="*.js"/>
          </fileset>
       </copy>
- 
+
       <!-- Copy the text rendering -->     
       <copy todir="${full.home}/textrender">
          <fileset dir="${basedir}/textrender">
