@@ -3,6 +3,12 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 01/12/2009 || Started work on beta 1.3 ||
+
+----
+
+|| *Date* || *Notes* ||
+|| 01/12/2009 || Updated beta 1.2 to include a sample Tomcat context and instructions about setting up a server to test and develop. ||
 || 01/11/2009 || _Beta 1.2 has been tagged._ Removed WZGraphicsContext (too slow for actual use). Added missing base resource loader class to minified version in build.xml. Implemented selective demo and tool copying. ||
 || 01/05/2009 || Updated the Wiki with a ton of information and restructured some pages.  Added an EngineFeatureList page outlining what the engine currently provides.  I'll add to it as more features become available. ||
 || 01/02/2009 || Working on updating the HTMLElementContext to enhance its functionality.  I've gotten image and sprite rendering working.  Need to get the transform stack working now (position only).  Another example game is in the works to test it out. ||
