@@ -1,0 +1,313 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>component.base.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>component.base.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+The base class from which all components extend.  A component				  is a piece of functionality used by a HostObject.
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="BaseComponent.html" target="main">BaseComponent</a>
+         </td>
+         <td>
+            
+All components extend from this object class.
+         </td>
+      </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * BaseComponent
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * @fileoverview The base class from which all components extend.  A component
+<span class='linenumber'>  6</span>  * 				  is a piece of functionality used by a HostObject.
+<span class='linenumber'>  7</span>  *
+<span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'>  9</span>  * @author: $Author: bfattori $
+<span class='linenumber'> 10</span>  * @version: $Revision: 455 $
+<span class='linenumber'> 11</span>  *
+<span class='linenumber'> 12</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 13</span>  *
+<span class='linenumber'> 14</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 15</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 16</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 17</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 18</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 19</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 20</span>  *
+<span class='linenumber'> 21</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 22</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 23</span>  *
+<span class='linenumber'> 24</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 25</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 26</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 27</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 28</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 29</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 30</span>  * THE SOFTWARE.
+<span class='linenumber'> 31</span>  *
+<span class='linenumber'> 32</span>  */</span><span class="WHIT">
+<span class='linenumber'> 33</span> 
+<span class='linenumber'> 34</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 35</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.baseobject.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 36</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.hostobject.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 37</span> 
+<span class='linenumber'> 38</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"BaseComponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"BaseObject"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 39</span> 
+<span class='linenumber'> 40</span> </span><span class="COMM">/**
+<span class='linenumber'> 41</span>  * @class All components extend from this object class.  A component is one
+<span class='linenumber'> 42</span>  *        part of an operating whole object (a {@link HostObject}) which is
+<span class='linenumber'> 43</span>  *        responsible for only a portion of the overall operation of an in-
+<span class='linenumber'> 44</span>  *        game object.  Components are broken down into five major categories:
+<span class='linenumber'> 45</span>  *        &lt;ul>
+<span class='linenumber'> 46</span>  *          &lt;li>&lt;b>TYPE_INPUT&lt;/b> - Input from controllers (keyboard, mouse, etc.)&lt;/li>
+<span class='linenumber'> 47</span>  *          &lt;li>&lt;b>TYPE_TRANSFORM&lt;/b> - Performs transformations on the host object&lt;/li>
+<span class='linenumber'> 48</span>  *          &lt;li>&lt;b>TYPE_LOGIC&lt;/b> - Handles logical operations that are not related to
+<span class='linenumber'> 49</span>  *              input and collision&lt;/li>
+<span class='linenumber'> 50</span>  *          &lt;li>&lt;b>TYPE_COLLIDER&lt;/b> - Determines what this object is possibly colliding
+<span class='linenumber'> 51</span>  *              with, and reports those collisions via callbacks to the host.&lt;/li>
+<span class='linenumber'> 52</span>  *          &lt;li>&lt;b>TYPE_RENDER&lt;/b> - Performs some sort of rendering operation to the context&lt;/li>
+<span class='linenumber'> 53</span>  *        &lt;/ul>
+<span class='linenumber'> 54</span>  *        Components are executed in the order listed.  First, all inputs are
+<span class='linenumber'> 55</span>  *        checked, then logic is performed.  Logic may be internal to a host object
+<span class='linenumber'> 56</span>  *        itself, but some components perform an object-centric type of logic that
+<span class='linenumber'> 57</span>  *        can be reused.  Next, collisions are checked.  And finally, rendering can
+<span class='linenumber'> 58</span>  *        occur.
+<span class='linenumber'> 59</span>  *        &lt;p/>
+<span class='linenumber'> 60</span>  *        Within each component type set, components can be prioritized so that
+<span class='linenumber'> 61</span>  *        one component will execute before others.  Such an ordering allows for
+<span class='linenumber'> 62</span>  *        multiple components of each type to perform their tasks in an order
+<span class='linenumber'> 63</span>  *        that the host defines.
+<span class='linenumber'> 64</span>  *
+<span class='linenumber'> 65</span>  *
+<span class='linenumber'> 66</span>  * @extends BaseObject
+<span class='linenumber'> 67</span>  */</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">BaseComponent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseObject.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope BaseComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 69</span> 
+<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="NAME">priority</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 71</span> 
+<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 73</span> 
+<span class='linenumber'> 74</span> </span><span class="WHIT">   </span><span class="NAME">host</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 75</span> 
+<span class='linenumber'> 76</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 77</span>     * Create a new instance of a component, setting the name, type, and
+<span class='linenumber'> 78</span>     * update priority of this component compared to all other components
+<span class='linenumber'> 79</span>     * within the host.
+<span class='linenumber'> 80</span>     *
+<span class='linenumber'> 81</span>     * @param name {String} The name of the component
+<span class='linenumber'> 82</span>     * @param type {Number} The type of the component
+<span class='linenumber'> 83</span>     * @param priority {Number} A value between 0.0 and 1.0.  Default: 0.5
+<span class='linenumber'> 84</span>     */</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 86</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"You must assign a name to every Component."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 87</span> </span><span class="WHIT">      </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name.toUpperCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 88</span> 
+<span class='linenumber'> 89</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_INPUT</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">type</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_RENDERING</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">             </span><span class="STRN">"You must specify a type for BaseComponent"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 91</span> 
+<span class='linenumber'> 92</span> </span><span class="WHIT">      </span><span class="NAME">this.type</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 93</span> 
+<span class='linenumber'> 94</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0.0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NUMB">1.0</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">             </span><span class="STRN">"Priority must be between 0.0 and 1.0 for BaseComponent"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> 
+<span class='linenumber'> 97</span> </span><span class="WHIT">      </span><span class="NAME">this.priority</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NUMB">0.5</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 98</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>100</span> 
+<span class='linenumber'>101</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>102</span>     * Release the object back into the object pool.
+<span class='linenumber'>103</span>     */</span><span class="WHIT">
+<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>105</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">      </span><span class="NAME">this.priority</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>107</span> </span><span class="WHIT">      </span><span class="NAME">this.type</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">      </span><span class="NAME">this.host</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>110</span> 
+<span class='linenumber'>111</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>112</span>     * Set the host object this component exists within.
+<span class='linenumber'>113</span>     *
+<span class='linenumber'>114</span>     * @param hostObject {HostObject} The object which hosts this component
+<span class='linenumber'>115</span>     */</span><span class="WHIT">
+<span class='linenumber'>116</span> </span><span class="WHIT">   </span><span class="NAME">setHostObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">hostObject</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>117</span> </span><span class="WHIT">      </span><span class="NAME">this.host</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">hostObject</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>118</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>119</span> 
+<span class='linenumber'>120</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>121</span>     * Get the host object this component exists within.
+<span class='linenumber'>122</span>     *
+<span class='linenumber'>123</span>     * @type HostObject
+<span class='linenumber'>124</span>     */</span><span class="WHIT">
+<span class='linenumber'>125</span> </span><span class="WHIT">   </span><span class="NAME">getHostObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.host</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>127</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>128</span> 
+<span class='linenumber'>129</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>130</span>     * Get the type of this component.  Will be one of:
+<span class='linenumber'>131</span>     * {@link #TYPE_INPUT}, {@link #TYPE_TRANSFORM}, {@link #TYPE_LOGIC},
+<span class='linenumber'>132</span>     * {@link #TYPE_COLLIDER}, or {@link #TYPE_RENDERING}
+<span class='linenumber'>133</span>     *
+<span class='linenumber'>134</span>     * @type Number
+<span class='linenumber'>135</span>     */</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">   </span><span class="NAME">getType</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.type</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>139</span> 
+<span class='linenumber'>140</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>141</span>     * Set the execution priority of this component with
+<span class='linenumber'>142</span>     * 1.0 being the highest priority and 0.0 being the lowest.  Components
+<span class='linenumber'>143</span>     * within a host object are sorted by type, and then priority.
+<span class='linenumber'>144</span>     *
+<span class='linenumber'>145</span>     * @param priority {Number} A value between 0.0 and 1.0
+<span class='linenumber'>146</span>     */</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">   </span><span class="NAME">setPriority</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">priority</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">      </span><span class="NAME">this.priority</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">priority</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>149</span> </span><span class="WHIT">      </span><span class="NAME">this.getHost</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">sort</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>150</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>151</span> 
+<span class='linenumber'>152</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>153</span>     * Returns the priority of this component.
+<span class='linenumber'>154</span>     *
+<span class='linenumber'>155</span>     * @type Number
+<span class='linenumber'>156</span>     */</span><span class="WHIT">
+<span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="NAME">getPriority</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>158</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.priority</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>159</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>160</span> 
+<span class='linenumber'>161</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>162</span>     * Run the component, updating its state.  Not all components will need an execute
+<span class='linenumber'>163</span>     * method.  However, it is important to include one if you need to run calculations
+<span class='linenumber'>164</span>     * or update the state of the component each engine cycle.
+<span class='linenumber'>165</span>     *
+<span class='linenumber'>166</span>     * @param renderContext {RenderContext} The context the component will render within.
+<span class='linenumber'>167</span>     * @param time {Number} The global engine time
+<span class='linenumber'>168</span>     * @param rendering {Boolean} &lt;tt>true&lt;/tt> during the rendering phase
+<span class='linenumber'>169</span>     */</span><span class="WHIT">
+<span class='linenumber'>170</span> </span><span class="WHIT">   </span><span class="NAME">execute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">rendering</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>171</span> </span><span class="WHIT">      </span><span class="COMM">// Does nothing...</span><span class="WHIT">
+<span class='linenumber'>172</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>173</span> 
+<span class='linenumber'>174</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>175</span>     * Converts the type name to a string.
+<span class='linenumber'>176</span>     *
+<span class='linenumber'>177</span>     * @type String
+<span class='linenumber'>178</span>     */</span><span class="WHIT">
+<span class='linenumber'>179</span> </span><span class="WHIT">   </span><span class="NAME">getTypeString</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>180</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>181</span> </span><span class="WHIT">      </span><span class="KEYW">switch</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>182</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_INPUT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"TYPE_INPUT"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>183</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_TRANSFORM</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"TYPE_TRANSFORM"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>184</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_LOGIC</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"TYPE_LOGIC"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>185</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_COLLIDER</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"TYPE_COLLIDER"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NAME">BaseComponent.TYPE_RENDERING</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"TYPE_RENDERING"</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">break</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>187</span> </span><span class="WHIT">         </span><span class="KEYW">default</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"TYPE_UNKNOWN"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>188</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>189</span> 
+<span class='linenumber'>190</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ts</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>191</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>192</span> 
+<span class='linenumber'>193</span> 
+<span class='linenumber'>194</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope BaseComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>195</span> 
+<span class='linenumber'>196</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>197</span>     * Get the class name of this object
+<span class='linenumber'>198</span>     *
+<span class='linenumber'>199</span>     * @return {String} The string "BaseComponent"
+<span class='linenumber'>200</span>     */</span><span class="WHIT">
+<span class='linenumber'>201</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>202</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"BaseComponent"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>203</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>204</span> 
+<span class='linenumber'>205</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>206</span>     * An input component
+<span class='linenumber'>207</span>     * @type Number
+<span class='linenumber'>208</span>     */</span><span class="WHIT">
+<span class='linenumber'>209</span> </span><span class="WHIT">   </span><span class="NAME">TYPE_INPUT</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>210</span> 
+<span class='linenumber'>211</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>212</span>     * A transformation (move,rotate,scale) component
+<span class='linenumber'>213</span>     * @type Number
+<span class='linenumber'>214</span>     */</span><span class="WHIT">
+<span class='linenumber'>215</span> </span><span class="WHIT">   </span><span class="NAME">TYPE_TRANSFORM</span><span class="PUNC">:</span><span class="WHIT">      </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>216</span> 
+<span class='linenumber'>217</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>218</span>     * A logic component
+<span class='linenumber'>219</span>     * @type Number
+<span class='linenumber'>220</span>     */</span><span class="WHIT">
+<span class='linenumber'>221</span> </span><span class="WHIT">   </span><span class="NAME">TYPE_LOGIC</span><span class="PUNC">:</span><span class="WHIT">          </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>222</span> 
+<span class='linenumber'>223</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>224</span>     * A collider component
+<span class='linenumber'>225</span>     * @type Number
+<span class='linenumber'>226</span>     */</span><span class="WHIT">
+<span class='linenumber'>227</span> </span><span class="WHIT">   </span><span class="NAME">TYPE_COLLIDER</span><span class="PUNC">:</span><span class="WHIT">       </span><span class="NUMB">4</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>228</span> 
+<span class='linenumber'>229</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>230</span>     * A rendering component
+<span class='linenumber'>231</span>     * @type Number
+<span class='linenumber'>232</span>     */</span><span class="WHIT">
+<span class='linenumber'>233</span> </span><span class="WHIT">   </span><span class="NAME">TYPE_RENDERING</span><span class="PUNC">:</span><span class="WHIT">      </span><span class="NUMB">5</span><span class="WHIT">
+<span class='linenumber'>234</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>235</span> 
+<span class='linenumber'>236</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">BaseComponent</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>237</span> 
+<span class='linenumber'>238</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:24:29 GMT-0500 (EST)</div>
+</body>
+</html>
