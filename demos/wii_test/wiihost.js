@@ -31,8 +31,8 @@
  *
  */
 
-//Engine.include("/components/component.mover2d.js");
-//Engine.include("/components/component.sprite.js");
+Engine.include("/components/component.mover2d.js");
+Engine.include("/components/component.sprite.js");
 //Engine.include("/components/component.wiimoteinput.js");
 Engine.include("/engine/engine.object2d.js");
 
@@ -40,8 +40,8 @@ Engine.initObject("WiiHost", "Object2D", function() {
 
 /**
  * @class The block object.  Represents a block which is dropped from
- * 		 the top of the playfield and is used to build a hand.  Each
- * 		 block is one of 6 designs.  Each block is comprised of tiles
+ *        the top of the playfield and is used to build a hand.  Each
+ *        block is one of 6 designs.  Each block is comprised of tiles
  *        which are cards that make up a hand, including wild cards.
  */
 var WiiHost = Object2D.extend({
@@ -53,11 +53,14 @@ var WiiHost = Object2D.extend({
 
       // Add components to move and draw the player
 //      this.add(WiimoteInputComponent.create("input"));
-//      this.add(Mover2DComponent.create("move"));
-//      this.add(SpriteComponent.create("draw"));
+      this.add(Mover2DComponent.create("move"));
+      this.add(SpriteComponent.create("draw"));
 
-//      this.setPosition(Point2D.create(30, 30));
-//		this.velocityVec = Point2D.create(0, 0);
+      this.setPosition(Point2D.create(30, 30));
+      this.velocityVec = Point2D.create(0, 0);
+
+      this.setSprite(WiiTest.spriteLoader.getSprite("redball", "ball"));
+      this.setPosition(Point2D.create(100, 338));
    },
 
    /**
@@ -116,12 +119,12 @@ var WiiHost = Object2D.extend({
    },
 
    getRotation: function() {
-		return this.getComponent("move").getRotation();
-	},
+      return this.getComponent("move").getRotation();
+   },
 
-	setRotation: function(r) {
-		this.getComponent("move").setRotation(r);
-	},
+   setRotation: function(r) {
+      this.getComponent("move").setRotation(r);
+   },
 
    /**
     * Set up the player object on the playfield.  The width and

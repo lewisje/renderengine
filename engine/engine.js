@@ -54,27 +54,27 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
       return out;
    },
 
-	cleanup: function(o) {
-		if (typeof o == "undefined") {
-			return "";
-		} else if (typeof o == "function") {
-			return "function";
-		} else if (o instanceof Array) {
-			var s = "[";
-			for (var e in o) {
-				s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
-			}
-			return s + "]";
-		} else if (typeof o == "object") {
-			var s = "{\n";
-			for (var e in o) {
-				s += e + ": " + this.cleanup(o[e]) + "\n";
-			}
-			return s + "}\n";
-		} else {
-			return String(o);
-		}
-	},
+   cleanup: function(o) {
+      if (typeof o == "undefined") {
+         return "";
+      } else if (typeof o == "function") {
+         return "function";
+      } else if (o instanceof Array) {
+         var s = "[";
+         for (var e in o) {
+            s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
+         }
+         return s + "]";
+      } else if (typeof o == "object") {
+         var s = "{\n";
+         for (var e in o) {
+            s += e + ": " + this.cleanup(o[e]) + "\n";
+         }
+         return s + "}\n";
+      } else {
+         return String(o);
+      }
+   },
 
    /** @private */
    fixArgs: function(a) {
@@ -83,7 +83,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
          if (!a[i]) {
             x.push("null");
          } else {
-				x.push(this.cleanup(a[i]));
+            x.push(this.cleanup(a[i]));
          }
       }
       return x.join(" ");
@@ -136,13 +136,13 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  */
 var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
-	msgStore: null,
-	
-	firstTime: null,
+   msgStore: null,
+   
+   firstTime: null,
 
    constructor: function() {
-		this.msgStore = [];
-		this.firstTime = true;
+      this.msgStore = [];
+      this.firstTime = true;
       $("head", document).append(
             "<style> " +
             "#debug-console { position: absolute; width: 400px; right: 10px; bottom: 5px; height: 98%; border: 1px solid; overflow: auto; " +
@@ -155,14 +155,14 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
       $(document).ready(function() {
          $(document.body).append($("<div id='debug-console'><!-- --></div>"));
       });
-		
-		window.error = function(err){
-			if (err instanceof Error) {
-				this.error(err.message);
-			} else {
-		  		this.error(err);
-			}
-	  	};
+      
+      window.error = function(err){
+         if (err instanceof Error) {
+            this.error(err.message);
+         } else {
+            this.error(err);
+         }
+      };
    },
 
    /** @private */
@@ -179,29 +179,29 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
          $("#debug-console")[0].scrollTop = w.scrollHeight + 1;
       }
    },
-	
-	store: function(type, args) {
-		if (!this.firstTime) {
-			return;
-		}
-		if (!document.getElementById("debug-console")) {
-			this.msgStore.push({
-			 	t: type,
-			 	a: this.fixArgs(args)
-		 	});	
-		} else {
-			this.firstTime = false;
-			for (var i = 0; i < this.msgStore.length; i++) {
-				switch (this.msgStore[i].t) {
-					case "i": this.info(this.msgStore[i].a); break;
-					case "d": this.debug(this.msgStore[i].a); break;
-					case "w": this.warn(this.msgStore[i].a); break;
-					case "e": this.error(this.msgStore[i].a); break;
-				}
-			}
-			this.msgStore = null;
-		}
-	},
+   
+   store: function(type, args) {
+      if (!this.firstTime) {
+         return;
+      }
+      if (!document.getElementById("debug-console")) {
+         this.msgStore.push({
+            t: type,
+            a: this.fixArgs(args)
+         });   
+      } else {
+         this.firstTime = false;
+         for (var i = 0; i < this.msgStore.length; i++) {
+            switch (this.msgStore[i].t) {
+               case "i": this.info(this.msgStore[i].a); break;
+               case "d": this.debug(this.msgStore[i].a); break;
+               case "w": this.warn(this.msgStore[i].a); break;
+               case "e": this.error(this.msgStore[i].a); break;
+            }
+         }
+         this.msgStore = null;
+      }
+   },
 
    /** @private */
    fixArgs: function(a) {
@@ -214,7 +214,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    info: function() {
       this.clean();
-		this.store("i",arguments);
+      this.store("i",arguments);
       $("#debug-console").append($("<div class='console-info'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -224,7 +224,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    debug: function() {
       this.clean();
-		this.store("d",arguments);
+      this.store("d",arguments);
       $("#debug-console").append($("<div class='console-debug'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -234,7 +234,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    warn: function() {
       this.clean();
-		this.store("w",arguments);
+      this.store("w",arguments);
       $("#debug-console").append($("<div class='console-warn'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -244,7 +244,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
     */
    error: function() {
       this.clean();
-		this.store("e",arguments);
+      this.store("e",arguments);
       $("#debug-console").append($("<div class='console-error'>" + this.fixArgs(arguments) + "</div>"));
       this.scroll();
    },
@@ -471,7 +471,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     */
    startup: function() {
       if (EngineSupport.checkBooleanParam("debug") && (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
-			this.consoleRef = new HTMLConsoleRef();
+         this.consoleRef = new HTMLConsoleRef();
       }
       else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
          // Firebug or firebug lite
@@ -676,17 +676,17 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          array.splice(idx, 1);
       }
    },
-	
-	/**
-	 * Returns <tt>true</tt> if the string, after trimming, is either
-	 * empty or is null.
-	 * 
-	 * @param str {String} The string to test
-	 * @return {Boolean} <tt>true</tt> if the string is empty or <tt>null</tt>
-	 */
-	isEmpty: function(str) {
-		return (str == null || $.trim(str) === "");		
-	},
+   
+   /**
+    * Returns <tt>true</tt> if the string, after trimming, is either
+    * empty or is null.
+    * 
+    * @param str {String} The string to test
+    * @return {Boolean} <tt>true</tt> if the string is empty or <tt>null</tt>
+    */
+   isEmpty: function(str) {
+      return (str == null || $.trim(str) === "");     
+   },
 
    /**
     * Calls a provided callback function once for each element in
@@ -907,20 +907,20 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
-	/**
-	 * Cleans up incoming source by stripping single-line comments,
-	 * multi-line comments, blank lines, new lines, and trims lines.
-	 * In other words, this is a simplification of minification.
-	 * 
-	 * @param inString {String} The source to clean
-	 */
-	cleanSource: function(inString) {
-		return inString.replace(/((\"|').*?\2)|(\/\/.*$)/gm, "$1")
-							.replace(/\/\*(\n|.)*?\*\//gm, "")
-							.replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")
-							.replace(/\s*\n$/gm, "")
-							.replace(/(\n|\r)/gm, "");
-	},
+   /**
+    * Cleans up incoming source by stripping single-line comments,
+    * multi-line comments, blank lines, new lines, and trims lines.
+    * In other words, this is a simplification of minification.
+    * 
+    * @param inString {String} The source to clean
+    */
+   cleanSource: function(inString) {
+      return inString.replace(/((\"|').*?\2)|(\/\/.*$)/gm, "$1")
+                     .replace(/\/\*(\n|.)*?\*\//gm, "")
+                     .replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")
+                     .replace(/\s*\n$/gm, "")
+                     .replace(/(\n|\r)/gm, "");
+   },
 
    /**
     * Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
@@ -932,38 +932,38 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    parseJSON: function(jsonString)
    {
-		jsonString = EngineSupport.cleanSource(jsonString);
+      jsonString = EngineSupport.cleanSource(jsonString);
       if (!(typeof JSON == "undefined")) {
-			try {
-	         return JSON.parse(jsonString, function (key, value) {
-	                   var a;
-	                   if (typeof value === 'string') {
-	                       a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-	                       if (a) {
-	                           return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
-	                       }
-	                   }
-	                   return value;
-	               });
-			} catch (ex) {
-				Console.warn("Cannot parse JSON: " + ex.message);
-				return null;
-			}
+         try {
+            return JSON.parse(jsonString, function (key, value) {
+                      var a;
+                      if (typeof value === 'string') {
+                          a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+                          if (a) {
+                              return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
+                          }
+                      }
+                      return value;
+                  });
+         } catch (ex) {
+            Console.warn("Cannot parse JSON: " + ex.message);
+            return null;
+         }
       } else {
          return EngineSupport.evalJSON(jsonString);
       }
    },
-	
-	evalJSON: function(jsonString)
-	{
-		jsonString = EngineSupport.cleanSource(jsonString);
-		try {
-			return eval("(" + jsonString + ")");	
-		} catch (ex) {
-			Console.warn("Cannot eval JSON: " + ex.message);
-			return null;
-		}
-	},
+   
+   evalJSON: function(jsonString)
+   {
+      jsonString = EngineSupport.cleanSource(jsonString);
+      try {
+         return eval("(" + jsonString + ")");   
+      } catch (ex) {
+         Console.warn("Cannot eval JSON: " + ex.message);
+         return null;
+      }
+   },
 
    /**
     * Return a string, enclosed in quotes.
@@ -1520,7 +1520,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
                }
                if (!Engine.localMode) {
                   // Delete the script node
-						$(n).remove();	
+                  $(n).remove(); 
                }
 
             }
@@ -1900,7 +1900,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    dependencyProcessor: null,
    dependencyTimer: null,
    dependencyCheckTimeout: $.browser.Wii ? 5000 : 2500,
-	dependencyProcessTimeout: 100,
+   dependencyProcessTimeout: 100,
 
    /**
     * Include a script file.
@@ -2162,7 +2162,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    findAllDependencies: function(objectName, obj) {
       var defs;
       var fTable = {};
-		Console.warn("Process: " + objectName);
+      Console.warn("Process: " + objectName);
 
       try {
          var k = obj();

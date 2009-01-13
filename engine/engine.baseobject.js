@@ -56,7 +56,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    constructor: function(name) {
       this.base(name);
       this.events = {};
-      this.jQObject = null,
+      this.jQObject = null;
    },
 
    /**
@@ -118,7 +118,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
          this.jQObject = $(this.element);
       }
       return this.jQObject;
-   }
+   },
 
    /**
     * Abstract update method to set the state of the object.
