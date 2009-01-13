@@ -1,0 +1,5 @@
+#summary Planning for server-side features to be included in the v2.0 release
+
+= Introduction =
+
+This will be a page where I collect ideas and discuss the implementation of a server side service to support The Render Engine.
