@@ -3,8 +3,8 @@
  * RenderContext2D
  *
  * @fileoverview The base 2D render context.  This context implements a number of
- * 				  methods which are then standard on all contexts which extend from
- * 				  it.
+ *               methods which are then standard on all contexts which extend from
+ *               it.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -461,20 +461,24 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    /**
     * Draw a sprite on the context.
     *
-    * @param point {Point2D} The top-left position to draw the image.
-    * @param imageData {Image} The sprite to draw
+    * @param obj {Object} A reference object, or <tt>null</tt>
+    * @param sprite {Sprite} The sprite to draw
+    * @param time {Number} The current world time
     */
-   drawSprite: function(sprite, time) {
+   drawSprite: function(obj, sprite, time) {
    },
 
    /**
     * Draw an image on the context.
     *
+    * @param obj {Object} A reference object, or <tt>null</tt>
     * @param rect {Rectangle2D} The rectangle that specifies the position and
     *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
+    * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
+    *                <tt>null</tt> the entire image is used
     */
-   drawImage: function(rect, image) {
+   drawImage: function(obj, rect, image, srcRect) {
    },
 
    /**
