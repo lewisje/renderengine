@@ -3,7 +3,7 @@
  * BaseObject
  *
  * @fileoverview The object from which most renderable engine objects will
- * 				  need to derive.
+ *               need to derive.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -48,12 +48,15 @@ Engine.initObject("BaseObject", "PooledObject", function() {
 var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
 
    element: null,
+   
+   jQObject: null,
 
    events: null,
 
    constructor: function(name) {
       this.base(name);
       this.events = {};
+      this.jQObject = null,
    },
 
    /**
@@ -64,7 +67,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
       // We need to make sure to remove any event's attached to us
       // that weren't already cleaned up
       for (var ref in this.events) {
-			var r = ref;
+         var r = ref;
          var fn = this.events[r];
          var type = r.split(",")[1];
          if (fn) {
@@ -82,6 +85,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
       this.base();
       this.element = null;
       this.events = null;
+      this.jQObject = null;
    },
 
    /**
@@ -102,6 +106,19 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    getElement: function() {
       return this.element;
    },
+   
+   /**
+    * A helper method to provide access to a jQuery object representing the
+    * element for this object.
+    *
+    * @return {jQuery} A jQuery object
+    */
+   jQ: function() {
+      if (!this.jQObject && this.element) {
+         this.jQObject = $(this.element);
+      }
+      return this.jQObject;
+   }
 
    /**
     * Abstract update method to set the state of the object.

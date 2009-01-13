@@ -45,11 +45,11 @@ Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
  */
 var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.prototype */{
 
-	transformStack: null,
-	
-	cursorPos: null,
-	
-	jQObj: null,
+   transformStack: null,
+   
+   cursorPos: null,
+   
+   jQObj: null,
 
    /**
     * Create an instance of an HTML element rendering context.  This context
@@ -59,11 +59,11 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    constructor: function(name, element) {
       this.base(name || "HTMLElementContext", element);
-		element.id = this.getId();
-		this.cursorPos = Point2D.create(0,0);
-		this.transformStack = [];
-		this.pushTransform();
-		this.jQObj = null;
+      element.id = this.getId();
+      this.cursorPos = Point2D.create(0,0);
+      this.transformStack = [];
+      this.pushTransform();
+      this.jQObj = null;
       this.setViewport(Rectangle2D.create(0, 0, this.jQ().width(), this.jQ().height()));
    },
 
@@ -85,17 +85,17 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       this.base();
    },
 
-	/**
-	 * Retrieve the jQuery object which represents the element.
-	 * @return jQuery Object
-	 * @type {jQuery}
-	 */
-	jQ: function() {
-		if (this.jQObj == null) {
-			this.jQObj = $(this.getSurface());
-		}
-		return this.jQObj;
-	},
+   /**
+    * Retrieve the jQuery object which represents the element.
+    * @return jQuery Object
+    * @type {jQuery}
+    */
+   jQ: function() {
+      if (this.jQObj == null) {
+         this.jQObj = $(this.getSurface());
+      }
+      return this.jQObj;
+   },
 
    /**
     * @memberOf HTMLElementContext
@@ -118,33 +118,26 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       }
       this.base(obj);
    },
-	
+   
    /**
     * Push a transform state onto the stack.
     */
-	pushTransform: function() {
-		this.base();
-		this.transformStack.push(this.cursorPos);	
-	},
-	
+   pushTransform: function() {
+      this.base();
+      this.transformStack.push(this.cursorPos); 
+   },
+   
    /**
     * Pop a transform state off the stack.
     */
-	popTransform: function() {
-		this.base();
-		this.cursorPos = this.transformStack.pop();
-	},
+   popTransform: function() {
+      this.base();
+      this.cursorPos = this.transformStack.pop();
+   },
 
-	//================================================================
+   //================================================================
    // Drawing functions
 
-   /**
-    * Reset the context, clearing it and preparing it for drawing.
-    */
-   reset: function(rect) {
-		this.jQ().empty();
-   },
-	
    /**
     * Set the background color of the context.
     *
@@ -152,7 +145,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    setBackgroundColor: function(color) {
       this.base(color);
-		this.jQ().css("background-color", color);
+      this.jQ().css("background-color", color);
    },
 
    /**
@@ -172,7 +165,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    setWidth: function(width) {
       this.base(width);
-		this.jQ().width(width);
+      this.jQ().width(width);
    },
 
    /**
@@ -182,7 +175,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    setHeight: function(height) {
       this.base(height);
-		this.jQ().height(height);
+      this.jQ().height(height);
    },
 
    /**
@@ -191,18 +184,18 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param rect {Rectangle2D} The rectangle to draw
     */
    drawRectangle: function(rect) {
-		var rD = rect.getDims();
-		var d = $("<div>").css({
-			borderWidth: this.getLineWidth(),
-			borderColor: this.getLineStyle(),
-			left: rD.l,
-			top: rD.t,
-			width: rD.w,
-			height: rD.h,
-			position: "absolute"
-		});
-		this.jQ().append(d);
-		return d;
+      var rD = rect.getDims();
+      var d = $("<div>").css({
+         borderWidth: this.getLineWidth(),
+         borderColor: this.getLineStyle(),
+         left: rD.l,
+         top: rD.t,
+         width: rD.w,
+         height: rD.h,
+         position: "absolute"
+      });
+      this.jQ().append(d);
+      return d;
    },
 
    /**
@@ -211,19 +204,19 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param rect {Rectangle2D} The rectangle to draw
     */
    drawFilledRectangle: function(rect) {
-		var rD = rect.getDims();
-		var d = $("<div>").css({
-			borderWidth: this.getLineWidth(),
-			borderColor: this.getLineStyle(),
-			backgroundColor: this.getFillStyle(),
-			left: rD.l,
-			top: rD.t,
-			width: rD.w,
-			height: rD.h,
-			position: "absolute"
-		});
-		this.jQ().append(d);
-		return d;
+      var rD = rect.getDims();
+      var d = $("<div>").css({
+         borderWidth: this.getLineWidth(),
+         borderColor: this.getLineStyle(),
+         backgroundColor: this.getFillStyle(),
+         left: rD.l,
+         top: rD.t,
+         width: rD.w,
+         height: rD.h,
+         position: "absolute"
+      });
+      this.jQ().append(d);
+      return d;
    },
 
    /**
@@ -232,52 +225,94 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param point {Point2D} The position to draw the point
     */
    drawPoint: function(point) {
-		return this.drawFilledRectangle(Rectangle2D.creat(point.x, point.y, 1, 1));
+      return this.drawFilledRectangle(Rectangle2D.creat(point.x, point.y, 1, 1));
    },
 
    /**
     * Draw a sprite on the context.
     *
-    * @param point {Point2D} The top-left position to draw the image.
-    * @param imageData {Image} The sprite to draw
+    * @param obj {Object} A reference object, or <tt>null</tt>
+    * @param sprite {Sprite} The sprite to draw
+    * @param time {Number} The current world time
     */
-   drawSprite: function(sprite, time) {
+   drawSprite: function(obj, sprite, time) {
       var f = sprite.getFrame(time);
-		var tl = f.getTopLeft();
+      var tl = f.getTopLeft();
       var rD = f.getDims();
 
-		var d = $("<div>").css({
-			position: "absolute",
-			top: this.cursorPos.y,
-			left: this.cursorPos.x,
-			width: rD.w,
-			height: rD.h,
-			background: "url(" + f.getSourceImage().src + ")",
-			backgroundX: tl.x,
-			backgroundY: tl.y
-		});
-		this.jQ().append(d);
-		return d;
+      // If the reference object is a host object it
+      // will give us a reference to the HTML element which we can then
+      // just modify the displayed image for.
+      if (obj && (obj instanceof HostObject) && obj.jQ()) {
+         obj.jQ().css({
+            top: this.cursorPos.y,
+            left: this.cursorPos.x,
+            width: rD.w,
+            height: rD.h,
+            backgroundX: tl.x,
+            backgroundY: tl.y
+         });
+      } else {
+         // Otherwise, just draw a new div with the sprite on it
+         var d = $("<div>").css({
+            position: "absolute",
+            top: this.cursorPos.y,
+            left: this.cursorPos.x,
+            width: rD.w,
+            height: rD.h,
+            background: "url(" + f.getSourceImage().src + ")",
+            backgroundX: tl.x,
+            backgroundY: tl.y
+         });
+         this.jQ().append(d);
+         return d;
+      }
    },
 
    /**
     * Draw an image on the context.
     *
+    * @param obj {Object} A reference object, or <tt>null</tt>
     * @param rect {Rectangle2D} The rectangle that specifies the position and
     *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
+    * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
+    *                <tt>null</tt> the entire image is used
     */
-   drawImage: function(rect, image) {
-		var rD = rect.getDims();
-		var i = $(image).clone().css({
-			position: "absolute",
-			left: rD.l,
-			top: rD.t,
-			width: rD.w,
-			height: rD.h
-		}).attr("width", rD.w).attr("height", rD.h);
-		this.jQ().append(i);
-		return i;
+   drawImage: function(obj, rect, image, srcRect) {
+      var rD = rect.getDims();
+
+      // If the reference object is a host object it
+      // will give us a reference to the HTML element which we can then
+      // just modify the displayed image for.
+      if (obj && (obj instanceof HostObject) && obj.jQ()) {
+         obj.jQ().css({
+            top: rD.t,
+            left: rD.l,
+            width: rD.w,
+            height: rD.h});
+         // Only modify the source, width, and height if they change it
+         if (obj.jQ().attr("src") != image.src) {
+            obj.jQ().attr("src", image.src);
+         }
+         if (obj.jQ().attr("width") != rD.w) {
+            obj.jQ().attr("width", rD.w)
+         }
+         if (obj.jQ().attr("height") != rD.h) {
+            obj.jQ().attr("height", rD.h)
+         }
+      } else {
+         // Otherwise, just draw a new image
+         var i = $(image).clone().css({
+            position: "absolute",
+            left: rD.l,
+            top: rD.t,
+            width: rD.w,
+            height: rD.h
+         }).attr("width", rD.w).attr("height", rD.h);
+         this.jQ().append(i);
+         return i;
+      }
    },
 
    /**
@@ -287,13 +322,13 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param text {String} The text to draw
     */
    drawText: function(point, text) {
-		var d = $("<span>").css({
-			left: point.x,
-			top: point.y,
-			position: "absolute"
-		}).text(text);
-		this.jQ().append(d);
-		return d;
+      var d = $("<span>").css({
+         left: point.x,
+         top: point.y,
+         position: "absolute"
+      }).text(text);
+      this.jQ().append(d);
+      return d;
    }
 
 }, /** @scope HTMLElementContext.prototype */{

@@ -3,7 +3,7 @@
  * SpriteComponent
  *
  * @fileoverview An extension of the render component which handles sprite
- * 				  resource rendering.
+ *               resource rendering.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -139,7 +139,7 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
       }
 
       if (this.currentSprite) {
-         renderContext.drawSprite(this.currentSprite, time);
+         renderContext.drawSprite(this.getHostObject(), this.currentSprite, time);
       }
    }
 }, /** @scope SpriteComponent */{
