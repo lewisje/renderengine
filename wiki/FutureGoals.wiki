@@ -12,7 +12,8 @@ Ideas for the next release.  This list is always evolving...
 || _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
 || _20%_ || Demo || 2D Sprite demo - Super Mario clone w/ editor.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _10%_ || Tool || Simple 2D game editor based on the sprite demo editor. ||
-|| - || Browser support || Optimize performance for the Wii. ||
+|| - || New Feature || Server side support written in Java/JSP. This will be a framework for supporting multiplayer pairing, virtual file system for storing data, and game launching. ||
+|| - || Browser support || Optimize performance for the Wii. Add in back-version of SoundManager to support Flash 7. ||
 || - || New Feature || Multiplayer networking using AJAX polling and COMET. ||
 || - || New Feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
 || - || Rendering Context || SVG rendering context. ||
