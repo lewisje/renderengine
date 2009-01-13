@@ -51,6 +51,8 @@ var WiiHost = Object2D.extend({
    constructor: function() {
       this.base("WiiHostObject");
 
+      this.setElement($("<div>").css({ position: "absolute", width: 60, height: 60 }));
+
       // Add components to move and draw the player
 //      this.add(WiimoteInputComponent.create("input"));
       this.add(Mover2DComponent.create("move"));
@@ -80,6 +82,7 @@ var WiiHost = Object2D.extend({
 
    setSprite: function(sprite) {
       this.sprite = sprite;
+      this.jQ().css("background", "url('" + sprite.getSourceImage().src + "') no-repeat");
       this.setBoundingBox(sprite.getBoundingBox());
       this.getComponent("draw").setSprite(sprite);
    },

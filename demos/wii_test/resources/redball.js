@@ -6,7 +6,7 @@
    bitmapHeight: 60,
    sprites: {
       "ball": {
-         "a" : [0, 0, 60, 60, 2, 150, "loop"]
+         "a" : [0, 0, 60, 60, 2, 500, "loop"]
       }
    }
 }

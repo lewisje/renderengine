@@ -249,8 +249,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
             left: this.cursorPos.x,
             width: rD.w,
             height: rD.h,
-            backgroundX: tl.x,
-            backgroundY: tl.y
+            backgroundPosition: -tl.x + "px " + tl.y + "px"
          });
       } else {
          // Otherwise, just draw a new div with the sprite on it
@@ -261,8 +260,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
             width: rD.w,
             height: rD.h,
             background: "url(" + f.getSourceImage().src + ")",
-            backgroundX: tl.x,
-            backgroundY: tl.y
+            backgroundPosition: -tl.x + "px " + tl.y + "px"
          });
          this.jQ().append(d);
          return d;
