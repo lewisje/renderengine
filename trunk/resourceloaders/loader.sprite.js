@@ -3,7 +3,7 @@
  * SpriteLoader
  *
  * @fileoverview An extension of the image resource loader for handling
- * 				  sprites.  Includes a class for working with loaded sprites.
+ *               sprites.  Includes a class for working with loaded sprites.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -70,10 +70,13 @@ Engine.initObject("SpriteLoader", "ImageLoader", function() {
 var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
 
    sprites: null,
+   
+   queuedSprites: 0,
 
    constructor: function(name) {
       this.base(name || "SpriteLoader");
       this.sprites = {};
+      this.queuedSprites = 0;
    },
 
    /**
@@ -90,6 +93,8 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
          if (url.indexOf(loc.protocol) != -1 && url.indexOf(loc.host) == -1) {
             Assert(false, "Sprites must be located on this server");
          }
+
+         this.queuedSprites++;
 
          var thisObj = this;
 
@@ -111,6 +116,7 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
 
          // Store the sprite info
          this.sprites[name] = info;
+         this.queuedSprites--;
       }
    },
 
@@ -129,6 +135,21 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
          info: this.sprites[name]
       };
       return sprite;
+   },
+
+   /**
+    * Check to see if a named resource is "ready for use".
+    * @param name {String} The name of the resource to check ready status for,
+    *             or <tt>null</tt> for all resources in loader.
+    * @return {Boolean} <tt>true</tt> if the resource is loaded and ready to use
+    */
+   isReady: function(name) {
+      // If sprites are queued, we can't be totally ready
+      if (this.queuedSprites > 0) {
+         return false;
+      }
+      
+      return this.base(name);
    },
 
    /**

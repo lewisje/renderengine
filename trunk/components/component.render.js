@@ -88,7 +88,7 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
           this.getHostObject().getWorldBox &&
           (!renderContext.getViewport().isIntersecting(this.getHostObject().getWorldBox())))
       {
-         return false;
+         return true;
       }
 
       // The object is visible

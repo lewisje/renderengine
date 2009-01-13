@@ -3,7 +3,7 @@
  * ResourceLoader
  *
  * @fileoverview The base class for all resource loaders.  It has the functionality
- * 				  for managing a local cache of loaded objects.
+ *               for managing a local cache of loaded objects.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -112,26 +112,26 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
    /**
     * Check to see if a named resource is "ready for use".
     * @param name {String} The name of the resource to check ready status for,
-    * 				or <tt>null</tt> for all resources in loader.
+    *             or <tt>null</tt> for all resources in loader.
     * @return {Boolean} <tt>true</tt> if the resource is loaded and ready to use
     */
    isReady: function(name) {
-		if (name) {
-	      return this.cache[name] ? this.cache[name].isReady : false;
-		} else {
-			// Check the status of all loader elements
-			var rList = this.getResources();
-			if (rList.length == 0) {
-				// Early out, no resources to load
-				return true;
-			}
-			for (var r in rList) {
-				if (!this.isReady(rList[r])) {
-					return false;
-				}
-			}
-			return true;
-		}
+      if (name) {
+         return this.cache[name] ? this.cache[name].isReady : false;
+      } else {
+         // Check the status of all loader elements
+         var rList = this.getResources();
+         if (rList.length == 0) {
+            // Early out, no resources to load
+            return true;
+         }
+         for (var r in rList) {
+            if (!this.isReady(rList[r])) {
+               return false;
+            }
+         }
+         return true;
+      }
    },
 
    /**
@@ -164,18 +164,18 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
          return null;
       }
    },
-	
-	/**
-	 * Set the data associated with the name.  The ready state is set
-	 * to <tt>false</tt>, so it will be up to the developer to call
-	 * {@link #setReady} on the object if the object is truly ready for use.
-	 * @param name {String} The name of the cache record
-	 * @param data {Object} Data to store
-	 */
-	set: function(name, data) {
+   
+   /**
+    * Set the data associated with the name.  The ready state is set
+    * to <tt>false</tt>, so it will be up to the developer to call
+    * {@link #setReady} on the object if the object is truly ready for use.
+    * @param name {String} The name of the cache record
+    * @param data {Object} Data to store
+    */
+   set: function(name, data) {
       var obj = { data: data, ready: false};
-		this.cache[name] = obj;
-	},
+      this.cache[name] = obj;
+   },
 
    /**
     * Returns the cache.  You should not manipulate the cache directly.

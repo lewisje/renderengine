@@ -40,7 +40,6 @@ Engine.include("/engine/engine.timers.js");
 
 // Load game objects
 Game.load("/wiihost.js");
-Game.load("/dummy.js");
 
 Engine.initObject("WiiTest", "Game", function(){
 
@@ -56,7 +55,7 @@ Engine.initObject("WiiTest", "Game", function(){
       fieldBox: null,
       areaScale: 1.0,
       
-      engineFPS: 15,
+      engineFPS: 30,
       
       fieldWidth: 320,
       fieldHeight: 400,
