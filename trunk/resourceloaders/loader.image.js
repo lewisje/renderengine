@@ -32,6 +32,7 @@
 
 // Includes
 Engine.include("/resourceloaders/loader.remote.js");
+Engine.include("/engine/engine.timers.js");
 
 Engine.initObject("ImageLoader", "RemoteLoader", function() {
 
@@ -104,9 +105,16 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
 		}
 		
       var thisObj = this;
-      image.bind("load", function() {
-         thisObj.setReady(name, true);
-      });
+		if (!$.browser.Wii) {
+	      image.bind("load", function() {
+	         thisObj.setReady(name, true);
+	      });
+		} else {
+			// Calculate an approximate wait time based on dimensions
+			OneShotTimeout.create("readyImg", width * height, function() {
+				thisObj.setReady(name, true);	
+			});
+		}
 
       // Append it to the container so it can load the image
       $(this.getElement()).append(image);

@@ -109,7 +109,7 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
       else
       {
          info.bitmapImage = path + info.bitmapImage;
-         Console.log("Loading sprite: " + name + " @ " + info.bitmapImage);
+         Console.info("Loading sprite: " + name + " @ " + info.bitmapImage);
 
          // Load the sprite image file
          this.base(name, info.bitmapImage, info.bitmapWidth, info.bitmapHeight);
@@ -239,7 +239,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
     * @private
     */
    constructor: function(name, spriteObj, spriteResource) {
-
+      this.base(name);
       this.type = (spriteObj["a"] ? Sprite.TYPE_ANIMATION : Sprite.TYPE_SINGLE);
 
       var s = (this.type == Sprite.TYPE_ANIMATION ? spriteObj["a"] : spriteObj["f"]);
@@ -250,10 +250,8 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       }
 
       this.image = spriteResource.image;
-
       this.frame = Rectangle2D.create(s[Sprite.INDEX_LEFT], s[Sprite.INDEX_TOP], s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
       this.bbox = Rectangle2D.create(0, 0, s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
-      return this.base(name);
    },
 
    /**

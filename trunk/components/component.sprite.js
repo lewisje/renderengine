@@ -64,46 +64,8 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
     * @private
     */
    calculateBoundingBox: function() {
-      return;
-      var x1 = 0;
-      var x2 = 0;
-      var y1 = 0;
-      var y2 = 0;
-      for (var p = 0; p < this.points.length; p++)
-      {
-         var pt = this.points[p];
-
-         if (pt.x < x1)
-         {
-            x1 = pt.x;
-         }
-         if (pt.x > x2)
-         {
-            x2 = pt.x;
-         }
-         if (pt.y < y1)
-         {
-            y1 = pt.y;
-         }
-         if (pt.y > y2)
-         {
-            y2 = pt.y;
-         }
-      }
-
-      var bbox = new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
-      this.getHostObject().setBoundingBox(bbox);
-
-      // Figure out longest axis
-      if (bbox.len_x() > bbox.len_y)
-      {
-         this.fullBox = new Rectangle2D(x1,x1,Math.abs(x1) + x2,Math.abs(x1) + x2);
-      }
-      else
-      {
-         this.fullBox = new Rectangle2D(y1,y1,Math.abs(y1) + y2,Math.abs(y1) + y2);
-      }
-   },
+      return this.currentSprite.getBoundingBox();
+    },
 
    /**
     * Set the sprite the component will render.

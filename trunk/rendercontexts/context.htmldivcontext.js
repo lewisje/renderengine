@@ -53,9 +53,11 @@ var HTMLDivContext = HTMLElementContext.extend(/** @scope HTMLDivContext.prototy
       var ctx = $("<div>").css({
          width: contextWidth,
          height: contextHeight,
-         position: "absolute"
+         position: "absolute",
+			overflow: "hidden"
       });
       this.base(name || "HTMLDivContext", ctx);
+		this.setViewport(Rectangle2D.create(0, 0, contextWidth, contextHeight));
    }
    
 }, /** @scope HTMLDivContext.prototype */{

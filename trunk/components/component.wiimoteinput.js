@@ -49,7 +49,7 @@ Engine.initObject("WiimoteInputComponent", "KeyboardInputComponent", function() 
  * <br/>
  * <ul>
  * <li>onWiimoteLeft - Direction pad left</li>
- * <li>onWiimoteLeft - Direction pad right</li>
+ * <li>onWiimoteRight - Direction pad right</li>
  * <li>onWiimoteUp - Direction pad up</li>
  * <li>onWiimoteDown - Direction pad down</li>
  * <li>onWiimotePlus - Plus button pressed/released</li>
@@ -70,6 +70,8 @@ Engine.initObject("WiimoteInputComponent", "KeyboardInputComponent", function() 
  * <li>onWiimoteDistance - Distance from screen in meters (controller, dist)</li>
  * <li>onWiimotePosition - X/Y position (controller, x, y)</li>
  * <li>onWiimoteRoll - X-axis roll in radians (controller, roll)</li>
+ * <li>onWiimoteOffscreen - Triggered <i>instead of</i> onWiimotePosition if the
+ * 								 remote isn't pointing at the screen.</li>
  * </ul>
  *
  * @extends InputComponent
@@ -79,7 +81,7 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
    enabledRemotes: null,
 
    remoteValid: null,
-
+	
    /**
     * Create an instance of a Wiimote input component.
     *
@@ -91,6 +93,18 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
       this.base(name, priority);
       this.enabledRemotes = [false, false, false, false];
       this.remoteValid = [0, 0, 0, 0];
+
+      var ctx = Engine.getDefaultContext();
+      var self = this;
+
+      // Add the event handlers
+		ctx.addEvent(this, "mousedown", function(evt) {
+			self._mouseDownListener(evt);
+		});
+
+		ctx.addEvent(this, "mouseup", function(evt) {
+			self._mouseUpListener(evt);
+		});
    },
 
    release: function() {
@@ -106,11 +120,24 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
 		var ctx = Engine.getDefaultContext();
 
       // Clean up event handlers
-		ctx.removeEvent(this, "keydown");
-		ctx.removeEvent(this, "keyup");
-		ctx.removeEvent(this, "keypress");
+		ctx.removeEvent(this, "mousedown");
+		ctx.removeEvent(this, "mouseup");
       this.base();
    },
+
+   /**
+    * @private
+    */
+	_mouseDownListener: function(evt) {
+		this._wmButtonA(evt, 0, true);	
+	},
+
+   /**
+    * @private
+    */
+	_mouseUpListener: function(evt) {
+		this._wmButtonA(evt, 0, false);	
+	},
 
    /**
     * @private
@@ -119,40 +146,40 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
          case WiimoteInputComponent.KEYCODE_LEFT:
-            this._wmLeft(0, true);
+            this._wmLeft(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_RIGHT:
-            this._wmRight(0, true);
+            this._wmRight(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_UP:
-            this._wmUp(0, true);
+            this._wmUp(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_DOWN:
-            this._wmDown(0, true);
+            this._wmDown(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_PLUS:
-            this._wmPlus(0, true);
+            this._wmPlus(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_MINUS:
-            this._wmMinus(0, true);
+            this._wmMinus(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_1:
-            this._wmButton1(0, true);
+            this._wmButton1(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_2:
-            this._wmButton2(0, true);
+            this._wmButton2(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_A:
-            this._wmButtonA(0, true);
+            this._wmButtonA(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_B:
-            this._wmButtonB(0, true);
+            this._wmButtonB(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_C:
-            this._wmButtonC(0, true);
+            return this._wmButtonC(event, 0, true);
             break;
          case WiimoteInputComponent.KEYCODE_Z:
-            this._wmButtonZ(0, true);
+            this._wmButtonZ(event, 0, true);
             break;
       }
 		
@@ -167,40 +194,40 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
          case WiimoteInputComponent.KEYCODE_LEFT:
-            this._wmLeft(0, false);
+            this._wmLeft(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_RIGHT:
-            this._wmRight(0, false);
+            this._wmRight(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_UP:
-            this._wmUp(0, false);
+            this._wmUp(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_DOWN:
-            this._wmDown(0, false);
+            this._wmDown(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_PLUS:
-            this._wmPlus(0, false);
+            this._wmPlus(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_MINUS:
-            this._wmMinus(0, false);
+            this._wmMinus(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_1:
-            this._wmButton1(0, false);
+            this._wmButton1(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_2:
-            this._wmButton2(0, false);
+            this._wmButton2(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_A:
-            this._wmButtonA(0, false);
+            this._wmButtonA(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_B:
-            this._wmButtonB(0, false);
+            this._wmButtonB(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_C:
-            this._wmButtonC(0, false);
+            this._wmButtonC(event, 0, false);
             break;
          case WiimoteInputComponent.KEYCODE_Z:
-            this._wmButtonZ(0, false);
+            this._wmButtonZ(event, 0, false);
             break;
       }
 		
@@ -223,6 +250,7 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
       // Run through the available Wiimotes
 		var op = $.browser.WiiMote;
       for (var w = 0; w < 4; w++) {
+
          var remote = op.update(w);	// This fixes a dependency problem
          // Cannot perform this check on the primary remote,
          // that's why this object extends the keyboard input component...
@@ -234,30 +262,33 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
             }
 
             if (!remote.isBrowsing) {
-               var chk;
+					var evt = { primary: false };
 
                // Simple bitmask check to handle states and fire methods
-               this._wmLeft(w, remote.hold & 1);
-               this._wmRight(w, remote.hold & 2);
-               this._wmDown(w, remote.hold & 4);
-               this._wmUp(w, remote.hold & 8);
-               this._wmPlus(w, remote.hold & 16);
-               this._wmButton2(w, remote.hold & 256);
-               this._wmButton1(w, remote.hold & 512);
-               this._wmButtonB(w, remote.hold & 1024);
-               this._wmButtonA(w, remote.hold & 2048);
-               this._wmMinus(w, remote.hold & 4096);
-               this._wmButtonZ(w, remote.hold & 8192);
-               this._wmButtonC(w, remote.hold & 16384);
+               this._wmLeft(evt, w, remote.hold & 1);
+               this._wmRight(evt, w, remote.hold & 2);
+               this._wmDown(evt, w, remote.hold & 4);
+               this._wmUp(evt, w, remote.hold & 8);
+               this._wmPlus(evt, w, remote.hold & 16);
+               this._wmButton2(evt, w, remote.hold & 256);
+               this._wmButton1(evt, w, remote.hold & 512);
+               this._wmButtonA(evt, w, remote.hold & 2048);
+               this._wmMinus(evt, w, remote.hold & 4096);
+               this._wmButtonZ(evt, w, remote.hold & 8192);
+               this._wmButtonC(evt, w, remote.hold & 16384);
             }
 
-            // Set distance and validity
-            this._wmDistance(w, remote.dpdDistance);
-            this._wmValidity(w, remote.dpdValidity);
+            this._wmButtonB(evt, w, remote.hold & 1024);
 
-            // Get position and roll
-            this._wmPosition(w, remote.dpdScreenX, remote.dpdScreenY);
-            this._wmRoll(w, Math.atan2(remote.dpdRollY, remote.dpdRollX));
+            // Set validity of remote data
+				this._wmValidity(w, remote.dpdValidity);
+
+            // Set distance to screen
+				this._wmDistance(w, remote.dpdDistance);
+				
+				// Set position and roll
+				this._wmPosition(w, remote.dpdScreenX, remote.dpdScreenY, remote.dpdX, remote.dpdY);
+				this._wmRoll(w, remote.dpdRollX, remote.dpdRollY, Math.atan2(remote.dpdRollY, remote.dpdRollX));
          } else {
             if (this.enabledRemotes[w]) {
                // Let the host know that a Wiimote became disabled
@@ -270,120 +301,120 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
    /**
     * @private
     */
-   _wmLeft: function(controllerNum, pressed) {
+   _wmLeft: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteLeft)
       {
-         this.getHostObject().onWiimoteLeft(controllerNum, pressed);
+         this.getHostObject().onWiimoteLeft(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmRight: function(controllerNum, pressed) {
+   _wmRight: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteRight)
       {
-         this.getHostObject().onWiimoteRight(controllerNum, pressed);
+         this.getHostObject().onWiimoteRight(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmUp: function(controllerNum, pressed) {
+   _wmUp: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteUp)
       {
-         this.getHostObject().onWiimoteUp(controllerNum, pressed);
+         this.getHostObject().onWiimoteUp(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmDown: function(controllerNum, pressed) {
+   _wmDown: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteDown)
       {
-         this.getHostObject().onWiimoteDown(controllerNum, pressed);
+         this.getHostObject().onWiimoteDown(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmPlus: function(controllerNum, pressed) {
+   _wmPlus: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimotePlus)
       {
-         this.getHostObject().onWiimotePlus(controllerNum, pressed);
+         this.getHostObject().onWiimotePlus(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmMinus: function(controllerNum, pressed) {
+   _wmMinus: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteMinus)
       {
-         this.getHostObject().onWiimoteMinus(controllerNum, pressed);
+         this.getHostObject().onWiimoteMinus(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmButton1: function(controllerNum, pressed) {
+   _wmButton1: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteButton1)
       {
-         this.getHostObject().onWiimoteButton1(controllerNum, pressed);
+         this.getHostObject().onWiimoteButton1(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmButton2: function(controllerNum, pressed) {
+   _wmButton2: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteButton2)
       {
-         this.getHostObject().onWiimoteButton2(controllerNum, pressed);
+         this.getHostObject().onWiimoteButton2(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmButtonA: function(controllerNum, pressed) {
+   _wmButtonA: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteButtonA)
       {
-         this.getHostObject().onWiimoteButtonA(controllerNum, pressed);
+         this.getHostObject().onWiimoteButtonA(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmButtonB: function(controllerNum, pressed) {
+   _wmButtonB: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteButtonB)
       {
-         this.getHostObject().onWiimoteButtonB(controllerNum, pressed);
+         this.getHostObject().onWiimoteButtonB(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmButtonC: function(controllerNum, pressed) {
+   _wmButtonC: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteButtonC)
       {
-         this.getHostObject().onWiimoteButtonC(controllerNum, pressed);
+         this.getHostObject().onWiimoteButtonC(controllerNum, pressed, evt);
       }
    },
 
    /**
     * @private
     */
-   _wmButtonZ: function(controllerNum, pressed) {
+   _wmButtonZ: function(evt, controllerNum, pressed) {
       if (this.getHostObject().onWiimoteButtonZ)
       {
-         this.getHostObject().onWiimoteButtonZ(controllerNum, pressed);
+         this.getHostObject().onWiimoteButtonZ(controllerNum, pressed, evt);
       }
    },
 
@@ -392,7 +423,7 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
     */
    _wmEnabled: function(controllerNum, state) {
       // Store the Wiimote enabled state
-      this.enabledRemotes[w] = state;
+      this.enabledRemotes[controllerNum] = state;
       if (this.getHostObject().onWiimoteEnabled)
       {
          this.getHostObject().onWiimoteEnabled(controllerNum, state);
@@ -414,7 +445,7 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
     */
    _wmValidity: function(c, v) {
       if (this.remoteValid[c] != v) {
-         this.removeValid[c] = v;
+         this.remoteValid[c] = v;
          if (this.getHostObject().onWiimoteValidity)
          {
             this.getHostObject().onWiimoteValidity(c, v);
@@ -425,20 +456,25 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
    /**
     * @private
     */
-   _wmPosition: function(c, x, y) {
-      if (this.getHostObject().onWiimotePosition)
+   _wmPosition: function(c, sx, sy, x, y) {
+		if (this.getHostObject().onWiimoteOffscreen) {
+			this.getHostObject().onWiimoteOffscreen(c, (!sx || !sy));
+		}
+
+      if ((sx && sy) && this.getHostObject().onWiimotePosition)
       {
-         this.getHostObject().onWiimotePosition(c, x, y);
+         this.getHostObject().onWiimotePosition(c, sx, sy, x, y);
       }
    },
 
    /**
     * @private
     */
-   _wmRoll: function(c, r) {
+   _wmRoll: function(c, x, y, z) {
       if (this.getHostObject().onWiimoteRoll)
       {
-         this.getHostObject().onWiimoteRoll(c, r);
+			// Pitch, yaw, roll?
+         this.getHostObject().onWiimoteRoll(c, x, y, z);
       }
    }
 }, { /** @scope WiimoteInputComponent.prototype */
@@ -486,21 +522,21 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
 
    KEYCODE_Z: 90,       // 200
 
-   KEYCODE_1: 49,       // 172
+   KEYCODE_1: 173,
 
-   KEYCODE_2: 50,       // 173
+   KEYCODE_2: 173,
 
-   KEYCODE_MINUS: 109,  // 170
+   KEYCODE_MINUS: 170,
 
-   KEYCODE_PLUS: 61,    // 174
+   KEYCODE_PLUS: 174,
 
-   KEYCODE_LEFT: 37,    // 178
+   KEYCODE_LEFT: 178,
 
-   KEYCODE_RIGHT: 39,   // 177
+   KEYCODE_RIGHT: 177,
 
-   KEYCODE_UP: 38,      // 175
+   KEYCODE_UP: 175,
 
-   KEYCODE_DOWN: 40     // 176
+   KEYCODE_DOWN: 176
 });
 
 return WiimoteInputComponent;

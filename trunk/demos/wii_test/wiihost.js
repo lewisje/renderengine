@@ -33,7 +33,7 @@
 
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.sprite.js");
-//Engine.include("/components/component.wiimoteinput.js");
+Engine.include("/components/component.wiimoteinput.js");
 Engine.include("/engine/engine.object2d.js");
 
 Engine.initObject("WiiHost", "Object2D", function() {
@@ -47,22 +47,26 @@ Engine.initObject("WiiHost", "Object2D", function() {
 var WiiHost = Object2D.extend({
 
    sprite: null,
+	
+	offScreen: false,
+	
+	jitter: false,
 
    constructor: function() {
       this.base("WiiHostObject");
+		this.sprite = null;
 
       this.setElement($("<div>").css({ position: "absolute", width: 60, height: 60 }));
 
       // Add components to move and draw the player
-//      this.add(WiimoteInputComponent.create("input"));
+      this.add(WiimoteInputComponent.create("input"));
       this.add(Mover2DComponent.create("move"));
       this.add(SpriteComponent.create("draw"));
+      this.setSprite(WiiTest.spriteLoader.getSprite("redball", "ball"));
 
       this.setPosition(Point2D.create(30, 30));
-      this.velocityVec = Point2D.create(0, 0);
-
-      this.setSprite(WiiTest.spriteLoader.getSprite("redball", "ball"));
-      this.setPosition(Point2D.create(100, 338));
+		this.offScreen = false;
+		this.jitter = false;
    },
 
    /**
@@ -110,6 +114,11 @@ var WiiHost = Object2D.extend({
     */
    setPosition: function(point) {
       this.base(point);
+		var d = this.getBoundingBox();
+		point.set(point.x - d.getHalfWidth(), point.y - d.getHalfHeight());
+		if (this.jitter) {
+			point.add(Point2D.create(Math.random() * 30, Math.random() * 30));
+		}
       this.getComponent("move").setPosition(point);
    },
 
@@ -128,17 +137,38 @@ var WiiHost = Object2D.extend({
    setRotation: function(r) {
       this.getComponent("move").setRotation(r);
    },
+	
+	setVelocity: function(vec) {
+		this.getComponent("move").setVelocity(vec);	
+	},
+	
+	onWiimotePosition: function(c, sx, sy, x, y) {
+		if (c == 0)	{
+			this.setPosition(Point2D.create(sx, sy));
+		}
+	},
+	
+	onWiimoteButtonA: function(c, state, evt) {
+		if (c == 0) {
+			this.jitter = state;
+		}
+	},
+	
+	onWiimoteLeft: function() {
+		return false;
+	},
 
-   /**
-    * Set up the player object on the playfield.  The width and
-    * heigh of the playfield are used to determine the center point
-    * where the player starts.
-    *
-    * @param pWidth {Number} The width of the playfield in pixels
-    * @param pHeight {Number} The height of the playfield in pixels
-    */
-   setup: function(pWidth, pHeight) {
-   },
+	onWiimoteUp: function() {
+		return false;
+	},
+
+	onWiimoteRight: function() {
+		return false;
+	},
+
+	onWiimoteDown: function() {
+		return false;
+	}
 
 }, { // Static
 

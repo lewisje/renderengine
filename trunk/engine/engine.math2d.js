@@ -313,6 +313,10 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       this.upd();
       return this;
    },
+	
+	get: function() {
+		return { x: this._vec.e(1), y: this._vec.e(2) };
+	},
 
    /**
     * Set the X coordinate
@@ -542,8 +546,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param height {Number} The height of the rectangle
     */
    constructor: function(x, y, width, height) {
-      this.topLeft = new Point2D(0,0);
-      this.dims = new Point2D(0,0);
+      this.topLeft = Point2D.create(0,0);
+      this.dims = Point2D.create(0,0);
       this.set(x,y,width,height);
    },
 
@@ -575,10 +579,10 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Get an object with the elements containing left, top, width, height as
-    * elements x, y, w, h.
+    * Get an object with the elements containing left, top, width, height, right
+    * and bottom as the elements x, y, w, h, r, and b. 
     *
-    * @return {Object} An object with the elements x, y, w, h
+    * @return {Object} An object with the specified elements
     */
    get: function() {
       var tl = this.getTopLeft();
@@ -744,7 +748,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Returns a {@link Point2D} that contains the center point of this rectangle.
     *
-    * @type Point2D
+    * @return {Point2D}
     */
    getCenter: function()
    {
@@ -762,7 +766,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Returns the positive length of this rectangle, along the X axis.
     *
-    * @type Number
+    * @return {Number}
     */
    len_x: function()
    {
@@ -772,7 +776,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Returns the positive length of this rectangle, along the Y axis.
     *
-    * @type Number
+    * @return {Number}
     */
    len_y: function()
    {
@@ -781,29 +785,29 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 
    /**
     * Gets a {@link Point2D} representing the top-left corner of this rectangle.
-    * @type Point2D
+    * @return {Point2D}
     */
    getTopLeft: function()
    {
-      return new Point2D(this.topLeft);
+      return Point2D.create(this.topLeft);
    },
 
    /**
     * Gets a {@link Point2D) representing the width and height of this rectangle.
-    * @type Point2D
+    * @return {Point2D}
     */
    getDims: function()
    {
-      return new Point2D(this.dims);
+      return Point2D.create(this.dims);
    },
 
    /**
     * Gets a {@link Point2D} representing the bottom-right corner of this rectangle.
-    * @type Point2D
+    * @return {Point2D}
     */
    getBottomRight: function()
    {
-      var p = new Point2D(this.topLeft);
+      var p = Point2D.create(this.topLeft);
       p.add(this.dims);
 
       return p;
@@ -811,6 +815,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 
    /**
     * Returns a printable version of this object.
+    * @return {String}
     */
    toString: function()
    {
