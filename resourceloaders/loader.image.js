@@ -111,7 +111,7 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
 	      });
 		} else {
 			// Calculate an approximate wait time based on dimensions
-			OneShotTimeout.create("readyImg", width * height, function() {
+			OneShotTimeout.create("readyImg", (width * height) * ImageLoader.loadAdjust, function() {
 				thisObj.setReady(name, true);	
 			});
 		}
@@ -147,7 +147,12 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
     */
    getClassName: function() {
       return "ImageLoader";
-   }
+   },
+	
+	/**
+	 * The ratio by which to scale image load times when loading on the Wii
+	 */
+	loadAdjust: 0.05
 });
 
 return ImageLoader;
