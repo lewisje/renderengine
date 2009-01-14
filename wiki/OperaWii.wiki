@@ -34,6 +34,8 @@ Since debugging isn't the best on the Wii, The Render Engine contains some aid. 
 
 It appears that these two events are _not_ being fired on the Wii.  The only approximation for `onload` is to wait for a period of time and _assume_ that an external resource is loaded.  The estimate is anyone's guess.  Based on some simple testing, I have found that for image resources, using the width times the height plus an error value gives a decent result.  So, for a 60 x 60 image, I wait 3600ms plus 500ms (4.1 seconds) just to be safe on slower connections.  Yes, loading takes longer since it's not exactly when the image is ready, but overall it's a good tradeoff.
 
+In reality, a better formulation (when I get a chance to optimize for the Wii) would be to come up with a graduated scale for timing of images.  Obviously waiting for a minute and a half for _one_ 320 x 320 pixel image is unrealistic (and unwanted for obvious reasons).  I will tweak this calculation, as I said, whenI optimize for the Wii.
+
 === Overall Processing Power ===
 
 Since games developed with the engine are running in a web browser, as script, it is necessary to take overall processing power into consideration.  While the Wii can run the Asteroids demo, it doesn't run it well.  There are many calculations that are occurring every millisecond which require a lot of horsepower.  The Wii doesn't appear to provide that much horsepower.  I plan on getting some specific numbers so that you will have a benchmark against which to develop in the future.
