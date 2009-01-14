@@ -32,7 +32,7 @@ Since debugging isn't the best on the Wii, The Render Engine contains some aid. 
 
 === `onload` and `onerror` Events ===
 
-It appears that these two events are _not_ being fired on the Wii.  The only approximation for `onload` is to wait for a period of time and _assume_ that an external resource is loaded.  The estimate is anyone's guess.  Based on some simple testing, I have found that for image resources, using the width times the height plus an error value gives a decent result.  So, for a 60 x 60 image, I wait 3600ms plus 500ms just to be safe on slower connections.  Yes, loading takes longer since it's not exactly when the image is ready, but overall it's a good tradeoff.
+It appears that these two events are _not_ being fired on the Wii.  The only approximation for `onload` is to wait for a period of time and _assume_ that an external resource is loaded.  The estimate is anyone's guess.  Based on some simple testing, I have found that for image resources, using the width times the height plus an error value gives a decent result.  So, for a 60 x 60 image, I wait 3600ms plus 500ms (4.1 seconds) just to be safe on slower connections.  Yes, loading takes longer since it's not exactly when the image is ready, but overall it's a good tradeoff.
 
 === Overall Processing Power ===
 
