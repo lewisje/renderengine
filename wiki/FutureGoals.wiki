@@ -17,7 +17,6 @@ Ideas for the next release.  This list is always evolving...
 || - || New Feature || Multiplayer networking using AJAX polling and COMET. ||
 || - || New Feature || Remote filesystem utilizing a database Virtual File System (VFS) ||
 || - || Rendering Context || SVG rendering context. ||
-|| - || Dev Tool || Write a _very simple_ syntax checker that will only execute when running on the Wii ||
-|| - || Dev Tool || Establish common syntax problems and write regular expressions to catch them ||
+|| - || Dev Tool || Write a _very simple_ syntax checker that will only execute when running on the Wii.  Establish common syntax problems and write regular expressions to catch them ||
 || - || Dev Tool || Add a function tracer which logs calls into and out of functions ||
 || - || Dev Tool || Implement a profiler which I can use on the Wii ||
