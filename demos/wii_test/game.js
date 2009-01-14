@@ -55,10 +55,10 @@ Engine.initObject("WiiTest", "Game", function(){
       fieldBox: null,
       areaScale: 1.0,
       
-      engineFPS: 30,
+      engineFPS: 15,
       
-      fieldWidth: 320,
-      fieldHeight: 400,
+      fieldWidth: 800,
+      fieldHeight: 460,
       spriteLoader: null,
       imageLoader: null,
       
@@ -88,7 +88,6 @@ Engine.initObject("WiiTest", "Game", function(){
        * the game to its running state.
        */
       setup: function(){
-      
          // Set the FPS of the game
          Engine.setFPS(this.engineFPS);
          
@@ -112,10 +111,10 @@ Engine.initObject("WiiTest", "Game", function(){
        */
       waitForResources: function(){
          if (WiiTest.imageLoader.isReady() &&
-         WiiTest.spriteLoader.isReady()) {
-            WiiTest.loadTimeout.destroy();
-            WiiTest.run();
-            return;
+         	WiiTest.spriteLoader.isReady()) {
+            	WiiTest.loadTimeout.destroy();
+            	WiiTest.run();
+            	return;
          }
          else {
             // Continue waiting
@@ -135,20 +134,17 @@ Engine.initObject("WiiTest", "Game", function(){
          $("#loading").remove();
          
          // Create the render context
+			this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-         
-         var field = $("<div>").css({
-            width: this.fieldWidth,
-            height: this.fieldHeight,
-            border: "1px solid red",
-            position: "relative"
-         });
          
          this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
          this.renderContext.jQ().css({
             border: "1px solid red",
-            position: "relative"});
+				left: 0,
+				top: 0,
+				right: 0,
+				bottom: 0});
          Engine.getDefaultContext().add(this.renderContext);
          WiiTest.play();
       },

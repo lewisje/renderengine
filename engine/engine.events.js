@@ -36,7 +36,24 @@ Engine.initObject("EventEngine", null, function() {
 
 /**
  * @class A static object for unformly handling events within all browser
- * 		 platforms.
+ * 		 platforms.  The event engine is an abstraction of the jQuery event
+ * 		 system.  Methods are provided for adding and removing events in
+ * 		 a programmatic way.  Additionally the engine has key codes for
+ * 		 common keys which aren't part of the letters or numbers.
+ * 		 <p/>
+ * 		 While the engine provides a low-level way to attach events, when
+ * 		 working with game objects methods are provided to manage events
+ * 		 better than with the engine itself.
+ * 		 <p/>
+ * 		 Adding an event:
+ * <pre>
+ * var t = $(".myElement");
+ * EventEngine.setHandler(t, "click", function(event) {
+ *    MyObject.evtHandler();
+ * });
+ * </pre>
+ * @see BaseObject#addEvent
+ * @see BaseObject#removeEvent
  */
 var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
 

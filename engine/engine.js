@@ -156,7 +156,8 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
          $(document.body).append($("<div id='debug-console'><!-- --></div>"));
       });
       
-      window.error = function(err){
+		// Redirect error logging to the console
+      window.onerror = function(err){
          if (err instanceof Error) {
             this.error(err.message);
          } else {
@@ -1528,7 +1529,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          };
 
          // When an error occurs
-         var eFn = function() {
+         var eFn = function(msg) {
             Console.error("File not found: ", scriptPath);
             if (cb) {
                cb(simplePath, Engine.SCRIPT_NOT_FOUND);
@@ -1611,8 +1612,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             // Start the game when it's ready
             if (gameObjectName) {
                Engine.gameRunTimer = setInterval(function() {
-                  if (typeof window[gameObjectName] != "undefined") {
+                  if (typeof window[gameObjectName] != "undefined" &&
+							 window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
+							Console.warn("Starting: " + gameObjectName);
                      window[gameObjectName].setup();
                   }
                }, 100);
@@ -1762,6 +1765,18 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    hideMetrics: function() {
       this.showMetricsWindow = false;
    },
+	
+	manMetrics: function() {
+		if ($("div.metric-button.minimize").length > 0) {
+			$("div.metric-button.minimize").removeClass("minimize").addClass("maximize");
+			$("div.metrics").css("height", 17);
+			$("div.metrics .items").hide();
+		} else {
+			$("div.metric-button.maximize").removeClass("maximize").addClass("minimize");
+			$("div.metrics .items").show();
+			$("div.metrics").css("height", "auto");
+		}
+	},
 
    /**
     * Creates a button for the metrics window
@@ -1782,6 +1797,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay.append(this.metricButton("run", function() { Engine.run(); }));
          this.metricDisplay.append(this.metricButton("pause", function() { Engine.pause(); }));
          this.metricDisplay.append(this.metricButton("shutdown", function() { Engine.shutdown(); }));
+         this.metricDisplay.append(this.metricButton("minimize", function() { Engine.manMetrics(); }));
 
          this.metricDisplay.append($("<div class='items'/>"));
          this.metricDisplay.appendTo($("body"));
@@ -2302,6 +2318,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          unresDeps += "Object '" + obj + "' has the following unresolved dependencies:\n";
          for (var d in Engine.dependencyList[obj].deps) {
             unresDeps += "   " + Engine.dependencyList[obj].deps[d] + "\n";
+				// Display the dependencies we found for this object
+				
          }
          unresDeps += "\n";
       }

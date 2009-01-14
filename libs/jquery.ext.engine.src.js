@@ -35,7 +35,9 @@ $.extend(jQuery.browser, {
    chrome: /chrome/.test( userAgent ),
    Wii: /nintendo wii/.test( userAgent ),
    iPhone: /iphone/.test( userAgent) && /safari/.test( userAgent ),
-	WiiMote: ((window.opera && window.opera.wiiremote) ? window.opera.wiiremote : null)
+	WiiMote: ((window.opera && window.opera.wiiremote) ? window.opera.wiiremote : null),
+	WiiScreenWidth: 800,
+	WiiScreenHeight: 460
 });
 
 /* Addition of some selectors that jQuery doesn't provide:

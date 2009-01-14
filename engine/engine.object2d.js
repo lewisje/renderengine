@@ -39,6 +39,7 @@ Engine.initObject("Object2D", "HostObject", function() {
 /**
  * @class An object for use in a 2D environment.  Methods for getting position, rotation
  * and scale should be implemented within the extended class.
+ * 
  * @extends HostObject
  */
 var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
@@ -49,12 +50,19 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    /** @private */
    bBox: null,
 
+	/**
+	 * @constructor
+	 * @param name {String} The name of the object
+	 */
    constructor: function(name) {
       this.base(name);
       this.lastPosition = new Point2D(5,5);
       this.zIndex = 1;
    },
 
+	/**
+	 * Release the object back into the pool.
+	 */
    release: function() {
       this.base();
       this.zIndex = 1;
@@ -66,7 +74,6 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     *
     * @param rect {Rectangle2D} The rectangle that completely encompasses
     *                           this object.
-    * @memberOf HostObject
     */
    setBoundingBox: function(rect) {
       this.bBox = rect;
@@ -75,20 +82,33 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    /**
     * Get the bounding box of this object
     *
-    * @type Rectangle2D
-    * @memberOf HostObject
+    * @return {Rectangle2D} The object bounding rectangle
     */
    getBoundingBox: function() {
       return this.bBox;
    },
 
+	/**
+	 * Get the world bounding box.
+	 * @return {Rectangle2D} The world bounding rectangle
+	 */
    getWorldBox: function() {
       return new Rectangle2D(this.getBoundingBox()).offset(this.getRenderPosition());
    },
 
+	/**
+	 * Abstract method to be implemented by the extending object to set the
+	 * position.
+	 * @param point {Point2D} The position of the object
+	 */
    setPosition: function(point) {
    },
 
+	/**
+	 * Get the position of the object.  For this class, the value returned is always
+	 * the zero point.
+	 * @return {Point2D} The position
+	 */
    getPosition: function() {
       return Point2D.ZERO;
    },
@@ -142,13 +162,17 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * Get the depth at which this object will render to
     * the context.
     *
-    * @type Number
-    * @memberOf HostObject
+    * @return {Number}
     */
    getZIndex: function() {
       return this.zIndex;
    },
 
+	/**
+	 * When editing objects, this method returns an object which
+	 * contains the properties with their getter and setter methods.
+	 * @return {Object} The properties object
+	 */
 	getProperties: function() {
 		var self = this;
 		var prop = this.base(self);
@@ -170,12 +194,11 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		});
 	}
 
-}, {
+}, {/** @scope Object2D.prototype */
    /**
     * Get the class name of this object
     *
     * @type String
-    * @memberOf HostObject
     */
    getClassName: function() {
       return "Object2D";

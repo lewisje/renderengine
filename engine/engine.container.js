@@ -37,7 +37,26 @@ Engine.include("/engine/engine.baseobject.js");
 Engine.initObject("Iterator", "PooledObject", function() {
 
 /**
- * @class Create an iterator over a {@link Container} instance.
+ * @class Create an iterator over a {@link Container} instance. An
+ * iterator is a convenient object to traverse the list of elements
+ * within the container.  The simplest way to traverse the list is
+ * as follows:
+ * <pre>
+ * var itr = Iterator.create(containerObj);
+ * while (itr.hasNext()) {
+ *    // Get the next object in the container
+ *    var o = itr.next();
+ *    
+ *    // Do something with the object
+ *    o.doSomething();
+ * }
+ * 
+ * // Destroy the container when done
+ * itr.destroy();
+ * </pre>
+ * The last step is important so that you're not creating a lot
+ * of objects, especially if the iterator is used repeatedly.
+ * Since the iterator is a pooled object, it will be reused.
  *
  * @param container {Container} The container to iterate over.
  */
@@ -49,6 +68,10 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 
    objs: null,
 
+	/**
+	 * @constructor
+	 * @param container {Container} The container to iterate over
+	 */
    constructor: function(container) {
       this.base("Iterator");
       this.idx = 0;
@@ -79,7 +102,8 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 
    /**
     * Get the next element from the iterator.
-    * @type Object
+    * @return {Object} The next element in the iterator
+    * @throws {Error} An error if called when no more elements are available
     */
    next: function() {
       if (this.idx < this.c.size())
@@ -91,13 +115,13 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 
    /**
     * Returns <tt>true</tt> if the iterator has more elements.
-    * @type Boolean
+    * @return {Boolean}
     */
    hasNext: function() {
       return (this.idx < this.c.size());
    }
 
-}, /** @scope Iterator */{
+}, /** @scope Iterator.prototype */{
    /**
     * Get the class name of this object
     *
@@ -120,13 +144,16 @@ Engine.initObject("Container", "BaseObject", function() {
  *        When a container is destroyed, all objects within the container
  *        are destroyed with it.
  *
- * @param {String} The name of the container. Default: Container
  * @extends BaseObject
  */
 var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    objects: null,
 
+	/**
+	 * @constructor
+	 * @param containerName {String} The name of the container
+	 */
    constructor: function(containerName) {
       this.base(containerName || "Container");
       this.objects = [];
@@ -154,7 +181,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Returns the count of the number of objects within the
     * container.
     *
-    * @type Number
+    * @return {Number} The number of objects in the container
     */
    size: function() {
       return this.objects.length;
@@ -163,7 +190,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    /**
     * Add an object to the container.
     *
-    * @param obj {BaseObject} The object to add to the container.
+    * @param obj {Object} The object to add to the container.
     */
    add: function(obj) {
       this.objects.push(obj);
@@ -176,7 +203,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Remove an object from the container.  The object is
     * not destroyed when it is removed from the container.
     *
-    * @param obj {BaseObject} The object to remove from the container.
+    * @param obj {Object} The object to remove from the container.
     */
    remove: function(obj) {
       if (obj.getId) {
@@ -190,8 +217,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * The object is not destroyed when it is removed.
     *
     * @param idx {Number} An index between zero and the size of the container minus 1.
-    * @return The object removed from the container.
-    * @type BaseObject
+    * @return {Object} The object removed from the container.
     */
    removeAtIndex: function(idx) {
       Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
@@ -209,9 +235,14 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * sorted, objects might not be in the position you'd expect.
     *
     * @param idx {Number} The index of the object to get
-    * @type BaseObject
+    * @return {Object} The object at the index within the container
+    * @throws {Error} Index out of bounds if the index is out of the list of objects
     */
    get: function(idx) {
+		if (idx < 0 || idx > this.size()) {
+			throw new Error("Index out of bounds");
+		}
+		
       return this.objects[idx];
    },
 
@@ -262,7 +293,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param filterFn {Function} A function to filter the set of
     *                 elements with.  If you pass <tt>null</tt> the
     *                 entire set of objects will be returned.
-    * @type Array
+    * @return {Array} The array of filtered objects
     */
    getObjects: function(filterFn) {
       if (filterFn) {
@@ -289,6 +320,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    /**
     * Returns a property object with accessor methods.
+    * @return {Object} The properties object
     */
    getProperties: function() {
       var self = this;
@@ -301,6 +333,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    /**
     * Serializes a container to XML.
+    * @return {String} The XML string
     */
    toString: function(indent) {
       indent = indent ? indent : "";
@@ -324,7 +357,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       return xml;
    }
 
-}, /** @scope Container */{
+}, /** @scope Container.prototype */{
    /**
     * Get the class name of this object
     *
@@ -355,7 +388,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    /**
     * Create an instance of a container object.
     *
-    * @param {String} The name of the container. Default: Container
+    * @param containerName {String} The name of the container. Default: Container
     * @constructor
     */
    constructor: function(containerName) {
@@ -376,7 +409,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
     * the hash.
     *
     * @param name {String} The name of the hash to check
-    * @type Boolean
+    * @return {Boolean}
     */
    isInHash: function(key) {
       return (this.objHash["_" + String(key)] != null);
@@ -426,8 +459,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
     * Remove the object with the given key name from the container.
     *
     * @param name {String} The object to remove
-    * @return the object removed from the hash
-    * @type BaseObject
+    * @return {Object} The object removed
     */
    removeHash: function(key) {
       var obj = this.objHash["_" + String(key)];
@@ -441,8 +473,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
     * The object is not destroyed when it is removed.
     *
     * @param idx {Number} An index between zero and the size of the container minus 1.
-    * @return The object removed from the container.
-    * @type BaseObject
+    * @return {Object} The object removed from the container.
     */
    removeAtIndex: function(idx) {
       var obj = this.base(idx);
@@ -462,7 +493,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
     * be retrieved.
     *
     * @param idx {Number/String} The index or hash of the object to get
-    * @type BaseObject
+    * @return {Object}
     */
    get: function(idx) {
       if (typeof idx == 'string')
@@ -478,7 +509,6 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    /**
     * Remove all objects from the container.  None of the objects are
     * destroyed.
-    * @memberOf Container
     */
    clear: function() {
       this.base();

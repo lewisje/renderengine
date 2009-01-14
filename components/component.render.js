@@ -45,9 +45,12 @@ Engine.initObject("RenderComponent", "BaseComponent", function() {
 var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype */{
 
    drawMode: 0,
+	
+	oldDisplay: null,
 
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
+		this.oldDisplay = null;
    },
 
    release: function() {
@@ -88,15 +91,25 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
           this.getHostObject().getWorldBox &&
           (!renderContext.getViewport().isIntersecting(this.getHostObject().getWorldBox())))
       {
-         return true;
+			if (this.getHostObject().getElement() && !this.oldDisplay) {
+				this.oldDisplay = this.getHostObject().jQ().css("display");
+				this.getHostObject().jQ().css("display", "none");
+			}
+
+         return false;
       }
+
+		if (this.getHostObject().getElement() && this.oldDisplay) {
+			this.getHostObject().jQ().css("display", this.oldDisplay);
+			this.oldDisplay = null;
+		}
 
       // The object is visible
       Engine.vObj++;
       return true;
    }
 
-}, { // Static
+}, { /** @scope RenderComponent.prototype */
 
    /**
     * Get the class name of this object
@@ -109,11 +122,13 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
 
    /**
     * The component should render itself to the rendering context.
+    * @type Number
     */
    DRAW: 0,
 
    /**
     * The component <i>should not</i> render itself to the rendering context.
+    * @type Number
     */
    NO_DRAW: 1
 
