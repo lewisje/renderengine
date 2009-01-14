@@ -4,7 +4,7 @@
 
 This document is intended to list some of the pitfalls I've run into.  I'm hoping that by the time I release version 2.0 of the engine, the Wii support will be better optimized.  Some things to note when developing for the Wii:
 
-=== `for..in` Loops ===
+=== `for..in` Loops During Dependency Checking (Linking) ===
 
 The variable declaration part causes problems with the dependency checker on the Wii.  A quick workaround is to specify a variable that references the declared variable in the `for..in` statement.  For example:
 
