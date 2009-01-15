@@ -156,7 +156,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
          $(document.body).append($("<div id='debug-console'><!-- --></div>"));
       });
       
-		// Redirect error logging to the console
+      // Redirect error logging to the console
       window.onerror = function(err){
          if (err instanceof Error) {
             this.error(err.message);
@@ -916,11 +916,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @param inString {String} The source to clean
     */
    cleanSource: function(inString) {
-      return inString.replace(/((\"|').*?\2)|(\/\/.*$)/gm, "$1")
-                     .replace(/\/\*(\n|.)*?\*\//gm, "")
-                     .replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")
-                     .replace(/\s*\n$/gm, "")
-                     .replace(/(\n|\r)/gm, "");
+      return inString.replace(/((\"|').*?\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
+                     .replace(/\/\*(\n|.)*?\*\//gm, "")           // Remove multi line comments
+                     .replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")      // Trim lines
+                     .replace(/\s*\n$/gm, "")                     // Remove blank lines
+                     .replace(/(\n|\r)/gm, "");                   // Remove new lines
    },
 
    /**
@@ -1506,48 +1506,70 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Store the request in the cache
          this.loadedScripts[s] = scriptPath;
 
-         // We'll use our own script loader so we can detect errors (i.e. missing files).
-         var n = document.createElement("script");
-         n.src = scriptPath;
-         n.type = "text/javascript";
+         if ($.browser.Wii) {
 
-         // When the file is loaded
-         var fn = function() {
-            if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-               Console.debug("Loaded '" + scriptPath + "'");
-               Engine.handleScriptDone();
+            $.get(scriptPath, function(data) {
+
+               // Parse script code for syntax errors
+               if (Engine.parseSyntax(data)) {
+                  var n = document.createElement("script");
+                  n.type = "text/javascript";
+                  $(n).text(data);
+
+                  var h = document.getElementsByTagName("head")[0];
+                  h.appendChild(n);
+                  Engine.readyForNextScript = true;
+
+                  Console.debug("Loaded '" + scriptPath + "'");
+               }
+               
+            }, "text");
+         }  else {
+
+            // We'll use our own script loader so we can detect errors (i.e. missing files).
+            var n = document.createElement("script");
+            n.src = scriptPath;
+            n.type = "text/javascript";
+
+            // When the file is loaded
+            var fn = function() {
+               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+                  Console.debug("Loaded '" + scriptPath + "'");
+                  Engine.handleScriptDone();
+                  if (cb) {
+                     cb(simplePath, Engine.SCRIPT_LOADED);
+                  }
+                  if (!Engine.localMode) {
+                     // Delete the script node
+                     $(n).remove(); 
+                  }
+
+               }
+               Engine.readyForNextScript = true;
+            };
+
+            // When an error occurs
+            var eFn = function(msg) {
+               Console.error("File not found: ", scriptPath);
                if (cb) {
-                  cb(simplePath, Engine.SCRIPT_LOADED);
+                  cb(simplePath, Engine.SCRIPT_NOT_FOUND);
                }
-               if (!Engine.localMode) {
-                  // Delete the script node
-                  $(n).remove(); 
-               }
+               Engine.readyForNextScript = true;
+            };
 
+            if ($.browser.msie) {
+               n.defer = true;
+               n.onreadystatechange = fn;
+               n.onerror = eFn;
+            } else {
+               n.onload = fn;
+               n.onerror = eFn;
             }
-            Engine.readyForNextScript = true;
-         };
 
-         // When an error occurs
-         var eFn = function(msg) {
-            Console.error("File not found: ", scriptPath);
-            if (cb) {
-               cb(simplePath, Engine.SCRIPT_NOT_FOUND);
-            }
-            Engine.readyForNextScript = true;
-         };
-
-         if ($.browser.msie) {
-            n.defer = true;
-            n.onreadystatechange = fn;
-            n.onerror = eFn;
-         } else {
-            n.onload = fn;
-            n.onerror = eFn;
+            var h = document.getElementsByTagName("head")[0];
+            h.appendChild(n);
          }
 
-         var h = document.getElementsByTagName("head")[0];
-         h.appendChild(n);
       } else {
          // Already have this script
          Engine.readyForNextScript = true;
@@ -1613,9 +1635,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             if (gameObjectName) {
                Engine.gameRunTimer = setInterval(function() {
                   if (typeof window[gameObjectName] != "undefined" &&
-							 window[gameObjectName].setup) {
+                      window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
-							Console.warn("Starting: " + gameObjectName);
+                     Console.warn("Starting: " + gameObjectName);
                      window[gameObjectName].setup();
                   }
                }, 100);
@@ -1696,8 +1718,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Load the scripts required for the engine to run and
-    * initializes the sound engine.
+    * Load the scripts required for the engine to run.
     * @private
     * @memberOf Engine
     */
@@ -1733,171 +1754,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    clearScriptCache: function() {
       this.loadedScripts = {};
-   },
-
-   //====================================================================================================
-   //====================================================================================================
-   //                                     METRICS MANAGEMENT
-   //====================================================================================================
-   //====================================================================================================
-
-   /**
-    * Toggle the display of the metrics window.  Any metrics
-    * that are being tracked will be reported in this window.
-    * @memberOf Engine
-    */
-   toggleMetrics: function() {
-      this.showMetricsWindow = !this.showMetricsWindow;
-   },
-
-   /**
-    * Show the metrics window
-    * @memberOf Engine
-    */
-   showMetrics: function() {
-      this.showMetricsWindow = true;
-   },
-
-   /**
-    * Hide the metrics window
-    * @memberOf Engine
-    */
-   hideMetrics: function() {
-      this.showMetricsWindow = false;
-   },
-	
-	manMetrics: function() {
-		if ($("div.metric-button.minimize").length > 0) {
-			$("div.metric-button.minimize").removeClass("minimize").addClass("maximize");
-			$("div.metrics").css("height", 17);
-			$("div.metrics .items").hide();
-		} else {
-			$("div.metric-button.maximize").removeClass("maximize").addClass("minimize");
-			$("div.metrics .items").show();
-			$("div.metrics").css("height", "auto");
-		}
-	},
-
-   /**
-    * Creates a button for the metrics window
-    * @private
-    */
-   metricButton: function(cssClass, fn) {
-      return $("<div class='metric-button " + cssClass + "' title='" + cssClass + "'><!-- --></div>").click(fn);
-   },
-
-   /**
-    * Render the metrics window
-    * @private
-    */
-   renderMetrics: function() {
-
-      if (this.showMetricsWindow && !this.metricDisplay) {
-         this.metricDisplay = $("<div/>").addClass("metrics");
-         this.metricDisplay.append(this.metricButton("run", function() { Engine.run(); }));
-         this.metricDisplay.append(this.metricButton("pause", function() { Engine.pause(); }));
-         this.metricDisplay.append(this.metricButton("shutdown", function() { Engine.shutdown(); }));
-         this.metricDisplay.append(this.metricButton("minimize", function() { Engine.manMetrics(); }));
-
-         this.metricDisplay.append($("<div class='items'/>"));
-         this.metricDisplay.appendTo($("body"));
-      }
-      else if (!this.showMetricsWindow && this.metricDisplay) {
-         this.metricDisplay.remove();
-         this.metricDisplay = null;
-      }
-
-      if (this.showMetricsWindow && this.lastMetricSample-- == 0)
-      {
-         // Add some metrics to assist the developer
-         var d = new Date().getTime() - Engine.worldTime;
-         Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
-         Engine.addMetric("aFPS", Math.floor((1 / d) * 1000), true, "#");
-         Engine.addMetric("avail", this.fpsClock, false, "#ms");
-         Engine.addMetric("frame", d, true, "#ms");
-         Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
-         Engine.addMetric("visObj", Engine.vObj, false, "#");
-
-         this.updateMetrics();
-         this.lastMetricSample = this.metricSampleRate;
-      }
-   },
-
-   /**
-    * Set the interval at which metrics are sampled by the system.
-    * The default is for metrics to be calculated every 10 engine frames.
-    *
-    * @param sampleRate {Number} The number of ticks between samples
-    * @memberOf Engine
-    */
-   setMetricSampleRate: function(sampleRate) {
-      this.lastMetricSample = 1;
-      this.metricSampleRate = sampleRate;
-   },
-
-   /**
-    * Add a metric to the game engine that can be displayed
-    * while it is running.  If smoothing is selected, a 3 point
-    * running average will be used to smooth out jitters in the
-    * value that is shown.  For the <tt>value</tt> argument,
-    * you can provide a string which contains the pound sign "#"
-    * that will be used to determine where the calculated value will
-    * occur in the formatted string.
-    *
-    * @param metricName {String} The name of the metric to track
-    * @param value {String/Number} The value of the metric.
-    * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
-    * @memberOf Engine
-    */
-   addMetric: function(metricName, value, smoothing, fmt) {
-      if (smoothing) {
-         var vals = this.metrics[metricName] ? this.metrics[metricName].values : [];
-         if (vals.length == 0) {
-            // Init
-            vals.push(value);
-            vals.push(value);
-            vals.push(value);
-         }
-         vals.shift();
-         vals.push(value);
-         var v = Math.floor((vals[0] + vals[1] + vals[2]) * 0.33);
-         this.metrics[metricName] = { val: fmt.replace("#", v), values: vals };
-      } else {
-         this.metrics[metricName] = { val: fmt.replace("#", value) };
-      }
-   },
-
-   /**
-    * Remove a metric from the display
-    *
-    * @param metricName {String} The name of the metric to remove
-    * @memberOf Engine
-    */
-   removeMetric: function(metricName) {
-      this.metrics[metricName] = null;
-      delete this.metrics[metricName];
-   },
-
-   /**
-    * Updates the display of the metrics window.
-    * @private
-    * @memberOf Engine
-    */
-   updateMetrics: function() {
-      var h = "";
-      for (var m in this.metrics)
-      {
-         h += m + ": " + this.metrics[m].val + "<br/>";
-      }
-      $(".items", this.metricDisplay).html(h);
-   },
-
-   /**
-    * Prints the version of the engine.
-    * @memberOf Engine
-    */
-   toString: function() {
-      return "The Render Engine " + this.version;
    },
 
    //====================================================================================================
@@ -2318,8 +2174,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          unresDeps += "Object '" + obj + "' has the following unresolved dependencies:\n";
          for (var d in Engine.dependencyList[obj].deps) {
             unresDeps += "   " + Engine.dependencyList[obj].deps[d] + "\n";
-				// Display the dependencies we found for this object
-				
+            // Display the dependencies we found for this object
+            
          }
          unresDeps += "\n";
       }
@@ -2338,6 +2194,200 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    dumpDependencies: function() {
       Console.debug(Engine.dependencyList);
+   },
+
+   //====================================================================================================
+   //====================================================================================================
+   //                                         SYNTAX PARSER
+   //====================================================================================================
+   //====================================================================================================
+   
+   /**
+    * Parse a javascript file for common syntax errors which might otherwise cause a script
+    * to not load.  On platforms, such as Wii and iPhone, it might not be possible to see
+    * errors which cause the code to not compile.  By checking a known set of possible errors,
+    * it might be possible to reduce headaches on those platforms when developing.
+    * @private
+    */
+   parseSyntax: function(jsCode) {
+      // Clean the source first so we only have code
+      jsCode = EngineSupport.cleanSource(jsCode);
+      
+      // Check for the following:
+      // * Extra comma after last item in Object definition
+      // * Variable comparison in assignment statement
+      // * Missing comma between items in Object definition
+      // * Missing colon between name and definition
+      // * Equal sign where colon expected
+      // * Try without catch and finally
+      // * Strings with line-breaks
+      
+      return true;   
+   },
+
+   //====================================================================================================
+   //====================================================================================================
+   //                                     METRICS MANAGEMENT
+   //====================================================================================================
+   //====================================================================================================
+
+   /**
+    * Toggle the display of the metrics window.  Any metrics
+    * that are being tracked will be reported in this window.
+    * @memberOf Engine
+    */
+   toggleMetrics: function() {
+      this.showMetricsWindow = !this.showMetricsWindow;
+   },
+
+   /**
+    * Show the metrics window
+    * @memberOf Engine
+    */
+   showMetrics: function() {
+      this.showMetricsWindow = true;
+   },
+
+   /**
+    * Hide the metrics window
+    * @memberOf Engine
+    */
+   hideMetrics: function() {
+      this.showMetricsWindow = false;
+   },
+   
+   manMetrics: function() {
+      if ($("div.metric-button.minimize").length > 0) {
+         $("div.metric-button.minimize").removeClass("minimize").addClass("maximize").attr("title", "maximize");
+         $("div.metrics").css("height", 17);
+         $("div.metrics .items").hide();
+      } else {
+         $("div.metric-button.maximize").removeClass("maximize").addClass("minimize").attr("title", "minimize");
+         $("div.metrics .items").show();
+         $("div.metrics").css("height", "auto");
+      }
+   },
+
+   /**
+    * Creates a button for the metrics window
+    * @private
+    */
+   metricButton: function(cssClass, fn) {
+      return $("<div class='metric-button " + cssClass + "' title='" + cssClass + "'><!-- --></div>").click(fn);
+   },
+
+   /**
+    * Render the metrics window
+    * @private
+    */
+   renderMetrics: function() {
+
+      if (this.showMetricsWindow && !this.metricDisplay) {
+         this.metricDisplay = $("<div/>").addClass("metrics");
+         this.metricDisplay.append(this.metricButton("run", function() { Engine.run(); }));
+         this.metricDisplay.append(this.metricButton("pause", function() { Engine.pause(); }));
+         this.metricDisplay.append(this.metricButton("shutdown", function() { Engine.shutdown(); }));
+         this.metricDisplay.append(this.metricButton("minimize", function() { Engine.manMetrics(); }));
+
+         this.metricDisplay.append($("<div class='items'/>"));
+         this.metricDisplay.appendTo($("body"));
+      }
+      else if (!this.showMetricsWindow && this.metricDisplay) {
+         this.metricDisplay.remove();
+         this.metricDisplay = null;
+      }
+
+      if (this.showMetricsWindow && this.lastMetricSample-- == 0)
+      {
+         // Add some metrics to assist the developer
+         var d = new Date().getTime() - Engine.worldTime;
+         Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
+         Engine.addMetric("aFPS", Math.floor((1 / d) * 1000), true, "#");
+         Engine.addMetric("avail", this.fpsClock, false, "#ms");
+         Engine.addMetric("frame", d, true, "#ms");
+         Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
+         Engine.addMetric("visObj", Engine.vObj, false, "#");
+
+         this.updateMetrics();
+         this.lastMetricSample = this.metricSampleRate;
+      }
+   },
+
+   /**
+    * Set the interval at which metrics are sampled by the system.
+    * The default is for metrics to be calculated every 10 engine frames.
+    *
+    * @param sampleRate {Number} The number of ticks between samples
+    * @memberOf Engine
+    */
+   setMetricSampleRate: function(sampleRate) {
+      this.lastMetricSample = 1;
+      this.metricSampleRate = sampleRate;
+   },
+
+   /**
+    * Add a metric to the game engine that can be displayed
+    * while it is running.  If smoothing is selected, a 3 point
+    * running average will be used to smooth out jitters in the
+    * value that is shown.  For the <tt>value</tt> argument,
+    * you can provide a string which contains the pound sign "#"
+    * that will be used to determine where the calculated value will
+    * occur in the formatted string.
+    *
+    * @param metricName {String} The name of the metric to track
+    * @param value {String/Number} The value of the metric.
+    * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
+    * @memberOf Engine
+    */
+   addMetric: function(metricName, value, smoothing, fmt) {
+      if (smoothing) {
+         var vals = this.metrics[metricName] ? this.metrics[metricName].values : [];
+         if (vals.length == 0) {
+            // Init
+            vals.push(value);
+            vals.push(value);
+            vals.push(value);
+         }
+         vals.shift();
+         vals.push(value);
+         var v = Math.floor((vals[0] + vals[1] + vals[2]) * 0.33);
+         this.metrics[metricName] = { val: fmt.replace("#", v), values: vals };
+      } else {
+         this.metrics[metricName] = { val: fmt.replace("#", value) };
+      }
+   },
+
+   /**
+    * Remove a metric from the display
+    *
+    * @param metricName {String} The name of the metric to remove
+    * @memberOf Engine
+    */
+   removeMetric: function(metricName) {
+      this.metrics[metricName] = null;
+      delete this.metrics[metricName];
+   },
+
+   /**
+    * Updates the display of the metrics window.
+    * @private
+    * @memberOf Engine
+    */
+   updateMetrics: function() {
+      var h = "";
+      for (var m in this.metrics)
+      {
+         h += m + ": " + this.metrics[m].val + "<br/>";
+      }
+      $(".items", this.metricDisplay).html(h);
+   },
+
+   /**
+    * Prints the version of the engine.
+    * @memberOf Engine
+    */
+   toString: function() {
+      return "The Render Engine " + this.version;
    },
 
    //====================================================================================================
