@@ -1,4 +1,4 @@
-The Render Engine v1.2b [January 11, 2009]
+The Render Engine v1.3b [January 16, 2009]
 (c)2009 Brett Fattori (bfattori AT gmail DOT com)
 
 ---------------------------------------------------------

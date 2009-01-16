@@ -2,15 +2,14 @@
  * The Render Engine
  * Wii Testing
  *
- * Some simple tests for the Wii
- *
+ * A simple game of bouncing balls
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +34,6 @@
 // Load all required engine components
 Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/resourceloaders/loader.image.js");
 Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
 
@@ -46,46 +44,30 @@ Game.load("/wiiball.js");
 Engine.initObject("WiiTest", "Game", function(){
 
    /**
-    * @class The game.
+    * @class Wii ball bounce game.  Press the A button over a ball
+    *        to make it bounce.  Press A when not over a ball to create
+    *        another ball.
     */
    var WiiTest = Game.extend({
    
       constructor: null,
       
+      // The rendering context
       renderContext: null,
       
-      fieldBox: null,
-      areaScale: 1.0,
-      
+      // Engine frames per second
       engineFPS: 60,
       
+      // The play field
+      fieldBox: null,
       fieldWidth: 800,
       fieldHeight: 460,
+
+      // Sprite resource loader
       spriteLoader: null,
-      imageLoader: null,
       
+      // The collision model
       cModel: null,
-      
-      
-      /**
-       * Handle the keypress which starts the game
-       *
-       * @param event {Event} The event object
-       onKeyPress: function(event) {
-       if (event.keyCode == EventEngine.KEYCODE_ENTER)
-       {
-       Spaceroids.startGame();
-       }
-       },
-       */
-      /**
-       * This method is being used to clean up the demo container.
-       * Each demo is loaded into this container, and when a demo
-       * is unloaded we can call this method to clean it up.
-       */
-      cleanup: function(){
-         this.renderContext.cleanUp();
-      },
       
       /**
        * Called to set up the game, download any resources, and initialize
@@ -96,10 +78,6 @@ Engine.initObject("WiiTest", "Game", function(){
          Engine.setFPS(this.engineFPS);
          
          this.spriteLoader = SpriteLoader.create();
-         this.imageLoader = ImageLoader.create();
-         
-         // Load the music
-         //      this.soundLoader.load("bgm", this.getFilePath("resources/smblvl1.mp3"));
          
          // Load the sprites
          this.spriteLoader.load("redball", this.getFilePath("resources/redball.js"));
@@ -114,8 +92,7 @@ Engine.initObject("WiiTest", "Game", function(){
        * @private
        */
       waitForResources: function(){
-         if (WiiTest.imageLoader.isReady() &&
-            WiiTest.spriteLoader.isReady()) {
+         if (WiiTest.spriteLoader.isReady()) {
                WiiTest.loadTimeout.destroy();
                WiiTest.run();
                return;
@@ -134,16 +111,17 @@ Engine.initObject("WiiTest", "Game", function(){
          this.renderContext.destroy();
       },
       
+      /**
+       * Run the game
+       */
       run: function(){
+         // Remove the "loading" message
          $("#loading").remove();
          
          // Create the render context
          this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-         
-         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
-         
          this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
          this.renderContext.jQ().css({
             border: "1px solid red",
@@ -152,25 +130,36 @@ Engine.initObject("WiiTest", "Game", function(){
             right: 0,
             bottom: 0});
          Engine.getDefaultContext().add(this.renderContext);
-         WiiTest.play();
-      },
-      
-      play: function(){
+
+         // Create the collision model with 5x5 divisions
+         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
+
+         // Add the first ball
          var ball = WiiBall.create();
          this.getRenderContext().add(ball);
          
+         // Add the player object
          var player = WiiHost.create();
          this.getRenderContext().add(player);
       },
       
+      /**
+       * Return a reference to the render context
+       */
       getRenderContext: function(){
          return this.renderContext;
       },
       
+      /**
+       * Return a reference to the playfield box
+       */
       getFieldBox: function() {
          return this.fieldBox;
       },
       
+      /**
+       * return a reference to the collision model
+       */
       getCModel: function() {
          return this.cModel;
       }
