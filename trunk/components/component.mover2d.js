@@ -61,14 +61,17 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	maxVelocity: 0,
 
 	acceleration: null,
+	
+	gravity: null,
 
    constructor: function(name, priority) {
       this.base(name, priority || 1.0);
-      this.velocity = new Vector2D(0,0);
-      this.acceleration = new Vector2D(0,0);
-      this.lPos = new Point2D(0,0);
+      this.velocity = Vector2D.create(0,0);
+      this.acceleration = Vector2D.create(0,0);
+      this.lPos = Point2D.create(0,0);
       this.vDecay = 0;
 		this.maxVelocity = -1;
+		this.gravity = Vector2D.create(0,0);
    },
 
    release: function() {
@@ -80,6 +83,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.lPos = null;
 		this.maxVelocity = -1;
 		this.acceleration = null;
+		this.gravity = null;
    },
 
    /**
@@ -117,6 +121,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
          var diff = (time - this.lastTime) * 0.1;
 			var oldVel = Vector2D.create(this.velocity);
 			this.velocity.add(this.getAcceleration());
+			this.velocity.add(this.getGravity());
 			if (this.maxVelocity != -1 && this.velocity.len() > this.maxVelocity) {
 				this.velocity.set(oldVel);
 			}
@@ -161,6 +166,22 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	 */
 	getAcceleration: function() {
 		return this.acceleration;
+	},
+	
+	/**
+	 * Set the vector of gravity.
+	 * @param vector {Vector2D} The gravity vector
+	 */
+	setGravity: function(vector) {
+		this.gravity.set(vector);
+	},
+	
+	/**
+	 * Get the gravity vector
+	 * @return {Vector2D} The gravity vector
+	 */
+	getGravity: function() {
+		return this.gravity;
 	},
 	
 	/**

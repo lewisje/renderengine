@@ -36,10 +36,12 @@
 Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/resourceloaders/loader.image.js");
+Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
 
 // Load game objects
 Game.load("/wiihost.js");
+Game.load("/wiiball.js");
 
 Engine.initObject("WiiTest", "Game", function(){
 
@@ -61,6 +63,8 @@ Engine.initObject("WiiTest", "Game", function(){
       fieldHeight: 460,
       spriteLoader: null,
       imageLoader: null,
+		
+		cModel: null,
       
       
       /**
@@ -138,6 +142,8 @@ Engine.initObject("WiiTest", "Game", function(){
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
          
+			this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 9);
+			
          this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
          this.renderContext.jQ().css({
             border: "1px solid red",
@@ -150,13 +156,24 @@ Engine.initObject("WiiTest", "Game", function(){
       },
       
       play: function(){
-         var player = WiiHost.create();
-         this.getRenderContext().add(player);
+	      var ball = WiiBall.create();
+	      this.getRenderContext().add(ball);
+			
+			var player = WiiHost.create();
+	      this.getRenderContext().add(player);
       },
       
       getRenderContext: function(){
          return this.renderContext;
-      }
+      },
+		
+		getFieldBox: function() {
+			return this.fieldBox;
+		},
+		
+		getCModel: function() {
+			return this.cModel;
+		}
       
    });
    
