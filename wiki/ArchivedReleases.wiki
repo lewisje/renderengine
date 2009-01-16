@@ -2,6 +2,11 @@
 
 See the ReleaseMilestones page for current development information.  The FutureGoals page is where the planning begins for the next major release.
 
+== Beta 1.3 (January 16, 2009) ==
+
+|| *Status* || *Goal* || *Description* ||
+|| _10%_ || Dev || Better handling of DOM as a viable render context.  Includes demo game which works on the Wii. ||
+
 == Beta 1.2 (January 11, 2009) ==
 
 || *Status* || *Goal* || *Description* ||
