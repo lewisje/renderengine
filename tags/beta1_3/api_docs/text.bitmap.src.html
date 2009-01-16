@@ -1,0 +1,292 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>text.bitmap.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>text.bitmap.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+A bitmap font renderer for render contexts that don't				  support fonts natively.
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="BitmapText.html" target="main">BitmapText</a>
+         </td>
+         <td>
+            
+A text renderer which draws text from a bitmap font file.
+         </td>
+      </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * BitmapText
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * @fileoverview A bitmap font renderer for render contexts that don't
+<span class='linenumber'>  6</span>  * 				  support fonts natively.
+<span class='linenumber'>  7</span>  *
+<span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'>  9</span>  * @author: $Author: bfattori $
+<span class='linenumber'> 10</span>  * @version: $Revision: 349 $
+<span class='linenumber'> 11</span>  *
+<span class='linenumber'> 12</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 13</span>  *
+<span class='linenumber'> 14</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 15</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 16</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 17</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 18</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 19</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 20</span>  *
+<span class='linenumber'> 21</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 22</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 23</span>  *
+<span class='linenumber'> 24</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 25</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 26</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 27</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 28</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 29</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 30</span>  * THE SOFTWARE.
+<span class='linenumber'> 31</span>  *
+<span class='linenumber'> 32</span>  */</span><span class="WHIT">
+<span class='linenumber'> 33</span> 
+<span class='linenumber'> 34</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 35</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.math2d.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 36</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/textrender/text.abstractrender.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 37</span> 
+<span class='linenumber'> 38</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"BitmapText"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"AbstractTextRenderer"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 39</span> 
+<span class='linenumber'> 40</span> </span><span class="COMM">/**
+<span class='linenumber'> 41</span>  * @class A text renderer which draws text from a bitmap font file.
+<span class='linenumber'> 42</span>  *
+<span class='linenumber'> 43</span>  * @constructor
+<span class='linenumber'> 44</span>  * @param font {Font} A resource obtained by calling {@link FontResourceLoader#get}
+<span class='linenumber'> 45</span>  * @extends AbstractTextRenderer
+<span class='linenumber'> 46</span>  * @see FontResourceLoader
+<span class='linenumber'> 47</span>  */</span><span class="WHIT">
+<span class='linenumber'> 48</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">BitmapText</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope BitmapText.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 49</span> 
+<span class='linenumber'> 50</span> </span><span class="WHIT">   </span><span class="NAME">font</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 51</span> 
+<span class='linenumber'> 52</span> </span><span class="WHIT">   </span><span class="NAME">spacing</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 53</span> 
+<span class='linenumber'> 54</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'> 55</span> 	 * @private
+<span class='linenumber'> 56</span> 	 */</span><span class="WHIT">
+<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">font</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 59</span> </span><span class="WHIT">      </span><span class="NAME">this.font</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">font</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 60</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 61</span> 
+<span class='linenumber'> 62</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'> 63</span> 	 * @private
+<span class='linenumber'> 64</span> 	 */</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">      </span><span class="NAME">this.font</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="WHIT">      </span><span class="NAME">this.spacing</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 70</span> 
+<span class='linenumber'> 71</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 72</span>     * Calculate the bounding box for the text and set it on the host object.
+<span class='linenumber'> 73</span>     * @private
+<span class='linenumber'> 74</span>     */</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="NAME">calculateBoundingBox</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 76</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 77</span> 
+<span class='linenumber'> 78</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 80</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 82</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.rText.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.rText</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 85</span> 
+<span class='linenumber'> 86</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pt.x</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 87</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 88</span> </span><span class="WHIT">            </span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pt.x</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 89</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pt.x</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">x2</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 92</span> </span><span class="WHIT">            </span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pt.x</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 93</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pt.y</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">            </span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pt.y</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 98</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">pt.y</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">y2</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>100</span> </span><span class="WHIT">            </span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">pt.y</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>101</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>102</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>103</span> 
+<span class='linenumber'>104</span> </span><span class="WHIT">      </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">setBoundingBox</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Rectangle2D</span><span class="PUNC">(</span><span class="NAME">x1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Math.abs</span><span class="PUNC">(</span><span class="NAME">x1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Math.abs</span><span class="PUNC">(</span><span class="NAME">y1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>105</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>106</span> 
+<span class='linenumber'>107</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>108</span>     * Set the text to render.
+<span class='linenumber'>109</span>     *
+<span class='linenumber'>110</span>     * @param text {String} The text to render
+<span class='linenumber'>111</span>     */</span><span class="WHIT">
+<span class='linenumber'>112</span> </span><span class="WHIT">   </span><span class="NAME">setText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>113</span> </span><span class="WHIT">      </span><span class="COMM">// If the font only supports uppercase letters</span><span class="WHIT">
+<span class='linenumber'>114</span> </span><span class="WHIT">      </span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.font.upperCaseOnly</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">String</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toUpperCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">text</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>115</span> 
+<span class='linenumber'>116</span> </span><span class="WHIT">      </span><span class="COMM">// Replace special chars</span><span class="WHIT">
+<span class='linenumber'>117</span> </span><span class="WHIT">      </span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">text.replace</span><span class="PUNC">(</span><span class="REGX">/&copy;/gi</span><span class="PUNC">,</span><span class="STRN">"(C)"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">replace</span><span class="PUNC">(</span><span class="REGX">/&reg;/gi</span><span class="PUNC">,</span><span class="STRN">"(R)"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>118</span> 
+<span class='linenumber'>119</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>120</span> 
+<span class='linenumber'>121</span> </span><span class="WHIT">      </span><span class="NAME">this.calculateBoundingBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>122</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>123</span> 
+<span class='linenumber'>124</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>125</span>     * @private
+<span class='linenumber'>126</span>     */</span><span class="WHIT">
+<span class='linenumber'>127</span> </span><span class="WHIT">   </span><span class="NAME">execute</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">renderContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>128</span> 
+<span class='linenumber'>129</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getText</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>132</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>133</span> 
+<span class='linenumber'>134</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getText</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">text.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getAlignment</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">letter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.ALIGN_RIGHT</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">text.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>138</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">kern</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.ALIGN_RIGHT</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NAME">this.font.info.kerning</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.font.info.kerning</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>139</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">space</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Point2D</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.ALIGN_RIGHT</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NAME">this.font.info.space</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this.font.info.space</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>140</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cW</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cH</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.font.info.height</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>141</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>142</span> 
+<span class='linenumber'>143</span> </span><span class="WHIT">      </span><span class="COMM">// Render the text</span><span class="WHIT">
+<span class='linenumber'>144</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Point2D</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>145</span> 
+<span class='linenumber'>146</span> </span><span class="WHIT">      </span><span class="COMM">// 1st pass: The text</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">      </span><span class="NAME">pc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Point2D</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">      </span><span class="NAME">letter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.ALIGN_RIGHT</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">text.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>149</span> </span><span class="WHIT">      </span><span class="NAME">lCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">text.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>150</span> 
+<span class='linenumber'>151</span> </span><span class="WHIT">      </span><span class="NAME">renderContext.get2DContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">globalCompositeOperation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"source-over"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="WHIT">      </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">lCount</span><span class="PUNC">--</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>153</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>154</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">glyph</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">text.charCodeAt</span><span class="PUNC">(</span><span class="NAME">letter</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">32</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">glyph</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>156</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>157</span> </span><span class="WHIT">            </span><span class="COMM">// A space</span><span class="WHIT">
+<span class='linenumber'>158</span> </span><span class="WHIT">            </span><span class="NAME">pc.add</span><span class="PUNC">(</span><span class="NAME">space</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>159</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>160</span> </span><span class="WHIT">         </span><span class="KEYW">else</span><span class="WHIT">
+<span class='linenumber'>161</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>162</span> </span><span class="WHIT">            </span><span class="COMM">// Draw the text</span><span class="WHIT">
+<span class='linenumber'>163</span> </span><span class="WHIT">            </span><span class="NAME">cS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.font.info.letters</span><span class="PUNC">[</span><span class="NAME">glyph</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="WHIT">            </span><span class="NAME">cW</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.font.info.letters</span><span class="PUNC">[</span><span class="NAME">glyph</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">cS</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">            </span><span class="COMM">//debugger;</span><span class="WHIT">
+<span class='linenumber'>166</span> </span><span class="WHIT">            </span><span class="NAME">renderContext.get2DContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">drawImage</span><span class="PUNC">(</span><span class="NAME">this.font.image</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cS</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cW</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cH</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pc.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pc.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cW</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cH</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>167</span> </span><span class="WHIT">            </span><span class="NAME">pc.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Point2D</span><span class="PUNC">(</span><span class="NAME">cW</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">mul</span><span class="PUNC">(</span><span class="NAME">kern</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>168</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>169</span> 
+<span class='linenumber'>170</span> </span><span class="WHIT">         </span><span class="NAME">letter</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.ALIGN_RIGHT</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>171</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>172</span> 
+<span class='linenumber'>173</span> </span><span class="WHIT">      </span><span class="COMM">// 2nd pass: The color</span><span class="WHIT">
+<span class='linenumber'>174</span> </span><span class="WHIT">      </span><span class="NAME">renderContext.get2DContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">globalCompositeOperation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"source-atop"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>175</span> </span><span class="WHIT">      </span><span class="NAME">lCount</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">text.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">      </span><span class="NAME">pc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Point2D</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>177</span> </span><span class="WHIT">      </span><span class="NAME">letter</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.ALIGN_RIGHT</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">text.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>178</span> </span><span class="WHIT">      </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">lCount</span><span class="PUNC">--</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>179</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>180</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">glyph</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">text.charCodeAt</span><span class="PUNC">(</span><span class="NAME">letter</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">32</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>181</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">glyph</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>182</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>183</span> </span><span class="WHIT">            </span><span class="COMM">// A space</span><span class="WHIT">
+<span class='linenumber'>184</span> </span><span class="WHIT">            </span><span class="NAME">pc.add</span><span class="PUNC">(</span><span class="NAME">space</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>185</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">         </span><span class="KEYW">else</span><span class="WHIT">
+<span class='linenumber'>187</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>188</span> </span><span class="WHIT">            </span><span class="COMM">// Draw a box the color we want and the size of the character</span><span class="WHIT">
+<span class='linenumber'>189</span> </span><span class="WHIT">            </span><span class="NAME">cS</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.font.info.letters</span><span class="PUNC">[</span><span class="NAME">glyph</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>190</span> </span><span class="WHIT">            </span><span class="NAME">cW</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.font.info.letters</span><span class="PUNC">[</span><span class="NAME">glyph</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">cS</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>191</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Rectangle2D</span><span class="PUNC">(</span><span class="NAME">pc.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pc.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cW</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cH</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>192</span> </span><span class="WHIT">            </span><span class="NAME">renderContext.setFillStyle</span><span class="PUNC">(</span><span class="NAME">this.getColor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>193</span> </span><span class="WHIT">            </span><span class="NAME">renderContext.drawFilledRectangle</span><span class="PUNC">(</span><span class="NAME">r</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>194</span> </span><span class="WHIT">            </span><span class="NAME">pc.add</span><span class="PUNC">(</span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Point2D</span><span class="PUNC">(</span><span class="NAME">cW</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">mul</span><span class="PUNC">(</span><span class="NAME">kern</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>195</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>196</span> 
+<span class='linenumber'>197</span> </span><span class="WHIT">         </span><span class="NAME">letter</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">align</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">AbstractTextRenderer.ALIGN_RIGHT</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>198</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>199</span> 
+<span class='linenumber'>200</span> 
+<span class='linenumber'>201</span> </span><span class="WHIT">      </span><span class="COMM">// Reset the composition operation</span><span class="WHIT">
+<span class='linenumber'>202</span> </span><span class="WHIT">      </span><span class="NAME">renderContext.get2DContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">globalCompositeOperation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"source-over"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>203</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>204</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope BitmapText.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>205</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>206</span>     * Get the class name of this object
+<span class='linenumber'>207</span>     * @return {String} The string "BitmapText"
+<span class='linenumber'>208</span>     */</span><span class="WHIT">
+<span class='linenumber'>209</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"BitmapText"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>211</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>212</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>213</span> 
+<span class='linenumber'>214</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">BitmapText</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>215</span> 
+<span class='linenumber'>216</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>217</span> </span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:00 GMT-0500 (EST)</div>
+</body>
+</html>

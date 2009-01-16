@@ -1,0 +1,1628 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: CanvasContext</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class CanvasContext</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='Container.html' target='main'>Container</a>
+            |
+            +--<a href='RenderContext.html' target='main'>RenderContext</a>
+               |
+               +--<a href='RenderContext2D.html' target='main'>RenderContext2D</a>
+                  |
+                  +--<b>CanvasContext</b></pre>
+   <hr>
+   Class <b>CanvasContext</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="RenderContext2D.html">RenderContext2D</a>.<br/>
+
+<p>
+A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D context which can render lines, images, and polygons.  Transformationscan be saved and restored, allowing for complex, stacked transformations.</p>
+
+
+
+<br/><i>Defined in <a href="context.canvascontext.src.html">context.canvascontext.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#CanvasContext">CanvasContext</a></b>()
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#afterAdd">afterAdd</a></b>(parent) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#arcTo">arcTo</a></b>(point1, point2, radius) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an arc from the current point to the specified point.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#bezierCurveTo">bezierCurveTo</a></b>(cPoint1, cPoint2, point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a bezier curve from the current point to the specified point.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawArc">drawArc</a></b>(point, radius, startAngle, endAngle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an un-filled arc on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawFilledArc">drawFilledArc</a></b>(point, radius, startAngle, endAngle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a filled arc on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawFilledRectangle">drawFilledRectangle</a></b>(rect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a filled rectangle on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawImage">drawImage</a></b>(rect, image, srcRect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an image on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawLine">drawLine</a></b>(point1, point2) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a line on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawPoint">drawPoint</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a point on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawRectangle">drawRectangle</a></b>(rect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an un-filled rectangle on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawSprite">drawSprite</a></b>(point, sprite) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a sprite on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawText">drawText</a></b>(point, text) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw text on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#endPath">endPath</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End a path.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#fillPath">fillPath</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fill a path using the current fill style.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#get2DContext">get2DContext</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets the surface context upon which all objects are drawn.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getDataURL">getDataURL</a></b>(format) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Useful method which returns a data URL which represents thecurrent state of the canvas context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getImage">getImage</a></b>(rect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Capture an image from the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#lineTo">lineTo</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a line from the current point to the point specified.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#moveTo">moveTo</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Move the current path to the point sepcified.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#popTransform">popTransform</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pop a transform state off the stack.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#pushTransform">pushTransform</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Push a transform state onto the stack.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#putImage">putImage</a></b>(imageData, point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an image, captured with <a href='#getImage'>getImage</a>, tothe context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#quadraticCurveTo">quadraticCurveTo</a></b>(cPoint, point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a quadratic curve from the current point to the specified point.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#reset">reset</a></b>(rect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reset the context, clearing it and preparing it for drawing.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setBackgroundColor">setBackgroundColor</a></b>(color) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the background color of the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setFillStyle">setFillStyle</a></b>(fillStyle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the fill style of the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setLineStyle">setLineStyle</a></b>(lineStyle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the line style for the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setLineWidth">setLineWidth</a></b>(width) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the line width for drawing paths.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setPosition">setPosition</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the current transform position (translation).
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setRotation">setRotation</a></b>(angle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the rotation angle of the current transform
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setScale">setScale</a></b>(scaleX, scaleY) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the scale of the current transform.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setTransform">setTransform</a></b>(matrix) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the transformation using a matrix.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setupWorld">setupWorld</a></b>(time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setWorldScale">setWorldScale</a></b>(scaleX, scaleY) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#startPath">startPath</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Start a path.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#strokePath">strokePath</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stroke a path using the current line style and width.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="RenderContext.html">RenderContext</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="RenderContext.html#destroy">destroy</a>,
+            
+               <a href="RenderContext.html#setSurface">setSurface</a>,
+            
+               <a href="RenderContext.html#getSurface">getSurface</a>,
+            
+               <a href="RenderContext.html#setWorldRotation">setWorldRotation</a>,
+            
+               <a href="RenderContext.html#setWorldPosition">setWorldPosition</a>,
+            
+               <a href="RenderContext.html#getWorldScale">getWorldScale</a>,
+            
+               <a href="RenderContext.html#getWorldRotation">getWorldRotation</a>,
+            
+               <a href="RenderContext.html#getWorldPosition">getWorldPosition</a>,
+            
+               <a href="RenderContext.html#setViewport">setViewport</a>,
+            
+               <a href="RenderContext.html#getViewport">getViewport</a>,
+            
+               <a href="RenderContext.html#add">add</a>,
+            
+               <a href="RenderContext.html#getContextData">getContextData</a>,
+            
+               <a href="RenderContext.html#sort">sort</a>,
+            
+               <a href="RenderContext.html#update">update</a>,
+            
+               <a href="RenderContext.html#render">render</a>,
+            
+               <a href="RenderContext.html#renderObject">renderObject</a>,
+            
+               <a href="RenderContext.html#resetTransformStack">resetTransformStack</a>,
+            
+               <a href="RenderContext.html#getNearObjects">getNearObjects</a>,
+            
+               <a href="RenderContext.html#sortFn">sortFn</a>,
+            
+               <a href="RenderContext.html#getClassName">getClassName</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="RenderContext2D.html">RenderContext2D</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="RenderContext2D.html#constructor">constructor</a>,
+            
+               <a href="RenderContext2D.html#getBackgroundColor">getBackgroundColor</a>,
+            
+               <a href="RenderContext2D.html#setWidth">setWidth</a>,
+            
+               <a href="RenderContext2D.html#getWidth">getWidth</a>,
+            
+               <a href="RenderContext2D.html#setHeight">setHeight</a>,
+            
+               <a href="RenderContext2D.html#getHeight">getHeight</a>,
+            
+               <a href="RenderContext2D.html#getBoundingBox">getBoundingBox</a>,
+            
+               <a href="RenderContext2D.html#getPosition">getPosition</a>,
+            
+               <a href="RenderContext2D.html#getRotation">getRotation</a>,
+            
+               <a href="RenderContext2D.html#getScaleX">getScaleX</a>,
+            
+               <a href="RenderContext2D.html#getScaleY">getScaleY</a>,
+            
+               <a href="RenderContext2D.html#setRenderTransform">setRenderTransform</a>,
+            
+               <a href="RenderContext2D.html#getRenderPosition">getRenderPosition</a>,
+            
+               <a href="RenderContext2D.html#getRenderRotation">getRenderRotation</a>,
+            
+               <a href="RenderContext2D.html#getRenderScale">getRenderScale</a>,
+            
+               <a href="RenderContext2D.html#getLineStyle">getLineStyle</a>,
+            
+               <a href="RenderContext2D.html#getLineWidth">getLineWidth</a>,
+            
+               <a href="RenderContext2D.html#getFillStyle">getFillStyle</a>,
+            
+               <a href="RenderContext2D.html#drawPolygon">drawPolygon</a>,
+            
+               <a href="RenderContext2D.html#drawPolyline">drawPolyline</a>,
+            
+               <a href="RenderContext2D.html#drawFilledPolygon">drawFilledPolygon</a>,
+            
+               <a href="RenderContext2D.html#lineSeg">lineSeg</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Container.html">Container</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#remove">remove</a>,
+            
+               <a href="Container.html#removeAtIndex">removeAtIndex</a>,
+            
+               <a href="Container.html#get">get</a>,
+            
+               <a href="Container.html#clear">clear</a>,
+            
+               <a href="Container.html#cleanUp">cleanUp</a>,
+            
+               <a href="Container.html#getObjects">getObjects</a>,
+            
+               <a href="Container.html#getProperties">getProperties</a>,
+            
+               <a href="Container.html#toString">toString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="CanvasContext"> </a>
+<h3>CanvasContext</h3>
+
+   <pre><b>CanvasContext</b>()</pre>
+   <ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="afterAdd"> </a> <h3>afterAdd</h3>
+      <pre><b>afterAdd</b>(parent)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>parent </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="arcTo"> </a> <h3>arcTo</h3>
+      <pre><b>arcTo</b>(point1, point2, radius)</pre> 
+   <ul>
+      Draw an arc from the current point to the specified point.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point1 </code> - Arc point 1 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point2 </code> - Arc point 2 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;radius </code> - The radius of the arc 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="bezierCurveTo"> </a> <h3>bezierCurveTo</h3>
+      <pre><b>bezierCurveTo</b>(cPoint1, cPoint2, point)</pre> 
+   <ul>
+      Draw a bezier curve from the current point to the specified point.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;cPoint1 </code> - Control point 1 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;cPoint2 </code> - Control point 2 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to draw to 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawArc"> </a> <h3>drawArc</h3>
+      <pre><b>drawArc</b>(point, radius, startAngle, endAngle)</pre> 
+   <ul>
+      Draw an un-filled arc on the context.  Arcs are drawn in clockwiseorder.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point around which the arc will be drawn 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;radius </code> - The radius of the arc in pixels 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;startAngle </code> - The starting angle of the arc in degrees 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;endAngle </code> - The end angle of the arc in degrees 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawFilledArc"> </a> <h3>drawFilledArc</h3>
+      <pre><b>drawFilledArc</b>(point, radius, startAngle, endAngle)</pre> 
+   <ul>
+      Draw a filled arc on the context.  Arcs are drawn in clockwiseorder.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point around which the arc will be drawn 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;radius </code> - The radius of the arc in pixels 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;startAngle </code> - The starting angle of the arc in degrees 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;endAngle </code> - The end angle of the arc in degrees 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawFilledRectangle"> </a> <h3>drawFilledRectangle</h3>
+      <pre><b>drawFilledRectangle</b>(rect)</pre> 
+   <ul>
+      Draw a filled rectangle on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle to draw 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawImage"> </a> <h3>drawImage</h3>
+      <pre><b>drawImage</b>(rect, image, srcRect)</pre> 
+   <ul>
+      Draw an image on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that specifies the position and            dimensions of the image rectangle. 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;image </code> - The image to draw onto the context 
+      </ul>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;srcRect </code> - <i>[optional]</i> The source rectangle within the image, if               <tt>null</tt> the entire image is used 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawLine"> </a> <h3>drawLine</h3>
+      <pre><b>drawLine</b>(point1, point2)</pre> 
+   <ul>
+      Draw a line on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point1 </code> - The start of the line 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point2 </code> - The end of the line 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawPoint"> </a> <h3>drawPoint</h3>
+      <pre><b>drawPoint</b>(point)</pre> 
+   <ul>
+      Draw a point on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The position to draw the point 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawRectangle"> </a> <h3>drawRectangle</h3>
+      <pre><b>drawRectangle</b>(rect)</pre> 
+   <ul>
+      Draw an un-filled rectangle on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle to draw 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawSprite"> </a> <h3>drawSprite</h3>
+      <pre><b>drawSprite</b>(point, sprite)</pre> 
+   <ul>
+      Draw a sprite on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The top-left position to draw the image. 
+      </ul>
+      <ul>
+         <code>[<i>Image</i>]&nbsp;sprite </code> - The sprite to draw 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawText"> </a> <h3>drawText</h3>
+      <pre><b>drawText</b>(point, text)</pre> 
+   <ul>
+      Draw text on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The top-left position to draw the image. 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;text </code> - The text to draw 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="endPath"> </a> <h3>endPath</h3>
+      <pre><b>endPath</b>()</pre> 
+   <ul>
+      End a path.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="fillPath"> </a> <h3>fillPath</h3>
+      <pre><b>fillPath</b>()</pre> 
+   <ul>
+      Fill a path using the current fill style.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="get2DContext"> </a> <h3>get2DContext</h3>
+      <pre><b>get2DContext</b>()</pre> 
+   <ul>
+      Gets the surface context upon which all objects are drawn.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getDataURL"> </a> <h3>getDataURL</h3>
+      <pre>String&nbsp;<b>getDataURL</b>(format)</pre> 
+   <ul>
+      Useful method which returns a data URL which represents thecurrent state of the canvas context.  The URL can be passed toan image element. <i>Note: Only works in Firefox and Opera!</i>
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;format </code> - The format of the output, or <tt>null</tt> for					 the PNG default. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The data URL 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getImage"> </a> <h3>getImage</h3>
+      <pre>&nbsp;<b>getImage</b>(rect)</pre> 
+   <ul>
+      Capture an image from the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The area to capture 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code>Image data capture 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="lineTo"> </a> <h3>lineTo</h3>
+      <pre><b>lineTo</b>(point)</pre> 
+   <ul>
+      Draw a line from the current point to the point specified.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to draw a line to 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="moveTo"> </a> <h3>moveTo</h3>
+      <pre><b>moveTo</b>(point)</pre> 
+   <ul>
+      Move the current path to the point sepcified.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to move to 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="popTransform"> </a> <h3>popTransform</h3>
+      <pre><b>popTransform</b>()</pre> 
+   <ul>
+      Pop a transform state off the stack.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="pushTransform"> </a> <h3>pushTransform</h3>
+      <pre><b>pushTransform</b>()</pre> 
+   <ul>
+      Push a transform state onto the stack.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="putImage"> </a> <h3>putImage</h3>
+      <pre><b>putImage</b>(imageData, point)</pre> 
+   <ul>
+      Draw an image, captured with <a href='#getImage'>getImage</a>, tothe context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>ImageData</i>]&nbsp;imageData </code> - Image data captured 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The poisition at which to draw the image 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="quadraticCurveTo"> </a> <h3>quadraticCurveTo</h3>
+      <pre><b>quadraticCurveTo</b>(cPoint, point)</pre> 
+   <ul>
+      Draw a quadratic curve from the current point to the specified point.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;cPoint </code> - The control point 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to draw to 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="reset"> </a> <h3>reset</h3>
+      <pre><b>reset</b>(rect)</pre> 
+   <ul>
+      Reset the context, clearing it and preparing it for drawing.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>rect </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setBackgroundColor"> </a> <h3>setBackgroundColor</h3>
+      <pre><b>setBackgroundColor</b>(color)</pre> 
+   <ul>
+      Set the background color of the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;color </code> - An HTML color 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setFillStyle"> </a> <h3>setFillStyle</h3>
+      <pre><b>setFillStyle</b>(fillStyle)</pre> 
+   <ul>
+      Set the fill style of the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;fillStyle </code> - An HTML color, or <tt>null</tt>. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setLineStyle"> </a> <h3>setLineStyle</h3>
+      <pre><b>setLineStyle</b>(lineStyle)</pre> 
+   <ul>
+      Set the line style for the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;lineStyle </code> - An HTML color or <tt>null</tt> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setLineWidth"> </a> <h3>setLineWidth</h3>
+      <pre><b>setLineWidth</b>(width)</pre> 
+   <ul>
+      Set the line width for drawing paths.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;width </code> - The width of lines in pixels 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setPosition"> </a> <h3>setPosition</h3>
+      <pre><b>setPosition</b>(point)</pre> 
+   <ul>
+      Set the current transform position (translation).
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The translation 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setRotation"> </a> <h3>setRotation</h3>
+      <pre><b>setRotation</b>(angle)</pre> 
+   <ul>
+      Set the rotation angle of the current transform
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;angle </code> - An angle in degrees 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setScale"> </a> <h3>setScale</h3>
+      <pre><b>setScale</b>(scaleX, scaleY)</pre> 
+   <ul>
+      Set the scale of the current transform.  Specifyingonly the first parameter implies a uniform scale.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;scaleX </code> - The X scaling factor, with 1 being 100% 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;scaleY </code> - The Y scaling factor 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setTransform"> </a> <h3>setTransform</h3>
+      <pre><b>setTransform</b>(matrix)</pre> 
+   <ul>
+      Set the transformation using a matrix.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Matrix2D</i>]&nbsp;matrix </code> - The transformation matrix 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setupWorld"> </a> <h3>setupWorld</h3>
+      <pre><b>setupWorld</b>(time)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>time </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setWorldScale"> </a> <h3>setWorldScale</h3>
+      <pre><b>setWorldScale</b>(scaleX, scaleY)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>scaleX </code> 
+      </ul>
+      <ul>
+         <code>scaleY </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="startPath"> </a> <h3>startPath</h3>
+      <pre><b>startPath</b>()</pre> 
+   <ul>
+      Start a path.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="strokePath"> </a> <h3>strokePath</h3>
+      <pre><b>strokePath</b>()</pre> 
+   <ul>
+      Stroke a path using the current line style and width.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+</body>
+</html>

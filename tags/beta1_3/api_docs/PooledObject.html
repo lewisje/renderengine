@@ -1,0 +1,427 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: PooledObject</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class PooledObject</h2>
+
+
+<p>
+Pooled objects are created as needed, and reused from a static pool       of all object types.  When an object is created, if one is not available       in the pool, a new object is created.  When the object is destroyed,       it is returned to the pool so it can be used again.  This has the       effect of minimizing the requirement of garbage collection, reducing       cycles needed to clean up dead objects.</p>
+
+
+
+<br/><i>Defined in <a href="engine.pooledobject.src.html">engine.pooledobject.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#isPooledObject">isPooledObject</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>true</tt> for all objects that are pooled.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#isRenderEngineObject">isRenderEngineObject</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<tt>true</tt> for all objects within the engine.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#objectPool">objectPool</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The pool of all objects.
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#PooledObject">PooledObject</a></b>()
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#create">create</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Similar to a constructor, all pooled objects should implementa create method which is used to either create a new instance ofthe object, or retrieve one from the pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Destroy this object instance (remove it from the Engine).
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getProperties">getProperties</a></b>(self) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns an object that assigns getter and setter methodsfor exposed properties of an object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; When a pooled object is destroyed, it will be released so itcan clean up variables before being put back into the pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#toString">toString</a></b>(indent) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Serialize the object to XML.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="isPooledObject">
+   <!-- -->
+   </a> <h3>isPooledObject</h3>
+      <pre>object <b>isPooledObject</b></pre> 
+   <ul>
+      <tt>true</tt> for all objects that are pooled.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="isRenderEngineObject">
+   <!-- -->
+   </a> <h3>isRenderEngineObject</h3>
+      <pre>object <b>isRenderEngineObject</b></pre> 
+   <ul>
+      <tt>true</tt> for all objects within the engine.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="objectPool">
+   <!-- -->
+   </a> <h3>objectPool</h3>
+      <pre>object <b>objectPool</b></pre> 
+   <ul>
+      The pool of all objects.  Each object is storedby it's classname, retrieved from <tt>getClassName()</tt>that should be defined by all objects.
+      
+   </ul>
+   <hr>
+
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="PooledObject"> </a>
+<h3>PooledObject</h3>
+
+   <pre><b>PooledObject</b>()</pre>
+   <ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="create"> </a> <h3>create</h3>
+      <pre><b>create</b>()</pre> 
+   <ul>
+      Similar to a constructor, all pooled objects should implementa create method which is used to either create a new instance ofthe object, or retrieve one from the pool.<p/>Usage: <tt>var obj = [ObjectClass].create(arg1, arg2, arg3...);</tt>
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="destroy"> </a> <h3>destroy</h3>
+      <pre><b>destroy</b>()</pre> 
+   <ul>
+      Destroy this object instance (remove it from the Engine).  The objectis returned to the pool of objects so it can be used again.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getProperties"> </a> <h3>getProperties</h3>
+      <pre>Object&nbsp;<b>getProperties</b>(self)</pre> 
+   <ul>
+      Returns an object that assigns getter and setter methodsfor exposed properties of an object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>BaseObject</i>]&nbsp;self </code> - The reference to the object being					 inspected. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>An object which contains getter and setter methods. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      When a pooled object is destroyed, it will be released so itcan clean up variables before being put back into the pool.the variables should be returned to an "uninitialized" state.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="toString"> </a> <h3>toString</h3>
+      <pre><b>toString</b>(indent)</pre> 
+   <ul>
+      Serialize the object to XML.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>indent </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+</body>
+</html>
