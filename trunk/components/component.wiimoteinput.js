@@ -3,7 +3,7 @@
  * WiimoteInputComponent
  *
  * @fileoverview An extension of the keyboard input component which handles the
- * 				  Nintendo Wii remote.
+ *               Nintendo Wii remote.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -71,7 +71,7 @@ Engine.initObject("WiimoteInputComponent", "KeyboardInputComponent", function() 
  * <li>onWiimotePosition - X/Y position (controller, x, y)</li>
  * <li>onWiimoteRoll - X-axis roll in radians (controller, roll)</li>
  * <li>onWiimoteOffscreen - Triggered <i>instead of</i> onWiimotePosition if the
- * 								 remote isn't pointing at the screen.</li>
+ *                          remote isn't pointing at the screen.</li>
  * </ul>
  *
  * @extends InputComponent
@@ -81,7 +81,7 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
    enabledRemotes: null,
 
    remoteValid: null,
-	
+   
    /**
     * Create an instance of a Wiimote input component.
     *
@@ -98,13 +98,20 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
       var self = this;
 
       // Add the event handlers
-		ctx.addEvent(this, "mousedown", function(evt) {
-			self._mouseDownListener(evt);
-		});
+      ctx.addEvent(this, "mousedown", function(evt) {
+         self._mouseDownListener(evt);
+      });
 
-		ctx.addEvent(this, "mouseup", function(evt) {
-			self._mouseUpListener(evt);
-		});
+      ctx.addEvent(this, "mouseup", function(evt) {
+         self._mouseUpListener(evt);
+      });
+      
+      if (!$.browser.Wii) {
+         // In the absense of the WiiMote, we'll use the mouse as the pointer
+         ctx.addEvent(this, "mousemove", function(evt) {
+            self._mouseMoveListener(evt);
+         });
+      }
    },
 
    release: function() {
@@ -117,27 +124,39 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
     * Destroy this instance and remove all references.
     */
    destroy: function() {
-		var ctx = Engine.getDefaultContext();
+      var ctx = Engine.getDefaultContext();
 
       // Clean up event handlers
-		ctx.removeEvent(this, "mousedown");
-		ctx.removeEvent(this, "mouseup");
+      ctx.removeEvent(this, "mousedown");
+      ctx.removeEvent(this, "mouseup");
+
+      if (!$.browser.Wii) {
+         // In the absense of the WiiMote, remove the mouse move handler
+         ctx.removeEvent(this, "mousemove");
+      }
       this.base();
    },
 
    /**
     * @private
     */
-	_mouseDownListener: function(evt) {
-		this._wmButtonA(evt, 0, true);	
-	},
+   _mouseDownListener: function(evt) {
+      this._wmButtonA(evt, 0, true);   
+   },
 
    /**
     * @private
     */
-	_mouseUpListener: function(evt) {
-		this._wmButtonA(evt, 0, false);	
-	},
+   _mouseUpListener: function(evt) {
+      this._wmButtonA(evt, 0, false);  
+   },
+
+   /**
+    * @private
+    */
+   _mouseMoveListener: function(evt) {
+      this._wmPosition(0, evt.pageX, evt.pageY, evt.screenX, evt.screenY);
+   },
 
    /**
     * @private
@@ -182,9 +201,9 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
             this._wmButtonZ(event, 0, true);
             break;
       }
-		
-		// Pass along for straight keyboard handling
-		this.base(event);
+      
+      // Pass along for straight keyboard handling
+      this.base(event);
    },
 
    /**
@@ -230,9 +249,9 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
             this._wmButtonZ(event, 0, false);
             break;
       }
-		
-		// Pass along for straight keyboard handling
-		this.base(event);
+      
+      // Pass along for straight keyboard handling
+      this.base(event);
    },
 
    /**
@@ -248,10 +267,10 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
       }
 
       // Run through the available Wiimotes
-		var op = $.browser.WiiMote;
+      var op = $.browser.WiiMote;
       for (var w = 0; w < 4; w++) {
 
-         var remote = op.update(w);	// This fixes a dependency problem
+         var remote = op.update(w); // This fixes a dependency problem
          // Cannot perform this check on the primary remote,
          // that's why this object extends the keyboard input component...
          if (remote.isEnabled) {
@@ -262,7 +281,7 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
             }
 
             if (!remote.isBrowsing) {
-					var evt = { primary: false };
+               var evt = { primary: false };
 
                // Simple bitmask check to handle states and fire methods
                this._wmLeft(evt, w, remote.hold & 1);
@@ -281,14 +300,14 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
             this._wmButtonB(evt, w, remote.hold & 1024);
 
             // Set validity of remote data
-				this._wmValidity(w, remote.dpdValidity);
+            this._wmValidity(w, remote.dpdValidity);
 
             // Set distance to screen
-				this._wmDistance(w, remote.dpdDistance);
-				
-				// Set position and roll
-				this._wmPosition(w, remote.dpdScreenX, remote.dpdScreenY, remote.dpdX, remote.dpdY);
-				this._wmRoll(w, remote.dpdRollX, remote.dpdRollY, Math.atan2(remote.dpdRollY, remote.dpdRollX));
+            this._wmDistance(w, remote.dpdDistance);
+            
+            // Set position and roll
+            this._wmPosition(w, remote.dpdScreenX, remote.dpdScreenY, remote.dpdX, remote.dpdY);
+            this._wmRoll(w, remote.dpdRollX, remote.dpdRollY, Math.atan2(remote.dpdRollY, remote.dpdRollX));
          } else {
             if (this.enabledRemotes[w]) {
                // Let the host know that a Wiimote became disabled
@@ -457,9 +476,9 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
     * @private
     */
    _wmPosition: function(c, sx, sy, x, y) {
-		if (this.getHostObject().onWiimoteOffscreen) {
-			this.getHostObject().onWiimoteOffscreen(c, (!sx || !sy));
-		}
+      if (this.getHostObject().onWiimoteOffscreen) {
+         this.getHostObject().onWiimoteOffscreen(c, (!sx || !sy));
+      }
 
       if ((sx && sy) && this.getHostObject().onWiimotePosition)
       {
@@ -473,7 +492,7 @@ var WiimoteInputComponent = KeyboardInputComponent.extend(/** @scope WiimoteInpu
    _wmRoll: function(c, x, y, z) {
       if (this.getHostObject().onWiimoteRoll)
       {
-			// Pitch, yaw, roll?
+         // Pitch, yaw, roll?
          this.getHostObject().onWiimoteRoll(c, x, y, z);
       }
    }

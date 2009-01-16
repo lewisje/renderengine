@@ -47,25 +47,34 @@ Engine.initObject("WiiBall", "Object2D", function() {
 var WiiBall = Object2D.extend({
 
    sprite: null,
-	
-	atRest: false,
+   
+   atRest: false,
+   
+   cBox: null,
+   wBox: null,
 
    constructor: function() {
       this.base("WiiBall");
-		this.sprite = null;
+      this.sprite = null;
 
       this.setElement($("<div>").css({ position: "absolute", width: 60, height: 60 }));
+
+      this.cBox = $("<div>").css({ position: "absolute", display: "none", border: "1px dashed blue"});
+      WiiTest.getRenderContext().getSurface().append(this.cBox);
+
+      this.wBox = $("<div>").css({ position: "absolute", display: "none", border: "2px solid blue"});
+      WiiTest.getRenderContext().getSurface().append(this.wBox);
 
       // Add components to move and draw the player
       this.add(Mover2DComponent.create("move"));
       this.add(SpriteComponent.create("draw"));
-		this.add(ColliderComponent.create("collide", WiiTest.getCModel()));
-      this.setSprite(WiiTest.spriteLoader.getSprite("redball", "ball"));
+      this.add(ColliderComponent.create("collide", WiiTest.getCModel()));
+      this.setSprite(WiiTest.spriteLoader.getSprite("redball", "red"));
 
       this.setPosition(Point2D.create(5, 5));
-		this.setGravity(Point2D.create(0, 1));
-		this.setVelocity(Vector2D.create(2, 0));
-		this.atRest = false;
+      this.setGravity(Point2D.create(0, 1));
+      this.setVelocity(Vector2D.create(2, 0));
+      this.atRest = false;
    },
 
    /**
@@ -79,9 +88,33 @@ var WiiBall = Object2D.extend({
     */
    update: function(renderContext, time) {
       renderContext.pushTransform();
-		this.checkBounce();
+      this.checkBounce();
       this.base(renderContext, time);
       renderContext.popTransform();
+      
+      if (Engine.getDebugMode()) {
+         // Find our collision node and put a box around it
+         if (this.ModelData && this.ModelData.lastNode) {
+            var n = this.ModelData.lastNode.getRect().get();
+            this.cBox.css({
+               display: "block",
+               left: n.x,
+               top: n.y,
+               width: n.w,
+               height: n.h
+            });
+         }
+
+         var b = this.getWorldBox().get();
+         this.wBox.css({
+            display: "block",
+            left: b.x,
+            top: b.y,
+            width: b.w,
+            height: b.h
+         });
+      }
+      
    },
 
    setSprite: function(sprite) {
@@ -99,6 +132,10 @@ var WiiBall = Object2D.extend({
       return this.getComponent("move").getPosition();
    },
 
+   getRenderPosition: function() {
+      return this.getPosition();
+   },
+
    /**
     * Set, or initialize, the position of the mover component
     *
@@ -109,57 +146,78 @@ var WiiBall = Object2D.extend({
       this.getComponent("move").setPosition(point);
    },
 
-	setVelocity: function(vec) {
-		this.getComponent("move").setVelocity(vec);	
-	},
-	
-	getVelocity: function() {
-		return this.getComponent("move").getVelocity();
-	},
-	
-	setGravity: function(vec) {
-		this.getComponent("move").setGravity(vec);
-	},
-	
-	checkBounce: function() {
-		if (this.atRest) {
-			return;
-		}
-		
-		// Ground
-		var fb = WiiTest.getFieldBox().get();
-		var bb = this.getBoundingBox().get();
-		var p = this.getPosition();
-		if (p.y > fb.h - bb.h) {
-			// Bounce
-			var v = this.getVelocity();
-			v.set(v.x, v.y * -1).mul(0.8);
-			this.setVelocity(v);
+   setVelocity: function(vec) {
+      this.getComponent("move").setVelocity(vec);  
+   },
+   
+   getVelocity: function() {
+      return this.getComponent("move").getVelocity();
+   },
+   
+   setGravity: function(vec) {
+      this.getComponent("move").setGravity(vec);
+   },
+   
+   checkBounce: function() {
+      if (this.atRest) {
+         return;
+      }
+      
+      // Ground
+      var fb = WiiTest.getFieldBox().get();
+      var bb = this.getBoundingBox().get();
+      var p = this.getPosition();
+      var floor = fb.h - 2;
+      if (p.y + bb.h > floor) {
+         // Bounce
+         var v = this.getVelocity();
+         v.set(v.x, v.y * -1).mul(0.8);
+         this.setVelocity(v);
 
-			// Adjust
-			var b = Point2D.create(p.x, fb.h - bb.h - 3);
-			this.setPosition(b);
-		}
-		
-		// Walls
-		if ((p.x < 0) || (p.x + bb.w > fb.w )) {
-			// Bounce
-			var v = this.getVelocity();
-			v.set(v.x * -1, v.y);
-			this.setVelocity(v);
+         // Adjust
+         var b = Point2D.create(p.x, fb.h - bb.h - 3);
+         this.setPosition(b);
+      }
+      
+      // Walls
+      if ((p.x < 0) || (p.x + bb.w > fb.w )) {
+         // Bounce
+         var v = this.getVelocity();
+         v.set(v.x * -1, v.y);
+         this.setVelocity(v);
 
-			// Adjust
-			var b = Point2D.create((p.x < 0 ? 5 : fb.w - bb.w - 5), p.y);
-			this.setPosition(b);
-		}
+         // Adjust
+         var b = Point2D.create((p.x < 0 ? 5 : fb.w - bb.w - 5), p.y);
+         this.setPosition(b);
+      }
 
-		// Check rest state		
-		if (this.getVelocity().len() < 2 && (this.getPosition().y >= (fb.h - bb.h - 2))) {
-			this.setVelocity(Point2D.ZERO);
-			this.setGravity(Point2D.ZERO);
-			this.atRest = true;
-		}
-	}
+      // Check rest state     
+      if (this.getVelocity().len() < 2 && (this.getPosition().y + bb.h > floor - 2)) {
+         this.setVelocity(Point2D.ZERO);
+         this.setGravity(Point2D.ZERO);
+         this.atRest = true;
+      }
+   },
+   
+   clicked: function() {
+      var xD = (Math.random() * 100) < 50 ? -1 : 1;
+      var v = Vector2D.create((Math.random() * 4) * xD, -20);
+      this.setVelocity(v);
+      this.setGravity(Vector2D.create(0, 1));
+      this.atRest = false;
+   },
+   
+   onCollide: function(obj) {
+      if (obj instanceof WiiHost &&
+          (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
+         this.setSprite(WiiTest.spriteLoader.getSprite("redball", "blue"));
+         return ColliderComponent.STOP;
+      }
+
+      this.setSprite(WiiTest.spriteLoader.getSprite("redball", "red"));
+      return ColliderComponent.CONTINUE;
+   }
+   
 
 }, { // Static
 

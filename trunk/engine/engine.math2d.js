@@ -3,7 +3,7 @@
  * Math2D
  *
  * @fileoverview A 2D math library with objects to represent points and rectangles
- * 				  plus methods to assist in manipulating them.
+ *               plus methods to assist in manipulating them.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -212,10 +212,10 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @return {Point2D} A random point within the rectangle
     */
    randomPoint: function(rect) {
-		var r = rect.get();
-		return Point2D.create(Math.floor(r.x + Math.random() * r.w),
-									 Math.floor(r.y + Math.random() * r.h));
-	}
+      var r = rect.get();
+      return Point2D.create(Math.floor(r.x + Math.random() * r.w),
+                            Math.floor(r.y + Math.random() * r.h));
+   }
 
 });
 
@@ -313,10 +313,10 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       this.upd();
       return this;
    },
-	
-	get: function() {
-		return { x: this._vec.e(1), y: this._vec.e(2) };
-	},
+   
+   get: function() {
+      return { x: this._vec.e(1), y: this._vec.e(2) };
+   },
 
    /**
     * Set the X coordinate
@@ -440,7 +440,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * Returns a printable version of this object.
     */
    toString: function() {
-      return this._vec.e(1) + "," + this._vec.e(2);
+      return Number(this._vec.e(1)).toFixed(2) + "," + Number(this._vec.e(2)).toFixed(2);
    }
 
 }, {
@@ -676,7 +676,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    isOverlapped: function(rect)
    {
-		// TODO: This will implement the Separating Axis Theorem, eventually...
+      // TODO: This will implement the Separating Axis Theorem, eventually...
    },
 
    /**
@@ -687,13 +687,13 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @type Boolean
     */
    isIntersecting: function(rect) {
-		var r1 = this.get();
-		var r2 = rect.get();
-		return !(r1.r < r2.x ||
-				   r1.x > r2.r ||
-				   r1.y > r2.b ||
-				   r1.b < r2.y);
-	},
+      var r1 = this.get();
+      var r2 = rect.get();
+      return !(r1.r < r2.x ||
+               r1.x > r2.r ||
+               r1.y > r2.b ||
+               r1.b < r2.y);
+   },
 
    /**
     * Determine if this rectangle is contained within the specified rectangle.
@@ -704,8 +704,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    isContained: function(rect)
    {
-		var r1 = this.get();
-		var r2 = rect.get();
+      var r1 = this.get();
+      var r2 = rect.get();
       return ((r1.x >= r2.x) &&
               (r1.y >= r2.y) &&
               (r1.r <= r2.r) &&
@@ -721,8 +721,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    containsRect: function(rect)
    {
-		var r1 = this.get();
-		var r2 = rect.get();
+      var r1 = this.get();
+      var r2 = rect.get();
       return ((r2.x >= r1.x) &&
               (r2.y >= r1.y) &&
               (r2.r <= r1.r) &&
@@ -755,13 +755,13 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       return new Point2D(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
    },
 
-	getHalfWidth: function() {
-		return this.len_x() * 0.5;
-	},
+   getHalfWidth: function() {
+      return this.len_x() * 0.5;
+   },
 
-	getHalfHeight: function() {
-		return this.len_y() * 0.5;
-	},
+   getHalfHeight: function() {
+      return this.len_y() * 0.5;
+   },
 
    /**
     * Returns the positive length of this rectangle, along the X axis.
@@ -819,7 +819,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    toString: function()
    {
-      return (this.topLeft.x + "," + this.topLeft.y + " [" + this.dims.x + "," + this.dims.y + "]");
+      return (this.topLeft + " [" + this.dims + "]");
    }
 }, {
    getClassName: function() {
