@@ -47,7 +47,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
     */
    var WiiBall = Object2D.extend({
 
-      sprite: null,
+      sprites: null,
 
       atRest: false,
 
@@ -72,7 +72,12 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.add(Mover2DComponent.create("move"));
          this.add(SpriteComponent.create("draw"));
          this.add(ColliderComponent.create("collide", WiiTest.getCModel()));
-         this.setSprite(WiiTest.spriteLoader.getSprite("redball", "red"));
+         
+         // The sprites
+         this.sprites = [];
+         this.sprites.push(WiiTest.spriteLoader.getSprite("redball", "red"));
+         this.sprites.push(WiiTest.spriteLoader.getSprite("redball", "blue"));
+         this.setSprite(0);
 
          this.setPosition(Point2D.create(5, 5));
          this.setGravity(Point2D.create(0, 1));
@@ -121,10 +126,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
 
       /**
        * Set the sprite to render with on the draw component.
-       * @param sprite {Sprite} The sprite
+       * @param spriteIdx {Number} The sprite index
        */
-      setSprite: function(sprite) {
-         this.sprite = sprite;
+      setSprite: function(spriteIdx) {
+         var sprite = this.sprites[spriteIdx];
          this.jQ().css("background", "url('" + sprite.getSourceImage().src + "') no-repeat");
          this.setBoundingBox(sprite.getBoundingBox());
          this.getComponent("draw").setSprite(sprite);
@@ -244,11 +249,11 @@ Engine.initObject("WiiBall", "Object2D", function() {
       onCollide: function(obj) {
          if (obj instanceof WiiHost &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
-            this.setSprite(WiiTest.spriteLoader.getSprite("redball", "blue"));
+            this.setSprite(1);
             return ColliderComponent.STOP;
          }
 
-         this.setSprite(WiiTest.spriteLoader.getSprite("redball", "red"));
+         this.setSprite(0);
          return ColliderComponent.CONTINUE;
       }
 
