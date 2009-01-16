@@ -6,13 +6,9 @@ The following are links to works in progress.  They are the tests that I've put 
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true Asteroids clone]
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids clone - Evolved]
 
-Wii test links:
+Simple "game" that works on the Wii:
 
    * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bouce the Ball - point and click A]
-
-Tools:
-
-   * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor]
 
 
 I'll add more as I get them completed and into the repo...
