@@ -13,7 +13,7 @@ If you're looking for what is currently supported/available in The Render Engine
     * Safari 3.0+
     * Opera 9.5+
     * Chrome b3+
-  # 2D Vector-based example game
+  # 2D Vector-based example game ([http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?evolved=true Asteroids clone - Evolved])
   # 2D DOM-based example game
   # Rendering contexts (RenderContext)
     * 2D Canvas
