@@ -10,8 +10,7 @@ The following are links to works in progress.  They are the tests that I've put 
 
 Wii test links:
 
-   * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?debug=true&debugLevel=1 Asteroids clone]
-   * [http://renderengine.googlecode.com/svn/trunk/demos/smb/index.html?debug=true&debugLevel=1 Super Mario clone]
+   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bouce the Ball - point and click A]
 
 Tools:
 
