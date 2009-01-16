@@ -57,14 +57,14 @@ Engine.initObject("WiiTest", "Game", function(){
       fieldBox: null,
       areaScale: 1.0,
       
-      engineFPS: 15,
+      engineFPS: 60,
       
       fieldWidth: 800,
       fieldHeight: 460,
       spriteLoader: null,
       imageLoader: null,
-		
-		cModel: null,
+      
+      cModel: null,
       
       
       /**
@@ -115,10 +115,10 @@ Engine.initObject("WiiTest", "Game", function(){
        */
       waitForResources: function(){
          if (WiiTest.imageLoader.isReady() &&
-         	WiiTest.spriteLoader.isReady()) {
-            	WiiTest.loadTimeout.destroy();
-            	WiiTest.run();
-            	return;
+            WiiTest.spriteLoader.isReady()) {
+               WiiTest.loadTimeout.destroy();
+               WiiTest.run();
+               return;
          }
          else {
             // Continue waiting
@@ -138,42 +138,42 @@ Engine.initObject("WiiTest", "Game", function(){
          $("#loading").remove();
          
          // Create the render context
-			this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
+         this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
          
-			this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 9);
-			
+         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
+         
          this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
          this.renderContext.jQ().css({
             border: "1px solid red",
-				left: 0,
-				top: 0,
-				right: 0,
-				bottom: 0});
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0});
          Engine.getDefaultContext().add(this.renderContext);
          WiiTest.play();
       },
       
       play: function(){
-	      var ball = WiiBall.create();
-	      this.getRenderContext().add(ball);
-			
-			var player = WiiHost.create();
-	      this.getRenderContext().add(player);
+         var ball = WiiBall.create();
+         this.getRenderContext().add(ball);
+         
+         var player = WiiHost.create();
+         this.getRenderContext().add(player);
       },
       
       getRenderContext: function(){
          return this.renderContext;
       },
-		
-		getFieldBox: function() {
-			return this.fieldBox;
-		},
-		
-		getCModel: function() {
-			return this.cModel;
-		}
+      
+      getFieldBox: function() {
+         return this.fieldBox;
+      },
+      
+      getCModel: function() {
+         return this.cModel;
+      }
       
    });
    
