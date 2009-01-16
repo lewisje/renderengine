@@ -915,12 +915,17 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * 
     * @param inString {String} The source to clean
     */
-   cleanSource: function(inString) {
-      return inString.replace(/((\"|').*?\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
+   cleanSource: function(inString, keepNewLines) {
+      var s = inString.replace(/((["'])[^\n\r]*\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
                      .replace(/\/\*(\n|.)*?\*\//gm, "")           // Remove multi line comments
                      .replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")      // Trim lines
-                     .replace(/\s*\n$/gm, "")                     // Remove blank lines
-                     .replace(/(\n|\r)/gm, "");                   // Remove new lines
+                     .replace(/\s*\n$/gm, "");                    // Remove blank lines
+     
+	   if (!keepNewLines) {
+	  		s = s.replace(/(\n|\r)/gm, "");                   // Remove new lines
+	   }
+      
+		return s;
    },
 
    /**
@@ -2210,18 +2215,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @private
     */
    parseSyntax: function(jsCode) {
+		
       // Clean the source first so we only have code
-      jsCode = EngineSupport.cleanSource(jsCode);
-      
+      //jsCode = EngineSupport.cleanSource(jsCode, true);
+		
       // Check for the following:
-      // * Extra comma after last item in Object definition
       // * Variable comparison in assignment statement
+      // * Extra comma after last item in Object definition
       // * Missing comma between items in Object definition
       // * Missing colon between name and definition
       // * Equal sign where colon expected
       // * Try without catch and finally
-      // * Strings with line-breaks
       
+		//Console.error("Syntax errors:\n", errors);
+		
       return true;   
    },
 
@@ -2351,9 +2358,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          vals.shift();
          vals.push(value);
          var v = Math.floor((vals[0] + vals[1] + vals[2]) * 0.33);
-         this.metrics[metricName] = { val: fmt.replace("#", v), values: vals };
+         this.metrics[metricName] = { val: (fmt ? fmt.replace("#", v) : v), values: vals };
       } else {
-         this.metrics[metricName] = { val: fmt.replace("#", value) };
+         this.metrics[metricName] = { val: (fmt ? fmt.replace("#", value) : value) };
       }
    },
 

@@ -31,9 +31,9 @@
  *
  */
 
-Engine.include("/components/component.mover2d.js");
-Engine.include("/components/component.sprite.js");
+Engine.include("/components/component.collider.js");
 Engine.include("/components/component.wiimoteinput.js");
+Engine.include("/components/component.transform2d.js");
 Engine.include("/engine/engine.object2d.js");
 
 Engine.initObject("WiiHost", "Object2D", function() {
@@ -46,27 +46,17 @@ Engine.initObject("WiiHost", "Object2D", function() {
  */
 var WiiHost = Object2D.extend({
 
-   sprite: null,
-	
-	offScreen: false,
-	
-	jitter: false,
+	overBall: null,
 
    constructor: function() {
-      this.base("WiiHostObject");
-		this.sprite = null;
+      this.base("WiiHost");
 
-      this.setElement($("<div>").css({ position: "absolute", width: 60, height: 60 }));
-
-      // Add components to move and draw the player
+      // Add components to move and collide the player
       this.add(WiimoteInputComponent.create("input"));
-      this.add(Mover2DComponent.create("move"));
-      this.add(SpriteComponent.create("draw"));
-      this.setSprite(WiiTest.spriteLoader.getSprite("redball", "ball"));
-
-      this.setPosition(Point2D.create(30, 30));
-		this.offScreen = false;
-		this.jitter = false;
+		this.add(Transform2DComponent.create("move"));
+		this.add(ColliderComponent.create("collide", WiiTest.getCModel()));
+		this.setBoundingBox(Rectangle2D.create(0, 0, 100, 100));
+		this.overBall = null;
    },
 
    /**
@@ -81,18 +71,8 @@ var WiiHost = Object2D.extend({
    update: function(renderContext, time) {
       renderContext.pushTransform();
       this.base(renderContext, time);
+		Engine.addMetric("overBall", this.overBall != null ? "true" : "false");
       renderContext.popTransform();
-   },
-
-   setSprite: function(sprite) {
-      this.sprite = sprite;
-      this.jQ().css("background", "url('" + sprite.getSourceImage().src + "') no-repeat");
-      this.setBoundingBox(sprite.getBoundingBox());
-      this.getComponent("draw").setSprite(sprite);
-   },
-
-   getSprite: function() {
-      return this.sprite;
    },
 
    /**
@@ -103,10 +83,6 @@ var WiiHost = Object2D.extend({
       return this.getComponent("move").getPosition();
    },
 
-   getRenderPosition: function() {
-      return this.getComponent("move").getRenderPosition();
-   },
-
    /**
     * Set, or initialize, the position of the mover component
     *
@@ -114,34 +90,10 @@ var WiiHost = Object2D.extend({
     */
    setPosition: function(point) {
       this.base(point);
-		var d = this.getBoundingBox();
-		point.set(point.x - d.getHalfWidth(), point.y - d.getHalfHeight());
-		if (this.jitter) {
-			point.add(Point2D.create(Math.random() * 30, Math.random() * 30));
-		}
+		point.set(point.x - 50, point.y - 50);
       this.getComponent("move").setPosition(point);
    },
 
-   getScale: function() {
-      return this.getComponent("move").getScale();
-   },
-
-   setScale: function(s) {
-      this.getComponent("move").setScale(s);
-   },
-
-   getRotation: function() {
-      return this.getComponent("move").getRotation();
-   },
-
-   setRotation: function(r) {
-      this.getComponent("move").setRotation(r);
-   },
-	
-	setVelocity: function(vec) {
-		this.getComponent("move").setVelocity(vec);	
-	},
-	
 	onWiimotePosition: function(c, sx, sy, x, y) {
 		if (c == 0)	{
 			this.setPosition(Point2D.create(sx, sy));
@@ -149,25 +101,30 @@ var WiiHost = Object2D.extend({
 	},
 	
 	onWiimoteButtonA: function(c, state, evt) {
-		if (c == 0) {
-			this.jitter = state;
+		if (c == 0 && this.overBall) {
+			var xD = (Math.random() * 100) < 50 ? -1 : 1;
+			var v = Vector2D.create((Math.random() * 4) * xD, -10);
+			this.overBall.setVelocity(v);
+			this.overBall.setGravity(Vector2D.create(0, 1));
+			this.overBall.atRest = false;
+			return;
+		}
+		
+		if (c == 0 && state && !this.overBall) {
+			var b = WiiBall.create();
+			WiiTest.getRenderContext().add(b);
 		}
 	},
 	
-	onWiimoteLeft: function() {
-		return false;
-	},
+	onCollide: function(obj) {
+		if (obj instanceof WiiBall &&
+		    (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
+			this.overBall = obj;
+			return ColliderComponent.STOP;
+		}
 
-	onWiimoteUp: function() {
-		return false;
-	},
-
-	onWiimoteRight: function() {
-		return false;
-	},
-
-	onWiimoteDown: function() {
-		return false;
+		this.overBall = null;
+		return ColliderComponent.STOP;
 	}
 
 }, { // Static
