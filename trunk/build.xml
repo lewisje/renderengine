@@ -251,6 +251,12 @@
          </classpath>
       </java>
       <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
+         <arg line="--nomunge -o ${min.home}/engine/engine.fnv1hash.js ${basedir}/engine/engine.fnv1hash.js"/>
+         <classpath>
+            <pathelement path="${basedir}/make/${compressor.jar}"/>
+         </classpath>
+      </java>
+      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
          <arg line="--nomunge -o ${min.home}/engine/engine.game.js ${basedir}/engine/engine.game.js"/>
          <classpath>
             <pathelement path="${basedir}/make/${compressor.jar}"/>
