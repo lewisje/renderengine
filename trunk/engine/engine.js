@@ -921,11 +921,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                      .replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")      // Trim lines
                      .replace(/\s*\n$/gm, "");                    // Remove blank lines
      
-	   if (!keepNewLines) {
-	  		s = s.replace(/(\n|\r)/gm, "");                   // Remove new lines
-	   }
+      if (!keepNewLines) {
+         s = s.replace(/(\n|\r)/gm, "");                   // Remove new lines
+      }
       
-		return s;
+      return s;
    },
 
    /**
@@ -2215,10 +2215,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @private
     */
    parseSyntax: function(jsCode) {
-		
+      
       // Clean the source first so we only have code
       //jsCode = EngineSupport.cleanSource(jsCode, true);
-		
+      
       // Check for the following:
       // * Variable comparison in assignment statement
       // * Extra comma after last item in Object definition
@@ -2227,8 +2227,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // * Equal sign where colon expected
       // * Try without catch and finally
       
-		//Console.error("Syntax errors:\n", errors);
-		
+      //Console.error("Syntax errors:\n", errors);
+      
       return true;   
    },
 
