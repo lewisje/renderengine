@@ -194,6 +194,7 @@ Engine.initObject("FNV1Hash", "PooledObject", function() {
       gotten: null,
 
       constructor: function(hashRoutine) {
+         this.base("FNV1Hash");
          this.fnv132 = new FNV1(hashRoutine || FNV1a32);
          this.gotten = false;
       },
