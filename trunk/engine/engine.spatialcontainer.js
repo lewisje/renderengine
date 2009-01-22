@@ -61,7 +61,7 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
 
    /**
     * Get the unique index of this node.
-    * @type Number
+    * @return {Number} The index of this node
     */
    getIndex: function() {
       return this.idx;
@@ -69,7 +69,7 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
 
    /**
     * Get an array of objects within this node.
-    * @type Array
+    * @return {Array} Objects in the node
     */
    getObjects: function() {
       return this.objects;
@@ -91,13 +91,13 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     */
    removeObject: function(obj) {
       EngineSupport.arrayRemove(this.objects, obj);
-   },
+   }
+}, { /** @scope SpatialNode.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf Container
+    * @return {String} "SpatialNode"
     */
    getClassName: function() {
       return "SpatialNode";
@@ -144,7 +144,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
 
    /**
     * Get the width of the container.
-    * @type Number
+    * @return {Number} The width
     */
    getWidth: function() {
       return this.width;
@@ -152,7 +152,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
 
    /**
     * Get the height of the container.
-    * @type Number
+    * @return {Number} The height
     */
    getHeight: function() {
       return this.height;
@@ -160,7 +160,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
 
    /**
     * Get the root of the container.
-    * @type Object
+    * @return {Object} The root
     */
    getRoot: function() {
       return this.root;
@@ -180,13 +180,13 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     * within the defined sub-space of the container.
     *
     * @param point {Point2D} The point to build with
-    * @type HashContainer
+    * @return {HashContainer} The PCL
     */
    getPCL: function(point) {
       return new HashContainer();
    }
 
-}, {
+}, { /** @scope SpatialContainer.prototype */
    /**
     * Get the class name of this object
     *

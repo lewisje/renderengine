@@ -2,8 +2,8 @@
  * The Render Engine
  * Math2D
  *
- * @fileoverview A 2D math library with objects to represent points and rectangles
- *               plus methods to assist in manipulating them.
+ * @fileoverview A 2D math library with static methods, plus objects to represent 
+ *               points, rectangles and circles.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -45,36 +45,30 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
    /**
     * An approximation of PI for speedier calculations.
-    * @memberOf Math2D
     */
    PI: 3.14159,
 
    /**
     * An approximation of the inverse of PI so we can
     * avoid divisions.
-    * @memberOf Math2D
     */
    INV_PI: 0.31831,
 
    /**
     * Convert degrees to radians.
     * @param degrees {Number} An angle in degrees
-    * @type Number
-    * @memberOf Math2D
+    * @return {Number} The degrees value converted to radians
     */
    degToRad: function(degrees) {
-      // ((Math.PI / 180) * deg);
       return (0.01745 * degrees);
    },
 
    /**
     * Convert radians to degrees.
     * @param radians {Number} An angle in radians
-    * @type Number
-    * @memberOf Math2D
+    * @return {Number} The radians value converted to degrees
     */
    radToDeg: function(radians) {
-      // ((rad * 180) / Math.PI)
       return ((radians * 180) * Math2D.INV_PI);
    },
 
@@ -84,16 +78,11 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     *
     * @param box1 {Rectangle2D} The collision box of object 1
     * @param box2 {Rectangle2D} The collision box of object 2
-    * @type Boolean
-    * @memberOf Math2D
+    * @return {Boolean} <tt>true</tt> if the rectangles overlap
     */
    boxBoxCollision: function(box1, box2) {
       return box1.isIntersecting(box2);
    },
-	
-	circleCircleCollision: function(circle1, circle2) {
-		
-	},
 
    /**
     * Perform point to AAB collision, returning <code>true</code>
@@ -101,8 +90,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     *
     * @param box {Rectangle2D} The collision box of the object
     * @param point {Point2D} The point to test, in world coordinates
-    * @type Boolean
-    * @memberOf Math2D
+    * @return {Boolean} <tt>true</tt> if the point is within the rectangle
     */
    boxPointCollision: function(box, point) {
       return box.containsPoint(point);
@@ -115,9 +103,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @param p2 {Point2D} End of line 1
     * @param p3 {Point2D} Start of line 2
     * @param p4 {Point2D} End of line 2
-    * @return <tt>true</tt> if the lines intersect
-    * @type Boolean
-    * @memberOf Math2D
+    * @return {Boolean} <tt>true</tt> if the lines intersect
     */
    lineLineCollision: function(p1, p2, p3, p4) {
       var d = ((p4.y - p3.y) * (p2.x - p1.x)) - ((p4.x - p3.x) * (p2.y - p1.y));
@@ -144,9 +130,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @param p1 {Point2D} The start of the line
     * @param p2 {Point2D} The end of the line
     * @param rect {Rectangle} The box to test against
-    * @return <tt>true</tt> if the line intersects the box
-    * @type Boolean
-    * @memberOf Math2D
+    * @return {Boolean} <tt>true</tt> if the line intersects the box
     */
    lineBoxCollision: function(p1, p2, rect) {
       // Convert the line to a box itself and do a quick box box test
@@ -189,11 +173,11 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    /**
     * A static method used to calculate a direction vector
     * from a heading angle.
+    *
     * @param origin {Point2D} The origin of the shape
     * @param baseVec {Vector2D} The base vector
     * @param angle {Number} The rotation in degrees
-    * @type Vector2D
-    * @memberOf Math2D
+    * @return {Vector2D} The direction vector
     */
    getDirectionVector: function(origin, baseVec, angle) {
       var r = Math2D.degToRad(angle);
@@ -228,7 +212,7 @@ Engine.initObject("MathObject", null, function() {
 var MathObject = Base.extend({
    constructor: function() {
    },
-	
+   
    release: function() {
    },
 
@@ -275,10 +259,10 @@ var MathObject = Base.extend({
     */
    objectPool: {},
 
-	/**
-	 * Return the classname of the math object
-	 * @return {String}
-	 */
+   /**
+    * Return the classname of the math object
+    * @return {String}
+    */
    getClassName: function() {
       return "MathObject";
    }
@@ -332,7 +316,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * Returns <tt>true</tt> if this point is equal to the specified point.
     *
     * @param point {Point2D} The point to compare to
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the two points are equal
     */
    equals: function(point) {
       return (this.x == point.x && this.y == point.y);
@@ -360,12 +344,16 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       return this;
    },
    
+   /**
+    * Get the elements of this point as an object with elements X and Y.
+    * @return {Object}
+    */
    get: function() {
       return { x: this._vec.e(1), y: this._vec.e(2) };
    },
 
    /**
-    * Set the X coordinate
+    * Set the X coordinate.
     *
     * @param x {Number} The X coordinate
     */
@@ -375,7 +363,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Set the Y coordinate
+    * Set the Y coordinate.
     *
     * @param y {Number} The Y coordinate
     */
@@ -385,9 +373,10 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Adds the specified point to this point.
+    * A method that mutates this point by adding the point to it.
+    *
     * @param point {Point2D} A point
-    * @type Point2D
+    * @return {Point2D} This point
     */
    add: function(point) {
       this._vec = this._vec.add(point._vec);
@@ -396,9 +385,9 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Add the scalar value to each component of the point
+    * A mutator method that adds the scalar value to each component of this point.
     * @param scalar {Number} A number
-    * @type Point2D
+    * @return {Point2D} This point
     */
    addScalar: function(scalar) {
       this._vec = this._vec.map(function(x) { return x + scalar; });
@@ -407,9 +396,9 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Subtract the specified point from this point.
+    * A mutator method that subtracts the specified point from this point.
     * @param point {Point2D} a point
-    * @type Point2D
+    * @return {Point2D} This point
     */
    sub: function(point) {
       this._vec = this._vec.subtract(point._vec);
@@ -418,9 +407,9 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Multiply the components of two points together.
+    * A mutator method that multiplies the components of this point with another.
     * @param point {Point2D} A point
-    * @type Point2D
+    * @return {Point2D} This point
     */
    convolve: function(point) {
       this._vec = this._vec.map(function(x, i) { return x * (i == 1 ? point.x : point.y); });
@@ -429,9 +418,10 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Divide the components of two points.  The point cannot contain zeros for its components.
+    * A mutator method that divides the components of this point by another.  The point 
+    * cannot contain zeros for its components.
     * @param point {Point2D} A point
-    * @type Point2D
+    * @return {Point2D} This point
     */
    convolveInverse: function(point) {
       Assert((point.x != 0 && point.y != 0), "Division by zero in Point.convolveInverse");
@@ -441,9 +431,9 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Multiply the components of this point by a scalar value.
+    * A mutator methor that multiplies the components of this point by a scalar value.
     * @param scalar {Number} A number
-    * @type Point2D
+    * @return {Point2D} This point
     */
    mul: function(scalar) {
       this._vec = this._vec.map(function(x) { return x * scalar; });
@@ -452,9 +442,9 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Divide the components of this point by a scalar value.
+    * A mutator method that divides the components of this point by a scalar value.
     * @param scalar {Number} A number - cannot be zero
-    * @type Point2D
+    * @return {Point2D} This point
     */
    div: function(scalar) {
       Assert((scalar != 0), "Division by zero in Point.divScalar");
@@ -465,8 +455,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    },
 
    /**
-    * Negate the point, inversing it's components.
-    * @type Point2D
+    * A mutator method that negates this point, inversing it's components.
+    * @return {Point2D} This point
     */
    neg: function() {
       this._vec.setElements([ -this._vec.e(1), -this._vec.e(2) ]);
@@ -476,22 +466,24 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
    /**
     * Returns true if the point is the zero point.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the point's elements are both zero.
     */
    isZero: function() {
       return this._vec.eql(Vector.Zero);
    },
-	
-	/**
-	 * Returns the distance between two points.
-	 * @param point {Point2D} The point to compare against
-	 */
-	dist: function(point) {
-		return this._vec.distanceFrom(point._vec);
-	},
+   
+   /**
+    * Returns the distance between this and another point.
+    * @param point {Point2D} The point to compare against
+    * @return {Number} The distance between the two points
+    */
+   dist: function(point) {
+      return this._vec.distanceFrom(point._vec);
+   },
 
    /**
-    * Returns a printable version of this object.
+    * Returns a printable version of this object fixed to two decimal places.
+    * @return {String} Formatted as "x,y"
     */
    toString: function() {
       return Number(this._vec.e(1)).toFixed(2) + "," + Number(this._vec.e(2)).toFixed(2);
@@ -499,6 +491,10 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
 }, { /** @scope Point2D.prototype */
 
+   /**
+    * Return the classname of the this object
+    * @return {String} "Point2D"
+    */
    getClassName: function() {
       return "Point2D";
    }
@@ -522,8 +518,9 @@ Engine.initObject("Vector2D", "Point2D", function() {
 var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
    /**
-    * Normalize the vector, returning its unit length, not including the actual length of the vector.
-    * @type Vector2D
+    * A mutator method that normalizes this vector, returning a unit length vector.
+    * @return {Vector2D} This vector, normalized
+    * @see #len
     */
    normalize: function() {
       this._vec = this._vec.toUnitVector();
@@ -532,28 +529,27 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
    },
 
    /**
-    * Get the magnitude/length of the vector.
+    * Get the magnitude/length of this vector.
     *
-    * @returns A value representing the length (magnitude) of the point.
-    * @type Number
+    * @return {Number} A value representing the length (magnitude) of the vector.
     */
    len: function() {
       return this._vec.modulus();
    },
 
    /**
-    * Get the dot product of two vectors.
+    * Get the dot product of this vector and another.
     * @param vector {Vector} The Point to perform the operation against.
-    * @type Vector2D
+    * @return {Number} The dot product
     */
    dot: function(vector) {
       return this._vec.dot(vector._vec);
    },
 
    /**
-    * Get the cross product of two vectors.
+    * A mutator method that gets the cross product of this vector and another.
     * @param vector {Vector2D} The vector to perform the operation against.
-    * @type Vector2D
+    * @return {Vector2D} This vector 
     */
    cross: function(vector) {
       this._vec = this._vec.cross(vector._vec);
@@ -567,13 +563,18 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     * is also a vector.
     *
     * @param vector {Vector} The vector to perform the angular determination against
-    * @type Number
+    * @return {Number} The angle between two vectors, in degrees
     */
    angleBetween: function(vector) {
       return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
    }
 
 }, { /** @scope Vector2D.prototype */
+   
+   /**
+    * Return the classname of the this object
+    * @return {String} "Vector2D"
+    */
    getClassName: function() {
       return "Vector2D";
    }
@@ -617,10 +618,10 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Set the values of this rectangle.
     *
-    * @param x {Float} An optional value to initialize the X coordinate of the rectangle
-    * @param y {Float} An optional value to initialize the Y coordinate of the rectangle
-    * @param width {Float} An optional value to initialize the width of the rectangle
-    * @param height {Float} An optional value to initialize the height of the rectangle
+    * @param x {Number} An optional value to initialize the X coordinate of the rectangle
+    * @param y {Number} An optional value to initialize the Y coordinate of the rectangle
+    * @param width {Number} An optional value to initialize the width of the rectangle
+    * @param height {Number} An optional value to initialize the height of the rectangle
     */
    set: function(x, y, width, height)
    {
@@ -651,21 +652,22 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Returns <tt>true</tt> if this rectangle is equal to the specified rectangle.
     *
     * @param rect {Rectangle2D} The rectangle to compare to
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the two rectangles are equal
     */
    equals: function(rect) {
       return (this.topLeft.equals(rect.getTopLeft()) && this.dims.equals(rect.getDims()));
    },
 
    /**
-    * Offset this rectangle by the given amount in the X and Y axis.  The first parameter
-    * can be either a point, or the value for the X axis.  If the X axis is specified,
-    * the second parameter should be the amount to offset in the Y axis.
+    * A mutator method that offsets this rectangle by the given amount in the X and Y axis.  
+    * The first parameter can be either a point, or the value for the X axis.  If the X axis is 
+    * specified, the second parameter should be the amount to offset in the Y axis.
     *
     * @param offsetPtOrX {Point/int} Either a {@link Point} which contains the offset in X and Y, or an integer
     *                                representing the offset in the X axis.
     * @param offsetY {int} If <code>offsetPtOrX</code> is an integer value for the offset in the X axis, this should be
     *                      the offset along the Y axis.
+    * @return {Rectangle2D} This rectangle
     */
    offset: function(offsetPtOrX, offsetY)
    {
@@ -684,7 +686,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    },
 
    /**
-    * Set the top left of the rectangle to the point, or coordinates specified.
+    * Set the top left of this rectangle to the point, or coordinates specified.
     *
     * @param ptOrX {Point2D/Number} The top left point, or the X coordinate
     * @param y {Number} If the top left wasn't specified as the first argument, this is the Y coordinate
@@ -700,8 +702,17 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       }
    },
 
-   setDims: function(point) {
-      this.dims.set(point.x, point.y);
+   /**
+    * Set the width and height of this rectangle using the point, or coordinates specified.
+    * @param ptOrX {Point2D/Number} The top left point, or the X coordinate
+    * @param [y] {Number} If the top left isn't a point, this is the Y coordinate
+    */
+   setDims: function(ptOrX, y) {
+      if (ptOrX instanceof Point2D) {
+         this.dims.set(ptOrX.x, ptOrX.y);
+      } else {
+         this.dims.set(ptOrX, y)
+      }
    },
 
    /**
@@ -729,7 +740,6 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     *
     * @param rect A {@link Rectangle} to compare against
     * @return {Vector2D} The vector to resolve the overlap
-    * @type Boolean
     */
    isOverlapped: function(rect)
    {
@@ -740,8 +750,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Determine if this rectangle intersects another rectangle.
     *
     * @param rect A {@link Rectangle2D} to compare against
-    * @return <code>true</code> if the two rectangles intersect.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the two rectangles intersect.
     */
    isIntersecting: function(rect) {
       var r1 = this.get();
@@ -756,8 +765,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Determine if this rectangle is contained within the specified rectangle.
     *
     * @param rect A {@link Rectangle2D} to compare against
-    * @return <code>true</code> if the this rectangle is fully contained in the specified rectangle.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the this rectangle is fully contained in the specified rectangle.
     */
    isContained: function(rect)
    {
@@ -773,8 +781,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Determine if this rectangle contains the specified rectangle.
     *
     * @param rect A {@link Rectangle2D} to compare against
-    * @return <code>true</code> if the rectangle is fully contained within this rectangle.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the rectangle is fully contained within this rectangle.
     */
    containsRect: function(rect)
    {
@@ -791,7 +798,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Returns <tt>true</tt> if this rectangle contains the specified point.
     *
     * @param point {Point} The point to test
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the point is within this rectangle
     */
    containsPoint: function(point)
    {
@@ -805,17 +812,25 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Returns a {@link Point2D} that contains the center point of this rectangle.
     *
-    * @return {Point2D}
+    * @return {Point2D} The center point of the rectangle
     */
    getCenter: function()
    {
       return Point2D.create(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
    },
 
+   /**
+    * Returns the half length of the width dimension of this rectangle
+    * @return {Number} The half-width
+    */
    getHalfWidth: function() {
       return this.len_x() * 0.5;
    },
 
+   /**
+    * Returns the half length of the height dimension of this rectangle
+    * @return {Number} The half-height
+    */
    getHalfHeight: function() {
       return this.len_y() * 0.5;
    },
@@ -872,13 +887,18 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 
    /**
     * Returns a printable version of this object.
-    * @return {String}
+    * @return {String} Formatted like "x,y [w,h]"
     */
    toString: function()
    {
       return (this.topLeft + " [" + this.dims + "]");
    }
 }, { /** @scope Rectangle2D.prototype */
+   
+   /**
+    * Return the classname of the this object
+    * @return {String} "Rectangle2D"
+    */
    getClassName: function() {
       return "Rectangle2D";
    }
@@ -896,10 +916,10 @@ Engine.initObject("Circle2D", "MathObject", function() {
  */
 var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
 
-	center: null,
-	
-	radius: 0,
-	
+   center: null,
+   
+   radius: 0,
+   
    /**
     * Create a circle object specifying the X and Y center position and
     * the radius.
@@ -923,9 +943,9 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
    /**
     * Set the values of this circle.
     *
-    * @param x {Float} An optional value to initialize the X coordinate of the circle
-    * @param y {Float} An optional value to initialize the Y coordinate of the circle
-    * @param radius {Float} An optional value to initialize the radius
+    * @param x {Number} An optional value to initialize the X coordinate of the circle
+    * @param y {Number} An optional value to initialize the Y coordinate of the circle
+    * @param radius {Number} An optional value to initialize the radius
     */
    set: function(x, y, radius)
    {
@@ -933,10 +953,10 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
          this.center.set(x.getCenter());
          this.radius = x.getRadius();
       }
-		else if (x instanceof Point2D) {
-			this.center.set(x);
-			this.radius = y;
-		}
+      else if (x instanceof Point2D) {
+         this.center.set(x);
+         this.radius = y;
+      }
       else
       {
          this.center.set((x != null ? x : 0.0), (y != null ? y : 0.0));
@@ -959,7 +979,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
     * Returns <tt>true</tt> if this circle is equal to the specified circle.
     *
     * @param circle {Circle2D} The circle to compare to
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the two circles are equal
     */
    equals: function(circle) {
       return (this.center.equals(circle.getCenter()) && this.radius == circle.getRadius());
@@ -990,84 +1010,97 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
       this.center.add(offs);
       return this;
    },
-	
-	getCenter: function() {
-		return Point2D.create(this.center);
-	},
-	
-	getRadius: function() {
-		return this.radius;
-	},
-	
+   
+   /**
+    * Get the center point of this circle.
+    * @return {Point2D} The center point
+    */
+   getCenter: function() {
+      return Point2D.create(this.center);
+   },
+   
+   /**
+    * Get the radius of this circle
+    * @return {Number} The radius
+    */
+   getRadius: function() {
+      return this.radius;
+   },
+   
    /**
     * Determine if this circle intersects another circle.
     *
     * @param circle A {@link Circle2D} to compare against
-    * @return <code>true</code> if the two circles intersect.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the two circles intersect.
     */
    isIntersecting: function(circle) {
-		// Square root is slow...
-		//var d = this.getCenter().dist(circle.getCenter());
+      // Square root is slow...
+      //var d = this.getCenter().dist(circle.getCenter());
       //return (d <= (this.getRadius() + circle.getRadius())); 
-		
-		// Faster
-		var c1 = this.getCenter();
-		var c2 = circle.getCenter();
-		var dX = Math.pow(c1.x - c2.x, 2);
-		var dY = Math.pow(c1.y - c2.y, 2);
-		var r2 = Math.pow(this.getRadius() + circle.getRadius(), 2);
-		return (dX + dY <= r2);		
+      
+      // Faster
+      var c1 = this.getCenter();
+      var c2 = circle.getCenter();
+      var dX = Math.pow(c1.x - c2.x, 2);
+      var dY = Math.pow(c1.y - c2.y, 2);
+      var r2 = Math.pow(this.getRadius() + circle.getRadius(), 2);
+      return (dX + dY <= r2);    
    },
 
    /**
     * Determine if this circle is contained within the specified circle.
     *
     * @param circle A {@link Circle2D} to compare against
-    * @return <code>true</code> if the this circle is fully contained in the specified circle.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the this circle is fully contained in the specified circle.
     */
    isContained: function(circle)
    {
-		var d = circle.getCenter().dist(this.getCenter());
-		return (d < (this.getRadius() + circle.getRadius()));
+      var d = circle.getCenter().dist(this.getCenter());
+      return (d < (this.getRadius() + circle.getRadius()));
    },
 
    /**
     * Determine if this rectangle contains the specified rectangle.
     *
     * @param rect A {@link Rectangle2D} to compare against
-    * @return <code>true</code> if the rectangle is fully contained within this rectangle.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the rectangle is fully contained within this rectangle.
     */
    containsCircle: function(circle)
    {
-		return circle.isContained(this);
+      return circle.isContained(this);
    },
 
    /**
     * Returns <tt>true</tt> if this rectangle contains the specified point.
     *
     * @param point {Point} The point to test
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the point is within the circle
     */
    containsPoint: function(point)
    {
       var c1 = this.getCenter();
-		var r = this.getRadius();
+      var r = this.getRadius();
       return (c1.dist(point) <= r);
    },
 
-	toString: function() {
-		return this.center.toString() + " r" + Number(this.radius).toFixed(2);
-	}	
+   /**
+    * Returns a printable version of this object.
+    * @return {String} Formatted like "cX,cY r#"
+    */
+   toString: function() {
+      return this.center.toString() + " r" + Number(this.radius).toFixed(2);
+   }  
 
 },{ /** @scope Circle2D.prototype */
-	
+   
+   /**
+    * Return the classname of the this object
+    * @return {String} "Circle2D"
+    */
    getClassName: function() {
       return "Circle2D";
    }
-	
+   
 });
 
 return Circle2D;

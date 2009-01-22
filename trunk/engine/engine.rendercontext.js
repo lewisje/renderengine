@@ -309,7 +309,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    getNearObjects: function(obj) {
       return {};
    }
-}, /** @scope RenderContext.prototype */{
+}, { /** @scope RenderContext.prototype */
 
    /**
     * Sort the objects to draw from objects with the lowest
