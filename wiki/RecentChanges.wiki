@@ -4,8 +4,8 @@
 
 || *Date* || *Notes* ||
 || 01/22/2009 || Extended collider component with two derivatives - box and circle colliders.  These two components will perform more specific tests for collision instead of leaving it totally up to the host.  Also added a way to make a collider component only respond to specific objects. ||
-|| 01/21/2009 || Updated the WiiTest so that balls bounce off eachother. ||
-|| 01/19/2009 || Started work on beta 1.4 ||
+|| 01/21/2009 || Updated the Wii test so that balls bounce off each other. ||
+|| 01/18/2009 || Started work on beta 1.4 ||
 
 ----
 
