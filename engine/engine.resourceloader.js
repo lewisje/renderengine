@@ -217,7 +217,8 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
    getResourceType: function() {
       return "default";
    }
-}, /** @scope ResourceLoader.prototype */{
+}, { /** @scope ResourceLoader.prototype */
+
    /**
     * Get the class name of this object
     * @return {String} The string "ResourceLoader"

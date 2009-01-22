@@ -95,7 +95,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
    /**
     * Returns <tt>true</tt> if the timer is currently running.
-    * @type Boolean
+    * @return {Boolean} <tt>true</tt> if the timer is running
     */
    isRunning: function() {
       return this.running;
@@ -134,7 +134,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
    /**
     * Get the callback function for this timer.
-    * @type Function
+    * @return {Function} The callback function
     */
    getCallback: function() {
       return this.callback;
@@ -153,15 +153,15 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
    /**
     * Get the interval of this timer, in milliseconds.
-    * @type Number
+    * @return {Number} The interval
     */
    getInterval: function() {
       return this.interval;
    }
-}, {
+}, { /** @scope Timer.prototype */
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} "Timer"
     */
    getClassName: function() {
       return "Timer";
@@ -199,10 +199,10 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
    restart: function() {
       this.setTimer(window.setTimeout(this.getCallback(), this.getInterval()));
    }
-}, {
+}, { /** @scope Timeout.prototype */
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} "Timeout"
     */
    getClassName: function() {
       return "Timeout";
@@ -228,7 +228,7 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
    constructor: function(name, interval, callback) {
 
       var cb = function() {
-			var aC = arguments.callee;
+         var aC = arguments.callee;
          aC.timer.destroy();
          aC.cbFn();
       };
@@ -250,11 +250,11 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
 
       this.base();
    }
-}, {
+}, { /** @scope OneShotTimeout.prototype */
 
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} "OneShotTimeout"
     */
    getClassName: function() {
       return "OneShotTimeout";
@@ -269,8 +269,8 @@ Engine.initObject("OneShotTrigger", "OneShotTimeout", function() {
 
 /**
  * @class A one-shot timer that triggers a callback, at regular intervals,
- *			 until the timer has expired.  When the timer expires, the trigger
- *			 will automatically destroy itself.
+ *        until the timer has expired.  When the timer expires, the trigger
+ *        will automatically destroy itself.
  *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
@@ -281,22 +281,22 @@ Engine.initObject("OneShotTrigger", "OneShotTimeout", function() {
 var OneShotTrigger = OneShotTimeout.extend(/** @scope OneShotTimeout.prototype */{
 
    constructor: function(name, interval, callback, triggerInterval, triggerCallback) {
-		var doneFn = function() {
-			var aC = arguments.callee;
-			aC.intv.destroy();
-			aC.cb();
-		};
-		// Create an Interval internally
-		doneFn.intv = Interval.create(name + "_trigger", triggerInterval, triggerCallback);
-		doneFn.cb = callback;
+      var doneFn = function() {
+         var aC = arguments.callee;
+         aC.intv.destroy();
+         aC.cb();
+      };
+      // Create an Interval internally
+      doneFn.intv = Interval.create(name + "_trigger", triggerInterval, triggerCallback);
+      doneFn.cb = callback;
 
       this.base(name, interval, doneFn);
    }
-}, {
+}, { /** @scope OneShotTrigger.prototype */
 
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} "OneShotTrigger"
     */
    getClassName: function() {
       return "OneShotTrigger";
@@ -334,10 +334,11 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
    restart: function() {
       this.setTimer(window.setInterval(this.getCallback(), this.getInterval()));
    }
-}, {
+}, { /** @scope Interval.prototype */
+
    /**
     * Get the class name of this object
-    * @type String
+    * @return {String} "Interval"
     */
    getClassName: function() {
       return "Interval";
