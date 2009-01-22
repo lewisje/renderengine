@@ -3,6 +3,13 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
+|| 01/22/2009 || Extended collider component with two derivatives - box and circle colliders.  These two components will perform more specific tests for collision instead of leaving it totally up to the host.  Also added a way to make a collider component only respond to specific objects. ||
+|| 01/21/2009 || Updated the WiiTest so that balls bounce off eachother. ||
+|| 01/19/2009 || Started work on beta 1.4 ||
+
+----
+
+|| *Date* || *Notes* ||
 || 01/16/2009 || _Beta 1.3 has been tagged._  Decided to skip the Poker/Tetris clone for now since it was fairly complex logic.  Instead, there's a simple "game" which was built for Wii (it works in all supported browsers, however) ||
 || 01/14/2009 || Almost done with the HTML context stuff I planned for b1.3.  I've also got a Wii test app which demos the HTML context, sprite loading/rendering, and Wii remote input. ||
 || 01/12/2009 || Started work on beta 1.3.  Created a beta 1.2.1 tag since all the examples were pointing to the old version of jQuery. ||
