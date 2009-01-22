@@ -2,8 +2,8 @@
  * The Render Engine
  * SpatialGrid
  *
- * @fileoverview A simple structure which divides a finite space up into a more
- * 				  coarse grid to assist in quickly finding objects within that
+ * @fileoverview A simple collision model which divides a finite space up into 
+ * 				  a coarse grid to assist in quickly finding objects within that
  * 				  space.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -40,15 +40,22 @@ Engine.include("/engine/engine.math2d.js");
 Engine.initObject("GridNode", "SpatialNode", function() {
 
 /**
- * @class A single node within a SpatialGrid.
+ * @class A single node within a SpatialGrid.  When the collision model is
+ * 		 updated, the nodes within the grid will be updated to reflect the
+ * 		 objects within it.  A node defines a single rectangle within the
+ * 		 entire {@link SpatialGrid}
  *
- * @param rect {Rectangle2D} The rectangle which defines this node.
  * @extends SpatialNode
  */
 var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
 
    rect: null,
 
+	/**
+	 * Create an instance of a SpatialNode for use within a {@link SpatialGrid}
+	 * @constructor
+	 * @param rect {Rectangle2D} The rectangle which defines this node.
+	 */
    constructor: function(rect) {
       this.base();
       this.rect = rect;

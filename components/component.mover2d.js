@@ -64,6 +64,8 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	
 	gravity: null,
 
+	atRest: null,
+	
    constructor: function(name, priority) {
       this.base(name, priority || 1.0);
       this.velocity = Vector2D.create(0,0);
@@ -72,6 +74,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.vDecay = 0;
 		this.maxVelocity = -1;
 		this.gravity = Vector2D.create(0,0);
+		this.atRest = false;
    },
 
    release: function() {
@@ -84,6 +87,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 		this.maxVelocity = -1;
 		this.acceleration = null;
 		this.gravity = null;
+		this.atRest = null;
    },
 
    /**
@@ -98,37 +102,45 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
     * @param rendering {Boolean} <tt>true</tt> during the render phase
     */
    execute: function(renderContext, time) {
-      this.lPos.set(this.getPosition());
-      var rot = this.getRotation();
-
-      // If we've just come into the world, we can short circuit with a
-      // quick addition of the velocity.
-      if (this.lastTime == -1)
-      {
-         this.setPosition(this.lPos.add(this.velocity));
-      }
-      else
-      {
-         if (this.vDecay != 0 && this.velocity.len() > 0) {
-            // We need to decay the velocity by the amount
-            // specified until velocity is zero, or less than zero
-            var invVelocity = Vector2D.create(this.velocity).neg();
-            invVelocity.mul(this.vDecay);
-
-            this.velocity.add(invVelocity);
+		if (!this.atRest) {
+	      this.lPos.set(this.getPosition());
+	      var rot = this.getRotation();
+	
+	      // If we've just come into the world, we can short circuit with a
+	      // quick addition of the velocity.
+	      if (this.lastTime == -1)
+	      {
+	         this.setPosition(this.lPos.add(this.velocity));
+	      }
+	      else
+	      {
+	         if (this.vDecay != 0 && this.velocity.len() > 0) {
+	            // We need to decay the velocity by the amount
+	            // specified until velocity is zero, or less than zero
+	            var invVelocity = Vector2D.create(this.velocity).neg();
+	            invVelocity.mul(this.vDecay);
+	
+	            this.velocity.add(invVelocity);
+	         }
+	
+	         var diff = (time - this.lastTime) * 0.1;
+				var oldVel = Vector2D.create(this.velocity);
+				this.velocity.add(this.getAcceleration());
+				this.velocity.add(this.getGravity());
+				if (this.maxVelocity != -1 && this.velocity.len() > this.maxVelocity) {
+					this.velocity.set(oldVel);
+				}
+	         var vz = Vector2D.create(this.velocity).mul(diff);
+	         this.setPosition(this.lPos.add(vz));
+	         this.setRotation(rot + this.angularVelocity * (diff));
+	      }
+			
+         // Check rest state     
+         if (this.getVelocity().len() < 0.2) {
+            this.setVelocity(Point2D.ZERO);
+				this.atRest = true;
          }
-
-         var diff = (time - this.lastTime) * 0.1;
-			var oldVel = Vector2D.create(this.velocity);
-			this.velocity.add(this.getAcceleration());
-			this.velocity.add(this.getGravity());
-			if (this.maxVelocity != -1 && this.velocity.len() > this.maxVelocity) {
-				this.velocity.set(oldVel);
-			}
-         var vz = Vector2D.create(this.velocity).mul(diff);
-         this.setPosition(this.lPos.add(vz));
-         this.setRotation(rot + this.angularVelocity * (diff));
-      }
+		}
 
       this.lastTime = time;
       this.base(renderContext, time);
@@ -141,15 +153,24 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
     */
    setVelocity: function(vector) {
       this.velocity.set(vector);
+		this.atRest = false;
    },
 
    /**
     * Returns the velocity vector of the component
-    * @type Vector2D
+    * @return {Vector2D}
     */
    getVelocity: function() {
       return this.velocity;
    },
+	
+	/**
+	 * Returns <tt>true</tt> if the component is in a resting state.
+	 * @return {Boolean}
+	 */
+	isAtRest: function() {
+		return this.atRest;
+	},
 	
 	/**
 	 * Set the acceleration vector.  Acceleration will
