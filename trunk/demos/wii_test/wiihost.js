@@ -63,7 +63,7 @@ Engine.initObject("WiiHost", "Object2D", function() {
          this.add(ColliderComponent.create("collide", WiiTest.getCModel()));
          
          // The player bounding box
-         this.setBoundingBox(Rectangle2D.create(0, 0, 60, 60));
+         this.setBoundingBox(Rectangle2D.create(0, 0, 20, 20));
          
          // Initialize the currently selected ball to null
          this.overBall = null;
@@ -138,7 +138,7 @@ Engine.initObject("WiiHost", "Object2D", function() {
        */
       getWorldBox: function() {
          var bBox = this.base();
-         return bBox.offset(Point2D.create(-30, -30));
+         return bBox.offset(Point2D.create(-10, -10));
       },
 
       /**

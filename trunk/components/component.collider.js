@@ -126,7 +126,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
          var pcl = this.collisionModel.getPCL(this.getHostObject().getPosition());
          var status = ColliderComponent.CONTINUE;
          EngineSupport.forEach(pcl, function(obj) {
-            if (status == ColliderComponent.CONTINUE)
+            if (this.getHostObject() != obj && status == ColliderComponent.CONTINUE)
             {
                status = this.getHostObject().onCollide(obj);
             }

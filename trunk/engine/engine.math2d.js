@@ -87,10 +87,13 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @type Boolean
     * @memberOf Math2D
     */
-   boxBoxCollision: function(box1, box2)
-   {
+   boxBoxCollision: function(box1, box2) {
       return box1.isIntersecting(box2);
    },
+	
+	circleCircleCollision: function(circle1, circle2) {
+		
+	},
 
    /**
     * Perform point to AAB collision, returning <code>true</code>
@@ -101,8 +104,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @type Boolean
     * @memberOf Math2D
     */
-   boxPointCollision: function(box, point)
-   {
+   boxPointCollision: function(box, point) {
       return box.containsPoint(point);
    },
 
@@ -117,8 +119,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @type Boolean
     * @memberOf Math2D
     */
-   lineLineCollision: function(p1, p2, p3, p4)
-   {
+   lineLineCollision: function(p1, p2, p3, p4) {
       var d = ((p4.y - p3.y) * (p2.x - p1.x)) - ((p4.x - p3.x) * (p2.y - p1.y));
       var n1 = ((p4.x - p3.x) * (p1.y - p3.y)) - ((p4.y - p3.y) * (p1.x - p3.x));
       var n2 = ((p2.x - p1.x) * (p1.y - p3.y)) - ((p2.y - p1.y) * (p1.x - p3.x));
@@ -194,8 +195,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @type Vector2D
     * @memberOf Math2D
     */
-   getDirectionVector: function(origin, baseVec, angle)
-   {
+   getDirectionVector: function(origin, baseVec, angle) {
       var r = Math2D.degToRad(angle);
 
       var x = Math.cos(r) * baseVec.x - Math.sin(r) * baseVec.y;
@@ -227,12 +227,58 @@ Engine.initObject("MathObject", null, function() {
 
 var MathObject = Base.extend({
    constructor: function() {
-   }
-}, {
-   create: function() {
-      return new this(arguments[0], arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
+   },
+	
+   release: function() {
    },
 
+   /**
+    * Destroy this object instance (remove it from the Engine).  The object
+    * is returned to the pool of math objects so it can be used again.
+    */
+   destroy: function() {
+      this.release();
+   },
+}, { /** @scope MathObject.prototype */
+   poolNew: 0,
+
+   poolSize: 0,
+
+   /**
+    * This method is used in place of a constructor.  If an object of this
+    * type is available in the pool, it will be used, rather than creating
+    * a new instance.  If the object is not in the pool, it will be created.
+    * Upon destruction, the object will return to the pool.
+    * <p/>
+    * Usage: <tt>var obj = [MathObjectClass].create(arg1, arg2, arg3...);</tt>
+    *
+    */
+   create: function() {
+      return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6],arguments[7],arguments[8],arguments[9]);
+   },
+
+   /**
+    * During object destruction, it needs to return itself to the
+    * pool so it can be used again.  Instead of creating new instances
+    * of each object, we utilize a pooled object so we don't need the
+    * garbage collector to be invoked for removed objects.
+    * @private
+    */
+   returnToPool: function(obj) {
+   },
+
+   /**
+    * The pool of all math objects.  Each object is stored
+    * by it's classname, retrieved from <tt>getClassName()</tt>
+    * that should be defined by all objects.
+    * @private
+    */
+   objectPool: {},
+
+	/**
+	 * Return the classname of the math object
+	 * @return {String}
+	 */
    getClassName: function() {
       return "MathObject";
    }
@@ -435,6 +481,14 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    isZero: function() {
       return this._vec.eql(Vector.Zero);
    },
+	
+	/**
+	 * Returns the distance between two points.
+	 * @param point {Point2D} The point to compare against
+	 */
+	dist: function(point) {
+		return this._vec.distanceFrom(point._vec);
+	},
 
    /**
     * Returns a printable version of this object.
@@ -443,13 +497,16 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       return Number(this._vec.e(1)).toFixed(2) + "," + Number(this._vec.e(2)).toFixed(2);
    }
 
-}, {
+}, { /** @scope Point2D.prototype */
 
    getClassName: function() {
       return "Point2D";
    }
 });
 
+/**
+ * The "zero" point. This point should not be modified.
+ */
 Point2D.ZERO = new Point2D(0,0);
 
 return Point2D;
@@ -516,7 +573,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
       return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
    }
 
-}, {
+}, { /** @scope Vector2D.prototype */
    getClassName: function() {
       return "Vector2D";
    }
@@ -612,7 +669,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    offset: function(offsetPtOrX, offsetY)
    {
-      var offs = new Point2D(0,0);
+      var offs = Point2D.create(0,0);
       if (offsetPtOrX instanceof Point2D)
       {
          offs.set(offsetPtOrX);
@@ -682,7 +739,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Determine if this rectangle intersects another rectangle.
     *
-    * @param rect A {@link Rectangle} to compare against
+    * @param rect A {@link Rectangle2D} to compare against
     * @return <code>true</code> if the two rectangles intersect.
     * @type Boolean
     */
@@ -752,7 +809,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    getCenter: function()
    {
-      return new Point2D(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
+      return Point2D.create(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
    },
 
    getHalfWidth: function() {
@@ -821,12 +878,198 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    {
       return (this.topLeft + " [" + this.dims + "]");
    }
-}, {
+}, { /** @scope Rectangle2D.prototype */
    getClassName: function() {
       return "Rectangle2D";
    }
 });
 
 return Rectangle2D;
+
+});
+
+
+Engine.initObject("Circle2D", "MathObject", function() {
+
+/**
+ * @class A 2D circle class with helpful manipulation methods.
+ */
+var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
+
+	center: null,
+	
+	radius: 0,
+	
+   /**
+    * Create a circle object specifying the X and Y center position and
+    * the radius.
+    *
+    * @param x {Number} The center X coordinate
+    * @param y {Number} The center Y coordinate
+    * @param radius {Number} The radius of the circle
+    */
+   constructor: function(x, y, radius) {
+      this.center = Point2D.create(0,0);
+      this.radius = 0;
+      this.set(x,y,radius);
+   },
+
+   release: function() {
+      this.base();
+      this.center = null;
+      this.radius = 0;
+   },
+
+   /**
+    * Set the values of this circle.
+    *
+    * @param x {Float} An optional value to initialize the X coordinate of the circle
+    * @param y {Float} An optional value to initialize the Y coordinate of the circle
+    * @param radius {Float} An optional value to initialize the radius
+    */
+   set: function(x, y, radius)
+   {
+      if (x instanceof Circle2D) {
+         this.center.set(x.getCenter());
+         this.radius = x.getRadius();
+      }
+		else if (x instanceof Point2D) {
+			this.center.set(x);
+			this.radius = y;
+		}
+      else
+      {
+         this.center.set((x != null ? x : 0.0), (y != null ? y : 0.0));
+         this.radius = (radius != null ? radius : 0.0);
+      }
+   },
+
+   /**
+    * Get an object with the elements containing centerX, centerY, and radius
+    * as the elements x, y, and r. 
+    *
+    * @return {Object} An object with the specified elements
+    */
+   get: function() {
+      var c = this.getCenter();
+      return {x: c.x, y: c.y, r: this.getRadius()};
+   },
+
+   /**
+    * Returns <tt>true</tt> if this circle is equal to the specified circle.
+    *
+    * @param circle {Circle2D} The circle to compare to
+    * @type Boolean
+    */
+   equals: function(circle) {
+      return (this.center.equals(circle.getCenter()) && this.radius == circle.getRadius());
+   },
+
+   /**
+    * Offset this circle by the given amount in the X and Y axis.  The first parameter
+    * can be either a {@link Point2D}, or the value for the X axis.  If the X axis is specified,
+    * the second parameter should be the amount to offset in the Y axis.
+    *
+    * @param offsetPtOrX {Point/int} Either a {@link Point2D} which contains the offset in X and Y, or an integer
+    *                                representing the offset in the X axis.
+    * @param offsetY {int} If <code>offsetPtOrX</code> is an integer value for the offset in the X axis, this should be
+    *                      the offset along the Y axis.
+    */
+   offset: function(offsetPtOrX, offsetY)
+   {
+      var offs = new Point2D(0,0);
+      if (offsetPtOrX instanceof Point2D)
+      {
+         offs.set(offsetPtOrX);
+      }
+      else
+      {
+         offs.set(offsetPtOrX, offsetY);
+      }
+
+      this.center.add(offs);
+      return this;
+   },
+	
+	getCenter: function() {
+		return Point2D.create(this.center);
+	},
+	
+	getRadius: function() {
+		return this.radius;
+	},
+	
+   /**
+    * Determine if this circle intersects another circle.
+    *
+    * @param circle A {@link Circle2D} to compare against
+    * @return <code>true</code> if the two circles intersect.
+    * @type Boolean
+    */
+   isIntersecting: function(circle) {
+		// Square root is slow...
+		//var d = this.getCenter().dist(circle.getCenter());
+      //return (d <= (this.getRadius() + circle.getRadius())); 
+		
+		// Faster
+		var c1 = this.getCenter();
+		var c2 = circle.getCenter();
+		var dX = Math.pow(c1.x - c2.x, 2);
+		var dY = Math.pow(c1.y - c2.y, 2);
+		var r2 = Math.pow(this.getRadius() + circle.getRadius(), 2);
+		return (dX + dY <= r2);		
+   },
+
+   /**
+    * Determine if this circle is contained within the specified circle.
+    *
+    * @param circle A {@link Circle2D} to compare against
+    * @return <code>true</code> if the this circle is fully contained in the specified circle.
+    * @type Boolean
+    */
+   isContained: function(circle)
+   {
+		var d = circle.getCenter().dist(this.getCenter());
+		return (d < (this.getRadius() + circle.getRadius()));
+   },
+
+   /**
+    * Determine if this rectangle contains the specified rectangle.
+    *
+    * @param rect A {@link Rectangle2D} to compare against
+    * @return <code>true</code> if the rectangle is fully contained within this rectangle.
+    * @type Boolean
+    */
+   containsCircle: function(circle)
+   {
+		return circle.isContained(this);
+   },
+
+   /**
+    * Returns <tt>true</tt> if this rectangle contains the specified point.
+    *
+    * @param point {Point} The point to test
+    * @type Boolean
+    */
+   containsPoint: function(point)
+   {
+      var c1 = this.getCenter();
+		var r = this.getRadius();
+      return (c1.dist(point) <= r);
+   },
+
+	toString: function() {
+		return this.center.toString() + " r" + Number(this.radius).toFixed(2);
+	}	
+
+},{ /** @scope Circle2D.prototype */
+	
+   getClassName: function() {
+      return "Circle2D";
+   }
+	
+});
+
+return Circle2D;
 
 });

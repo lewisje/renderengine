@@ -224,8 +224,8 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf BaseObject
+    * @return {String}
+    * @memberOf PooledObject
     */
    getClassName: function() {
       if (!this.hasOwnProperty("getClassName")) {
