@@ -51,9 +51,9 @@ Engine.initObject("WiiBall", "Object2D", function() {
 
       atRest: false,
 
-		circle: null,
-		
-		upVec: null,
+      circle: null,
+      
+      upVec: null,
 
       // Debugging collision box and bounding box
       cBox: null,
@@ -87,11 +87,11 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.setGravity(Point2D.create(0, 1));
          this.setVelocity(Vector2D.create(2, 0));
          this.atRest = false;
-			
-			this.circle = Circle2D.create(Point2D.create(0, 0), 30);
-			this.upVec = Vector2D.create(0, -1);
-			
-			//this.setVelocityDecay(0.3);
+         
+         this.circle = Circle2D.create(Point2D.create(0, 0), 30);
+         this.upVec = Vector2D.create(0, -1);
+         
+         //this.setVelocityDecay(0.3);
       },
 
       /**
@@ -159,10 +159,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
       getRenderPosition: function() {
          return this.getPosition();
       },
-		
-		getCircle: function() {
-			return Circle2D.create(this.getPosition(), 30);
-		},
+      
+      getCircle: function() {
+         return Circle2D.create(this.getPosition(), 30);
+      },
 
       /**
        * Set, or initialize, the position of the mover component
@@ -181,10 +181,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
       setVelocity: function(vec) {
          this.getComponent("move").setVelocity(vec);  
       },
-		
-		setVelocityDecay: function(decay) {
-			this.getComponent("move").setVelocityDecay(decay);
-		},
+      
+      setVelocityDecay: function(decay) {
+         this.getComponent("move").setVelocityDecay(decay);
+      },
 
       /**
        * Get the velocity vector of the ball
@@ -201,10 +201,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
       setGravity: function(vec) {
          this.getComponent("move").setGravity(vec);
       },
-		
-		isAtRest: function() {
-			return this.getComponent("move").isAtRest();
-		},
+      
+      isAtRest: function() {
+         return this.getComponent("move").isAtRest();
+      },
 
       /**
        * Check to see if the ball should bounce off the floor or
@@ -260,138 +260,145 @@ Engine.initObject("WiiBall", "Object2D", function() {
        * change the sprite which represents it.
        */
       onCollide: function(obj) {
-			if (obj instanceof WiiBall &&
-				 this.getWorldBox().isIntersecting(obj.getWorldBox())) {
-				if (!this.isAtRest()) {
-					// Bounce the balls
-					if (this.ballsCollide(obj)) {
-						this.doBallBounce(obj);
-						return ColliderComponent.CONTINUE;
-					}
-				}
-			}
+         if (obj instanceof WiiBall &&
+             this.getWorldBox().isIntersecting(obj.getWorldBox())) {
+            if (!this.isAtRest()) {
+               // Bounce the balls
+               if (this.ballsCollide(obj)) {
+                  this.doBallBounce(obj);
+                  return ColliderComponent.CONTINUE;
+               }
+            }
+         }
 
          if (obj instanceof WiiHost &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
             this.setSprite(1);
-				return ColliderComponent.STOP;
+            return ColliderComponent.STOP;
          }
-			
+         
          this.setSprite(0);
          return ColliderComponent.CONTINUE;
       },
-		
-		ballsCollide: function(ball) {
-			// Early test
-			var dist = ball.getCircle().getCenter().dist(this.getCircle().getCenter());
-			var sumRad = ball.getCircle().getRadius() + this.getCircle().getRadius();
-			dist -= sumRad;
-			if (this.getVelocity().len() < dist) {
-				// No collision possible
-			  	return false;
-			}
-			
-			var norm = Vector2D.create(this.getVelocity()).normalize();
-			
-			// Find C, the vector from the center of the moving
-			// circle A to the center of B
-			var c = Vector2D.create(ball.getCircle().getCenter().sub(this.getCircle().getCenter()));
-			var dot = norm.dot(c);
-			
-			// Another early escape: Make sure that A is moving
-			// towards B! If the dot product between the movevec and
-			// B.center - A.center is less that or equal to 0,
-			// A isn't isn't moving towards B
-			if (dot <= 0) {
-			  return false;
-			}
-			
-			var lenC = c.len();
-			var f = (lenC * lenC) - (dot * dot);
+      
+      ballsCollide: function(ball) {
+         // Early test
+         var dist = ball.getCircle().getCenter().dist(this.getCircle().getCenter());
+         var sumRad = ball.getCircle().getRadius() + this.getCircle().getRadius();
+         dist -= sumRad;
+         if (this.getVelocity().len() < dist) {
+            // No collision possible
+            return false;
+         }
+         
+         var norm = Vector2D.create(this.getVelocity()).normalize();
+         
+         // Find C, the vector from the center of the moving
+         // circle A to the center of B
+         var c = Vector2D.create(ball.getCircle().getCenter().sub(this.getCircle().getCenter()));
+         var dot = norm.dot(c);
+         
+         // Another early escape: Make sure that A is moving
+         // towards B! If the dot product between the movevec and
+         // B.center - A.center is less that or equal to 0,
+         // A isn't isn't moving towards B
+         if (dot <= 0) {
+           return false;
+         }
+         
+         var lenC = c.len();
+         var f = (lenC * lenC) - (dot * dot);
 
-			// Escape test: if the closest that A will get to B
-			// is more than the sum of their radii, there's no
-			// way they are going collide
-			var sumRad2 = sumRad * sumRad;
-			if (f >= sumRad2) {
-			  return false;
-			}
-			
-			// We now have F and sumRadii, two sides of a right triangle.
-			// Use these to find the third side, sqrt(T)
-			var t = sumRad2 - f;
-			
-			// If there is no such right triangle with sides length of
-			// sumRadii and sqrt(f), T will probably be less than 0.
-			// Better to check now than perform a square root of a
-			// negative number.
-			if (t < 0) {
-			  return false;
-			}
-			
-			// Therefore the distance the circle has to travel along
-			// movevec is D - sqrt(T)
-			var distance = dot - Math.sqrt(t);
-			
-			// Get the magnitude of the movement vector
-			var mag = this.getVelocity().len();
-			
-			// Finally, make sure that the distance A has to move
-			// to touch B is not greater than the magnitude of the
-			// movement vector.
-			if (mag < distance) {
-			  return false;
-			}
-			
-			// Set the length of the movevec so that the circles will just
-			// touch
-			var moveVec = this.getVelocity().normalize();
-			movevec = moveVec.mul(distance);
-			
-			return true; 			
-		},
-		
-		doBallBounce: function(ball) {
-			// First, find the normalized vector n from the center of
-			// circle1 to the center of circle2
-			var n = Vector2D.create(this.getCircle().getCenter()).sub(ball.getCircle().getCenter());
-			n.normalize();
-			
-			// Find the length of the component of each of the movement
-			// vectors along n.
-			// a1 = v1 . n
-			// a2 = v2 . n
-			var v1 = this.getVelocity();
-			var v2 = ball.getVelocity();
-			
-			var a1 = v1.dot(n);
-			var a2 = v2.dot(n);
-			
-			// Using the optimized version,
-			// optimizedP =  2(a1 - a2)
-			//              -----------
-			//                m1 + m2
-			var optimizedP = (2.0 * (a1 - a2)) / (this.getMass() + ball.getMass());
-			
-			// Calculate v1', the new movement vector of circle1
-			// v1' = v1 - optimizedP * m2 * n
-			var omn1 = Vector2D.create(n);
-			omn1.mul(optimizedP * ball.getMass()); 
-			var v1P = v1.sub(omn1);;
-			
-			// Calculate v1', the new movement vector of circle1
-			// v2' = v2 + optimizedP * m1 * n
-			var omn2 = Vector2D.create(n);
-			omn2.mul(optimizedP * this.getMass());
-			var v2P = v2.add(omn2);
-			
-			this.setVelocity(v1P);
-			ball.setVelocity(v2P);
-		},
-		
-		getMass: function() {
-			return 0.2;
-		}
+         // Escape test: if the closest that A will get to B
+         // is more than the sum of their radii, there's no
+         // way they are going collide
+         var sumRad2 = sumRad * sumRad;
+         if (f >= sumRad2) {
+           return false;
+         }
+         
+         // We now have F and sumRadii, two sides of a right triangle.
+         // Use these to find the third side, sqrt(T)
+         var t = sumRad2 - f;
+         
+         // If there is no such right triangle with sides length of
+         // sumRadii and sqrt(f), T will probably be less than 0.
+         // Better to check now than perform a square root of a
+         // negative number.
+         if (t < 0) {
+           return false;
+         }
+         
+         // Therefore the distance the circle has to travel along
+         // movevec is D - sqrt(T)
+         var distance = dot - Math.sqrt(t);
+         
+         // Get the magnitude of the movement vector
+         var mag = this.getVelocity().len();
+         
+         // Finally, make sure that the distance A has to move
+         // to touch B is not greater than the magnitude of the
+         // movement vector.
+         if (mag < distance) {
+           return false;
+         }
+         
+         // Set the length of the movevec so that the circles will just
+         // touch
+         var moveVec = this.getVelocity().normalize();
+         movevec = moveVec.mul(distance);
+         
+         return true;         
+      },
+      
+      doBallBounce: function(ball) {
+         // First, find the normalized vector n from the center of
+         // circle1 to the center of circle2
+         var n = Vector2D.create(this.getCircle().getCenter()).sub(ball.getCircle().getCenter());
+         n.normalize();
+         
+         // Find the length of the component of each of the movement
+         // vectors along n.
+         // a1 = v1 . n
+         // a2 = v2 . n
+         var v1 = this.getVelocity();
+         var v2 = ball.getVelocity();
+         
+         var a1 = v1.dot(n);
+         var a2 = v2.dot(n);
+         
+         // Using the optimized version,
+         // optimizedP =  2(a1 - a2)
+         //              -----------
+         //                m1 + m2
+         var optimizedP = (2.0 * (a1 - a2)) / (this.getMass() + ball.getMass());
+         
+         // Calculate v1', the new movement vector of circle1
+         // v1' = v1 - optimizedP * m2 * n
+         var omn1 = Vector2D.create(n);
+         omn1.mul(optimizedP * ball.getMass()); 
+         var v1P = v1.sub(omn1);
+         
+         // Calculate v1', the new movement vector of circle1
+         // v2' = v2 + optimizedP * m1 * n
+         var omn2 = Vector2D.create(n);
+         omn2.mul(optimizedP * this.getMass());
+         var v2P = v2.sub(omn2);
+         
+         v1P.mul(this.getDamping());
+         v2P.mul(ball.getDamping());
+         
+         this.setVelocity(v1P);
+         ball.setVelocity(v2P);
+      },
+      
+      getMass: function() {
+         return 0.04;
+      },
+      
+      getDamping: function() {
+         return 0.8;
+      }
 
 
    }, { // Static
