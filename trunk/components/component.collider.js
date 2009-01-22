@@ -49,15 +49,48 @@ Engine.initObject("ColliderComponent", "BaseComponent", function() {
 var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.prototype */{
 
    collisionModel: null,
+   
+   objectType: null,
 
    constructor: function(name, collisionModel, priority) {
       this.base(name, BaseComponent.TYPE_COLLIDER, priority || 1.0);
       this.collisionModel = collisionModel;
+      this.objectType = null;
    },
 
    release: function() {
       this.base();
       this.collisionModel = null;
+      this.objectType = null;
+   },
+
+   /**
+    * Get the collision model being used by this component.
+    * @return {SpatialContainer} The collision model
+    */
+   getCollisionModel: function() {
+      return this.collisionModel;
+   },
+   
+   /**
+    * Get the object type that this collider component will respond to.  If
+    * the value is <tt>null</tt>, all objects are potential collision objects.
+    * @return {BaseObject} The only object type to collide with, or <tt>null</tt> for any object
+    */
+   getObjectType: function() {
+      return this.objectType;
+   },
+   
+   /**
+    * Set the object type that this component will respond to.  Setting this to <tt>null</tt>
+    * will trigger a potential collision when any object comes into possible contact with the
+    * component's host object based on the collision model.  If the object isn't of this type,
+    * no collision tests will be performed.
+    *
+    * @param objType {BaseObject} The object type to check for
+    */
+   setObjectType: function(objType) {
+      this.objectType = objType;
    },
 
    /**
@@ -84,7 +117,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       }
 
       // Find the node that contains the object
-      var aNode = this.collisionModel.findNodePoint(obj.getPosition());
+      var aNode = this.getCollisionModel().findNodePoint(obj.getPosition());
       if (aNode != null)
       {
          if (obj.ModelData.lastNode && (obj.ModelData.lastNode.getIndex() != aNode.getIndex()))
@@ -116,22 +149,41 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     */
    execute: function(renderContext, time) {
 
+      var host = this.getHostObject();
+
       // Update the collision model
       this.updateModel();
 
       // If the host object needs to know about collisions...
-      if (this.getHostObject().onCollide)
+      if (host.onCollide)
       {
          // Get the PCL and check for collisions
-         var pcl = this.collisionModel.getPCL(this.getHostObject().getPosition());
+         var pcl = this.getCollisionModel().getPCL(host.getPosition());
          var status = ColliderComponent.CONTINUE;
          EngineSupport.forEach(pcl, function(obj) {
-            if (this.getHostObject() != obj && status == ColliderComponent.CONTINUE)
+            if (this.getHostObject() != obj && 
+                (this.getObjectType() == null || obj instanceof this.getObjectType()) &&
+                status == ColliderComponent.CONTINUE)
             {
-               status = this.getHostObject().onCollide(obj);
+               status = this.testCollision(time, obj);
             }
          }, this);
       }
+   },
+   
+   /**
+    * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision
+    * and the potential collision object.  The return value should either tell the collision
+    * tests to continue, or to stop.
+    * <p/>
+    * For the base collider component the collision test is up to the host object to determine.
+    *
+    * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
+    * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+    * @return {Number} A status indicating whether to continue checking, or to stop
+    */
+   testCollision: function(time, collisionObj) {
+      return this.getHostObject().onCollide(collisionObj, time);
    }
 
 }, /** @scope ColliderComponent.prototype */{ // Statics

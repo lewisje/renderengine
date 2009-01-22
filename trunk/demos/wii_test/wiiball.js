@@ -161,7 +161,8 @@ Engine.initObject("WiiBall", "Object2D", function() {
       },
       
       getCircle: function() {
-         return Circle2D.create(this.getPosition(), 30);
+         this.circle.set(this.getPosition(), 30);
+         return this.circle;
       },
 
       /**
