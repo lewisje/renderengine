@@ -333,6 +333,18 @@
          </classpath>
       </java>
       <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
+         <arg line="--nomunge -o ${min.home}/components/component.boxcollider.js ${basedir}/components/component.boxcollider.js"/>
+         <classpath>
+            <pathelement path="${basedir}/make/${compressor.jar}"/>
+         </classpath>
+      </java>
+      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
+         <arg line="--nomunge -o ${min.home}/components/component.circlecollider.js ${basedir}/components/component.circlecollider.js"/>
+         <classpath>
+            <pathelement path="${basedir}/make/${compressor.jar}"/>
+         </classpath>
+      </java>
+      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
          <arg line="--nomunge -o ${min.home}/components/component.collider.js ${basedir}/components/component.collider.js"/>
          <classpath>
             <pathelement path="${basedir}/make/${compressor.jar}"/>
