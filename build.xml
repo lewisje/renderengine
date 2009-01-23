@@ -3,8 +3,12 @@
  
    <property name="app.name" value="renderengine"/>
    <property name="app.version" value="beta1"/>
-   <property name="compressor.jar" value="yuicompressor-2.4.2.jar"/>
+   <property name="build.date" value="01/23/2009"/>
    <property name="dist.home" value="${basedir}/dist_${app.version}"/>
+   <property name="engine.src" value="${basedir}/engine/build"  />
+   <property name="make.dir" value="${basedir}/make"/>
+   <property name="compressor.jar" value="${make.dir}/yuicompressor-2.4.2.jar"/>
+
   
    <!-- Locations of distributed files -->
    <property name="min.home" value="${dist.home}/min-js"/>
@@ -20,6 +24,29 @@
    <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
    <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
+
+
+   <!-- =========================== ENGINE BUILD TARGET ========================== -->
+	<target name="engine.build" description="Main engine build, concatenates source files and replaces @ENGINE_VERSION">
+		<echo message="Building ${engine.file}" />
+		<concat destfile="${engine.file}">
+			<fileset dir="${make.dir}" includes="intro.js" />
+			<fileset dir="${engine.src}" includes="engine.console.js" />
+			<fileset dir="${engine.src}" includes="engine.support.js" />
+			<fileset dir="${engine.src}" includes="engine.linker.js" />
+			<fileset dir="${engine.src}" includes="engine.main.js" />
+			<fileset dir="${engine.src}" includes="engine.init.js" />
+		</concat>
+		<replaceregexp match="@ENGINE_VERSION" replace="${app.version}" flags="g" byline="true" file="${engine.file}" />
+		<echo message="${engine.file} built." />
+	</target>
+  
+	<target name="engine.runtime" description="Build a single file compilation of the engine for testing">
+		<!-- Create the directory -->
+		<antcall target="engine.build">
+			<param name="engine.file" value="${basedir}/engine/runtime/engine.js"/>
+		</antcall>
+	</target>
   
   
    <!-- =============================== ENGINE CLEAN ========================== -->
@@ -138,6 +165,9 @@
          <fileset file="${basedir}/README.txt"/>
       </copy>
 		
+		<replaceregexp match="@BUILD_VERSION" replace="${app.version}" flags="g" byline="true" file="${build.home}/README.txt" />
+		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${build.home}/README.txt" />
+		
 	</target>  
   
    <!-- ======================= ENGINE FULL SOURCE DISTIBUTION ========================= -->
@@ -160,6 +190,10 @@
       <antcall target="licenses">
          <param name="build.home" value="${full.home}"/>
       </antcall>
+   
+   	<antcall target="engine.build">
+			<param name="engine.file" value="${full.home}/engine/engine.js" />
+   	</antcall>
       <!-- ### FINISH ### Pre-compilation tasks -->
  
       <!-- Copy the engine files -->     
@@ -206,6 +240,17 @@
  
    </target>
   
+	<target name="engine.compress" description="Compress a source file into a destination file">
+	
+      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
+         <arg line="--nomunge -o ${min.home}/${input.file} ${basedir}/${input.file}"/>
+         <classpath>
+            <pathelement path="${compressor.jar}"/>
+         </classpath>
+      </java>
+	
+	</target>
+
   
    <!-- ================== ENGINE MINIFIED/COMPRESSED DISTRIBUTION ===================== -->
    <target name="engine.min" description="Create the minified/compressed distribution of the engine">
@@ -227,336 +272,244 @@
       <antcall target="licenses">
          <param name="build.home" value="${min.home}"/>
       </antcall>
+
+   	<antcall target="engine.build">
+			<param name="engine.file" value="${make.dir}/temp_engine.js" />
+   	</antcall>
       <!-- ### FINISH ### Pre-compilation tasks -->
  
  
       <!-- Compress and copy the engine files -->
       <echo message="Compressing engine..."/>
+
+		<!-- Get the engine out out the way -->
       <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.baseobject.js ${basedir}/engine/engine.baseobject.js"/>
+         <arg line="--nomunge -o ${min.home}/engine/engine.js ${make.dir}/temp_engine.js"/>
          <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
+            <pathelement path="${compressor.jar}"/>
          </classpath>
       </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.container.js ${basedir}/engine/engine.container.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.events.js ${basedir}/engine/engine.events.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.fnv1hash.js ${basedir}/engine/engine.fnv1hash.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.game.js ${basedir}/engine/engine.game.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.hostobject.js ${basedir}/engine/engine.hostobject.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.js ${basedir}/engine/engine.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.math2d.js ${basedir}/engine/engine.math2d.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.object2d.js ${basedir}/engine/engine.object2d.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.particles.js ${basedir}/engine/engine.particles.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.pooledobject.js ${basedir}/engine/engine.pooledobject.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.rendercontext.js ${basedir}/engine/engine.rendercontext.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.resourceloader.js ${basedir}/engine/engine.resourceloader.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.spatialcontainer.js ${basedir}/engine/engine.spatialcontainer.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.timers.js ${basedir}/engine/engine.timers.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
+		<delete file="${make.dir}/temp_engine.js"/>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.baseobject.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.container.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.events.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.fnv1hash.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.game.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.hostobject.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.math2d.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.object2d.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.particles.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.pooledobject.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.rendercontext.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.resourceloader.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.spatialcontainer.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="engine/engine.timers.js"/>
+		</antcall>
 
  
       <!-- Compress and copy the object components -->     
       <echo message="Compressing components..."/>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.base.js ${basedir}/components/component.base.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.boxcollider.js ${basedir}/components/component.boxcollider.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.circlecollider.js ${basedir}/components/component.circlecollider.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.collider.js ${basedir}/components/component.collider.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.host.js ${basedir}/components/component.host.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.input.js ${basedir}/components/component.input.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.keyboardinput.js ${basedir}/components/component.keyboardinput.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.logic.js ${basedir}/components/component.logic.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.mouseinput.js ${basedir}/components/component.mouseinput.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.mover2d.js ${basedir}/components/component.mover2d.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.notifier.js ${basedir}/components/component.notifier.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.render.js ${basedir}/components/component.render.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.sprite.js ${basedir}/components/component.sprite.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.transform2d.js ${basedir}/components/component.transform2d.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.vector2d.js ${basedir}/components/component.vector2d.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/components/component.wiimoteinput.js ${basedir}/components/component.wiimoteinput.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.base.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.boxcollider.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.circlecollider.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.collider.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.host.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.input.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.keyboardinput.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.logic.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.mouseinput.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.mover2d.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.notifier.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.render.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.sprite.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.transform2d.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.vector2d.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="components/component.wiimoteinput.js"/>
+		</antcall>
  
  
       <!-- Compress and copy the render contexts -->     
       <echo message="Compressing rendercontexts..."/>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/rendercontexts/context.canvascontext.js ${basedir}/rendercontexts/context.canvascontext.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/rendercontexts/context.documentcontext.js ${basedir}/rendercontexts/context.documentcontext.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/rendercontexts/context.htmlelement.js ${basedir}/rendercontexts/context.htmlelement.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/rendercontexts/context.render2d.js ${basedir}/rendercontexts/context.render2d.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/rendercontexts/context.scrollingbackground.js ${basedir}/rendercontexts/context.scrollingbackground.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/rendercontexts/context.svgcontext.js ${basedir}/rendercontexts/context.svgcontext.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="rendercontexts/context.canvascontext.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="rendercontexts/context.documentcontext.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="rendercontexts/context.htmlelement.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="rendercontexts/context.render2d.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="rendercontexts/context.scrollingbackground.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="rendercontexts/context.svgcontext.js"/>
+		</antcall>
+
  
       <!-- Compress and copy the resource loaders -->     
       <echo message="Compressing resourceloaders..."/>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.bitmapfont.js ${basedir}/resourceloaders/loader.bitmapfont.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.image.js ${basedir}/resourceloaders/loader.image.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.level.js ${basedir}/resourceloaders/loader.level.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.object.js ${basedir}/resourceloaders/loader.object.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.remote.js ${basedir}/resourceloaders/loader.remote.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.sound.js ${basedir}/resourceloaders/loader.sound.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.sprite.js ${basedir}/resourceloaders/loader.sprite.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/resourceloaders/loader.xml.js ${basedir}/resourceloaders/loader.xml.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.bitmapfont.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.image.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.level.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.object.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.remote.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.sound.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.sprite.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="resourceloaders/loader.xml.js"/>
+		</antcall>
  
  
       <!-- Copy the collision models -->     
       <echo message="Compressing spatial..."/>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/spatial/container.quadtree.js ${basedir}/spatial/container.quadtree.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/spatial/container.spatialgrid.js ${basedir}/spatial/container.spatialgrid.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="spatial/container.quadtree.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="spatial/container.spatialgrid.js"/>
+		</antcall>
  
  
       <!-- Copy the text rendering -->     
       <echo message="Compressing textrender..."/>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/textrender/text.abstractrender.js ${basedir}/textrender/text.abstractrender.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/textrender/text.bitmap.js ${basedir}/textrender/text.bitmap.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/textrender/text.renderer.js ${basedir}/textrender/text.renderer.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/textrender/text.vector.js ${basedir}/textrender/text.vector.js"/>
-         <classpath>
-            <pathelement path="${basedir}/make/${compressor.jar}"/>
-         </classpath>
-      </java>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="textrender/text.abstractrender.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="textrender/text.bitmap.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="textrender/text.renderer.js"/>
+		</antcall>
+
+		<antcall target="engine.compress">
+			<param name="input.file" value="textrender/text.vector.js"/>
+		</antcall>
   
    </target>
   
