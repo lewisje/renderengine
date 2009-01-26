@@ -180,6 +180,9 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	
 	setCheckRest: function(state) {
 		this.checkRest = state;
+		if (this.atRest && !state) {
+			this.atRest = false;
+		}
 	},
 	
 	getCheckRest: function() {
@@ -193,6 +196,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	 */
 	setAcceleration: function(vector) {
 		this.acceleration.set(vector);
+		this.atRest = false;
 	},
 	
 	/**
@@ -209,6 +213,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	 */
 	setGravity: function(vector) {
 		this.gravity.set(vector);
+		this.atRest = false;
 	},
 	
 	/**
