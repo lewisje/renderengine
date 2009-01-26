@@ -1,17 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-I spent the last couple of days working on the DOM rendering context.  I'm pretty happy with what I've achieved.  In a "two birds with one stone" moment, I decided to use the Wii for testing.  It took a while, but I've gotten it working.  It's a simple app where you guide an animated sprite around the screen with the Wii remote.  Pressing the "A" button will shake the ball up a little.  It ain't much, but it's a start.
+I decided, a while back, to use the _Sylvester_ math library to do 2D and 3D work.  However, after spending some time really examining the library, I've determined that what I've got (`Math2D`) bridged to _Sylvester's_ classes isn't the best solution.  First off, having a bridge, instead of using _Sylvester_ natively just leads to at least two classes for each point, rectangle, etc.
 
-During my development on the Wii, it has come to my attention that the error handling is poor/nonexistent.  I've supplanted that with my own console, but it's still a crap-shoot.  The biggest problem, by far, is syntax errors in the code.  Opera on the Wii doesn't allow me a way to validate syntax easily.  At least with Firebug and Firebug Lite there is some information when a syntax error occurs.  I thought I had found a way, but the `window.onerror` method isn't available.
+Secondly _Sylvester_, while admittedly excellent at what it's designed to do, isn't optimized for games.  There's too much object creation and destruction.  The pool of objects is constantly being refreshed and the garbage collector is working overtime.  This needs to be remedied so that _The Render Engine_ will run well on all platforms.
 
-Other issues popped up and I realized I want to do a few things:
-
-  * Write a _very simple_ syntax checker that will only execute when running on the Wii.
-  * Establish common syntax problems and write regular expressions to catch them.
-  * Add a function tracer which logs calls into and out of functions.
-  * Implement a profiler which I can use on the Wii.
-
-These are all currently pie-in-the-sky ideas which I'll probably end up writing before version 2.  However, if I don't get to them I've noted them in the future tasks list.
-
-Check out the ReleaseMilestones for more information...
+So, after a lot of deliberating, I'm going to integrate what _Sylvester_ does directly into the library.  I'll convert the classes to minimize object creation so that the garbage collector will get a break.  And finally, I'll see if maybe I can convince James Coglan to accept an _optimized_ version of his lib for potential game development.
