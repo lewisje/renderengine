@@ -43,7 +43,7 @@ var LogicComponent = BaseComponent.extend(/** @scope LogicComponent.prototype */
 
    /**
     * @constructor
-    * @memberOf InputComponent
+    * @memberOf LogicComponent
     */
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_LOGIC, priority || 1.0);

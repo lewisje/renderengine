@@ -89,6 +89,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.alive = true;
       this.rotDir = 0;
       this.thrusting = false;
+		this.setCheckRest(false);
 
    },
 

@@ -66,6 +66,8 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 
 	atRest: null,
 	
+	checkRest: null,
+	
    constructor: function(name, priority) {
       this.base(name, priority || 1.0);
       this.velocity = Vector2D.create(0,0);
@@ -75,6 +77,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 		this.maxVelocity = -1;
 		this.gravity = Vector2D.create(0,0);
 		this.atRest = false;
+		this.checkRest = true;
    },
 
    release: function() {
@@ -88,6 +91,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 		this.acceleration = null;
 		this.gravity = null;
 		this.atRest = null;
+		this.checkRest = null;
    },
 
    /**
@@ -135,11 +139,13 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	         this.setRotation(rot + this.angularVelocity * (diff));
 	      }
 			
-         // Check rest state     
-         if (this.getVelocity().len() < 0.2) {
-            this.setVelocity(Point2D.ZERO);
-				this.atRest = true;
-         }
+         // Check rest state  
+			if (this.checkRest) {
+	         if (this.getVelocity().len() < 0.2) {
+	            this.setVelocity(Point2D.ZERO);
+					this.atRest = true;
+	         }
+			}   
 		}
 
       this.lastTime = time;
@@ -170,6 +176,14 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 	 */
 	isAtRest: function() {
 		return this.atRest;
+	},
+	
+	setCheckRest: function(state) {
+		this.checkRest = state;
+	},
+	
+	getCheckRest: function() {
+		return this.checkRest;
 	},
 	
 	/**
