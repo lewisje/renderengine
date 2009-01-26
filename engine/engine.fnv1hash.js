@@ -186,6 +186,7 @@ Engine.initObject("FNV1Hash", "PooledObject", function() {
     *        result in the same evolved hash.  Uses the {@link FNV1a32} hashing routine by default.
     *
     * @param [hashRoutine=FNV1a32] {FNV1} The hash routine to use.
+    * @extends PooledObject
     */
    var FNV1Hash = PooledObject.extend(/** @scope FNV1Hash.prototype */{
 
