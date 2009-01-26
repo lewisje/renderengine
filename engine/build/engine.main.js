@@ -167,6 +167,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Assert((fps != 0), "You cannot have a framerate of zero!");
       this.fpsClock = Math.floor(1000 / fps);
    },
+   
+   /**
+    * Get the amount of time allocated to draw a single frame
+    * @return {Number}
+    */
+   getFrameTime: function() {
+      return this.fpsClock;
+   },
 
    /**
     * Get the default rendering context for the Engine.  This

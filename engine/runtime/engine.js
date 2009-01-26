@@ -1754,6 +1754,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
+    * Get the amount of time allocated to draw a single frame
+    * @return {Number}
+    */
+   getFrameTime: function() {
+      return this.fpsClock;
+   },
+
+   /**
     * Get the default rendering context for the Engine.  This
     * is the <tt>document.body</tt> element in the browser.
     *

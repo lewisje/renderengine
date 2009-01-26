@@ -89,7 +89,8 @@ var SpaceroidsPlayer = Object2D.extend({
       this.alive = true;
       this.rotDir = 0;
       this.thrusting = false;
-		this.getComponent("move").setCheckRest(false);
+      this.getComponent("move").setCheckRestState(false);
+      this.getComponent("move").setCheckLag(false);
 
    },
 
@@ -131,23 +132,23 @@ var SpaceroidsPlayer = Object2D.extend({
          var r = c_mover.getRotation();
          var dir = Math2D.getDirectionVector(Point2D.ZERO, this.tip, r);
 
-			c_mover.setAcceleration(dir.mul(0.08));
+         c_mover.setAcceleration(dir.mul(0.3));
 
-			// Particle trail
-			if (Spaceroids.evolved) {
-				var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
-				var colr = SpaceroidsPlayer.trailColors[Math.floor(Math.random() * 3)];
-				this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
-			}
+         // Particle trail
+         if (Spaceroids.evolved) {
+            var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
+            var colr = SpaceroidsPlayer.trailColors[Math.floor(Math.random() * 3)];
+            this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
+         }
       } else {
-			c_mover.setAcceleration(Point2D.ZERO);
-		}
+         c_mover.setAcceleration(Point2D.ZERO);
+      }
 
       renderContext.pushTransform();
       this.base(renderContext, time);
       renderContext.popTransform();
 
-      // Debug the quad node
+      // Debug the collision node
       if (Engine.getDebugMode() && this.ModelData && this.ModelData.lastNode)
       {
          renderContext.setLineStyle("red");
@@ -216,13 +217,13 @@ var SpaceroidsPlayer = Object2D.extend({
    },
 
    getScale: function() {
-		return this.getComponent("move").getScale();
-	},
+      return this.getComponent("move").getScale();
+   },
 
-	setScale: function(scale) {
-		this.base(scale);
-		this.getComponent("move").setScale(scale);
-	},
+   setScale: function(scale) {
+      this.base(scale);
+      this.getComponent("move").setScale(scale);
+   },
 
    /**
     * Set up the player object on the playfield.  The width and
@@ -343,7 +344,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
       this.field.soundLoader.get("thrust").stop();
 
-		var pCount = Spaceroids.evolved ? 40 : 8;
+      var pCount = Spaceroids.evolved ? 40 : 8;
 
       // Make some particles
       for (var x = 0; x < pCount; x++)
@@ -351,7 +352,7 @@ var SpaceroidsPlayer = Object2D.extend({
          this.field.pEngine.addParticle(SimpleParticle.create(this.getPosition(), 3000));
       }
 
-      this.getComponent("move").setVelocity(0);
+      this.getComponent("move").setVelocity(Point2D.ZERO);
       this.getComponent("move").setPosition(this.getRenderContext().getBoundingBox().getCenter());
       this.getComponent("move").setRotation(0);
       this.rotDir = 0;
@@ -373,46 +374,46 @@ var SpaceroidsPlayer = Object2D.extend({
 
    },
 
-	/**
-	 * Randomly jump the player somewhere when they get into a tight spot.
-	 * The point is NOT guaranteed to be free of a collision.
-	 */
+   /**
+    * Randomly jump the player somewhere when they get into a tight spot.
+    * The point is NOT guaranteed to be free of a collision.
+    */
    hyperSpace: function() {
 
-		if (this.hyperjump) {
-			return;
-		}
+      if (this.hyperjump) {
+         return;
+      }
 
-		// Hide the player
+      // Hide the player
       this.alive = false;
       this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
       this.field.soundLoader.get("thrust").stop();
       this.thrusting = false;
-		this.hyperjump = true;
+      this.hyperjump = true;
 
-		var self = this;
-		if (Spaceroids.evolved) {
-			OneShotTrigger.create("hyper", 250, function() {
-	      	self.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
-			}, 10, function() {
-	      	self.setScale(self.getScale() - 0.09);
-			});
-		} else {
-      	this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
-		}
+      var self = this;
+      if (Spaceroids.evolved) {
+         OneShotTrigger.create("hyper", 250, function() {
+            self.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
+         }, 10, function() {
+            self.setScale(self.getScale() - 0.09);
+         });
+      } else {
+         this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
+      }
 
 
-		// Give it some time and move the player somewhere random
-		OneShotTimeout.create("hyperspace", 800, function() {
-			self.getComponent("move").setVelocity(0);
-			var randPt = Math2D.randomPoint(self.getRenderContext().getBoundingBox());
-			self.getComponent("move").setPosition(randPt);
-      	self.setScale(1);
-			self.getComponent("draw").setDrawMode(RenderComponent.DRAW);
-			self.alive = true;
-			self.hyperjump = false;
-		});
-	},
+      // Give it some time and move the player somewhere random
+      OneShotTimeout.create("hyperspace", 800, function() {
+         self.getComponent("move").setVelocity(0);
+         var randPt = Math2D.randomPoint(self.getRenderContext().getBoundingBox());
+         self.getComponent("move").setPosition(randPt);
+         self.setScale(1);
+         self.getComponent("draw").setDrawMode(RenderComponent.DRAW);
+         self.alive = true;
+         self.hyperjump = false;
+      });
+   },
 
    /**
     * Called by the keyboard input component to handle a key down event.
@@ -425,9 +426,9 @@ var SpaceroidsPlayer = Object2D.extend({
          return;
       }
 
-		if (event.ctrlKey || event.shiftKey) {
-			this.hyperSpace();
-		}
+      if (event.ctrlKey || event.shiftKey) {
+         this.hyperSpace();
+      }
 
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
