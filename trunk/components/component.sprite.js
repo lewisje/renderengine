@@ -104,7 +104,7 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
          renderContext.drawSprite(this.getHostObject(), this.currentSprite, time);
       }
    }
-}, /** @scope SpriteComponent */{
+}, { /** @scope SpriteComponent.prototype */
    /**
     * Get the class name of this object
     *

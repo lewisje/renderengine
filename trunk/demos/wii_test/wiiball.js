@@ -91,7 +91,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.circle = Circle2D.create(Point2D.create(0, 0), 30);
          this.upVec = Vector2D.create(0, -1);
          
-         //this.setVelocityDecay(0.3);
+         this.getComponent("move").setLagAdjustment(0.08);
       },
 
       /**
@@ -204,7 +204,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
       },
       
       isAtRest: function() {
-         return this.getComponent("move").isAtRest();
+         return this.getComponent("move").isResting();
       },
 
       /**
@@ -387,20 +387,20 @@ Engine.initObject("WiiBall", "Object2D", function() {
          omn2.mul(optimizedP * this.getMass());
          var v2P = v2.sub(omn2);
          
-         v1P.mul(this.getDamping()).mul(ball.getDamping());
-         v2P.mul(ball.getDamping()).mul(this.getDamping());
+         v1P.mul(this.getDamping());
+         v2P.mul(ball.getDamping());
          
          this.setVelocity(v1P);
          ball.setVelocity(v2P);
       },
       
       getMass: function() {
-         return 0.004;
+         return 1;
       },
       
       getDamping: function() {
          if (this.isAtRest()) {
-            return 0.001;
+            return 0.01;
          } else {
             return 0.8;
          }

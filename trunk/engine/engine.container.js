@@ -68,10 +68,10 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 
    objs: null,
 
-	/**
-	 * @constructor
-	 * @param container {Container} The container to iterate over
-	 */
+   /**
+    * @constructor
+    * @param container {Container} The container to iterate over
+    */
    constructor: function(container) {
       this.base("Iterator");
       this.idx = 0;
@@ -121,7 +121,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       return (this.idx < this.c.size());
    }
 
-}, /** @scope Iterator.prototype */{
+}, { /** @scope Iterator.prototype */
    /**
     * Get the class name of this object
     *
@@ -150,10 +150,10 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    objects: null,
 
-	/**
-	 * @constructor
-	 * @param containerName {String} The name of the container
-	 */
+   /**
+    * @constructor
+    * @param containerName {String} The name of the container
+    */
    constructor: function(containerName) {
       this.base(containerName || "Container");
       this.objects = [];
@@ -239,10 +239,10 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @throws {Error} Index out of bounds if the index is out of the list of objects
     */
    get: function(idx) {
-		if (idx < 0 || idx > this.size()) {
-			throw new Error("Index out of bounds");
-		}
-		
+      if (idx < 0 || idx > this.size()) {
+         throw new Error("Index out of bounds");
+      }
+      
       return this.objects[idx];
    },
 

@@ -79,6 +79,7 @@ var SpaceroidsRock = Object2D.extend({
                                  Math.floor(Math.random() * this.pBox.getDims().y));
       }
       this.setPosition(position);
+      this.getComponent("move").setCheckLag(false);
    },
 
    release: function() {
@@ -115,7 +116,7 @@ var SpaceroidsRock = Object2D.extend({
       this.base(renderContext, time);
       renderContext.popTransform();
 
-      // Debug the quad node
+      // Debug the collision node
       if (Engine.getDebugMode() && this.ModelData && this.ModelData.lastNode)
       {
          renderContext.setLineStyle("blue");
@@ -209,10 +210,8 @@ var SpaceroidsRock = Object2D.extend({
       c_mover.setAngularVelocity( Math.floor(Math.random() * 10) > 5 ? 0.5 : -0.5);
 
 
-      var b = Point2D.create(0,-1);
+      var b = Point2D.create(0,-1.2);
       var vec = Math2D.getDirectionVector(Point2D.ZERO, b, Math.floor(Math.random() * 360));
-
-      vec.mul(0.3);
 
       c_mover.setVelocity(vec);
    },
@@ -264,11 +263,15 @@ var SpaceroidsRock = Object2D.extend({
       // Break the rock up into smaller chunks
       if (this.size - 4 > 1)
       {
+         var curVel = this.getComponent("move").getVelocity().len();
          for (var p = 0; p < 3; p++)
          {
             var rock = SpaceroidsRock.create(this.size - 4, this.getPosition());
             this.getRenderContext().add(rock);
             rock.setup(this.pBox.getDims().x, this.pBox.getDims().y);
+            
+            var r_mover = rock.getComponent("move");
+            r_mover.setVelocity(r_mover.getVelocity().mul(curVel + 0.5));
             if (Spaceroids.isAttractMode) {
                rock.killTimer = Engine.worldTime + 2000;
             }

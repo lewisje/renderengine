@@ -3,7 +3,7 @@
  * BitmapFontLoader
  *
  * @fileoverview An extension of the image resource loader for handling bitmap
- * 				  fonts.
+ *               fonts.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -47,9 +47,9 @@ var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype 
 
    fonts: null,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(name) {
       this.base(name || "BitmapFontLoader");
       this.fonts = {};
@@ -112,7 +112,7 @@ var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype 
    getResourceType: function() {
       return "bitmap font";
    }
-}, /** @scope BitmapFontLoader.protoype */{
+}, { /** @scope BitmapFontLoader.protoype */
    /**
     * Get the class name of this object
     * @return {String} The string "BitmapFontLoader"
