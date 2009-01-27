@@ -887,12 +887,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       if (this.showMetricsWindow && this.lastMetricSample-- == 0)
       {
          // Add some metrics to assist the developer
-         var d = new Date().getTime() - Engine.worldTime;
          Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
-         Engine.addMetric("aFPS", Math.floor((1 / d) * 1000), true, "#");
+         Engine.addMetric("aFPS", Math.floor((1 / Engine.frameTime) * 1000), true, "#");
          Engine.addMetric("avail", this.fpsClock, false, "#ms");
-         Engine.addMetric("frame", d, true, "#ms");
-         Engine.addMetric("load", Math.floor((d / this.fpsClock) * 100), true, "#%");
+         Engine.addMetric("frame", Engine.frameTime, true, "#ms");
+         Engine.addMetric("load", Math.floor((Engine.frameTime / this.fpsClock) * 100), true, "#%");
          Engine.addMetric("visObj", Engine.vObj, false, "#");
 
          this.updateMetrics();
@@ -994,22 +993,35 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    engineTimer: function() {
 
-      if (!this.running) {
+      if (!Engine.running) {
          return;
       }
 
-      Engine.worldTime = new Date().getTime();
-
       // Update the world
+      var nextFrame = Engine.fpsClock;
       if (Engine.getDefaultContext() != null)
       {
          Engine.vObj = 0;
+         
+         // Render a frame
+         Engine.worldTime = new Date().getTime();
          Engine.getDefaultContext().update(null, Engine.worldTime);
-         Engine.renderMetrics();
+         Engine.frameTime = newDate().getTime() - Engine.worldTime;
+         
+         // Determine when the next frame should draw
+         // If we've gone over the allotted time, wait until the next available frame
+         var f = nextFrame - Engine.frameTime;
+         nextFrame = (f > 0 ? f : nextFrame);
+         Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
+         
+         // Output any metrics
+         if (Engine.showMetricsWindow) {
+            Engine.renderMetrics();
+         }
      }
 
       // When the process is done, start all over again
-      Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, this.fpsClock);
+      Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, nextFrame);
    }
 
  }, { // Interface
