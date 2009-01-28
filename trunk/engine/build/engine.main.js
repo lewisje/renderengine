@@ -1008,7 +1008,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Render a frame
          Engine.worldTime = new Date().getTime();
          Engine.getDefaultContext().update(null, Engine.worldTime);
-         Engine.frameTime = newDate().getTime() - Engine.worldTime;
+         Engine.frameTime = new Date().getTime() - Engine.worldTime;
          
          // Determine when the next frame should draw
          // If we've gone over the allotted time, wait until the next available frame
