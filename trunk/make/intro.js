@@ -4,8 +4,9 @@
  * browser platforms, including Gecko, Webkit, and Opera.  Visit
  * http://code.google.com/p/renderengine for more information.
  *
- * @author: Brett Fattori (brettf@renderengine.com)
- * @version: @ENGINE_VERSION
+ * author: Brett Fattori (brettf@renderengine.com)
+ * version: @BUILD_VERSION
+ * date: @BUILD_DATE
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
