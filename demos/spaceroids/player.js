@@ -494,6 +494,8 @@ var SpaceroidsPlayer = Object2D.extend({
             }
             break;
       }
+      
+      return false;
    },
 
    /**
@@ -519,6 +521,8 @@ var SpaceroidsPlayer = Object2D.extend({
             break;
 
       }
+      
+      return false;
    },
 
    /*
