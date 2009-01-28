@@ -3,7 +3,7 @@
  * KeyboardInputComponent
  *
  * @fileoverview An extension of the input component for dealing with the
- * 				  keyboard.
+ *               keyboard.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -65,15 +65,15 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       var self = this;
 
       // Add the event handlers
-		ctx.addEvent(this, "keydown", function(evt) {
-			self._keyDownListener(evt);
-		});
-		ctx.addEvent(this, "keyup", function(evt) {
-			self._keyUpListener(evt);
-		});
-		ctx.addEvent(this, "keypress", function(evt) {
-			self._keyPressListener(evt);
-		});
+      ctx.addEvent(this, "keydown", function(evt) {
+         return self._keyDownListener(evt);
+      });
+      ctx.addEvent(this, "keyup", function(evt) {
+         return self._keyUpListener(evt);
+      });
+      ctx.addEvent(this, "keypress", function(evt) {
+         return self._keyPressListener(evt);
+      });
    },
 
    /**
@@ -83,9 +83,9 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       var ctx = Engine.getDefaultContext();
 
       // Clean up event handlers
-		ctx.removeEvent(this, "keydown");
-		ctx.removeEvent(this, "keyup");
-		ctx.removeEvent(this, "keypress");
+      ctx.removeEvent(this, "keydown");
+      ctx.removeEvent(this, "keyup");
+      ctx.removeEvent(this, "keypress");
       this.base();
    },
 
@@ -95,7 +95,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyDownListener: function(eventObj) {
       if (this.getHostObject().onKeyDown)
       {
-         this.getHostObject().onKeyDown(eventObj);
+         return this.getHostObject().onKeyDown(eventObj);
       }
    },
 
@@ -105,7 +105,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyUpListener: function(eventObj) {
       if (this.getHostObject().onKeyUp)
       {
-         this.getHostObject().onKeyUp(eventObj);
+         return this.getHostObject().onKeyUp(eventObj);
       }
    },
 
@@ -115,7 +115,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyPressListener: function(eventObj) {
       if (this.getHostObject().onKeyPress)
       {
-         this.getHostObject().onKeyPress(eventObj);
+         return this.getHostObject().onKeyPress(eventObj);
       }
    }
 
