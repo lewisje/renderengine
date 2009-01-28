@@ -151,14 +151,32 @@ var Spaceroids = Game.extend({
       title.setColor("#ffffff");
       this.renderContext.add(title);
 
-      var copy = TextRenderer.create(VectorText.create(), "&copy;1979 Atari Games", 1);
+      var copy;
+      
+      if (EngineSupport.checkBooleanParam("evolved")) {
+         copy = TextRenderer.create(VectorText.create(), "&copy;2009 Brett Fattori", 0.6);
+      } else {
+         copy = TextRenderer.create(VectorText.create(), "&copy;1979 Atari Games", 0.6);
+      }
       copy.setColor("#ffffff");
-      copy.setPosition(Point2D.create(145, 130));
+      copy.setPosition(Point2D.create(140, 121));
       this.renderContext.add(copy);
+
+      // Instructions
+      var inst = ["left/right arrows to turn","up arrow to thrust","ctrl key to fire missile", "shift key to hyperjump"];
+      if (EngineSupport.checkBooleanParam("evolved")) {
+         inst.push("space bar to detonate nuke");
+      }
+      for (var x = 0; x < inst.length; x++) {
+         inst[x] = TextRenderer.create(VectorText.create(), inst[x], 0.8);
+         inst[x].setColor("#00ff00");
+         inst[x].setPosition(Point2D.create(130, 485 + (x * 15)));
+         this.renderContext.add(inst[x]);
+      }
 
       var startText;
       if ($.browser.Wii) {
-			// We'll prompt differently for the Wii
+         // We'll prompt differently for the Wii
          startText = "[ Press =A Button= to Start ]";
 
          var wii = TextRenderer.create(VectorText.create(), "(Wii Detected)", 1);
@@ -170,13 +188,13 @@ var Spaceroids = Game.extend({
       }
 
       if (EngineSupport.checkBooleanParam("evolved")) {
-			Spaceroids.evolved = true;
+         Spaceroids.evolved = true;
 
-         var evolved = TextRenderer.create(VectorText.create(), "(-- Evolved --)", 1);
+         var evolved = TextRenderer.create(VectorText.create(), "Upgrage v2.0", 1);
          evolved.setColor("#ff0000");
-         evolved.setPosition(Point2D.create(160, 560));
+         evolved.setPosition(Point2D.create(290, 120));
          this.renderContext.add(evolved);
-		}
+      }
 
       Spaceroids.start = TextRenderer.create(VectorText.create(), startText, 1);
       Spaceroids.start.setPosition(Point2D.create(96, 450));
@@ -319,6 +337,9 @@ var Spaceroids = Game.extend({
       // Add some asteroids
       var pWidth = this.fieldWidth;
       var pHeight = this.fieldHeight;
+      if (this.playerObj) {
+         this.playerObj.nukes = 1;
+      }
 
       for (var a = 0; a < Spaceroids.level + 1; a++)
       {
@@ -372,8 +393,8 @@ var Spaceroids = Game.extend({
       // Set the FPS of the game
       Engine.setFPS(this.engineFPS);
 
-//		this.fieldWidth *= this.areaScale;
-//		this.fieldHeight *= this.areaScale;
+//    this.fieldWidth *= this.areaScale;
+//    this.fieldHeight *= this.areaScale;
 
       // Create the 2D context
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
@@ -412,6 +433,20 @@ var Spaceroids = Game.extend({
       EventEngine.removeHandler(document, "keypress", Spaceroids.onKeyPress);
 
       this.renderContext.destroy();
+   },
+   
+   /**
+    * Cause the playfield to flash
+    */
+   blinkScreen: function(color) {
+      if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
+         $(this.renderContext.getSurface()).css("background", color || "white");
+         var surf = this.renderContext.getSurface();
+         //window.setTimeout
+         OneShotTimeout.create("blink", 100, function() {
+            $(surf).css("background", "black");
+         });
+      }
    },
 
    /**

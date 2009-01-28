@@ -243,15 +243,7 @@ var SpaceroidsRock = Object2D.extend({
          Spaceroids.pEngine.addParticle(SimpleParticle.create(this.getPosition()));
       }
 
-      if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
-         $(this.getRenderContext().getSurface()).css("background", "white");
-         var surf = this.getRenderContext().getSurface();
-         //window.setTimeout
-         OneShotTimeout.create("blink", 100, function() {
-            $(surf).css("background", "black");
-         });
-      }
-
+      Spaceroids.blinkScreen();
       Spaceroids.rocks--;
 
       // Score some points

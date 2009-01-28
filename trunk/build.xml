@@ -19,6 +19,14 @@
 	<property name="demo.set" value="NO_COPY"/>
 	<property name="tool.set" value="NO_COPY"/>
 
+	<!-- Dumpt the system date (this is for Windows) -->
+	<exec executable="date" outputproperty="builddate.out" >  
+		<arg line="/T"/>  
+	</exec>
+	<propertyregex property="build.date" input="${builddate.out}" select="\1">  
+		<regexp pattern="\w+ ((\d+\/?){3})"/>  
+	</propertyregex>
+
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
    <target name="engine.dist" depends="engine.clean,engine.zip" description="Creates the full and compressed distribution zip files for The Render Engine"/>
