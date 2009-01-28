@@ -3,6 +3,7 @@
  
    <property name="app.name" value="renderengine"/>
    <property name="app.version" value="beta1"/>
+	<property name="version.name" value="beta 1.0.0"/>
    <property name="build.date" value="01/23/2009"/>
    <property name="dist.home" value="${basedir}/dist_${app.version}"/>
    <property name="engine.src" value="${basedir}/engine/build"  />
@@ -37,7 +38,8 @@
 			<fileset dir="${engine.src}" includes="engine.main.js" />
 			<fileset dir="${engine.src}" includes="engine.init.js" />
 		</concat>
-		<replaceregexp match="@ENGINE_VERSION" replace="${app.version}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${engine.file}" />
 		<echo message="${engine.file} built." />
 	</target>
   
@@ -165,7 +167,7 @@
          <fileset file="${basedir}/README.txt"/>
       </copy>
 		
-		<replaceregexp match="@BUILD_VERSION" replace="${app.version}" flags="g" byline="true" file="${build.home}/README.txt" />
+		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${build.home}/README.txt" />
 		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${build.home}/README.txt" />
 		
 	</target>  
