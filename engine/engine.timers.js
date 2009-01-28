@@ -307,6 +307,50 @@ return OneShotTrigger;
 
 });
 
+Engine.initObject("MultiTimeout", "Timeout", function() {
+
+/**
+ * @class A timer that will repeat the specified number of times before
+ *        destroying itself.  The callback will be triggered with the
+ *        repetition number as the only argument.
+ *
+ * @extends Timeout
+ */
+var MultiTimeout = Timeout.extend(/** @scope Timeout.prototype */{
+
+   constructor: function(name, reps, interval, callback) {
+
+      var cb = function() {
+         var aC = arguments.callee;
+         if (aC.reps-- > 0) {
+            aC.cbFn(aC.reps);
+            aC.timer.restart();
+         } else {
+            aC.timer.destroy();
+         }
+      };
+      cb.cbFn = callback;
+      cb.timer = this;
+      cb.reps = reps;
+
+      this.base(name, interval, cb);
+   }
+   
+}, { /** @scope MultiTimeout.prototype */
+
+   /**
+    * Get the class name of this object
+    * @return {String} "MultiTimeout"
+    */
+   getClassName: function() {
+      return "MultiTimeout";
+   }
+});
+
+return MultiTimeout;
+
+});
+
 Engine.initObject("Interval", "Timer", function() {
 
 /**
