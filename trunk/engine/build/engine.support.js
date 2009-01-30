@@ -335,7 +335,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @param inString {String} The source to clean
     */
    cleanSource: function(inString, keepNewLines) {
-      var s = inString.replace(/((["'])[^\n\r]*\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
+      var s = inString.replace(/((["'])[^;\n\r]*\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
                      .replace(/\/\*(\n|.)*?\*\//gm, "")           // Remove multi line comments
                      .replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")      // Trim lines
                      .replace(/\s*\n$/gm, "");                    // Remove blank lines
