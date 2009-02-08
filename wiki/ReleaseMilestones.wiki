@@ -49,7 +49,7 @@ Maybe you're looking for FutureGoals?
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Beta 1.4 (January 30, 2009) ==
+== Beta 1.4 (TBA) ==
 || *Status* || *Goal* || *Description* ||
 || _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 
