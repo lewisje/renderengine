@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+*Note:* I've been extremely busy for a while, so I don't want anyone to think that this project is _dead_.  On the contrary, I have a lot of plans for the engine but the time to work on it has to be balanced with the work that pays me money!  =)
+
 I decided, a while back, to use the _Sylvester_ math library to do 2D and 3D work.  However, after spending some time really examining the library, I've determined that what I've got (`Math2D`) bridged to _Sylvester's_ classes isn't the best solution.  First off, having a bridge, instead of using _Sylvester_ natively just leads to at least two classes for each point, rectangle, etc.
 
 Secondly _Sylvester_, while admittedly excellent at what it's designed to do, isn't optimized for games.  There's too much object creation and destruction.  The pool of objects is constantly being refreshed and the garbage collector is working overtime.  This needs to be remedied so that _The Render Engine_ will run well on all platforms.
