@@ -59,7 +59,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    dependencyCount: 0,
    dependencyProcessor: null,
    dependencyTimer: null,
-   dependencyCheckTimeout: $.browser.Wii ? 5000 : 2500,
+   dependencyCheckTimeout: $.browser.Wii ? 6500 : 3500,
    dependencyProcessTimeout: 100,
 
    /**

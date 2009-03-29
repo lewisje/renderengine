@@ -73,7 +73,6 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
     * @private
     */
    calculateBoundingBox: function() {
-      return;
 
       var x1 = 0;
       var x2 = 0;
@@ -82,23 +81,24 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       for (var p = 0; p < this.rText.length; p++)
       {
          var pt = this.rText[p];
-
-         if (pt.x < x1)
-         {
-            x1 = pt.x;
-         }
-         if (pt.x > x2)
-         {
-            x2 = pt.x;
-         }
-         if (pt.y < y1)
-         {
-            y1 = pt.y;
-         }
-         if (pt.y > y2)
-         {
-            y2 = pt.y;
-         }
+			if (pt) {
+	         if (pt.x < x1)
+	         {
+	            x1 = pt.x;
+	         }
+	         if (pt.x > x2)
+	         {
+	            x2 = pt.x;
+	         }
+	         if (pt.y < y1)
+	         {
+	            y1 = pt.y;
+	         }
+	         if (pt.y > y2)
+	         {
+	            y2 = pt.y;
+	         }
+			}
       }
 
       this.getHostObject().setBoundingBox(new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
