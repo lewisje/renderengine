@@ -651,7 +651,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 681 $
+ * @version: $Revision: 694 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -978,7 +978,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @param inString {String} The source to clean
     */
    cleanSource: function(inString, keepNewLines) {
-      var s = inString.replace(/((["'])[^\n\r]*\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
+      var s = inString.replace(/((["'])[^;\n\r]*\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
                      .replace(/\/\*(\n|.)*?\*\//gm, "")           // Remove multi line comments
                      .replace(/^[ \t]*(.*?)[ \t]*$/gm, "$1")      // Trim lines
                      .replace(/\s*\n$/gm, "");                    // Remove blank lines
@@ -1134,7 +1134,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    dependencyCount: 0,
    dependencyProcessor: null,
    dependencyTimer: null,
-   dependencyCheckTimeout: $.browser.Wii ? 5000 : 2500,
+   dependencyCheckTimeout: $.browser.Wii ? 6500 : 3500,
    dependencyProcessTimeout: 100,
 
    /**
@@ -1593,7 +1593,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 689 $
+ * @version: $Revision: 691 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -2481,6 +2481,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          Engine.addMetric("frame", Engine.frameTime, true, "#ms");
          Engine.addMetric("load", Math.floor((Engine.frameTime / this.fpsClock) * 100), true, "#%");
          Engine.addMetric("visObj", Engine.vObj, false, "#");
+			Engine.addMetric("dropped", Engine.droppedFrames, false, "#");
 
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;

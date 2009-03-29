@@ -895,6 +895,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          Engine.addMetric("frame", Engine.frameTime, true, "#ms");
          Engine.addMetric("load", Math.floor((Engine.frameTime / this.fpsClock) * 100), true, "#%");
          Engine.addMetric("visObj", Engine.vObj, false, "#");
+			Engine.addMetric("dropped", Engine.droppedFrames, false, "#");
 
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;

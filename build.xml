@@ -20,12 +20,16 @@
 	<property name="tool.set" value="NO_COPY"/>
 
 	<!-- Dumpt the system date (this is for Windows) -->
-	<exec executable="date" outputproperty="builddate.out" >  
+	<exec executable="cmd.exe" outputproperty="build.date" >  
+		<arg line="/c"/>
+		<arg line="date.exe"/>
 		<arg line="/T"/>  
 	</exec>
+	<!--
 	<propertyregex property="build.date" input="${builddate.out}" select="\1">  
 		<regexp pattern="\w+ ((\d+\/?){3})"/>  
 	</propertyregex>
+	-->
 
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->

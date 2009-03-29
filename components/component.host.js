@@ -33,7 +33,7 @@
 
 // Includes
 Engine.include("/engine/engine.container.js");
-Engine.include("/components/component.base.js");
+Engine.include("/components/component.logic.js");
 
 Engine.initObject("HostComponent", "LogicComponent", function() {
 
@@ -73,6 +73,7 @@ var HostComponent = LogicComponent.extend(/** @scope HostComponent.prototype */{
     * @param obj {HostObject} The host object reference
     */
    add: function(name, obj) {
+		Assert((obj instanceof HostObject), "You can only add HostObjects to a HostComponent");
       this.objects.add(name.toUpperCase(), obj);
    },
 
@@ -105,6 +106,14 @@ var HostComponent = LogicComponent.extend(/** @scope HostComponent.prototype */{
    execute: function(renderContext, time) {
       var objs = this.objects.getObjects();
       for (var c in objs) {
+
+			// Make sure the host object's render context matches 
+			// this component's host object's context
+			if (objs[c].getRenderContext() == null) {
+				objs[c].setRenderContext(renderContext);
+				Console.info(this.getHostObject().getId() + "[" + this.getName() + "]: SetRenderContext '" + renderContext.getId() + "'");
+			}
+
          objs[c].update(renderContext, time);
       }
    }

@@ -316,7 +316,7 @@ Engine.initObject("MultiTimeout", "Timeout", function() {
  *
  * @extends Timeout
  */
-var MultiTimeout = Timeout.extend(/** @scope Timeout.prototype */{
+var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
 
    constructor: function(name, reps, interval, callback) {
 

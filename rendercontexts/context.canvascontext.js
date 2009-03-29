@@ -2,7 +2,7 @@
  * The Render Engine
  * CanvasContext
  *
- * @fileoverview An extension of the 2D render context which encapsulates 
+ * @fileoverview An extension of the 2D render context which encapsulates
  *               the Canvas element.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -69,18 +69,12 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       var worldScale = this.getWorldScale();
       // Create the canvas element
       canvas = document.createElement("canvas");
-      if (jQuery.browser.msie) {
-         canvas.style.width = this.width * worldScale;
-         canvas.style.height = this.height * worldScale;
-      } else {
-         canvas.width = this.width * worldScale;
-         canvas.height = this.height * worldScale;
-      }
 
       this.setViewport(Rectangle2D.create(0, 0, this.width, this.height));
       this.base(name || "CanvasContext", canvas);
 
       canvas.id = this.getId();
+      this.setWorldScale(this.getWorldScale());
    },
 
    afterAdd: function(parent) {
