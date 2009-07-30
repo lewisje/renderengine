@@ -14,7 +14,7 @@ The new pooling mechanism will keep the references to an object instance beyond 
 
 My intent is to minimize the amount of work that has to be done by the garbage collector, thus minimizing the amount of time that is consumed when the garbage collector runs.  Currently, the collector is running at about 1/2 to 1 second.  I'd like this to be even shorter, but there's more work to be done.  As it stands, there are objects which are created and discarded quite often, and those are used a lot.  These objects are the points, vectors, and rectangles used in creating, positioning, and colliding of objects.
 
-I would like to find an effective way to manage the "transient objects" (as I call them) which are created, used, and then discarded many times during an engine cycle.  Object instance reuse is the biggest part of this, but a mechanism to catch a discarded object and return it to the pool would be ideal.
+I would like to find an effective way to manage the "transient objects" (my term) which are created, used, and then discarded many times during an engine cycle.  Object instance reuse is the biggest part of this, but a mechanism to catch a discarded object and return it to the pool would be ideal.
 
 = How Is It Used, or, What's Different? =
 
