@@ -9,7 +9,7 @@ The following is a list of browsers that I have tested the engine and examples i
 || *Safari* || 3.0+ || Windows, Mac, iPhone || Great - Win/Mac, Ok - iPhone ||
 || *Opera* || 9.5+ || Windows || Great ||
 || *Opera* || 9.5+ || Wii || Ok - Needs optimization ||
-|| *Chrome* || 0.3beta || Windows || Great ||
+|| *Chrome* || 1.0+ || Windows || Great ||
 
 Levels of support:
   * Fail - Engine not working on this browser
