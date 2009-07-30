@@ -3,7 +3,7 @@
  * HostObject
  *
  * @fileoverview An object which can contain components.  This is a base
- * 				  class for most in-game objects.
+ *               class for most in-game objects.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -34,6 +34,7 @@
 // Includes
 Engine.include("/engine/engine.container.js");
 Engine.include("/components/component.base.js");
+Engine.include("/components/component.host.js");
 
 Engine.initObject("HostObject", "HashContainer", function() {
 
@@ -132,10 +133,10 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       {
          this.sort(HostObject.componentSort);
       }
-		
-		if (component instanceof HostComponent) {
-			component.set
-		}
+      
+      if (component instanceof HostComponent) {
+         component.set
+      }
    },
 
    /**
