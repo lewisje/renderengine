@@ -8,7 +8,7 @@ This process can take a while if many objects were created and discarded.  The w
 
 == Pooled Objects ==
 
-The new pooling mechanism will keep the references to an object instance beyond destruction, allowing it to be reused when needed.  Instead of creating new instances of objects, an object is destroyed and put into a pool with other objects of the same class name.  When an object is needed, if one is available in the pool, it is initialized from there.  Otherwise, a new instance is allocated and initialized.  No objects are released to be garbage collected.
+The new pooling mechanism will keep the references to an object instance beyond destruction, allowing it to be reused when needed.  Instead of creating new instances of objects, an object is destroyed and put into a pool with other objects of the same class name.  When an object is needed, if one is available in the pool, it is initialized from there.  Otherwise, a new instance is allocated and initialized.  No objects are released to be garbage collected until the engine is shut down.
 
 == Intended Effect ==
 
