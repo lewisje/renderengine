@@ -1,7 +1,7 @@
 #summary A list of browsers The Render Engine runs on
 = List of Supported Browsers =
 
-The following is a list of browsers that I have tested the engine and examples in.  As more browsers are tested and pass, I will add them to this list.
+The following is a list of browsers that I have tested the engine and examples in.  As more browsers are tested and pass, I will add them to this list.  
 
 ||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||
 || *Firefox* || 1.5,2.0 || Windows || Good||
@@ -23,6 +23,7 @@ Levels of support:
 
 _Notes:_
 
+  * Just as a note, the best performance of any browser is Google's _Chrome_.  Their V8 Javascript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete!
   * Additional tests for different browsers on multiple platforms would be nice.  I only have a Windows PC and occasional access to a Mac and/or iPhone.
   * Requests for additional browsers should be added to the comments of this page.
   * There is a project to bring the Cairo (Firefox's renderer) canvas to Internet Explorer.  When this works, I will test and add IE to my list of browsers.  The !ExCanvas object doesn't perform fast enough for this engine.
