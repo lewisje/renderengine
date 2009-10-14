@@ -3,6 +3,10 @@
 
 *Note:* I'm back... As the weather gets cooler, I'm going to get back to working on The Render Engine.
 
+I just updated the render contexts to be unobtrusive.  With The Render Engine, swapping of contexts should be something that is as simple as telling the game which to use.  You shouldn't have to know how to assign sprite images or how to draw to the context within your game.  Instead, this should be handled by the context and the components themselves.  The Wii Test was updated to show off this capability.
+
+Additionally, with Gecko and Webkit supporting transformations, I want to see if I can get them working in the render contexts.  Using these, it should be possible to support most drawing operations on the HTMLDivContext.  We'll see if this is possible...
+
 
 
 I decided, a while back, to use the _Sylvester_ math library to do 2D and 3D work.  However, after spending some time really examining the library, I've determined that what I've got (`Math2D`) bridged to _Sylvester's_ classes isn't the best solution.  First off, having a bridge, instead of using _Sylvester_ natively just leads to at least two classes for each point, rectangle, etc.
