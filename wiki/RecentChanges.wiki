@@ -3,7 +3,7 @@
 = Recent Changes =
 
 || *Date* || *Notes* ||
-|| 10/13/2009 || Updated render contexts to be unobtrusive. Contexts should be able to be swapped without concern. In !WiiTest, you can see this by setting the "context" query param to 0 for !HTMLDivContext and 1 for !CanvasContext. ||
+|| 10/13/2009 || Updated render contexts to be unobtrusive. Contexts should be able to be swapped without concern. In !WiiTest, you can see this by setting the "context" query param to 0 for HTMLDivContext and 1 for !CanvasContext. ||
 || 07/30/2009 || Fixed a bug in "engine.hostobject.js" which was causing the demos to fail. ||
 || 01/22/2009 || Extended collider component with two derivatives - box and circle colliders.  These two components will perform more specific tests for collision instead of leaving it totally up to the host.  Also added a way to make a collider component only respond to specific objects. ||
 || 01/21/2009 || Updated the Wii test so that balls bounce off each other. ||
