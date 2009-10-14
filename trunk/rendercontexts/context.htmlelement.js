@@ -101,10 +101,12 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @memberOf HTMLElementContext
     */
    add: function(obj) {
-      if (obj.getElement())
+      if (!obj.getElement())
       {
-         this.jQ().append(obj.getElement());
+			// Create an element for the object
+			obj.setElement($("<div>").css("position", "absolute"));
       }
+      this.jQ().append(obj.getElement());
       this.base(obj);
    },
 

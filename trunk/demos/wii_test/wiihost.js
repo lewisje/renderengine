@@ -70,9 +70,9 @@ Engine.initObject("WiiHost", "Object2D", function() {
 
          // Debugging
          this.cBox = $("<div>").css({ position: "absolute", display: "none", border: "1px dashed red"});
-         WiiTest.getRenderContext().getSurface().append(this.cBox);
+         //WiiTest.getRenderContext().getSurface().append(this.cBox);
          this.wBox = $("<div>").css({ position: "absolute", display: "none", border: "2px solid red"});
-         WiiTest.getRenderContext().getSurface().append(this.wBox);
+         //WiiTest.getRenderContext().getSurface().append(this.wBox);
       },
 
       /**

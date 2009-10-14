@@ -276,6 +276,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
+		if (this.running) {
+			return;
+		}
+		
       var mode = "[";
       mode += (this.debugMode ? "DEBUG" : "");
       mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
@@ -294,6 +298,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    pause: function() {
       Console.warn(">>> Engine paused <<<");
+		window.clearTimeout(Engine.globalTimer);
       this.running = false;
    },
 
@@ -305,8 +310,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    shutdown: function() {
       if (!this.running && this.started)
       {
+			// If the engine is not currently running (paused) restart it
+			// and then re-perform the shutdown
          this.running = true;
          setTimeout(function() { Engine.shutdown(); }, 10);
+			return;
       }
 
       this.started = false;
@@ -996,7 +1004,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    engineTimer: function() {
 
-      if (!Engine.running) {
+      if (!this.running) {
          return;
       }
 
