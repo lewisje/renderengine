@@ -340,7 +340,32 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    getClassName: function() {
       return "HTMLElementContext";
-   }
+   },
+	
+	/**
+	 * When the HTMLElementContext's dependencies are resolved, check the browser
+	 * type and load a specific object which handles specific processing.
+	 */
+	resolved: function() {
+		var version = parseFloat(EngineSupport.sysInfo().version);
+		switch (EngineSupport.sysInfo().browser) {
+			case "safari" :
+					if (version >= 3) {
+						// Load support for webkit transforms
+						Engine.include("/rendercontexts/support/context.htmlelement.safari.js");
+					}
+				break;
+			case "mozilla" :
+					if (version >= 1.9) {
+						// Load support for gecko transforms
+						Engine.include("/rendercontexts/support/context.htmlelement.gecko.js");
+					}
+				break;
+			default:
+				break;
+		};
+		
+	}
 });
 
 return HTMLElementContext;
