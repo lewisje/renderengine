@@ -410,6 +410,19 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * Gets an object that is a collation of a number of browser and
     * client settings.  You can use this information to tailor a game
     * to the environment it is running within.
+    * <ul>
+    * <li>browser - A string indicating the browser type (safari, mozilla, opera, msie)</li>
+    * <li>version - The browser version</li>
+    * <li>agent - The user agent</li>
+    * <li>platform - The platform the browser is running on</li>
+    * <li>cpu - The CPU on the machine the browser is running on</li>
+    * <li>language - The browser's language</li>
+    * <li>online - If the browser is running in online mode</li>
+    * <li>cookies - If the browser supports cookies</li>
+    * <li>fullscreen - If the browser is running in fullscreen mode</li>
+    * <li>width - The browser's viewable width</li>
+    * <li>height - The browser's viewable height</li>
+    * </ul>
     * @return An object with system information
     * @memberOf EngineSupport
     */
