@@ -1169,6 +1169,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
+		// Store the object for intialization when all dependencies are resolved
       Linker.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Linker.dependencyCount++;
       Console.info(objectName, " depends on: ", newDeps);
@@ -1253,13 +1254,19 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
 
          if (!miss && Linker.checkNSDeps(d)) {
-            // We can initialize it
+            // We can initialize it now
             var parentObj = Linker.getParentClass(d);
             parentObj[d] = Linker.dependencyList[d].objFn();
             Console.info("Initializing", d);
 
             // Remember what we processed so we don't process them again
             pDeps.push(d);
+				
+				// After it has been initialized, check to see if it has the
+				// resolved() class method
+				if (parentObj[d].resolved) {
+					parentObj[d].resolved();
+				}
          }
       }
 
@@ -1593,7 +1600,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 697 $
+ * @version: $Revision: 708 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
