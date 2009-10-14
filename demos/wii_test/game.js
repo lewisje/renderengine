@@ -32,6 +32,7 @@
  */
 
 // Load all required engine components
+Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/spatial/container.spatialgrid.js");
@@ -122,13 +123,26 @@ Engine.initObject("WiiTest", "Game", function(){
          this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-         this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+         
+			// Allow us to swap render contexts
+			var renderContext = EngineSupport.getNumericParam("context", 0);
+			
+			if (renderContext == 0) {
+				// Default is the HTMLDivContext
+				this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+			} else if (renderContext == 1) {
+				// CanvasContext to show ease of swapping
+				this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+			}
+         
+			
+	      this.renderContext.setBackgroundColor("#FFFFFF");
+			
+			// Address the rendercontext's object directly
          this.renderContext.jQ().css({
-            border: "1px solid red",
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0});
+            border: "1px solid red"
+			});
+         
          Engine.getDefaultContext().add(this.renderContext);
 
          // Create the collision model with 5x5 divisions

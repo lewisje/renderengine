@@ -74,6 +74,14 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
     */
    setSprite: function(sprite) {
       this.currentSprite = sprite;
+		
+		if (this.getHostObject().jQ()) {
+			this.getHostObject().jQ().css({
+				width: sprite.getBoundingBox().len_x(),
+				height: sprite.getBoundingBox().len_y(),
+				background: "url('" + sprite.getSourceImage().src + "') no-repeat"
+			});
+		}
    },
 
    /**

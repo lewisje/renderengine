@@ -64,13 +64,13 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.sprite = null;
 
          // The element which we render to
-         this.setElement($("<div>").css({ position: "absolute", width: 60, height: 60 }));
+         //this.setElement($("<div>").css({ position: "absolute", width: 60, height: 60 }));
 
          // Debugging
          this.cBox = $("<div>").css({ position: "absolute", display: "none", border: "1px dashed blue"});
-         WiiTest.getRenderContext().getSurface().append(this.cBox);
+         //WiiTest.getRenderContext().getSurface().append(this.cBox);
          this.wBox = $("<div>").css({ position: "absolute", display: "none", border: "2px solid blue"});
-         WiiTest.getRenderContext().getSurface().append(this.wBox);
+         //WiiTest.getRenderContext().getSurface().append(this.wBox);
 
          // Add components to move and draw the player
          this.add(Mover2DComponent.create("move"));
@@ -139,7 +139,6 @@ Engine.initObject("WiiBall", "Object2D", function() {
        */
       setSprite: function(spriteIdx) {
          var sprite = this.sprites[spriteIdx];
-         this.jQ().css("background", "url('" + sprite.getSourceImage().src + "') no-repeat");
          this.setBoundingBox(sprite.getBoundingBox());
          this.getComponent("draw").setSprite(sprite);
       },
