@@ -52,14 +52,14 @@ The following list is a set of goals to be reached for the intended release.  So
 == Beta 1.4 (_October 31, 2009_) ==
 || *Status* || *Goal* || *Description* ||
 || _75%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
-|| - || Support || Canvas native font support ||
+|| - || Browser Support || Canvas native font support ||
 
 == Beta 1.5 (TBA) ==
 
 || *Status* || *Goal* || *Description* ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
-|| - || Support || DOM transformations in browsers which support it ||
 || - || Tool || Particle editor. ||
+|| - || Browser Support || DOM transformations in browsers which support it ||
 
 == Beta 2 (TBA) ==
 
