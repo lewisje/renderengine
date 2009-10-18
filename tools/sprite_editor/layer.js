@@ -37,9 +37,7 @@ Engine.include("/engine/engine.container.js");
 Engine.initObject("SpriteLayer", "Object2D", function() {
 
 /**
- * @class The player object.  Creates the player and assigns the
- *        components which handle collision, drawing, drawing the thrust
- *        and moving the object.
+ * @class A single layer/frame within a sprite.
  */
 var SpriteLayer = Object2D.extend({
 
@@ -93,6 +91,12 @@ var SpriteLayer = Object2D.extend({
       renderContext.popTransform();
    },
 
+	/**
+	 * Get the pixel, normalized to the grid size, using the given coordinates.
+	 * @param x {Number} The X coordinate
+	 * @param y {Number} The Y coordinate
+	 * @return {Array} An array containing the X and Y grid-normalized components
+	 */
    getGridPixel: function(x, y) {
       var pSize = SpriteEditor.pixSize;
       x /= pSize;
@@ -102,28 +106,65 @@ var SpriteLayer = Object2D.extend({
       return [x,y];     
    },
 
+	/**
+	 * Add a pixel to the layer, in the current color, at the given coordinates
+	 * @param x {Number} The X coordinate
+	 * @param y {Number} The Y coordinate
+	 */
    addPixel: function(x, y) {
       var gP = this.getGridPixel(x, y);
       var t = SpriteEditor.editorSize / SpriteEditor.pixSize;
       this.pixels[gP[1] * t + gP[0]] = SpriteEditor.currentColor;
    },
 
+	/**
+	 * Clear the pixel on the layer at the given coordinates
+	 * @param x {Number} The X coordinate
+	 * @param y {Number} The Y coordinate
+	 */
    clearPixel: function(x, y) {
       var gP = this.getGridPixel(x, y);
       var t = SpriteEditor.editorSize / SpriteEditor.pixSize;
       this.pixels[gP[1] * t + gP[0]] = null;
    },
 
+	/**
+	 * Clear all of the pixels on the layer
+	 */
 	clear: function() {
 		this.pixels = [];	
 	},
 
+	/**
+	 * Set the pixels array for the layer
+	 * @param pixels {Array} The array of pixels for the current layer
+	 */
+	setPixels: function(pixels) {
+		this.pixels = pixels;
+	},
+	
+	/**
+	 * Get the pixel array for the layer
+	 * @return {Array} A copy of the pixels on the current layer
+	 */
+	getPixels: function() {
+		return [].concat(this.pixels);
+	},
+
+	/**
+	 * Get the pixel at the given coordinates
+	 * @param x {Number} The X coordinate
+	 * @param y {Number} The Y coordinate
+	 */
    getPixel: function(x, y) {
       var gP = this.getGridPixel(x, y);
       var t = SpriteEditor.editorSize / SpriteEditor.pixSize;
       return this.pixels[gP[1] * t + gP[0]];
    },
    
+	/**
+	 * Flip the layer vertically
+	 */
    flipVertical: function() {
       var rowSize = SpriteEditor.editorSize / SpriteEditor.pixSize;
       var flip = [];
@@ -134,6 +175,9 @@ var SpriteLayer = Object2D.extend({
       this.pixels = flip;
    },
    
+	/**
+	 * Flip the layer horizontally
+	 */
    flipHorizontal: function() {
       var flip = [];
       EngineSupport.fillArray(flip, this.buffSize, null);
@@ -146,6 +190,9 @@ var SpriteLayer = Object2D.extend({
       this.pixels = flip;     
    },
    
+	/**
+	 * Shift the pixels to the left, wrapping at the left border
+	 */
    shiftLeft: function() {
       // Remove the first pixel of each row and insert it into the
       // last pixel
@@ -156,6 +203,9 @@ var SpriteLayer = Object2D.extend({
       }     
    },
    
+	/**
+	 * Shift the pixels to the right, wrapping at the right border
+	 */
    shiftRight: function() {
       // Remove the last pixel of each row and insert it into the
       // first pixel
@@ -166,6 +216,9 @@ var SpriteLayer = Object2D.extend({
       }     
    },
    
+	/**
+	 * Shift the pixels up, wrapping at the top border
+	 */
    shiftUp: function() {
       // Remove the top row of pixels and add to the bottom
       var start = 0;
@@ -175,6 +228,9 @@ var SpriteLayer = Object2D.extend({
       this.pixels = this.pixels.concat(topRow); 
    },
    
+	/**
+	 * Shift the pixels down, wrapping at the bottom border
+	 */
    shiftDown: function() {
       // Remove the bottom row of pixels and add to the top
       var start = this.buffSize - (SpriteEditor.editorSize / SpriteEditor.pixSize);

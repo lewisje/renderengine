@@ -2,9 +2,9 @@
    position: absolute;
    background: silver;
    width: 400px;
-   top: 5px;
-   height: 500px;
-   left: 520px;
+   top: 0;
+   height: 514px;
+   left: 512px;
    border: 1px outset white;
    padding: 10px;
 }
@@ -219,6 +219,7 @@ div.button.mirror-horizontal {
 	width: 16px;
 	height: 16px;
 	margin-left: 5px;
+	border: 1px solid transparent;
 }
 
 .frames ul li.currentFrame {

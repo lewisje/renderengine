@@ -38,7 +38,7 @@ Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.loadStylesheet("resources/color_select.css", true);
 Engine.loadStylesheet("resources/editor.css", true);
 
-// Load game objects
+// Load objects
 Game.load("/layer.js");
 Game.load("/grid.js");
 Game.load("/preview.js");
@@ -47,7 +47,11 @@ Game.load("/color_select.js");
 Engine.initObject("SpriteEditor", "Game", function() {
 
 /**
- * @class The game.
+ * @class A sprite editor for creating sprite resources for
+ * 		 use in a 2D sprite-based game.  The editor has the capability
+ * 		 to create single-frame and animated sprites.  Methods are
+ * 		 provided to manipulate the sprites, such as: mirroring, inverting,
+ * 		 shifting, and more.
  */
 var SpriteEditor = Game.extend({
 
@@ -88,15 +92,15 @@ var SpriteEditor = Game.extend({
 	frameIdx: 0,
 
    /**
-    * Called to set up the game, download any resources, and initialize
-    * the game to its running state.
+    * Called to set up the editor, download any resources, and initialize
+    * the editor to its running state.
     */
    setup: function() {
      $("#loading").remove();
      $("#controls").css("display", "block");
      $("#menuBar").css("display", "block");
 
-      // Set the FPS of the game
+      // Set the FPS so drawing speed is resonable
       Engine.setFPS(25);
 
       // Create the 2D context
@@ -147,18 +151,21 @@ var SpriteEditor = Game.extend({
       this.editorContext.add(this.renderFrame);
 		this.currentLayer = this.renderFrame;
 
+		// Set a click event for the first frame in the frame manager
 		$(".frames ul li.currentFrame").click(function() {
 			SpriteEditor.setCurrentFrame($(".frames ul li").index(this));			
 		});
 
+		// Generate the grid
       this.grid = SpriteGrid.create();
       this.editorContext.add(this.grid);
 
+		// Finally, add the controls
       this.addControls();
    },
 
    /**
-    * Called when a game is being shut down to allow it to clean up
+    * Called when the editor is being shut down to allow it to clean up
     * any objects, remove event handlers, destroy the rendering context, etc.
     */
    teardown: function() {
@@ -169,6 +176,11 @@ var SpriteEditor = Game.extend({
    //===============================================================================================
    // Editor Functions
 
+	/**
+	 * Set the current frame being displayed in the editor.
+	 * 
+	 * @param [frameIdx] {Number} The frame index, or <tt>null</tt> for the current frame
+	 */
 	setCurrentFrame: function(frameIdx) {
 		frameIdx = frameIdx || this.frameIdx;
 		this.currentLayer = this.frames[frameIdx];
@@ -178,18 +190,31 @@ var SpriteEditor = Game.extend({
 		$(".frames ul li:eq(" + frameIdx + ")").addClass("currentFrame");
 	},
 
+	/**
+	 * Add a new, empty frame to the set of frames in the sprite.
+	 * @return {SpriteLayer} The newly added frame layer
+	 */
 	addFrame: function() {
 		var frame = SpriteLayer.create();
 		this.frames.push(frame);
 		return frame;
 	},
 
+	/**
+	 * Delete the frame at the given index, or the currently selected frame.
+	 * @param [frameIdx] {Number} The index of the frame to delete, or <tt>null</tt> to
+	 * 		 delete the currently selected frame.
+	 */
 	deleteFrame: function(frameIdx) {
 		frameIdx = frameIdx || this.frameIdx;
 		this.frames.splice(frameIdx, 1);
 		this.setCurrentFrame();
 	},
 
+	/**
+	 * Navigate the frame manager to the previous frame and update
+	 * the editor to reflect that frame's state.
+	 */
 	prevFrame: function() {
 		this.frameIdx--;
 		if (this.frameIdx < 0) {
@@ -198,6 +223,10 @@ var SpriteEditor = Game.extend({
 		this.setCurrentFrame();
 	},
 	
+	/**
+	 * Navigate the frame manager to the next frame and update
+	 * the editor to reflect that frame's state.
+	 */
 	nextFrame: function() {
 		this.frameIdx++;
 		if (this.frameIdx == this.frames.length) {
@@ -206,6 +235,13 @@ var SpriteEditor = Game.extend({
 		this.setCurrentFrame();
 	},
 
+	/**
+	 * Set the pixel, at the given coordinates, to the currently selected
+	 * foreground color.
+	 * 
+	 * @param x {Number} The X coordinate
+	 * @param y {Number} The Y coordinate
+	 */
    setPixel: function(x, y) {
       for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
          for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
@@ -221,6 +257,12 @@ var SpriteEditor = Game.extend({
       }
    },
 
+	/**
+	 * Clear the pixel at the given coordinates.
+	 * 
+	 * @param x {Number} The X coordinate
+	 * @param y {Number} The Y coordinate
+	 */
    clearPixel: function(x, y) {
       for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
          for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
@@ -236,30 +278,51 @@ var SpriteEditor = Game.extend({
       }
    },
 
+	/**
+	 * Shift all pixels within the sprite up one row, wrapping at the top row.
+	 */
    shiftUp: function() {
       SpriteEditor.currentLayer.shiftUp();
    },
 
+	/**
+	 * Shift all pixels within the sprite down one row, wrapping at the bottom row.
+	 */
    shiftDown: function() {
       SpriteEditor.currentLayer.shiftDown();
    },
 
+	/**
+	 * Shift all pixels within the sprite left one column, wrapping at the left column.
+	 */
    shiftLeft: function() {
       SpriteEditor.currentLayer.shiftLeft();
    },
 
+	/**
+	 * Shift all pixels within the sprite right one column, wrapping at the right column.
+	 */
    shiftRight: function() {
       SpriteEditor.currentLayer.shiftRight();
    },
 
+	/**
+	 * Flip all pixels within the sprite vertically.
+	 */
    flipVertical: function() {
       SpriteEditor.currentLayer.flipVertical();
    },
 
+	/**
+	 * Flip all pixels within the sprite horizontally.
+	 */
    flipHorizontal: function() {
       SpriteEditor.currentLayer.flipHorizontal();
    },
 
+	/**
+	 * Toggle horizontal mirroring on or off.
+	 */
    hMirrorToggle: function() {
 		var self = this;
 		setTimeout(function() {
@@ -269,6 +332,9 @@ var SpriteEditor = Game.extend({
 		}, 10);
    },
 
+	/**
+	 * Toggle vertical mirroring on or off.
+	 */
    vMirrorToggle: function() {
 		var self = this;
 		setTimeout(function() {
@@ -277,7 +343,12 @@ var SpriteEditor = Game.extend({
 	      self.mirrorVert = mode;
 		}, 10);
    },
-
+	
+	/**
+	 * Set the drawing mode current operation.
+	 * @param obj {HTMLElement} The element which corresponds to one of the UI buttons
+	 * @private
+	 */
    setDrawMode: function(obj) {
       if ($(obj).hasClass("paintbrush")) {
          SpriteEditor.drawMode = SpriteEditor.PAINT;
@@ -294,6 +365,13 @@ var SpriteEditor = Game.extend({
       }
    },
 
+	/**
+	 * Get the color of the pixel at the given coordinates, setting the
+	 * current foreground color appropriately.
+	 * 
+	 * @param x {Number} The X coordinate
+	 * @param y {Number} The Y coordinate
+	 */
    getPixel: function(x, y) {
       var colr = SpriteEditor.currentLayer.getPixel(x, y);
       if (colr) {
@@ -303,6 +381,11 @@ var SpriteEditor = Game.extend({
       }
    },
 
+	/**
+	 * Set the drawing color to the given hexadecimal color value.
+	 * 
+	 * @param hexColor {String} The hexidecimal color value in HTML notation (i.e. #aabbcc)
+	 */
    setNewColor: function(hexColor) {
       if (SpriteEditor.editColor == SpriteEditor.COLOR_FOREGROUND) {
          $("#curColor").val(hexColor);
@@ -316,6 +399,10 @@ var SpriteEditor = Game.extend({
       }
    },
 
+	/**
+	 * Add the drawing controls to the UI.
+	 * @private
+	 */
    addControls: function() {
       $("#curColor")
          .change(function() {
@@ -394,16 +481,12 @@ var SpriteEditor = Game.extend({
       SpriteEditor.previewImage = $(".preview img");
    },
 
-   callFunction: function(fName, obj) {
-      fName = fName.split(".");
-      var o = window;
-      var i = fName.length - 1;
-      while (i--) {
-         o = o[fName.shift()];
-      }
-      o[fName.shift()](obj);
-   },
-
+	/**
+	 * Fix up the given color so that it represents a good hexadecimal color value.
+	 * @param colr {String} A color value to fix
+	 * @return {String} A cleaned up hexadecimal color
+	 * @private
+	 */
    fixupColor: function(colr) {
 
       function pad(n) {
@@ -428,6 +511,12 @@ var SpriteEditor = Game.extend({
       return colr;
    },
 
+	/**
+	 * Get the contrast value of the given color value.
+	 * @param colr {String} The color to analyze
+	 * @return {String} The hexadecimal color with a normalized contrast
+	 * @private
+	 */
    getContrast: function(colr) {
       colr = colr.substring(1);
       var cont = colr.replace(/(\w{2})(\w{2})(\w{2})/, function(str, r, g, b) {
@@ -440,6 +529,10 @@ var SpriteEditor = Game.extend({
    //--------------------------------------------------------------------------------------------
    // MENUBAR ACTIONS
    
+	/**
+	 * MENU - clear the current frame
+	 * @private
+	 */
 	actionClearFrame: function() {
 		function $$doNew() {
 			SpriteEditor.currentLayer.clear();	
@@ -450,6 +543,10 @@ var SpriteEditor = Game.extend({
 		}
 	},
 	
+	/**
+	 * MENU - add a new frame
+	 * @private
+	 */
 	actionNewFrame: function() {
 		var f = $("<li>").append("<img width='16' height='16'/>");
 		f.click(function() {
@@ -460,31 +557,88 @@ var SpriteEditor = Game.extend({
 		this.setCurrentFrame(this.frames.length - 1);
 	},
 	
+	/**
+	 * MENU - duplicate the current frame, adding a new frame at the end of the manager
+	 * @private
+	 */
+	actionDuplicateFrame: function() {
+		var f = $("<li>").append("<img width='16' height='16'/>");
+		f.click(function() {
+			SpriteEditor.setCurrentFrame($(".frames ul li").index(this));			
+		});
+		$(".frames ul").append(f);
+		var f = this.addFrame();
+		f.setPixels(this.currentLayer.getPixels());
+		this.setCurrentFrame(this.frames.length - 1);
+	},
+	
+	/**
+	 * MENU - toggle horizontal mirror
+	 * @private
+	 */
 	actionHMirrorToggle: function() {
 		$("div.button.mirror-horizontal").mousedown();
 	},
 	
+	/**
+	 * MENU - toggle vertical mirror
+	 * @private
+	 */
 	actionVMirrorToggle: function() {
 		$("div.button.mirror-vertical").mousedown();
 	},
 	
+	/**
+	 * MENU - toggle the display of the grid
+	 * @private
+	 */
 	actionToggleGrid: function() {
 		$("#gridVis").click();
 		SpriteEditor.grid.setVisible($("#gridVis")[0].checked);
 	},
 	
+	/**
+	 * MENU - display "about" alert
+	 * @private
+	 */
    actionAbout: function() {
-      alert("SpriteEditor\n\n(c)2008 Brett Fattori - The Render Engine");
+      alert("SpriteEditor [alpha 1]\n\n(c)2008-2009 Brett Fattori\nPart of The Render Engine project\nMIT Licensed");
    },
 	
+	/**
+	 * MENU - navigate to the previous frame
+	 * @private
+	 */
 	actionPreviousFrame: function() {
 		this.prevFrame();
 	},
 	
+	/**
+	 * MENU - navigate to the next frame
+	 * @private
+	 */
 	actionNextFrame: function() {
 		this.nextFrame();
 	},
+	
+	/**
+	 * MENU - exit the editor and shut down the game engine
+	 * @private
+	 */
+	actionExit: function() {
+		function $$doExit() {
+			Engine.shutdown();	
+		}
+		
+		if (confirm("Are you sure you want to exit Sprite Editor?")) {
+			$$doExit();
+		}
+	},
 
+	/**
+	 * MENU - basic color pallette
+	 * @private
+	 */
    colorTable: {
       "white":"#FFFFFF",
       "yellow":"#FFFF00",
@@ -504,10 +658,34 @@ var SpriteEditor = Game.extend({
       "black":"#000000"
    },
 
+	/**
+	 * Paint mode
+	 * @type Number
+	 */
    PAINT: 0,
+
+	/**
+	 * Erase mode
+	 * @type Number
+	 */
    ERASE: 1,
+
+	/**
+	 * Eye-dropper mode
+	 * @type Number
+	 */
    SELECT: 2,
+
+	/**
+	 * Foreground color index
+	 * @type Number
+	 */
    COLOR_FOREGROUND: 0,
+
+	/**
+	 * Background color index
+	 * @type Number
+	 */
    COLOR_BACKGROUND: 1
 });
 
