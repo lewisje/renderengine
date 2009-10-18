@@ -10,5 +10,8 @@ Simple "game" that works on the Wii:
 
    * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bouce the Ball - point and click A]
 
+Example of the Sprite Editor that is in development:
+
+   * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true]Sprite Editor alpha
 
 I'll add more as I get them completed and into the repo...
