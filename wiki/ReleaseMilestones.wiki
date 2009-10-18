@@ -12,8 +12,10 @@ Maybe you're looking for FutureGoals?
     * Safari
     * Opera
     * Chrome
-  # 2D Vector-based example game (Asteroids clone)
-  # 2D DOM-based example game, Wii enabled (Simple ball bounce)
+  # Example games/demos
+    * 2D Vector-based example game (Asteroids-like clone)
+    * 2D DOM-based example game, Wii enabled (Simple ball bounce)
+    * 2D Example audio player built with engine
   # Rendering contexts
     * 2D Canvas
     * DOM
