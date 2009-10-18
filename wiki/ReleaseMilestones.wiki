@@ -42,8 +42,8 @@ Maybe you're looking for FutureGoals?
     * Windows
     * Macintosh
     * Linux
-    * _iPhone_*
-    * _Wii_*
+    * _iPhone*_
+    * _Wii*_
 
 * The support for the iPhone and Wii platform will be minimal.  Version 2.0 aims to have better support and optimization for these platforms.
 
