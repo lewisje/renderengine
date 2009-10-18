@@ -8,10 +8,10 @@ Maybe you're looking for FutureGoals?
   # Completely open-source engine
   # Script loading w/ Dependency processor (linker)
   # Multiple browser support
-    * Firefox 1.5+
-    * Safari 3.0+
-    * Opera 9.5+
-    * Chrome b3+
+    * Firefox
+    * Safari
+    * Opera
+    * Chrome
   # 2D Vector-based example game (Asteroids clone)
   # 2D DOM-based example game, Wii enabled (Simple ball bounce)
   # Rendering contexts
@@ -42,8 +42,10 @@ Maybe you're looking for FutureGoals?
     * Windows
     * Macintosh
     * Linux
-    * iPhone
-    * Wii
+    * _iPhone_*
+    * _Wii_*
+
+* The support for the iPhone and Wii platform will be minimal.  Version 2.0 aims to have better support and optimization for these platforms.
 
 = Release Goals and Milestones =
 
