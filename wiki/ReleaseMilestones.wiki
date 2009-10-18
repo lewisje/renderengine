@@ -51,7 +51,7 @@ The following list is a set of goals to be reached for the intended release.  So
 
 == Beta 1.4 (TBA) ==
 || *Status* || *Goal* || *Description* ||
-|| _60%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
+|| _75%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 
 == Beta 1.5 (TBA) ==
 
