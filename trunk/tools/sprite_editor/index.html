@@ -91,21 +91,35 @@
 					<div class="item disabled" func="SpriteEditor.actionCopy">Copy</div>
 					<div class="item disabled" func="SpriteEditor.actionPaste">Paste</div>
 					<div class="sep"><!-- --></div>
-					<div class="item" func="SpriteEditor.actionFlipHoriz">Flip Horizontal</div>
-					<div class="item" func="SpriteEditor.actionFlipVert">Flip Vertical</div>
+					<div class="item" func="SpriteEditor.flipHorizontal">Flip Horizontal</div>
+					<div class="item" func="SpriteEditor.flipVertical">Flip Vertical</div>
 					<div class="sep"><!-- --></div>
-					<div class="item" func="SpriteEditor.actionShiftUp">Shift Up</div>
-					<div class="item" func="SpriteEditor.actionShiftDown">Shift Down</div>
-					<div class="item" func="SpriteEditor.actionShiftLeft">Shift Left</div>
-					<div class="item" func="SpriteEditor.actionShiftRight">Shift Right</div>
+					<div class="item" func="SpriteEditor.shiftUp">Shift Up</div>
+					<div class="item" func="SpriteEditor.shiftDown">Shift Down</div>
+					<div class="item" func="SpriteEditor.shiftLeft">Shift Left</div>
+					<div class="item" func="SpriteEditor.shiftRight">Shift Right</div>
 				</div>
 			</div>
 			<div class="menuItem">Options
 				<div class="menu">
-					<div class="item toggle" func="SpriteEditor.actionMirrorVert">Vertical Mirror</div>
-					<div class="item toggle" func="SpriteEditor.actionMirrorHoriz">Horizontal Mirror</div>
+					<div class="item toggle" func="SpriteEditor.actionVMirrorToggle">Vertical Mirror</div>
+					<div class="item toggle" func="SpriteEditor.actionHMirrorToggle">Horizontal Mirror</div>
 					<div class="sep"><!-- --></div>
 					<div class="item toggle checked" func="SpriteEditor.actionToggleGrid">Show Grid</div>
+				</div>
+			</div>
+			<div class="menuItem">Frames
+				<div class="menu">
+					<div class="item" func="SpriteEditor.actionClearFrame">Clear Frame</div>
+					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionNewFrame">New Frame</div>
+					<div class="item" func="SpriteEditor.actionDeleteFrame">Delete Frame</div>
+					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionPreviousFrame">Previous Frame</div>
+					<div class="item" func="SpriteEditor.actionNextFrame">Next Frame</div>
+					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionShowFrameEditor">Show Frame Editor</div>
+					<div class="item" func="SpriteEditor.actionAnimateFrames">Animate Frames</div>
 				</div>
 			</div>
 			<div class="menuItem">Help
@@ -203,6 +217,11 @@
             <div class="button flip-horizontal" func="SpriteEditor.flipHorizontal" title="Flip Horizontally"><!-- --></div>
             <div class="stateful button mirror-vertical" func="SpriteEditor.vMirrorToggle" title="Mirror Vertically"><!-- --></div>
             <div class="stateful button mirror-horizontal" func="SpriteEditor.hMirrorToggle" title="Mirror Horizontally"><!-- --></div>
+         </div>
+         <div style="clear: both"><!-- --></div>
+         <div class="tool frames">
+            <h5>Frames</h5>
+            <ul><li class="currentFrame"><img src="" class="frame" width="16" height="16"/></li></ul>
          </div>
       </div>
    </body>

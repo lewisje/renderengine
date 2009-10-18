@@ -74,9 +74,8 @@ var SpriteGrid = Object2D.extend({
 
 		// Before we draw the grid, let's capture the canvas to the preview window
 		SpriteEditor.previewContext.clear();
-		SpriteEditor.previewContext.drawImage(Rectangle2D.create(0, 0, 64, 64),
-			renderContext.getSurface(),
-			Rectangle2D.create(0, 0, 512, 512));
+		SpriteEditor.previewContext.drawImage(null, Rectangle2D.create(0, 0, 64, 64),
+			renderContext.getSurface());
 
       renderContext.pushTransform();
       this.base(renderContext, time);

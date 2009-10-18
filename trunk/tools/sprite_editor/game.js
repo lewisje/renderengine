@@ -62,6 +62,8 @@ var SpriteEditor = Game.extend({
    currentColor: "white",
 
    currentLayer: null,
+	
+	renderFrame: null,
 
    mouseBtn: 0,
 
@@ -80,6 +82,10 @@ var SpriteEditor = Game.extend({
    mirrorVert: false,
 
    mirrorHorz: false,
+	
+	frames: [],
+	
+	frameIdx: 0,
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -91,7 +97,7 @@ var SpriteEditor = Game.extend({
      $("#menuBar").css("display", "block");
 
       // Set the FPS of the game
-      Engine.setFPS(5);
+      Engine.setFPS(25);
 
       // Create the 2D context
       this.editorContext = CanvasContext.create("editor", this.editorSize, this.editorSize);
@@ -102,6 +108,7 @@ var SpriteEditor = Game.extend({
       // The place where previews will be generated
       this.previewContext = SpritePreview.create();
       this.previewContext.setWorldScale(1);
+		this.previewContext.setBackgroundColor("black");
       Engine.getDefaultContext().add(this.previewContext);
 
       // Set some event handlers
@@ -135,10 +142,16 @@ var SpriteEditor = Game.extend({
          }
       });
 
-      // Add the default layer
-      this.currentLayer = SpriteLayer.create();
+      // Add the first frame
+		this.renderFrame = this.addFrame();
+      this.editorContext.add(this.renderFrame);
+		this.currentLayer = this.renderFrame;
+
+		$(".frames ul li.currentFrame").click(function() {
+			SpriteEditor.setCurrentFrame($(".frames ul li").index(this));			
+		});
+
       this.grid = SpriteGrid.create();
-      this.editorContext.add(this.currentLayer);
       this.editorContext.add(this.grid);
 
       this.addControls();
@@ -155,6 +168,43 @@ var SpriteEditor = Game.extend({
 
    //===============================================================================================
    // Editor Functions
+
+	setCurrentFrame: function(frameIdx) {
+		frameIdx = frameIdx || this.frameIdx;
+		this.currentLayer = this.frames[frameIdx];
+		this.editorContext.replace(this.renderFrame, this.currentLayer);
+		this.renderFrame = this.currentLayer;
+		$(".frames ul li.currentFrame").removeClass("currentFrame");
+		$(".frames ul li:eq(" + frameIdx + ")").addClass("currentFrame");
+	},
+
+	addFrame: function() {
+		var frame = SpriteLayer.create();
+		this.frames.push(frame);
+		return frame;
+	},
+
+	deleteFrame: function(frameIdx) {
+		frameIdx = frameIdx || this.frameIdx;
+		this.frames.splice(frameIdx, 1);
+		this.setCurrentFrame();
+	},
+
+	prevFrame: function() {
+		this.frameIdx--;
+		if (this.frameIdx < 0) {
+			this.frameIdx = 0;
+		}
+		this.setCurrentFrame();
+	},
+	
+	nextFrame: function() {
+		this.frameIdx++;
+		if (this.frameIdx == this.frames.length) {
+			this.frameIdx = this.frames.length - 1;
+		}
+		this.setCurrentFrame();
+	},
 
    setPixel: function(x, y) {
       for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
@@ -211,15 +261,21 @@ var SpriteEditor = Game.extend({
    },
 
    hMirrorToggle: function() {
-      var mode = $(".mirror-horizontal").hasClass("on");
-      this.grid.setMirrorHorizontal(mode);
-      this.mirrorHorz = mode;
+		var self = this;
+		setTimeout(function() {
+	      var mode = $(".mirror-horizontal").hasClass("on");
+	      self.grid.setMirrorHorizontal(mode);
+	      self.mirrorHorz = mode;
+		}, 10);
    },
 
    vMirrorToggle: function() {
-      var mode = $(".mirror-vertical").hasClass("on");
-      this.grid.setMirrorVertical(mode);
-      this.mirrorVert = mode;
+		var self = this;
+		setTimeout(function() {
+	      var mode = $(".mirror-vertical").hasClass("on");
+	      self.grid.setMirrorVertical(mode);
+	      self.mirrorVert = mode;
+		}, 10);
    },
 
    setDrawMode: function(obj) {
@@ -384,9 +440,50 @@ var SpriteEditor = Game.extend({
    //--------------------------------------------------------------------------------------------
    // MENUBAR ACTIONS
    
+	actionClearFrame: function() {
+		function $$doNew() {
+			SpriteEditor.currentLayer.clear();	
+		}
+		
+		if (confirm("Are you sure you want to clear the current Frame?")) {
+			$$doNew();
+		}
+	},
+	
+	actionNewFrame: function() {
+		var f = $("<li>").append("<img width='16' height='16'/>");
+		f.click(function() {
+			SpriteEditor.setCurrentFrame($(".frames ul li").index(this));			
+		});
+		$(".frames ul").append(f);
+		this.addFrame();
+		this.setCurrentFrame(this.frames.length - 1);
+	},
+	
+	actionHMirrorToggle: function() {
+		$("div.button.mirror-horizontal").mousedown();
+	},
+	
+	actionVMirrorToggle: function() {
+		$("div.button.mirror-vertical").mousedown();
+	},
+	
+	actionToggleGrid: function() {
+		$("#gridVis").click();
+		SpriteEditor.grid.setVisible($("#gridVis")[0].checked);
+	},
+	
    actionAbout: function() {
       alert("SpriteEditor\n\n(c)2008 Brett Fattori - The Render Engine");
    },
+	
+	actionPreviousFrame: function() {
+		this.prevFrame();
+	},
+	
+	actionNextFrame: function() {
+		this.nextFrame();
+	},
 
    colorTable: {
       "white":"#FFFFFF",

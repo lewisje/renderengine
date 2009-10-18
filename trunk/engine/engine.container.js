@@ -199,6 +199,45 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       }
    },
 
+	/**
+	 * Insert an object into the container at the given index. Asserts if the
+	 * index is out of bounds for the container.  The index must be greater than
+	 * or equal to zero, and less than or equal to the size of the container minus one.
+	 * 
+	 * @param index {Number} The index to insert the object at.
+	 * @param obj {Object} The object to insert into the container
+	 */
+	insert: function(index, obj) {
+		Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
+		this.objects.splice(index, 0, obj);
+	},
+	
+	/**
+	 * Replaces the given object with the new object.  If the old object is
+	 * not found, no action is performed.
+	 * 
+	 * @param oldObj {Object} The object to replace
+	 * @param newObj {Object} The object to put in place
+	 */
+	replace: function(oldObj, newObj) {
+		this.replaceAt(EngineSupport.indexOf(this.objects, oldObj), newObj);		
+	},
+	
+	/**
+	 * Replaces the object at the given index, returning the object that was there
+	 * previously. Asserts if the index is out of bounds for the container.  The index 
+	 * must be greater than or equal to zero, and less than or equal to the size of the 
+	 * container minus one.
+	 * 
+	 * @param index {Number} The index at which to replace the object
+	 * @param obj {Object} The object to put in place
+	 * @return {Object} The object which was replaced
+	 */
+	replaceAt: function(index, obj) {
+		Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
+		return this.objects.splice(index, 1, obj);		
+	},
+	
    /**
     * Remove an object from the container.  The object is
     * not destroyed when it is removed from the container.

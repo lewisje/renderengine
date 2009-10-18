@@ -72,6 +72,7 @@ var SpritePreview = CanvasContext.extend({
 
 		// Now copy across the image to the preview in the editor
 		SpriteEditor.previewImage.attr("src", this.getDataURL());
+		$(".frames ul li.currentFrame img").attr("src", this.getDataURL());
 
       renderContext.popTransform();
    }
