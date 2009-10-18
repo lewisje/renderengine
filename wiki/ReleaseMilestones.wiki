@@ -13,7 +13,7 @@ Maybe you're looking for FutureGoals?
     * Opera 9.5+
     * Chrome b3+
   # 2D Vector-based example game (Asteroids clone)
-  # 2D DOM-based example game (Poker/Tetris mashup)
+  # 2D DOM-based example game, Wii enabled (Simple ball bounce)
   # Rendering contexts
     * 2D Canvas
     * DOM
