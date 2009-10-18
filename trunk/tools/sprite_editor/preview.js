@@ -36,9 +36,7 @@ Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.initObject("SpritePreview", "CanvasContext", function() {
 
 /**
- * @class The player object.  Creates the player and assigns the
- *        components which handle collision, drawing, drawing the thrust
- *        and moving the object.
+ * @class The canvas upon which the preview sprite is displayed.
  */
 var SpritePreview = CanvasContext.extend({
 
@@ -49,17 +47,24 @@ var SpritePreview = CanvasContext.extend({
 		$(this.getSurface()).css("display", "none");
    },
 
+	/**
+	 * Clear the canvas
+	 * @private
+	 */
    clear: function() {
       var cRect = this.getViewport();
       this.get2DContext().clearRect(cRect.getTopLeft().x, cRect.getTopLeft().y, cRect.getDims().x, cRect.getDims().y);
    },
 
+	/**
+	 * @private
+	 */
 	reset: function(rect) {
 		// Overloaded so the rectangle doesn't clear
 	},
 
    /**
-    * Update the context.
+    * Update the preview context.
     *
     * @param renderContext {RenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
@@ -81,7 +86,7 @@ var SpritePreview = CanvasContext.extend({
 
    /**
     * Get the class name of this object
-    * @return The string <tt>SpriteTest.Actor</tt>
+    * @return The string <tt>SpritePreview</tt>
     * @type String
     */
    getClassName: function() {

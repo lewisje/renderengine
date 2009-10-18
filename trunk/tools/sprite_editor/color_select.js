@@ -80,18 +80,18 @@ var ColorSelector = Base.extend(/** @scope ColorSelector.prototype */{
 			.css({width: "256px", height: "256px"})
 			.attr("id", this.id + "_sv_select_box")
 			.addClass("sv_select_box")
-			.mousedown(function(evt) { self.sv_select_box_mousedown(evt.layerX, evt.layerY); return false;})
+			.mousedown(function(evt) { self.sv_select_box_mousedown(evt.originalEvent.layerX, evt.originalEvent.layerY); return false;})
 			.mouseup(function() { self.sv_select_box_mouseup(); return false;})
-			.mousemove(function(evt) { self.sv_update(evt.layerX, evt.layerY); });
+			.mousemove(function(evt) { self.sv_update(evt.originalEvent.layerX, evt.originalEvent.layerY); });
 
 		this.sv_select_box_bg.append(this.sv_select_box);
 
 		this.h_select_box = $("<div>")
 			.attr("id", this.id + "_h_select_box")
 			.addClass("h_select_box")
-			.mousedown(function(evt) { self.h_select_box_mousedown(evt.layerY); return false;})
+			.mousedown(function(evt) { self.h_select_box_mousedown(evt.originalEvent.layerY); return false;})
 			.mouseup(function() { self.h_select_box_mouseup(); return false; })
-			.mousemove(function(evt) { self.hue_cursor_to_color(evt.layerY) });
+			.mousemove(function(evt) { self.hue_cursor_to_color(evt.originalEvent.layerY); });
 
 		this.color_select_box.append(this.h_select_box);
 

@@ -36,9 +36,7 @@ Engine.include("/engine/engine.object2d.js");
 Engine.initObject("SpriteGrid", "Object2D", function() {
 
 /**
- * @class The player object.  Creates the player and assigns the
- *        components which handle collision, drawing, drawing the thrust
- *        and moving the object.
+ * @class The grid.
  */
 var SpriteGrid = Object2D.extend({
 
@@ -57,12 +55,16 @@ var SpriteGrid = Object2D.extend({
 		this.color = "#c0c0c0";
    },
 
+	/**
+	 * Set the color of the grid lines
+	 * @param colr {String} Hexadecimal color for the grid lines
+	 */
 	setGridColor: function(colr) {
 		this.color = colr;
 	},
 
    /**
-    * Update the player within the rendering context.  This draws
+    * Update the grid within the rendering context.  This draws
     * the shape to the context, after updating the transform of the
     * object.  If the player is thrusting, draw the thrust flame
     * under the ship.
@@ -124,14 +126,26 @@ var SpriteGrid = Object2D.extend({
       renderContext.popTransform();
    },
 
+	/**
+	 * Set the visibility state of the grid
+	 * @param state {Boolean} <code>true</code> to show the grid, <code>false</code> to hide it
+	 */
 	setVisible: function(state)  {
 		this.visible = state;
 	},
 	
+	/**
+	 * Set the vertical mirror state
+	 * @param state {Boolean} <code>true</code> to enable vertical mirroring
+	 */
 	setMirrorVertical: function(state) {
 		this.mirror[1] = state;
 	},
 	
+	/**
+	 * Set the horizontal mirror state
+	 * @param state {Boolean} <code>true</code> to enable horizontal mirroring
+	 */
 	setMirrorHorizontal: function(state) {
 		this.mirror[0] = state;	
 	}

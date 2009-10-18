@@ -80,6 +80,9 @@
 					<div class="item disabled" func="SpriteEditor.actionOpen">Open</div>
 					<div class="item disabled" func="SpriteEditor.actionSave">Save</div>
 					<div class="sep"><!-- --></div>
+					<div class="item" func="SpriteEditor.actionExportSpriteSheet">Export Sprite Sheet</div>
+					<div class="item" func="SpriteEditor.actionImportSpriteSheet">Import Sprite Sheet</div>
+					<div class="sep"><!-- --></div>
 					<div class="item" func="SpriteEditor.actionExit">Exit</div>
 				</div>
 			</div>
@@ -113,12 +116,12 @@
 					<div class="item" func="SpriteEditor.actionClearFrame">Clear Frame</div>
 					<div class="sep"><!-- --></div>
 					<div class="item" func="SpriteEditor.actionNewFrame">New Frame</div>
+					<div class="item" func="SpriteEditor.actionDuplicateFrame">Duplicate Frame</div>
 					<div class="item" func="SpriteEditor.actionDeleteFrame">Delete Frame</div>
 					<div class="sep"><!-- --></div>
 					<div class="item" func="SpriteEditor.actionPreviousFrame">Previous Frame</div>
 					<div class="item" func="SpriteEditor.actionNextFrame">Next Frame</div>
 					<div class="sep"><!-- --></div>
-					<div class="item" func="SpriteEditor.actionShowFrameEditor">Show Frame Editor</div>
 					<div class="item" func="SpriteEditor.actionAnimateFrames">Animate Frames</div>
 				</div>
 			</div>
@@ -224,5 +227,41 @@
             <ul><li class="currentFrame"><img src="" class="frame" width="16" height="16"/></li></ul>
          </div>
       </div>
+		
+		<!-- Export Dialog Template -->
+		<script type="text/html" id="export_dialog">
+			<div class="dialog">
+				<div class="title">Export Sprite Sheet</div>
+				<div class="section">
+					<h5>Sprites per Row</h5>
+					<input type="text" id="exportAcross" value="5"/>
+				</div>
+				<div class="buttons">
+					<div class="button" func="SpriteEditor.exportOk">Ok</div>
+					<div class="button" func="SpriteEditor.exportCancel">Cancel</div>
+				</div>
+			</div>
+		</script>
+
+		<!-- Import Dialog Template -->
+		<script type="text/html" id="import_dialog">
+			<div class="dialog">
+				<div class="title">Import Sprite Sheet</div>
+				<div class="section">
+					<h5>URL</h5>
+					<input type="text" id="importURL" value="http://" size="30"/>
+				</div>
+				<div class="section">
+					<h5>Dimensions</h5>
+					<span class="label">Sprites Across: </span><input type="text" id="importAcross" value="5"/><br/>
+					<span class="label">Sprites Down: </span><input type="text" id="importAcross" value="1"/><br/>
+				</div>
+				<div class="buttons">
+					<div class="button" func="SpriteEditor.importOk">Ok</div>
+					<div class="button" func="SpriteEditor.importCancel">Cancel</div>
+				</div>
+			</div>
+		</script>
+		
    </body>
 </html>
