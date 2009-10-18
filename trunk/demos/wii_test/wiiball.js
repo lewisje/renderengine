@@ -394,14 +394,14 @@ Engine.initObject("WiiBall", "Object2D", function() {
       },
       
       getMass: function() {
-         return 1;
+         return 2.5;
       },
       
       getDamping: function() {
          if (this.isAtRest()) {
             return 0.01;
          } else {
-            return 0.8;
+            return 0.62;
          }
       }
 
