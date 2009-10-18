@@ -45,7 +45,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    /** @private */
    combiner: function() {
       var out = "";
-      for (var a in arguments) {
+      for (var a = 0; a < arguments.length; a++) {
          out += arguments[a].toString();
       }
       return out;
@@ -56,7 +56,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
          return "";
       } else if (typeof o == "function") {
          return "function";
-      } else if (o instanceof Array) {
+      } else if (o.constructor == Array || (o.slice && o.join && o.splice)) {	// An array
          var s = "[";
          for (var e in o) {
             s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
@@ -69,7 +69,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
          }
          return s + "}\n";
       } else {
-         return String(o);
+         return o.toString();
       }
    },
 

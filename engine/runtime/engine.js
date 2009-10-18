@@ -76,7 +76,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    /** @private */
    combiner: function() {
       var out = "";
-      for (var a in arguments) {
+      for (var a = 0; a < arguments.length; a++) {
          out += arguments[a].toString();
       }
       return out;
@@ -87,7 +87,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
          return "";
       } else if (typeof o == "function") {
          return "function";
-      } else if (o instanceof Array) {
+      } else if (o.constructor == Array || (o.slice && o.join && o.splice)) {	// An array
          var s = "[";
          for (var e in o) {
             s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
@@ -100,7 +100,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
          }
          return s + "}\n";
       } else {
-         return String(o);
+         return o.toString();
       }
    },
 
@@ -651,7 +651,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 694 $
+ * @version: $Revision: 715 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1053,6 +1053,19 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * Gets an object that is a collation of a number of browser and
     * client settings.  You can use this information to tailor a game
     * to the environment it is running within.
+    * <ul>
+    * <li>browser - A string indicating the browser type (safari, mozilla, opera, msie)</li>
+    * <li>version - The browser version</li>
+    * <li>agent - The user agent</li>
+    * <li>platform - The platform the browser is running on</li>
+    * <li>cpu - The CPU on the machine the browser is running on</li>
+    * <li>language - The browser's language</li>
+    * <li>online - If the browser is running in online mode</li>
+    * <li>cookies - If the browser supports cookies</li>
+    * <li>fullscreen - If the browser is running in fullscreen mode</li>
+    * <li>width - The browser's viewable width</li>
+    * <li>height - The browser's viewable height</li>
+    * </ul>
     * @return An object with system information
     * @memberOf EngineSupport
     */
@@ -1082,7 +1095,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 697 $
+ * @version: $Revision: 713 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *

@@ -114,6 +114,10 @@ var SpriteLayer = Object2D.extend({
       this.pixels[gP[1] * t + gP[0]] = null;
    },
 
+	clear: function() {
+		this.pixels = [];	
+	},
+
    getPixel: function(x, y) {
       var gP = this.getGridPixel(x, y);
       var t = SpriteEditor.editorSize / SpriteEditor.pixSize;

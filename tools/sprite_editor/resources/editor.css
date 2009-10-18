@@ -183,6 +183,7 @@ div.button.shift-right {
    height: 62px;
    border: 1px inset white;
    float: left;
+	margin-left: 5px;
 }
 
 div.button.flip-vertical {
@@ -200,6 +201,33 @@ div.button.mirror-vertical {
 div.button.mirror-horizontal {
    background-image: url(resources/mirrorh.png);
 }
+
+.frames {
+   margin-top: 10px;
+   width: 397px;
+   height: 140px;
+   border: 1px inset white;
+}
+
+.frames ul {
+	list-style: none;
+	margin-left: -30px;
+}
+
+.frames ul li {
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin-left: 5px;
+}
+
+.frames ul li.currentFrame {
+	border: 1px solid white;
+}
+
+.frames ul li img.frame {
+}
+
 
 #menuBar {
    position: relative;
