@@ -54,51 +54,44 @@
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   constructor: null,
+	version: "@ENGINE_VERSION",
 
-   version: "@ENGINE_VERSION",
+	constructor: null,
 
-   idRef: 0,
+	/*
+	 * Engine objects
+	 */
+	idRef: 0,						// Object reference Id
+	gameObjects: {},				// Live objects cache
+	livingObjects: 0,				// Count of live objects
 
-   fpsClock: 33,
+	/*
+	 * Engine info
+	 */
+	fpsClock: 33,					// The clock rate (ms)
+	frameTime: 0,					// Amount of time taken to render a frame
+	engineLocation: null,		// URI of engine
+	defaultContext: null,		// The default rendering context
+	debugMode: false,				// Global debug flag
+	localMode: false,				// Local run flag
+	started: false,				// Engine started flag
+	running: false,				// Engine running flag
 
-   livingObjects: 0,
+	/*
+	 * Metrics tracking/display
+	 */
+	metrics: {},					// Tracked metrics
+	metricDisplay: null,			// The metric display object
+	metricSampleRate: 10,		// Frames between samples
+	lastMetricSample: 10,		// Last sample frame
+	showMetricsWindow: false,	// Metrics display flag
+	vObj: 0,							// Visible objects
+	droppedFrames: 0,				// Non-rendered frames/frames dropped
 
-   gameObjects: {},
-
-   debugMode: false,
-
-   localMode: false,
-
-   defaultContext: null,
-
-   started: false,
-   running: false,
-
-   loadedScripts: {},
-
-   engineLocation: null,
-
-   metrics: {},
-
-   metricDisplay: null,
-
-   metricSampleRate: 10,
-
-   lastMetricSample: 10,
-
-   showMetricsWindow: false,
-
-   vObj: 0,
-
-   localMode: false,
-
-   /*
-    * Used to calculate a ratio of scripts to load, to those loaded.
-    */
-   scriptLoadCount: 0,
-   scriptsProcessed: 0,
-   scriptRatio: 0,
+	/*
+	 * Sound engine info
+	 */
+	soundsEnabled: false,		// Sound engine enabled flag
 
    /**
     * The current time of the world on the client.  This time is updated
@@ -106,15 +99,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @type Number
     * @memberOf Engine
     */
-   worldTime: 0,
+   worldTime: 0,					// The world time
 
-   soundsEnabled: false,
-
-   queuePaused:false,
-
-   pauseReps: 0,
-   
-   droppedFrames: 0,
 
    //====================================================================================================
    //====================================================================================================
@@ -171,11 +157,48 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
    
    /**
-    * Get the amount of time allocated to draw a single frame
+    * Get the FPS (frames per second) the engine is set to run at.
+	 * @return {Number}
+	 * @memberOf Engine
+    */
+   getFPS: function() {
+   	return Math.floor((1 / this.fpsClock) * 1000)
+   },
+   
+   /**
+    * Get the actual FPS (frames per second) the engine is running at.
+    * This value will vary as load increases or decreases due to the
+    * number of objects being rendered.  A faster machine will be able
+    * to handle a higher FPS setting.
+    * @return {Number}
+	 * @memberOf Engine
+    */
+	getActualFPS: function() {
+		return Math.floor((1 / Engine.frameTime) * 1000);
+	},
+   
+   /**
+    * Get the amount of time allocated to draw a single frame.
     * @return {Number}
     */
    getFrameTime: function() {
       return this.fpsClock;
+   },
+   
+   /**
+    * Get the engine load.  The load represents the amount of
+    * work the engine is doing to render a frame.  A value less
+    * than one indicates the the engine can render a frame within
+    * the amount of time available.  Higher than one indicates the
+    * engine cannot render the frame in the time available.
+    * <p/>
+    * Faster machines will be able to handle more load.  You can use
+    * this value to gauge how well your game is performing.
+    * @return {Number}
+    * @memberOf Engine
+    */
+   getEngineLoad: function () {
+   	return (Engine.frameTime / this.fpsClock);
    },
 
    /**
@@ -191,6 +214,33 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       return this.defaultContext;
+   },
+
+   /**
+    * Get the path to the engine.  Uses the location of the <tt>engine.js</tt>
+    * file that was loaded.
+    * @return {String} The path/URL where the engine is located
+    * @memberOf Engine
+    */
+   getEnginePath: function() {
+      if (this.engineLocation == null)
+      {
+         // Determine the path of the "engine.js" file
+         var head = document.getElementsByTagName("head")[0];
+         var scripts = head.getElementsByTagName("script");
+         for (var x = 0; x < scripts.length; x++)
+         {
+            var src = scripts[x].src;
+            if (src != null && src.match(/(.*)\/engine\/(.*?)engine\.js/))
+            {
+               // Get the path
+               this.engineLocation = src.match(/(.*)\/engine\/(.*?)engine\.js/)[1];
+               break;
+            }
+         }
+      }
+
+      return this.engineLocation;
    },
 
    //====================================================================================================
@@ -235,7 +285,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Get an object by it's Id that was assigned during the call to {@link #create}.
+    * Get an object by the Id that was assigned during the call to {@link #create}.
     *
     * @param id {String} The global Id of the object to locate
     * @return {PooledObject} The object
@@ -250,6 +300,23 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //                                    ENGINE PROCESS CONTROL
    //====================================================================================================
    //====================================================================================================
+
+   /**
+    * Load the minimal scripts required for the engine to run.
+    * @private
+    * @memberOf Engine
+    */
+   loadEngineScripts: function() {
+      // Engine stylesheet
+      this.loadStylesheet("/css/engine.css");
+
+      // The basics needed by the engine to get started
+      this.loadNow("/engine/engine.game.js");
+      this.loadNow("/engine/engine.rendercontext.js");
+      this.loadNow("/rendercontexts/context.render2d.js");
+      this.loadNow("/rendercontexts/context.htmlelement.js");
+      this.loadNow("/rendercontexts/context.documentcontext.js");
+   },
 
    /**
     * Starts the engine and loads the basic engine scripts.  When all scripts required
@@ -375,438 +442,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       $("head script", document).remove();
    },
 
-   //====================================================================================================
-   //====================================================================================================
-   //                                     SCRIPT PROCESSING
-   //====================================================================================================
-   //====================================================================================================
-
-   /**
-    * Status message when a script is not found
-    */
-   SCRIPT_NOT_FOUND: false,
-   
-   /**
-    * Status message when a script is successfully loaded
-    */
-   SCRIPT_LOADED: true,
-
-   /**
-    * Load a stylesheet and append it to the document.  Allows for
-    * scripts to specify additional stylesheets that can be loaded
-    * as needed.
-    *
-    * @param stylesheetPath {String} Path to the stylesheet, relative to
-    *                                the engine path.
-    * @memberOf Engine
-    */
-   loadStylesheet: function(stylesheetPath, relative) {
-      stylesheetPath = (relative ? "" : this.getEnginePath()) + stylesheetPath;
-      var f = function() {
-         $.get(stylesheetPath, function(data) {
-            // process the data to replace the "enginePath" variable
-            var epRE = /(\$<enginePath>)/g;
-            data = data.replace(epRE, Engine.getEnginePath());
-            $("head", document).append($("<style type='text/css'/>").text(data));
-            Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
-            Engine.readyForNextScript = true;
-         }, "text");
-      };
-
-      this.setQueueCallback(f);
-   },
-
-   /**
-    * Load a script from the server and append it to
-    * the head element of the browser.  Script names are
-    * cached so they will not be loaded again.
-    *
-    * @param scriptPath {String} The URL of a script to load.
-    * @memberOf Engine
-    */
-   loadScript: function(scriptPath) {
-      if (!Engine.scriptQueue) {
-         // Create the queue
-         Engine.scriptQueue = [];
-      }
-
-      // Track what we need to load
-      Engine.scriptLoadCount++;
-      Engine.updateProgress();
-
-      // Put script into load queue
-      Engine.scriptQueue.push(scriptPath);
-      Engine.runScriptQueue();
-   },
-
-   /**
-    * Internal method which runs the script queue to handle scripts and functions
-    * which are queued to run sequentially.
-    * @private
-    */
-   runScriptQueue: function() {
-      if (!Engine.scriptQueueTimer) {
-         // Process any waiting scripts
-         Engine.scriptQueueTimer = setInterval(function() {
-            if (Engine.queuePaused) {
-               if (Engine.pauseReps++ > 500) {
-                  // If after ~5 seconds the queue is still paused, unpause it and
-                  // warn the user that the situation occurred
-                  Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
-                  Engine.pauseReps = 0;
-                  Engine.pauseQueue(false);
-               }
-               return;
-            }
-
-            Engine.pauseReps = 0;
-
-            if (Engine.scriptQueue.length > 0) {
-               Engine.processScriptQueue();
-            } else {
-               // Stop the queue timer if there are no scripts
-               clearInterval(Engine.scriptQueueTimer);
-               Engine.scriptQueueTimer = null;
-            }
-         }, 10);
-
-         Engine.readyForNextScript = true;
-      }
-   },
-
-   /**
-    * Put a callback into the script queue so that when a
-    * certain number of files has been loaded, we can call
-    * a method.  Allows for functionality to start with
-    * incremental loading.
-    *
-    * @param cb {Function} A callback to execute
-    * @memberOf Engine
-    */
-   setQueueCallback: function(cb) {
-      if (!Engine.scriptQueue) {
-         // Create the queue
-         Engine.scriptQueue = [];
-      }
-
-      // Put callback into load queue
-      Engine.scriptLoadCount++;
-      Engine.updateProgress();
-      Engine.scriptQueue.push(cb);
-      Engine.runScriptQueue();
-   },
-
-   /**
-    * You can pause the queue from a callback function, then
-    * unpause it to continue processing queued scripts.  This will
-    * allow you to wait for an event to occur before continuing to
-    * to load scripts.
-    *
-    * @param state {Boolean} <tt>true</tt> to put the queue processor
-    *                        in a paused state.
-    */
-   pauseQueue: function(state) {
-      Engine.queuePaused = state;
-   },
-
-   /**
-    * Process any scripts that are waiting to be loaded.
-    * @private
-    * @memberOf Engine
-    */
-   processScriptQueue: function() {
-      if (Engine.scriptQueue.length > 0 && Engine.readyForNextScript) {
-         // Hold the queue until the script is loaded
-         Engine.readyForNextScript = false;
-
-         // Get next script...
-         var scriptPath = Engine.scriptQueue.shift();
-
-         // If the queue element is a function, execute it and return
-         if (typeof scriptPath === "function") {
-            Engine.handleScriptDone();
-            scriptPath();
-            Engine.readyForNextScript = true;
-            return;
-         }
-
-         this.doLoad(scriptPath);
-      }
-   },
-
-   /**
-    * This method performs the actual script loading.
-    * @private
-    */
-   doLoad: function(scriptPath, simplePath, cb) {
-      if (!this.started) {
-         return;
-      }
-
-      var s = scriptPath.replace(/[\/\.]/g,"_");
-      if (this.loadedScripts[s] == null)
-      {
-         // Store the request in the cache
-         this.loadedScripts[s] = scriptPath;
-
-         if ($.browser.Wii) {
-
-            $.get(scriptPath, function(data) {
-
-               // Parse script code for syntax errors
-               if (Engine.parseSyntax(data)) {
-                  var n = document.createElement("script");
-                  n.type = "text/javascript";
-                  $(n).text(data);
-
-                  var h = document.getElementsByTagName("head")[0];
-                  h.appendChild(n);
-                  Engine.readyForNextScript = true;
-
-                  Console.debug("Loaded '" + scriptPath + "'");
-               }
-               
-            }, "text");
-         }  else {
-
-            // We'll use our own script loader so we can detect errors (i.e. missing files).
-            var n = document.createElement("script");
-            n.src = scriptPath;
-            n.type = "text/javascript";
-
-            // When the file is loaded
-            var fn = function() {
-               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-                  Console.debug("Loaded '" + scriptPath + "'");
-                  Engine.handleScriptDone();
-                  if (cb) {
-                     cb(simplePath, Engine.SCRIPT_LOADED);
-                  }
-                  if (!Engine.localMode) {
-                     // Delete the script node
-                     $(n).remove(); 
-                  }
-
-               }
-               Engine.readyForNextScript = true;
-            };
-
-            // When an error occurs
-            var eFn = function(msg) {
-               Console.error("File not found: ", scriptPath);
-               if (cb) {
-                  cb(simplePath, Engine.SCRIPT_NOT_FOUND);
-               }
-               Engine.readyForNextScript = true;
-            };
-
-            if ($.browser.msie) {
-               n.defer = true;
-               n.onreadystatechange = fn;
-               n.onerror = eFn;
-            } else {
-               n.onload = fn;
-               n.onerror = eFn;
-            }
-
-            var h = document.getElementsByTagName("head")[0];
-            h.appendChild(n);
-         }
-
-      } else {
-         // Already have this script
-         Engine.readyForNextScript = true;
-      }
-   },
-
-   /**
-    * Perform an immediate load on the specified script.  Objects within
-    * the script may not immediately initialize, unless their dependencies
-    * have been resolved.
-    * 
-    * @param {String} scriptPath The path to the script to load
-    * @param {Function} [cb] The function to call when the script is loaded.
-    *                   the path of the script loaded and a status message
-    *                   will be passed as the two parameters.
-    */
-   loadNow: function(scriptPath, cb) {
-      Engine.scriptLoadCount++;
-      Engine.updateProgress();
-      this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
-   },
-
-   /**
-    * Loads a game's script.  This will wait until the specified
-    * <tt>gameObjectName</tt> is available before running it.  Doing so will
-    * ensure that all dependencies have been resolved before starting a game.
-    * Also creates the default rendering context for the engine.
-    * <p/>
-    * All games should execute this method to start their processing, rather than
-    * using the script loading mechanism for engine or game scripts.  This is used
-    * for the main game script only.  Normally it would appear in the game's "index" file.
-    * <pre>
-    *  &lt;script type="text/javascript"&gt;
-    *     // Load the game script
-    *     Engine.loadGame('game.js','Spaceroids');
-    *  &lt;/script&gt;
-    * </pre>
-    *
-    * @param gameSource {String} The URL of the game script.
-    * @param gameObjectName {String} The string name of the game object to execute.  When
-    *                       the framework if ready, the <tt>startup()</tt> method of this
-    *                       object will be called.
-    * @memberOf Engine
-    */
-   loadGame: function(gameSource, gameObjectName) {
-      // We'll wait for the Engine to be ready before we load the game
-      var engine = this;
-      Engine.gameLoadTimer = setInterval(function() {
-         if (window["DocumentContext"] != null) {
-
-            // Start the engine
-            Engine.run();
-
-            // Stop the timer
-            clearInterval(Engine.gameLoadTimer);
-            Engine.gameLoadTimer = null;
-
-            // Create the default context (the document)
-            Console.debug("Loading '" + gameSource + "'");
-            engine.loadScript(gameSource);
-
-            // Start the game when it's ready
-            if (gameObjectName) {
-               Engine.gameRunTimer = setInterval(function() {
-                  if (typeof window[gameObjectName] != "undefined" &&
-                      window[gameObjectName].setup) {
-                     clearInterval(Engine.gameRunTimer);
-                     Console.warn("Starting: " + gameObjectName);
-                     window[gameObjectName].setup();
-                  }
-               }, 100);
-            }
-         }
-      }, 100);
-   },
-
-   /**
-    * Load a script relative to the engine path.  A simple helper method which calls
-    * {@link #loadScript} and prepends the engine path to the supplied script source.
-    *
-    * @param scriptSource {String} A URL to load that is relative to the engine path.
-    * @memberOf Engine
-    */
-   load: function(scriptSource) {
-      this.loadScript(this.getEnginePath() + scriptSource);
-   },
-
-   /**
-    * After a script has been loaded, updates the progress
-    * @private
-    */
-   handleScriptDone: function() {
-      Engine.scriptsProcessed++;
-      Engine.scriptRatio = Engine.scriptsProcessed / Engine.scriptLoadCount;
-      Engine.scriptRatio = Engine.scriptRatio > 1 ? 1 : Engine.scriptRatio;
-      Engine.updateProgress();
-   },
-
-   /**
-    * Updates the progress bar (if available)
-    * @private
-    */
-   updateProgress: function() {
-      var pBar = jQuery("#engine-load-progress");
-      if (pBar.length > 0) {
-         // Update their progress bar
-         if (pBar.css("position") != "relative" || pBar.css("position") != "absolute") {
-            pBar.css("position", "relative");
-         }
-         var pW = pBar.width();
-         var fill = Math.floor(pW * Engine.scriptRatio);
-         var fBar = jQuery("#engine-load-progress .bar");
-         if (fBar.length == 0) {
-            fBar = jQuery("<div class='bar' style='position: absolute; top: 0px; left: 0px; height: 100%;'></div>");
-            pBar.append(fBar);
-         }
-         fBar.width(fill);
-      }
-   },
-
-   /**
-    * Get the path to the engine.  Uses the location of the <tt>engine.js</tt>
-    * file that was loaded.
-    * @return {String} The path/URL where the engine is located
-    * @memberOf Engine
-    */
-   getEnginePath: function() {
-      if (this.engineLocation == null)
-      {
-         // Determine the path of the "engine.js" file
-         var head = document.getElementsByTagName("head")[0];
-         var scripts = head.getElementsByTagName("script");
-         for (var x = 0; x < scripts.length; x++)
-         {
-            var src = scripts[x].src;
-            if (src != null && src.match(/(.*)\/engine\/(.*?)engine\.js/))
-            {
-               // Get the path
-               this.engineLocation = src.match(/(.*)\/engine\/(.*?)engine\.js/)[1];
-               break;
-            }
-         }
-      }
-
-      return this.engineLocation;
-   },
-
-   /**
-    * Load the scripts required for the engine to run.
-    * @private
-    * @memberOf Engine
-    */
-   loadEngineScripts: function() {
-      // Engine stylesheet
-      this.loadStylesheet("/css/engine.css");
-
-      // The basics needed by the engine to get started
-      this.loadNow("/engine/engine.game.js");
-      this.loadNow("/engine/engine.rendercontext.js");
-      this.loadNow("/rendercontexts/context.render2d.js");
-      this.loadNow("/rendercontexts/context.htmlelement.js");
-      this.loadNow("/rendercontexts/context.documentcontext.js");
-   },
-
-   /**
-    * Output the list of scripts loaded by the Engine to the console.
-    * @memberOf Engine
-    */
-   dumpScripts: function() {
-      for (var f in this.loadedScripts)
-      {
-         Console.debug(this.loadedScripts[f]);
-      }
-   },
-
-   /**
-    * Clears the script name cache.  Allows scripts to be loaded
-    * again.  Use this method with caution, as it is not recommended
-    * to load a script if the object is in use.  May cause unexpected
-    * results.
-    * @memberOf Engine
-    */
-   clearScriptCache: function() {
-      this.loadedScripts = {};
-   },
-   
-   /**
-    * Include a script file.
-    *
-    * @param scriptURL {String} The URL of the script file
-    */
-   include: function(scriptURL) {
-      Engine.loadNow(scriptURL);
-   },
 
    /**
     * Initializes an object for use in the engine.  Calling this method is required to make sure
@@ -897,11 +532,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       if (this.showMetricsWindow && this.lastMetricSample-- == 0)
       {
          // Add some metrics to assist the developer
-         Engine.addMetric("FPS", Math.floor((1 / this.fpsClock) * 1000), false, "#");
-         Engine.addMetric("aFPS", Math.floor((1 / Engine.frameTime) * 1000), true, "#");
+         Engine.addMetric("FPS", this.getFPS(), false, "#");
+         Engine.addMetric("aFPS", this.getActualFPS(), true, "#");
          Engine.addMetric("avail", this.fpsClock, false, "#ms");
          Engine.addMetric("frame", Engine.frameTime, true, "#ms");
-         Engine.addMetric("load", Math.floor((Engine.frameTime / this.fpsClock) * 100), true, "#%");
+         Engine.addMetric("load", Math.floor(this.getEngineLoad() * 100), true, "#%");
          Engine.addMetric("visObj", Engine.vObj, false, "#");
 			Engine.addMetric("dropped", Engine.droppedFrames, false, "#");
 
