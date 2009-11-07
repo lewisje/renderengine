@@ -1,17 +1,29 @@
 #summary A list of examples using The Render Engine
 #labels Featured
 
-The following are links to works in progress.  They are the tests that I've put together to work out the various parts of the engine:
+=Engine Examples=
+
+The Render Engine is a fully featured engine which can be used to write both games and to write applications which are graphics intensive.  Below are examples of the engine at use.
+
+==Asteroids Clone==
+
+This example is a clone of Asteroids by Atari.  There are two modes in which the game runs.  The first is a clone of the original, mostly complete, with sounds and vector rendering.  It's not meant to be a complete game, but more how to make the engine work.  The second has more visual effects and some simple particle animations.  Both games run from the same source.
 
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true Asteroids clone]
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids clone - Evolved]
 
-Simple "game" that works on the Wii:
+==Ball Bounce and the Wii==
 
-   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bouce the Ball - point and click A]
+The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on t he Wii, but on PCs and Macs.  This game also has two versions.  The first version runs in the DOM rendering context.  This version is, by far, the faster of the two on the Wii.  The second shows how the rendering context can be simply swapped out (in this case, with the Canvas context) and the game runs essentially the same.  On the Wii, just point and click the "A" button.
 
-Example of the Sprite Editor that is in development:
+   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bouce the Ball - DOM context]
+
+   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 Bouce the Ball - Canvas context]
+
+==The Sprite Editor==
+
+In addition to games, The Render Engine can be (and is) used to create applications.  In this case I'm using it to develop the Sprite Editor.  Eventually, this will be a part of the online release for the creation of sprites for usage in your games.
 
    * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor alpha]
 
-I'll add more as I get them completed and into the repo...
+There are more examples in development and I'll release those when they are more complete.  If you have good examples of the engine in use, let me know and I'll include them here on this page!
