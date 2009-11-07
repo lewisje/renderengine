@@ -368,6 +368,7 @@ var Engine = Engine.extend({
             pBar.append(fBar);
          }
          fBar.width(fill);
+			jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
       }
    },
 
