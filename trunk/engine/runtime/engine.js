@@ -1613,7 +1613,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 708 $
+ * @version: $Revision: 731 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -2650,6 +2650,7 @@ var Engine = Engine.extend({
             pBar.append(fBar);
          }
          fBar.width(fill);
+			jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
       }
    },
 
