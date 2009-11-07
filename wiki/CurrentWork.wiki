@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+I've been super busy at work and haven't had a lot of time to work on the engine. I made a few small updates to script loading and put in some more documentation. Because of work demands, I had to push the release date for beta 1.4 to _November 20th_.
+
 *Note:* I'm back... As the weather gets cooler, I'm going to get back to working on The Render Engine.
 
 I just updated the render contexts to be unobtrusive.  With The Render Engine, swapping of contexts should be something that is as simple as telling the game which to use.  You shouldn't have to know how to assign sprite images or how to draw to the context within your game.  Instead, this should be handled by the context and the components themselves.  The Wii Test was updated to show off this capability.
