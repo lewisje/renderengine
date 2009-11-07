@@ -48,10 +48,12 @@
 			<fileset dir="${engine.src}" includes="engine.support.js" />
 			<fileset dir="${engine.src}" includes="engine.linker.js" />
 			<fileset dir="${engine.src}" includes="engine.main.js" />
+			<fileset dir="${engine.src}" includes="engine.script.js" />
 			<fileset dir="${engine.src}" includes="engine.init.js" />
 		</concat>
 		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
 		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@ENGINE_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
 		<echo message="${engine.file} built." />
 	</target>
   
