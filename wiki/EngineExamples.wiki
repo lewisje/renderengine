@@ -17,7 +17,6 @@ This example is a clone of Asteroids by Atari.  There are two modes in which the
 The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on t he Wii, but on PCs and Macs.  This game also has two versions.  The first version runs in the DOM rendering context.  This version is, by far, the faster of the two on the Wii.  The second shows how the rendering context can be simply swapped out (in this case, with the Canvas context) and the game runs essentially the same.  On the Wii, just point and click the "A" button.
 
    * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bouce the Ball - DOM context]
-
    * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 Bouce the Ball - Canvas context]
 
 ==The Sprite Editor==
