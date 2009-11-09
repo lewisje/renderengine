@@ -63,6 +63,7 @@ The following list is a set of goals to be reached for the intended release.  So
 || *Status* || *Goal* || *Description* ||
 || _75%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 || _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
+|| - || Browser Support || Componentized canvas font support. ||
 || - || Tool || Particle editor. ||
 
 == Beta 2 (TBA) ==
