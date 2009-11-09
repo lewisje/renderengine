@@ -20,4 +20,4 @@ Ideas for the next release.  This list is always evolving...
 || - || Dev Tool || Write a _very simple_ syntax checker that will only execute when running on the Wii.  Establish common syntax problems and write regular expressions to catch them ||
 || - || Dev Tool || Add a function tracer which logs calls into and out of functions ||
 || - || Dev Tool || Implement a profiler which I can use on all platforms to test code execution times.  This should be engine specific. ||
-|| - || Browser Support || Considering O3D integration. ||
+|| - || Browser Support || Considering Google Labs O3D integration. ||
