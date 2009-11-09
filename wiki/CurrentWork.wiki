@@ -1,6 +1,10 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+Had to reorganize the release tasks again.  The Sprite Editor is being moved to beta 1.5 and the DOM transforms are being moved to beta 1.4.
+
+Recently I noticed the [http://code.google.com/apis/o3d/ Google Labs O3D] project.  I really like this and hope to get it into the engine at some point. It'll be after the 1.0 release (probably part of 2.0, or even 3.0).
+
 I've been super busy at work and haven't had a lot of time to work on the engine. I made a few small updates to script loading and put in some more documentation. Because of work demands, I had to push the release date for beta 1.4 to _November 20th_.
 
 *Note:* I'm back... As the weather gets cooler, I'm going to get back to working on The Render Engine.
