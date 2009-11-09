@@ -39,7 +39,7 @@
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
 
 
-   <!-- =========================== ENGINE BUILD TARGET ========================== -->
+   <!-- =========================== ENGINE BUILD TARGETS ========================== -->
 	<target name="engine.build" description="Main engine build, concatenates source files and replaces @ENGINE_VERSION">
 		<echo message="Building ${engine.file}" />
 		<concat destfile="${engine.file}">
@@ -58,10 +58,37 @@
 	</target>
   
 	<target name="engine.runtime" description="Build a single file compilation of the engine for testing">
-		<!-- Create the directory -->
+		<!-- Build the single-engine distribution -->
 		<antcall target="engine.build">
 			<param name="engine.file" value="${basedir}/engine/runtime/engine.js"/>
 		</antcall>
+	</target>
+
+	<!-- Strip out Console.log, Console.debug, and Console.info messages.  We'll leave in 
+		  Console.warn and Console.error for obvious reasons. -->
+	<target name="engine.nodebug.full" depends="engine.full" description="Build a version of the engine with all debug messages removed">
+		
+		<!-- LOGS -->
+		<replaceregexp match="Console.log\(.*\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- DEBUGS -->
+		<replaceregexp match="Console.debug\(.*\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- INFOS -->
+		<replaceregexp match="Console.info\(.*\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
 	</target>
   
   
@@ -255,6 +282,8 @@
       </copy>
  
    </target>
+
+   <!-- ================== ENGINE MINIFIED/COMPRESSED DISTRIBUTION ===================== -->
   
 	<target name="engine.compress" description="Compress a source file into a destination file">
 	
@@ -266,9 +295,7 @@
       </java>
 	
 	</target>
-
-  
-   <!-- ================== ENGINE MINIFIED/COMPRESSED DISTRIBUTION ===================== -->
+ 
    <target name="engine.min" description="Create the minified/compressed distribution of the engine">
   
       <!-- ### START ### Pre-compilation tasks -->

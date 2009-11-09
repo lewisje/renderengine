@@ -1,5 +1,5 @@
 The Render Engine @BUILD_VERSION [@BUILD_DATE]
-(c)2009 Brett Fattori (bfattori AT gmail DOT com)
+(c)2008-2009 Brett Fattori (bfattori AT gmail DOT com)
 
 ---------------------------------------------------------
 
@@ -7,6 +7,8 @@ The Render Engine is an open source game engine written entirely in Javascript. 
 
 The engine includes a demonstration using vector-based graphics.  A simple Asteroids clone with player, asteroid, and bullet objects which demonstrates the component system.  It also uses the spatial grid collision system, and shows how to work with that.  An "evolved" mode is available (set the URL parameter "evolved=true") to demonstrate the particle system.
 
+Visit our project page for the latest release, examples, and tutorials @
+http://www.renderengine.com
 
 The engine source is accessible through Google Code @
 http://code.google.com/p/renderengine
@@ -53,34 +55,51 @@ The following list is taken from the wiki page @ http://code.google.com/p/render
 
 This is a list of browsers that I have tested the engine and examples in. As more browsers are tested and pass, I will add them to this list.
 
-Browser         Version         Tested Platforms        Support Level
---------        --------        -----------------       --------------
-Firefox         1.5,2.0         Windows                 Good
-Firefox         3.0+            Windows, Mac            Great
-Safari          3.0+            Windows, Mac, iPhone    Great - Win/Mac, Ok - iPhone
-Opera           9.5+            Windows                 Great
-Opera           9.5+            Wii                     Ok - Needs optimization
-Chrome          0.3beta         Windows                 Great
+Browser           Version         Tested Platforms        Support Level
+--------          --------        -----------------       --------------
+Chrome            3.0+            Windows                 Near Perfect
+Firefox           3.5+            Windows, Mac            Perfect
+Safari            3.0+            Windows, Mac, iPhone    Great - Win/Mac, Ok - iPhone
+Opera             9.5+            Windows                 Great
+Opera             9.5+            Wii                     Ok - Needs optimization
+
+Chrome            1.0,2.0         Windows                 Great
+Firefox           3.0             Windows                 Great
+Firefox           1.5,2.0         Windows                 Good
+Internet Explorer 6.0+            Windows                 Fail
+
 
 Levels of support:
 
-    * Fail - Engine not working on this browser
-    * Poor - Most features not working
-    * Ok - Runs, missing features or poor performance
-    * Good - Baseline, functioning
-    * Great - Fully functional with minor issues
-    * Perfect - All features working as expected 
+  * Perfect - All features working as expected
+  * Great - Fully functional with minor issues
+  * Good - Baseline, functioning
+  * Ok - Runs, missing features or poor performance
+  * Poor - Most features not working
+  * Fail - Engine not working on this browser
+
+
+Internet Explorer Support
+---------------------------------
+
+For those who are using Internet Explorer, and prefer to keep their browser intact, that would like to enjoy The Render Engine and what it has to offer should consider downloading the following plug-in for Internet Explorer:
+
+http://code.google.com/chrome/chromeframe/
+
 
 Notes:
 
+    * Just as a note, the best performance of any browser is Google's _Chrome_.  Their V8 Javascript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete! However, there are some features not yet supported in Chromium which need to be addressed before I will endorse it fully.
+
     * Additional tests for different browsers on multiple platforms would be nice. I only have a Windows PC and occasional access to a Mac and/or iPhone.
+
     * Requests for additional browsers should be sent to bfattori AT gmail DOT com, or posted on the wiki page.
+
     * There is a project to bring the Cairo (Firefox's renderer) canvas to Internet Explorer. When this works, I will test and add IE to my list of browsers. The ExCanvas object doesn't perform fast enough for this engine.
+
     * In Firefox 1.5 and 2.0 the garbage collection, in tandem with the older Javascript engine, is passable. 
 
 
 ----
-The Render Engine's website will be http://www.renderengine.com when I get a chance to update it =)
-
-This engine is open source, and is protected by the terms of the MIT License which guarantees that all source is, and will remain, open for your consumption.
+This engine is open source, and is protected under the terms of the MIT License which guarantees that all source is, and will remain, open for your creative consumption.
 
