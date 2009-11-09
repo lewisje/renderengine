@@ -19,6 +19,8 @@ Levels of support:
   * Great - Fully functional with minor issues
   * Perfect - All features working as expected
 
+==Internet Explorer Support==
+
 For those who are using Internet Explorer, and prefer to keep their browser intact, that would like to enjoy The Render Engine and what it has to offer should consider downloading the following plug-in for Internet Explorer:
 
 [http://code.google.com/chrome/chromeframe/ ChromeFrame for Internet Explorer]
