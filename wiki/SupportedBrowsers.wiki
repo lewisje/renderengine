@@ -4,10 +4,10 @@
 The following is a list of browsers that I have tested the engine and examples in.  As more browsers are tested and pass, I will add them to this list.  
 
 ||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||
-|| *Chrome* || 1.0+ || Windows || Great ||
-|| *Firefox* || 3.0+ || Windows || Great ||
-|| *Safari* || 3.0+ || Windows, Mac, iPhone || Great - Win/Mac, Ok - iPhone ||
-|| *Opera* || 9.5+ || Windows || Great ||
+|| [http://www.google.com/chrome *Chrome*] || 1.0+ || Windows || Great ||
+|| [http://www.firefox.com/ *Firefox*] || 3.0+ || Windows || Great ||
+|| [http://www.apple.com/safari/download/ *Safari*] || 3.0+ || Windows, Mac, iPhone || Great - Win/Mac, Ok - iPhone ||
+|| [http://www.opera.com/ *Opera*] || 9.5+ || Windows || Great ||
 || *Firefox* || 1.5,2.0 || Windows || Good||
 || *Opera* || 9.5+ || Wii || Ok - Needs optimization ||
 
