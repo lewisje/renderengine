@@ -332,6 +332,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * multi-line comments, blank lines, new lines, and trims lines.
     * In other words, this is a simplification of minification.
     * 
+    * /(([\"'])(\\\2|.*:\/\/|[^\/\n\r])*\2)|(//.*$)/gm
     * @param inString {String} The source to clean
     */
    cleanSource: function(inString, keepNewLines) {
