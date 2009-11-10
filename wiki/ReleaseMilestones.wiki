@@ -56,7 +56,7 @@ The following list is a set of goals to be reached for the intended release.  So
 == Beta 1.4 (_November 20, 2009_) ==
 || *Status* || *Goal* || *Description* ||
 || _100%_ || Browser Support || Canvas native font support ||
-|| _30%_ || Browser Support || Componentized canvas font support. ||
+|| _100%_ || Browser Support || Componentized canvas font support. ||
 || - || Browser Support || DOM transformations in browsers which support it ||
 
 == Beta 1.5 (TBA) ==
