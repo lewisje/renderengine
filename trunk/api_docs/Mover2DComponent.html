@@ -79,7 +79,7 @@
    Extends <a href="Transform2DComponent.html">Transform2DComponent</a>.<br/>
 
 <p>
-A simple mover component that adjusts the transformation of a componentover time.  This component handles velocity, acceleration, anddeceleration.</p>
+A mover component that adds physical transformations to an object.       Properties include velocity, acceleration, mass, and gravity.</p>
 
 
 
@@ -179,6 +179,62 @@ A simple mover component that adjusts the transformation of a componentover tim
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getCheckRestState">getCheckRestState</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Determine if the component should check to see if the velocity hasdropped below a level which would indicate "at rest".
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getGravity">getGravity</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the gravity vector
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getLagAdjustment">getLagAdjustment</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the value by which calculations are adjusted for time lag.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getMass">getMass</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the mass of the object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
             &nbsp;Number
             </code></font> 
          </td>
@@ -192,7 +248,23 @@ A simple mover component that adjusts the transformation of a componentover tim
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRestingVelocity">getRestingVelocity</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the magnitude at which velocity is determined to be close enough tozero to be "at rest".
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getVelocity">getVelocity</a></b>() </code> 
@@ -205,13 +277,41 @@ A simple mover component that adjusts the transformation of a componentover tim
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Number
             </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getVelocityDecay">getVelocityDecay</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the rate at which velocity will decay to zero.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isCheckLag">isCheckLag</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if calculations should determine time lag and adjust.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isResting">isResting</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if the component is in a resting state.
  
          </td>
       </tr>
@@ -257,9 +357,93 @@ A simple mover component that adjusts the transformation of a componentover tim
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#setCheckLag">setCheckLag</a></b>(state) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Setting this to <tt>true</tt> will enable a check for time lag and adjustcalculations by an adjustment factor.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setCheckRestState">setCheckRestState</a></b>(state) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If set to <tt>true</tt>, the component will check to see if thevelocity magnitude has dropped below a defined rate.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setGravity">setGravity</a></b>(vector) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the vector of gravity.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setLagAdjustment">setLagAdjustment</a></b>(lagAdj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sets the value by which calculations will be adjusted for time lag.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setMass">setMass</a></b>(mass) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the mass of the object which can be subsequently used incalculations like friction and energy transfer.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#setMaxVelocity">setMaxVelocity</a></b>(The) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the maximum velocity magnitude.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the maximum velocity.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setResting">setResting</a></b>(state) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Setting this to <tt>true</tt> will stop further movement calculationsfrom occuring.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setRestingVelocity">setRestingVelocity</a></b>(mag) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the magnitude of velocity which determines if the object is "at rest".
  
          </td>
       </tr>
@@ -283,7 +467,7 @@ A simple mover component that adjusts the transformation of a componentover tim
          <td>
             <code> <b> <a href="#setVelocityDecay">setVelocityDecay</a></b>(decay) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the decay rate at which the velocity willapproach zero.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the decay rate at which the velocity will approach zero.
  
          </td>
       </tr>
@@ -391,6 +575,8 @@ A simple mover component that adjusts the transformation of a componentover tim
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
             
                <a href="BaseObject.html#update">update</a>,
             
@@ -554,6 +740,90 @@ A simple mover component that adjusts the transformation of a componentover tim
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getCheckRestState"> </a> <h3>getCheckRestState</h3>
+      <pre>Boolean&nbsp;<b>getCheckRestState</b>()</pre> 
+   <ul>
+      Determine if the component should check to see if the velocity hasdropped below a level which would indicate "at rest".
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the component will check for the "resting state" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getGravity"> </a> <h3>getGravity</h3>
+      <pre>Vector2D&nbsp;<b>getGravity</b>()</pre> 
+   <ul>
+      Get the gravity vector
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>The gravity vector 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getLagAdjustment"> </a> <h3>getLagAdjustment</h3>
+      <pre>Number&nbsp;<b>getLagAdjustment</b>()</pre> 
+   <ul>
+      Get the value by which calculations are adjusted for time lag.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The adjustment value 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getMass"> </a> <h3>getMass</h3>
+      <pre>Number&nbsp;<b>getMass</b>()</pre> 
+   <ul>
+      Get the mass of the object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The mass of the object 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getMaxVelocity"> </a> <h3>getMaxVelocity</h3>
       <pre>Number&nbsp;<b>getMaxVelocity</b>()</pre> 
    <ul>
@@ -575,8 +845,29 @@ A simple mover component that adjusts the transformation of a componentover tim
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getRestingVelocity"> </a> <h3>getRestingVelocity</h3>
+      <pre>Number&nbsp;<b>getRestingVelocity</b>()</pre> 
+   <ul>
+      Get the magnitude at which velocity is determined to be close enough tozero to be "at rest".
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The resting velocity magnitude 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getVelocity"> </a> <h3>getVelocity</h3>
-      <pre><b>getVelocity</b>()</pre> 
+      <pre>Vector2D&nbsp;<b>getVelocity</b>()</pre> 
    <ul>
       Returns the velocity vector of the component
       
@@ -586,13 +877,18 @@ A simple mover component that adjusts the transformation of a componentover tim
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getVelocityDecay"> </a> <h3>getVelocityDecay</h3>
-      <pre>&nbsp;<b>getVelocityDecay</b>()</pre> 
+      <pre>Number&nbsp;<b>getVelocityDecay</b>()</pre> 
    <ul>
       Get the rate at which velocity will decay to zero.
       
@@ -605,7 +901,49 @@ A simple mover component that adjusts the transformation of a componentover tim
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The velocity decay rate 
+         <code><i>Number</i>&nbsp;</code>The velocity decay rate 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isCheckLag"> </a> <h3>isCheckLag</h3>
+      <pre>Boolean&nbsp;<b>isCheckLag</b>()</pre> 
+   <ul>
+      Returns <tt>true</tt> if calculations should determine time lag and adjust.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isResting"> </a> <h3>isResting</h3>
+      <pre>Boolean&nbsp;<b>isResting</b>()</pre> 
+   <ul>
+      Returns <tt>true</tt> if the component is in a resting state.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
       </ul>
    </ul>
    
@@ -631,7 +969,7 @@ A simple mover component that adjusts the transformation of a componentover tim
    <a name="setAcceleration"> </a> <h3>setAcceleration</h3>
       <pre><b>setAcceleration</b>(The)</pre> 
    <ul>
-      Set the acceleration vector.  Acceleration willbe constantly applied to the last position.
+      Set the acceleration vector.  Acceleration will be constantly applied to the last position.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -670,10 +1008,115 @@ A simple mover component that adjusts the transformation of a componentover tim
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setCheckLag"> </a> <h3>setCheckLag</h3>
+      <pre><b>setCheckLag</b>(state)</pre> 
+   <ul>
+      Setting this to <tt>true</tt> will enable a check for time lag and adjustcalculations by an adjustment factor.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Boolean</i>]&nbsp;state </code> - <tt>true</tt> to check for lag 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setCheckRestState"> </a> <h3>setCheckRestState</h3>
+      <pre><b>setCheckRestState</b>(state)</pre> 
+   <ul>
+      If set to <tt>true</tt>, the component will check to see if thevelocity magnitude has dropped below a defined rate.  When thevelocity magnitude drops below the set rate, the object will bemarked as "at rest" and no calculations will be made until theobject is set into motion again.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Boolean</i>]&nbsp;state </code> - <tt>true</tt> to check to see if the velocity                       has reached a "resting state". 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setGravity"> </a> <h3>setGravity</h3>
+      <pre><b>setGravity</b>(vector)</pre> 
+   <ul>
+      Set the vector of gravity.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;vector </code> - The gravity vector 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setLagAdjustment"> </a> <h3>setLagAdjustment</h3>
+      <pre><b>setLagAdjustment</b>(lagAdj)</pre> 
+   <ul>
+      Sets the value by which calculations will be adjusted for time lag.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;lagAdj </code> - The adjustment value 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setMass"> </a> <h3>setMass</h3>
+      <pre><b>setMass</b>(mass)</pre> 
+   <ul>
+      Set the mass of the object which can be subsequently used incalculations like friction and energy transfer.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;mass </code> - The mass of the object 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setMaxVelocity"> </a> <h3>setMaxVelocity</h3>
       <pre><b>setMaxVelocity</b>(The)</pre> 
    <ul>
-      Set the maximum velocity magnitude.  Setting thisvalue to <tt>-1</tt> indicates that there is nomaximum velocity.
+      Set the maximum velocity.  Setting this value to <tt>zero</tt> indicates that there is no maximum velocity.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -681,6 +1124,48 @@ A simple mover component that adjusts the transformation of a componentover tim
       <b>Parameters:</b>
       <ul>
          <code>[<i>Number</i>]&nbsp;The </code> - maximum velocity 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setResting"> </a> <h3>setResting</h3>
+      <pre><b>setResting</b>(state)</pre> 
+   <ul>
+      Setting this to <tt>true</tt> will stop further movement calculationsfrom occuring.  Marks the object as being "at rest".
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Boolean</i>]&nbsp;state </code> - <tt>true</tt> to stop movement 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setRestingVelocity"> </a> <h3>setRestingVelocity</h3>
+      <pre><b>setRestingVelocity</b>(mag)</pre> 
+   <ul>
+      Set the magnitude of velocity which determines if the object is "at rest".
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;mag </code> - The velocity magnitude which is "at rest" 
       </ul>
    </ul>
    
@@ -715,7 +1200,7 @@ A simple mover component that adjusts the transformation of a componentover tim
    <a name="setVelocityDecay"> </a> <h3>setVelocityDecay</h3>
       <pre><b>setVelocityDecay</b>(decay)</pre> 
    <ul>
-      Set the decay rate at which the velocity willapproach zero.  You can use this value to causea moving object to eventually stop moving. i.e. similarto friction.
+      Set the decay rate at which the velocity will approach zero.  You can use this value to cause a moving object to eventually stop moving. i.e. similar to friction.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -744,6 +1229,6 @@ A simple mover component that adjusts the transformation of a componentover tim
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:38 GMT-0500 (EST)</div>
 </body>
 </html>

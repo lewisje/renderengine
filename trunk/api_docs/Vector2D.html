@@ -122,7 +122,9 @@ A 2D vector class with helpful manipulation methods.</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#angleBetween">angleBetween</a></b>(vector) </code> 
@@ -134,24 +136,14 @@ A 2D vector class with helpful manipulation methods.</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#cross">cross</a></b>(vector) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the cross product of two vectors.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#dot">dot</a></b>(vector) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the dot product of two vectors.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that gets the cross product of this vector and another.
  
          </td>
       </tr>
@@ -159,25 +151,41 @@ A 2D vector class with helpful manipulation methods.</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Number
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#len">len</a></b>() </code> 
+            <code> <b> <a href="#dot">dot</a></b>(vector) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the magnitude/length of the vector.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the dot product of this vector and another.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#len">len</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the magnitude/length of this vector.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#normalize">normalize</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Normalize the vector, returning its unit length, not including the actual length of the vector.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that normalizes this vector, returning a unit length vector.
  
          </td>
       </tr>
@@ -211,6 +219,8 @@ A 2D vector class with helpful manipulation methods.</p>
             
                <a href="Point2D.html#set">set</a>,
             
+               <a href="Point2D.html#get">get</a>,
+            
                <a href="Point2D.html#setX">setX</a>,
             
                <a href="Point2D.html#setY">setY</a>,
@@ -232,6 +242,8 @@ A 2D vector class with helpful manipulation methods.</p>
                <a href="Point2D.html#neg">neg</a>,
             
                <a href="Point2D.html#isZero">isZero</a>,
+            
+               <a href="Point2D.html#dist">dist</a>,
             
                <a href="Point2D.html#toString">toString</a>,
             
@@ -291,7 +303,7 @@ A 2D vector class with helpful manipulation methods.</p>
 
 
    <a name="angleBetween"> </a> <h3>angleBetween</h3>
-      <pre><b>angleBetween</b>(vector)</pre> 
+      <pre>Number&nbsp;<b>angleBetween</b>(vector)</pre> 
    <ul>
       Returns the angle (in degrees) between two vectors.  This assumes that thepoint is being used to represent a vector, and that the supplied pointis also a vector.
       
@@ -306,15 +318,20 @@ A 2D vector class with helpful manipulation methods.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The angle between two vectors, in degrees 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="cross"> </a> <h3>cross</h3>
-      <pre><b>cross</b>(vector)</pre> 
+      <pre>Vector2D&nbsp;<b>cross</b>(vector)</pre> 
    <ul>
-      Get the cross product of two vectors.
+      A mutator method that gets the cross product of this vector and another.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -327,15 +344,20 @@ A 2D vector class with helpful manipulation methods.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>This vector 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="dot"> </a> <h3>dot</h3>
-      <pre><b>dot</b>(vector)</pre> 
+      <pre>Number&nbsp;<b>dot</b>(vector)</pre> 
    <ul>
-      Get the dot product of two vectors.
+      Get the dot product of this vector and another.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -348,15 +370,20 @@ A 2D vector class with helpful manipulation methods.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The dot product 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="len"> </a> <h3>len</h3>
-      <pre>&nbsp;<b>len</b>()</pre> 
+      <pre>Number&nbsp;<b>len</b>()</pre> 
    <ul>
-      Get the magnitude/length of the vector.
+      Get the magnitude/length of this vector.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -367,7 +394,7 @@ A 2D vector class with helpful manipulation methods.</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>A value representing the length (magnitude) of the point. 
+         <code><i>Number</i>&nbsp;</code>A value representing the length (magnitude) of the vector. 
       </ul>
    </ul>
    
@@ -375,9 +402,9 @@ A 2D vector class with helpful manipulation methods.</p>
    <hr>
 
    <a name="normalize"> </a> <h3>normalize</h3>
-      <pre><b>normalize</b>()</pre> 
+      <pre>Vector2D&nbsp;<b>normalize</b>()</pre> 
    <ul>
-      Normalize the vector, returning its unit length, not including the actual length of the vector.
+      A mutator method that normalizes this vector, returning a unit length vector.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -385,7 +412,12 @@ A 2D vector class with helpful manipulation methods.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>This vector, normalized 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -401,6 +433,6 @@ A 2D vector class with helpful manipulation methods.</p>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:37 GMT-0500 (EST)</div>
 </body>
 </html>

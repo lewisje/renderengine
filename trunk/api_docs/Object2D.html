@@ -130,12 +130,14 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Rectangle2D
+            </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(name) </code> 
+            <code> <b> <a href="#getBoundingBox">getBoundingBox</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the bounding box of this object
  
          </td>
       </tr>
@@ -154,24 +156,28 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getPosition">getPosition</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the position of the object.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getProperties">getProperties</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; When editing objects, this method returns an object whichcontains the properties with their getter and setter methods.
  
          </td>
       </tr>
@@ -238,12 +244,28 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Rectangle2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getWorldBox">getWorldBox</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the world bounding box.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getZIndex">getZIndex</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the depth at which this object will render tothe context.
  
          </td>
       </tr>
@@ -255,7 +277,19 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
          <td>
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Release the object back into the pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setBoundingBox">setBoundingBox</a></b>(rect) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the bounding box of this object
  
          </td>
       </tr>
@@ -267,7 +301,7 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
          <td>
             <code> <b> <a href="#setPosition">setPosition</a></b>(point) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Abstract method to be implemented by the extending object to set theposition.
  
          </td>
       </tr>
@@ -327,6 +361,8 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
             
                <a href="HashContainer.html#get">get</a>,
             
+               <a href="HashContainer.html#clear">clear</a>,
+            
                <a href="HashContainer.html#cleanUp">cleanUp</a>,
             
          </code></td>
@@ -382,7 +418,11 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
             
                <a href="Container.html#size">size</a>,
             
-               <a href="Container.html#clear">clear</a>,
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
             
                <a href="Container.html#getObjects">getObjects</a>,
             
@@ -404,6 +444,8 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
             
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
@@ -464,23 +506,23 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
 </table>
 
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(name)</pre> 
+   <a name="getBoundingBox"> </a> <h3>getBoundingBox</h3>
+      <pre>Rectangle2D&nbsp;<b>getBoundingBox</b>()</pre> 
    <ul>
-      undocumented
+      Get the bounding box of this object
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>name </code> 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Rectangle2D</i>&nbsp;</code>The object bounding rectangle 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -502,9 +544,9 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    <hr>
 
    <a name="getPosition"> </a> <h3>getPosition</h3>
-      <pre><b>getPosition</b>()</pre> 
+      <pre>Point2D&nbsp;<b>getPosition</b>()</pre> 
    <ul>
-      undocumented
+      Get the position of the object.  For this class, the value returned is alwaysthe zero point.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -512,15 +554,20 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>The position 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getProperties"> </a> <h3>getProperties</h3>
-      <pre><b>getProperties</b>()</pre> 
+      <pre>Object&nbsp;<b>getProperties</b>()</pre> 
    <ul>
-      undocumented
+      When editing objects, this method returns an object whichcontains the properties with their getter and setter methods.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -528,7 +575,12 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The properties object 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -614,9 +666,51 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    <hr>
 
    <a name="getWorldBox"> </a> <h3>getWorldBox</h3>
-      <pre><b>getWorldBox</b>()</pre> 
+      <pre>Rectangle2D&nbsp;<b>getWorldBox</b>()</pre> 
    <ul>
-      undocumented
+      Get the world bounding box.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Rectangle2D</i>&nbsp;</code>The world bounding rectangle 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getZIndex"> </a> <h3>getZIndex</h3>
+      <pre>Number&nbsp;<b>getZIndex</b>()</pre> 
+   <ul>
+      Get the depth at which this object will render tothe context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      Release the object back into the pool.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -629,14 +723,19 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="release"> </a> <h3>release</h3>
-      <pre><b>release</b>()</pre> 
+   <a name="setBoundingBox"> </a> <h3>setBoundingBox</h3>
+      <pre><b>setBoundingBox</b>(rect)</pre> 
    <ul>
-      undocumented
+      Set the bounding box of this object
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that completely encompasses                          this object. 
+      </ul>
+   </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -648,14 +747,14 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
    <a name="setPosition"> </a> <h3>setPosition</h3>
       <pre><b>setPosition</b>(point)</pre> 
    <ul>
-      undocumented
+      Abstract method to be implemented by the extending object to set theposition.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>point </code> 
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The position of the object 
       </ul>
    </ul>
    
@@ -722,6 +821,6 @@ An object for use in a 2D environment.  Methods for getting position, rotationa
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:38 GMT-0500 (EST)</div>
 </body>
 </html>

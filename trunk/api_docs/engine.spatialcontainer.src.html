@@ -86,7 +86,7 @@ A single node within a spatial container.
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 11</span>  * @version: $Revision: 349 $
+<span class='linenumber'> 11</span>  * @version: $Revision: 680 $
 <span class='linenumber'> 12</span>  *
 <span class='linenumber'> 13</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 14</span>  *
@@ -139,7 +139,7 @@ A single node within a spatial container.
 <span class='linenumber'> 61</span> 
 <span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'> 63</span>     * Get the unique index of this node.
-<span class='linenumber'> 64</span>     * @type Number
+<span class='linenumber'> 64</span>     * @return {Number} The index of this node
 <span class='linenumber'> 65</span>     */</span><span class="WHIT">
 <span class='linenumber'> 66</span> </span><span class="WHIT">   </span><span class="NAME">getIndex</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 67</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.idx</span><span class="PUNC">;</span><span class="WHIT">
@@ -147,7 +147,7 @@ A single node within a spatial container.
 <span class='linenumber'> 69</span> 
 <span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'> 71</span>     * Get an array of objects within this node.
-<span class='linenumber'> 72</span>     * @type Array
+<span class='linenumber'> 72</span>     * @return {Array} Objects in the node
 <span class='linenumber'> 73</span>     */</span><span class="WHIT">
 <span class='linenumber'> 74</span> </span><span class="WHIT">   </span><span class="NAME">getObjects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 75</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.objects</span><span class="PUNC">;</span><span class="WHIT">
@@ -169,13 +169,13 @@ A single node within a spatial container.
 <span class='linenumber'> 91</span>     */</span><span class="WHIT">
 <span class='linenumber'> 92</span> </span><span class="WHIT">   </span><span class="NAME">removeObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 93</span> </span><span class="WHIT">      </span><span class="NAME">EngineSupport.arrayRemove</span><span class="PUNC">(</span><span class="NAME">this.objects</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 94</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 95</span> 
-<span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 97</span>     * Get the class name of this object
-<span class='linenumber'> 98</span>     *
-<span class='linenumber'> 99</span>     * @type String
-<span class='linenumber'>100</span>     * @memberOf Container
+<span class='linenumber'> 94</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope SpatialNode.prototype */</span><span class="WHIT">
+<span class='linenumber'> 96</span> 
+<span class='linenumber'> 97</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 98</span>     * Get the class name of this object
+<span class='linenumber'> 99</span>     *
+<span class='linenumber'>100</span>     * @return {String} "SpatialNode"
 <span class='linenumber'>101</span>     */</span><span class="WHIT">
 <span class='linenumber'>102</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>103</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"SpatialNode"</span><span class="PUNC">;</span><span class="WHIT">
@@ -222,7 +222,7 @@ A single node within a spatial container.
 <span class='linenumber'>144</span> 
 <span class='linenumber'>145</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>146</span>     * Get the width of the container.
-<span class='linenumber'>147</span>     * @type Number
+<span class='linenumber'>147</span>     * @return {Number} The width
 <span class='linenumber'>148</span>     */</span><span class="WHIT">
 <span class='linenumber'>149</span> </span><span class="WHIT">   </span><span class="NAME">getWidth</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>150</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.width</span><span class="PUNC">;</span><span class="WHIT">
@@ -230,7 +230,7 @@ A single node within a spatial container.
 <span class='linenumber'>152</span> 
 <span class='linenumber'>153</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>154</span>     * Get the height of the container.
-<span class='linenumber'>155</span>     * @type Number
+<span class='linenumber'>155</span>     * @return {Number} The height
 <span class='linenumber'>156</span>     */</span><span class="WHIT">
 <span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="NAME">getHeight</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>158</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.height</span><span class="PUNC">;</span><span class="WHIT">
@@ -238,7 +238,7 @@ A single node within a spatial container.
 <span class='linenumber'>160</span> 
 <span class='linenumber'>161</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>162</span>     * Get the root of the container.
-<span class='linenumber'>163</span>     * @type Object
+<span class='linenumber'>163</span>     * @return {Object} The root
 <span class='linenumber'>164</span>     */</span><span class="WHIT">
 <span class='linenumber'>165</span> </span><span class="WHIT">   </span><span class="NAME">getRoot</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>166</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.root</span><span class="PUNC">;</span><span class="WHIT">
@@ -258,13 +258,13 @@ A single node within a spatial container.
 <span class='linenumber'>180</span>     * within the defined sub-space of the container.
 <span class='linenumber'>181</span>     *
 <span class='linenumber'>182</span>     * @param point {Point2D} The point to build with
-<span class='linenumber'>183</span>     * @type HashContainer
+<span class='linenumber'>183</span>     * @return {HashContainer} The PCL
 <span class='linenumber'>184</span>     */</span><span class="WHIT">
 <span class='linenumber'>185</span> </span><span class="WHIT">   </span><span class="NAME">getPCL</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>186</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">HashContainer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>187</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
 <span class='linenumber'>188</span> 
-<span class='linenumber'>189</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>189</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope SpatialContainer.prototype */</span><span class="WHIT">
 <span class='linenumber'>190</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>191</span>     * Get the class name of this object
 <span class='linenumber'>192</span>     *
@@ -284,6 +284,6 @@ A single node within a spatial container.
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:24:55 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:29 GMT-0500 (EST)</div>
 </body>
 </html>

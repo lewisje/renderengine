@@ -195,12 +195,66 @@ A collider component handles collisions by updating the       collision model a
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;SpatialContainer
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getCollisionModel">getCollisionModel</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the collision model being used by this component.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;BaseObject
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getObjectType">getObjectType</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the object type that this collider component will respond to.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setObjectType">setObjectType</a></b>(objType) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the object type that this component will respond to.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#testCollision">testCollision</a></b>(time, collisionObj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Call the host object's <tt>onCollide()</tt> method, passing the time of the collisionand the potential collision object.
  
          </td>
       </tr>
@@ -243,6 +297,8 @@ A collider component handles collisions by updating the       collision model a
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
             
                <a href="BaseObject.html#update">update</a>,
             
@@ -462,6 +518,48 @@ A collider component handles collisions by updating the       collision model a
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getCollisionModel"> </a> <h3>getCollisionModel</h3>
+      <pre>SpatialContainer&nbsp;<b>getCollisionModel</b>()</pre> 
+   <ul>
+      Get the collision model being used by this component.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>SpatialContainer</i>&nbsp;</code>The collision model 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getObjectType"> </a> <h3>getObjectType</h3>
+      <pre>BaseObject&nbsp;<b>getObjectType</b>()</pre> 
+   <ul>
+      Get the object type that this collider component will respond to.  Ifthe value is <tt>null</tt>, all objects are potential collision objects.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>BaseObject</i>&nbsp;</code>The only object type to collide with, or <tt>null</tt> for any object 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="release"> </a> <h3>release</h3>
       <pre><b>release</b>()</pre> 
    <ul>
@@ -474,6 +572,56 @@ A collider component handles collisions by updating the       collision model a
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
    
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setObjectType"> </a> <h3>setObjectType</h3>
+      <pre><b>setObjectType</b>(objType)</pre> 
+   <ul>
+      Set the object type that this component will respond to.  Setting this to <tt>null</tt>will trigger a potential collision when any object comes into possible contact with thecomponent's host object based on the collision model.  If the object isn't of this type,no collision tests will be performed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>BaseObject</i>]&nbsp;objType </code> - The object type to check for 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="testCollision"> </a> <h3>testCollision</h3>
+      <pre>Number&nbsp;<b>testCollision</b>(time, collisionObj)</pre> 
+   <ul>
+      Call the host object's <tt>onCollide()</tt> method, passing the time of the collisionand the potential collision object.  The return value should either tell the collisiontests to continue, or to stop.<p/>For the base collider component the collision test is up to the host object to determine.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The engine time (in milliseconds) when the potential collision occurred 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;collisionObj </code> - The host object with which the collision potentially occurs 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>A status indicating whether to continue checking, or to stop 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -505,6 +653,6 @@ A collider component handles collisions by updating the       collision model a
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:03 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:39 GMT-0500 (EST)</div>
 </body>
 </html>

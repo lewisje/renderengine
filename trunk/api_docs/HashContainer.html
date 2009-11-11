@@ -153,6 +153,20 @@ A hash container is a logical collection of objects.  A hash container       is
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#clear">clear</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove all objects from the container.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#get">get</a></b>(idx) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If a number is provided, the request will be passed to thebase object, otherwise a name is assumed and the hash willbe retrieved.
@@ -176,7 +190,9 @@ A hash container is a logical collection of objects.  A hash container       is
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#isInHash">isInHash</a></b>(name) </code> 
@@ -213,7 +229,7 @@ A hash container is a logical collection of objects.  A hash container       is
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Object
             </code></font> 
          </td>
          <td>
@@ -227,7 +243,7 @@ A hash container is a logical collection of objects.  A hash container       is
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Object
             </code></font> 
          </td>
          <td>
@@ -263,6 +279,8 @@ A hash container is a logical collection of objects.  A hash container       is
             
                <a href="BaseObject.html#getElement">getElement</a>,
             
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
                <a href="BaseObject.html#update">update</a>,
             
                <a href="BaseObject.html#addEvent">addEvent</a>,
@@ -293,13 +311,15 @@ A hash container is a logical collection of objects.  A hash container       is
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="Container.html#constructor">constructor</a>,
-            
                <a href="Container.html#destroy">destroy</a>,
             
                <a href="Container.html#size">size</a>,
             
-               <a href="Container.html#clear">clear</a>,
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
             
                <a href="Container.html#getObjects">getObjects</a>,
             
@@ -404,8 +424,24 @@ A hash container is a logical collection of objects.  A hash container       is
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="clear"> </a> <h3>clear</h3>
+      <pre><b>clear</b>()</pre> 
+   <ul>
+      Remove all objects from the container.  None of the objects aredestroyed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="get"> </a> <h3>get</h3>
-      <pre><b>get</b>(idx)</pre> 
+      <pre>Object&nbsp;<b>get</b>(idx)</pre> 
    <ul>
       If a number is provided, the request will be passed to thebase object, otherwise a name is assumed and the hash willbe retrieved.
       
@@ -420,7 +456,12 @@ A hash container is a logical collection of objects.  A hash container       is
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -447,7 +488,7 @@ A hash container is a logical collection of objects.  A hash container       is
    <hr>
 
    <a name="isInHash"> </a> <h3>isInHash</h3>
-      <pre><b>isInHash</b>(name)</pre> 
+      <pre>Boolean&nbsp;<b>isInHash</b>(name)</pre> 
    <ul>
       Returns <tt>true</tt> if the object name is already inthe hash.
       
@@ -462,7 +503,12 @@ A hash container is a logical collection of objects.  A hash container       is
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -505,7 +551,7 @@ A hash container is a logical collection of objects.  A hash container       is
    <hr>
 
    <a name="removeAtIndex"> </a> <h3>removeAtIndex</h3>
-      <pre>&nbsp;<b>removeAtIndex</b>(idx)</pre> 
+      <pre>Object&nbsp;<b>removeAtIndex</b>(idx)</pre> 
    <ul>
       Remove an object from the container at the specified index.The object is not destroyed when it is removed.
       
@@ -523,7 +569,7 @@ A hash container is a logical collection of objects.  A hash container       is
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The object removed from the container. 
+         <code><i>Object</i>&nbsp;</code>The object removed from the container. 
       </ul>
    </ul>
    
@@ -531,7 +577,7 @@ A hash container is a logical collection of objects.  A hash container       is
    <hr>
 
    <a name="removeHash"> </a> <h3>removeHash</h3>
-      <pre>&nbsp;<b>removeHash</b>(name)</pre> 
+      <pre>Object&nbsp;<b>removeHash</b>(name)</pre> 
    <ul>
       Remove the object with the given key name from the container.
       
@@ -549,7 +595,7 @@ A hash container is a logical collection of objects.  A hash container       is
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>the object removed from the hash 
+         <code><i>Object</i>&nbsp;</code>The object removed 
       </ul>
    </ul>
    
@@ -567,6 +613,6 @@ A hash container is a logical collection of objects.  A hash container       is
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:03 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:39 GMT-0500 (EST)</div>
 </body>
 </html>

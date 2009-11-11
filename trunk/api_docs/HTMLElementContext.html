@@ -169,7 +169,7 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawImage">drawImage</a></b>(rect, image) </code> 
+            <code> <b> <a href="#drawImage">drawImage</a></b>(obj, rect, image, srcRect) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an image on the context.
  
@@ -205,7 +205,7 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawSprite">drawSprite</a></b>(point, imageData) </code> 
+            <code> <b> <a href="#drawSprite">drawSprite</a></b>(obj, sprite, time) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a sprite on the context.
  
@@ -291,9 +291,9 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#reset">reset</a></b>(rect) </code> 
+            <code> <b> <a href="#resolved">resolved</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reset the context, clearing it and preparing it for drawing.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; When the HTMLElementContext's dependencies are resolved, check the browsertype and load a specific object which handles specific processing.
  
          </td>
       </tr>
@@ -391,6 +391,8 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext.html#sort">sort</a>,
             
+               <a href="RenderContext.html#reset">reset</a>,
+            
                <a href="RenderContext.html#update">update</a>,
             
                <a href="RenderContext.html#render">render</a>,
@@ -402,8 +404,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
                <a href="RenderContext.html#resetTransformStack">resetTransformStack</a>,
             
                <a href="RenderContext.html#getNearObjects">getNearObjects</a>,
-            
-               <a href="RenderContext.html#sortFn">sortFn</a>,
             
          </code></td>
       </tr>
@@ -440,6 +440,32 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
             
                <a href="RenderContext2D.html#getScaleY">getScaleY</a>,
             
+               <a href="RenderContext2D.html#setFont">setFont</a>,
+            
+               <a href="RenderContext2D.html#getFont">getFont</a>,
+            
+               <a href="RenderContext2D.html#getNormalizedFont">getNormalizedFont</a>,
+            
+               <a href="RenderContext2D.html#setFontSize">setFontSize</a>,
+            
+               <a href="RenderContext2D.html#getFontSize">getFontSize</a>,
+            
+               <a href="RenderContext2D.html#setFontWeight">setFontWeight</a>,
+            
+               <a href="RenderContext2D.html#getFontWeight">getFontWeight</a>,
+            
+               <a href="RenderContext2D.html#setFontAlign">setFontAlign</a>,
+            
+               <a href="RenderContext2D.html#getFontAlign">getFontAlign</a>,
+            
+               <a href="RenderContext2D.html#setFontBaseline">setFontBaseline</a>,
+            
+               <a href="RenderContext2D.html#getFontBaseline">getFontBaseline</a>,
+            
+               <a href="RenderContext2D.html#setFontStyle">setFontStyle</a>,
+            
+               <a href="RenderContext2D.html#getFontStyle">getFontStyle</a>,
+            
                <a href="RenderContext2D.html#setTransform">setTransform</a>,
             
                <a href="RenderContext2D.html#setRenderTransform">setRenderTransform</a>,
@@ -465,6 +491,10 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
                <a href="RenderContext2D.html#drawArc">drawArc</a>,
             
                <a href="RenderContext2D.html#drawFilledArc">drawFilledArc</a>,
+            
+               <a href="RenderContext2D.html#drawCircle">drawCircle</a>,
+            
+               <a href="RenderContext2D.html#drawFilledCircle">drawFilledCircle</a>,
             
                <a href="RenderContext2D.html#drawPolygon">drawPolygon</a>,
             
@@ -523,6 +553,12 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
          <td><code>
             
                <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
             
                <a href="Container.html#removeAtIndex">removeAtIndex</a>,
             
@@ -671,7 +707,7 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
    <hr>
 
    <a name="drawImage"> </a> <h3>drawImage</h3>
-      <pre><b>drawImage</b>(rect, image)</pre> 
+      <pre><b>drawImage</b>(obj, rect, image, srcRect)</pre> 
    <ul>
       Draw an image on the context.
       
@@ -680,10 +716,16 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
    <ul>
       <b>Parameters:</b>
       <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
+      </ul>
+      <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that specifies the position and            dimensions of the image rectangle. 
       </ul>
       <ul>
          <code>[<i>Object</i>]&nbsp;image </code> - The image to draw onto the context 
+      </ul>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;srcRect </code> - <i>[optional]</i> The source rectangle within the image, if               <tt>null</tt> the entire image is used 
       </ul>
    </ul>
    
@@ -737,7 +779,7 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
    <hr>
 
    <a name="drawSprite"> </a> <h3>drawSprite</h3>
-      <pre><b>drawSprite</b>(point, imageData)</pre> 
+      <pre><b>drawSprite</b>(obj, sprite, time)</pre> 
    <ul>
       Draw a sprite on the context.
       
@@ -746,10 +788,13 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Point2D</i>]&nbsp;point </code> - The top-left position to draw the image. 
+         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
       </ul>
       <ul>
-         <code>[<i>Image</i>]&nbsp;imageData </code> - The sprite to draw 
+         <code>[<i>Sprite</i>]&nbsp;sprite </code> - The sprite to draw 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The current world time 
       </ul>
    </ul>
    
@@ -874,19 +919,14 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="reset"> </a> <h3>reset</h3>
-      <pre><b>reset</b>(rect)</pre> 
+   <a name="resolved"> </a> <h3>resolved</h3>
+      <pre><b>resolved</b>()</pre> 
    <ul>
-      Reset the context, clearing it and preparing it for drawing.
+      When the HTMLElementContext's dependencies are resolved, check the browsertype and load a specific object which handles specific processing.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>rect </code> 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -990,6 +1030,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.Aside 
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:03 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:39 GMT-0500 (EST)</div>
 </body>
 </html>
