@@ -205,7 +205,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawImage">drawImage</a></b>(rect, image, srcRect) </code> 
+            <code> <b> <a href="#drawImage">drawImage</a></b>(obj, rect, image, srcRect) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an image on the context.
  
@@ -253,7 +253,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawSprite">drawSprite</a></b>(point, sprite) </code> 
+            <code> <b> <a href="#drawSprite">drawSprite</a></b>(obj, sprite, time) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a sprite on the context.
  
@@ -267,7 +267,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
          <td>
             <code> <b> <a href="#drawText">drawText</a></b>(point, text) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw text on the context.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw filled text on the context.
  
          </td>
       </tr>
@@ -576,6 +576,18 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
          </td>
       </tr>
    
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#strokeText">strokeText</a></b>(point, text) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw stroked (outline) text on the context.
+ 
+         </td>
+      </tr>
+   
 </table>
 &nbsp;
 
@@ -633,10 +645,6 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
             
                <a href="RenderContext.html#getNearObjects">getNearObjects</a>,
             
-               <a href="RenderContext.html#sortFn">sortFn</a>,
-            
-               <a href="RenderContext.html#getClassName">getClassName</a>,
-            
          </code></td>
       </tr>
       
@@ -670,6 +678,32 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
             
                <a href="RenderContext2D.html#getScaleY">getScaleY</a>,
             
+               <a href="RenderContext2D.html#setFont">setFont</a>,
+            
+               <a href="RenderContext2D.html#getFont">getFont</a>,
+            
+               <a href="RenderContext2D.html#getNormalizedFont">getNormalizedFont</a>,
+            
+               <a href="RenderContext2D.html#setFontSize">setFontSize</a>,
+            
+               <a href="RenderContext2D.html#getFontSize">getFontSize</a>,
+            
+               <a href="RenderContext2D.html#setFontWeight">setFontWeight</a>,
+            
+               <a href="RenderContext2D.html#getFontWeight">getFontWeight</a>,
+            
+               <a href="RenderContext2D.html#setFontAlign">setFontAlign</a>,
+            
+               <a href="RenderContext2D.html#getFontAlign">getFontAlign</a>,
+            
+               <a href="RenderContext2D.html#setFontBaseline">setFontBaseline</a>,
+            
+               <a href="RenderContext2D.html#getFontBaseline">getFontBaseline</a>,
+            
+               <a href="RenderContext2D.html#setFontStyle">setFontStyle</a>,
+            
+               <a href="RenderContext2D.html#getFontStyle">getFontStyle</a>,
+            
                <a href="RenderContext2D.html#setRenderTransform">setRenderTransform</a>,
             
                <a href="RenderContext2D.html#getRenderPosition">getRenderPosition</a>,
@@ -683,6 +717,10 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
                <a href="RenderContext2D.html#getLineWidth">getLineWidth</a>,
             
                <a href="RenderContext2D.html#getFillStyle">getFillStyle</a>,
+            
+               <a href="RenderContext2D.html#drawCircle">drawCircle</a>,
+            
+               <a href="RenderContext2D.html#drawFilledCircle">drawFilledCircle</a>,
             
                <a href="RenderContext2D.html#drawPolygon">drawPolygon</a>,
             
@@ -718,6 +756,12 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
             
                <a href="Container.html#size">size</a>,
             
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
+            
                <a href="Container.html#remove">remove</a>,
             
                <a href="Container.html#removeAtIndex">removeAtIndex</a>,
@@ -734,6 +778,8 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
             
                <a href="Container.html#toString">toString</a>,
             
+               <a href="Container.html#getClassName">getClassName</a>,
+            
          </code></td>
       </tr>
       
@@ -748,6 +794,8 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
             
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
@@ -965,7 +1013,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <hr>
 
    <a name="drawImage"> </a> <h3>drawImage</h3>
-      <pre><b>drawImage</b>(rect, image, srcRect)</pre> 
+      <pre><b>drawImage</b>(obj, rect, image, srcRect)</pre> 
    <ul>
       Draw an image on the context.
       
@@ -973,6 +1021,9 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
+      </ul>
       <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that specifies the position and            dimensions of the image rectangle. 
       </ul>
@@ -1058,7 +1109,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <hr>
 
    <a name="drawSprite"> </a> <h3>drawSprite</h3>
-      <pre><b>drawSprite</b>(point, sprite)</pre> 
+      <pre><b>drawSprite</b>(obj, sprite, time)</pre> 
    <ul>
       Draw a sprite on the context.
       
@@ -1067,10 +1118,13 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Point2D</i>]&nbsp;point </code> - The top-left position to draw the image. 
+         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
       </ul>
       <ul>
-         <code>[<i>Image</i>]&nbsp;sprite </code> - The sprite to draw 
+         <code>[<i>Sprite</i>]&nbsp;sprite </code> - The sprite to draw 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The current world time 
       </ul>
    </ul>
    
@@ -1084,7 +1138,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <a name="drawText"> </a> <h3>drawText</h3>
       <pre><b>drawText</b>(point, text)</pre> 
    <ul>
-      Draw text on the context.
+      Draw filled text on the context.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -1163,7 +1217,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>String</i>]&nbsp;format </code> - The format of the output, or <tt>null</tt> for					 the PNG default. 
+         <code>[<i>String</i>]&nbsp;format </code> - The format of the output, or <tt>null</tt> for                the PNG default. 
       </ul>
    </ul>
    
@@ -1612,6 +1666,30 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="strokeText"> </a> <h3>strokeText</h3>
+      <pre><b>strokeText</b>(point, text)</pre> 
+   <ul>
+      Draw stroked (outline) text on the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;text </code> - The text to draw 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -1623,6 +1701,6 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:38 GMT-0500 (EST)</div>
 </body>
 </html>

@@ -240,6 +240,20 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getTextFont">getTextFont</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the font for the text.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
             &nbsp;Number
             </code></font> 
          </td>
@@ -254,7 +268,21 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Number
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getTextStyle">getTextStyle</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the style for text.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
             </code></font> 
          </td>
          <td>
@@ -342,9 +370,33 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#setTextFont">setTextFont</a></b>(font) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the font for the text.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#setTextSize">setTextSize</a></b>(size) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the size of the text to render.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setTextStyle">setTextStyle</a></b>(style) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the style of the text.
  
          </td>
       </tr>
@@ -570,7 +622,7 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <a name="getText"> </a> <h3>getText</h3>
       <pre>String&nbsp;<b>getText</b>()</pre> 
    <ul>
-      Get the text for this object to render.
+      Get the text for this object to render.  This method<i>must</i> be implemented by a text renderer.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -591,7 +643,7 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <a name="getTextAlignment"> </a> <h3>getTextAlignment</h3>
       <pre>Number&nbsp;<b>getTextAlignment</b>()</pre> 
    <ul>
-      Get the horizontal alignment of the text.
+      Get the horizontal alignment of the text. This method is optionalfor a text renderer.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -602,7 +654,7 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Number</i>&nbsp;</code>The alignment constant for the text 
+         <code><i>Number</i>&nbsp;</code>The alignment mode for the given text renderer 
       </ul>
    </ul>
    
@@ -630,6 +682,27 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getTextFont"> </a> <h3>getTextFont</h3>
+      <pre>String&nbsp;<b>getTextFont</b>()</pre> 
+   <ul>
+      Get the font for the text.  This method is optionalfor a text renderer.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The text font 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getTextSize"> </a> <h3>getTextSize</h3>
       <pre>Number&nbsp;<b>getTextSize</b>()</pre> 
    <ul>
@@ -651,10 +724,10 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="getTextWeight"> </a> <h3>getTextWeight</h3>
-      <pre>Number&nbsp;<b>getTextWeight</b>()</pre> 
+   <a name="getTextStyle"> </a> <h3>getTextStyle</h3>
+      <pre>String&nbsp;<b>getTextStyle</b>()</pre> 
    <ul>
-      Get the weight of the text.
+      Get the style for text.  This method is optionalfor a text renderer.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -665,7 +738,28 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Number</i>&nbsp;</code>The text weight 
+         <code><i>String</i>&nbsp;</code>The text style 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getTextWeight"> </a> <h3>getTextWeight</h3>
+      <pre>Object&nbsp;<b>getTextWeight</b>()</pre> 
+   <ul>
+      Get the weight of the text.  This method is optionalfor a text renderer.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The boldness of the given text renderer 
       </ul>
    </ul>
    
@@ -738,7 +832,7 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <a name="setText"> </a> <h3>setText</h3>
       <pre><b>setText</b>(text)</pre> 
    <ul>
-      Set the text for this object to render.
+      Set the text for this object to render.  This method<i>must</i> be implemented by a text renderer.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -759,14 +853,14 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <a name="setTextAlignment"> </a> <h3>setTextAlignment</h3>
       <pre><b>setTextAlignment</b>(alignment)</pre> 
    <ul>
-      Set the horizontal alignment of the text.
+      Set the horizontal alignment of the text.  This method is optionalfor a text renderer
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Number</i>]&nbsp;alignment </code> - One of <a href='AbstractTextRenderer.html#ALIGN_LEFT'>AbstractTextRenderer.ALIGN_LEFT</a>, <a href='AbstractTextRenderer.html#ALIGN_RIGHT'>AbstractTextRenderer.ALIGN_RIGHT</a>                 or <a href='AbstractTextRenderer.html#ALIGN_CENTER'>AbstractTextRenderer.ALIGN_CENTER</a> 
+         <code>[<i>Object</i>]&nbsp;alignment </code> - A text alignment mode for the given text renderer. 
       </ul>
    </ul>
    
@@ -798,6 +892,27 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setTextFont"> </a> <h3>setTextFont</h3>
+      <pre><b>setTextFont</b>(font)</pre> 
+   <ul>
+      Set the font for the text.  This method is optionalfor a text renderer.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;font </code> - The text font 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setTextSize"> </a> <h3>setTextSize</h3>
       <pre><b>setTextSize</b>(size)</pre> 
    <ul>
@@ -819,17 +934,38 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="setTextWeight"> </a> <h3>setTextWeight</h3>
-      <pre><b>setTextWeight</b>(weight)</pre> 
+   <a name="setTextStyle"> </a> <h3>setTextStyle</h3>
+      <pre><b>setTextStyle</b>(style)</pre> 
    <ul>
-      Set the weight (boldness) of the text.
+      Set the style of the text.  This method is optionalfor a text renderer.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Number</i>]&nbsp;weight </code> - The boldness of the text 
+         <code>[<i>String</i>]&nbsp;style </code> - The text style 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setTextWeight"> </a> <h3>setTextWeight</h3>
+      <pre><b>setTextWeight</b>(weight)</pre> 
+   <ul>
+      Set the weight (boldness) of the text.  This methodis optional for a text renderer.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;weight </code> - The boldness of the given text renderer 
       </ul>
    </ul>
    
@@ -875,6 +1011,6 @@ A 2d text rendering object.  The object hosts the given text       renderer, an
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:38 GMT-0500 (EST)</div>
 </body>
 </html>

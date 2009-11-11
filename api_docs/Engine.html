@@ -63,7 +63,7 @@ The main engine class which is responsible for keeping the world up to date.Add
 
 
 
-<br/><i>Defined in <a href="engine.src.html">engine.js</a></i>
+<br/><i>Defined in <a href="engine.main.src.html">engine.main.js</a></i>
 
 <hr>
 
@@ -76,28 +76,6 @@ The main engine class which is responsible for keeping the world up to date.Add
          <font size="+2"> <b>Field Summary</b></font>
       </td>
    </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>object</code></font>
-         </td>
-         <td>
-            <code><b><a href="#SCRIPT_LOADED">SCRIPT_LOADED</a></b></code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status message when a script is successfully loaded
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>object</code></font>
-         </td>
-         <td>
-            <code><b><a href="#SCRIPT_NOT_FOUND">SCRIPT_NOT_FOUND</a></b></code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status message when a script is not found
-         </td>
-      </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
@@ -141,18 +119,6 @@ The main engine class which is responsible for keeping the world up to date.Add
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#clearScriptCache">clearScriptCache</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Clears the script name cache.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;String
             </code></font> 
@@ -180,25 +146,13 @@ The main engine class which is responsible for keeping the world up to date.Add
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Object
+            &nbsp;Number
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#dumpDependencies">dumpDependencies</a></b>() </code> 
+            <code> <b> <a href="#getActualFPS">getActualFPS</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dump out any unresolved class dependencies to the console.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#dumpScripts">dumpScripts</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output the list of scripts loaded by the Engine to the console.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the actual FPS (frames per second) the engine is running at.
  
          </td>
       </tr>
@@ -234,6 +188,20 @@ The main engine class which is responsible for keeping the world up to date.Add
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getEngineLoad">getEngineLoad</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the engine load.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
             &nbsp;String
             </code></font> 
          </td>
@@ -248,13 +216,41 @@ The main engine class which is responsible for keeping the world up to date.Add
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFPS">getFPS</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the FPS (frames per second) the engine is set to run at.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFrameTime">getFrameTime</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the amount of time allocated to draw a single frame.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
             &nbsp;PooledObject
             </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getObject">getObject</a></b>(id) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get an object by it's Id that was assigned during the call to <a href='#create'>create</a>.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get an object by the Id that was assigned during the call to <a href='#create'>create</a>.
  
          </td>
       </tr>
@@ -276,19 +272,7 @@ The main engine class which is responsible for keeping the world up to date.Add
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#include">include</a></b>(scriptURL) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Include a script file.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#initObject">initObject</a></b>(objectName, dependencies, fn) </code> 
+            <code> <b> <a href="#initObject">initObject</a></b>(objectName, primaryDependency, fn) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Initializes an object for use in the engine.
  
@@ -314,57 +298,9 @@ The main engine class which is responsible for keeping the world up to date.Add
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#load">load</a></b>(scriptSource) </code> 
+            <code> <b> <a href="#manMetrics">manMetrics</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Load a script relative to the engine path.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#loadGame">loadGame</a></b>(gameSource, gameObjectName) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Loads a game's script.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#loadNow">loadNow</a></b>(scriptPath, cb) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Perform an immediate load on the specified script.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#loadScript">loadScript</a></b>(scriptPath) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Load a script from the server and append it tothe head element of the browser.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#loadStylesheet">loadStylesheet</a></b>(stylesheetPath) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Load a stylesheet and append it to the document.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -377,18 +313,6 @@ The main engine class which is responsible for keeping the world up to date.Add
             <code> <b> <a href="#pause">pause</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pauses the engine.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#pauseQueue">pauseQueue</a></b>(state) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; You can pause the queue from a callback function, thenunpause it to continue processing queued scripts.
  
          </td>
       </tr>
@@ -449,18 +373,6 @@ The main engine class which is responsible for keeping the world up to date.Add
             <code> <b> <a href="#setMetricSampleRate">setMetricSampleRate</a></b>(sampleRate) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the interval at which metrics are sampled by the system.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#setQueueCallback">setQueueCallback</a></b>(cb) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Put a callback into the script queue so that when acertain number of files has been loaded, we can calla method.
  
          </td>
       </tr>
@@ -553,28 +465,6 @@ The main engine class which is responsible for keeping the world up to date.Add
 
 
    <!-- One single method detail entry -->
-   <a name="SCRIPT_LOADED">
-   <!-- -->
-   </a> <h3>SCRIPT_LOADED</h3>
-      <pre>object <b>SCRIPT_LOADED</b></pre> 
-   <ul>
-      Status message when a script is successfully loaded
-      
-   </ul>
-   <hr>
-
-   <!-- One single method detail entry -->
-   <a name="SCRIPT_NOT_FOUND">
-   <!-- -->
-   </a> <h3>SCRIPT_NOT_FOUND</h3>
-      <pre>object <b>SCRIPT_NOT_FOUND</b></pre> 
-   <ul>
-      Status message when a script is not found
-      
-   </ul>
-   <hr>
-
-   <!-- One single method detail entry -->
    <a name="worldTime">
    <!-- -->
    </a> <h3>worldTime</h3>
@@ -621,22 +511,6 @@ The main engine class which is responsible for keeping the world up to date.Add
          <code>[<i>Boolean</i>]&nbsp;smoothing </code> - <tt>true</tt> to use 3 point average smoothing 
       </ul>
    </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="clearScriptCache"> </a> <h3>clearScriptCache</h3>
-      <pre><b>clearScriptCache</b>()</pre> 
-   <ul>
-      Clears the script name cache.  Allows scripts to be loadedagain.  Use this method with caution, as it is not recommendedto load a script if the object is in use.  May cause unexpectedresults.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -692,10 +566,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="dumpDependencies"> </a> <h3>dumpDependencies</h3>
-      <pre>Object&nbsp;<b>dumpDependencies</b>()</pre> 
+   <a name="getActualFPS"> </a> <h3>getActualFPS</h3>
+      <pre>Number&nbsp;<b>getActualFPS</b>()</pre> 
    <ul>
-      Dump out any unresolved class dependencies to the console.
+      Get the actual FPS (frames per second) the engine is running at.This value will vary as load increases or decreases due to thenumber of objects being rendered.  A faster machine will be ableto handle a higher FPS setting.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -706,25 +580,9 @@ The main engine class which is responsible for keeping the world up to date.Add
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Object</i>&nbsp;</code>A list of all classes that haven't been loaded due to resolution conflicts. 
+         <code><i>Number</i>&nbsp;</code> 
       </ul>
    </ul>
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="dumpScripts"> </a> <h3>dumpScripts</h3>
-      <pre><b>dumpScripts</b>()</pre> 
-   <ul>
-      Output the list of scripts loaded by the Engine to the console.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -771,6 +629,27 @@ The main engine class which is responsible for keeping the world up to date.Add
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getEngineLoad"> </a> <h3>getEngineLoad</h3>
+      <pre>Number&nbsp;<b>getEngineLoad</b>()</pre> 
+   <ul>
+      Get the engine load.  The load represents the amount ofwork the engine is doing to render a frame.  A value lessthan one indicates the the engine can render a frame withinthe amount of time available.  Higher than one indicates theengine cannot render the frame in the time available.<p/>Faster machines will be able to handle more load.  You can usethis value to gauge how well your game is performing.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getEnginePath"> </a> <h3>getEnginePath</h3>
       <pre>String&nbsp;<b>getEnginePath</b>()</pre> 
    <ul>
@@ -792,10 +671,52 @@ The main engine class which is responsible for keeping the world up to date.Add
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getFPS"> </a> <h3>getFPS</h3>
+      <pre>Number&nbsp;<b>getFPS</b>()</pre> 
+   <ul>
+      Get the FPS (frames per second) the engine is set to run at.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getFrameTime"> </a> <h3>getFrameTime</h3>
+      <pre>Number&nbsp;<b>getFrameTime</b>()</pre> 
+   <ul>
+      Get the amount of time allocated to draw a single frame.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getObject"> </a> <h3>getObject</h3>
       <pre>PooledObject&nbsp;<b>getObject</b>(id)</pre> 
    <ul>
-      Get an object by it's Id that was assigned during the call to <a href='#create'>create</a>.
+      Get an object by the Id that was assigned during the call to <a href='#create'>create</a>.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -834,31 +755,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="include"> </a> <h3>include</h3>
-      <pre><b>include</b>(scriptURL)</pre> 
-   <ul>
-      Include a script file.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;scriptURL </code> - The URL of the script file 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="initObject"> </a> <h3>initObject</h3>
-      <pre><b>initObject</b>(objectName, dependencies, fn)</pre> 
+      <pre><b>initObject</b>(objectName, primaryDependency, fn)</pre> 
    <ul>
-      Initializes an object for use in the engine.  Calling this method is required to make surethat all dependencies are resolved before actually instantiating an object of the specifiedclass.
+      Initializes an object for use in the engine.  Calling this method is required to make surethat all dependencies are resolved before actually instantiating an object of the specifiedclass.  This uses the <a href='Linker.html'>Linker</a> class to handle dependency processing and resolution.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -868,7 +768,7 @@ The main engine class which is responsible for keeping the world up to date.Add
          <code>[<i>String</i>]&nbsp;objectName </code> - The name of the object class 
       </ul>
       <ul>
-         <code>[<i>Array</i>]&nbsp;dependencies </code> - An array of object names the object to initialize                    is dependent on.  When all objects have been created, the                    object will be initialized. 
+         <code>[<i>String</i>]&nbsp;primaryDependency </code> - The name of the class for which the <tt>objectName</tt> class is                                  dependent upon.  Specifying <tt>null</tt> will assume the <tt>Base</tt> class. 
       </ul>
       <ul>
          <code>[<i>Function</i>]&nbsp;fn </code> - The function to run when the object can be initialized. 
@@ -903,109 +803,14 @@ The main engine class which is responsible for keeping the world up to date.Add
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="load"> </a> <h3>load</h3>
-      <pre><b>load</b>(scriptSource)</pre> 
+   <a name="manMetrics"> </a> <h3>manMetrics</h3>
+      <pre><b>manMetrics</b>()</pre> 
    <ul>
-      Load a script relative to the engine path.  A simple helper method which calls<a href='#loadScript'>loadScript</a> and prepends the engine path to the supplied script source.
+      undocumented
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;scriptSource </code> - A URL to load that is relative to the engine path. 
-      </ul>
-   </ul>
    
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="loadGame"> </a> <h3>loadGame</h3>
-      <pre><b>loadGame</b>(gameSource, gameObjectName)</pre> 
-   <ul>
-      Loads a game's script.  This will wait until the specified<tt>gameObjectName</tt> is available before running it.  Doing so willensure that all dependencies have been resolved before starting a game.Also creates the default rendering context for the engine.<p/>All games should execute this method to start their processing, rather thanusing the script loading mechanism for engine or game scripts.  This is usedfor the main game script only.  Normally it would appear in the game's "index" file.<pre> &lt;script type="text/javascript"&gt;    // Load the game script    Engine.loadGame('game.js','Spaceroids'); &lt;/script&gt;</pre>
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;gameSource </code> - The URL of the game script. 
-      </ul>
-      <ul>
-         <code>[<i>String</i>]&nbsp;gameObjectName </code> - The string name of the game object to execute.  When                      the framework if ready, the <tt>startup()</tt> method of this                      object will be called. 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="loadNow"> </a> <h3>loadNow</h3>
-      <pre><b>loadNow</b>(scriptPath, cb)</pre> 
-   <ul>
-      Perform an immediate load on the specified script.  Objects withinthe script may not immediately initialize, unless their dependencieshave been resolved.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;scriptPath </code> - The path to the script to load 
-      </ul>
-      <ul>
-         <code>[<i>Function</i>]&nbsp;cb </code> - The function to call when the script is loaded.                  the path of the script loaded and a status message                  will be passed as the two parameters. 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="loadScript"> </a> <h3>loadScript</h3>
-      <pre><b>loadScript</b>(scriptPath)</pre> 
-   <ul>
-      Load a script from the server and append it tothe head element of the browser.  Script names arecached so they will not be loaded again.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;scriptPath </code> - The URL of a script to load. 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="loadStylesheet"> </a> <h3>loadStylesheet</h3>
-      <pre><b>loadStylesheet</b>(stylesheetPath)</pre> 
-   <ul>
-      Load a stylesheet and append it to the document.  Allows forscripts to specify additional stylesheets that can be loadedas needed.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>String</i>]&nbsp;stylesheetPath </code> - Path to the stylesheet, relative to                               the engine path. 
-      </ul>
-   </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -1022,27 +827,6 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    <!-- METHOD PARAMETERS START -->
    
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="pauseQueue"> </a> <h3>pauseQueue</h3>
-      <pre><b>pauseQueue</b>(state)</pre> 
-   <ul>
-      You can pause the queue from a callback function, thenunpause it to continue processing queued scripts.  This willallow you to wait for an event to occur before continuing toto load scripts.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>Boolean</i>]&nbsp;state </code> - <tt>true</tt> to put the queue processor                       in a paused state. 
-      </ul>
-   </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -1151,27 +935,6 @@ The main engine class which is responsible for keeping the world up to date.Add
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="setQueueCallback"> </a> <h3>setQueueCallback</h3>
-      <pre><b>setQueueCallback</b>(cb)</pre> 
-   <ul>
-      Put a callback into the script queue so that when acertain number of files has been loaded, we can calla method.  Allows for functionality to start withincremental loading.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>Function</i>]&nbsp;cb </code> - A callback to execute 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="showMetrics"> </a> <h3>showMetrics</h3>
       <pre><b>showMetrics</b>()</pre> 
    <ul>
@@ -1268,6 +1031,6 @@ The main engine class which is responsible for keeping the world up to date.Add
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:03 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:39 GMT-0500 (EST)</div>
 </body>
 </html>

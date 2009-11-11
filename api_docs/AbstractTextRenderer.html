@@ -153,20 +153,6 @@ Abstract class that provides the basic interface for all       text render obje
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Number
-            </code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#getAlignment">getAlignment</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the alignment of the text.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>
             &nbsp;String
             </code></font> 
          </td>
@@ -195,6 +181,20 @@ Abstract class that provides the basic interface for all       text render obje
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getSize">getSize</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the scaling of the text
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
             &nbsp;String
             </code></font> 
          </td>
@@ -202,6 +202,48 @@ Abstract class that provides the basic interface for all       text render obje
             <code> <b> <a href="#getText">getText</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the text being rendered
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getTextAlignment">getTextAlignment</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the alignment of the text.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getTextFont">getTextFont</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the font of the text to be rendered
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getTextStyle">getTextStyle</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the style of the text for the renderer.
  
          </td>
       </tr>
@@ -225,18 +267,6 @@ Abstract class that provides the basic interface for all       text render obje
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#setAlignment">setAlignment</a></b>(alignment) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the alignment of the text to one of the constants <a href='#ALIGN_LEFT'>ALIGN_LEFT</a>, <a href='#ALIGN_RIGHT'>ALIGN_RIGHT</a>, or	<a href='#ALIGN_CENTER'>ALIGN_CENTER</a>.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
             <code> <b> <a href="#setColor">setColor</a></b>(color) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the color of the text to render.
@@ -249,9 +279,57 @@ Abstract class that provides the basic interface for all       text render obje
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#setSize">setSize</a></b>(size) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the scaling of the text
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#setText">setText</a></b>(text) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the text to be rendered
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setTextAlignment">setTextAlignment</a></b>(alignment) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the alignment of the text.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setTextFont">setTextFont</a></b>(font) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the font of the text to be renderer
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setTextStyle">setTextStyle</a></b>(style) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the style of the text, usually italics or normal, for the text renderer.
  
          </td>
       </tr>
@@ -385,27 +463,6 @@ Abstract class that provides the basic interface for all       text render obje
 </table>
 
 
-   <a name="getAlignment"> </a> <h3>getAlignment</h3>
-      <pre>Number&nbsp;<b>getAlignment</b>()</pre> 
-   <ul>
-      Get the alignment of the text.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   <ul>
-      <b>Returns:</b>
-      <ul>
-         <code><i>Number</i>&nbsp;</code>The alignment of the text 
-      </ul>
-   </ul>
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="getClassName"> </a> <h3>getClassName</h3>
       <pre>String&nbsp;<b>getClassName</b>()</pre> 
    <ul>
@@ -448,6 +505,27 @@ Abstract class that provides the basic interface for all       text render obje
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getSize"> </a> <h3>getSize</h3>
+      <pre>Number&nbsp;<b>getSize</b>()</pre> 
+   <ul>
+      Get the scaling of the text
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getText"> </a> <h3>getText</h3>
       <pre>String&nbsp;<b>getText</b>()</pre> 
    <ul>
@@ -463,6 +541,69 @@ Abstract class that provides the basic interface for all       text render obje
       <b>Returns:</b>
       <ul>
          <code><i>String</i>&nbsp;</code>The text this renderer will draw 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getTextAlignment"> </a> <h3>getTextAlignment</h3>
+      <pre>Object&nbsp;<b>getTextAlignment</b>()</pre> 
+   <ul>
+      Get the alignment of the text.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The alignment of the text renderer 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getTextFont"> </a> <h3>getTextFont</h3>
+      <pre>String&nbsp;<b>getTextFont</b>()</pre> 
+   <ul>
+      Get the font of the text to be rendered
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The font name 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getTextStyle"> </a> <h3>getTextStyle</h3>
+      <pre>Object&nbsp;<b>getTextStyle</b>()</pre> 
+   <ul>
+      Get the style of the text for the renderer.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The style of the text 
       </ul>
    </ul>
    
@@ -490,27 +631,6 @@ Abstract class that provides the basic interface for all       text render obje
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="setAlignment"> </a> <h3>setAlignment</h3>
-      <pre><b>setAlignment</b>(alignment)</pre> 
-   <ul>
-      Set the alignment of the text to one of the constants <a href='#ALIGN_LEFT'>ALIGN_LEFT</a>, <a href='#ALIGN_RIGHT'>ALIGN_RIGHT</a>, or	<a href='#ALIGN_CENTER'>ALIGN_CENTER</a>.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>[<i>Number</i>]&nbsp;alignment </code> - The alignment constant for the text 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="setColor"> </a> <h3>setColor</h3>
       <pre><b>setColor</b>(color)</pre> 
    <ul>
@@ -532,6 +652,27 @@ Abstract class that provides the basic interface for all       text render obje
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setSize"> </a> <h3>setSize</h3>
+      <pre><b>setSize</b>(size)</pre> 
+   <ul>
+      Set the scaling of the text
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;size </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setText"> </a> <h3>setText</h3>
       <pre><b>setText</b>(text)</pre> 
    <ul>
@@ -543,6 +684,69 @@ Abstract class that provides the basic interface for all       text render obje
       <b>Parameters:</b>
       <ul>
          <code>[<i>String</i>]&nbsp;text </code> - The text to render 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setTextAlignment"> </a> <h3>setTextAlignment</h3>
+      <pre><b>setTextAlignment</b>(alignment)</pre> 
+   <ul>
+      Set the alignment of the text.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;alignment </code> - The alignment for the text renderer 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setTextFont"> </a> <h3>setTextFont</h3>
+      <pre><b>setTextFont</b>(font)</pre> 
+   <ul>
+      Set the font of the text to be renderer
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;font </code> - The font name 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setTextStyle"> </a> <h3>setTextStyle</h3>
+      <pre><b>setTextStyle</b>(style)</pre> 
+   <ul>
+      Set the style of the text, usually italics or normal, for the text renderer.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;style </code> - The style of the text 
       </ul>
    </ul>
    
@@ -585,6 +789,6 @@ Abstract class that provides the basic interface for all       text render obje
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:01 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:36 GMT-0500 (EST)</div>
 </body>
 </html>

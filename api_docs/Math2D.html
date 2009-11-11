@@ -118,7 +118,9 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#boxBoxCollision">boxBoxCollision</a></b>(box1, box2) </code> 
@@ -130,7 +132,9 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#boxPointCollision">boxPointCollision</a></b>(box, point) </code> 
@@ -142,7 +146,9 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#degToRad">degToRad</a></b>(degrees) </code> 
@@ -154,7 +160,9 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getDirectionVector">getDirectionVector</a></b>(origin, baseVec, angle) </code> 
@@ -167,7 +175,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -181,7 +189,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Boolean
             </code></font> 
          </td>
          <td>
@@ -194,7 +202,9 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#radToDeg">radToDeg</a></b>(radians) </code> 
@@ -285,7 +295,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
 
 
    <a name="boxBoxCollision"> </a> <h3>boxBoxCollision</h3>
-      <pre><b>boxBoxCollision</b>(box1, box2)</pre> 
+      <pre>Boolean&nbsp;<b>boxBoxCollision</b>(box1, box2)</pre> 
    <ul>
       Perform AAB (axis-aligned box) to AAB collision testing, returning <tt>true</tt>if the two boxes overlap.
       
@@ -303,13 +313,18 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the rectangles overlap 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="boxPointCollision"> </a> <h3>boxPointCollision</h3>
-      <pre><b>boxPointCollision</b>(box, point)</pre> 
+      <pre>Boolean&nbsp;<b>boxPointCollision</b>(box, point)</pre> 
    <ul>
       Perform point to AAB collision, returning <code>true</code>if a collision occurs.
       
@@ -327,13 +342,18 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the point is within the rectangle 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="degToRad"> </a> <h3>degToRad</h3>
-      <pre><b>degToRad</b>(degrees)</pre> 
+      <pre>Number&nbsp;<b>degToRad</b>(degrees)</pre> 
    <ul>
       Convert degrees to radians.
       
@@ -348,13 +368,18 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The degrees value converted to radians 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getDirectionVector"> </a> <h3>getDirectionVector</h3>
-      <pre><b>getDirectionVector</b>(origin, baseVec, angle)</pre> 
+      <pre>Vector2D&nbsp;<b>getDirectionVector</b>(origin, baseVec, angle)</pre> 
    <ul>
       A static method used to calculate a direction vectorfrom a heading angle.
       
@@ -375,13 +400,18 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>The direction vector 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="lineBoxCollision"> </a> <h3>lineBoxCollision</h3>
-      <pre>&nbsp;<b>lineBoxCollision</b>(p1, p2, rect)</pre> 
+      <pre>Boolean&nbsp;<b>lineBoxCollision</b>(p1, p2, rect)</pre> 
    <ul>
       Test to see if a line intersects a Rectangle.
       
@@ -405,7 +435,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the line intersects the box 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the line intersects the box 
       </ul>
    </ul>
    
@@ -413,7 +443,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    <hr>
 
    <a name="lineLineCollision"> </a> <h3>lineLineCollision</h3>
-      <pre>&nbsp;<b>lineLineCollision</b>(p1, p2, p3, p4)</pre> 
+      <pre>Boolean&nbsp;<b>lineLineCollision</b>(p1, p2, p3, p4)</pre> 
    <ul>
       Check to see if a line intersects another
       
@@ -440,7 +470,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code><tt>true</tt> if the lines intersect 
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the lines intersect 
       </ul>
    </ul>
    
@@ -448,7 +478,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    <hr>
 
    <a name="radToDeg"> </a> <h3>radToDeg</h3>
-      <pre><b>radToDeg</b>(radians)</pre> 
+      <pre>Number&nbsp;<b>radToDeg</b>(radians)</pre> 
    <ul>
       Convert radians to degrees.
       
@@ -463,7 +493,12 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The radians value converted to degrees 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -505,6 +540,6 @@ A static class with methods and fields that are helpfulwhen dealing with two di
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:01 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:36 GMT-0500 (EST)</div>
 </body>
 </html>

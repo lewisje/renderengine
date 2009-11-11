@@ -108,24 +108,28 @@ A 2D point class with helpful methods for manipulation</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#add">add</a></b>(point) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Adds the specified point to this point.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A method that mutates this point by adding the point to it.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#addScalar">addScalar</a></b>(scalar) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add the scalar value to each component of the point
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that adds the scalar value to each component of this point.
  
          </td>
       </tr>
@@ -144,43 +148,65 @@ A 2D point class with helpful methods for manipulation</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#convolve">convolve</a></b>(point) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Multiply the components of two points together.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that multiplies the components of this point with another.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#convolveInverse">convolveInverse</a></b>(point) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Divide the components of two points.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that divides the components of this point by another.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#dist">dist</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the distance between this and another point.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#div">div</a></b>(scalar) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Divide the components of this point by a scalar value.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that divides the components of this point by a scalar value.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#equals">equals</a></b>(point) </code> 
@@ -192,7 +218,23 @@ A 2D point class with helpful methods for manipulation</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#get">get</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the elements of this point as an object with elements X and Y.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#isZero">isZero</a></b>() </code> 
@@ -204,24 +246,28 @@ A 2D point class with helpful methods for manipulation</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#mul">mul</a></b>(scalar) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Multiply the components of this point by a scalar value.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator methor that multiplies the components of this point by a scalar value.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#neg">neg</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Negate the point, inversing it's components.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that negates this point, inversing it's components.
  
          </td>
       </tr>
@@ -257,7 +303,7 @@ A 2D point class with helpful methods for manipulation</p>
          <td>
             <code> <b> <a href="#setX">setX</a></b>(x) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the X coordinate
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the X coordinate.
  
          </td>
       </tr>
@@ -269,31 +315,35 @@ A 2D point class with helpful methods for manipulation</p>
          <td>
             <code> <b> <a href="#setY">setY</a></b>(y) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the Y coordinate
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the Y coordinate.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#sub">sub</a></b>(point) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Subtract the specified point from this point.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that subtracts the specified point from this point.
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#toString">toString</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns a printable version of this object.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns a printable version of this object fixed to two decimal places.
  
          </td>
       </tr>
@@ -359,9 +409,9 @@ A 2D point class with helpful methods for manipulation</p>
 
 
    <a name="add"> </a> <h3>add</h3>
-      <pre><b>add</b>(point)</pre> 
+      <pre>Point2D&nbsp;<b>add</b>(point)</pre> 
    <ul>
-      Adds the specified point to this point.
+      A method that mutates this point by adding the point to it.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -374,15 +424,20 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="addScalar"> </a> <h3>addScalar</h3>
-      <pre><b>addScalar</b>(scalar)</pre> 
+      <pre>Point2D&nbsp;<b>addScalar</b>(scalar)</pre> 
    <ul>
-      Add the scalar value to each component of the point
+      A mutator method that adds the scalar value to each component of this point.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -395,7 +450,12 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -425,9 +485,9 @@ A 2D point class with helpful methods for manipulation</p>
    <hr>
 
    <a name="convolve"> </a> <h3>convolve</h3>
-      <pre><b>convolve</b>(point)</pre> 
+      <pre>Point2D&nbsp;<b>convolve</b>(point)</pre> 
    <ul>
-      Multiply the components of two points together.
+      A mutator method that multiplies the components of this point with another.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -440,15 +500,20 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="convolveInverse"> </a> <h3>convolveInverse</h3>
-      <pre><b>convolveInverse</b>(point)</pre> 
+      <pre>Point2D&nbsp;<b>convolveInverse</b>(point)</pre> 
    <ul>
-      Divide the components of two points.  The point cannot contain zeros for its components.
+      A mutator method that divides the components of this point by another.  The point cannot contain zeros for its components.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -461,15 +526,46 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="dist"> </a> <h3>dist</h3>
+      <pre>Number&nbsp;<b>dist</b>(point)</pre> 
+   <ul>
+      Returns the distance between this and another point.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to compare against 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The distance between the two points 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="div"> </a> <h3>div</h3>
-      <pre><b>div</b>(scalar)</pre> 
+      <pre>Point2D&nbsp;<b>div</b>(scalar)</pre> 
    <ul>
-      Divide the components of this point by a scalar value.
+      A mutator method that divides the components of this point by a scalar value.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -482,13 +578,18 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="equals"> </a> <h3>equals</h3>
-      <pre><b>equals</b>(point)</pre> 
+      <pre>Boolean&nbsp;<b>equals</b>(point)</pre> 
    <ul>
       Returns <tt>true</tt> if this point is equal to the specified point.
       
@@ -503,13 +604,39 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the two points are equal 
+      </ul>
+   </ul>
    
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="get"> </a> <h3>get</h3>
+      <pre>Object&nbsp;<b>get</b>()</pre> 
+   <ul>
+      Get the elements of this point as an object with elements X and Y.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="isZero"> </a> <h3>isZero</h3>
-      <pre><b>isZero</b>()</pre> 
+      <pre>Boolean&nbsp;<b>isZero</b>()</pre> 
    <ul>
       Returns true if the point is the zero point.
       
@@ -519,15 +646,20 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the point's elements are both zero. 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="mul"> </a> <h3>mul</h3>
-      <pre><b>mul</b>(scalar)</pre> 
+      <pre>Point2D&nbsp;<b>mul</b>(scalar)</pre> 
    <ul>
-      Multiply the components of this point by a scalar value.
+      A mutator methor that multiplies the components of this point by a scalar value.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -540,15 +672,20 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="neg"> </a> <h3>neg</h3>
-      <pre><b>neg</b>()</pre> 
+      <pre>Point2D&nbsp;<b>neg</b>()</pre> 
    <ul>
-      Negate the point, inversing it's components.
+      A mutator method that negates this point, inversing it's components.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -556,7 +693,12 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -604,7 +746,7 @@ A 2D point class with helpful methods for manipulation</p>
    <a name="setX"> </a> <h3>setX</h3>
       <pre><b>setX</b>(x)</pre> 
    <ul>
-      Set the X coordinate
+      Set the X coordinate.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -625,7 +767,7 @@ A 2D point class with helpful methods for manipulation</p>
    <a name="setY"> </a> <h3>setY</h3>
       <pre><b>setY</b>(y)</pre> 
    <ul>
-      Set the Y coordinate
+      Set the Y coordinate.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -644,9 +786,9 @@ A 2D point class with helpful methods for manipulation</p>
    <hr>
 
    <a name="sub"> </a> <h3>sub</h3>
-      <pre><b>sub</b>(point)</pre> 
+      <pre>Point2D&nbsp;<b>sub</b>(point)</pre> 
    <ul>
-      Subtract the specified point from this point.
+      A mutator method that subtracts the specified point from this point.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -659,15 +801,20 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code>This point 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="toString"> </a> <h3>toString</h3>
-      <pre><b>toString</b>()</pre> 
+      <pre>String&nbsp;<b>toString</b>()</pre> 
    <ul>
-      Returns a printable version of this object.
+      Returns a printable version of this object fixed to two decimal places.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -675,7 +822,12 @@ A 2D point class with helpful methods for manipulation</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>Formatted as "x,y" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -691,6 +843,6 @@ A 2D point class with helpful methods for manipulation</p>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:03 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:39 GMT-0500 (EST)</div>
 </body>
 </html>

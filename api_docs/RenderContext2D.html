@@ -179,9 +179,33 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#drawCircle">drawCircle</a></b>(point, radius) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Helper method to draw a circle by calling the <a href='#drawArc'>drawArc</a> methodwith predefined start and end angle of zero and 6.28 radians.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#drawFilledArc">drawFilledArc</a></b>(point, radius, startAngle, endAngle) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a filled arc on the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#drawFilledCircle">drawFilledCircle</a></b>(point, radius) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Helper method to draw a filled circle by calling the <a href='#drawFilledArc'>drawFilledArc</a> methodwith predefined start and end angle of zero and 6.28 radians.
  
          </td>
       </tr>
@@ -215,7 +239,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawImage">drawImage</a></b>(rect, image) </code> 
+            <code> <b> <a href="#drawImage">drawImage</a></b>(obj, rect, image, srcRect) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an image on the context.
  
@@ -287,7 +311,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawSprite">drawSprite</a></b>(point, imageData) </code> 
+            <code> <b> <a href="#drawSprite">drawSprite</a></b>(obj, sprite, time) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a sprite on the context.
  
@@ -368,6 +392,90 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFont">getFont</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the font currently being used to render text
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFontAlign">getFontAlign</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the alignment of the font
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFontBaseline">getFontBaseline</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the font baseline
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFontSize">getFontSize</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the font size
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFontStyle">getFontStyle</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the renderable style of the font
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getFontWeight">getFontWeight</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the weight of the font to be rendered to the context
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
@@ -412,6 +520,20 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <code> <b> <a href="#getLineWidth">getLineWidth</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the current line width for drawing paths.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getNormalizedFont">getNormalizedFont</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the normalized font string used to describe the style.
  
          </td>
       </tr>
@@ -604,6 +726,78 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <code> <b> <a href="#setFillStyle">setFillStyle</a></b>(fillStyle) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the fill style of the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setFont">setFont</a></b>(font) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the font to use when rendering text to the context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setFontAlign">setFontAlign</a></b>(align) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the font alignment for the context
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setFontBaseline">setFontBaseline</a></b>(baseline) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the baseline of the renderable font
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setFontSize">setFontSize</a></b>(size) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the size of the font being used to render text
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setFontStyle">setFontStyle</a></b>(style) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the style of the renderable font
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setFontWeight">setFontWeight</a></b>(weight) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the rendering weight of the font
  
          </td>
       </tr>
@@ -807,10 +1001,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             
                <a href="RenderContext.html#getNearObjects">getNearObjects</a>,
             
-               <a href="RenderContext.html#sortFn">sortFn</a>,
-            
-               <a href="RenderContext.html#getClassName">getClassName</a>,
-            
          </code></td>
       </tr>
       
@@ -837,6 +1027,12 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             
                <a href="Container.html#size">size</a>,
             
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
+            
                <a href="Container.html#remove">remove</a>,
             
                <a href="Container.html#removeAtIndex">removeAtIndex</a>,
@@ -853,6 +1049,8 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             
                <a href="Container.html#toString">toString</a>,
             
+               <a href="Container.html#getClassName">getClassName</a>,
+            
          </code></td>
       </tr>
       
@@ -867,6 +1065,8 @@ All 2D contexts should extend from this to inherit themethods which abstract th
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
             
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
@@ -1035,6 +1235,30 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="drawCircle"> </a> <h3>drawCircle</h3>
+      <pre><b>drawCircle</b>(point, radius)</pre> 
+   <ul>
+      Helper method to draw a circle by calling the <a href='#drawArc'>drawArc</a> methodwith predefined start and end angle of zero and 6.28 radians.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point around which the circle will be drawn 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;radius </code> - The radius of the circle in pixels 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="drawFilledArc"> </a> <h3>drawFilledArc</h3>
       <pre><b>drawFilledArc</b>(point, radius, startAngle, endAngle)</pre> 
    <ul>
@@ -1055,6 +1279,30 @@ All 2D contexts should extend from this to inherit themethods which abstract th
       </ul>
       <ul>
          <code>[<i>Number</i>]&nbsp;endAngle </code> - The end angle of the arc in degrees 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="drawFilledCircle"> </a> <h3>drawFilledCircle</h3>
+      <pre><b>drawFilledCircle</b>(point, radius)</pre> 
+   <ul>
+      Helper method to draw a filled circle by calling the <a href='#drawFilledArc'>drawFilledArc</a> methodwith predefined start and end angle of zero and 6.28 radians.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point around which the circle will be drawn 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;radius </code> - The radius of the circle in pixels 
       </ul>
    </ul>
    
@@ -1108,7 +1356,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <hr>
 
    <a name="drawImage"> </a> <h3>drawImage</h3>
-      <pre><b>drawImage</b>(rect, image)</pre> 
+      <pre><b>drawImage</b>(obj, rect, image, srcRect)</pre> 
    <ul>
       Draw an image on the context.
       
@@ -1117,10 +1365,16 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <ul>
       <b>Parameters:</b>
       <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
+      </ul>
+      <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that specifies the position and            dimensions of the image rectangle. 
       </ul>
       <ul>
          <code>[<i>Object</i>]&nbsp;image </code> - The image to draw onto the context 
+      </ul>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;srcRect </code> - <i>[optional]</i> The source rectangle within the image, if               <tt>null</tt> the entire image is used 
       </ul>
    </ul>
    
@@ -1240,7 +1494,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <hr>
 
    <a name="drawSprite"> </a> <h3>drawSprite</h3>
-      <pre><b>drawSprite</b>(point, imageData)</pre> 
+      <pre><b>drawSprite</b>(obj, sprite, time)</pre> 
    <ul>
       Draw a sprite on the context.
       
@@ -1249,10 +1503,13 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Point2D</i>]&nbsp;point </code> - The top-left position to draw the image. 
+         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
       </ul>
       <ul>
-         <code>[<i>Image</i>]&nbsp;imageData </code> - The sprite to draw 
+         <code>[<i>Sprite</i>]&nbsp;sprite </code> - The sprite to draw 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The current world time 
       </ul>
    </ul>
    
@@ -1367,6 +1624,132 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getFont"> </a> <h3>getFont</h3>
+      <pre>String&nbsp;<b>getFont</b>()</pre> 
+   <ul>
+      Get the font currently being used to render text
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getFontAlign"> </a> <h3>getFontAlign</h3>
+      <pre>String&nbsp;<b>getFontAlign</b>()</pre> 
+   <ul>
+      Get the alignment of the font
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getFontBaseline"> </a> <h3>getFontBaseline</h3>
+      <pre>String&nbsp;<b>getFontBaseline</b>()</pre> 
+   <ul>
+      Get the font baseline
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getFontSize"> </a> <h3>getFontSize</h3>
+      <pre>String&nbsp;<b>getFontSize</b>()</pre> 
+   <ul>
+      Get the font size
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getFontStyle"> </a> <h3>getFontStyle</h3>
+      <pre>String&nbsp;<b>getFontStyle</b>()</pre> 
+   <ul>
+      Get the renderable style of the font
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getFontWeight"> </a> <h3>getFontWeight</h3>
+      <pre>String&nbsp;<b>getFontWeight</b>()</pre> 
+   <ul>
+      Get the weight of the font to be rendered to the context
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getHeight"> </a> <h3>getHeight</h3>
       <pre><b>getHeight</b>()</pre> 
    <ul>
@@ -1437,6 +1820,27 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
    
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getNormalizedFont"> </a> <h3>getNormalizedFont</h3>
+      <pre>String&nbsp;<b>getNormalizedFont</b>()</pre> 
+   <ul>
+      Get the normalized font string used to describe the style. Thevalue includes style, weight, size, and font.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -1738,6 +2142,132 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setFont"> </a> <h3>setFont</h3>
+      <pre><b>setFont</b>(font)</pre> 
+   <ul>
+      Set the font to use when rendering text to the context.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;font </code> - A font string similar to CSS 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setFontAlign"> </a> <h3>setFontAlign</h3>
+      <pre><b>setFontAlign</b>(align)</pre> 
+   <ul>
+      Set the font alignment for the context
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;align </code> - The font alignment 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setFontBaseline"> </a> <h3>setFontBaseline</h3>
+      <pre><b>setFontBaseline</b>(baseline)</pre> 
+   <ul>
+      Set the baseline of the renderable font
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;baseline </code> - The render baseline 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setFontSize"> </a> <h3>setFontSize</h3>
+      <pre><b>setFontSize</b>(size)</pre> 
+   <ul>
+      Set the size of the font being used to render text
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;size </code> - The font size string 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setFontStyle"> </a> <h3>setFontStyle</h3>
+      <pre><b>setFontStyle</b>(style)</pre> 
+   <ul>
+      Set the style of the renderable font
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;style </code> - The font style 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setFontWeight"> </a> <h3>setFontWeight</h3>
+      <pre><b>setFontWeight</b>(weight)</pre> 
+   <ul>
+      Set the rendering weight of the font
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;weight </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setHeight"> </a> <h3>setHeight</h3>
       <pre><b>setHeight</b>(height)</pre> 
    <ul>
@@ -1979,6 +2509,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:02 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:39 GMT-0500 (EST)</div>
 </body>
 </html>

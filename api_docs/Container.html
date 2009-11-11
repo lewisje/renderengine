@@ -99,7 +99,7 @@ A container is a logical collection of objects.  A container       is responsib
       <td>
    
       <code>
-      <b><a href="#Container">Container</a></b>(The)
+      <b><a href="#Container">Container</a></b>()
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -163,18 +163,6 @@ A container is a logical collection of objects.  A container       is responsib
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(containerName) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
             <code> <b> <a href="#destroy">destroy</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Destroy all objects contained within this object.
@@ -184,7 +172,9 @@ A container is a logical collection of objects.  A container       is responsib
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#get">get</a></b>(idx) </code> 
@@ -196,7 +186,23 @@ A container is a logical collection of objects.  A container       is responsib
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Array
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getObjects">getObjects</a></b>(filterFn) </code> 
@@ -208,12 +214,26 @@ A container is a logical collection of objects.  A container       is responsib
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getProperties">getProperties</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns a property object with accessor methods.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#insert">insert</a></b>(index, obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Insert an object into the container at the given index.
  
          </td>
       </tr>
@@ -245,7 +265,7 @@ A container is a logical collection of objects.  A container       is responsib
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;Object
             </code></font> 
          </td>
          <td>
@@ -259,6 +279,34 @@ A container is a logical collection of objects.  A container       is responsib
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#replace">replace</a></b>(oldObj, newObj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Replaces the given object with the new object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#replaceAt">replaceAt</a></b>(index, obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Replaces the object at the given index, returning the object that was therepreviously.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#size">size</a></b>() </code> 
@@ -282,7 +330,9 @@ A container is a logical collection of objects.  A container       is responsib
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#toString">toString</a></b>(indent) </code> 
@@ -316,6 +366,8 @@ A container is a logical collection of objects.  A container       is responsib
                <a href="BaseObject.html#setElement">setElement</a>,
             
                <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
             
                <a href="BaseObject.html#update">update</a>,
             
@@ -365,21 +417,12 @@ A container is a logical collection of objects.  A container       is responsib
 <a name="Container"> </a>
 <h3>Container</h3>
 
-   <pre><b>Container</b>(The)</pre>
+   <pre><b>Container</b>()</pre>
    <ul>
       
    </ul>
    
    <!-- PARAMETERS START -->
-   
-   <ul>
-      <b>Parameters:</b>
-      
-      <ul>
-         <code>[<i>String</i>]&nbsp;The</code> - name of the container. Default: Container 
-      </ul>
-      
-   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -410,7 +453,7 @@ A container is a logical collection of objects.  A container       is responsib
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object to add to the container. 
+         <code>[<i>Object</i>]&nbsp;obj </code> - The object to add to the container. 
       </ul>
    </ul>
    
@@ -453,27 +496,6 @@ A container is a logical collection of objects.  A container       is responsib
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(containerName)</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>containerName </code> 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="destroy"> </a> <h3>destroy</h3>
       <pre><b>destroy</b>()</pre> 
    <ul>
@@ -491,7 +513,7 @@ A container is a logical collection of objects.  A container       is responsib
    <hr>
 
    <a name="get"> </a> <h3>get</h3>
-      <pre><b>get</b>(idx)</pre> 
+      <pre>Object&nbsp;<b>get</b>(idx)</pre> 
    <ul>
       Get the object at the index specified. If the container has beensorted, objects might not be in the position you'd expect.
       
@@ -506,13 +528,44 @@ A container is a logical collection of objects.  A container       is responsib
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The object at the index within the container 
+      </ul>
+   </ul>
+   <ul>
+      <b>Throws:</b>
+      <ul>
+         <code>Error</code> Index out of bounds if the index is out of the list of objects 
+      </ul>
+   </ul>
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
    
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "Container" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getObjects"> </a> <h3>getObjects</h3>
-      <pre><b>getObjects</b>(filterFn)</pre> 
+      <pre>Array&nbsp;<b>getObjects</b>(filterFn)</pre> 
    <ul>
       Get the array of all objects within this container.  If a filteringfunction is provided, only objects matching the filter will bereturned from the object collection.<p/>The filter function needs to return <tt>true</tt> for each elementthat should be contained in the filtered set.  The function will bepassed the following arguments:<ul><li>element - The array element being operated upon</li><li>index - The index of the element in the array</li><li>array - The entire array of elements in the container</li></ul>Say you wanted to filter a host objects components based on aparticular type.  You might do something like the following:<pre>var logicComponents = host.getObjects(function(el, idx) {   if (el.getType() == BaseComponent.TYPE_LOGIC) {      return true;   }});</pre>
       
@@ -527,19 +580,53 @@ A container is a logical collection of objects.  A container       is responsib
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Array</i>&nbsp;</code>The array of filtered objects 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getProperties"> </a> <h3>getProperties</h3>
-      <pre><b>getProperties</b>()</pre> 
+      <pre>Object&nbsp;<b>getProperties</b>()</pre> 
    <ul>
       Returns a property object with accessor methods.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The properties object 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="insert"> </a> <h3>insert</h3>
+      <pre><b>insert</b>(index, obj)</pre> 
+   <ul>
+      Insert an object into the container at the given index. Asserts if theindex is out of bounds for the container.  The index must be greater thanor equal to zero, and less than or equal to the size of the container minus one.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;index </code> - The index to insert the object at. 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - The object to insert into the container 
+      </ul>
+   </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -574,7 +661,7 @@ A container is a logical collection of objects.  A container       is responsib
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object to remove from the container. 
+         <code>[<i>Object</i>]&nbsp;obj </code> - The object to remove from the container. 
       </ul>
    </ul>
    
@@ -586,7 +673,7 @@ A container is a logical collection of objects.  A container       is responsib
    <hr>
 
    <a name="removeAtIndex"> </a> <h3>removeAtIndex</h3>
-      <pre>&nbsp;<b>removeAtIndex</b>(idx)</pre> 
+      <pre>Object&nbsp;<b>removeAtIndex</b>(idx)</pre> 
    <ul>
       Remove an object from the container at the specified index.The object is not destroyed when it is removed.
       
@@ -604,7 +691,60 @@ A container is a logical collection of objects.  A container       is responsib
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>The object removed from the container. 
+         <code><i>Object</i>&nbsp;</code>The object removed from the container. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="replace"> </a> <h3>replace</h3>
+      <pre><b>replace</b>(oldObj, newObj)</pre> 
+   <ul>
+      Replaces the given object with the new object.  If the old object isnot found, no action is performed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;oldObj </code> - The object to replace 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;newObj </code> - The object to put in place 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="replaceAt"> </a> <h3>replaceAt</h3>
+      <pre>Object&nbsp;<b>replaceAt</b>(index, obj)</pre> 
+   <ul>
+      Replaces the object at the given index, returning the object that was therepreviously. Asserts if the index is out of bounds for the container.  The index must be greater than or equal to zero, and less than or equal to the size of the container minus one.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;index </code> - The index at which to replace the object 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - The object to put in place 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The object which was replaced 
       </ul>
    </ul>
    
@@ -612,7 +752,7 @@ A container is a logical collection of objects.  A container       is responsib
    <hr>
 
    <a name="size"> </a> <h3>size</h3>
-      <pre><b>size</b>()</pre> 
+      <pre>Number&nbsp;<b>size</b>()</pre> 
    <ul>
       Returns the count of the number of objects within thecontainer.
       
@@ -622,7 +762,12 @@ A container is a logical collection of objects.  A container       is responsib
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The number of objects in the container 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -649,7 +794,7 @@ A container is a logical collection of objects.  A container       is responsib
    <hr>
 
    <a name="toString"> </a> <h3>toString</h3>
-      <pre><b>toString</b>(indent)</pre> 
+      <pre>String&nbsp;<b>toString</b>(indent)</pre> 
    <ul>
       Serializes a container to XML.
       
@@ -664,7 +809,12 @@ A container is a logical collection of objects.  A container       is responsib
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The XML string 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -680,6 +830,6 @@ A container is a logical collection of objects.  A container       is responsib
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:25:01 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:37 GMT-0500 (EST)</div>
 </body>
 </html>

@@ -58,6 +58,16 @@ A timer that wraps the <tt>window.setInterval</tt> method.
    
       <tr class="TableRowColor">
          <td>
+            <a href="MultiTimeout.html" target="main">MultiTimeout</a>
+         </td>
+         <td>
+            
+A timer that will repeat the specified number of times before       destroying itself.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
             <a href="OneShotTimeout.html" target="main">OneShotTimeout</a>
          </td>
          <td>
@@ -72,7 +82,7 @@ A one-shot timer that cannot be restarted and will       self-destroy after it 
          </td>
          <td>
             
-A one-shot timer that triggers a callback, at regular intervals,			 until the timer has expired.
+A one-shot timer that triggers a callback, at regular intervals,       until the timer has expired.
          </td>
       </tr>
    
@@ -114,7 +124,7 @@ The base abstract class for all timers.
 <span class='linenumber'>  6</span>  *
 <span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  8</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  9</span>  * @version: $Revision: 421 $
+<span class='linenumber'>  9</span>  * @version: $Revision: 697 $
 <span class='linenumber'> 10</span>  *
 <span class='linenumber'> 11</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 12</span>  *
@@ -203,7 +213,7 @@ The base abstract class for all timers.
 <span class='linenumber'> 95</span> 
 <span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'> 97</span>     * Returns &lt;tt>true&lt;/tt> if the timer is currently running.
-<span class='linenumber'> 98</span>     * @type Boolean
+<span class='linenumber'> 98</span>     * @return {Boolean} &lt;tt>true&lt;/tt> if the timer is running
 <span class='linenumber'> 99</span>     */</span><span class="WHIT">
 <span class='linenumber'>100</span> </span><span class="WHIT">   </span><span class="NAME">isRunning</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>101</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.running</span><span class="PUNC">;</span><span class="WHIT">
@@ -242,7 +252,7 @@ The base abstract class for all timers.
 <span class='linenumber'>134</span> 
 <span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>136</span>     * Get the callback function for this timer.
-<span class='linenumber'>137</span>     * @type Function
+<span class='linenumber'>137</span>     * @return {Function} The callback function
 <span class='linenumber'>138</span>     */</span><span class="WHIT">
 <span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="NAME">getCallback</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>140</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.callback</span><span class="PUNC">;</span><span class="WHIT">
@@ -261,15 +271,15 @@ The base abstract class for all timers.
 <span class='linenumber'>153</span> 
 <span class='linenumber'>154</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>155</span>     * Get the interval of this timer, in milliseconds.
-<span class='linenumber'>156</span>     * @type Number
+<span class='linenumber'>156</span>     * @return {Number} The interval
 <span class='linenumber'>157</span>     */</span><span class="WHIT">
 <span class='linenumber'>158</span> </span><span class="WHIT">   </span><span class="NAME">getInterval</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>159</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.interval</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>160</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>161</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>161</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope Timer.prototype */</span><span class="WHIT">
 <span class='linenumber'>162</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>163</span>     * Get the class name of this object
-<span class='linenumber'>164</span>     * @type String
+<span class='linenumber'>164</span>     * @return {String} "Timer"
 <span class='linenumber'>165</span>     */</span><span class="WHIT">
 <span class='linenumber'>166</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>167</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Timer"</span><span class="PUNC">;</span><span class="WHIT">
@@ -307,10 +317,10 @@ The base abstract class for all timers.
 <span class='linenumber'>199</span> </span><span class="WHIT">   </span><span class="NAME">restart</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>200</span> </span><span class="WHIT">      </span><span class="NAME">this.setTimer</span><span class="PUNC">(</span><span class="NAME">window.setTimeout</span><span class="PUNC">(</span><span class="NAME">this.getCallback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getInterval</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>201</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>202</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>202</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope Timeout.prototype */</span><span class="WHIT">
 <span class='linenumber'>203</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>204</span>     * Get the class name of this object
-<span class='linenumber'>205</span>     * @type String
+<span class='linenumber'>205</span>     * @return {String} "Timeout"
 <span class='linenumber'>206</span>     */</span><span class="WHIT">
 <span class='linenumber'>207</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>208</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Timeout"</span><span class="PUNC">;</span><span class="WHIT">
@@ -336,7 +346,7 @@ The base abstract class for all timers.
 <span class='linenumber'>228</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">interval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>229</span> 
 <span class='linenumber'>230</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>231</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">arguments.callee</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>231</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">arguments.callee</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>232</span> </span><span class="WHIT">         </span><span class="NAME">aC.timer.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>233</span> </span><span class="WHIT">         </span><span class="NAME">aC.cbFn</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>234</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
@@ -358,11 +368,11 @@ The base abstract class for all timers.
 <span class='linenumber'>250</span> 
 <span class='linenumber'>251</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>252</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>253</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>253</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope OneShotTimeout.prototype */</span><span class="WHIT">
 <span class='linenumber'>254</span> 
 <span class='linenumber'>255</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>256</span>     * Get the class name of this object
-<span class='linenumber'>257</span>     * @type String
+<span class='linenumber'>257</span>     * @return {String} "OneShotTimeout"
 <span class='linenumber'>258</span>     */</span><span class="WHIT">
 <span class='linenumber'>259</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>260</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"OneShotTimeout"</span><span class="PUNC">;</span><span class="WHIT">
@@ -377,8 +387,8 @@ The base abstract class for all timers.
 <span class='linenumber'>269</span> 
 <span class='linenumber'>270</span> </span><span class="COMM">/**
 <span class='linenumber'>271</span>  * @class A one-shot timer that triggers a callback, at regular intervals,
-<span class='linenumber'>272</span>  *			 until the timer has expired.  When the timer expires, the trigger
-<span class='linenumber'>273</span>  *			 will automatically destroy itself.
+<span class='linenumber'>272</span>  *        until the timer has expired.  When the timer expires, the trigger
+<span class='linenumber'>273</span>  *        will automatically destroy itself.
 <span class='linenumber'>274</span>  *
 <span class='linenumber'>275</span>  * @param name {String} The name of the timer
 <span class='linenumber'>276</span>  * @param interval {Number} The interval for the timer, in milliseconds
@@ -389,22 +399,22 @@ The base abstract class for all timers.
 <span class='linenumber'>281</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">OneShotTrigger</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">OneShotTimeout.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope OneShotTimeout.prototype */</span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>282</span> 
 <span class='linenumber'>283</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">interval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">triggerInterval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">triggerCallback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>284</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">doneFn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>285</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">arguments.callee</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>286</span> </span><span class="WHIT">			</span><span class="NAME">aC.intv.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>287</span> </span><span class="WHIT">			</span><span class="NAME">aC.cb</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>288</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>289</span> </span><span class="WHIT">		</span><span class="COMM">// Create an Interval internally</span><span class="WHIT">
-<span class='linenumber'>290</span> </span><span class="WHIT">		</span><span class="NAME">doneFn.intv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Interval.create</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"_trigger"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">triggerInterval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">triggerCallback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>291</span> </span><span class="WHIT">		</span><span class="NAME">doneFn.cb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>284</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">doneFn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>285</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">arguments.callee</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>286</span> </span><span class="WHIT">         </span><span class="NAME">aC.intv.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>287</span> </span><span class="WHIT">         </span><span class="NAME">aC.cb</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>288</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>289</span> </span><span class="WHIT">      </span><span class="COMM">// Create an Interval internally</span><span class="WHIT">
+<span class='linenumber'>290</span> </span><span class="WHIT">      </span><span class="NAME">doneFn.intv</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Interval.create</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"_trigger"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">triggerInterval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">triggerCallback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>291</span> </span><span class="WHIT">      </span><span class="NAME">doneFn.cb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>292</span> 
 <span class='linenumber'>293</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">interval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">doneFn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>294</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>295</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>295</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope OneShotTrigger.prototype */</span><span class="WHIT">
 <span class='linenumber'>296</span> 
 <span class='linenumber'>297</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>298</span>     * Get the class name of this object
-<span class='linenumber'>299</span>     * @type String
+<span class='linenumber'>299</span>     * @return {String} "OneShotTrigger"
 <span class='linenumber'>300</span>     */</span><span class="WHIT">
 <span class='linenumber'>301</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>302</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"OneShotTrigger"</span><span class="PUNC">;</span><span class="WHIT">
@@ -415,52 +425,97 @@ The base abstract class for all timers.
 <span class='linenumber'>307</span> 
 <span class='linenumber'>308</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>309</span> 
-<span class='linenumber'>310</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"Interval"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Timer"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>310</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"MultiTimeout"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Timeout"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>311</span> 
 <span class='linenumber'>312</span> </span><span class="COMM">/**
-<span class='linenumber'>313</span>  * @class A timer that wraps the &lt;tt>window.setInterval&lt;/tt> method.
-<span class='linenumber'>314</span>  * @extends Timer
-<span class='linenumber'>315</span>  */</span><span class="WHIT">
-<span class='linenumber'>316</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Interval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Timer.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Interval.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>317</span> 
-<span class='linenumber'>318</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>319</span>     * Cancel this interval timer.
-<span class='linenumber'>320</span>     */</span><span class="WHIT">
-<span class='linenumber'>321</span> </span><span class="WHIT">   </span><span class="NAME">cancel</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>322</span> </span><span class="WHIT">      </span><span class="NAME">window.clearInterval</span><span class="PUNC">(</span><span class="NAME">this.getTimer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>323</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>324</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>325</span> 
-<span class='linenumber'>326</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>327</span> </span><span class="WHIT">      </span><span class="NAME">this.cancel</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>328</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>329</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>330</span> 
-<span class='linenumber'>331</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>332</span>     * Restart this interval timer.
-<span class='linenumber'>333</span>     */</span><span class="WHIT">
-<span class='linenumber'>334</span> </span><span class="WHIT">   </span><span class="NAME">restart</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>335</span> </span><span class="WHIT">      </span><span class="NAME">this.setTimer</span><span class="PUNC">(</span><span class="NAME">window.setInterval</span><span class="PUNC">(</span><span class="NAME">this.getCallback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getInterval</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>336</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>337</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>338</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>339</span>     * Get the class name of this object
-<span class='linenumber'>340</span>     * @type String
-<span class='linenumber'>341</span>     */</span><span class="WHIT">
-<span class='linenumber'>342</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>343</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Interval"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>344</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>345</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>346</span> 
-<span class='linenumber'>347</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Interval</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>348</span> 
-<span class='linenumber'>349</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>350</span> 
-<span class='linenumber'>351</span> </span></pre>
+<span class='linenumber'>313</span>  * @class A timer that will repeat the specified number of times before
+<span class='linenumber'>314</span>  *        destroying itself.  The callback will be triggered with the
+<span class='linenumber'>315</span>  *        repetition number as the only argument.
+<span class='linenumber'>316</span>  *
+<span class='linenumber'>317</span>  * @extends Timeout
+<span class='linenumber'>318</span>  */</span><span class="WHIT">
+<span class='linenumber'>319</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">MultiTimeout</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Timeout.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope MultiTimeout.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>320</span> 
+<span class='linenumber'>321</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">reps</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">interval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>322</span> 
+<span class='linenumber'>323</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">cb</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>324</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">aC</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">arguments.callee</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>325</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">aC.reps</span><span class="PUNC">--</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>326</span> </span><span class="WHIT">            </span><span class="NAME">aC.cbFn</span><span class="PUNC">(</span><span class="NAME">aC.reps</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>327</span> </span><span class="WHIT">            </span><span class="NAME">aC.timer.restart</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>328</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>329</span> </span><span class="WHIT">            </span><span class="NAME">aC.timer.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>330</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>331</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>332</span> </span><span class="WHIT">      </span><span class="NAME">cb.cbFn</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>333</span> </span><span class="WHIT">      </span><span class="NAME">cb.timer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>334</span> </span><span class="WHIT">      </span><span class="NAME">cb.reps</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">reps</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>335</span> 
+<span class='linenumber'>336</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">interval</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>337</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>338</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>339</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope MultiTimeout.prototype */</span><span class="WHIT">
+<span class='linenumber'>340</span> 
+<span class='linenumber'>341</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>342</span>     * Get the class name of this object
+<span class='linenumber'>343</span>     * @return {String} "MultiTimeout"
+<span class='linenumber'>344</span>     */</span><span class="WHIT">
+<span class='linenumber'>345</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>346</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"MultiTimeout"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>347</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>348</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>349</span> 
+<span class='linenumber'>350</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">MultiTimeout</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>351</span> 
+<span class='linenumber'>352</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>353</span> 
+<span class='linenumber'>354</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"Interval"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Timer"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>355</span> 
+<span class='linenumber'>356</span> </span><span class="COMM">/**
+<span class='linenumber'>357</span>  * @class A timer that wraps the &lt;tt>window.setInterval&lt;/tt> method.
+<span class='linenumber'>358</span>  * @extends Timer
+<span class='linenumber'>359</span>  */</span><span class="WHIT">
+<span class='linenumber'>360</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Interval</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Timer.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Interval.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>361</span> 
+<span class='linenumber'>362</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>363</span>     * Cancel this interval timer.
+<span class='linenumber'>364</span>     */</span><span class="WHIT">
+<span class='linenumber'>365</span> </span><span class="WHIT">   </span><span class="NAME">cancel</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>366</span> </span><span class="WHIT">      </span><span class="NAME">window.clearInterval</span><span class="PUNC">(</span><span class="NAME">this.getTimer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>367</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>368</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>369</span> 
+<span class='linenumber'>370</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>371</span> </span><span class="WHIT">      </span><span class="NAME">this.cancel</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>372</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>373</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>374</span> 
+<span class='linenumber'>375</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>376</span>     * Restart this interval timer.
+<span class='linenumber'>377</span>     */</span><span class="WHIT">
+<span class='linenumber'>378</span> </span><span class="WHIT">   </span><span class="NAME">restart</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>379</span> </span><span class="WHIT">      </span><span class="NAME">this.setTimer</span><span class="PUNC">(</span><span class="NAME">window.setInterval</span><span class="PUNC">(</span><span class="NAME">this.getCallback</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getInterval</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>380</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>381</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope Interval.prototype */</span><span class="WHIT">
+<span class='linenumber'>382</span> 
+<span class='linenumber'>383</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>384</span>     * Get the class name of this object
+<span class='linenumber'>385</span>     * @return {String} "Interval"
+<span class='linenumber'>386</span>     */</span><span class="WHIT">
+<span class='linenumber'>387</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>388</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Interval"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>389</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>390</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>391</span> 
+<span class='linenumber'>392</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Interval</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>393</span> 
+<span class='linenumber'>394</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>395</span> 
+<span class='linenumber'>396</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Jan 11 2009 15:24:56 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Tue Nov 10 2009 19:32:29 GMT-0500 (EST)</div>
 </body>
 </html>
