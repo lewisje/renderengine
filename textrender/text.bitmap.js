@@ -38,7 +38,9 @@ Engine.include("/textrender/text.abstractrender.js");
 Engine.initObject("BitmapText", "AbstractTextRenderer", function() {
 
 /**
- * @class A text renderer which draws text from a bitmap font file.
+ * @class A text renderer which draws text from a bitmap font file.  This type of text
+ * 		 renderer is only supported by the {@link CanvasContext}.  For an {@link HTMLElementContext}
+ * 		 or a derivative, use the {@link ContextText} renderer.
  *
  * @constructor
  * @param font {Font} A resource obtained by calling {@link FontResourceLoader#get}
@@ -133,7 +135,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 
       var text = this.getText();
       var lCount = text.length;
-      var align = this.getAlignment();
+      var align = this.getTextAlignment();
       var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
       var kern = (align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.kerning : this.font.info.kerning);
       var space = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.space : this.font.info.space), 0);
@@ -148,7 +150,10 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
       lCount = text.length;
 
-      renderContext.get2DContext().globalCompositeOperation = "source-over";
+		if (renderContext.get2DContext) {
+	      renderContext.get2DContext().globalCompositeOperation = "source-over";
+		}
+
       while (lCount-- > 0)
       {
          var glyph = text.charCodeAt(letter) - 32;
@@ -163,7 +168,9 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
             cS = this.font.info.letters[glyph - 1];
             cW = this.font.info.letters[glyph] - cS;
             //debugger;
-            renderContext.get2DContext().drawImage(this.font.image, cS, 0, cW, cH, pc.x, pc.y, cW, cH);
+				var sRect = Rectangle2D.create(cS, 0, cW, cH);
+				var rect = Rectangle2D.create(pc.x, pc.y, cW, cH);
+            renderContext.drawImage(null, rect, this.font.image, sRect);
             pc.add(new Point2D(cW, 0).mul(kern));
          }
 
@@ -171,35 +178,37 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       }
 
       // 2nd pass: The color
-      renderContext.get2DContext().globalCompositeOperation = "source-atop";
-      lCount = text.length;
-      pc = new Point2D(0,0);
-      letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
-      while (lCount-- > 0)
-      {
-         var glyph = text.charCodeAt(letter) - 32;
-         if (glyph == 0)
-         {
-            // A space
-            pc.add(space);
-         }
-         else
-         {
-            // Draw a box the color we want and the size of the character
-            cS = this.font.info.letters[glyph - 1];
-            cW = this.font.info.letters[glyph] - cS;
-            var r = new Rectangle2D(pc.x, pc.y, cW, cH);
-            renderContext.setFillStyle(this.getColor());
-            renderContext.drawFilledRectangle(r);
-            pc.add(new Point2D(cW, 0).mul(kern));
-         }
-
-         letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
-      }
-
-
-      // Reset the composition operation
-      renderContext.get2DContext().globalCompositeOperation = "source-over";
+		if (renderContext.get2DContext) {
+	      renderContext.get2DContext().globalCompositeOperation = "source-atop";
+	      lCount = text.length;
+	      pc = new Point2D(0,0);
+	      letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
+	      while (lCount-- > 0)
+	      {
+	         var glyph = text.charCodeAt(letter) - 32;
+	         if (glyph == 0)
+	         {
+	            // A space
+	            pc.add(space);
+	         }
+	         else
+	         {
+	            // Draw a box the color we want and the size of the character
+	            cS = this.font.info.letters[glyph - 1];
+	            cW = this.font.info.letters[glyph] - cS;
+	            var r = new Rectangle2D(pc.x, pc.y, cW, cH);
+	            renderContext.setFillStyle(this.getColor());
+	            renderContext.drawFilledRectangle(r);
+	            pc.add(new Point2D(cW, 0).mul(kern));
+	         }
+	
+	         letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
+	      }
+	
+	
+	      // Reset the composition operation
+	      renderContext.get2DContext().globalCompositeOperation = "source-over";
+		}
    }
 }, /** @scope BitmapText.prototype */{
    /**

@@ -46,32 +46,25 @@ Engine.initObject("RenderContext2D", "RenderContext", function() {
 var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype */{
 
    width: 0,
-
    height: 0,
-
    lineStyle: null,
-
    fillStyle: null,
-
    lineWidth: 1,
-
    position: null,
-
    rotation: 0,
-
    scaleX: 1,
-
    scaleY: 1,
-
    wPosition: null,
-
    wRotation: 0,
-
    wScale: null,
-
    bBox: null,
-
    backgroundColor: null,
+	font: "sans-serif",
+	fontWeight: "normal",
+	fontSize: "12px",
+	fontAlign: "left",
+	fontBaseline: "alphabetic",
+	fontStyle: "normal",
 
    constructor: function(name, surface) {
       this.base(name || "RenderContext2D", surface);
@@ -96,6 +89,12 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
       this.wPosition = null;
       this.wRotation = 0;
       this.wScale = null;
+		this.font = "sans-serif";
+		this.fontWeight = "normal";
+		this.fontSize = "12px";
+		this.fontAlign = "left";
+		this.fontBaseline = "alphabetic";
+		this.fontStyle = "normal";
    },
 
    /**
@@ -221,6 +220,111 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    getScaleY: function() {
       return this.scaleY;
    },
+
+	/**
+	 * Set the font to use when rendering text to the context.
+	 * @param font {String} A font string similar to CSS
+	 */
+	setFont: function(font) {
+		this.font = font;
+	},
+	
+	/**
+	 * Get the font currently being used to render text
+	 * @return {String}
+	 */
+	getFont: function() {
+		return this.font;
+	},
+	
+	/**
+	 * Get the normalized font string used to describe the style. The
+	 * value includes style, weight, size, and font.
+	 * @return {String}
+	 */
+	getNormalizedFont: function() {
+		return this.getFontStyle() + " " + this.getFontWeight() + " " + this.getFontSize() + " " + this.getFont();
+	},
+	
+	/**
+	 * Set the size of the font being used to render text
+	 * @param size {String} The font size string
+	 */
+	setFontSize: function(size) {
+		this.fontSize = size;	
+	},
+	
+	/**
+	 * Get the font size
+	 * @return {String}
+	 */
+	getFontSize: function() {
+		return this.fontSize;
+	},
+	
+	/**
+	 * Set the rendering weight of the font
+	 * @param weight {String}
+	 */
+	setFontWeight: function(weight) {
+		this.fontWeight = weight;	
+	},
+	
+	/**
+	 * Get the weight of the font to be rendered to the context
+	 * @return {String}
+	 */
+	getFontWeight: function() {
+		return this.fontWeight;
+	},
+	
+	/**
+	 * Set the font alignment for the context
+	 * @param align {String} The font alignment
+	 */
+	setFontAlign: function(align) {
+		this.fontAlign = align;
+	},
+	
+	/**
+	 * Get the alignment of the font
+	 * @return {String}
+	 */
+	getFontAlign: function() {
+		return this.fontAlign;
+	},
+	
+	/**
+	 * Set the baseline of the renderable font
+	 * @param baseline {String} The render baseline
+	 */
+	setFontBaseline: function(baseline) {
+		this.fontBaseline = baseline;
+	},
+	
+	/**
+	 * Get the font baseline
+	 * @return {String}
+	 */
+	getFontBaseline: function() {
+		return this.fontBaseline;
+	},
+
+	/**
+	 * Set the style of the renderable font
+	 * @param style {String} The font style
+	 */
+	setFontStyle: function(style) {
+		this.fontStyle = style;
+	},
+	
+	/**
+	 * Get the renderable style of the font
+	 * @return {String}
+	 */
+	getFontStyle: function() {
+		return this.fontStyle;
+	},
 
    /**
     * Set the transformation using a matrix.
@@ -613,7 +717,109 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     */
    getClassName: function() {
       return "RenderContext2D";
-   }
+   },
+	
+	/**
+	 * Bold text weight
+	 * @memberOf RenderContext2D
+	 */
+	FONT_WEIGHT_BOLD: "bold",
+	
+	/**
+	 * Normal text weight
+	 * @memberOf RenderContext2D
+	 */
+	FONT_WEIGHT_NORMAL: "normal",
+	
+	/**
+	 * Light text weight
+	 * @memberOf RenderContext2D
+	 */
+	FONT_WEIGHT_LIGHT: "light",
+	
+	/**
+	 * Text align left
+	 * @memberOf RenderContext2D
+	 */
+	FONT_ALIGN_LEFT: "left",
+	
+	/**
+	 * Text align right
+	 * @memberOf RenderContext2D
+	 */
+	FONT_ALIGN_RIGHT: "right",
+	
+	/**
+	 * Text align center
+	 * @memberOf RenderContext2D
+	 */
+	FONT_ALIGN_CENTER: "center",
+	
+	/**
+	 * Text align start of stroke
+	 * @memberOf RenderContext2D
+	 */
+	FONT_ALIGN_START: "start",
+	
+	/**
+	 * Text align end of stroke
+	 * @memberOf RenderContext2D
+	 */
+	FONT_ALIGN_END: "end",
+	
+	/**
+	 * Text baseline alphabetic
+	 * @memberOf RenderContext2D
+	 */
+	FONT_BASELINE_ALPHABETIC: "alphabetic",
+	
+	/**
+	 * Text baseline top of em box
+	 * @memberOf RenderContext2D
+	 */
+	FONT_BASELINE_TOP: "top",
+	
+	/**
+	 * Text baseline hanging ideograph
+	 * @memberOf RenderContext2D
+	 */
+	FONT_BASELINE_HANGING: "hanging",
+	
+	/**
+	 * Text baseline middle of em square
+	 * @memberOf RenderContext2D
+	 */
+	FONT_BASELINE_MIDDLE: "middle",
+	
+	/**
+	 * Text baseline ideographic bottom
+	 * @memberOf RenderContext2D
+	 */
+	FONT_BASELINE_IDEOGRAPHIC: "ideographic",
+	
+	/**
+	 * Text baseline bottom of em square
+	 * @memberOf RenderContext2D
+	 */
+	FONT_BASELINE_BOTTOM: "bottom",
+	
+	/**
+	 * Text style italic
+	 * @memberOf RenderContext2D
+	 */
+	FONT_STYLE_ITALIC: "italic",
+	
+	/**
+	 * Text style normal
+	 * @memberOf RenderContext2D
+	 */
+	FONT_STYLE_NORMAL: "normal",
+	
+	/**
+	 * Text style oblique
+	 * @memberOf RenderContext2D
+	 */
+	FONT_STYLE_OBLIQUE: "oblique"
 });
 
 return RenderContext2D;

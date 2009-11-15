@@ -35,7 +35,7 @@
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend({
+var Engine = Engine.extend(/** @scope Engine.prototype */{
 	constructor: null,
 
    /*
@@ -51,11 +51,13 @@ var Engine = Engine.extend({
 	
    /**
     * Status message when a script is not found
+    * @memberOf Engine
     */
    SCRIPT_NOT_FOUND: false,
    
    /**
     * Status message when a script is successfully loaded
+    * @memberOf Engine
     */
    SCRIPT_LOADED: true,
 
@@ -63,6 +65,7 @@ var Engine = Engine.extend({
     * Include a script file.
     *
     * @param scriptURL {String} The URL of the script file
+    * @memberOf Engine
     */
    include: function(scriptURL) {
       Engine.loadNow(scriptURL);
@@ -77,15 +80,18 @@ var Engine = Engine.extend({
     * @param {Function} [cb] The function to call when the script is loaded.
     *                   the path of the script loaded and a status message
     *                   will be passed as the two parameters.
+    * @memberOf Engine
+    * @private
     */
    loadNow: function(scriptPath, cb) {
       this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
    },
 	
    /**
-    * Load a script from the server and append it to
+    * Queue a script to load from the server and append it to
     * the head element of the browser.  Script names are
-    * cached so they will not be loaded again.
+    * cached so they will not be loaded again.  Each script in the
+    * queue is processed synchronously.
     *
     * @param scriptPath {String} The URL of a script to load.
     * @memberOf Engine
@@ -100,6 +106,7 @@ var Engine = Engine.extend({
     * Internal method which runs the script queue to handle scripts and functions
     * which are queued to run sequentially.
     * @private
+    * @memberOf Engine
     */
    runScriptQueue: function() {
       if (!Engine.scriptQueueTimer) {
@@ -154,6 +161,7 @@ var Engine = Engine.extend({
     *
     * @param state {Boolean} <tt>true</tt> to put the queue processor
     *                        in a paused state.
+    * @memberOf Engine
     */
    pauseQueue: function(state) {
       Engine.queuePaused = state;
@@ -186,6 +194,7 @@ var Engine = Engine.extend({
    /**
     * This method performs the actual script loading.
     * @private
+    * @memberOf Engine
     */
    doLoad: function(scriptPath, simplePath, cb) {
       if (!this.started) {
@@ -341,6 +350,7 @@ var Engine = Engine.extend({
    /**
     * After a script has been loaded, updates the progress
     * @private
+    * @memberOf Engine
     */
    handleScriptDone: function() {
       Engine.scriptsProcessed++;
@@ -352,6 +362,7 @@ var Engine = Engine.extend({
    /**
     * Updates the progress bar (if available)
     * @private
+    * @memberOf Engine
     */
    updateProgress: function() {
       var pBar = jQuery("#engine-load-progress");
@@ -375,7 +386,15 @@ var Engine = Engine.extend({
    /**
     * Load a stylesheet and append it to the document.  Allows for
     * scripts to specify additional stylesheets that can be loaded
-    * as needed.
+    * as needed.  Additionally, you can use thise method to inject
+    * the engine path into the css being loaded.  Using the variable
+    * <tt>$&lt;enginePath&gt;</tt>, you can load css relative to the
+    * engine's path.  For example:
+    * <pre>
+    *    .foo {
+    *       background: url('$&lt;enginePath&gt;/myGame/images/bar.png') no-repeat 50% 50%;
+    *    }
+    * </pre>
     *
     * @param stylesheetPath {String} Path to the stylesheet, relative to
     *                                the engine path.

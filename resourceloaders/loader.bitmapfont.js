@@ -73,6 +73,7 @@ var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype 
          // Get the file from the server
          $.getScript(path + url, function(data) {
             data = BitmapFontLoader.font;
+				Console.log("Acquired font info: ", data);
             thisObj.load(name, null, data);
          });
       }
@@ -80,11 +81,11 @@ var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype 
       {
          Console.log("Loading font: " + name + " @ " + path + info.bitmapImage);
 
-         // Load the bitmap file
-         this.base(name, path + info.bitmapImage, info.width, info.height);
-
          // Store the font info
          this.fonts[name] = info;
+
+         // Load the bitmap file
+         this.base(name, path + info.bitmapImage, info.width, info.height);
       }
    },
 

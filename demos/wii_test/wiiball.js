@@ -63,15 +63,6 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.base("WiiBall");
          this.sprite = null;
 
-         // The element which we render to
-         //this.setElement($("<div>").css({ position: "absolute", width: 60, height: 60 }));
-
-         // Debugging
-         this.cBox = $("<div>").css({ position: "absolute", display: "none", border: "1px dashed blue"});
-         //WiiTest.getRenderContext().getSurface().append(this.cBox);
-         this.wBox = $("<div>").css({ position: "absolute", display: "none", border: "2px solid blue"});
-         //WiiTest.getRenderContext().getSurface().append(this.wBox);
-
          // Add components to move and draw the player
          this.add(Mover2DComponent.create("move"));
          this.add(SpriteComponent.create("draw"));
@@ -107,30 +98,6 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.checkBounce();
          this.base(renderContext, time);
          renderContext.popTransform();
-
-         if (Engine.getDebugMode()) {
-            // Find our collision node and put a box around it
-            if (this.ModelData && this.ModelData.lastNode) {
-               var n = this.ModelData.lastNode.getRect().get();
-               this.cBox.css({
-                  display: "block",
-                  left: n.x,
-                  top: n.y,
-                  width: n.w,
-                  height: n.h
-               });
-            }
-
-            var b = this.getWorldBox().get();
-            this.wBox.css({
-               display: "block",
-               left: b.x,
-               top: b.y,
-               width: b.w,
-               height: b.h
-            });
-         }
-
       },
 
       /**

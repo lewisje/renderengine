@@ -38,8 +38,14 @@ Engine.initObject("HTMLDivContext", "HTMLElementContext", function() {
 /**
  * @class A simple extension of the {@link HTMLElementContext} which uses a DIV
  * element to represent the context.  This is just a convenience method.
+ * <p/>
+ * As of the 1.3 beta version, further development on HTMLDivContext is
+ * hereby ceased.  No further development will occur to support HTML elements
+ * as viable targetable contexts.  Due to the nature of updating an HTML
+ * context, the decision has been made to drop support for it.
  *
  * @extends HTMLElementContext
+ * @deprecated
  */
 var HTMLDivContext = HTMLElementContext.extend(/** @scope HTMLDivContext.prototype */{
 

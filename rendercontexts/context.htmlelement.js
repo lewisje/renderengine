@@ -36,12 +36,12 @@ Engine.include("/rendercontexts/context.render2d.js");
 Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
 
 /**
- * @class A reference to the <tt>document.body</tt> element as a rendering context.
- * Aside from being The Render Engine's default rendering context, the context
- * is essentially a wrapper for the HTML document.  Wrapping, in this way, allows
- * us to update not only this context, but all other contexts during an engine frame.
+ * @class A wrapper for any HTML element to convert it into a targetable render context.
+ * 		 The {@link DocumentContext} and {@link HTMLDivContext} use this as their base
+ * 		 class.
  *
  * @extends RenderContext2D
+ * @see DocumentContext
  */
 var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.prototype */{
 
@@ -281,6 +281,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    drawImage: function(obj, rect, image, srcRect) {
       var rD = rect.getDims();
+		var sD = srcRect ? srcRect.getDims() : rect.getDims();
 
       // If the reference object is a host object it
       // will give us a reference to the HTML element which we can then
@@ -302,16 +303,17 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
             obj.jQ().attr("height", rD.h)
          }
       } else {
-         // Otherwise, just draw a new image
-         var i = $(image).clone().css({
+         // Otherwise, just draw a new div with the sprite on it
+         var i = $("<img>").attr("src", image.src).css({
             position: "absolute",
-            left: rD.l,
-            top: rD.t,
-            width: rD.w,
-            height: rD.h
-         }).attr("width", rD.w).attr("height", rD.h);
-         this.jQ().append(i);
-         return i;
+            top: rD.l,
+            left: rD.t,
+            width: sD.w,
+            height: sD.h
+         });
+			i.attr("width", rD.w);
+			i.attr("height", rD.h);
+			this.jQ().append(i);
       }
    },
 
@@ -322,9 +324,12 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param text {String} The text to draw
     */
    drawText: function(point, text) {
+		this.base(point, text);
       var d = $("<span>").css({
-         left: point.x,
-         top: point.y,
+         font: this.getFontSize() + " " + this.getFont(),
+			color: this.getFillStyle(),
+			left: this.cursorPos + point.x,
+         top: this.cursorPos + point.y,
          position: "absolute"
       }).text(text);
       this.jQ().append(d);

@@ -122,7 +122,7 @@ var FNV1 = function(algo) {
 };
 
 /**
- * Implementation of FNV1 - a fast hash function.
+ * @class Implementation of FNV1 - a fast hash function.
  * 
  * <p>This implementation uses 32-bit operations, and the values returned from
  * {@link #getHash()} are limited to the lower 32 bits.</p>
@@ -148,7 +148,7 @@ var FNV132 = (function() {
 })();
 
 /**
- * Implementation of FNV1a - a fast hash function. The FNV1a variant provides a
+ * @class Implementation of FNV1a - a fast hash function. The FNV1a variant provides a
  * slightly better dispersion for short (< 4 bytes) values than plain FNV1.
  * 
  * <p>This implementation uses 32-bit operations, and the values returned from
