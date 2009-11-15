@@ -77,7 +77,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       {
          var e = objs[o].getElement();
          if (e && e != document.body) {
-            Console.log("DOM element ", e, " removed from ", this.getSurface());
+            
             this.getSurface().removeChild(e);
          }
       }

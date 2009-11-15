@@ -2,9 +2,9 @@
    <property file="build.properties"/>
  
    <property name="app.name" value="renderengine"/>
-   <property name="app.version" value="beta1"/>
-	<property name="version.name" value="beta 1.0.0"/>
-   <property name="build.date" value="01/23/2009"/>
+   <property name="app.version" value=""/>
+	<property name="version.name" value=""/>
+   <property name="build.date" value=""/>
    <property name="dist.home" value="${basedir}/dist_${app.version}"/>
    <property name="engine.src" value="${basedir}/engine/build"  />
    <property name="make.dir" value="${basedir}/make"/>
@@ -33,7 +33,7 @@
 
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
-   <target name="engine.dist" depends="engine.clean,engine.zip" description="Creates the full and compressed distribution zip files for The Render Engine"/>
+   <target name="dist" depends="engine.clean,engine.zip" description="Creates the full and compressed distribution zip files for The Render Engine"/>
    <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
    <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
@@ -90,8 +90,7 @@
 		</replaceregexp>
 
 	</target>
-  
-  
+
    <!-- =============================== ENGINE CLEAN ========================== -->
    <target name="engine.clean" description="Prepares for creation of distribution">
      
@@ -119,6 +118,7 @@
       <mkdir dir="${build.home}"/>
  
       <mkdir dir="${build.home}/engine"/>
+      <mkdir dir="${build.home}/engine/runtime"/>
       <mkdir dir="${build.home}/components"/>
       <mkdir dir="${build.home}/rendercontexts"/>
       <mkdir dir="${build.home}/resourceloaders"/>
@@ -130,6 +130,7 @@
       <mkdir dir="${build.home}/demos"/>
       <mkdir dir="${build.home}/tools"/>
       <mkdir dir="${build.home}/setup"/>
+      <mkdir dir="${build.home}/test"/>
            
    </target>
  
@@ -149,9 +150,15 @@
   
       <!-- Copy the font description files and images -->     
       <copy todir="${build.home}/fonts">
-         <fileset dir="${basedir}/fonts">
-            <include name="*.js"/>
-            <include name="*.png"/>
+         <fileset dir="${basedir}/fonts" includes="${font.set}">
+         	<exclude name="**/.svn"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the tests -->     
+      <copy todir="${build.home}/test">
+         <fileset dir="${basedir}/test" includes="${test.set}">
+         	<exclude name="**/.svn"/>
          </fileset>
       </copy>
  
@@ -235,7 +242,7 @@
       </antcall>
    
    	<antcall target="engine.build">
-			<param name="engine.file" value="${full.home}/engine/engine.js" />
+			<param name="engine.file" value="${full.home}/engine/runtime/engine.js" />
    	</antcall>
       <!-- ### FINISH ### Pre-compilation tasks -->
  
@@ -285,6 +292,19 @@
 
    <!-- ================== ENGINE MINIFIED/COMPRESSED DISTRIBUTION ===================== -->
   
+  	<target name="min.nodebug" description="Remove debug, log, and info messages">
+
+		<!-- LOGS -->
+		<replaceregexp match="Console.log\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
+		<!-- DEBUGS -->
+		<replaceregexp match="Console.debug\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
+		<!-- INFOS -->
+		<replaceregexp match="Console.info\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
+  	</target>
+  
 	<target name="engine.compress" description="Compress a source file into a destination file">
 	
       <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
@@ -294,6 +314,9 @@
          </classpath>
       </java>
 	
+		<antcall target="min.nodebug">
+			<param name="input.file" value="${basedir}/${input.file}"/>
+		</antcall>
 	</target>
  
    <target name="engine.min" description="Create the minified/compressed distribution of the engine">
@@ -319,6 +342,11 @@
    	<antcall target="engine.build">
 			<param name="engine.file" value="${make.dir}/temp_engine.js" />
    	</antcall>
+
+		<antcall target="min.nodebug">
+			<param name="input.file" value="${make.dir}/temp_engine.js"/>
+		</antcall>
+   	   	
       <!-- ### FINISH ### Pre-compilation tasks -->
  
  
@@ -327,7 +355,7 @@
 
 		<!-- Get the engine out out the way -->
       <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/engine.js ${make.dir}/temp_engine.js"/>
+         <arg line="--nomunge -o ${min.home}/engine/runtime/engine.js ${make.dir}/temp_engine.js"/>
          <classpath>
             <pathelement path="${compressor.jar}"/>
          </classpath>
