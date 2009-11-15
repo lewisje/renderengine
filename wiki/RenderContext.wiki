@@ -14,6 +14,8 @@ A rendering context has a "surface" to which the contents are drawn.  This surfa
 
 The HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base RenderContext2D since that context is aimed at 2D rendering with vectors, paths, and sprites.
 
+_Note:_ As of beta 1.3, further development of the HTMLElementContext is ceasing beyond that of allowing the document's body to register as a context.  See [HTMLContextNote this page] for an explanation.
+
 === RenderContext2D ===
 
 This context is the base class for the !CanvasContext and SVGContext which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.  A context could be created from this which would also wrap the DOM in such a mechanism, but since line drawing isn't natively supported by the DOM it doesn't make much sense.
