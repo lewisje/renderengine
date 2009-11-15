@@ -179,14 +179,28 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    
    /**
     * Get the amount of time allocated to draw a single frame.
-    * @return {Number}
+    * @return {Number} Milliseconds allocated to draw a frame
+	 * @memberOf Engine
     */
    getFrameTime: function() {
       return this.fpsClock;
    },
+	
+	/**
+	 * Get the amount of time it took to draw the last frame.  This value
+	 * varies per frame drawn, based on visible objects, number of operations
+	 * performed, and other factors.  The draw time can be used to optimize
+	 * your game for performance.
+	 * @return {Number} Milliseconds required to draw the frame
+	 * @memberOf Engine
+	 */
+	getDrawTime: function() {
+		return Engine.frameTime;
+	},
    
    /**
-    * Get the engine load.  The load represents the amount of
+    * Get the load the currently rendered frame is putting on the engine.  
+    * The load represents the amount of
     * work the engine is doing to render a frame.  A value less
     * than one indicates the the engine can render a frame within
     * the amount of time available.  Higher than one indicates the

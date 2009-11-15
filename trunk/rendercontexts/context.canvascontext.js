@@ -413,15 +413,35 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    /**
-    * Draw text on the context.
+    * Draw filled text on the context.
     *
     * @param point {Point2D} The top-left position to draw the image.
     * @param text {String} The text to draw
     */
    drawText: function(point, text) {
-
       this.base(point, text);
+		if (!this.get2DContext().fillText) {
+			return;	// Unsupported by canvas
+		}
+		this.get2DContext().font = this.getNormalizedFont();
+		this.get2DContext().textBaseline = this.getFontBaseline();
+		this.get2DContext().fillText(text, point.x, point.y);
    },
+	
+	/**
+	 * Draw stroked (outline) text on the context.
+	 * 
+	 * @param point {Point2D}
+	 * @param text {String} The text to draw
+	 */
+	strokeText: function(point, text) {
+		if (!this.get2DContext().strokeText) {
+			return;	// Unsupported by canvas
+		}
+		this.get2DContext().font = this.getNormalizedFont();
+		this.get2DContext().textBaseline = this.getFontBaseline();
+		this.get2DContext().strokeText(text, point.x, point.y);
+	},
 
    /**
     * Start a path.

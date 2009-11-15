@@ -54,6 +54,8 @@ Engine.initObject("TextRenderer", "Object2D", function() {
 var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    drawMode: 0,
+	
+	renderer: null,
 
    /**
     * @private
@@ -64,7 +66,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
       this.base("TextRenderer");
 
-      // Add components to move and draw the asteroid
+      // Add components to move and draw the text
       this.renderer = renderer;
       this.add(this.renderer);
       this.add(Transform2DComponent.create("transform"));
@@ -78,6 +80,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
    release: function() {
       this.base();
       this.drawMode = 0;
+		this.renderer = null;
    },
 
    /**
@@ -98,7 +101,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
    },
 
    /**
-    * Set the text for this object to render.
+    * Set the text for this object to render.  This method
+    * <i>must</i> be implemented by a text renderer.
     *
     * @param text {String} The text to render.
     */
@@ -107,7 +111,9 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
    },
 
    /**
-    * Get the text for this object to render.
+    * Get the text for this object to render.  This method
+    * <i>must</i> be implemented by a text renderer.
+    * 
     * @return {String} The text to draw
     */
    getText: function() {
@@ -132,21 +138,59 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
    },
 
    /**
-    * Set the weight (boldness) of the text.
+    * Set the weight (boldness) of the text.  This method
+    * is optional for a text renderer.
     *
-    * @param weight {Number} The boldness of the text
+    * @param weight {Object} The boldness of the given text renderer
     */
    setTextWeight: function(weight) {
       this.getComponent("TextRenderObject").setTextWeight(weight);
    },
 
    /**
-    * Get the weight of the text.
-    * @return {Number} The text weight
+    * Get the weight of the text.  This method is optional
+    * for a text renderer.
+    * @return {Object} The boldness of the given text renderer
     */
    getTextWeight: function() {
-      this.getComponent("TextRenderObject").getTextWeight();
+      return this.getComponent("TextRenderObject").getTextWeight();
    },
+	
+	/**
+	 * Set the font for the text.  This method is optional
+	 * for a text renderer.
+	 * @param font {String} The text font
+	 */
+	setTextFont: function(font) {
+		this.getComponent("TextRenderObject").setTextFont(font);
+	},
+	
+	/**
+	 * Get the font for the text.  This method is optional
+	 * for a text renderer.
+	 * @return {String} The text font
+	 */
+	getTextFont: function() {
+		return this.getComponent("TextRenderObject").getTextFont();
+	},
+	
+	/**
+	 * Set the style of the text.  This method is optional
+	 * for a text renderer.
+	 * @param style {String} The text style
+	 */
+	setTextStyle: function(style) {
+		this.getComponent("TextRenderObject").setTextStyle(style);
+	},
+
+	/**
+	 * Get the style for text.  This method is optional
+	 * for a text renderer.
+	 * @return {String} The text style
+	 */	
+	getTextStyle: function() {
+		return this.getComponent("TextRenderObject").getTextStyle();
+	},
 
    /**
     * Get the position where the text will render.
@@ -166,21 +210,22 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
    },
 
    /**
-    * Set the horizontal alignment of the text.
+    * Set the horizontal alignment of the text.  This method is optional
+    * for a text renderer
     *
-    * @param alignment {Number} One of {@link AbstractTextRenderer#ALIGN_LEFT}, {@link AbstractTextRenderer#ALIGN_RIGHT}
-    *                  or {@link AbstractTextRenderer#ALIGN_CENTER}
+    * @param alignment {Object} A text alignment mode for the given text renderer.
     */
    setTextAlignment: function(alignment) {
-      this.getComponent("TextRenderObject").setAlignment(alignment);
+		this.getComponent("TextRenderObject").setTextAlignment(alignment);
    },
 
    /**
-    * Get the horizontal alignment of the text.
-    * @return {Number} The alignment constant for the text
+    * Get the horizontal alignment of the text. This method is optional
+    * for a text renderer.
+    * @return {Number} The alignment mode for the given text renderer
     */
    getTextAlignment: function() {
-      this.getComponent("TextRenderObject").getAlignment();
+		return this.getComponent("TextRenderObject").getTextAlignment();
    },
 
    /**
@@ -197,7 +242,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {String} The text color
     */
    getColor: function() {
-      this.getComponent("TextRenderObject").getColor();
+      return this.getComponent("TextRenderObject").getColor();
    },
 
    /**

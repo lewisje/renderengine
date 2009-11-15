@@ -159,16 +159,26 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
    /**
     * <tt>true</tt> for all objects within the engine.
+    * @type Boolean
     */
    isRenderEngineObject: true,
 
    /**
     * <tt>true</tt> for all objects that are pooled.
+    * @type Boolean
     */
    isPooledObject: true,
 
+	/**
+	 * Number of new objects put into the pool
+	 * @type Number
+	 */
    poolNew: 0,
 
+	/**
+	 * Total number of objects in the pool
+	 * @type Number
+	 */
    poolSize: 0,
 
    /**
@@ -215,9 +225,8 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    },
 
    /**
-    * The pool of all objects.  Each object is stored
-    * by it's classname, retrieved from <tt>getClassName()</tt>
-    * that should be defined by all objects.
+    * The pool of all objects, stored by class name.
+    * @type Object
     */
    objectPool: {},
 

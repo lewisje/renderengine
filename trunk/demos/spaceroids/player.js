@@ -176,7 +176,7 @@ var SpaceroidsPlayer = Object2D.extend({
       }
       
       // If they have their nuke, draw that too
-      if (this.nukes > 0) {
+      if (Spaceroids.evolved && this.nukes > 0) {
          renderContext.pushTransform();
          renderContext.drawRectangle(Rectangle2D.create(70, 35, 6, 6));
          renderContext.popTransform();

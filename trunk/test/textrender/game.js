@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * Wii Testing
+ * Test: Font Rendering
  *
- * A simple game of bouncing balls
+ * Tests of the available font renderers.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -33,22 +33,21 @@
 
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/spatial/container.spatialgrid.js");
+Engine.include("/textrender/text.vector.js");
+Engine.include("/textrender/text.bitmap.js");
+Engine.include("/textrender/text.context.js");
+Engine.include("/textrender/text.renderer.js");
+Engine.include("/resourceloaders/loader.bitmapfont.js");
 Engine.include("/engine/engine.timers.js");
 
-// Load game objects
-Game.load("/wiihost.js");
-Game.load("/wiiball.js");
-
-Engine.initObject("WiiTest", "Game", function(){
+Engine.initObject("FontTest", "Game", function(){
 
    /**
     * @class Wii ball bounce game.  Press the A button over a ball
     *        to make it bounce.  Press A when not over a ball to create
     *        another ball.
     */
-   var WiiTest = Game.extend({
+   var FontTest = Game.extend({
    
       constructor: null,
       
@@ -56,19 +55,13 @@ Engine.initObject("WiiTest", "Game", function(){
       renderContext: null,
       
       // Engine frames per second
-      engineFPS: 60,
+      engineFPS: 2,
       
       // The play field
       fieldBox: null,
-      fieldWidth: 800,
-      fieldHeight: 460,
+      fieldWidth: 700,
+      fieldHeight: 400,
 
-      // Sprite resource loader
-      spriteLoader: null,
-      
-      // The collision model
-      cModel: null,
-      
       /**
        * Called to set up the game, download any resources, and initialize
        * the game to its running state.
@@ -76,30 +69,28 @@ Engine.initObject("WiiTest", "Game", function(){
       setup: function(){
          // Set the FPS of the game
          Engine.setFPS(this.engineFPS);
-         
-         this.spriteLoader = SpriteLoader.create();
-         
-         // Load the sprites
-         this.spriteLoader.load("redball", this.getFilePath("resources/redball.js"));
-         
+			
+			FontTest.fontLoader = BitmapFontLoader.create();
+			FontTest.fontLoader.load("bFont", "lucida_sans_36.js");
+			
          // Don't start until all of the resources are loaded
-         WiiTest.loadTimeout = Timeout.create("wait", 250, WiiTest.waitForResources);
+         FontTest.loadTimeout = Timeout.create("wait", 250, FontTest.waitForResources);
          this.waitForResources();
       },
-      
+
       /**
        * Wait for resources to become available before starting the game
        * @private
        */
       waitForResources: function(){
-         if (WiiTest.spriteLoader.isReady()) {
-               WiiTest.loadTimeout.destroy();
-               WiiTest.run();
+         if (FontTest.fontLoader.isReady("bFont")) {
+               FontTest.loadTimeout.destroy();
+               FontTest.run();
                return;
          }
          else {
             // Continue waiting
-            WiiTest.loadTimeout.restart();
+            FontTest.loadTimeout.restart();
          }
       },
       
@@ -123,19 +114,66 @@ Engine.initObject("WiiTest", "Game", function(){
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
 			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
-	      this.renderContext.setBackgroundColor("#FFFFFF");
+	      this.renderContext.setBackgroundColor("#000000");
          Engine.getDefaultContext().add(this.renderContext);
 
-         // Create the collision model with 5x5 divisions
-         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
+		 	// Vector Text
+			var vector1 = TextRenderer.create(VectorText.create(), "ABCxyz123!@#$%^&*()", 1);
+			vector1.setPosition(Point2D.create(20, 20));
+			vector1.setTextWeight(1);
+			vector1.setColor("#ffffff");
+			this.renderContext.add(vector1);
+			
+			var vector2 = TextRenderer.create(VectorText.create(), "ABCxyz123!@#$%^&*()", 2);
+			vector2.setPosition(Point2D.create(20, 43));
+			vector2.setTextWeight(1);
+			vector2.setColor("#ffffff");
+			this.renderContext.add(vector2);
+			
+			var vector3 = TextRenderer.create(VectorText.create(), "ABCxyz123!@#$%^&*()", 2.5);
+			vector3.setPosition(Point2D.create(20, 80));
+			vector3.setTextWeight(1);
+			vector3.setColor("#ffffff");
+			this.renderContext.add(vector3);
+			
+			// Bitmap Text
+			var bitmap1 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("bFont")), "ABCxyz123!@#$%^&*()", 0.75);
+			bitmap1.setPosition(Point2D.create(10, 120));
+			bitmap1.setTextWeight(1);
+			bitmap1.setColor("#ff0000");
+			this.renderContext.add(bitmap1);
+			
+			var bitmap2 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("bFont")), "ABCxyz123!@#$%^&*()", 1);
+			bitmap2.setPosition(Point2D.create(10, 143));
+			bitmap2.setTextWeight(1);
+			bitmap2.setColor("#ff0000");
+			this.renderContext.add(bitmap2);
+			
+			var bitmap3 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("bFont")), "ABCxyz123!@#$%^&*()", 1.5);
+			bitmap3.setPosition(Point2D.create(10, 175));
+			bitmap3.setTextWeight(1);
+			bitmap3.setColor("#ff0000");
+			this.renderContext.add(bitmap3);
+			
+			// Context Render
+	      var context1 = TextRenderer.create(ContextText.create(), "ABCxyz123!@#$%^&*()", 1);
+	      context1.setPosition(Point2D.create(10, 260));
+	      context1.setColor("#8888ff");
+	      this.renderContext.add(context1);
 
-         // Add the first ball
-         var ball = WiiBall.create();
-         this.getRenderContext().add(ball);
-         
-         // Add the player object
-         var player = WiiHost.create();
-         this.getRenderContext().add(player);
+	      var context2 = TextRenderer.create(ContextText.create(), "ABCxyz123!@#$%^&*()", 2);
+	      context2.setPosition(Point2D.create(10, 288));
+			context2.setTextFont("Times New Roman")
+	      context2.setColor("#8888ff");
+	      this.renderContext.add(context2);
+
+	      var context3 = TextRenderer.create(ContextText.create(), "ABCxyz123!@#$%^&*()", 2.5);
+	      context3.setPosition(Point2D.create(10, 320));
+			context3.setTextFont("Courier New");
+			context3.setTextWeight(RenderContext2D.FONT_WEIGHT_BOLD);
+	      context3.setColor("#8888ff");
+	      this.renderContext.add(context3);
+
       },
       
       /**
@@ -150,17 +188,10 @@ Engine.initObject("WiiTest", "Game", function(){
        */
       getFieldBox: function() {
          return this.fieldBox;
-      },
-      
-      /**
-       * return a reference to the collision model
-       */
-      getCModel: function() {
-         return this.cModel;
       }
       
    });
    
-   return WiiTest;
+   return FontTest;
    
 });

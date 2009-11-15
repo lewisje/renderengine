@@ -67,12 +67,6 @@ Engine.initObject("WiiHost", "Object2D", function() {
          
          // Initialize the currently selected ball to null
          this.overBall = null;
-
-         // Debugging
-         this.cBox = $("<div>").css({ position: "absolute", display: "none", border: "1px dashed red"});
-         //WiiTest.getRenderContext().getSurface().append(this.cBox);
-         this.wBox = $("<div>").css({ position: "absolute", display: "none", border: "2px solid red"});
-         //WiiTest.getRenderContext().getSurface().append(this.wBox);
       },
 
       /**
@@ -90,30 +84,6 @@ Engine.initObject("WiiHost", "Object2D", function() {
 
          // Use the metrics to let us know if we're over a ball
          Engine.addMetric("overBall", this.overBall != null ? "true" : "false");
-
-         // Debugging boxes
-         if (Engine.getDebugMode()) {
-            // Find our collision node and put a box around it
-            if (this.ModelData && this.ModelData.lastNode) {
-               var n = this.ModelData.lastNode.getRect().get();
-               this.cBox.css({
-                  display: "block",
-                  left: n.x,
-                  top: n.y,
-                  width: n.w,
-                  height: n.h
-               });
-            }
-
-            var b = this.getWorldBox().get();
-            this.wBox.css({
-               display: "block",
-               left: b.x,
-               top: b.y,
-               width: b.w,
-               height: b.h
-            });
-         }
       },
 
       /**

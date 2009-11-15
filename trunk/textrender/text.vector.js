@@ -38,7 +38,9 @@ Engine.include("/textrender/text.abstractrender.js");
 Engine.initObject("VectorText", "AbstractTextRenderer", function() {
 
 /**
- * @class A text renderer which draws text with simple vectors.
+ * @class A text renderer which draws text with simple vectors.  This type of text
+ * 		 renderer is only supported by the {@link CanvasContext}.  For an {@link HTMLElementContext}
+ * 		 or a derivative, use the {@link ContextText} renderer.
  *
  * @constructor
  * @param componentName {String} The name of the text component
@@ -57,6 +59,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
    constructor: function(componentName, priority) {
       this.base(componentName, priority);
       this.rText = [];
+		this.setTextWeight(1);
    },
 
 	/**
@@ -66,6 +69,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       this.base();
       this.rText = null;
       this.spacing = 0;
+		this.setTextWeight(1);
    },
 
    /**
@@ -120,7 +124,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       text = text.replace(/&COPY;/g,"a").replace(/&REG;/g,"b");
 
       var lCount = text.length;
-      var align = this.getAlignment();
+      var align = this.getTextAlignment();
       var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
       var kern = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing), 0);
       //var space = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing) * 0.07, 0);
