@@ -52,15 +52,10 @@ Engine.initObject("RenderContext", "Container", function() {
 var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    surface: null,
-
    transformStackDepth: 0,
-
    viewport: null,
-
    worldPosition: null,
-
    worldRotation: null,
-
    worldScale: null,
 
    /**
@@ -295,19 +290,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       {
          this.popTransform();
       }
-   },
-
-   /**
-    * Get a collection of object Id's that are near the object specified.
-    * The collection is a Javascript object that contains the Id's of the
-    * objects nearby.
-    *
-    * @param obj {Object2D} The object to test against
-    * @returns A collection that contains the names of objects nearby
-    * @deprecated
-    */
-   getNearObjects: function(obj) {
-      return {};
    }
 }, { /** @scope RenderContext.prototype */
 

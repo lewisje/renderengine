@@ -126,8 +126,8 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    },
    
    /**
-    * A helper method to provide access to a jQuery object representing the
-    * element for this object.
+    * A helper method to provide access to the jQuery object wrapping the
+    * element for this object.  This allows direct access to the DOM.
     *
     * @return {jQuery} A jQuery object
     */

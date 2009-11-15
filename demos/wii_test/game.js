@@ -124,6 +124,15 @@ Engine.initObject("WiiTest", "Game", function(){
          this.centerPoint = this.fieldBox.getCenter();
 			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
 	      this.renderContext.setBackgroundColor("#FFFFFF");
+
+			// Address the context element directly via jQuery
+         this.renderContext.jQ().css({
+            border: "1px solid red",
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0});
+
          Engine.getDefaultContext().add(this.renderContext);
 
          // Create the collision model with 5x5 divisions
