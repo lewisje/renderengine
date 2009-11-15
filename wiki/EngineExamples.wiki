@@ -14,10 +14,9 @@ This example is a clone of Asteroids by Atari.  There are two modes in which the
 
 ==Ball Bounce and the Wii==
 
-The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on t he Wii, but on PCs and Macs.  This game also has two versions.  The first version runs in the DOM rendering context.  This version is, by far, the faster of the two on the Wii.  The second shows how the rendering context can be simply swapped out (in this case, with the Canvas context) and the game runs essentially the same.  On the Wii, just point and click the "A" button.
+The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on t he Wii, but on PCs and Macs.  On the Wii, just point and click the "A" button.
 
-   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bouce the Ball - DOM context]
-   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 Bouce the Ball - Canvas context]
+   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 Bounce the Ball]
 
 ==The Sprite Editor==
 
@@ -26,3 +25,9 @@ In addition to games, The Render Engine can be (and is) used to create applicati
    * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor alpha]
 
 There are more examples in development and I'll release those when they are more complete.  If you have good examples of the engine in use, let me know and I'll include them here on this page!
+
+==Text Rendering Capabilities==
+
+The following is a quick test I've put together to test text rendering in the three supported modes.  If your browser doesn't support rendering fonts to the canvas, you'll only see the first two (Vector and Bitmap).
+
+   * [http://renderengine.googlecode.com/svn/trunk/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
