@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+Today I made the tough decision to finally drop HTML contexts as targetable render contexts.  [HTMLContextNote See this for an explanation].
+
 Had to reorganize the [ReleaseMilestones release tasks] again.  The Sprite Editor is being moved to beta 1.5 and the DOM transforms are being moved to beta 1.4.
 
 Recently I noticed the [http://code.google.com/apis/o3d/ Google Labs O3D] project.  I really like this and hope to get it into the engine at some point. It'll be after the 1.0 release (probably part of 2.0, or even 3.0).
