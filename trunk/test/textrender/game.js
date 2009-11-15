@@ -71,7 +71,9 @@ Engine.initObject("FontTest", "Game", function(){
          Engine.setFPS(this.engineFPS);
 			
 			FontTest.fontLoader = BitmapFontLoader.create();
-			FontTest.fontLoader.load("bFont", "lucida_sans_36.js");
+			FontTest.fontLoader.load("lucida", "lucida_sans_36.js");
+			FontTest.fontLoader.load("century", "century_gothic_36.js");
+			FontTest.fontLoader.load("times", "times_36.js");
 			
          // Don't start until all of the resources are loaded
          FontTest.loadTimeout = Timeout.create("wait", 250, FontTest.waitForResources);
@@ -83,7 +85,9 @@ Engine.initObject("FontTest", "Game", function(){
        * @private
        */
       waitForResources: function(){
-         if (FontTest.fontLoader.isReady("bFont")) {
+         if (FontTest.fontLoader.isReady("lucida") &&
+				 FontTest.fontLoader.isReady("century") &&
+				 FontTest.fontLoader.isReady("times")) {
                FontTest.loadTimeout.destroy();
                FontTest.run();
                return;
@@ -137,19 +141,19 @@ Engine.initObject("FontTest", "Game", function(){
 			this.renderContext.add(vector3);
 			
 			// Bitmap Text
-			var bitmap1 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("bFont")), "ABCxyz123!@#$%^&*()", 0.75);
+			var bitmap1 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("century")), "ABCxyz123!@#$%^&*()", 0.75);
 			bitmap1.setPosition(Point2D.create(10, 120));
 			bitmap1.setTextWeight(1);
 			bitmap1.setColor("#ff0000");
 			this.renderContext.add(bitmap1);
 			
-			var bitmap2 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("bFont")), "ABCxyz123!@#$%^&*()", 1);
+			var bitmap2 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("lucida")), "ABCxyz123!@#$%^&*()", 1);
 			bitmap2.setPosition(Point2D.create(10, 143));
 			bitmap2.setTextWeight(1);
 			bitmap2.setColor("#ff0000");
 			this.renderContext.add(bitmap2);
 			
-			var bitmap3 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("bFont")), "ABCxyz123!@#$%^&*()", 1.5);
+			var bitmap3 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("times")), "ABCxyz123!@#$%^&*()", 1.5);
 			bitmap3.setPosition(Point2D.create(10, 175));
 			bitmap3.setTextWeight(1);
 			bitmap3.setColor("#ff0000");
