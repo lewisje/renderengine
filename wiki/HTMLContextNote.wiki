@@ -8,7 +8,7 @@ Because of this, I was having to write a lot of extra code which determined whic
 
 You'd think it would be as simple as the context knowing which way to render something, but as it turns out, it isn't that simple.  Components like the sprite component need to request the context to draw them.  However, in the case of an HTML context, a sprite (unless changed) only needs to be drawn once.  From that moment on, it can just manipulate its position.  For a graphical context, it has to be redrawn for each frame.
 
-Determining which mode of operation was taking the code away from the render context and putting it into the components.  This is not optimal when trying to squeeze out as much performance as I can.  So, it is with a heavy heart that I drop support for the HTML context as a viable render target.
+Determining this "mode of operation" was taking the code away from the render context and putting it into the components.  This is not optimal when trying to squeeze out as much performance as I can.  So, it is with a heavy heart that I drop support for the HTML context as a viable render target.
 
 Believe me, this decision didn't come easily.  But the decision had to be made, and now that it's done, I believe that progress can speed up a bit.  Maybe sometime in the future I can consider reviving the HTML contexts.  I was excited to see what could be done with CSS DOM transformations, but that will be put on hold indefinitely starting today (11/15/2009).
 
