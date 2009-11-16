@@ -52,11 +52,6 @@ Note: The support for the iPhone and Wii platform will be minimal.  Version 2.0 
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Beta 1.4 (_November 20, 2009_) ==
-|| *Status* || *Goal* || *Description* ||
-|| _100%_ || Browser Support || Canvas native font support ||
-|| _100%_ || Feature || Componentized canvas font support. ||
-
 == Beta 1.5 (TBA) ==
 
 || *Status* || *Goal* || *Description* ||
