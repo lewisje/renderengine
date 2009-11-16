@@ -315,7 +315,7 @@
       </java>
 	
 		<antcall target="min.nodebug">
-			<param name="input.file" value="${basedir}/${input.file}"/>
+			<param name="input.file" value="${min.home}/${input.file}"/>
 		</antcall>
 	</target>
  
