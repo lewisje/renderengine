@@ -2,7 +2,7 @@
 
 See the ReleaseMilestones page for current development information.  The FutureGoals page is where the planning begins for the next major release.
 
-== Beta 1.4 (_November 15, 2009_) ==
+== Beta 1.4 (November 15, 2009) ==
 
 || *Status* || *Goal* || *Description* ||
 || _Complete_ || Browser Support || Canvas native font support ||
