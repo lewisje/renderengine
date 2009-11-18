@@ -325,9 +325,14 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
             if (gameObjectName) {
                Engine.gameRunTimer = setInterval(function() {
                   if (typeof window[gameObjectName] != "undefined" &&
-                      window[gameObjectName].setup) {
+                     	window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
+
+				         // Remove the "loading" message
+        					$("#loading").remove();
                      Console.warn("Starting: " + gameObjectName);
+							
+							// Start the game
                      window[gameObjectName].setup();
                   }
                }, 100);
