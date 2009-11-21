@@ -5,8 +5,8 @@
  * http://code.google.com/p/renderengine for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: beta 1.3.0
- * date: 01/23/2009
+ * version: beta 1.4.0
+ * date: 11/15/2009
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -651,7 +651,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 715 $
+ * @version: $Revision: 755 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -975,6 +975,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * multi-line comments, blank lines, new lines, and trims lines.
     * In other words, this is a simplification of minification.
     * 
+    * /(([\"'])(\\\2|.*:\/\/|[^\/\n\r])*\2)|(//.*$)/gm
     * @param inString {String} The source to clean
     */
    cleanSource: function(inString, keepNewLines) {
@@ -1613,7 +1614,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 731 $
+ * @version: $Revision: 779 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1660,7 +1661,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-	version: "beta 1.3.0",
+	version: "beta 1.4.0",
 
 	constructor: null,
 
@@ -1785,14 +1786,28 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    
    /**
     * Get the amount of time allocated to draw a single frame.
-    * @return {Number}
+    * @return {Number} Milliseconds allocated to draw a frame
+	 * @memberOf Engine
     */
    getFrameTime: function() {
       return this.fpsClock;
    },
+	
+	/**
+	 * Get the amount of time it took to draw the last frame.  This value
+	 * varies per frame drawn, based on visible objects, number of operations
+	 * performed, and other factors.  The draw time can be used to optimize
+	 * your game for performance.
+	 * @return {Number} Milliseconds required to draw the frame
+	 * @memberOf Engine
+	 */
+	getDrawTime: function() {
+		return Engine.frameTime;
+	},
    
    /**
-    * Get the engine load.  The load represents the amount of
+    * Get the load the currently rendered frame is putting on the engine.  
+    * The load represents the amount of
     * work the engine is doing to render a frame.  A value less
     * than one indicates the the engine can render a frame within
     * the amount of time available.  Higher than one indicates the
@@ -2317,7 +2332,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend({
+var Engine = Engine.extend(/** @scope Engine.prototype */{
 	constructor: null,
 
    /*
@@ -2333,11 +2348,13 @@ var Engine = Engine.extend({
 	
    /**
     * Status message when a script is not found
+    * @memberOf Engine
     */
    SCRIPT_NOT_FOUND: false,
    
    /**
     * Status message when a script is successfully loaded
+    * @memberOf Engine
     */
    SCRIPT_LOADED: true,
 
@@ -2345,6 +2362,7 @@ var Engine = Engine.extend({
     * Include a script file.
     *
     * @param scriptURL {String} The URL of the script file
+    * @memberOf Engine
     */
    include: function(scriptURL) {
       Engine.loadNow(scriptURL);
@@ -2359,15 +2377,18 @@ var Engine = Engine.extend({
     * @param {Function} [cb] The function to call when the script is loaded.
     *                   the path of the script loaded and a status message
     *                   will be passed as the two parameters.
+    * @memberOf Engine
+    * @private
     */
    loadNow: function(scriptPath, cb) {
       this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
    },
 	
    /**
-    * Load a script from the server and append it to
+    * Queue a script to load from the server and append it to
     * the head element of the browser.  Script names are
-    * cached so they will not be loaded again.
+    * cached so they will not be loaded again.  Each script in the
+    * queue is processed synchronously.
     *
     * @param scriptPath {String} The URL of a script to load.
     * @memberOf Engine
@@ -2382,6 +2403,7 @@ var Engine = Engine.extend({
     * Internal method which runs the script queue to handle scripts and functions
     * which are queued to run sequentially.
     * @private
+    * @memberOf Engine
     */
    runScriptQueue: function() {
       if (!Engine.scriptQueueTimer) {
@@ -2436,6 +2458,7 @@ var Engine = Engine.extend({
     *
     * @param state {Boolean} <tt>true</tt> to put the queue processor
     *                        in a paused state.
+    * @memberOf Engine
     */
    pauseQueue: function(state) {
       Engine.queuePaused = state;
@@ -2468,6 +2491,7 @@ var Engine = Engine.extend({
    /**
     * This method performs the actual script loading.
     * @private
+    * @memberOf Engine
     */
    doLoad: function(scriptPath, simplePath, cb) {
       if (!this.started) {
@@ -2598,9 +2622,14 @@ var Engine = Engine.extend({
             if (gameObjectName) {
                Engine.gameRunTimer = setInterval(function() {
                   if (typeof window[gameObjectName] != "undefined" &&
-                      window[gameObjectName].setup) {
+                     	window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
+
+				         // Remove the "loading" message
+        					$("#loading").remove();
                      Console.warn("Starting: " + gameObjectName);
+							
+							// Start the game
                      window[gameObjectName].setup();
                   }
                }, 100);
@@ -2623,6 +2652,7 @@ var Engine = Engine.extend({
    /**
     * After a script has been loaded, updates the progress
     * @private
+    * @memberOf Engine
     */
    handleScriptDone: function() {
       Engine.scriptsProcessed++;
@@ -2634,6 +2664,7 @@ var Engine = Engine.extend({
    /**
     * Updates the progress bar (if available)
     * @private
+    * @memberOf Engine
     */
    updateProgress: function() {
       var pBar = jQuery("#engine-load-progress");
@@ -2657,7 +2688,15 @@ var Engine = Engine.extend({
    /**
     * Load a stylesheet and append it to the document.  Allows for
     * scripts to specify additional stylesheets that can be loaded
-    * as needed.
+    * as needed.  Additionally, you can use thise method to inject
+    * the engine path into the css being loaded.  Using the variable
+    * <tt>$&lt;enginePath&gt;</tt>, you can load css relative to the
+    * engine's path.  For example:
+    * <pre>
+    *    .foo {
+    *       background: url('$&lt;enginePath&gt;/myGame/images/bar.png') no-repeat 50% 50%;
+    *    }
+    * </pre>
     *
     * @param stylesheetPath {String} Path to the stylesheet, relative to
     *                                the engine path.
