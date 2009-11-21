@@ -136,7 +136,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     */
    reset: function(rect) {
       var cRect = (rect != null ? rect : this.getViewport());
-      this.get2DContext().clearRect(cRect.getTopLeft().x, cRect.getTopLeft().y, cRect.getDims().x, cRect.getDims().y);
+		var d = cRect.get();
+      this.get2DContext().clearRect(d.x, d.y, d.w, d.h);
    },
 
    setupWorld: function(time) {

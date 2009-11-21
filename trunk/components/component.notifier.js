@@ -37,7 +37,8 @@ Engine.include("/components/component.logic.js");
 Engine.initObject("NotifierComponent", "LogicComponent", function() {
 
 /**
- * @class A component which notifies objects when an action occurs.
+ * @class A component which notifies objects when an action occurs.  The component
+ * 		 uses a subscriber model to notify an object when certain actions occur.
  * @extends LogicComponent
  */
 var NotifierComponent = LogicComponent.extend(/** @scope NotifierComponent.prototype */{
