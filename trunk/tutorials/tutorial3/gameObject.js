@@ -11,7 +11,7 @@ Engine.initObject("GameObject", "Object2D", function() {
 		width: 50,				// The width of the object
 		height: 50,				// The height of the object
 		color: "#ffff00",		// The color of the object
-		moveVec: null,		// The velocity of our object
+		moveVec: null,			// The movement vector
 		shape: null,			// Our object's shape
 
       constructor: function() {
@@ -61,11 +61,10 @@ Engine.initObject("GameObject", "Object2D", function() {
 		
 		/**
 		 * Handle a "keydown" event from the <tt>KeyboardInputComponent</tt>.
-		 * @param evt {Event} A DOM event object.  It will contain the "keyCode"
-		 * 				field which is how we read the key that was pressed.
+		 * @param keyCode {Number} The key which was pressed down.
 		 */
-		onKeyDown: function(evt) {
-	      switch (evt.keyCode) {
+		onKeyDown: function(keyCode) {
+	      switch (keyCode) {
 	         case EventEngine.KEYCODE_LEFT_ARROW:
 	            this.moveVec.setX(-4);
 	            break;
@@ -79,15 +78,15 @@ Engine.initObject("GameObject", "Object2D", function() {
 	            this.moveVec.setY(4);
 	            break;
 	      }
+			return false;
 		},
 		
 		/**
 		 * Handle a "keyup" event from the <tt>KeyboardInputComponent</tt>.
-		 * @param evt {Event} A DOM event object.  It will contain the "keyCode"
-		 * 				field which is how we read the key that was pressed.
+		 * @param keyCode {Number} The key which was released
 		 */
-		onKeyUp: function(evt) {
-	      switch (evt.keyCode) {
+		onKeyUp: function(keyCode) {
+	      switch (keyCode) {
 	         case EventEngine.KEYCODE_LEFT_ARROW:
 	         case EventEngine.KEYCODE_RIGHT_ARROW:
 	            this.moveVec.setX(0);
@@ -97,6 +96,7 @@ Engine.initObject("GameObject", "Object2D", function() {
 	            this.moveVec.setY(0);
 	            break;
 	      }
+			return false;
 		},
 
       /**
