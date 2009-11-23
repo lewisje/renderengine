@@ -68,7 +68,7 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
       if (this.getElement() == null)
       {
          var div = jQuery("<div/>")
-				.css({ background: "black", display: "none" });
+            .css({ background: "black", display: "none" });
 
          this.setElement(div[0]);
 
@@ -97,28 +97,33 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
     * @return {HTMLImage} The image loaded
     */
    loadImageResource: function(name, url, width, height) {
-		var image = null;
-		if (width && height) {
-	      image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
-		} else {
-	      image = $("<img/>").attr("src", url);
-		}
-		
+      var image = null;
+      if (width && height) {
+         image = $("<img/>").attr("src", url).attr("width", width).attr("height", height);
+      } else {
+         image = $("<img/>").attr("src", url);
+      }
+      
       var thisObj = this;
-		if (!$.browser.Wii) {
-	      image.bind("load", function() {
-	         thisObj.setReady(name, true);
-	      });
-		} else {
-			// Calculate an approximate wait time based on dimensions
-			OneShotTimeout.create("readyImg", (width * height) * ImageLoader.loadAdjust, function() {
-				thisObj.setReady(name, true);	
-			});
-		}
+      if (!$.browser.Wii) {
+         image.bind("load", function() {
+            thisObj.setReady(name, true);
+         });
+      } else {
+         // Calculate an approximate wait time based on dimensions
+         OneShotTimeout.create("readyImg", (width * height) * ImageLoader.loadAdjust, function() {
+            thisObj.setReady(name, true); 
+         });
+      }
 
       // Append it to the container so it can load the image
       $(this.getElement()).append(image);
-      return image;
+      var info = {
+         width: width,
+         height: height,
+         image: image
+      };
+      return info;
    },
 
    /**
@@ -129,8 +134,20 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
     * @return {HTMLImage} The image
     */
    get: function(name) {
-      var img = this.base(name);
-      return img ? img[0] : null;
+      var imgInfo = this.base(name);
+      return imgInfo ? imgInfo.image[0] : null;
+   },
+   
+   /**
+    * Get the dimensions of an image from the resource stored with 
+    * the specified name, or <tt>null</tt> if no such image exists.
+    *
+    * @param name {String} The name of the image resource
+    * @return {Point2D} A point which represents the width and height of the image
+    */
+   getDimensions: function(name) {
+      var imgInfo = this.base(name);
+      return imgInfo ? Point2D.create(imgInfo.width, imgInfo.height) : null;
    },
 
    /**
@@ -148,11 +165,11 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
    getClassName: function() {
       return "ImageLoader";
    },
-	
-	/**
-	 * The ratio by which to scale image load times when loading on the Wii
-	 */
-	loadAdjust: 0.05
+   
+   /**
+    * The ratio by which to scale image load times when loading on the Wii
+    */
+   loadAdjust: 0.05
 });
 
 return ImageLoader;
