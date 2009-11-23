@@ -1,5 +1,9 @@
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
+Engine.include("/resourceloaders/loader.image.js");
+Engine.include("/resourceloaders/loader.sound.js");
+Engine.include("/engine/engine.timers.js");
+
 
 // Load the game object
 Game.load("/piano.js");
@@ -18,12 +22,17 @@ Engine.initObject("Tutorial4", "Game", function(){
       renderContext: null,
 
       // Engine frames per second
-      engineFPS: 30,
+      engineFPS: 5,
 
       // The play field
       fieldBox: null,
       fieldWidth: 480,
-      fieldHeight: 320,
+      fieldHeight: 300,
+      
+      // References to the resource loaders
+      imageLoader: null,
+      soundLoader: null,
+      loadTimeout: null,
 
       /**
        * Called to set up the game, download any resources, and initialize
@@ -44,17 +53,50 @@ Engine.initObject("Tutorial4", "Game", function(){
          // Add the new rendering context to the default engine context
          Engine.getDefaultContext().add(this.renderContext);
          
-         // Create the game object and add it to the render context.
-         // It'll start animating immediately.
-         this.renderContext.add(GameObject.create());
+         // The resource loaders
+         this.imageLoader = ImageLoader.create();
+         this.soundLoader = SoundLoader.create();
+         
+         // Begin the loading process
+         this.imageLoader.load("keys", this.getFilePath("resources/fingerboard.jpg"), 220, 171);
+         this.soundLoader.load("tones", this.getFilePath("resources/third_octave.mp3"));
+         
+         // Wait until the image and sounds are loaded before proceeding
+         this.loadTimeout = Timeout.create("wait", 250, Tutorial4.waitForResources);
+         this.waitForResources();
       },
 
+      /**
+       * Wait for resources to become available before starting the game
+       * @private
+       */
+      waitForResources: function(){
+         if (this.imageLoader.isReady() && this.soundLoader.isReady()) {
+               this.loadTimeout.destroy();
+               this.run();
+               return;
+         }
+         else {
+            // Continue waiting
+            this.loadTimeout.restart();
+         }
+      },
+
+      /**
+       * Run the game
+       */
+      run: function(){
+         this.renderContext.add(PianoKeys.create());
+      },
+   
       /**
        * Called when a game is being shut down to allow it to clean up
        * any objects, remove event handlers, destroy the rendering context, etc.
        */
       teardown: function(){
          this.renderContext.destroy();
+         this.imageLoader.destroy();
+         this.soundLoader.destrow();
       },
 
       /**
