@@ -17,7 +17,7 @@ There are many useful pages in The Render Engine wiki @
 http://code.google.com/p/renderengine/w/list
 
 Full API documentation is available online @
-http://renderengine.googlecode.com/svn/trunk/api_docs/index.html
+http://renderengine.googlecode.com/svn/api/index.html
 
 A Google Discussion Group is available @
 http://groups.google.com/group/the-render-engine
@@ -43,6 +43,7 @@ Go to the Apache Tomcat website and download the 5.5.27 version of the server.  
 
 Start up, or restart, the Tomcat server and navigate to "http://localhost:8080/renderengine/demos/spaceroids" to test the installation.  If all went well, you should be presented with the Asteroids clone game.
 
+Get Tomcat 5.5 @
 http://tomcat.apache.org/download-55.cgi
 
 
@@ -89,11 +90,11 @@ http://code.google.com/chrome/chromeframe/
 
 Notes:
 
-    * Just as a note, the best performance of any browser is Google's _Chrome_.  Their V8 Javascript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete! However, there are some features not yet supported in Chromium which need to be addressed before I will endorse it fully.
+    * Just as a note, the best performance of any browser is Google's Chrome.  Their V8 Javascript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete! However, there are some features not yet supported in Chromium which need to be addressed before I will endorse it fully.
 
     * Additional tests for different browsers on multiple platforms would be nice. I only have a Windows PC and occasional access to a Mac and/or iPhone.
 
-    * Requests for additional browsers should be sent to bfattori AT gmail DOT com, or posted on the wiki page.
+    * Requests for additional browsers should be sent to bfattori AT gmail DOT com, or posted to the discussion group.
 
     * There is a project to bring the Cairo (Firefox's renderer) canvas to Internet Explorer. When this works, I will test and add IE to my list of browsers. The ExCanvas object doesn't perform fast enough for this engine.
 
