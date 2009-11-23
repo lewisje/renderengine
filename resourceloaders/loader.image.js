@@ -72,7 +72,7 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
 
          this.setElement(div[0]);
 
-         // Add it to the defauls context so it can be cleaned up
+         // Add it to the default context so it can be cleaned up
          Engine.getDefaultContext().add(this);
       }
 
