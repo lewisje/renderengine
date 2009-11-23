@@ -39,17 +39,25 @@ Engine.initObject("SpriteComponent", "RenderComponent", function() {
 
 /**
  * @class A render component that renders its contents from a {@link Sprite}.
+ * @param name {String} The component name
+ * @param [priority=0.1] {Number} The render priority
+ * @param sprite {Sprite} The sprite to render
  * @extends RenderComponent
+ * @constructor
  */
 var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototype */{
 
    currentSprite: null,
 
    /**
-    * @constructor
+    * @private
     */
    constructor: function(name, priority, sprite) {
-      this.base(name, priority || 0.1);
+      if (priority instanceof Sprite) [
+         sprite = priority;
+         priority = 0.1;
+      }
+      this.base(name, priority);
       this.currentSprite = sprite;
    },
 
@@ -74,14 +82,14 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
     */
    setSprite: function(sprite) {
       this.currentSprite = sprite;
-		
-		if (this.getHostObject().jQ()) {
-			this.getHostObject().jQ().css({
-				width: sprite.getBoundingBox().len_x(),
-				height: sprite.getBoundingBox().len_y(),
-				background: "url('" + sprite.getSourceImage().src + "') no-repeat"
-			});
-		}
+      
+      if (this.getHostObject().jQ()) {
+         this.getHostObject().jQ().css({
+            width: sprite.getBoundingBox().len_x(),
+            height: sprite.getBoundingBox().len_y(),
+            background: "url('" + sprite.getSourceImage().src + "') no-repeat"
+         });
+      }
    },
 
    /**
