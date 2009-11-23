@@ -39,7 +39,12 @@ Engine.initObject("ImageComponent", "RenderComponent", function() {
 
 /**
  * @class A render component that renders an image.
+ * @param name {String} The name of the component
+ * @param [priority=0.1] {Number} The render priority
+ * @param imageLoader {ImageLoader} The image loader to get images from
+ * @param [imageName] {String} The name of the image resource from the loader
  * @extends RenderComponent
+ * @constructor
  */
 var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype */{
 
@@ -47,12 +52,20 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
    bbox: null,
 
    /**
-    * @constructor
+    * @private
     */
-   constructor: function(name, priority, image, width, height) {
-      this.base(name, priority || 0.1);
-      this.currentImage = image;
-      this.bbox = Rectangle2D.create(0,0,width,height);
+   constructor: function(name, priority, imageLoader, imageName) {
+      if (priority instanceof ImageLoader) {
+         imageName = imageLoader;
+         imageLoader = priority;
+         priority = 0.1;
+      }
+      this.base(name, priority);
+      if (imageName != null) {
+         this.currentImage = imageLoader.get(imageName);
+         var dims = imageLoader.getDimensions(imageName);
+         this.bbox = Rectangle2D.create(0,0,dims.x,dims.y);
+      }
    },
 
    /**
@@ -73,16 +86,16 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
     },
 
    /**
-    * Set the image the component will render.
+    * Set the image the component will render from the {@link ImageLoader}
+    * specified when creating the component.
     *
-    * @param image {HTMLImage} The image to render
-    * @param width {Number} The width of the image, in pixels
-    * @param height {Number} The height of the image, in pixels
+    * @param imageName {String} The image to render
     */
-   setImage: function(image, width, height) {
-      this.currentImage = image;
-      this.bbox.setWidth(width);
-      this.bbox.setHeight(height);
+   setImage: function(imageName) {
+      this.currentImage = imageLoader.get(imageName);
+      var dims = imageLoader.getDimensions(imageName);
+      this.bbox.setWidth(dims.x);
+      this.bbox.setHeight(dims.y);
    },
 
    /**
