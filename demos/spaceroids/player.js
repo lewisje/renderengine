@@ -460,7 +460,7 @@ var SpaceroidsPlayer = Object2D.extend({
     *
     * @param event {Event} The event object
     */
-   onKeyDown: function(event) {
+   onKeyDown: function(keyCode, ctrlKey, altKey, shiftKey, event) {
       if (!this.alive)
       {
          return;
@@ -503,7 +503,7 @@ var SpaceroidsPlayer = Object2D.extend({
     *
     * @param event {Event} The event object
     */
-   onKeyUp: function(event) {
+   onKeyUp: function(keyCode, ctrlKey, altKey, shiftKey, event) {
       if (!this.alive)
       {
          return;
