@@ -65,7 +65,6 @@ Engine.initObject("PianoKeys", "Object2D", function() {
             this.sounds[charCode - 49].play();
             this.dots[charCode - 49] = true;
          }
-         console.debug(this.dots);
          return false;
       },
       
@@ -89,7 +88,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          // At some point, we'll draw something where the key being
          // pressed is located to give some feedback...
          for (var key = 0; key < 8; key++) {
-            var keyColor = this.dots[49 + key] ? "#ff0000" : "#ffffff";
+            var keyColor = this.dots[key] ? "#ff0000" : "#ffffff";
             var dotShape = Rectangle2D.create(15 + (26 * key), 108, 10, 10); 
             renderContext.setFillStyle(keyColor);
             renderContext.drawFilledRectangle(dotShape);
