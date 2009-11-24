@@ -104,7 +104,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyDownListener: function(eventObj) {
       if (this.getHostObject().onKeyDown)
       {
-         return this.getHostObject().onKeyDown(eventObj.charCode, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
+         return this.getHostObject().onKeyDown(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    },
 
@@ -114,7 +114,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyUpListener: function(eventObj) {
       if (this.getHostObject().onKeyUp)
       {
-         return this.getHostObject().onKeyUp(eventObj.charCode, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
+         return this.getHostObject().onKeyUp(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    },
 
@@ -124,7 +124,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyPressListener: function(eventObj) {
       if (this.getHostObject().onKeyPress)
       {
-         return this.getHostObject().onKeyPress(eventObj.charCode, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
+         return this.getHostObject().onKeyPress(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    }
 
