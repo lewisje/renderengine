@@ -77,12 +77,12 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
       }
 
       // Create an image element
-      var image = null;
+      var imageInfo = null;
       if (url != null) {
-         image = this.loadImageResource(name, url, width, height);
+         imageInfo = this.loadImageResource(name, url, width, height);
       }
 
-      this.base(name, image);
+      this.base(name, imageInfo);
    },
 
    /**
@@ -146,7 +146,7 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
     * @return {Point2D} A point which represents the width and height of the image
     */
    getDimensions: function(name) {
-      var imgInfo = this.base(name);
+      var imgInfo = this.getCachedObjects()[name] ? this.getCachedObjects()[name].data : null;
       return imgInfo ? Point2D.create(imgInfo.width, imgInfo.height) : null;
    },
 
