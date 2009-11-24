@@ -26,8 +26,8 @@ Engine.initObject("Tutorial4", "Game", function(){
 
       // The play field
       fieldBox: null,
-      fieldWidth: 480,
-      fieldHeight: 300,
+      fieldWidth: 320,
+      fieldHeight: 271,
       
       // References to the resource loaders
       imageLoader: null,
@@ -58,7 +58,7 @@ Engine.initObject("Tutorial4", "Game", function(){
          this.soundLoader = SoundLoader.create();
          
          // Begin the loading process
-         this.imageLoader.load("keys", this.getFilePath("resources/fingerboard.jpg"), 220, 171);
+         this.imageLoader.load("keys", this.getFilePath("resources/fingerboard.png"), 220, 171);
          this.soundLoader.load("c1", this.getFilePath("resources/low_c.mp3"));
          this.soundLoader.load("d1", this.getFilePath("resources/dee.mp3"));
          this.soundLoader.load("e1", this.getFilePath("resources/eee.mp3"));
@@ -69,10 +69,10 @@ Engine.initObject("Tutorial4", "Game", function(){
          this.soundLoader.load("c2", this.getFilePath("resources/hi_c.mp3"));
          
          // Wait until the image and sounds are loaded before proceeding
-			var self = this;
+         var self = this;
          this.loadTimeout = Timeout.create("wait", 250, function() {
-				self.waitForResources();
-			});
+            self.waitForResources();
+         });
          this.waitForResources();
       },
 
