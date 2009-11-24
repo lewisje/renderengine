@@ -61,7 +61,6 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          if (charCode >= 49 && charCode <= 56) {
             this.sounds[charCode - 49].play();
          }
-         return false;
       },
 
       /**
@@ -85,7 +84,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          if (charCode >= 49 && charCode <= 56) {
             this.dots[charCode - 49] = false;
          }
-         return false;
+         return true;
       },
       
       /**
@@ -99,7 +98,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          for (var key = 0; key < 8; key++) {
             keyColor = this.dots[49 + key] ? "#ff0000" : "#ffffff";
             renderContext.setFillStyle(keyColor);
-            var dotShape = Rectangle2D.create(15 + (26 * key), 180, 10, 10); 
+            var dotShape = Rectangle2D.create(15 + (26 * key), 108, 10, 10); 
             renderContext.drawFilledRectangle(dotShape);
          }
       }
