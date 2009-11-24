@@ -5,6 +5,13 @@
 The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.
 
 || *Date* || *Notes* ||
+|| 11/24/2009 || Just completed tutorial 4 and will be publishing by EOD. ||
+|| 11/23/2009 || While working on tutorial 4, it occurred to me that there wasn't a simple component to render a bitmap to the context.  There's now an ImageComponent which does just that. ||
+|| 11/20/2009 || I've been working on tutorials for the web.  The one tutorial that was out there was just too complicated, so I made it an "advanced" tutorial and started with some simpler ones. ||
+
+----
+
+|| *Date* || *Notes* ||
 || 11/15/2009 || *Beta 1.4 has been tagged.* Dropping support for HTML contexts as targetable contexts.  Only the document context will remain to allow the engine to boot. ||
 || 11/09/2009 || Updated build process with a "nodebug" option to remove all Console.log, .info, and .debug messages. This should speed up processing a tiny bit. Updated README.txt with recent information. Added Chrome Frame support tag to demos and tools. ||
 || 11/08/2009 || Added native methods for rendering text via the Canvas on browsers which support it.  Attempting to create a component which will take advantage of this. || 
