@@ -47,7 +47,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          this.base(renderContext, time);
          
          // Draw a dot on the key being pressed
-         this.draw();
+         this.draw(renderContext);
 
          renderContext.popTransform();
       },
