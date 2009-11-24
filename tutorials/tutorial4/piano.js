@@ -59,7 +59,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
        * Handle a "keypress" event from the <tt>KeyboardInputComponent</tt>.
        * @param keyCode {Number} The key which was pressed.
        */
-      onKeyDown: function(charCode,kc,c,a,s,e) {
+      onKeyDown: function(charCode) {
          // These will trigger a dot on the key being played
          console.debug(e);
          if (charCode >= 49 && charCode <= 56) {
