@@ -61,6 +61,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          if (charCode >= 49 && charCode <= 56) {
             this.sounds[charCode - 49].play();
          }
+         return false;
       },
 
       /**
@@ -84,7 +85,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          if (charCode >= 49 && charCode <= 56) {
             this.dots[charCode - 49] = false;
          }
-         return true;
+         return false;
       },
       
       /**
