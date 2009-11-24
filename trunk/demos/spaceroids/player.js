@@ -460,7 +460,7 @@ var SpaceroidsPlayer = Object2D.extend({
     *
     * @param event {Event} The event object
     */
-   onKeyDown: function(keyCode, ctrlKey, altKey, shiftKey, event) {
+   onKeyDown: function(charCode, keyCode, ctrlKey, altKey, shiftKey, event) {
       if (!this.alive)
       {
          return;
@@ -485,8 +485,10 @@ var SpaceroidsPlayer = Object2D.extend({
             break;
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.DRAW);
+				if (!this.thrusting) {
+	            this.field.soundLoader.get("thrust").play({volume: 30});
+				}
             this.thrusting = true;
-            this.field.soundLoader.get("thrust").play({volume: 30});
             break;
          case EventEngine.KEYCODE_SPACE:
             if (Spaceroids.evolved) {
@@ -503,7 +505,7 @@ var SpaceroidsPlayer = Object2D.extend({
     *
     * @param event {Event} The event object
     */
-   onKeyUp: function(keyCode, ctrlKey, altKey, shiftKey, event) {
+   onKeyUp: function(charCode, keyCode, ctrlKey, altKey, shiftKey, event) {
       if (!this.alive)
       {
          return;
