@@ -14,7 +14,8 @@ Maybe you're looking for FutureGoals?
     * Chrome
   # Example games/demos
     * 2D Vector-based example game (Asteroids-like clone)
-    * 2D DOM-based example game, Wii enabled (Simple ball bounce)
+    * 2D Simple sprite-based example game, Wii enabled (Ball Bounce)
+    * 2D Text rendering example (Vector, Bitmap, and Context Native)
     * 2D Example audio player built with engine
   # Rendering contexts
     * 2D Canvas
@@ -26,7 +27,7 @@ Maybe you're looking for FutureGoals?
     * Logic 
     * Rendering (Canvas, DOM)
   # 2D Sprite support
-  # Sound support
+  # Sound support (Sound Manager 2)
   # Resource loaders
     * JSON Object
     * XML
