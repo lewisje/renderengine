@@ -59,10 +59,20 @@ Engine.initObject("Tutorial4", "Game", function(){
          
          // Begin the loading process
          this.imageLoader.load("keys", this.getFilePath("resources/fingerboard.jpg"), 220, 171);
-         this.soundLoader.load("tones", this.getFilePath("resources/third_octave.mp3"));
+         this.soundLoader.load("c1", this.getFilePath("resources/low_c.mp3"));
+         this.soundLoader.load("d1", this.getFilePath("resources/dee.mp3"));
+         this.soundLoader.load("e1", this.getFilePath("resources/eee.mp3"));
+         this.soundLoader.load("f1", this.getFilePath("resources/eff.mp3"));
+         this.soundLoader.load("g1", this.getFilePath("resources/gee.mp3"));
+         this.soundLoader.load("a1", this.getFilePath("resources/ay.mp3"));
+         this.soundLoader.load("b1", this.getFilePath("resources/bee.mp3"));
+         this.soundLoader.load("c2", this.getFilePath("resources/hi_c.mp3"));
          
          // Wait until the image and sounds are loaded before proceeding
-         this.loadTimeout = Timeout.create("wait", 250, Tutorial4.waitForResources);
+			var self = this;
+         this.loadTimeout = Timeout.create("wait", 250, function() {
+				self.waitForResources();
+			});
          this.waitForResources();
       },
 
