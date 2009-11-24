@@ -50,6 +50,7 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
 
    currentImage: null,
    bbox: null,
+	imageLoader: null,
 
    /**
     * @private
@@ -61,6 +62,7 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
          priority = 0.1;
       }
       this.base(name, priority);
+		this.imageLoader = imageLoader;
       if (imageName != null) {
          this.currentImage = imageLoader.get(imageName);
          var dims = imageLoader.getDimensions(imageName);
@@ -92,8 +94,8 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
     * @param imageName {String} The image to render
     */
    setImage: function(imageName) {
-      this.currentImage = imageLoader.get(imageName);
-      var dims = imageLoader.getDimensions(imageName);
+      this.currentImage = this.imageLoader.get(imageName);
+      var dims = this.imageLoader.getDimensions(imageName);
       this.bbox.setWidth(dims.x);
       this.bbox.setHeight(dims.y);
    },
