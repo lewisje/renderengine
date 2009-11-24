@@ -21,7 +21,7 @@ Base.prototype = {
       var extend = Base.prototype.extend;
       if (arguments.length == 2) {
          var ancestor = this[source];
-         var ancestorClass = this;
+         var ancestorClass = this.constructor ? this.constructor.prototype : null;
          // overriding?
          if ((ancestor instanceof Function) && (value instanceof Function) &&
             ancestor.valueOf() != value.valueOf() && /\bbase\b/.test(value)) {
@@ -30,7 +30,7 @@ Base.prototype = {
          // var fromPrototype = !Base._prototyping && _prototype[source] == ancestor;
             value = function() {
                var previous = this.base;
-               var previousClass = this.baseClass;
+               var previousClass = this;
             // this.base = fromPrototype ? _prototype[source] : ancestor;
                this.base = ancestor;
                this.baseClass = ancestorClass;
