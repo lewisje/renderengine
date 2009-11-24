@@ -22,7 +22,7 @@ Engine.initObject("Tutorial4", "Game", function(){
       renderContext: null,
 
       // Engine frames per second
-      engineFPS: 5,
+      engineFPS: 25,
 
       // The play field
       fieldBox: null,
