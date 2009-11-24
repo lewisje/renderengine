@@ -46,12 +46,14 @@ Engine.initObject("KeyboardInputComponent", "InputComponent", function() {
  * <li>onKeyUp - A key was released</li>
  * <li>onKeyPress - A key was pressed and released</li>
  * </ul>
- * Each function should take up to five arguments.  The first argument is the
- * <tt>keyCode</tt>, a number which represents which key was acted upon.  See the
- * {@link EventEngine} for key codes of the non-alphabetic keys. The second argument
- * is a boolean indicating if the Control key was pressed.  The third argument is a
- * boolean indicating if the Alt key was pressed.  The fourth argument is a boolean
- * indicating if the Shift key was pressed.  The fifth and final argument is the
+ * Each function should take up to six arguments.  The first argument is the character
+ * code, a number which represents the key that was pressed. The second argument is the
+ * <tt>keyCode</tt>, a number which represents special keys that were pressed, such as
+ * the arrow keys and function keys.  See the
+ * {@link EventEngine} for key codes of the non-alphabetic keys. The third argument
+ * is a boolean indicating if the Control key was pressed.  The fourth argument is a
+ * boolean indicating if the Alt key was pressed.  The fifth argument is a boolean
+ * indicating if the Shift key was pressed.  The sixth and final argument is the
  * actual event object itself.
  *
  * @extends InputComponent
@@ -102,7 +104,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyDownListener: function(eventObj) {
       if (this.getHostObject().onKeyDown)
       {
-         return this.getHostObject().onKeyDown(eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
+         return this.getHostObject().onKeyDown(eventObj.charCode, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    },
 
@@ -112,7 +114,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyUpListener: function(eventObj) {
       if (this.getHostObject().onKeyUp)
       {
-         return this.getHostObject().onKeyUp(eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
+         return this.getHostObject().onKeyUp(eventObj.charCode, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    },
 
@@ -122,7 +124,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
    _keyPressListener: function(eventObj) {
       if (this.getHostObject().onKeyPress)
       {
-         return this.getHostObject().onKeyPress(eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
+         return this.getHostObject().onKeyPress(eventObj.charCode, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    }
 
