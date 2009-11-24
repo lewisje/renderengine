@@ -1,24 +1,15 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-Today I made the tough decision to finally drop HTML contexts as targetable render contexts.  [HTMLContextNote See this for an explanation].
+The Render Engine was tweeted last week, so it suddenly became evident that the engine needed to be updated, and the website needed to reflect that.  Before the v1.0 gold release of the engine, I want to have the documentation in a complete state and I want some nice tutorials to ease people into the concepts of the engine.  I've spent the last week writing some tutorials, and in the process cleaning up the engine where things were missed or were buggy.  I'll be getting back to the tasks at hand shortly.  The first three tutorials are up with the fourth one by the end of today (11/24/09).
 
-Had to reorganize the [ReleaseMilestones release tasks] again.  The Sprite Editor is being moved to beta 1.5 and the DOM transforms are being moved to beta 1.4.
+On November 15th I had to make the tough decision to finally drop HTML contexts as targetable render contexts.  [HTMLContextNote See this for an explanation].
 
 Recently I noticed the [http://code.google.com/apis/o3d/ Google Labs O3D] project.  I really like this and hope to get it into the engine at some point. It'll be after the 1.0 release (probably part of 2.0, or even 3.0).
 
-I've been super busy at work and haven't had a lot of time to work on the engine. I made a few small updates to script loading and put in some more documentation. Because of work demands, I had to push the release date for beta 1.4 to _November 20th_.
 
-*Note:* I'm back... As the weather gets cooler, I'm going to get back to working on The Render Engine.
-
-I just updated the render contexts to be unobtrusive.  With The Render Engine, swapping of contexts should be something that is as simple as telling the game which to use.  You shouldn't have to know how to assign sprite images or how to draw to the context within your game.  Instead, this should be handled by the context and the components themselves.  The Wii Test was updated to show off this capability.
-
-Additionally, with Gecko and Webkit supporting transformations, I want to see if I can get them working in the render contexts.  Using these, it should be possible to support most drawing operations on the HTMLDivContext.  We'll see if this is possible...
-
-
+_Older Stuff:_
 
 I decided, a while back, to use the _Sylvester_ math library to do 2D and 3D work.  However, after spending some time really examining the library, I've determined that what I've got (`Math2D`) bridged to _Sylvester's_ classes isn't the best solution.  First off, having a bridge, instead of using _Sylvester_ natively just leads to at least two classes for each point, rectangle, etc.
 
 Secondly _Sylvester_, while admittedly excellent at what it's designed to do, isn't optimized for games.  There's too much object creation and destruction.  The pool of objects is constantly being refreshed and the garbage collector is working overtime.  This needs to be remedied so that _The Render Engine_ will run well on all platforms.
-
-So, after a lot of deliberating, I'm going to integrate what _Sylvester_ does directly into the library.  I'll convert the classes to minimize object creation so that the garbage collector will get a break.  And finally, I'll see if maybe I can convince James Coglan to accept an _optimized_ version of his lib for potential game development.
