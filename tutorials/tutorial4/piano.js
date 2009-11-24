@@ -9,6 +9,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
    var PianoKeys = Object2D.extend({
 
       sounds: [],
+      dots: [false,false,false,false,false,false,false],
 
       constructor: function() {
          this.base("PianoKeys");
