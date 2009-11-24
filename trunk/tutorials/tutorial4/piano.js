@@ -59,21 +59,10 @@ Engine.initObject("PianoKeys", "Object2D", function() {
        * Handle a "keypress" event from the <tt>KeyboardInputComponent</tt>.
        * @param keyCode {Number} The key which was pressed.
        */
-      onKeyPress: function(charCode) {
-         // These will trigger a sound to play
-         if (charCode >= 49 && charCode <= 56) {
-            this.sounds[charCode - 49].play();
-         }
-         return false;
-      },
-
-      /**
-       * Handle a "keypress" event from the <tt>KeyboardInputComponent</tt>.
-       * @param keyCode {Number} The key which was pressed.
-       */
       onKeyDown: function(charCode) {
          // These will trigger a dot on the key being played
          if (charCode >= 49 && charCode <= 56) {
+            this.sounds[charCode - 49].play();
             this.dots[charCode - 49] = true;
          }
          return false;
