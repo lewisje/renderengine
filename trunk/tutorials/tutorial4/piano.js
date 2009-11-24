@@ -61,11 +61,11 @@ Engine.initObject("PianoKeys", "Object2D", function() {
        */
       onKeyDown: function(charCode) {
          // These will trigger a dot on the key being played
-         console.debug(charCode);
          if (charCode >= 49 && charCode <= 56) {
             this.sounds[charCode - 49].play();
             this.dots[charCode - 49] = true;
          }
+         console.debug(this.dots);
          return false;
       },
       
