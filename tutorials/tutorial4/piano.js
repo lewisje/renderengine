@@ -8,16 +8,28 @@ Engine.initObject("PianoKeys", "Object2D", function() {
 
    var PianoKeys = Object2D.extend({
 
+		sounds: [],
+
       constructor: function() {
          this.base("PianoKeys");
 
          // Add the component which handles keyboard input
          this.add(KeyboardInputComponent.create("input"));
-         this.add(KeyboardInputComponent.create("move"));
+         this.add(Transform2DComponent.create("move"));
          this.add(ImageComponent.create("draw", Tutorial4.imageLoader, "keys"));
 
          // Position the object
          this.getComponent("move").setPosition(Point2D.create(20, 25));
+			
+			// Get the sounds into the array
+			this.sounds.push(Tutorial4.soundLoader.get("c1"));
+			this.sounds.push(Tutorial4.soundLoader.get("d1"));
+			this.sounds.push(Tutorial4.soundLoader.get("e1"));
+			this.sounds.push(Tutorial4.soundLoader.get("f1"));
+			this.sounds.push(Tutorial4.soundLoader.get("g1"));
+			this.sounds.push(Tutorial4.soundLoader.get("a1"));
+			this.sounds.push(Tutorial4.soundLoader.get("b1"));
+			this.sounds.push(Tutorial4.soundLoader.get("c2"));
       },
       
       /**
@@ -43,24 +55,32 @@ Engine.initObject("PianoKeys", "Object2D", function() {
        * Handle a "keypress" event from the <tt>KeyboardInputComponent</tt>.
        * @param keyCode {Number} The key which was pressed.
        */
-      onKeyPress: function(keyCode) {
+      onKeyPress: function(charCode) {
          // These will trigger a sound to play
-         switch (keyCode) {
+         switch (charCode) {
             case 49:    // 1 key
+            	this.sounds[0].play();
                break;
             case 50:    // 2 key
+            	this.sounds[1].play();
                break;
             case 51:    // 3 key
+            	this.sounds[2].play();
                break;
             case 52:    // 4 key
+            	this.sounds[3].play();
                break;
             case 53:    // 5 key
+            	this.sounds[4].play();
                break;
             case 54:    // 6 key
+            	this.sounds[5].play();
                break;
             case 55:    // 7 key
+            	this.sounds[6].play();
                break;
             case 56:    // 8 key
+            	this.sounds[7].play();
                break;
          }
          return false;

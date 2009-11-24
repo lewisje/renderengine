@@ -61,9 +61,10 @@ Engine.initObject("GameObject", "Object2D", function() {
 		
 		/**
 		 * Handle a "keydown" event from the <tt>KeyboardInputComponent</tt>.
+		 * @param charCode {Number} Unused
 		 * @param keyCode {Number} The key which was pressed down.
 		 */
-		onKeyDown: function(keyCode) {
+		onKeyDown: function(charCode, keyCode) {
 	      switch (keyCode) {
 	         case EventEngine.KEYCODE_LEFT_ARROW:
 	            this.moveVec.setX(-4);
@@ -83,9 +84,10 @@ Engine.initObject("GameObject", "Object2D", function() {
 		
 		/**
 		 * Handle a "keyup" event from the <tt>KeyboardInputComponent</tt>.
+		 * @param charCode {Number} Unused
 		 * @param keyCode {Number} The key which was released
 		 */
-		onKeyUp: function(keyCode) {
+		onKeyUp: function(charCode, keyCode) {
 	      switch (keyCode) {
 	         case EventEngine.KEYCODE_LEFT_ARROW:
 	         case EventEngine.KEYCODE_RIGHT_ARROW:
