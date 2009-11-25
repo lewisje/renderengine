@@ -55,7 +55,7 @@ Engine.initObject("Tutorial5", "Game", function(){
       
       // The play field
       fieldBox: null,
-      fieldWidth: 550,
+      fieldWidth: 400,
       fieldHeight: 320,
       
       // The bitmap font loader
