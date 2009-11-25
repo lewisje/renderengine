@@ -42,12 +42,12 @@ Engine.initObject("RenderContext", "Container", function() {
  * during engine runtime.  A render context is a container of all of the objects
  * added to it so that each object is given the chance to render.
  *
- * @constructor
  * @param contextName {String} The name of this context.  Default: RenderContext
  * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.
- * @see CanvasContext
- * @see DocumentContext
+ * @see {CanvasContext}
  * @extends Container
+ * @constructor
+ * @description Creates a render context
  */
 var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
@@ -111,7 +111,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
-    * Set the scale of the rendering context.
+    * [ABSTRACT] Set the scale of the rendering context.
     *
     * @param scaleX {Number} The scale along the X dimension
     * @param scaleY {Number} The scale along the Y dimension
@@ -129,42 +129,69 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldScale = scale;
    },
 
+   /**
+    * Set the world rotation of the rendering context.  All objects
+    * should be adjusted by this rotation when the context renders.
+    * @param rotation {Number} The rotation angle
+    */
    setWorldRotation: function(rotation) {
       this.worldRotation = rotation;
    },
 
+   /**
+    * Set the world position of the rendering context.  All objects
+    * should be adjuest by this position when the context renders.
+    * @param point {Point2D} The world position
+    */
    setWorldPosition: function(point) {
       this.worldPosition.set(point);
    },
 
    /**
     * Gets an array representing the rendering scale of the world.
-    * @return {Array} The first element is the X axis, the second is the Y axis
+    * @return {Number[]} The first element is the X axis, the second is the Y axis
     */
    getWorldScale: function() {
       return this.worldScale;
    },
 
+   /**
+    * Gets the world rotation angle.
+    * @return {Number}
+    */
    getWorldRotation: function() {
       return this.worldRotation;
    },
 
+   /**
+    * Get the world render position.
+    * @return {Point2D}
+    */
    getWorldPosition: function() {
       return this.worldPosition;
    },
 
+   /**
+    * Set the viewport of the render context.  The viewport is a window
+    * upon the world so that not all of the world is rendered at one time.
+    * @param rect {Rectangle2D} A rectangle defining the viewport
+    */
    setViewport: function(rect) {
       this.viewport = Rectangle2D.create(rect);
    },
 
+   /**
+    * Get the viewport of the render context.
+    * @return {Rectangle2D}
+    */
    getViewport: function() {
       return this.viewport;
    },
 
    /**
-    * Add an object to the render list.  Only objects
-    * within the render list will be rendered.  If an object declared
-    * an <tt>afterAdd</tt> method, it will be called after the object
+    * Add an object to the context.  Only objects
+    * within the context will be rendered.  If an object declared
+    * an <tt>afterAdd()</tt> method, it will be called after the object
     * has been added to the context.
     *
     * @param obj {BaseObject} The object to add to the render list
@@ -206,7 +233,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
-    * Clear the context and prepare it for rendering.  If you pass a
+    * [ABSTRACT] Clear the context and prepare it for rendering.  If you pass a
     * rectangle, only that portion of the world will be cleared.  If
     * you don't pass a rectangle, the entire context is cleared.
     *
@@ -251,12 +278,17 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.popTransform();
    },
 
+   /**
+    * Render a single object into the world for the given time.
+    * @param obj {BaseObject} An object to render
+    * @param time {Number} The world time, in milliseconds
+    */
    renderObject: function(obj, time) {
       obj.update(this, time);
    },
 
    /**
-    * Gives the render context a chance to initialize the world.
+    * [ABSTRACT] Gives the render context a chance to initialize the world.
     * Use this method to change the world position, rotation, scale, etc.
     *
     * @param time {Number} The current world time
@@ -291,7 +323,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
          this.popTransform();
       }
    }
-}, { /** @scope RenderContext.prototype */
+}, /** @scope RenderContext.prototype */{ 
 
    /**
     * Sort the objects to draw from objects with the lowest
@@ -310,7 +342,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    /**
     * Get the class name of this object
-    * @return {String} The string "RenderContext"
+    * @return {String} "RenderContext"
     */
    getClassName: function() {
       return "RenderContext";

@@ -38,9 +38,14 @@ Engine.include("/engine/engine.baseobject.js");
 Engine.initObject("Particle", "PooledObject", function() {
 
 /**
- * @class Base particle class.  A particle need only implement the
- *        draw method.  The remainder of the functionality is
+ * @class Base particle class.  A particle only needs to implement the
+ *        <tt>draw()</tt> method. The remainder of the functionality is
  *        handled by this abstract class.
+ *
+ * @param lifetime {Number} The life of the particle, in milliseconds
+ * @extends PooledObject
+ * @constructor
+ * @description Create a particle
  */
 var Particle = PooledObject.extend(/** @scope Particle.prototype */{
 
@@ -50,12 +55,18 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
 
    birth: 0,
 
+   /**
+    * @private
+    */
    constructor: function(lifetime) {
       this.base("Particle");
       this.life = lifetime;
       this.birth = 0;
    },
 
+   /**
+    * Release the object back into the pool.
+    */
    release: function() {
       this.base();
       this.life = 0;
@@ -63,12 +74,23 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       this.birth = 0;
    },
 
+   /**
+    * Initializes the object within the <tt>ParticleEngine</tt>
+    * @param pEngine {ParticleEngine} The particle engine which owns the particle
+    * @param time {Number} The world time when the particle was created
+    * @private
+    */
    init: function(pEngine, time) {
       this.engine = pEngine;
       this.life += time;
       this.birth = time;
    },
 
+   /**
+    * Update the particle in the render context, calling its draw method.
+    * @param renderContext {RenderContext} The context where the particle is drawn
+    * @param time {Number} The world time, in milliseconds
+    */
    update: function(renderContext, time) {
       if (time < this.life)
       {
@@ -84,21 +106,36 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       }
    },
 
+   /**
+    * Get the time-to-live for the particle (when it will expire)
+    * @return {Number} milliseconds
+    */
    getTTL: function() {
-		return this.life;
-	},
+      return this.life;
+   },
 
-	getBirth: function() {
-		return this.birth;
-	},
+   /**
+    * Get the time at which the particle was created
+    * @return {Number} milliseconds
+    */
+   getBirth: function() {
+      return this.birth;
+   },
 
+   /**
+    * [ABSTRACT] Draw the particle
+    * @param renderContext {RenderContext} The context to render the particle to
+    * @param time {Number} The world time, in milliseconds
+    */
    draw: function(renderContext, time) {
+      // ABSTRACT
    }
-}, {
+   
+}, /** @scope Particle.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} "Particle"
     */
    getClassName: function() {
       return "Particle";
@@ -116,6 +153,9 @@ Engine.initObject("ParticleEngine", "BaseObject", function() {
  *        particles within a game environment.  This is registered with the
  *        render context so it will be updated at regular intervals.
  *
+ * @extends BaseObject
+ * @constructor
+ * @description Create the particle engine
  */
 var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 
@@ -125,12 +165,18 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 
    dead: null,
 
+   /**
+    * @private
+    */
    constructor: function() {
       this.base("ParticleEngine");
       this.particles = [];
       this.dead = [];
    },
 
+   /**
+    * Releases the object back into the pool.
+    */
    release: function() {
       this.base();
       this.particles = null,
@@ -216,21 +262,25 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       }
    },
 
-	getProperties: function() {
-		var self = this;
-		var prop = this.base(self);
-		return $.extend(prop, {
-			"Count" : [function() { return self.particles.length; },
-						  null, false]
-		});
-	}
+   /**
+    * Get the properties object for the particle engine
+    * @return {Object}
+    */
+   getProperties: function() {
+      var self = this;
+      var prop = this.base(self);
+      return $.extend(prop, {
+         "Count" : [function() { return self.particles.length; },
+                    null, false]
+      });
+   }
 
 
-}, {
+}, /** @scope ParticleEngine.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} "ParticleEngine"
     */
    getClassName: function() {
       return "ParticleEngine";

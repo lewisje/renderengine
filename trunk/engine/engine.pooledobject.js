@@ -3,8 +3,8 @@
  * BaseObject
  *
  * @fileoverview An object that has functionality to assist in keeping memory
- * 				  usage down and to minimize the effect of the Javascript garbage
- * 				  collector.
+ *               usage down and to minimize the effect of the JavaScript garbage
+ *               collector.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -36,12 +36,18 @@ Engine.initObject("PooledObject", null, function() {
 
 /**
  * @class Pooled objects are created as needed, and reused from a static pool
- *        of all object types.  When an object is created, if one is not available
- *        in the pool, a new object is created.  When the object is destroyed,
- *        it is returned to the pool so it can be used again.  This has the
+ *        of all objects, organized by class.  When an object is created, if one 
+ *        is not available in the pool, a new object is created.  When the object 
+ *        is destroyed, it is returned to the pool so it can be used again.  This has the
  *        effect of minimizing the requirement of garbage collection, reducing
  *        cycles needed to clean up dead objects.
  *
+ * @param name {String} The name of the object from which the Id will be generated.
+ * @constructor
+ * @description Create an instance of this object, assigning a name to it.  An
+ *              object reference will be maintained by the {@link Engine} class,
+ *              which gives the object final responsibility for making sure the
+ *              object can be destroyed.
  */
 var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
@@ -51,16 +57,8 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    // The name of the object
    name: "",
 
-
    /**
-    * Create an instance of this object, assigning a name to it.  An
-    * object reference will be maintained by the {@link Engine} class,
-    * which gives the object final responsibility for making sure the
-    * object can be destroyed.
-    *
-    * @param name {String} The name of the object from which the Id will be generated.
-    * @memberOf PooledObject
-    * @constructor
+    * @private
     */
    constructor: function(name) {
       this.name = name;
@@ -68,10 +66,9 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    },
 
    /**
-    * When a pooled object is destroyed, it will be released so it
-    * can clean up variables before being put back into the pool.
-    * the variables should be returned to an "uninitialized" state.
-    * @memberOf PooledObject
+    * When a pooled object is destroyed, its <tt>release()</tt> method will be called
+    * so it has a chance to can clean up instance variables before being put back into 
+    * the pool for reuse. The variables should be returned to an "uninitialized" state.
     */
    release: function() {
       this.name = "";
@@ -79,9 +76,9 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    },
 
    /**
-    * Destroy this object instance (remove it from the Engine).  The object
-    * is returned to the pool of objects so it can be used again.
-    * @memberOf PooledObject
+    * Destroy this object instance (remove it from the Engine).  The object's release
+    * method is called after destruction so it will be returned to the pool of objects 
+    * to be used again.
     */
    destroy: function() {
 
@@ -98,10 +95,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    /**
     * Get the managed Id of this object within the Engine.
     *
-    * @return This object's engine Id
-    * @type String
-    * @memberOf BaseObject
-    * @memberOf BaseObject
+    * @return {String}
     */
    getId: function() {
       return this.id;
@@ -110,75 +104,71 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    /**
     * Get the original name this object was created with.
     *
-    * @return The name used when creating this object
-    * @type String
-    * @memberOf BaseObject
+    * @return {String} The name used when creating this object
     */
    getName: function() {
       return this.name;
    },
 
-	/**
-	 * Returns an object that assigns getter and setter methods
-	 * for exposed properties of an object.
-	 * @param {BaseObject} self The reference to the object being
-	 * 					 inspected.
-	 * @return {Object} An object which contains getter and setter methods.
-	 */
-	getProperties: function() {
-		var self = this;
-		var prop = {};
-		return $.extend(prop, {
-	  		"Id" 				: [function() { return self.getId(); },
-							 		null, false],
-	  		"ObjectName" 	: [function() { return self.getName(); },
-							 		function(i) { self.setName(i); }, true]
-		});
-	},
+   /**
+    * Returns an object that assigns getter and setter methods
+    * for exposed properties of an object.
+    * @return {Object} An object which contains getter and setter methods.
+    */
+   getProperties: function() {
+      var self = this;
+      var prop = {};
+      return $.extend(prop, {
+         "Id"           : [function() { return self.getId(); },
+                           null, false],
+         "ObjectName"   : [function() { return self.getName(); },
+                           function(i) { self.setName(i); }, true]
+      });
+   },
 
    /**
     * Serialize the object to XML.
-    * @type String
+    * @return {String}
     */
    toString: function(indent) {
-		indent = indent ? indent : "";
-		var props = this.getProperties();
-		var xml = indent + "<" + this.constructor.getClassName();
-		for (var p in props) {
-			// If the value should be serialized, call it's getter
-			if (props[p][2]) {
-				xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
-			}
-		}
+      indent = indent ? indent : "";
+      var props = this.getProperties();
+      var xml = indent + "<" + this.constructor.getClassName();
+      for (var p in props) {
+         // If the value should be serialized, call it's getter
+         if (props[p][2]) {
+            xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
+         }
+      }
 
-		xml += "/>\n";
-		return xml;
+      xml += "/>\n";
+      return xml;
    }
 
 }, /** @scope PooledObject.prototype **/{
 
    /**
     * <tt>true</tt> for all objects within the engine.
-    * @type Boolean
+    * @type {Boolean}
     */
    isRenderEngineObject: true,
 
    /**
     * <tt>true</tt> for all objects that are pooled.
-    * @type Boolean
+    * @type {Boolean}
     */
    isPooledObject: true,
 
-	/**
-	 * Number of new objects put into the pool
-	 * @type Number
-	 */
+   /**
+    * Number of new objects put into the pool
+    * @type {Number}
+    */
    poolNew: 0,
 
-	/**
-	 * Total number of objects in the pool
-	 * @type Number
-	 */
+   /**
+    * Total number of objects in the pool
+    * @type {Number}
+    */
    poolSize: 0,
 
    /**
@@ -226,15 +216,14 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
    /**
     * The pool of all objects, stored by class name.
-    * @type Object
+    * @type {Object}
     */
    objectPool: {},
 
    /**
     * Get the class name of this object
     *
-    * @return {String}
-    * @memberOf PooledObject
+    * @return {String} "PooledObject"
     */
    getClassName: function() {
       if (!this.hasOwnProperty("getClassName")) {

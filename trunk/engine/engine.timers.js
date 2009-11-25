@@ -44,6 +44,7 @@ Engine.initObject("Timer", "BaseObject", function() {
  *
  * @extends BaseObject
  * @constructor
+ * @description Create a timer object
  */
 var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
@@ -51,6 +52,9 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
    running: false,
 
+   /**
+    * @private
+    */
    constructor: function(name, interval, callback) {
       callback = name instanceof Number ? interval : callback;
       interval = name instanceof Number ? name : interval;
@@ -64,6 +68,9 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
       this.restart();
    },
 
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.timer = null;
@@ -159,7 +166,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    getInterval: function() {
       return this.interval;
    }
-}, { /** @scope Timer.prototype */
+}, /** @scope Timer.prototype */{ 
    /**
     * Get the class name of this object
     * @return {String} "Timer"
@@ -177,11 +184,13 @@ Engine.initObject("Timeout", "Timer", function() {
 
 /**
  * @class A timer that wraps the <tt>window.setTimeout</tt> method.
- * @extends Timer
+ *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
  * @param callback {Function} The function to call when the interval is reached
+ * @extends Timer
  * @constructor
+ * @description Create a timeout timer
  */
 var Timeout = Timer.extend(/** @scope Timeout.prototype */{
 
@@ -193,6 +202,9 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
       this.base();
    },
 
+   /**
+    * Cancel and destroy the timeout
+    */
    destroy: function() {
       this.cancel();
       this.base();
@@ -204,7 +216,7 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
    restart: function() {
       this.setTimer(window.setTimeout(this.getCallback(), this.getInterval()));
    }
-}, { /** @scope Timeout.prototype */
+}, /** @scope Timeout.prototype */{ 
    /**
     * Get the class name of this object
     * @return {String} "Timeout"
@@ -229,9 +241,13 @@ Engine.initObject("OneShotTimeout", "Timeout", function() {
  * @param callback {Function} The function to call when the interval is reached
  * @constructor
  * @extends Timeout
+ * @description Create a one-shot timeout
  */
 var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
 
+   /**
+    * @private
+    */
    constructor: function(name, interval, callback) {
 
       var cb = function() {
@@ -257,7 +273,7 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
 
       this.base();
    }
-}, { /** @scope OneShotTimeout.prototype */
+}, /** @scope OneShotTimeout.prototype */{ 
 
    /**
     * Get the class name of this object
@@ -286,6 +302,7 @@ Engine.initObject("OneShotTrigger", "OneShotTimeout", function() {
  * @param triggerCallback {Function} The function to call for each trigger interval
  * @extends OneShotTimeout
  * @constructor
+ * @description Create a one-shot triggering timeout
  */
 var OneShotTrigger = OneShotTimeout.extend(/** @scope OneShotTimeout.prototype */{
 
@@ -301,7 +318,7 @@ var OneShotTrigger = OneShotTimeout.extend(/** @scope OneShotTimeout.prototype *
 
       this.base(name, interval, doneFn);
    }
-}, { /** @scope OneShotTrigger.prototype */
+}, /** @scope OneShotTrigger.prototype */{ 
 
    /**
     * Get the class name of this object
@@ -329,6 +346,7 @@ Engine.initObject("MultiTimeout", "Timeout", function() {
  * @param callback {Function} The function to call when the interval is reached
  * @extends Timeout
  * @constructor
+ * @description Creat a multi-timeout triggering time
  */
 var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
 
@@ -350,7 +368,7 @@ var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
       this.base(name, interval, cb);
    }
    
-}, { /** @scope MultiTimeout.prototype */
+}, /** @scope MultiTimeout.prototype */{ 
 
    /**
     * Get the class name of this object
@@ -374,6 +392,7 @@ Engine.initObject("Interval", "Timer", function() {
  * @param callback {Function} The function to call when the interval is reached
  * @extends Timer
  * @constructor
+ * @description Create an interval timer
  */
 var Interval = Timer.extend(/** @scope Interval.prototype */{
 
@@ -385,6 +404,9 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
       this.base();
    },
 
+   /**
+    * Cancel and destroy the interval timer.
+    */
    destroy: function() {
       this.cancel();
       this.base();
@@ -396,7 +418,7 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
    restart: function() {
       this.setTimer(window.setInterval(this.getCallback(), this.getInterval()));
    }
-}, { /** @scope Interval.prototype */
+}, /** @scope Interval.prototype */{ 
 
    /**
     * Get the class name of this object

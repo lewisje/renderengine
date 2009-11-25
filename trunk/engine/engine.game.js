@@ -3,8 +3,8 @@
  * Game
  *
  * @fileoverview The game object represents an instance of a game.  It is
- * 				  the controlling entity for all of a game and is responsible
- * 				  for setup and teardown of the game.
+ *               the controlling entity for all of a game and is responsible
+ *               for setup and teardown of the game.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -44,17 +44,17 @@ var Game = Base.extend(/** @scope Game.prototype */{
    constructor: null,
 
    /**
-    * Initialize the game.
+    * Initialize the game.  This method will be called automatically by the
+    * engine when all dependencies for the game have been resolved.
     * @memberOf Game
-    * @static
     */
    setup: function() {
    },
 
    /**
-    * Shut down the game.
+    * Shut down the game.  This method will be called if the engine is shut down
+    * giving a game time to clean up before it is destroyed.
     * @memberOf Game
-    * @static
     */
    tearDown: function() {
    },
@@ -62,7 +62,6 @@ var Game = Base.extend(/** @scope Game.prototype */{
    /**
     * Get the display name of the game.
     * @memberOf Game
-    * @static
     */
    getName: function() {
       return "Game";
@@ -74,48 +73,52 @@ var Game = Base.extend(/** @scope Game.prototype */{
     *
     * @param scriptSource {String} The relative path to the script to load.
     * @memberOf Game
-    * @static
     */
    load: function(scriptSource) {
       Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game's path");
       Engine.loadScript( (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource );
    },
 
-	/**
-	 * Load a script, relative to the game engine.  Scripts cannot be loaded
-	 * with an absolute URL.
-	 * 
-	 * @param scriptPath {String} The relative path of the script to load.
-	 */
+   /**
+    * Load a script, relative to the game engine.  Scripts cannot be loaded
+    * with an absolute URL.
+    * 
+    * @param scriptPath {String} The relative path of the script to load.
+    */
    loadEngineScript: function(scriptPath) {
       Engine.loadNow(scriptPath, Game.scriptLoaded);
    },
 
+   /**
+    * Called when the script with the given path is loaded.
+    * @param scriptPath {String}
+    */
    scriptLoaded: function(scriptPath) {
    },
 
    /**
-    * Abstracted to keep games separate from Engine
+    * Allows a game to inject a function call into the scriping
+    * queue to be processed when the queue has an available slot.
+    * @param cb {Function} The callback to execute
     */
    setQueueCallback: function(cb) {
       Engine.setQueueCallback(cb);
    },
 
    /**
-    * Get the number of players this game supports.
+    * Get the number of players the game supports.
     *
     * @return {Number}
     * @memberOf Game
-    * @static
     */
    getPlayers: function() {
       return 1;
    },
 
-	/**
-	 * Get the path where your game class exists.
-	 * @return {String}
-	 */
+   /**
+    * Get the path where your game class exists.
+    * @return {String}
+    */
    getGamePath: function() {
       var loc = window.location;
       var path = loc.protocol + "//" + loc.host + loc.pathname.substring(0,loc.pathname.lastIndexOf("/"));
@@ -123,11 +126,11 @@ var Game = Base.extend(/** @scope Game.prototype */{
       return path;
    },
 
-	/**
-	 * Get the path of the specified file, relative to your game class.
-	 * @param fileName {String} The path to the file
-	 * @return {String}
-	 */
+   /**
+    * Get the path of the specified file, relative to your game class.
+    * @param fileName {String} The path to the file
+    * @return {String}
+    */
    getFilePath: function(fileName) {
       var loc = window.location;
       if (fileName.indexOf(loc.protocol) != -1 && fileName.indexOf(loc.host) == -1) {

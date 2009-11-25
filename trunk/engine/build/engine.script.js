@@ -35,20 +35,20 @@
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend(/** @scope Engine.prototype */{
-	constructor: null,
+var Engine = Engine.extend(/** @lends Engine */{
+   constructor: null,
 
    /*
     * Script queue
     */
-	scriptQueue: [],
-	loadedScripts: {},			// Cache of loaded scripts
-   scriptLoadCount: 0,			// Number of queued scripts to load
-   scriptsProcessed: 0,			// Number of scripts processed
-   scriptRatio: 0,				// Ratio between processed/queued
-	queuePaused:false,			// Script queue paused flag
-	pauseReps: 0,					// Queue run repetitions while paused
-	
+   scriptQueue: [],
+   loadedScripts: {},         // Cache of loaded scripts
+   scriptLoadCount: 0,        // Number of queued scripts to load
+   scriptsProcessed: 0,       // Number of scripts processed
+   scriptRatio: 0,            // Ratio between processed/queued
+   queuePaused:false,         // Script queue paused flag
+   pauseReps: 0,              // Queue run repetitions while paused
+   
    /**
     * Status message when a script is not found
     * @memberOf Engine
@@ -86,7 +86,7 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
    loadNow: function(scriptPath, cb) {
       this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
    },
-	
+   
    /**
     * Queue a script to load from the server and append it to
     * the head element of the browser.  Script names are
@@ -207,8 +207,8 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
          // Store the request in the cache
          this.loadedScripts[s] = scriptPath;
 
-	      Engine.scriptLoadCount++;
-	      Engine.updateProgress();
+         Engine.scriptLoadCount++;
+         Engine.updateProgress();
 
          if ($.browser.Wii) {
 
@@ -223,9 +223,9 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
                   var h = document.getElementsByTagName("head")[0];
                   h.appendChild(n);
                   Engine.readyForNextScript = true;
-						
-				      Engine.scriptLoadCount--;
-				      Engine.updateProgress();
+                  
+                  Engine.scriptLoadCount--;
+                  Engine.updateProgress();
                   Console.debug("Loaded '" + scriptPath + "'");
                }
                
@@ -325,14 +325,14 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
             if (gameObjectName) {
                Engine.gameRunTimer = setInterval(function() {
                   if (typeof window[gameObjectName] != "undefined" &&
-                     	window[gameObjectName].setup) {
+                        window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
 
-				         // Remove the "loading" message
-        					$("#loading").remove();
+                     // Remove the "loading" message
+                     $("#loading").remove();
                      Console.warn("Starting: " + gameObjectName);
-							
-							// Start the game
+                     
+                     // Start the game
                      window[gameObjectName].setup();
                   }
                }, 100);
@@ -384,7 +384,7 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
             pBar.append(fBar);
          }
          fBar.width(fill);
-			jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
+         jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
       }
    },
 

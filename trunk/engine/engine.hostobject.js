@@ -2,7 +2,7 @@
  * The Render Engine
  * HostObject
  *
- * @fileoverview An object which can contain components.  This is a base
+ * @fileoverview An object which contains components.  This is a base
  *               class for most in-game objects.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -45,6 +45,8 @@ Engine.initObject("HostObject", "HashContainer", function() {
  *        functionality for things like rendering, collision detection, effects, or 
  *        transformations. This way, an object can be anything, depending on it's components.
  * @extends HashContainer
+ * @constructor
+ * @description Create a host object.
  */
 var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
@@ -71,7 +73,8 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
 
    /**
-    * Set the rendering context this object will be drawn within.
+    * Set the rendering context this object will be drawn within.  This method is
+    * called when a host object is added to a rendering context.
     *
     * @param renderContext {RenderContext} The context
     */
@@ -108,7 +111,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    /**
     * Add a component to the host object.  The components will be
-    * sorted based on their type, and priority within that type.
+    * sorted based on their type then their priority within that type.
     * Components with a higher priority will be sorted before components
     * with a lower priority.  The sorting order for type is:
     * <ul>
@@ -143,7 +146,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * Get the component with the specified name from this object.
     *
     * @param name {String} The unique name of the component to get
-    * @type BaseComponent
+    * @return {BaseComponent}
     */
    getComponent: function(name) {
       return this.get(name.toUpperCase());
@@ -151,6 +154,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    
    /**
     * Returns a property object with accessor methods.
+    * @return {Object}
     */
    getProperties: function() {
       var self = this;
@@ -161,7 +165,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       });
    }
 
-}, /** @scope HostObject.prototype */{  // Interface
+}, /** @scope HostObject.prototype */{
 
    /**
     * Sort components within this object based upon their component
@@ -177,7 +181,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "HostObject"
+    * @return {String} "HostObject"
     */
    getClassName: function() {
       return "HostObject";
