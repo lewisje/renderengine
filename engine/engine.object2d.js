@@ -2,8 +2,8 @@
  * The Render Engine
  * Object2D
  *
- * @fileoverview An extension of the HostObject which is specifically geared
- *               towards 2D game development.
+ * @fileoverview An extension of the <tt>HostObject</tt> which is specifically geared
+ *               towards 2d game development.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -37,10 +37,13 @@ Engine.include("/engine/engine.hostobject.js");
 Engine.initObject("Object2D", "HostObject", function() {
 
 /**
- * @class An object for use in a 2D environment.  Methods for getting position, rotation
+ * @class An object for use in a 2d environment.  Methods for getting the position, rotation
  * and scale should be implemented within the extended class.
  * 
+ * @param name {String} The name of the object
  * @extends HostObject
+ * @constructor
+ * @description Create a 2d host object
  */
 var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 
@@ -51,8 +54,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    bBox: null,
 
    /**
-    * @constructor
-    * @param name {String} The name of the object
+    * @private
     */
    constructor: function(name) {
       this.base(name);
@@ -96,57 +98,97 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       return new Rectangle2D(this.getBoundingBox()).offset(this.getRenderPosition());
    },
    
+   /**
+    * [ABSTRACT] Get the world bounding circle.
+    * @return {Circle2D}
+    */
    getCircle: function() {
       // ABSTRACT METHOD
    },
    
+   /**
+    * [ABSTRACT] Get the velocity of the object.
+    * @return {Vector2D}
+    */
    getVelocity: function() {
       // ABSTRACT METHOD
    },
 
    /**
-    * Abstract method to be implemented by the extending object to set the
-    * position.
+    * [ABSTRACT] Set the position of the object
     * @param point {Point2D} The position of the object
     */
    setPosition: function(point) {
+      // ABSTRACT
    },
 
    /**
-    * Get the position of the object.  For this class, the value returned is always
-    * the zero point.
+    * Get the position of the object.
     * @return {Point2D} The position
     */
    getPosition: function() {
       return Point2D.ZERO;
    },
 
+   /**
+    * Get the render position of the object.
+    * @return {Point2D}
+    */
    getRenderPosition: function() {
       return Point2D.ZERO;
    },
 
+   /**
+    * Get the last position the object was rendered at.
+    * @return {Point2D}
+    */
    getLastPosition: function() {
       return Point2D.ZERO;
    },
 
+   /**
+    * [ABSTRACT] Set the rotation of the object
+    * @param angle {Number} The rotation angle
+    */
    setRotation: function(angle) {
    },
 
+   /**
+    * Get the rotation of the object
+    * @return {Number}
+    */
    getRotation: function() {
       return 0;
    },
 
+   /**
+    * [ABSTRACT] Set the scale of the object along the X and Y axis.
+    * @param scaleX {Number} The scale along the X axis
+    * @param scaleY {Number} The scale along the Y axis
+    */
    setScale: function(scaleX, scaleY) {
    },
 
+   /**
+    * Get the uniform scale of the object.
+    * @return {Number}
+    */
    getScale: function() {
       return 1;
    },
 
+   /**
+    * Get the scale of the object along the X axis
+    * @return {Number}
+    */
    getScaleX: function() {
       return 1;
    },
 
+   /**
+    * Get the scale of the object along the Y axis.
+    * @return {Number}
+    */
    getScaleY: function() {
       return 1;
    },
@@ -202,11 +244,11 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       });
    }
 
-}, {/** @scope Object2D.prototype */
+}, /** @scope Object2D.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} "Object2D"
     */
    getClassName: function() {
       return "Object2D";

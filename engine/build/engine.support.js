@@ -380,6 +380,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
    
+   /**
+    * This method does a direct <tt>eval()</tt> on the JSON object and
+    * should be avoided since it allows for XSS and other security issues.
+    * @deprecated
+    * @see #parseJSON
+    */
    evalJSON: function(jsonString)
    {
       jsonString = EngineSupport.cleanSource(jsonString);
