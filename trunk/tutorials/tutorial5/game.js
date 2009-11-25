@@ -55,8 +55,8 @@ Engine.initObject("Tutorial5", "Game", function(){
       
       // The play field
       fieldBox: null,
-      fieldWidth: 700,
-      fieldHeight: 400,
+      fieldWidth: 550,
+      fieldHeight: 320,
       
       // The bitmap font loader
       fontLoader: null,
@@ -123,7 +123,7 @@ Engine.initObject("Tutorial5", "Game", function(){
          // Vector Text
          var vText = TextRenderer.create(VectorText.create(), 
                   "Vector Text", 2.5);
-         vText.setPosition(Point2D.create(20, 20));
+         vText.setPosition(Point2D.create(20, 40));
          vText.setTextWeight(1);
          vText.setColor("#ffffff");
          this.renderContext.add(vText);
