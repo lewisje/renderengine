@@ -81,7 +81,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
       },
       
       /**
-       * Draw our game object onto the specified render context.
+       * Draw the dots onto the keyboard when a key is pressed.
        * @param renderContext {RenderContext} The context to draw onto
        */
       draw: function(renderContext) {
