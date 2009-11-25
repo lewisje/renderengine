@@ -56,16 +56,16 @@ Engine.initObject("KeyboardInputComponent", "InputComponent", function() {
  * indicating if the Shift key was pressed.  The sixth and final argument is the
  * actual event object itself.
  *
+ * @param name {String} The unique name of the component.
+ * @param priority {Number} The priority of the component among other input components.
  * @extends InputComponent
+ * @constructor
+ * @description Create an instance of a keyboard input component. 
  */
 var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputComponent.prototype */{
 
    /**
-    * Create an instance of a keyboard input component.
-    *
-    * @param name {String} The unique name of the component.
-    * @param priority {Number} The priority of the component among other input components.
-    * @constructor
+    * @private
     */
    constructor: function(name, priority) {
       this.base(name, priority);
@@ -87,6 +87,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
 
    /**
     * Destroy this instance and remove all references.
+    * @private
     */
    destroy: function() {
       var ctx = Engine.getDefaultContext();
@@ -128,12 +129,11 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       }
    }
 
-}, {
+}, /** @scope KeyboardInputComponent.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf KeyboardInputComponent
+    * @return {String} "KeyboardInputComponent"
     */
    getClassName: function() {
       return "KeyboardInputComponent";

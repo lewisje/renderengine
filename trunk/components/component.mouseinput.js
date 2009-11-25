@@ -1,9 +1,9 @@
 /**
  * The Render Engine
- * KeyboardInputComponent
+ * MouseInputComponent
  *
  * @fileoverview An extension of the input component which handles
- * 				  mouse input.
+ *               mouse input.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -39,26 +39,27 @@ Engine.initObject("MouseInputComponent", "InputComponent", function() {
 
 /**
  * @class A component which responds to mouse events and notifies
- * the host object when one of the events occurs.  The host object should implement
+ * the host object when one of the events occurs.  The host should implement
  * any of the five methods listed below to be notified of the corresponding event:
  * <ul>
- * <li>onMouseOver - The mouse moved over the host object, or the object moved under the mouse</li>
- * <li>onMouseOut - The mouse moved out of the host object (after being over it)</li>
- * <li>onMouseDown - A mouse button was depressed over the host object</li>
- * <li>onMouseUp - A mouse button was released over the host object</li>
- * <li>onMouseMove - The mouse was moved</li>
+ * <li><tt>onMouseOver()</tt> - The mouse moved over the host object, or the object 
+ *     moved under the mouse</li>
+ * <li><tt>onMouseOut()</tt> - The mouse moved out of the host object (after being over it)</li>
+ * <li><tt>onMouseDown()</tt> - A mouse button was depressed over the host object</li>
+ * <li><tt>onMouseUp()</tt> - A mouse button was released over the host object</li>
+ * <li><tt>onMouseMove()</tt> - The mouse was moved</li>
  * </ul>
  *
+ * @param name {String} The unique name of the component.
+ * @param priority {Number} The priority of the component among other input components.
  * @extends InputComponent
+ * @constructor
+ * @description Create a mouse input component.
  */
 var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.prototype */{
 
    /**
-    * Create an instance of a mouse input component.
-    *
-    * @param name {String} The unique name of the component.
-    * @param priority {Number} The priority of the component among other input components.
-    * @constructor
+    * @private
     */
    constructor: function(name, priority) {
       this.base(name, priority);
@@ -71,6 +72,7 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
     * a mouse listener on the render context.
     *
     * @param hostObject {HostObject} The object which hosts the component
+    * @private
     */
    setHostObject: function(hostObject) {
       this.base(hostObject);
@@ -114,7 +116,6 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
    /**
     * Perform the checks on the mouse info object, and also perform
     * intersection tests to be able to call mouse events.
-    *
     * @private
     */
    execute: function(renderContext, time) {
@@ -169,12 +170,11 @@ var MouseInputComponent = InputComponent.extend(/** @scope MouseInputComponent.p
          this.getHostObject().onMouseUp(mouseInfo);
       }
    }
-}, {
+}, /** @scope MouseInputComponent.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf KeyboardInputComponent
+    * @return {String} "MouseInputComponent"
     */
    getClassName: function() {
       return "MouseInputComponent";

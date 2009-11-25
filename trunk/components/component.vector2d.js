@@ -1,9 +1,9 @@
 /**
  * The Render Engine
- * VectorDrawComponent
+ * Vector2DComponent
  *
  * @fileoverview An extension of the render component which draws 2D
- * 				  wireframe (vector) models to the render context.
+ *               wireframe (vector) models to the render context.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -38,8 +38,13 @@ Engine.include("/components/component.render.js");
 Engine.initObject("Vector2DComponent", "RenderComponent", function() {
 
 /**
- * @class A render component that renders its contents from a set of points.
+ * @class A render component that renders its contents from an <tt>Array</tt> of points.
+ *
+ * @param name {String} The name of the component
+ * @param [priority=0.1] {Number} The priority of the component
  * @extends BaseComponent
+ * @constructor
+ * @description Creates a 2d vector drawing component
  */
 var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prototype */{
 
@@ -56,14 +61,17 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    closedManifold: null,
 
    /**
-    * @constructor
-    * @memberOf Vector2DComponent
+    * @private
     */
    constructor: function(name, priority) {
       this.base(name, priority || 0.1);
       this.closedManifold = true;
    },
 
+   /**
+    * Release the component back into the object pool. See {@link PooledObject#release} for
+    * more information.
+    */
    release: function() {
       this.base();
       this.strokeStyle = "#ffffff";
@@ -124,7 +132,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * Set the points which comprise the shape of the object to
     * be rendered to the context.
     *
-    * @param pointArray {Array} An array of <tt>Point2D</tt> instances
+    * @param pointArray {Point2D[]} An array of <tt>Point2D</tt> instances
     */
    setPoints: function(pointArray) {
       this.points = pointArray;
@@ -143,7 +151,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
 
    /**
     * Returns the line style that will be used to draw this shape.
-    * @type String
+    * @return {String}
     */
    getLineStyle: function() {
       return this.strokeStyle;
@@ -160,7 +168,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
 
    /**
     * Returns the width of the lines used to draw the shape.
-    * @type Number
+    * @return {Number}
     */
    getLineWidth: function() {
       return this.lineWidth;
@@ -176,7 +184,8 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    },
 
    /**
-    * @memberOf Vector2DComponent
+    * Returns the fill style of the shape.
+    * @return {String}
     */
    getFillStyle: function() {
       return this.fillStyle;
@@ -233,12 +242,11 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
          renderContext.drawFilledPolygon(this.points);
       }
    }
-}, {
+}, /** @scope Vector2DComponent.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf Vector2DComponent
+    * @return {String} "Vector2DComponent"
     */
    getClassName: function() {
       return "Vector2DComponent";

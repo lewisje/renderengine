@@ -39,18 +39,20 @@ Engine.initObject("ImageComponent", "RenderComponent", function() {
 
 /**
  * @class A render component that renders an image.
+ *
  * @param name {String} The name of the component
  * @param [priority=0.1] {Number} The render priority
  * @param imageLoader {ImageLoader} The image loader to get images from
  * @param [imageName] {String} The name of the image resource from the loader
  * @extends RenderComponent
  * @constructor
+ * @description Creates a component which renders images from an {@link ImageLoader}.
  */
 var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype */{
 
    currentImage: null,
    bbox: null,
-	imageLoader: null,
+   imageLoader: null,
 
    /**
     * @private
@@ -62,7 +64,7 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
          priority = 0.1;
       }
       this.base(name, priority);
-		this.imageLoader = imageLoader;
+      this.imageLoader = imageLoader;
       if (imageName != null) {
          this.currentImage = imageLoader.get(imageName);
          var dims = imageLoader.getDimensions(imageName);
@@ -71,7 +73,8 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
    },
 
    /**
-    * @private
+    * Releases the component back into the object pool. See {@link PooledObject#release}
+    * for more information.
     */
    release: function() {
       this.base();
@@ -80,7 +83,7 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
    },
 
    /**
-    * Returns a bounding box which encloses the image.
+    * Calculates the bounding box which encloses the image.
     * @private
     */
    calculateBoundingBox: function() {
@@ -89,7 +92,8 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
 
    /**
     * Set the image the component will render from the {@link ImageLoader}
-    * specified when creating the component.
+    * specified when creating the component.  This allows the user to change
+    * the image on the fly.
     *
     * @param imageName {String} The image to render
     */
@@ -102,7 +106,6 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
 
    /**
     * Get the image the component is rendering.
-    *
     * @return {HTMLImage}
     */
    getImage: function() {
@@ -126,11 +129,10 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
          renderContext.drawImage(this.getHostObject(), this.bbox, this.currentImage);
       }
    }
-}, { /** @scope ImageComponent.prototype */
+}, /** @scope ImageComponent.prototype */{ 
    /**
     * Get the class name of this object
-    *
-    * @type String
+    * @return {String} "ImageComponent"
     */
    getClassName: function() {
       return "ImageComponent";

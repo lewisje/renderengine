@@ -37,24 +37,27 @@ Engine.initObject("InputComponent", "BaseComponent", function() {
 
 /**
  * @class A component which can read an input device and make those inputs
- * available for usage.
+ *        available to a {@link HostObject}.
+ *
+ * @param name {String} The name of the component
+ * @param [priority=1.0] {Number} The component's priority
  * @extends BaseComponent
+ * @constructor
+ * @description Create an input component.
  */
 var InputComponent = BaseComponent.extend(/** @scope InputComponent.prototype */{
 
    /**
-    * @constructor
-    * @memberOf InputComponent
+    * @private
     */
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_INPUT, priority || 1.0);
    }
-}, {
+}, /** @scope InputComponent.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf InputComponent
+    * @return {String} "InputComponent"
     */
    getClassName: function() {
       return "InputComponent";
