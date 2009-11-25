@@ -37,14 +37,30 @@ Engine.include("/components/component.base.js");
 Engine.initObject("ColliderComponent", "BaseComponent", function() {
 
 /**
- * @class A collider component handles collisions by updating the
- *        collision model and checking for possible collisions.
+ * @class A collider component is responsible for handling potential collisions by 
+ *        updating the associated collision model and checking for possible collisions.
  *
  * @param name {String} Name of the component
  * @param collisionModel {SpatialCollection} The collision model
  * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
  *
  * @extends BaseComponent
+ * @constructor
+ * @description Creates a collider component which tests the collision model for
+ *              potential collisions. Each frame, the component will update a potential
+ *              collision list (PCL) for the host object, using its current position
+ *              obtained from {@link Object2D#getPosition}. Each object which meets
+ *              certain criteria will be passed to an <tt>onCollide()<tt> method which
+ *              must be implemented by the host object.
+ *              <p/>
+ *              The event handler will be passed the time the collision was detected
+ *              as its first argument, and the potential collision object as the second.
+ *              The host must determine if the collision is valid for itself, and then
+ *              return a value which indicates whether the component should contine to
+ *              check for collisions, or if it should stop.
+ *              <p/>
+ *              If the <tt>onCollide()</tt> method is not implemented on the host, no 
+ *              collision events will be passed.
  */
 var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.prototype */{
 
@@ -52,12 +68,19 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    
    objectType: null,
 
+   /**
+    * @private
+    */
    constructor: function(name, collisionModel, priority) {
       this.base(name, BaseComponent.TYPE_COLLIDER, priority || 1.0);
       this.collisionModel = collisionModel;
       this.objectType = null;
    },
 
+   /**
+    * Releases the component back into the pool for reuse.  See {@link PooledObject#release}
+    * for more information.
+    */
    release: function() {
       this.base();
       this.collisionModel = null;
@@ -83,9 +106,11 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    
    /**
     * Set the object type that this component will respond to.  Setting this to <tt>null</tt>
-    * will trigger a potential collision when any object comes into possible contact with the
-    * component's host object based on the collision model.  If the object isn't of this type,
-    * no collision tests will be performed.
+    * will trigger a potential collision when <i>any object</i> comes into possible contact 
+    * with the component's host based on the collision model.  If the object isn't of this type,
+    * no collision tests will be performed.  This allows the developer to fine tune which
+    * object the collision component is responsible for.  As such, multiple collision components
+    * could be used to handle different types of collisions.
     *
     * @param objType {BaseObject} The object type to check for
     */
@@ -100,6 +125,8 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     * <ul>
     * <li>lastNode - The last node the object was reported within.
     * </ul>
+    * This data is used by the collider components to determine where to test for
+    * collisions, and whether or not the PCL should be rebuilt.
     */
    updateModel: function() {
 
@@ -131,17 +158,17 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
    /**
     * Updates the object within the collision model and determines if
-    * the host object wants to be alerted whenever a potential collision
+    * the host object should to be alerted whenever a potential collision
     * has occurred.  If a potential collision occurs, an array (referred to
     * as a Potentail Collision List, or PCL) will be created which
     * contains objects that might be colliding with the host object.  It
     * is up to the host object to make the final determination that a
     * collision has occurred.
     * <p/>
-    * The list of objects within the PCL will be passed to the <tt>onCollide</tt>
+    * The list of objects within the PCL will be passed to the <tt>onCollide()</tt>
     * method (if declared) on the host object.  If a collision occurred and was
-    * handled, the <tt>onCollide</tt> method should return <tt>CollisionComponent.STOP</tt>,
-    * otherwise, it should return <tt>CollisionComponent.CONTINUE</tt> to continue
+    * handled, the <tt>onCollide()</tt> method should return {@link CollisionComponent#STOP},
+    * otherwise, it should return {@link CollisionComponent#CONTINUE} to continue
     * checking objects from the PCL against the host object.
     *
     * @param renderContext {RenderContext} The render context for the component
@@ -191,26 +218,24 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} "ColliderComponent"
     */
    getClassName: function() {
       return "ColliderComponent";
    },
 
    /**
-    * When <tt>onCollide</tt> is called on the host object, it should
-    * return <tt>ColliderComponent.CONTINUE</tt> if it hasn't handled
-    * the collision, or if it wishes to be notified about other potential
-    * collisions.
-    * @type Number
+    * When <tt>onCollide()</tt> is called on the host object, it should
+    * return this value if it hasn't handled the collision, or if it wishes to be 
+    * notified about other potential collisions.
+    * @type {Number}
     */
    CONTINUE: 0,
 
    /**
-    * When <tt>onCollide</tt> is called on the host object, it should
-    * return <tt>ColliderComponent.STOP</tt> if no more collisions
-    * should be reported.
-    * @type Number
+    * When <tt>onCollide()</tt> is called on the host object, it should
+    * return this if no more collisions should be reported.
+    * @type {Number}
     */
    STOP: 1
 

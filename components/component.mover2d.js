@@ -1,9 +1,9 @@
 /**
  * The Render Engine
- * 2DMoverComponent
+ * Mover2DComponent
  *
  * @fileoverview An extension of the transform 2D component which adds physical
- *               movement properties.
+ *               movement properties such as mass, gravity, and velocity.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -44,6 +44,8 @@ Engine.initObject("Mover2DComponent", "Transform2DComponent", function() {
  * @param name {String} The name of the component
  * @param priority {Number} The priority of this component between 0.0 and 1.0
  * @extends Transform2DComponent
+ * @constructor
+ * @description Creates a 2d mover component
  */
 var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.prototype */{
 
@@ -75,6 +77,9 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    
    checkLag: null,
    
+   /**
+    * @private
+    */
    constructor: function(name, priority) {
       this.base(name, priority || 1.0);
       this.velocity = Vector2D.create(0,0);
@@ -91,6 +96,10 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.checkLag = true;
    },
 
+   /**
+    * Releases the component back into the object pool. See {@link PooledObject#release}
+    * for more information.
+    */
    release: function() {
       this.base();
       this.lastTime = -1;
@@ -118,7 +127,6 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
     *
     * @param renderContext {RenderContext} The render context for the component
     * @param time {Number} The engine time in milliseconds
-    * @param rendering {Boolean} <tt>true</tt> during the render phase
     */
    execute: function(renderContext, time) {
       if (!this.isResting()) {
@@ -177,7 +185,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
 
    /**
     * Setting this to <tt>true</tt> will enable a check for time lag and adjust
-    * calculations by an adjustment factor.
+    * calculations by a specified factor.
     *
     * @param state {Boolean} <tt>true</tt> to check for lag
     */
@@ -368,7 +376,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    /**
     * Set the decay rate at which the velocity will approach zero.  
     * You can use this value to cause a moving object to eventually 
-    * stop moving. i.e. similar to friction.
+    * stop moving. (e.g. friction)
     *
     * @param decay {Number} The rate at which velocity decays
     */
@@ -400,7 +408,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
    getAngularVelocity: function() {
       return this.angularVelocity;
    }
-}, { /** @scope Mover2DComponent.prototype */
+}, /** @scope Mover2DComponent.prototype */{ 
    /**
     * Get the class name of this object
     * @return {String} "Mover2DComponent"
