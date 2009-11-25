@@ -3,7 +3,7 @@
  * Object2D
  *
  * @fileoverview An extension of the HostObject which is specifically geared
- * 				  towards 2D game development.
+ *               towards 2D game development.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -50,19 +50,19 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    /** @private */
    bBox: null,
 
-	/**
-	 * @constructor
-	 * @param name {String} The name of the object
-	 */
+   /**
+    * @constructor
+    * @param name {String} The name of the object
+    */
    constructor: function(name) {
       this.base(name);
       this.lastPosition = new Point2D(5,5);
       this.zIndex = 1;
    },
 
-	/**
-	 * Release the object back into the pool.
-	 */
+   /**
+    * Release the object back into the pool.
+    */
    release: function() {
       this.base();
       this.zIndex = 1;
@@ -88,27 +88,35 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       return this.bBox;
    },
 
-	/**
-	 * Get the world bounding box.
-	 * @return {Rectangle2D} The world bounding rectangle
-	 */
+   /**
+    * Get the world bounding box.
+    * @return {Rectangle2D} The world bounding rectangle
+    */
    getWorldBox: function() {
       return new Rectangle2D(this.getBoundingBox()).offset(this.getRenderPosition());
    },
+   
+   getCircle: function() {
+      // ABSTRACT METHOD
+   },
+   
+   getVelocity: function() {
+      // ABSTRACT METHOD
+   },
 
-	/**
-	 * Abstract method to be implemented by the extending object to set the
-	 * position.
-	 * @param point {Point2D} The position of the object
-	 */
+   /**
+    * Abstract method to be implemented by the extending object to set the
+    * position.
+    * @param point {Point2D} The position of the object
+    */
    setPosition: function(point) {
    },
 
-	/**
-	 * Get the position of the object.  For this class, the value returned is always
-	 * the zero point.
-	 * @return {Point2D} The position
-	 */
+   /**
+    * Get the position of the object.  For this class, the value returned is always
+    * the zero point.
+    * @return {Point2D} The position
+    */
    getPosition: function() {
       return Point2D.ZERO;
    },
@@ -131,9 +139,9 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    setScale: function(scaleX, scaleY) {
    },
 
-	getScale: function() {
-		return 1;
-	},
+   getScale: function() {
+      return 1;
+   },
 
    getScaleX: function() {
       return 1;
@@ -168,31 +176,31 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       return this.zIndex;
    },
 
-	/**
-	 * When editing objects, this method returns an object which
-	 * contains the properties with their getter and setter methods.
-	 * @return {Object} The properties object
-	 */
-	getProperties: function() {
-		var self = this;
-		var prop = this.base(self);
-		return $.extend(prop, {
-			"ZIndex" 		: [function() { return self.getZIndex(); },
-						 			function(i){	self.setZIndex(i); }, true],
-			"BoundingBox" 	: [function() { return self.getBoundingBox().toString(); },
-								  	null, false],
-			"WorldBox" 		: [function() { return self.getWorldBox().toString(); },
-							  		null, false],
-			"Position" 		: [function() { return self.getPosition(); },
-							  		function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }, true],
-			"RenderPos" 	: [function() { return self.getRenderPosition() },
-									null, false],
-			"Rotation" 		: [function() { return self.getRotation(); },
-							  		function(i) { self.setRotation(i); }, true],
-			"Scale" 			: [function() { return self.getScale(); },
-						  			function(i) {self.setScale(i,i); }, true]
-		});
-	}
+   /**
+    * When editing objects, this method returns an object which
+    * contains the properties with their getter and setter methods.
+    * @return {Object} The properties object
+    */
+   getProperties: function() {
+      var self = this;
+      var prop = this.base(self);
+      return $.extend(prop, {
+         "ZIndex"       : [function() { return self.getZIndex(); },
+                           function(i){   self.setZIndex(i); }, true],
+         "BoundingBox"  : [function() { return self.getBoundingBox().toString(); },
+                           null, false],
+         "WorldBox"     : [function() { return self.getWorldBox().toString(); },
+                           null, false],
+         "Position"     : [function() { return self.getPosition(); },
+                           function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }, true],
+         "RenderPos"    : [function() { return self.getRenderPosition() },
+                           null, false],
+         "Rotation"     : [function() { return self.getRotation(); },
+                           function(i) { self.setRotation(i); }, true],
+         "Scale"        : [function() { return self.getScale(); },
+                           function(i) {self.setScale(i,i); }, true]
+      });
+   }
 
 }, {/** @scope Object2D.prototype */
    /**
