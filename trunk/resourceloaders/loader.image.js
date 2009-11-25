@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * ImageResourceLoader
+ * ImageLoader
  *
  * @fileoverview A resource loader for images.
  *

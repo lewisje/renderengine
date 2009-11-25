@@ -104,7 +104,7 @@ var Game = Base.extend(/** @scope Game.prototype */{
    /**
     * Get the number of players this game supports.
     *
-    * @type Number
+    * @return {Number}
     * @memberOf Game
     * @static
     */
@@ -112,6 +112,10 @@ var Game = Base.extend(/** @scope Game.prototype */{
       return 1;
    },
 
+	/**
+	 * Get the path where your game class exists.
+	 * @return {String}
+	 */
    getGamePath: function() {
       var loc = window.location;
       var path = loc.protocol + "//" + loc.host + loc.pathname.substring(0,loc.pathname.lastIndexOf("/"));
@@ -119,6 +123,11 @@ var Game = Base.extend(/** @scope Game.prototype */{
       return path;
    },
 
+	/**
+	 * Get the path of the specified file, relative to your game class.
+	 * @param fileName {String} The path to the file
+	 * @return {String}
+	 */
    getFilePath: function(fileName) {
       var loc = window.location;
       if (fileName.indexOf(loc.protocol) != -1 && fileName.indexOf(loc.host) == -1) {

@@ -43,6 +43,7 @@ Engine.initObject("Timer", "BaseObject", function() {
  * @param callback {Function} The function to call when the interval is reached
  *
  * @extends BaseObject
+ * @constructor
  */
 var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
@@ -177,6 +178,10 @@ Engine.initObject("Timeout", "Timer", function() {
 /**
  * @class A timer that wraps the <tt>window.setTimeout</tt> method.
  * @extends Timer
+ * @param name {String} The name of the timer
+ * @param interval {Number} The interval for the timer, in milliseconds
+ * @param callback {Function} The function to call when the interval is reached
+ * @constructor
  */
 var Timeout = Timer.extend(/** @scope Timeout.prototype */{
 
@@ -222,6 +227,8 @@ Engine.initObject("OneShotTimeout", "Timeout", function() {
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
  * @param callback {Function} The function to call when the interval is reached
+ * @constructor
+ * @extends Timeout
  */
 var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
 
@@ -277,6 +284,8 @@ Engine.initObject("OneShotTrigger", "OneShotTimeout", function() {
  * @param callback {Function} The function to call when the interval is reached
  * @param triggerInterval {Number} The interval between triggers, in milliseconds
  * @param triggerCallback {Function} The function to call for each trigger interval
+ * @extends OneShotTimeout
+ * @constructor
  */
 var OneShotTrigger = OneShotTimeout.extend(/** @scope OneShotTimeout.prototype */{
 
@@ -314,7 +323,12 @@ Engine.initObject("MultiTimeout", "Timeout", function() {
  *        destroying itself.  The callback will be triggered with the
  *        repetition number as the only argument.
  *
+ * @param name {String} The name of the timer
+ * @param reps {Number} The number of repetitions to restart the timer automatically
+ * @param interval {Number} The interval for the timer, in milliseconds
+ * @param callback {Function} The function to call when the interval is reached
  * @extends Timeout
+ * @constructor
  */
 var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
 
@@ -355,7 +369,11 @@ Engine.initObject("Interval", "Timer", function() {
 
 /**
  * @class A timer that wraps the <tt>window.setInterval</tt> method.
+ * @param name {String} The name of the timer
+ * @param interval {Number} The interval for the timer, in milliseconds
+ * @param callback {Function} The function to call when the interval is reached
  * @extends Timer
+ * @constructor
  */
 var Interval = Timer.extend(/** @scope Interval.prototype */{
 
