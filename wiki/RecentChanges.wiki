@@ -5,6 +5,7 @@
 The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.
 
 || *Date* || *Notes* ||
+|| 11/25/2009 || Updated a bunch of documentation in components and engine files.  I plan to finish with the rest of the files and rebuild the online documentation soon. ||
 || 11/24/2009 || Just completed tutorial 4 and it is now up. ||
 || 11/23/2009 || While working on tutorial 4, it occurred to me that there wasn't a simple component to render a bitmap to the context.  There's now an ImageComponent which does just that. ||
 || 11/20/2009 || I've been working on tutorials for the web.  The one tutorial that was out there was just too complicated, so I made it an "advanced" tutorial and started with some simpler ones. ||
