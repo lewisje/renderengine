@@ -43,9 +43,10 @@ Engine.initObject("WiimoteInputComponent", "KeyboardInputComponent", function() 
  * should implement any of the following methods to receive the corresponding events.
  * <br/>
  * The next few events are fired on the host object, if they exist, when
- * the corresponding button is pressed and released.  All methods take two
- * arguments: the controller number and a boolean indicating <tt>true</tt>
- * if the button has been pressed and <tt>false</tt> when released.
+ * the corresponding button is pressed and released.  All methods take three
+ * arguments: the controller number, a boolean indicating <tt>true</tt>
+ * if the button has been pressed or <tt>false</tt> when released, and
+ * the event object that caused the method to be invoked.
  * <br/>
  * <ul>
  * <li><tt>onWiimoteLeft()</tt> - Direction pad left</li>
