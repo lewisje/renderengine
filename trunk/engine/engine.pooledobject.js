@@ -172,9 +172,11 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    poolSize: 0,
 
    /**
-    * Similar to a constructor, all pooled objects should implement
-    * a create method which is used to either create a new instance of
-    * the object, or retrieve one from the pool.
+    * Similar to a constructor, all pooled objects implement this method.
+    * The <tt>create()</tt> method will either create a new instance, if no object of the object's
+    * class exists within the pool, or will reuse an existing pooled instance of
+    * the object.  Either way, the constructor for the object instance is called so that
+    * instance creation can be maintained in the constructor.
     * <p/>
     * Usage: <tt>var obj = [ObjectClass].create(arg1, arg2, arg3...);</tt>
     *
@@ -191,8 +193,10 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       } else {
          PooledObject.poolNew++;
          Engine.addMetric("newObjs", PooledObject.poolNew, false, "#");
-         // Any more than 10 arguments and we're pooched!
-         return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6],arguments[7],arguments[8],arguments[9]);
+         // TODO: Any more than 15 arguments and construction will fail!
+         return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
+								 arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+								 arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
       }
    },
 
