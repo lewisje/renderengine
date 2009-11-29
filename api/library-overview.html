@@ -1,0 +1,626 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>Library Overview</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   
+      <h1>The Render Engine beta 1.4</h1>
+   
+   
+</div>
+<br/>
+   
+      The Render Engine is a cross-browser, open source game engine written entirely in Javascript. It is designed, from the ground up, to be easy to use and understand. The game engine is currently designed for 2D game development across a wide variety of browsers, but could easily be expanded to support 3D in the future. The engine uses a simple object-oriented structure and is well documented in a format familiar to many Java developers.
+<p/>
+The Render Engine currently runs on a number of browser platforms, including:
+<ul>
+<li>Gecko - Firefox and Camino</li>
+<li>Webkit - Safari, iPhone, Google Chrome</li>
+<li>Opera - PC, Mac, Nintendo Wii</li>
+</ul>
+<p/>
+Visit <a href="http://www.renderengine.com">http://www.renderengine.com</a> for more information.
+<p/>
+&copy;2009 Brett Fattori <a href="mailto:bfattori%40renderengine%2Ecom">&lt;bfattori AT renderengine DOT com&gt;</a>
+<br/>   
+      <br/>
+   
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">File Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.base.src.html">component.base.js</a>
+         </td>
+         <td>
+            The base class from which all components extend.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.boxcollider.src.html">component.boxcollider.js</a>
+         </td>
+         <td>
+            A collision component which determines collisions via              bounding box comparisons.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.circlecollider.src.html">component.circlecollider.js</a>
+         </td>
+         <td>
+            A collision component which determines collisions via              bounding circle comparisons.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.collider.src.html">component.collider.js</a>
+         </td>
+         <td>
+            The base collision component.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.host.src.html">component.host.js</a>
+         </td>
+         <td>
+            A component which allows chaining of {@link HostObject HostObjects} for               complex object creation.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.image.src.html">component.image.js</a>
+         </td>
+         <td>
+            An extension of the render component which handles               image resource rendering.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.input.src.html">component.input.js</a>
+         </td>
+         <td>
+            The base input component.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.keyboardinput.src.html">component.keyboardinput.js</a>
+         </td>
+         <td>
+            An extension of the input component for dealing with the              keyboard.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.logic.src.html">component.logic.js</a>
+         </td>
+         <td>
+            The base logic component.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.mouseinput.src.html">component.mouseinput.js</a>
+         </td>
+         <td>
+            An extension of the input component which handles              mouse input.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.mover2d.src.html">component.mover2d.js</a>
+         </td>
+         <td>
+            An extension of the transform 2D component which adds physical              movement properties such as mass, gravity, and velocity.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.notifier.src.html">component.notifier.js</a>
+         </td>
+         <td>
+            An extension of the logic component which efficiently               notifies a list of recipients when events are triggered.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.render.src.html">component.render.js</a>
+         </td>
+         <td>
+            The base render component.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.sprite.src.html">component.sprite.js</a>
+         </td>
+         <td>
+            An extension of the render component which handles sprite              resource rendering.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.transform2d.src.html">component.transform2d.js</a>
+         </td>
+         <td>
+            The base 2d transformation component.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.vector2d.src.html">component.vector2d.js</a>
+         </td>
+         <td>
+            An extension of the render component which draws 2D              wireframe (vector) models to the render context.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="component.wiimoteinput.src.html">component.wiimoteinput.js</a>
+         </td>
+         <td>
+            An extension of the keyboard input component which handles the              Nintendo Wii remote.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.console.src.html">engine.console.js</a>
+         </td>
+         <td>
+            A debug console abstraction
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.init.src.html">engine.init.js</a>
+         </td>
+         <td>
+            Initializes the console and engine
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.linker.src.html">engine.linker.js</a>
+         </td>
+         <td>
+            A class for checking class dependencies and class intialization
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.main.src.html">engine.main.js</a>
+         </td>
+         <td>
+            The main engine class
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.script.src.html">engine.script.js</a>
+         </td>
+         <td>
+            
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.support.src.html">engine.support.js</a>
+         </td>
+         <td>
+            A support class for the engine with useful methods              to manipulate arrays, parse JSON, and handle query parameters.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.baseobject.src.html">engine.baseobject.js</a>
+         </td>
+         <td>
+            The object from which most renderable engine objects will              need to derive.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.container.src.html">engine.container.js</a>
+         </td>
+         <td>
+            A set of objects which can be used to create a collection              of objects, and to iterate over a container.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.events.src.html">engine.events.js</a>
+         </td>
+         <td>
+            Methods for handling events (adding & removing) and keycodes for              special keys like the arrows and function keys.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.fnv1hash.src.html">engine.fnv1hash.js</a>
+         </td>
+         <td>
+            Quickly generate a hash for the provided input.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.game.src.html">engine.game.js</a>
+         </td>
+         <td>
+            The game object represents an instance of a game.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.hostobject.src.html">engine.hostobject.js</a>
+         </td>
+         <td>
+            An object which contains components.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.math2d.src.html">engine.math2d.js</a>
+         </td>
+         <td>
+            A 2D math library with static methods, plus objects to represent               points, rectangles and circles.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.object2d.src.html">engine.object2d.js</a>
+         </td>
+         <td>
+            An extension of the <tt>HostObject</tt> which is specifically geared              towards 2d game development.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.particles.src.html">engine.particles.js</a>
+         </td>
+         <td>
+            The particle engine and base particle class.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.pooledobject.src.html">engine.pooledobject.js</a>
+         </td>
+         <td>
+            An object that has functionality to assist in keeping memory              usage down and to minimize the effect of the JavaScript garbage              collector.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.rendercontext.src.html">engine.rendercontext.js</a>
+         </td>
+         <td>
+            The base class for all render contexts.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.resourceloader.src.html">engine.resourceloader.js</a>
+         </td>
+         <td>
+            The base class for all resource loaders.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.spatialcontainer.src.html">engine.spatialcontainer.js</a>
+         </td>
+         <td>
+            Spatial containers maintain a collection of objects and can report              on potential objects within a defined space of that container.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="engine.timers.src.html">engine.timers.js</a>
+         </td>
+         <td>
+            A collection of timer objects.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.canvascontext.src.html">context.canvascontext.js</a>
+         </td>
+         <td>
+            An extension of the 2D render context which encapsulates              the Canvas element.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.documentcontext.src.html">context.documentcontext.js</a>
+         </td>
+         <td>
+            A render context which wraps the DOM document node.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.htmldivcontext.src.html">context.htmldivcontext.js</a>
+         </td>
+         <td>
+            A render context which wraps the DOM document node.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.htmlelement.src.html">context.htmlelement.js</a>
+         </td>
+         <td>
+            A render context which wraps a specified HTML node.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.render2d.src.html">context.render2d.js</a>
+         </td>
+         <td>
+            The base 2D render context.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.scrollingbackground.src.html">context.scrollingbackground.js</a>
+         </td>
+         <td>
+            An object which loads an image and a collision map              for usage as a single layered scrolling background.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.svgcontext.src.html">context.svgcontext.js</a>
+         </td>
+         <td>
+            An extension of the 2D render context using the SVG (Scalable 				  Vector Graphics) as a render context.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.htmlelement.gecko.src.html">context.htmlelement.gecko.js</a>
+         </td>
+         <td>
+            
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="context.htmlelement.safari.src.html">context.htmlelement.safari.js</a>
+         </td>
+         <td>
+            
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.bitmapfont.src.html">loader.bitmapfont.js</a>
+         </td>
+         <td>
+            An extension of the image resource loader for handling bitmap              fonts.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.image.src.html">loader.image.js</a>
+         </td>
+         <td>
+            A resource loader for images.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.level.src.html">loader.level.js</a>
+         </td>
+         <td>
+            An extension of the image resource loader for loading 2D levels				  with an associated collision map and object placement.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.object.src.html">loader.object.js</a>
+         </td>
+         <td>
+            An extension of the remote resource loader for loading				  JSON objects.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.remote.src.html">loader.remote.js</a>
+         </td>
+         <td>
+            A resource loader for handling remote objects located on				  the server.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.remotefile.src.html">loader.remotefile.js</a>
+         </td>
+         <td>
+            
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.sound.src.html">loader.sound.js</a>
+         </td>
+         <td>
+            A resource loader for MP3 sounds and a sound class for				  working with the loaded sounds via SoundManager 2.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.sprite.src.html">loader.sprite.js</a>
+         </td>
+         <td>
+            An extension of the image resource loader for handling              sprites.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="loader.xml.src.html">loader.xml.js</a>
+         </td>
+         <td>
+            A resource loader for XML files.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="container.quadtree.src.html">container.quadtree.js</a>
+         </td>
+         <td>
+            A generalized representation of a spatial quadtree.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="container.spatialgrid.src.html">container.spatialgrid.js</a>
+         </td>
+         <td>
+            A simple collision model which divides a finite space up into 				  a coarse grid to assist in quickly finding objects within that				  space.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="text.abstractrender.src.html">text.abstractrender.js</a>
+         </td>
+         <td>
+            Abstract class that provides basic interface for all    			  text render objects used by the text renderer.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="text.bitmap.src.html">text.bitmap.js</a>
+         </td>
+         <td>
+            A bitmap font renderer for render contexts that don't				  support fonts natively.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="text.context.src.html">text.context.js</a>
+         </td>
+         <td>
+            A native context font renderer.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="text.renderer.src.html">text.renderer.js</a>
+         </td>
+         <td>
+            A text renderer object that uses a specific render              object to produce text when a render context cannot.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="text.vector.src.html">text.vector.js</a>
+         </td>
+         <td>
+            A simple text renderer which draws text using lines.
+         </td>
+      </tr>
+   
+</table>
+
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:39 GMT-0500 (EST)</div>
+</body>
+</html>

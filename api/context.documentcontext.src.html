@@ -1,0 +1,162 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>context.documentcontext.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>context.documentcontext.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+A render context which wraps the DOM document node.
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="DocumentContext.html" target="main">DocumentContext</a>
+         </td>
+         <td>
+            
+A reference to the <tt>document.body</tt> element as a rendering context.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="DocumentContext.constructor.html" target="main">DocumentContext.constructor</a>
+         </td>
+         <td>
+            
+         </td>
+      </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * DocumentContext
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * @fileoverview A render context which wraps the DOM document node.
+<span class='linenumber'>  6</span>  *
+<span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'>  8</span>  * @author: $Author: bfattori $
+<span class='linenumber'>  9</span>  * @version: $Revision: 687 $
+<span class='linenumber'> 10</span>  *
+<span class='linenumber'> 11</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 12</span>  *
+<span class='linenumber'> 13</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 14</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 15</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 16</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 17</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 18</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 19</span>  *
+<span class='linenumber'> 20</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 21</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 22</span>  *
+<span class='linenumber'> 23</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 24</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 25</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 26</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 27</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 28</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 29</span>  * THE SOFTWARE.
+<span class='linenumber'> 30</span>  *
+<span class='linenumber'> 31</span>  */</span><span class="WHIT">
+<span class='linenumber'> 32</span> 
+<span class='linenumber'> 33</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 34</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/rendercontexts/context.htmlelement.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 35</span> 
+<span class='linenumber'> 36</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"DocumentContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"HTMLElementContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 37</span> 
+<span class='linenumber'> 38</span> </span><span class="COMM">/**
+<span class='linenumber'> 39</span>  * @class A reference to the &lt;tt>document.body&lt;/tt> element as a rendering context.
+<span class='linenumber'> 40</span>  * Aside from being The Render Engine's default rendering context, the context
+<span class='linenumber'> 41</span>  * is essentially a wrapper for the HTML document.  Wrapping, in this way, allows
+<span class='linenumber'> 42</span>  * us to update not only this context, but all other contexts during an engine frame.
+<span class='linenumber'> 43</span>  *
+<span class='linenumber'> 44</span>  * @extends HTMLElementContext
+<span class='linenumber'> 45</span>  */</span><span class="WHIT">
+<span class='linenumber'> 46</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">DocumentContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">HTMLElementContext.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope DocumentContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 47</span> 
+<span class='linenumber'> 48</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 49</span>     * Create an instance of a document rendering context.  This context
+<span class='linenumber'> 50</span>     * represents the HTML document body.  Theoretically, only one of these
+<span class='linenumber'> 51</span>     * contexts should ever be created.
+<span class='linenumber'> 52</span>     * @constructor
+<span class='linenumber'> 53</span>     */</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 55</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"DocumentContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">document.body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 59</span>     * Reset the context, clearing it and preparing it for drawing.
+<span class='linenumber'> 60</span>     */</span><span class="WHIT">
+<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="NAME">reset</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 63</span> 
+<span class='linenumber'> 64</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope DocumentContext.prototype */</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 66</span>     * Get the class name of this object
+<span class='linenumber'> 67</span>     *
+<span class='linenumber'> 68</span>     * @type String
+<span class='linenumber'> 69</span>     */</span><span class="WHIT">
+<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"DocumentContext"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 73</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 74</span> 
+<span class='linenumber'> 75</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">DocumentContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 76</span> 
+<span class='linenumber'> 77</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:29 GMT-0500 (EST)</div>
+</body>
+</html>
