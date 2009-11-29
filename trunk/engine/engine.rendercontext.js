@@ -57,6 +57,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    worldPosition: null,
    worldRotation: null,
    worldScale: null,
+	staticCtx: null,
 
    /**
     * @private
@@ -69,6 +70,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldPosition = Point2D.create(0, 0);
       this.worldRotation = 0;
       this.viewport = Rectangle2D.create(0, 0, 100, 100);
+		this.staticCtx = false;
    },
 
    /**
@@ -81,6 +83,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldScale = null;
       this.worldPosition = null;
       this.worldRotation = null;
+		this.staticCtx = null;
    },
 
    /**
@@ -109,6 +112,27 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    getSurface: function() {
       return this.surface;
    },
+
+	/**
+	 * Set the context to be static.  Setting a context to be static effectively removes 
+	 * it from the automatic update when the world is updated.  The user will need to call
+	 * {@link render}, passing the world time (gotten with {@link Engine#worldTime})
+	 * to manually render the context.  Any objects within the context will then render
+	 * to the context.
+	 * 
+	 * @param state {Boolean} <tt>true</tt> to set the context to static
+	 */
+	setStatic: function(state) {
+		this.staticCtx = state;
+	},
+	
+	/**
+	 * Determine if the context is static.
+	 * @return {Boolean}
+	 */
+	isStatic: function() {
+		return this.staticCtx;
+	},
 
    /**
     * [ABSTRACT] Set the scale of the rendering context.
@@ -251,7 +275,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     */
    update: function(parentContext, time)
    {
-      this.render(time);
+		if (!this.staticCtx) {
+	      this.render(time);
+		}
    },
 
    /**
