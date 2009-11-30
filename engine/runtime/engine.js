@@ -6,7 +6,7 @@
  *
  * author: Brett Fattori (brettf@renderengine.com)
  * version: beta 1.4.0
- * date: 11/15/2009
+ * date: 
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -87,7 +87,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
          return "";
       } else if (typeof o == "function") {
          return "function";
-      } else if (o.constructor == Array || (o.slice && o.join && o.splice)) {	// An array
+      } else if (o.constructor == Array || (o.slice && o.join && o.splice)) { // An array
          var s = "[";
          for (var e in o) {
             s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
@@ -301,28 +301,28 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
     * Write a debug message to the console
     */
    info: function() {
-      console.log(this.fixArgs(arguments));
+      console.log.apply(console,arguments);
    },
 
    /**
     * Write a debug message to the console
     */
    debug: function() {
-      console.log(["[D]", this.fixArgs(arguments)]);
+      console.debug.apply(console,arguments);
    },
 
    /**
     * Write a warning message to the console
     */
    warn: function() {
-      console.log(["[W]", this.fixArgs(arguments)]);
+      console.warn.apply(console,arguments);
    },
 
    /**
     * Write an error message to the console
     */
    error: function() {
-      console.log(["[E!]", this.fixArgs(arguments)]);
+      console.error.apply(console,arguments);
    },
 
    /**
@@ -651,7 +651,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 755 $
+ * @version: $Revision: 837 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1023,6 +1023,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
    
+   /**
+    * This method does a direct <tt>eval()</tt> on the JSON object and
+    * should be avoided since it allows for XSS and other security issues.
+    * @deprecated
+    * @see #parseJSON
+    */
    evalJSON: function(jsonString)
    {
       jsonString = EngineSupport.cleanSource(jsonString);
@@ -1150,6 +1156,21 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    dependencyTimer: null,
    dependencyCheckTimeout: $.browser.Wii ? 6500 : 3500,
    dependencyProcessTimeout: 100,
+   
+   loadedClasses: [],
+   
+   /**
+    * Cleanup all initialized classes and start fresh.
+    * @private
+    */
+   cleanup: function() {
+      for (var c in Linker.loadedClasses) {
+         var d = Linker.loadedClasses[c]
+         var parentObj = Linker.getParentClass(d);
+         delete parentObj[d];
+      }
+      Linker.loadedClasses = [];
+   },
 
    /**
     * Initializes an object for use in the engine.  Calling this method is required to make sure
@@ -1183,7 +1204,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
-		// Store the object for intialization when all dependencies are resolved
+      // Store the object for intialization when all dependencies are resolved
       Linker.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Linker.dependencyCount++;
       Console.info(objectName, " depends on: ", newDeps);
@@ -1269,18 +1290,20 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
 
          if (!miss && Linker.checkNSDeps(d)) {
             // We can initialize it now
+            Console.log("Initializing '", d, "'");
             var parentObj = Linker.getParentClass(d);
             parentObj[d] = Linker.dependencyList[d].objFn();
-            Console.info("Initializing", d);
+            Console.info("-> Initialized '", d, "'");
+            Linker.loadedClasses.push(d);
 
             // Remember what we processed so we don't process them again
             pDeps.push(d);
-				
-				// After it has been initialized, check to see if it has the
-				// resolved() class method
-				if (parentObj[d].resolved) {
-					parentObj[d].resolved();
-				}
+            
+            // After it has been initialized, check to see if it has the
+            // resolved() class method
+            if (parentObj[d].resolved) {
+               parentObj[d].resolved();
+            }
          }
       }
 
@@ -1654,51 +1677,55 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * the script and function queue.
  * <p/>
  * Since JavaScript is a single-threaded environment, frames are generated serially.  One
- * frame must complete before another can be rendered.  Frames are not currently skipped
- * by the engine.  It is up to objects to determine if frames have been skipped and adjust
- * themselves appropriately.
+ * frame must complete before another can be rendered.  By default, if frames are missed,
+ * the engine will wait until the next logical frame can be rendered.  The engine can also
+ * run where it doesn't skip frames, and instead runs a constant frame clock.  This
+ * doesn't guarantee that the engine will run at a fixed frame rate.
  *
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-	version: "beta 1.4.0",
+   version: "beta 1.4.0",
 
-	constructor: null,
+   constructor: null,
 
-	/*
-	 * Engine objects
-	 */
-	idRef: 0,						// Object reference Id
-	gameObjects: {},				// Live objects cache
-	livingObjects: 0,				// Count of live objects
+   /*
+    * Engine objects
+    */
+   idRef: 0,                  // Object reference Id
+   gameObjects: {},           // Live objects cache
+   livingObjects: 0,          // Count of live objects
 
-	/*
-	 * Engine info
-	 */
-	fpsClock: 33,					// The clock rate (ms)
-	frameTime: 0,					// Amount of time taken to render a frame
-	engineLocation: null,		// URI of engine
-	defaultContext: null,		// The default rendering context
-	debugMode: false,				// Global debug flag
-	localMode: false,				// Local run flag
-	started: false,				// Engine started flag
-	running: false,				// Engine running flag
+   /*
+    * Engine info
+    */
+   fpsClock: 33,              // The clock rate (ms)
+   frameTime: 0,              // Amount of time taken to render a frame
+   engineLocation: null,      // URI of engine
+   defaultContext: null,      // The default rendering context
+   debugMode: false,          // Global debug flag
+   localMode: false,          // Local run flag
+   started: false,            // Engine started flag
+   running: false,            // Engine running flag
+   upTime: 0,                 // The startup time
+   downTime: 0,               // The shutdown time
+   skipFrames: true,          // Skip missed frames
 
-	/*
-	 * Metrics tracking/display
-	 */
-	metrics: {},					// Tracked metrics
-	metricDisplay: null,			// The metric display object
-	metricSampleRate: 10,		// Frames between samples
-	lastMetricSample: 10,		// Last sample frame
-	showMetricsWindow: false,	// Metrics display flag
-	vObj: 0,							// Visible objects
-	droppedFrames: 0,				// Non-rendered frames/frames dropped
+   /*
+    * Metrics tracking/display
+    */
+   metrics: {},               // Tracked metrics
+   metricDisplay: null,       // The metric display object
+   metricSampleRate: 10,      // Frames between samples
+   lastMetricSample: 10,      // Last sample frame
+   showMetricsWindow: false,  // Metrics display flag
+   vObj: 0,                   // Visible objects
+   droppedFrames: 0,          // Non-rendered frames/frames dropped
 
-	/*
-	 * Sound engine info
-	 */
-	soundsEnabled: false,		// Sound engine enabled flag
+   /*
+    * Sound engine info
+    */
+   soundsEnabled: false,      // Sound engine enabled flag
 
    /**
     * The current time of the world on the client.  This time is updated
@@ -1706,7 +1733,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @type Number
     * @memberOf Engine
     */
-   worldTime: 0,					// The world time
+   worldTime: 0,              // The world time
+
+   /**
+    * The number of milliseconds the engine has been running.  This time is updated
+    * for each frame generated by the Engine.
+    * @type Number
+    * @memberOf Engine
+    */
+   liveTime: 0,               // The "alive" time (worldTime-upTime)
 
 
    //====================================================================================================
@@ -1765,11 +1800,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    
    /**
     * Get the FPS (frames per second) the engine is set to run at.
-	 * @return {Number}
-	 * @memberOf Engine
+    * @return {Number}
+    * @memberOf Engine
     */
    getFPS: function() {
-   	return Math.floor((1 / this.fpsClock) * 1000)
+      return Math.floor((1 / this.fpsClock) * 1000)
    },
    
    /**
@@ -1778,32 +1813,32 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * number of objects being rendered.  A faster machine will be able
     * to handle a higher FPS setting.
     * @return {Number}
-	 * @memberOf Engine
+    * @memberOf Engine
     */
-	getActualFPS: function() {
-		return Math.floor((1 / Engine.frameTime) * 1000);
-	},
+   getActualFPS: function() {
+      return Math.floor((1 / Engine.frameTime) * 1000);
+   },
    
    /**
     * Get the amount of time allocated to draw a single frame.
     * @return {Number} Milliseconds allocated to draw a frame
-	 * @memberOf Engine
+    * @memberOf Engine
     */
    getFrameTime: function() {
       return this.fpsClock;
    },
-	
-	/**
-	 * Get the amount of time it took to draw the last frame.  This value
-	 * varies per frame drawn, based on visible objects, number of operations
-	 * performed, and other factors.  The draw time can be used to optimize
-	 * your game for performance.
-	 * @return {Number} Milliseconds required to draw the frame
-	 * @memberOf Engine
-	 */
-	getDrawTime: function() {
-		return Engine.frameTime;
-	},
+   
+   /**
+    * Get the amount of time it took to draw the last frame.  This value
+    * varies per frame drawn, based on visible objects, number of operations
+    * performed, and other factors.  The draw time can be used to optimize
+    * your game for performance.
+    * @return {Number} Milliseconds required to draw the frame
+    * @memberOf Engine
+    */
+   getDrawTime: function() {
+      return Engine.frameTime;
+   },
    
    /**
     * Get the load the currently rendered frame is putting on the engine.  
@@ -1819,7 +1854,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getEngineLoad: function () {
-   	return (Engine.frameTime / this.fpsClock);
+      return (Engine.frameTime / this.fpsClock);
    },
 
    /**
@@ -1964,10 +1999,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
-		if (this.running) {
-			return;
-		}
-		
+      if (this.running) {
+         return;
+      }
+      
       var mode = "[";
       mode += (this.debugMode ? "DEBUG" : "");
       mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
@@ -1986,7 +2021,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    pause: function() {
       Console.warn(">>> Engine paused <<<");
-		window.clearTimeout(Engine.globalTimer);
+      window.clearTimeout(Engine.globalTimer);
       this.running = false;
    },
 
@@ -1998,11 +2033,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    shutdown: function() {
       if (!this.running && this.started)
       {
-			// If the engine is not currently running (paused) restart it
-			// and then re-perform the shutdown
+         // If the engine is not currently running (i.e. paused) 
+         // restart it and then re-perform the shutdown
          this.running = true;
-         setTimeout(function() { Engine.shutdown(); }, 10);
-			return;
+         setTimeout(function() { Engine.shutdown(); }, (this.fpsClock * 2));
+         return;
       }
 
       this.started = false;
@@ -2035,6 +2070,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       Assert((this.livingObjects == 0), "Object references not cleaned up!");
+      
+      this.loadedScripts = {};
+      this.scriptLoadCount = 0;
+      this.scriptsProcessed = 0;
+      this.defaultContext = null;
 
       // Perform final cleanup (silly hack for unit testing)
       if (!Engine.UNIT_TESTING) {
@@ -2061,6 +2101,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Remove all scripts from the <head>
       $("head script", document).remove();
+      
+      // Final cleanup
+      Linker.cleanup();
    },
 
 
@@ -2159,7 +2202,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          Engine.addMetric("frame", Engine.frameTime, true, "#ms");
          Engine.addMetric("load", Math.floor(this.getEngineLoad() * 100), true, "#%");
          Engine.addMetric("visObj", Engine.vObj, false, "#");
-			Engine.addMetric("dropped", Engine.droppedFrames, false, "#");
+         Engine.addMetric("dropped", Engine.droppedFrames, false, "#");
 
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;
@@ -2259,33 +2302,30 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
-
-      if (!this.running) {
-         return;
-      }
+      var nextFrame = Engine.fpsClock;
 
       // Update the world
-      var nextFrame = Engine.fpsClock;
-      if (Engine.getDefaultContext() != null)
+      if (Engine.running && Engine.getDefaultContext() != null)
       {
          Engine.vObj = 0;
-         
+
          // Render a frame
          Engine.worldTime = new Date().getTime();
          Engine.getDefaultContext().update(null, Engine.worldTime);
          Engine.frameTime = new Date().getTime() - Engine.worldTime;
-         
+         Engine.liveTime = Engine.worldTime - Engine.upTime;
+
          // Determine when the next frame should draw
          // If we've gone over the allotted time, wait until the next available frame
          var f = nextFrame - Engine.frameTime;
-         nextFrame = (f > 0 ? f : nextFrame);
+         nextFrame = (Engine.skipFrames ? (f > 0 ? f : nextFrame) : Engine.fpsClock);
          Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
-         
+
          // Output any metrics
          if (Engine.showMetricsWindow) {
             Engine.renderMetrics();
          }
-     }
+      }
 
       // When the process is done, start all over again
       Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, nextFrame);
@@ -2332,20 +2372,20 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend(/** @scope Engine.prototype */{
-	constructor: null,
+var Engine = Engine.extend(/** @lends Engine */{
+   constructor: null,
 
    /*
     * Script queue
     */
-	scriptQueue: [],
-	loadedScripts: {},			// Cache of loaded scripts
-   scriptLoadCount: 0,			// Number of queued scripts to load
-   scriptsProcessed: 0,			// Number of scripts processed
-   scriptRatio: 0,				// Ratio between processed/queued
-	queuePaused:false,			// Script queue paused flag
-	pauseReps: 0,					// Queue run repetitions while paused
-	
+   scriptQueue: [],
+   loadedScripts: {},         // Cache of loaded scripts
+   scriptLoadCount: 0,        // Number of queued scripts to load
+   scriptsProcessed: 0,       // Number of scripts processed
+   scriptRatio: 0,            // Ratio between processed/queued
+   queuePaused:false,         // Script queue paused flag
+   pauseReps: 0,              // Queue run repetitions while paused
+   
    /**
     * Status message when a script is not found
     * @memberOf Engine
@@ -2383,7 +2423,7 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
    loadNow: function(scriptPath, cb) {
       this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
    },
-	
+   
    /**
     * Queue a script to load from the server and append it to
     * the head element of the browser.  Script names are
@@ -2504,8 +2544,8 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
          // Store the request in the cache
          this.loadedScripts[s] = scriptPath;
 
-	      Engine.scriptLoadCount++;
-	      Engine.updateProgress();
+         Engine.scriptLoadCount++;
+         Engine.updateProgress();
 
          if ($.browser.Wii) {
 
@@ -2520,9 +2560,9 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
                   var h = document.getElementsByTagName("head")[0];
                   h.appendChild(n);
                   Engine.readyForNextScript = true;
-						
-				      Engine.scriptLoadCount--;
-				      Engine.updateProgress();
+                  
+                  Engine.scriptLoadCount--;
+                  Engine.updateProgress();
                   Console.debug("Loaded '" + scriptPath + "'");
                }
                
@@ -2622,14 +2662,14 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
             if (gameObjectName) {
                Engine.gameRunTimer = setInterval(function() {
                   if (typeof window[gameObjectName] != "undefined" &&
-                     	window[gameObjectName].setup) {
+                        window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
 
-				         // Remove the "loading" message
-        					$("#loading").remove();
+                     // Remove the "loading" message
+                     $("#loading").remove();
                      Console.warn("Starting: " + gameObjectName);
-							
-							// Start the game
+                     
+                     // Start the game
                      window[gameObjectName].setup();
                   }
                }, 100);
@@ -2681,7 +2721,7 @@ var Engine = Engine.extend(/** @scope Engine.prototype */{
             pBar.append(fBar);
          }
          fBar.width(fill);
-			jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
+         jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
       }
    },
 
@@ -2794,4 +2834,3 @@ if (EngineSupport.checkBooleanParam("metrics"))
 
 // Local mode keeps loaded script source available
 Engine.localMode = EngineSupport.checkBooleanParam("local");
-
