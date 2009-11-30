@@ -57,7 +57,7 @@ The following list is a set of goals to be reached for the intended release.  So
 
 || *Status* || *Goal* || *Description* ||
 || _75%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
-|| _5%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
+|| _45%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
 || - || Tool || Particle editor. ||
 || - || Example || Music Player ||
 
@@ -65,7 +65,7 @@ The following list is a set of goals to be reached for the intended release.  So
 
 || *Status* || *Goal* || *Description* ||
 || - || *Code freeze* || *No additional features* - Start logging and addressing major bugs. ||
-|| _45%_ || Documentation || Clean up and finish API documentation.  Expand wiki to include more articles about engine use and game development with the engine. ||
+|| _65%_ || Documentation || Clean up and finish API documentation.  Expand wiki to include more articles about engine use and game development with the engine. ||
 || _60%_ || Tutorials || Build additional "basics" tutorials. ||
 
 == Release Candidate 1 (TBA) ==
