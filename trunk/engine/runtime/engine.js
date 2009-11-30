@@ -1637,7 +1637,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 852 $
+ * @version: $Revision: 853 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1914,7 +1914,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      Assert((this.running == true && this.started == true), "Creating an object when the engine is stopped!");
+      Assert((this.started == true), "Creating an object when the engine is stopped!");
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
