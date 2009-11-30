@@ -21,3 +21,4 @@ Ideas for the next release.  This list is always evolving...
 || - || Dev Tool || Add a function tracer which logs calls into and out of functions ||
 || - || Dev Tool || Implement a profiler which I can use on all platforms to test code execution times.  This should be engine specific. ||
 || - || Browser Support || Considering Google Labs O3D integration. ||
+|| - || New Featured || Box 2d JS physics support ||
