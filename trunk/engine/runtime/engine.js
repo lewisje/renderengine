@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 716 $
+ * @version: $Revision: 852 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1102,7 +1102,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 713 $
+ * @version: $Revision: 852 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1637,7 +1637,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 779 $
+ * @version: $Revision: 852 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1914,7 +1914,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      Assert((this.running == true), "Cannot create objects when the engine is not running!");
+      Assert((this.running == true && this.started == true), "Creating an object when the engine is stopped!");
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
@@ -2789,7 +2789,7 @@ var Engine = Engine.extend(/** @lends Engine */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 681 $
+ * @version: $Revision: 852 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
