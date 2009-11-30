@@ -56,7 +56,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
          return "";
       } else if (typeof o == "function") {
          return "function";
-      } else if (o.constructor == Array || (o.slice && o.join && o.splice)) {	// An array
+      } else if (o.constructor == Array || (o.slice && o.join && o.splice)) { // An array
          var s = "[";
          for (var e in o) {
             s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
@@ -270,28 +270,28 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
     * Write a debug message to the console
     */
    info: function() {
-      console.log(this.fixArgs(arguments));
+      console.log.apply(console,arguments);
    },
 
    /**
     * Write a debug message to the console
     */
    debug: function() {
-      console.log(["[D]", this.fixArgs(arguments)]);
+      console.debug.apply(console,arguments);
    },
 
    /**
     * Write a warning message to the console
     */
    warn: function() {
-      console.log(["[W]", this.fixArgs(arguments)]);
+      console.warn.apply(console,arguments);
    },
 
    /**
     * Write an error message to the console
     */
    error: function() {
-      console.log(["[E!]", this.fixArgs(arguments)]);
+      console.error.apply(console,arguments);
    },
 
    /**

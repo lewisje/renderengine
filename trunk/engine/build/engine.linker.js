@@ -61,6 +61,21 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    dependencyTimer: null,
    dependencyCheckTimeout: $.browser.Wii ? 6500 : 3500,
    dependencyProcessTimeout: 100,
+   
+   loadedClasses: [],
+   
+   /**
+    * Cleanup all initialized classes and start fresh.
+    * @private
+    */
+   cleanup: function() {
+      for (var c in Linker.loadedClasses) {
+         var d = Linker.loadedClasses[c]
+         var parentObj = Linker.getParentClass(d);
+         delete parentObj[d];
+      }
+      Linker.loadedClasses = [];
+   },
 
    /**
     * Initializes an object for use in the engine.  Calling this method is required to make sure
@@ -94,7 +109,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
-		// Store the object for intialization when all dependencies are resolved
+      // Store the object for intialization when all dependencies are resolved
       Linker.dependencyList[objectName] = {deps: newDeps, objFn: fn};
       Linker.dependencyCount++;
       Console.info(objectName, " depends on: ", newDeps);
@@ -180,18 +195,20 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
 
          if (!miss && Linker.checkNSDeps(d)) {
             // We can initialize it now
+            Console.log("Initializing '", d, "'");
             var parentObj = Linker.getParentClass(d);
             parentObj[d] = Linker.dependencyList[d].objFn();
-            Console.info("Initializing", d);
+            Console.info("-> Initialized '", d, "'");
+            Linker.loadedClasses.push(d);
 
             // Remember what we processed so we don't process them again
             pDeps.push(d);
-				
-				// After it has been initialized, check to see if it has the
-				// resolved() class method
-				if (parentObj[d].resolved) {
-					parentObj[d].resolved();
-				}
+            
+            // After it has been initialized, check to see if it has the
+            // resolved() class method
+            if (parentObj[d].resolved) {
+               parentObj[d].resolved();
+            }
          }
       }
 
