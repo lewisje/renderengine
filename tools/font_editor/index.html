@@ -41,6 +41,9 @@
    <head>
       <title>The Render Engine - Font Editor</title>
 
+		<!-- ChromeFrame Support -->
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+
       <!-- Supporting Libraries -->
       <script type="text/javascript" src="../../libs/base.js"></script>
       <script type="text/javascript" src="../../libs/jquery-1.2.6.js"></script>
@@ -67,12 +70,23 @@
    </head>
    <body>
       <span id="loading">Loading...
-         <div id="engine-load-progress"></div>
+         <div id="engine-load-progress"></div><span id="engine-load-info"></span>
       </span>
       <script type="text/javascript">
          // Load the game script
          Engine.loadGame('game.js','FontEditor');
       </script>
 
+		<div id="infoForm">
+			<b>Font URL: </b><input type='text' id='fontURL' size='40' value='http://catcam.mypets.ws/renderengine/fonts/courier_36.png'/>
+			<input type="button" id="loadFile" value="Load..."/><br/>
+			<b>Font Name: </b><input type='text' id='fontName' size='40'/><br/>
+			<b>Width: </b><input type='text' id='fontWidth' size='5' value="1968"/><br/>
+			<b>Height: </b><input type='text' id='fontHeight' size='5' value="34"/><br/>
+			<b>Size: </b><input type='text' id='fontSize' size='5'/><br/>
+			<b>Uppercase Only? </b><input type='checkbox' id='fontUpper'/><br/>
+			<b>Kerning: </b><input type='text' size='5' id='fontKerning' value="0.88"/><br/>
+			<b>Space Width: </b><input type='text' size='5' id='fontSpace' value="20"/><br/>
+		</div>
    </body>
 </html>
