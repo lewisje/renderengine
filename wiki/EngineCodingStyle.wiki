@@ -23,6 +23,9 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
     */
    var NewClass = SuperClass.extend(/** @scope NewClass.prototype */{
 
+      //==================================================================
+      // INSTANCE FIELDS
+
       /** 
        * Document any public fields that are on the prototype.
        * Be sure to also document the type.
@@ -36,6 +39,9 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       // In most cases, you'll probably want all of your fields to be
       // private and to provider getters and setters.
       fieldC: 0,
+
+      //==================================================================
+      // INSTANCE METHODS
 
       /**
        * Document the constructor as shown above. Remember to include
@@ -111,6 +117,9 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       }
 
    }, /** @scope NewClass.prototype */{
+
+      //==================================================================
+      // CLASS FIELDS AND METHODS
 
       /** 
        * Static members of a class should be well documented. 
