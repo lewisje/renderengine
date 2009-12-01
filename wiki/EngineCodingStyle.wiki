@@ -69,7 +69,7 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
 
          // Instead of using the "new" keyword to construct
          // objects, use the ".create()" method of pooled objects.
-         var myObj = PooledObject.create(arg1, arg2, arg3);
+         var myObj = PooledObject.create(y, this.field1, z);
 
       }
    }, /** @scope NewClass.prototype */{
