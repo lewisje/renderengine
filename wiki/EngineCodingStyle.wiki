@@ -80,6 +80,7 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
        * @param y {Type} Always document arguments
        * @param [z=default] {Type} Especially optional arguments and their
        *                    default values.
+       * @return {PooledObject} Be sure to document any return value
        */
       extMethod: function(y, z) {
 
@@ -87,6 +88,7 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
          // objects, use the ".create()" method of pooled objects.
          var myObj = PooledObject.create(y, this.field1, z);
 
+         return myObj;
       },
 
       /**
