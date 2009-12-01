@@ -3,7 +3,7 @@
 
 =Engine Examples=
 
-The Render Engine is a fully featured engine which can be used to write both games and to write applications which are graphics intensive.  Below are examples of the engine at use.
+The Render Engine is a fully featured engine which can be used to write both games and to write applications which are graphics intensive.  Below are examples of the engine in use.  All of the following examples were written using The Render Engine and, as you can tell, are the old "eat your own dog food" type of examples.
 
 ==Asteroids Clone==
 
