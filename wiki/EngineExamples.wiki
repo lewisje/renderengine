@@ -12,29 +12,29 @@ This example is a clone of Asteroids by Atari.  There are two modes in which the
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true Asteroids clone]
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids clone - Evolved]
 
-==Ball Bounce and the Wii==
+==Ball Physics and the Wii==
 
-The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on t he Wii, but on PCs and Macs.  On the Wii, just point and click the "A" button.
+The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on the Wii, but on PCs and Macs.  On the Wii, just point and click the "A" button.  In addition, this is the first test of the "ball physics" which have since been converted to a collider component.
 
    * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 Bounce the Ball]
 
 ==The Sprite Editor==
 
-In addition to games, The Render Engine can be (and is) used to create applications.  In this case I'm using it to develop the Sprite Editor.  Eventually, this will be a part of the online release for the creation of sprites for usage in your games.
+In addition to games, The Render Engine can be (and, as you can see with this example, is) used to create applications.  In this case I'm using it to develop the Sprite Editor.  Eventually, this will be a part of the online release for the creation of sprites in your games.
 
    * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor alpha]
 
 
 ==Text Rendering Capabilities==
 
-The following is a quick test I've put together to test text rendering in the three supported modes.  If your browser doesn't support rendering fonts to the canvas, you'll only see the first two (Vector and Bitmap).
+The following is a quick test I put together to test text rendering with the three supported renderers.  If your browser doesn't support natively rendering fonts to the canvas, you'll only see the first two (Vector and Bitmap).  In most cases, the bitmap fonts are a decent alternative to rendering text to the canvas.
 
    * [http://renderengine.googlecode.com/svn/trunk/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
 
 ==The Bitmap Font Editor==
 
-Another tool that will be provided with the engine will dissect a bitmap image of a font for use with the canvas context.  It will analyze a bitmap for breaks between the characters, then generate a font definition.  When it's completed, the editor will allow the user to create, adjust, and remove dividers.  Currently, the editor is in its early stages.
+Another tool that will be provided with the engine will dissect a bitmap image of a font for use with the canvas context.  It currently analyzes a bitmap for breaks between the characters, and will eventually generate a font definition.  When it's completed, the editor will allow the user to create, adjust, and remove dividers.  Currently, the editor is in the early development stages and tests the character analysis portion.
 
    * [http://renderengine.googlecode.com/svn/trunk/tools/font_editor/index.html?metrics=true Font Editor alpha]
 
-There are more examples in development and I'll release those when they are more complete.  If you have good examples of the engine in use, let me know and I'll include them here on this page!
+There will be more examples, in the future, which will appear on this page.  If you have any good examples of the engine in use, let me know and I'll include them here as well!
