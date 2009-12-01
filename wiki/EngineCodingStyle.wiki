@@ -16,6 +16,10 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
     * system know that.
     *
     * @extends SuperClass
+    * @param arg1 {Type} Description of argument 1
+    * @param [arg2=default] {Type} Description of argument 2
+    * @constructor
+    * @description Creates a <tt>NewClass</tt> instance
     */
    var NewClass = SuperClass.extend(/** @scope NewClass.prototype */{
 
@@ -23,10 +27,9 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       field1: null,
 
       /**
-       * Document the constructor, let the end user know what
-       * the arguments are for using:
-       * @param arg1 {Type} Description of argument 1
-       * @param [arg2=default] {Type} Description of argument 2
+       * Document the constructor as shown above. Then mark
+       * the actual constructor method as private.
+       * @private
        */
       constructor: function(arg1, arg2) {
          // Call the super-class
