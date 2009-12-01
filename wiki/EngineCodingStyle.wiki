@@ -33,6 +33,10 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       // Unless they are private fields
       fieldB: null,
 
+      // In most cases, you'll probably want all of your fields to be
+      // private and to provider getters and setters.
+      fieldC: 0,
+
       /**
        * Document the constructor as shown above. Then mark
        * the actual constructor method as private.
@@ -82,7 +86,27 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
          // objects, use the ".create()" method of pooled objects.
          var myObj = PooledObject.create(y, this.field1, z);
 
+      },
+
+      /**
+       * Setter methods should match the field name with the
+       * "set" identifier.  Remember to document the value
+       * @param val {Number} The value for field C
+       */
+      setFieldC: function(val) {
+         this.fieldC = val;
+      },
+
+      /**
+       * The getter should also match the field name with the "get"
+       * identifier.  For boolean fields, consider using "is" instead of
+       * "get".  Be sure to indicate the return type
+       * @return {Number}
+       */
+      getFieldC: function() {
+         return this.fieldC;
       }
+
    }, /** @scope NewClass.prototype */{
 
       /** Static members of a class should be well documented. 
