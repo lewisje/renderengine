@@ -19,7 +19,7 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
     * @param arg1 {Type} Description of argument 1
     * @param [arg2=default] {Type} Description of argument 2
     * @constructor
-    * @description Creates a <tt>NewClass</tt> instance
+    * @description This is the constructor description for a <tt>NewClass</tt> instance
     */
    var NewClass = SuperClass.extend(/** @scope NewClass.prototype */{
 
