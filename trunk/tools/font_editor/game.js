@@ -34,6 +34,7 @@
  */
 
 // Load all required engine components
+Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/resourceloaders/loader.image.js");
 Engine.include("/engine/engine.timers.js");
@@ -43,7 +44,9 @@ Game.load("fontrender.js");
 Engine.initObject("FontEditor", "Game", function() {
 
 /**
- * @class The game.
+ * @class Font Editor.  Fonts should be a single bitmap, 36px to 48px font,
+ * with the following characters (in the exact order)
+ * !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz
  */
 var FontEditor = Game.extend({
 
@@ -52,8 +55,8 @@ var FontEditor = Game.extend({
 	testContext: null,
 	fontDef: null,
 	
-	editorWidth: 1789,
-	editorHeight: 80,
+	editorWidth: 2500,
+	editorHeight: 100,
 	
 	testWidth: 800,
 	testHeight: 80,
@@ -77,13 +80,19 @@ var FontEditor = Game.extend({
 		// Check to see if a JS file exists for the font
 		//var fontJS = Game.loadEngineScript("fonts/" + fontFile + ".js");
 
+		// Create a div we can scroll the canvas within
+		var div = HTMLDivContext.create("div", 800, 120);
+		div.jQ().css("overflow-x", "auto");
+
+		Engine.getDefaultContext().add(div);
+
       // Create the editor's 2D context
       this.editorContext = CanvasContext.create("editor", this.editorWidth, this.editorHeight);
 		this.editorContext.setWorldScale(1);
 		
 		// The editor context is static.  We'll update it as needed
 		this.editorContext.setStatic(true);
-      Engine.getDefaultContext().add(this.editorContext);
+      div.add(this.editorContext);
       this.editorContext.setBackgroundColor("black");
 
 		// Create the test context where the font will be rendered to
@@ -215,6 +224,8 @@ var FontEditor = Game.extend({
 				rowNum++;
 			}
 		} while (rowNum < w);
+		this.editorContext.setLineStyle("yellow");
+		this.editorContext.drawLine(Point2D.create(w,0), Point2D.create(w, h));
 	},
 	
 	/**
