@@ -57,7 +57,7 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
     * @private
     */
    constructor: function(name, priority, sprite) {
-      if (priority instanceof Sprite) [
+      if (priority instanceof Sprite) {
          sprite = priority;
          priority = 0.1;
       }
