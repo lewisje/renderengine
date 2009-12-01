@@ -47,6 +47,9 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
          // Be sure to use inline comments where possible.
          // It's important to describe what is going on, especially
          // when it cannot be inferred from the code.
+
+         // Variables should be scoped to the function with the "var" keyword
+         var localVar = 0;
       },
 
       /**
@@ -60,6 +63,10 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
        *                    default values.
        */
       extMethod: function(y, z) {
+
+         // Instead of using the "new" keyword to construct
+         // objects, use the ".create()" method of pooled objects.
+         var myObj = PooledObject.create(arg1, arg2, arg3);
 
       }
    }, /** @scope NewClass.prototype */{
