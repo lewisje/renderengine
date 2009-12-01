@@ -64,18 +64,24 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       }
    }, /** @scope NewClass.prototype */{
 
-      /** Static members of a class should be well documented. */
+      /** Static members of a class should be well documented. 
+       * @type {Number}
+       */
       STATUS_OK: 1,
 
-      /** These will show up as fields of the class in the documentation. */
+      /** These will show up as fields of the class in the documentation. 
+       * @type {Number}
+       */
       STATUS_FAIL: -1,
 
-      /** The uppercase name indicates a constant. */
+      /** The uppercase name indicates a constant. 
+       * @type {Number}
+       */
       STATUS_INIT: 0,
 
       /**
        * Remember to include the method to get your class's name.
-       * @return {String} Returns the string "NewClass"
+       * @return {String} "NewClass"
        */
       getClassName: function() {
          return "NewClass";
