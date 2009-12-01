@@ -23,8 +23,15 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
     */
    var NewClass = SuperClass.extend(/** @scope NewClass.prototype */{
 
-      /** Document your fields that are on the prototype */
-      field1: null,
+      /** 
+       * Document your public fields that are on the prototype.
+       * Be sure to document the type.
+       * @type {String}
+       */
+      fieldA: null,
+
+      // Unless they are private fields
+      fieldB: null,
 
       /**
        * Document the constructor as shown above. Then mark
@@ -34,6 +41,10 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       constructor: function(arg1, arg2) {
          // Call the super-class
          this.base(arg1, arg2);
+
+         // Be sure to initialize instance fields in the constructor
+         this.fieldA = "foo";
+         this.fieldB = "bar";
 
          // The constructor for the class
          // ...
