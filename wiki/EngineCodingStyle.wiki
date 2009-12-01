@@ -29,7 +29,11 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
        * @param [arg2=default] {Type} Description of argument 2
        */
       constructor: function(arg1, arg2) {
+         // Call the super-class
+         this.base(arg1, arg2);
+
          // The constructor for the class
+         // ...
       },
 
       /**
