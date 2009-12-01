@@ -24,10 +24,17 @@ In addition to games, The Render Engine can be (and is) used to create applicati
 
    * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor alpha]
 
-There are more examples in development and I'll release those when they are more complete.  If you have good examples of the engine in use, let me know and I'll include them here on this page!
 
 ==Text Rendering Capabilities==
 
 The following is a quick test I've put together to test text rendering in the three supported modes.  If your browser doesn't support rendering fonts to the canvas, you'll only see the first two (Vector and Bitmap).
 
    * [http://renderengine.googlecode.com/svn/trunk/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
+
+==The Bitmap Font Editor==
+
+Another tool that will be provided with the engine will dissect a bitmap image of a font for use with the canvas context.  It will analyze a bitmap for breaks between the characters, then generate a font definition.  When it's completed, the editor will allow the user to create, adjust, and remove dividers.  Currently, the editor is in its early stages.
+
+   * [http://renderengine.googlecode.com/svn/trunk/tools/font_editor/index.html?metrics=true Font Editor alpha]
+
+There are more examples in development and I'll release those when they are more complete.  If you have good examples of the engine in use, let me know and I'll include them here on this page!
