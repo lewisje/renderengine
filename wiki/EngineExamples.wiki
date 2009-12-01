@@ -12,7 +12,7 @@ This example is a clone of Asteroids by Atari.  There are two modes in which the
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true Asteroids clone]
    * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids clone - Evolved]
 
-==Ball Physics and the Wii==
+==Ball Physics, Sprites, and the Wii==
 
 The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on the Wii, but on PCs and Macs.  On the Wii, just point and click the "A" button.  In addition, this is the first test of the "ball physics" which have since been converted to a collider component.
 
