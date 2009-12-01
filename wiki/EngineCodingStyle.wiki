@@ -24,8 +24,8 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
    var NewClass = SuperClass.extend(/** @scope NewClass.prototype */{
 
       /** 
-       * Document your public fields that are on the prototype.
-       * Be sure to document the type.
+       * Document any public fields that are on the prototype.
+       * Be sure to also document the type.
        * @type {String}
        */
       fieldA: null,
@@ -38,8 +38,9 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       fieldC: 0,
 
       /**
-       * Document the constructor as shown above. Then mark
-       * the actual constructor method as private.
+       * Document the constructor as shown above. Remember to include
+       * the parameters up there as well. Then mark the actual constructor 
+       * method as private.
        * @private
        */
       constructor: function(arg1, arg2) {
@@ -89,8 +90,8 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       },
 
       /**
-       * Setter methods should match the field name with the
-       * "set" identifier.  Remember to document the value
+       * Setter methods should match the field name preceded by the
+       * "set" identifier.  Remember to document the arguments!
        * @param val {Number} The value for field C
        */
       setFieldC: function(val) {
@@ -98,9 +99,9 @@ All classes must be declared using Base style.  No Prototype, no moo-tools, no S
       },
 
       /**
-       * The getter should also match the field name with the "get"
+       * The getter should also match the field name, preceded with the "get"
        * identifier.  For boolean fields, consider using "is" instead of
-       * "get".  Be sure to indicate the return type
+       * "get".  Be sure to indicate the return type!
        * @return {Number}
        */
       getFieldC: function() {
