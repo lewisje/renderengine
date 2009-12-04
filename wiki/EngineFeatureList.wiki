@@ -24,7 +24,7 @@ If you're looking for what is currently supported/available in The Render Engine
     * Collision
     * Input (keyboard, mouse)
     * Logic 
-    * Rendering (Canvas, DOM)
+    * Rendering
   # 2D Sprite support
   # Sound support (requires Flash 8+)
   # Resource loaders (ResourceLoaders)
