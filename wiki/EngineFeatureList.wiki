@@ -15,7 +15,7 @@ If you're looking for what is currently supported/available in The Render Engine
     * Opera 9.5+
     * Chrome 1.0+
   # 2D Vector-based example game ([http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?evolved=true Asteroids clone - Evolved])
-  # 2D DOM-based example game ([http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bounce the Ball])
+  # 2D Sprite-based example game ([http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bounce the Ball])
   # Rendering contexts (RenderContext)
     * 2D Canvas
   # Modular host objects (HostObjects)
