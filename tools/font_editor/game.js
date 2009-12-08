@@ -118,7 +118,7 @@ var FontEditor = Game.extend({
 		this.editorContext.addEvent(this, "mousemove", function(evt) {
 			var scr = $(this).parent().scrollLeft();
 			if (self.analyzed && self.fontDef.letters[evt.clientX + scr] == "X") {
-				console.debug("over", evt.clientX + scr, scr);				
+				Console.debug("over", evt.clientX + scr, scr);				
 			}
 			if (self.mouseBtn) {
 				// This allows manual adjustment of automatic glyph dividers
