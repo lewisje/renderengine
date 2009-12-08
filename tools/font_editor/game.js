@@ -63,6 +63,8 @@ var FontEditor = Game.extend({
 	
 	testString: "The quick brown fox jumps over the lazy dog. !@#$%^&*()",
 	imageLoader: null,
+	
+	analyzed: false,
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -88,7 +90,7 @@ var FontEditor = Game.extend({
 
       // Create the editor's 2D context
       this.editorContext = CanvasContext.create("editor", this.editorWidth, this.editorHeight);
-		this.editorContext.setWorldScale(1);
+		this.editorContext.setWorldScale(2);
 		
 		// The editor context is static.  We'll update it as needed
 		this.editorContext.setStatic(true);
@@ -114,6 +116,10 @@ var FontEditor = Game.extend({
 		});
 
 		this.editorContext.addEvent(this, "mousemove", function(evt) {
+			var scr = $(this).parent().scrollLeft();
+			if (self.analyzed && self.fontDef.letters[evt.clientX + scr] == "X") {
+				console.debug("over", evt.clientX + scr, scr);				
+			}
 			if (self.mouseBtn) {
 				// This allows manual adjustment of automatic glyph dividers
 			}
@@ -186,35 +192,41 @@ var FontEditor = Game.extend({
 	 * the one with the least number of overlapped pixels.
 	 */
 	analyze: function() {
-		var rowNum = 1, letArr = [], lidx = 0;
-		var w = parseInt($("#fontWidth").val());
-		var h = parseInt($("#fontHeight").val());
+		var rowNum = 0, letArr = [], lidx = 0;
+		var w = parseInt($("#fontWidth").val()) * 2;
+		var h = parseInt($("#fontHeight").val()) * 2;
 		do {
 			var d = this.getPixelDensity(rowNum);
 			//console.debug("Density: ", d);
 			rowNum++;
 			if (d == 0) {
+				//this.editorContext.setLineStyle("blue");
+				//this.editorContext.drawLine(Point2D.create(rowNum,0), Point2D.create(rowNum, h));
 				// Possible letter boundary, check the density of the next rows
 				// until we find one that is higher than zero
 				var nextRow = rowNum + 1;
 				if (this.getPixelDensity(nextRow) != 0) {
 					this.editorContext.setLineStyle("orange");
 					this.editorContext.drawLine(Point2D.create(rowNum,0), Point2D.create(rowNum, h));
+					this.fontDef.letters[rowNum] = "X";
 					rowNum++;
 				} else {
 					while (nextRow < w && this.getPixelDensity(nextRow) < 1) {
+						//this.editorContext.setLineStyle("blue");
+						//this.editorContext.drawLine(Point2D.create(nextRow,0), Point2D.create(nextRow, h));
 						nextRow++;
 					};
 					nextRow--; 
 					// If nextrow and rownum are not the same, find the median
 					var med = 0;
 					if (rowNum != nextRow) {
-						med = (nextRow - rowNum) / 2;
+						med = Math.floor((nextRow - rowNum) / 2);
 					}
 					rowNum += med;
 					//letArr.push(med);
 					this.editorContext.setLineStyle("yellow");
 					this.editorContext.drawLine(Point2D.create(rowNum,0), Point2D.create(rowNum, h));
+					this.fontDef.letters[rowNum] = "X";
 					rowNum = nextRow + 1;
 				}
 			} else {
@@ -226,6 +238,8 @@ var FontEditor = Game.extend({
 		} while (rowNum < w);
 		this.editorContext.setLineStyle("yellow");
 		this.editorContext.drawLine(Point2D.create(w,0), Point2D.create(w, h));
+		this.fontDef.letters[rowNum] = "X";
+		this.analyzed = true;
 	},
 	
 	/**
@@ -234,7 +248,7 @@ var FontEditor = Game.extend({
 	 * @return {Array} The array of pixels in the row
 	 */
 	getPixelRow: function(rowNum) {
-		var h = parseInt($("#fontHeight").val());
+		var h = parseInt($("#fontHeight").val()) * 2;
 		var rect = Rectangle2D.create(rowNum, 0, 1, h);
 		return this.editorContext.getImage(rect);
 	},
@@ -244,11 +258,11 @@ var FontEditor = Game.extend({
 	 * @param inRow {Array} The row from {@link #getPixelRow}
 	 */
 	getPixelDensity: function(rowNum) {
-		var h = parseInt($("#fontHeight").val());
+		var h = parseInt($("#fontHeight").val()) * 2;
 		var d = 0;
 		var r = this.getPixelRow(rowNum);
-		for (var y = 4; y < 4*h; y+=4) {
-			d += (r.data[y] > 0 ? 1 : 0);
+		for (var y = 3; y < 4*h; y+=4) {
+			d |= (r.data[y] > 230 ? 1 : 0);
 		}
 		return d;	
 	}
