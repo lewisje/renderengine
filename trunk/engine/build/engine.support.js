@@ -318,7 +318,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @return String
     * @memberOf EngineSupport
     */
-   toJSONString: function(o)
+   toJSON: function(o)
    {
       if (!typeof JSON == "undefined") {
          return JSON.stringify(o);

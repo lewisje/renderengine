@@ -55,7 +55,7 @@ var FontEditor = Game.extend({
 	testContext: null,
 	fontDef: null,
 	
-	editorWidth: 2500,
+	editorWidth: 6000,
 	editorHeight: 100,
 	
 	testWidth: 800,
@@ -65,6 +65,10 @@ var FontEditor = Game.extend({
 	imageLoader: null,
 	
 	analyzed: false,
+	mouseBtn: false,
+	mouseLine: -1,
+	
+	fontBase: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz",
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -75,6 +79,8 @@ var FontEditor = Game.extend({
 
       // Set the FPS of the game
       Engine.setFPS(5);
+		
+		$("#fontURL").val(Engine.getEnginePath() + "/fonts/century_gothic_36.png");
 
 		// The font file can be specified as a command parameter
 		var fontFile = EngineSupport.getStringParam("fontFile");
@@ -109,6 +115,20 @@ var FontEditor = Game.extend({
 		var self = this;
 		this.editorContext.addEvent(this, "mousedown", function(evt) {
 			self.mouseBtn = true;
+			var pos = self.mouseLine;
+			var h = parseInt($("#fontHeight").val()) * 2;
+			// This allows manual adjustment of automatic glyph dividers
+			if (self.fontDef.letters[pos] != "X") {
+				self.fontDef.letters[pos] = "X";
+				self.editorContext.setLineStyle("green");
+				self.editorContext.drawLine(Point2D.create(pos,0), Point2D.create(pos, h));
+				self.checkFont();
+			} else {
+				self.fontDef.letters[pos] = null;
+				self.editorContext.setLineStyle("black");
+				self.editorContext.drawLine(Point2D.create(pos,0), Point2D.create(pos, h));
+				self.checkFont();
+			}
 		});
 
 		this.editorContext.addEvent(this, "mouseup", function(evt) {
@@ -116,13 +136,8 @@ var FontEditor = Game.extend({
 		});
 
 		this.editorContext.addEvent(this, "mousemove", function(evt) {
-			var scr = $(this).parent().scrollLeft();
-			if (self.analyzed && self.fontDef.letters[evt.clientX + scr] == "X") {
-				Console.debug("over", evt.clientX + scr, scr);				
-			}
-			if (self.mouseBtn) {
-				// This allows manual adjustment of automatic glyph dividers
-			}
+			var pos = evt.clientX + $(this).parent().scrollLeft();
+			self.mouseLine = pos;
 		});
 		
 		// Default font definition
@@ -180,19 +195,26 @@ var FontEditor = Game.extend({
 	},
 	
 	run: function() {
+		var self = this;
+		this.editorContext.cleanUp();
 		this.editorContext.add(FontRender.create("font"));
 		this.editorContext.render(Engine.worldTime);
-		this.analyze();	
+		$("#analyze").click(function() {
+			self.editorContext.render(Engine.worldTime);
+			self.analyze();
+		});
 	},
 
 	/**
 	 * Automatically analyze a font image, looking for breaks between character
 	 * glyphs.  If there are multiple rows with zero filled pixels, find the
 	 * median between them.  If there aren't any rows containing zero pixels, find
-	 * the one with the least number of overlapped pixels.
+	 * the one with the least number of overlapped pixels.  Builds a dense array of
+	 * possible divider positions.
 	 */
 	analyze: function() {
-		var rowNum = 0, letArr = [], lidx = 0;
+		var rowNum = 0;
+		this.fontDef.letters = [];
 		var w = parseInt($("#fontWidth").val()) * 2;
 		var h = parseInt($("#fontHeight").val()) * 2;
 		do {
@@ -236,10 +258,11 @@ var FontEditor = Game.extend({
 				rowNum++;
 			}
 		} while (rowNum < w);
-		this.editorContext.setLineStyle("yellow");
-		this.editorContext.drawLine(Point2D.create(w,0), Point2D.create(w, h));
-		this.fontDef.letters[rowNum] = "X";
+		//this.editorContext.setLineStyle("yellow");
+		//this.editorContext.drawLine(Point2D.create(w,0), Point2D.create(w, h));
+		//this.fontDef.letters[rowNum] = "X";
 		this.analyzed = true;
+		this.checkFont();
 	},
 	
 	/**
@@ -255,16 +278,47 @@ var FontEditor = Game.extend({
 	
 	/**
 	 * Count the pixels in the given row.
-	 * @param inRow {Array} The row from {@link #getPixelRow}
+	 * @param rowNum {Number} The row to analyze
 	 */
 	getPixelDensity: function(rowNum) {
 		var h = parseInt($("#fontHeight").val()) * 2;
 		var d = 0;
 		var r = this.getPixelRow(rowNum);
+		var min = parseInt($("#minAlpha").val());
 		for (var y = 3; y < 4*h; y+=4) {
-			d |= (r.data[y] > 230 ? 1 : 0);
+			d |= (r.data[y] > min ? 1 : 0);
 		}
 		return d;	
+	},
+	
+	/**
+	 * Check to see if all of the required character slots
+	 * are filled.  If so, render the test string with the
+	 * new font and generate the font definition.
+	 */
+	checkFont: function() {
+		var req = $("#fontUpper").val() == "on" ? 58 : this.fontBase.length;
+		var ltrCount = 0;
+		var ltrs = [];
+		for (var l in this.fontDef.letters) {
+			if (this.fontDef.letters[l] == "X") {
+				ltrCount++;
+				ltrs.push(Math.floor(l / 2));
+			}
+		}
+		if (ltrCount - 1 ==  this.fontBase.length) {
+			var outDef = this.fontDef;
+			outDef.name = $("#fontName").val();
+			outDef.width = parseInt($("#fontWidth").val());
+			outDef.height = parseInt($("#fontHeight").val());
+			outDef.kerning = Number($("#fontKerning").val());
+			outDef.space = parseInt($("#fontSpace").val());
+			outDef.size = parseInt($("#fontSize").val());
+			outDef.bitmapImage = $("#fontURL").val().substr($("#fontURL").val().lastIndexOf("/") + 1);
+			outDef.letters = [0].concat(ltrs);
+			var reg = "// Generated by The Render Engine font editor\n// (c)2008-2009 Brett Fattori\n";
+			$("#fontDef").val(reg + "BitmapFontLoader.font=" + JSON.stringify(outDef) + ";");
+		}	
 	}
 	
 });

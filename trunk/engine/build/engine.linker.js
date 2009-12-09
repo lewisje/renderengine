@@ -246,7 +246,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       var vR = new RegExp("(var\\s*" + nR + "\\s*)","g");
       var m;
       while ((m = vR.exec(def)) != null) {
-         vTable.push(m[2]);
+         vTable.push(m[2]); 
       }
       return vTable;
    },
