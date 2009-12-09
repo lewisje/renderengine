@@ -49,6 +49,7 @@
       <script type="text/javascript" src="../../libs/jquery-1.2.6.js"></script>
       <script type="text/javascript" src="../../libs/jquery.ext.engine.js"></script>
       <script type="text/javascript" src="../../libs/sylvester.js"></script>
+      <script type="text/javascript" src="../../libs/json2.js"></script>
 
       <!-- Load the main engine script -->
       <script type="text/javascript" src="../support/editor_support.js"></script>
@@ -66,6 +67,15 @@
             background: blue;
          }
 
+			#infoForm {
+				position: absolute;
+				top: 150px;
+				left: 10px;
+				padding: 5px;
+				border: 1px solid;
+				font: 10px Arial;
+			}
+
       </style>
    </head>
    <body>
@@ -78,8 +88,7 @@
       </script>
 
 		<div id="infoForm">
-			<!-- <b>Font URL: </b><input type='text' id='fontURL' size='40' value='http://catcam.mypets.ws/renderengine/fonts/century_gothic_36.png'/> -->
-			<b>Font URL: </b><input type='text' id='fontURL' size='40' value='http://renderengine.googlecode.com/svn/trunk/fonts/century_gothic_36.png'/>
+			<b>Font URL: </b><input type='text' id='fontURL' size='70' value=''/>
 			<input type="button" id="loadFile" value="Load..."/><br/>
 			<b>Font Name: </b><input type='text' id='fontName' size='40'/><br/>
 			<b>Width: </b><input type='text' id='fontWidth' size='5' value="1789"/><br/>
@@ -88,6 +97,9 @@
 			<b>Uppercase Only? </b><input type='checkbox' id='fontUpper'/><br/>
 			<b>Kerning: </b><input type='text' size='5' id='fontKerning' value="0.88"/><br/>
 			<b>Space Width: </b><input type='text' size='5' id='fontSpace' value="20"/><br/>
+			<b>Min Alpha: </b><input type='text' size='5' id='minAlpha' value="100"/>
+			<input type="button" id="analyze" value="Analyze Font"/><br/>
+			<textarea id="fontDef" cols="70" rows="10"></textarea>
 		</div>
    </body>
 </html>

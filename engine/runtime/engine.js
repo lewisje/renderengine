@@ -6,7 +6,7 @@
  *
  * author: Brett Fattori (brettf@renderengine.com)
  * version: beta 1.4.0
- * date: 
+ * date: 11/15/2009
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -961,7 +961,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @return String
     * @memberOf EngineSupport
     */
-   toJSONString: function(o)
+   toJSON: function(o)
    {
       if (!typeof JSON == "undefined") {
          return JSON.stringify(o);
@@ -1341,7 +1341,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       var vR = new RegExp("(var\\s*" + nR + "\\s*)","g");
       var m;
       while ((m = vR.exec(def)) != null) {
-         vTable.push(m[2]);
+         vTable.push(m[2]); 
       }
       return vTable;
    },
@@ -1637,7 +1637,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 853 $
+ * @version: $Revision: 854 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
