@@ -5,6 +5,7 @@
 The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.
 
 || *Date* || *Notes* ||
+|| 12/13/2009 || Moved the particle editor to version 2.0.  Dropped the "Music Player" example. ||
 || 12/08/2009 || Bitmap font editor nearing comlpetion for v1.0 release. All font def files generated with font editor. Added two new bitmap fonts: Arial, Copperplate. ||
 || 11/29/2009 || Updated the API documentation online. Worked on the bitmap font editor. ||
 || 11/25/2009 || Updated a bunch of documentation in components and engine files.  I plan to finish with the rest of the files and rebuild the online documentation soon. ||
