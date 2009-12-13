@@ -22,3 +22,4 @@ Ideas for the next release.  This list is always evolving...
 || - || Dev Tool || Implement a profiler which I can use on all platforms to test code execution times.  This should be engine specific. ||
 || - || New Feature || Considering Google Labs O3D integration. ||
 || - || New Feature || Box 2d JS physics support ||
+|| - || Tool || Particle editor. ||
