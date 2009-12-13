@@ -16,7 +16,6 @@ Maybe you're looking for FutureGoals?
     * 2D Vector-based example game (Asteroids-like clone)
     * 2D Simple sprite-based example game, Wii enabled (Ball Bounce)
     * 2D Text rendering example (Vector, Bitmap, and Context Native)
-    * 2D Example audio player built with engine
   # Rendering contexts
     * 2D Canvas
   # Modular host objects
@@ -39,7 +38,6 @@ Maybe you're looking for FutureGoals?
   # Game editors and tools
     * 2D Sprite editor
     * 2D Font editor
-    * 2D Particle effect editor
   # Multiple platforms
     * Windows
     * Macintosh
@@ -58,8 +56,6 @@ The following list is a set of goals to be reached for the intended release.  So
 || *Status* || *Goal* || *Description* ||
 || _75%_ || Tool || Sprite editor.  A tool for making, saving and loading, and animating 2D sprites. ||
 || _80%_ || Tool || Bitmap font editor for browsers which don't support fonts in canvas context. ||
-|| - || Tool || Particle editor. ||
-|| - || Example || Music Player ||
 
 == Beta 2 (TBA) ==
 
