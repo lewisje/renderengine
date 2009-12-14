@@ -355,6 +355,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
 
+		// Check for supported browser
+		if (!this.browserSupportCheck()) {
+			return;
+		};
+
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
       this.started = true;

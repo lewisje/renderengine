@@ -317,11 +317,6 @@ var Engine = Engine.extend(/** @lends Engine */{
             clearInterval(Engine.gameLoadTimer);
             Engine.gameLoadTimer = null;
 
-				// Check for supported browser
-				if (!Engine.browserSupportCheck()) {
-					return;
-				};
-
             // Load the game
             Console.debug("Loading '" + gameSource + "'");
             engine.loadScript(gameSource);
