@@ -31,7 +31,7 @@ One small nuance of finding the character boundaries is the double quote charact
 
 The space between characters, known as the kerning value, can be adjusted to make the flow of the characters more presentable.  A value between 0.8 and 1.0 is usually desirable.  Plus, you'll need to define how large a space character will be (in pixels).  For extremely light fonts, you may want to check the box for "Bold" to render the font a little thicker (this won't be stored in the definition).
 
-If everything went well, you should have a font definition which can be copied into a ".js" file of the same name as the font and places in the "fonts" folder.  You can now use the bitmap font loader to load your new font.
+If everything went well, you should have a font definition which can be copied into a ".js" file of the same name as the font and placed in the "fonts" folder.  You can now use the bitmap font loader to load your new font.
 
 == Final Thoughts ==
 
