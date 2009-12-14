@@ -651,7 +651,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 880 $
+ * @version: $Revision: 901 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1651,7 +1651,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 854 $
+ * @version: $Revision: 901 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1998,11 +1998,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
-
-		// Check for supported browser
-		if (!this.browserSupportCheck()) {
-			return;
-		};
 
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
@@ -2706,6 +2701,11 @@ var Engine = Engine.extend(/** @lends Engine */{
             // Stop the timer
             clearInterval(Engine.gameLoadTimer);
             Engine.gameLoadTimer = null;
+
+				// Check for supported browser
+				if (!Engine.browserSupportCheck()) {
+					return;
+				};
 
             // Load the game
             Console.debug("Loading '" + gameSource + "'");

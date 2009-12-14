@@ -190,7 +190,7 @@ var Spaceroids = Game.extend({
       if (EngineSupport.checkBooleanParam("evolved")) {
          Spaceroids.evolved = true;
 
-         var evolved = TextRenderer.create(VectorText.create(), "Upgrage v2.0", 1);
+         var evolved = TextRenderer.create(VectorText.create(), "Redux", 1);
          evolved.setColor("#ff0000");
          evolved.setPosition(Point2D.create(290, 120));
          this.renderContext.add(evolved);
