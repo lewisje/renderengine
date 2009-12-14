@@ -1,11 +1,13 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-The Render Engine was tweeted last week, so it suddenly became evident that the engine needed to be updated, and the website needed to reflect that.  Before the v1.0 gold release of the engine, I want to have the documentation in a complete state and I want some nice tutorials to ease people into the concepts of the engine.  I've spent the last week writing some tutorials, and in the process cleaning up the engine where things were missed or were buggy.  I'll be getting back to the tasks at hand shortly.  The first three tutorials are up with the fourth one by the end of today (11/24/09).
+[12/13/2009] Trying to get the one remaining tool completed enough to tag beta 1.5.  The sprite editor is very close, but there are some things that need to be addressed before I'm happy with it.  I just completed the FontEditor tool and have provided some simple documentation on the Wiki. 
 
-On November 15th I had to make the tough decision to finally drop HTML contexts as targetable render contexts.  [HTMLContextNote See this for an explanation].
+[11/23/2009] The Render Engine was tweeted last week, so it suddenly became evident that the engine needed to be updated, and the website needed to reflect that.  Before the v1.0 gold release of the engine, I want to have the documentation in a complete state and I want some nice tutorials to ease people into the concepts of the engine.  I've spent the last week writing some tutorials, and in the process cleaning up the engine where things were missed or were buggy.  I'll be getting back to the tasks at hand shortly.  The first three tutorials are up with the fourth one by the end of today (11/24/09).
 
-Recently I noticed the [http://code.google.com/apis/o3d/ Google Labs O3D] project.  I really like this and hope to get it into the engine at some point. It'll be after the 1.0 release (probably part of 2.0, or even 3.0).
+[11/15/2009] On November 15th I had to make the tough decision to finally drop HTML contexts as targetable render contexts.  [HTMLContextNote See this for an explanation].
+
+[11/08/2009] Recently I noticed the [http://code.google.com/apis/o3d/ Google Labs O3D] project.  I really like this and hope to get it into the engine at some point. It'll be after the 1.0 release (probably part of 2.0, or even 3.0).
 
 
 _Older Stuff:_
