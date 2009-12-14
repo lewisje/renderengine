@@ -56,15 +56,6 @@ A simple extension of the {@link HTMLElementContext} which uses a DIVelement to
          </td>
       </tr>
    
-      <tr class="TableRowColor">
-         <td>
-            <a href="HTMLDivContext.constructor.html" target="main">HTMLDivContext.constructor</a>
-         </td>
-         <td>
-            
-         </td>
-      </tr>
-   
 </table>
 <br/>
 <hr>
@@ -122,47 +113,48 @@ A simple extension of the {@link HTMLElementContext} which uses a DIVelement to
 <span class='linenumber'> 45</span>  * context, the decision has been made to drop support for it.
 <span class='linenumber'> 46</span>  *
 <span class='linenumber'> 47</span>  * @extends HTMLElementContext
-<span class='linenumber'> 48</span>  * @deprecated
-<span class='linenumber'> 49</span>  */</span><span class="WHIT">
-<span class='linenumber'> 50</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">HTMLDivContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">HTMLElementContext.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope HTMLDivContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 51</span> 
-<span class='linenumber'> 52</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 53</span>     * Create an instance of a document rendering context.  This context
-<span class='linenumber'> 54</span>     * represents the HTML document body.  Theoretically, only one of these
-<span class='linenumber'> 55</span>     * contexts should ever be created.
-<span class='linenumber'> 56</span>     * @constructor
-<span class='linenumber'> 57</span>     */</span><span class="WHIT">
-<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextWidth</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextHeight</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 59</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"&lt;div>"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 60</span> </span><span class="WHIT">         </span><span class="NAME">width</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">contextWidth</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 61</span> </span><span class="WHIT">         </span><span class="NAME">height</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">contextHeight</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 62</span> </span><span class="WHIT">         </span><span class="NAME">position</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"absolute"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 63</span> </span><span class="WHIT">			</span><span class="NAME">overflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"hidden"</span><span class="WHIT">
-<span class='linenumber'> 64</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 65</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"HTMLDivContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 66</span> </span><span class="WHIT">		</span><span class="NAME">this.setViewport</span><span class="PUNC">(</span><span class="NAME">Rectangle2D.create</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextWidth</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextHeight</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 67</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 68</span> </span><span class="WHIT">   </span><span class="WHIT">
-<span class='linenumber'> 69</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope HTMLDivContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 70</span> 
-<span class='linenumber'> 71</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 72</span>     * Get the class name of this object
-<span class='linenumber'> 73</span>     *
-<span class='linenumber'> 74</span>     * @return {String} The string "HTMLDivContext"
-<span class='linenumber'> 75</span>     */</span><span class="WHIT">
-<span class='linenumber'> 76</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 77</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"HTMLDivContext"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 79</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 80</span> 
-<span class='linenumber'> 81</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">HTMLDivContext</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 82</span> 
-<span class='linenumber'> 83</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 84</span> </span></pre>
+<span class='linenumber'> 48</span>  * @constructor
+<span class='linenumber'> 49</span>  * @description Create a new instance of a context drawn on a &lt;tt>div&lt;/tt> element.
+<span class='linenumber'> 50</span>  * @param name {String} The name of the context
+<span class='linenumber'> 51</span>  * @param contextWidth {Number} The width (in pixels) of the context.
+<span class='linenumber'> 52</span>  * @param contextHeight {Number} The height (in pixels) of the context.
+<span class='linenumber'> 53</span>  */</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">HTMLDivContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">HTMLElementContext.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope HTMLDivContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 55</span> 
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 57</span>     * @private
+<span class='linenumber'> 58</span>     */</span><span class="WHIT">
+<span class='linenumber'> 59</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextWidth</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextHeight</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 60</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$</span><span class="PUNC">(</span><span class="STRN">"&lt;div>"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">css</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 61</span> </span><span class="WHIT">         </span><span class="NAME">width</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">contextWidth</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">         </span><span class="NAME">height</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">contextHeight</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">         </span><span class="NAME">position</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"absolute"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 64</span> </span><span class="WHIT">			</span><span class="NAME">overflow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"hidden"</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"HTMLDivContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">		</span><span class="NAME">this.setViewport</span><span class="PUNC">(</span><span class="NAME">Rectangle2D.create</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextWidth</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">contextHeight</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'> 70</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope HTMLDivContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 71</span> 
+<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 73</span>     * Get the class name of this object
+<span class='linenumber'> 74</span>     *
+<span class='linenumber'> 75</span>     * @return {String} "HTMLDivContext"
+<span class='linenumber'> 76</span>     */</span><span class="WHIT">
+<span class='linenumber'> 77</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"HTMLDivContext"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 80</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 81</span> 
+<span class='linenumber'> 82</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">HTMLDivContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 83</span> 
+<span class='linenumber'> 84</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:29 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:23 GMT-0500 (EST)</div>
 </body>
 </html>

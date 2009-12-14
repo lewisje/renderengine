@@ -105,11 +105,11 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
       <td>
    
       <code>
-      <b><a href="#CanvasContext">CanvasContext</a></b>()
+      <b><a href="#CanvasContext">CanvasContext</a></b>(name, width, height)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
+        Create a new instance of a canvas context.
         </td>
    </tr>
 
@@ -325,7 +325,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;ImageData
             </code></font> 
          </td>
          <td>
@@ -415,7 +415,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
          <td>
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the object back into the object pool.
  
          </td>
       </tr>
@@ -535,7 +535,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
          <td>
             <code> <b> <a href="#setupWorld">setupWorld</a></b>(time) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set up the world for the given time before any rendering is dont.
  
          </td>
       </tr>
@@ -547,7 +547,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
          <td>
             <code> <b> <a href="#setWorldScale">setWorldScale</a></b>(scaleX, scaleY) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the scale of the world
  
          </td>
       </tr>
@@ -661,8 +661,6 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
-            
-               <a href="RenderContext2D.html#constructor">constructor</a>,
             
                <a href="RenderContext2D.html#getBackgroundColor">getBackgroundColor</a>,
             
@@ -838,12 +836,29 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
 <a name="CanvasContext"> </a>
 <h3>CanvasContext</h3>
 
-   <pre><b>CanvasContext</b>()</pre>
+   <pre><b>CanvasContext</b>(name, width, height)</pre>
    <ul>
-      
+      Create a new instance of a canvas context.
    </ul>
    
    <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the context 
+      </ul>
+      
+      <ul>
+         <code>[<i>Number</i>]&nbsp;width</code> - The width (in pixels) of the canvas context. 
+      </ul>
+      
+      <ul>
+         <code>[<i>Number</i>]&nbsp;height</code> - The height (in pixels) of the canvas context. 
+      </ul>
+      
+   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -1242,7 +1257,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <hr>
 
    <a name="getImage"> </a> <h3>getImage</h3>
-      <pre>&nbsp;<b>getImage</b>(rect)</pre> 
+      <pre>ImageData&nbsp;<b>getImage</b>(rect)</pre> 
    <ul>
       Capture an image from the context.
       
@@ -1260,7 +1275,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>Image data capture 
+         <code><i>ImageData</i>&nbsp;</code>Image data capture 
       </ul>
    </ul>
    
@@ -1392,7 +1407,7 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <a name="release"> </a> <h3>release</h3>
       <pre><b>release</b>()</pre> 
    <ul>
-      undocumented
+      Releases the object back into the object pool.  See <a href='PooledObject.html#release'>PooledObject.release</a>for more information.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -1600,14 +1615,14 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <a name="setupWorld"> </a> <h3>setupWorld</h3>
       <pre><b>setupWorld</b>(time)</pre> 
    <ul>
-      undocumented
+      Set up the world for the given time before any rendering is dont.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>time </code> 
+         <code>[<i>Number</i>]&nbsp;time </code> - The render time 
       </ul>
    </ul>
    
@@ -1621,17 +1636,17 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
    <a name="setWorldScale"> </a> <h3>setWorldScale</h3>
       <pre><b>setWorldScale</b>(scaleX, scaleY)</pre> 
    <ul>
-      undocumented
+      Set the scale of the world
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>scaleX </code> 
+         <code>[<i>Number</i>]&nbsp;scaleX </code> - The scale of the world along the X axis 
       </ul>
       <ul>
-         <code>scaleY </code> 
+         <code>[<i>Number</i>]&nbsp;scaleY </code> - The scale of the world along the y axis 
       </ul>
    </ul>
    
@@ -1709,6 +1724,6 @@ A <tt>canvas</tt> element represented within the engine.  A canvasis a 2D conte
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:37 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:31 GMT-0500 (EST)</div>
 </body>
 </html>

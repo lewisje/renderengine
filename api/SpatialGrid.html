@@ -105,7 +105,7 @@ A structure which divides a finite space up into a more       coarse grid to as
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
+        Create an instance of a spatial grid model
         </td>
    </tr>
 
@@ -126,19 +126,9 @@ A structure which divides a finite space up into a more       coarse grid to as
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(width, height, divisions) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;SpatialNode
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#findNodePoint">findNodePoint</a></b>(point) </code> 
@@ -151,7 +141,21 @@ A structure which divides a finite space up into a more       coarse grid to as
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Array
             </code></font> 
          </td>
          <td>
@@ -169,7 +173,7 @@ A structure which divides a finite space up into a more       coarse grid to as
          <td>
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the object back into the object pool.
  
          </td>
       </tr>
@@ -228,8 +232,6 @@ A structure which divides a finite space up into a more       coarse grid to as
             
                <a href="SpatialContainer.html#setRoot">setRoot</a>,
             
-               <a href="SpatialContainer.html#getClassName">getClassName</a>,
-            
          </code></td>
       </tr>
       
@@ -282,7 +284,7 @@ A structure which divides a finite space up into a more       coarse grid to as
 
    <pre><b>SpatialGrid</b>(width, height, divisions)</pre>
    <ul>
-      
+      Create an instance of a spatial grid model
    </ul>
    
    <!-- PARAMETERS START -->
@@ -323,35 +325,8 @@ A structure which divides a finite space up into a more       coarse grid to as
 </table>
 
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(width, height, divisions)</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>width </code> 
-      </ul>
-      <ul>
-         <code>height </code> 
-      </ul>
-      <ul>
-         <code>divisions </code> 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
    <a name="findNodePoint"> </a> <h3>findNodePoint</h3>
-      <pre><b>findNodePoint</b>(point)</pre> 
+      <pre>SpatialNode&nbsp;<b>findNodePoint</b>(point)</pre> 
    <ul>
       Find the node that contains the specified point.
       
@@ -366,13 +341,39 @@ A structure which divides a finite space up into a more       coarse grid to as
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>SpatialNode</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>"SpatialGrid" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getPCL"> </a> <h3>getPCL</h3>
-      <pre>&nbsp;<b>getPCL</b>(point)</pre> 
+      <pre>Array&nbsp;<b>getPCL</b>(point)</pre> 
    <ul>
       Get the list of objects with respect to the point given.  Objects willbe returned from the cross that makes up the grid node containingthe point, and the four adjacent points.  For example, if you had a3x3 grid with the object in the center node, the nodes marked withasterisks below would be included in the result set:<pre> +---+---+---+ |   | * |   | +---+---+---+ | * | * | * | +---+---+---+ |   | * |   | +---+---+---+</pre>
       
@@ -390,7 +391,7 @@ A structure which divides a finite space up into a more       coarse grid to as
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>An array of objects found within the cross 
+         <code><i>Array</i>&nbsp;</code>An array of objects found within the cross 
       </ul>
    </ul>
    
@@ -400,7 +401,7 @@ A structure which divides a finite space up into a more       coarse grid to as
    <a name="release"> </a> <h3>release</h3>
       <pre><b>release</b>()</pre> 
    <ul>
-      undocumented
+      Releases the object back into the object pool.  See <a href='PooledObject.html#release'>PooledObject.release</a>for more information.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -424,6 +425,6 @@ A structure which divides a finite space up into a more       coarse grid to as
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:37 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:31 GMT-0500 (EST)</div>
 </body>
 </html>

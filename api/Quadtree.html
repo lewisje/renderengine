@@ -105,7 +105,7 @@ A quadtree which divides up a space into smaller and smaller       divisions to
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
+        Build a quadtree which can be used to quickly locate objectswithin a defined space.
         </td>
    </tr>
 
@@ -115,6 +115,59 @@ A quadtree which divides up a space into smaller and smaller       divisions to
 
 
 <!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;QuadtreeNode
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#findNodePoint">findNodePoint</a></b>(point, node) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Find the quadtree node which contains the point specified.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;QuadtreeNode
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#findNodeRect">findNodeRect</a></b>(rect, node) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Find the smallest quadtree node which contains the rectangle specified.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;HashContainer
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getPCL">getPCL</a></b>(node) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns a potential collision list of objects that are containedwithin the defined sub-space of the container.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
 
 
 <!-- ========== EVENT SUMMARY =========== -->
@@ -168,8 +221,6 @@ A quadtree which divides up a space into smaller and smaller       divisions to
                <a href="SpatialContainer.html#getRoot">getRoot</a>,
             
                <a href="SpatialContainer.html#setRoot">setRoot</a>,
-            
-               <a href="SpatialContainer.html#getPCL">getPCL</a>,
             
                <a href="SpatialContainer.html#getClassName">getClassName</a>,
             
@@ -225,7 +276,7 @@ A quadtree which divides up a space into smaller and smaller       divisions to
 
    <pre><b>Quadtree</b>(width, height, divisions)</pre>
    <ul>
-      
+      Build a quadtree which can be used to quickly locate objectswithin a defined space.
    </ul>
    
    <!-- PARAMETERS START -->
@@ -256,6 +307,101 @@ A quadtree which divides up a space into smaller and smaller       divisions to
 
 <!-- ============ METHOD DETAIL START ======= -->
 
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="findNodePoint"> </a> <h3>findNodePoint</h3>
+      <pre>QuadtreeNode&nbsp;<b>findNodePoint</b>(point, node)</pre> 
+   <ul>
+      Find the quadtree node which contains the point specified.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to locate 
+      </ul>
+      <ul>
+         <code>[<i>QuadtreeNode</i>]&nbsp;node </code> - The node to start the search at 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>QuadtreeNode</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="findNodeRect"> </a> <h3>findNodeRect</h3>
+      <pre>QuadtreeNode&nbsp;<b>findNodeRect</b>(rect, node)</pre> 
+   <ul>
+      Find the smallest quadtree node which contains the rectangle specified.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle to locate 
+      </ul>
+      <ul>
+         <code>[<i>QuadtreeNode</i>]&nbsp;node </code> - The node to start the search at 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>QuadtreeNode</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getPCL"> </a> <h3>getPCL</h3>
+      <pre>HashContainer&nbsp;<b>getPCL</b>(node)</pre> 
+   <ul>
+      Returns a potential collision list of objects that are containedwithin the defined sub-space of the container.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>QuadtreeNode</i>]&nbsp;node </code> - The node to search against 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>HashContainer</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
 <!-- ============ METHOD DETAIL END ========== -->
 
 <!-- ============ EVENT DETAIL START ======= -->
@@ -266,6 +412,6 @@ A quadtree which divides up a space into smaller and smaller       divisions to
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:36 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:30 GMT-0500 (EST)</div>
 </body>
 </html>

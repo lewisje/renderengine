@@ -56,15 +56,6 @@ A reference to the <tt>document.body</tt> element as a rendering context.
          </td>
       </tr>
    
-      <tr class="TableRowColor">
-         <td>
-            <a href="DocumentContext.constructor.html" target="main">DocumentContext.constructor</a>
-         </td>
-         <td>
-            
-         </td>
-      </tr>
-   
 </table>
 <br/>
 <hr>
@@ -119,44 +110,45 @@ A reference to the <tt>document.body</tt> element as a rendering context.
 <span class='linenumber'> 42</span>  * us to update not only this context, but all other contexts during an engine frame.
 <span class='linenumber'> 43</span>  *
 <span class='linenumber'> 44</span>  * @extends HTMLElementContext
-<span class='linenumber'> 45</span>  */</span><span class="WHIT">
-<span class='linenumber'> 46</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">DocumentContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">HTMLElementContext.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope DocumentContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 47</span> 
-<span class='linenumber'> 48</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 49</span>     * Create an instance of a document rendering context.  This context
-<span class='linenumber'> 50</span>     * represents the HTML document body.  Theoretically, only one of these
-<span class='linenumber'> 51</span>     * contexts should ever be created.
-<span class='linenumber'> 52</span>     * @constructor
-<span class='linenumber'> 53</span>     */</span><span class="WHIT">
-<span class='linenumber'> 54</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 55</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"DocumentContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">document.body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="WHIT">
-<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 59</span>     * Reset the context, clearing it and preparing it for drawing.
-<span class='linenumber'> 60</span>     */</span><span class="WHIT">
-<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="NAME">reset</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 63</span> 
-<span class='linenumber'> 64</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope DocumentContext.prototype */</span><span class="WHIT">
-<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 66</span>     * Get the class name of this object
-<span class='linenumber'> 67</span>     *
-<span class='linenumber'> 68</span>     * @type String
-<span class='linenumber'> 69</span>     */</span><span class="WHIT">
-<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"DocumentContext"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 72</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'> 73</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 74</span> 
-<span class='linenumber'> 75</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">DocumentContext</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 76</span> 
-<span class='linenumber'> 77</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 78</span> </span></pre>
+<span class='linenumber'> 45</span>  * @constructor
+<span class='linenumber'> 46</span>  * @description Create an instance of a document rendering context.  This context
+<span class='linenumber'> 47</span>  * represents the HTML document body.  Theoretically, only one of these
+<span class='linenumber'> 48</span>  * contexts should ever be created.
+<span class='linenumber'> 49</span>  */</span><span class="WHIT">
+<span class='linenumber'> 50</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">DocumentContext</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">HTMLElementContext.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope DocumentContext.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 51</span> 
+<span class='linenumber'> 52</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 53</span>     * @private
+<span class='linenumber'> 54</span>     */</span><span class="WHIT">
+<span class='linenumber'> 55</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 56</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"DocumentContext"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">document.body</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'> 59</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 60</span>     * Reset the context, clearing it and preparing it for drawing.
+<span class='linenumber'> 61</span>     */</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="NAME">reset</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 64</span> 
+<span class='linenumber'> 65</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope DocumentContext.prototype */</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 67</span>     * Get the class name of this object
+<span class='linenumber'> 68</span>     *
+<span class='linenumber'> 69</span>     * @return {String} "DocumentContext"
+<span class='linenumber'> 70</span>     */</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 72</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"DocumentContext"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 73</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 74</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 75</span> 
+<span class='linenumber'> 76</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">DocumentContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 77</span> 
+<span class='linenumber'> 78</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:29 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:23 GMT-0500 (EST)</div>
 </body>
 </html>

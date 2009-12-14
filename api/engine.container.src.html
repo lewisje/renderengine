@@ -94,7 +94,7 @@ Create an iterator over a {@link Container} instance.
 <span class='linenumber'>  6</span>  *
 <span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  8</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  9</span>  * @version: $Revision: 837 $
+<span class='linenumber'>  9</span>  * @version: $Revision: 888 $
 <span class='linenumber'> 10</span>  *
 <span class='linenumber'> 11</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 12</span>  *
@@ -650,28 +650,27 @@ Create an iterator over a {@link Container} instance.
 <span class='linenumber'>562</span>     */</span><span class="WHIT">
 <span class='linenumber'>563</span> </span><span class="WHIT">   </span><span class="NAME">cleanUp</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>564</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>565</span> </span><span class="WHIT">      </span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>566</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>567</span> 
-<span class='linenumber'>568</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope HashContainer.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>569</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>570</span>     * Get the class name of this object
-<span class='linenumber'>571</span>     *
-<span class='linenumber'>572</span>     * @return {String} "HashContainer"
-<span class='linenumber'>573</span>     */</span><span class="WHIT">
-<span class='linenumber'>574</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>575</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"HashContainer"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>576</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>577</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>578</span> 
-<span class='linenumber'>579</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">HashContainer</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>580</span> 
-<span class='linenumber'>581</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>582</span> </span></pre>
+<span class='linenumber'>565</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>566</span> 
+<span class='linenumber'>567</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope HashContainer.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>568</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>569</span>     * Get the class name of this object
+<span class='linenumber'>570</span>     *
+<span class='linenumber'>571</span>     * @return {String} "HashContainer"
+<span class='linenumber'>572</span>     */</span><span class="WHIT">
+<span class='linenumber'>573</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>574</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"HashContainer"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>575</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>576</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>577</span> 
+<span class='linenumber'>578</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">HashContainer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>579</span> 
+<span class='linenumber'>580</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>581</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:23 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:17 GMT-0500 (EST)</div>
 </body>
 </html>

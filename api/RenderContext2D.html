@@ -103,11 +103,11 @@ All 2D contexts should extend from this to inherit themethods which abstract th
       <td>
    
       <code>
-      <b><a href="#RenderContext2D">RenderContext2D</a></b>()
+      <b><a href="#RenderContext2D">RenderContext2D</a></b>(name, surface)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
+        Create a new instance of a 2d render context.
         </td>
    </tr>
 
@@ -146,18 +146,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
             <code> <b> <a href="#bezierCurveTo">bezierCurveTo</a></b>(cPoint1, cPoint2, point) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a bezier curve from the current point to the specified point.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(name, surface) </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -356,7 +344,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getBackgroundColor">getBackgroundColor</a></b>() </code> 
@@ -368,7 +358,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Rectangle2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getBoundingBox">getBoundingBox</a></b>() </code> 
@@ -380,7 +372,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getFillStyle">getFillStyle</a></b>() </code> 
@@ -489,7 +483,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;
+            &nbsp;ImageData
             </code></font> 
          </td>
          <td>
@@ -502,7 +496,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getLineStyle">getLineStyle</a></b>() </code> 
@@ -514,7 +510,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getLineWidth">getLineWidth</a></b>() </code> 
@@ -540,7 +538,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getPosition">getPosition</a></b>() </code> 
@@ -552,43 +552,51 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getRenderPosition">getRenderPosition</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the render position relative to the world
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getRenderRotation">getRenderRotation</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the render rotation relative to the world
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getRenderScale">getRenderScale</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the render scale relative to the world
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getRotation">getRotation</a></b>() </code> 
@@ -600,7 +608,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getScaleX">getScaleX</a></b>() </code> 
@@ -612,7 +622,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getScaleY">getScaleY</a></b>() </code> 
@@ -624,7 +636,9 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getWidth">getWidth</a></b>() </code> 
@@ -701,7 +715,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
          <td>
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the object back into the object pool.
  
          </td>
       </tr>
@@ -1109,12 +1123,25 @@ All 2D contexts should extend from this to inherit themethods which abstract th
 <a name="RenderContext2D"> </a>
 <h3>RenderContext2D</h3>
 
-   <pre><b>RenderContext2D</b>()</pre>
+   <pre><b>RenderContext2D</b>(name, surface)</pre>
    <ul>
-      
+      Create a new instance of a 2d render context.
    </ul>
    
    <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the context 
+      </ul>
+      
+      <ul>
+         <code>[<i>HTMLElement</i>]&nbsp;surface</code> - The element which represents the surface of the context 
+      </ul>
+      
+   </ul>
    
    <!-- PARAMETERS END -->
 
@@ -1179,30 +1206,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
       </ul>
       <ul>
          <code>[<i>Point2D</i>]&nbsp;point </code> - The point to draw to 
-      </ul>
-   </ul>
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
-
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(name, surface)</pre> 
-   <ul>
-      undocumented
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>name </code> 
-      </ul>
-      <ul>
-         <code>surface </code> 
       </ul>
    </ul>
    
@@ -1585,7 +1588,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <hr>
 
    <a name="getBackgroundColor"> </a> <h3>getBackgroundColor</h3>
-      <pre><b>getBackgroundColor</b>()</pre> 
+      <pre>String&nbsp;<b>getBackgroundColor</b>()</pre> 
    <ul>
       Get the color assigned to the context background.
       
@@ -1595,13 +1598,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getBoundingBox"> </a> <h3>getBoundingBox</h3>
-      <pre><b>getBoundingBox</b>()</pre> 
+      <pre>Rectangle2D&nbsp;<b>getBoundingBox</b>()</pre> 
    <ul>
       Get the bounding box for the rendering context.
       
@@ -1611,13 +1619,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Rectangle2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getFillStyle"> </a> <h3>getFillStyle</h3>
-      <pre><b>getFillStyle</b>()</pre> 
+      <pre>String&nbsp;<b>getFillStyle</b>()</pre> 
    <ul>
       Get the current fill style of the context.
       
@@ -1627,7 +1640,12 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -1775,7 +1793,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <hr>
 
    <a name="getImage"> </a> <h3>getImage</h3>
-      <pre>&nbsp;<b>getImage</b>(rect)</pre> 
+      <pre>ImageData&nbsp;<b>getImage</b>(rect)</pre> 
    <ul>
       Capture an image from the context.
       
@@ -1793,7 +1811,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <ul>
       <b>Returns:</b>
       <ul>
-         <code></code>Image data capture 
+         <code><i>ImageData</i>&nbsp;</code>Image data capture 
       </ul>
    </ul>
    
@@ -1801,7 +1819,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <hr>
 
    <a name="getLineStyle"> </a> <h3>getLineStyle</h3>
-      <pre><b>getLineStyle</b>()</pre> 
+      <pre>String&nbsp;<b>getLineStyle</b>()</pre> 
    <ul>
       Get the current line style for the context.  <tt>null</tt> ifnot set.
       
@@ -1811,13 +1829,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getLineWidth"> </a> <h3>getLineWidth</h3>
-      <pre><b>getLineWidth</b>()</pre> 
+      <pre>Number&nbsp;<b>getLineWidth</b>()</pre> 
    <ul>
       Get the current line width for drawing paths.
       
@@ -1827,7 +1850,12 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -1854,7 +1882,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <hr>
 
    <a name="getPosition"> </a> <h3>getPosition</h3>
-      <pre><b>getPosition</b>()</pre> 
+      <pre>Point2D&nbsp;<b>getPosition</b>()</pre> 
    <ul>
       Get the current transform position (translation)
       
@@ -1864,15 +1892,20 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getRenderPosition"> </a> <h3>getRenderPosition</h3>
-      <pre><b>getRenderPosition</b>()</pre> 
+      <pre>Point2D&nbsp;<b>getRenderPosition</b>()</pre> 
    <ul>
-      undocumented
+      Get the render position relative to the world
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -1880,15 +1913,20 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getRenderRotation"> </a> <h3>getRenderRotation</h3>
-      <pre><b>getRenderRotation</b>()</pre> 
+      <pre>Number&nbsp;<b>getRenderRotation</b>()</pre> 
    <ul>
-      undocumented
+      Get the render rotation relative to the world
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -1896,15 +1934,20 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getRenderScale"> </a> <h3>getRenderScale</h3>
-      <pre><b>getRenderScale</b>()</pre> 
+      <pre>Number&nbsp;<b>getRenderScale</b>()</pre> 
    <ul>
-      undocumented
+      Get the render scale relative to the world
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -1912,13 +1955,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getRotation"> </a> <h3>getRotation</h3>
-      <pre><b>getRotation</b>()</pre> 
+      <pre>Number&nbsp;<b>getRotation</b>()</pre> 
    <ul>
       Get the current transform rotation.
       
@@ -1928,13 +1976,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getScaleX"> </a> <h3>getScaleX</h3>
-      <pre><b>getScaleX</b>()</pre> 
+      <pre>Number&nbsp;<b>getScaleX</b>()</pre> 
    <ul>
       Get the X scaling factor of the current transform.
       
@@ -1944,13 +1997,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getScaleY"> </a> <h3>getScaleY</h3>
-      <pre><b>getScaleY</b>()</pre> 
+      <pre>Number&nbsp;<b>getScaleY</b>()</pre> 
    <ul>
       Get the Y scaling factor of the current transform.
       
@@ -1960,13 +2018,18 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getWidth"> </a> <h3>getWidth</h3>
-      <pre><b>getWidth</b>()</pre> 
+      <pre>Number&nbsp;<b>getWidth</b>()</pre> 
    <ul>
       Get the width of the context drawing area.
       
@@ -1976,7 +2039,12 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -2095,7 +2163,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
    <a name="release"> </a> <h3>release</h3>
       <pre><b>release</b>()</pre> 
    <ul>
-      undocumented
+      Releases the object back into the object pool.  See <a href='PooledObject.html#release'>PooledObject.release</a>for more information.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -2517,6 +2585,6 @@ All 2D contexts should extend from this to inherit themethods which abstract th
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:37 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:31 GMT-0500 (EST)</div>
 </body>
 </html>

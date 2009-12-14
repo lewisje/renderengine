@@ -128,6 +128,18 @@ A render component that renders its contents from a <a href='Sprite.html'>Sprite
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#execute">execute</a></b>(renderContext, time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw the sprite to the render context.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;String
             </code></font> 
@@ -136,6 +148,44 @@ A render component that renders its contents from a <a href='Sprite.html'>Sprite
             <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Sprite
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getSprite">getSprite</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the sprite the component is rendering.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the component back into the object pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setSprite">setSprite</a></b>(sprite) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the sprite the component will render.
  
          </td>
       </tr>
@@ -161,13 +211,9 @@ A render component that renders its contents from a <a href='Sprite.html'>Sprite
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="RenderComponent.html#release">release</a>,
-            
                <a href="RenderComponent.html#setDrawMode">setDrawMode</a>,
             
                <a href="RenderComponent.html#getDrawMode">getDrawMode</a>,
-            
-               <a href="RenderComponent.html#execute">execute</a>,
             
          </code></td>
       </tr>
@@ -310,6 +356,30 @@ A render component that renders its contents from a <a href='Sprite.html'>Sprite
 </table>
 
 
+   <a name="execute"> </a> <h3>execute</h3>
+      <pre><b>execute</b>(renderContext, time)</pre> 
+   <ul>
+      Draw the sprite to the render context.  The frame, for animatedsprites, will be automatically determined based on the currenttime passed as the second argument.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>RenderContext</i>]&nbsp;renderContext </code> - The context to render to 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The engine time in milliseconds 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getClassName"> </a> <h3>getClassName</h3>
       <pre>String&nbsp;<b>getClassName</b>()</pre> 
    <ul>
@@ -331,6 +401,64 @@ A render component that renders its contents from a <a href='Sprite.html'>Sprite
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getSprite"> </a> <h3>getSprite</h3>
+      <pre>Sprite&nbsp;<b>getSprite</b>()</pre> 
+   <ul>
+      Get the sprite the component is rendering.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Sprite</i>&nbsp;</code>A <tt>Sprite</tt> instance 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      Releases the component back into the object pool. See <a href='PooledObject.html#release'>PooledObject.release</a> formore information.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setSprite"> </a> <h3>setSprite</h3>
+      <pre><b>setSprite</b>(sprite)</pre> 
+   <ul>
+      Set the sprite the component will render.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Sprite</i>]&nbsp;sprite </code> - The sprite to render 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -342,6 +470,6 @@ A render component that renders its contents from a <a href='Sprite.html'>Sprite
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:36 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:30 GMT-0500 (EST)</div>
 </body>
 </html>

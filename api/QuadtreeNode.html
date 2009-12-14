@@ -97,11 +97,11 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
       <td>
    
       <code>
-      <b><a href="#QuadtreeNode">QuadtreeNode</a></b>(rect)
+      <b><a href="#QuadtreeNode">QuadtreeNode</a></b>(rect, rect)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        
+        Create a quadtree node instance
         </td>
    </tr>
 
@@ -122,19 +122,23 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#constructor">constructor</a></b>(rect) </code> 
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Array
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getQuads">getQuads</a></b>() </code> 
@@ -146,7 +150,9 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code></code></font> 
+            <font size="-1"><code>
+            &nbsp;Rectangle2D
+            </code></font> 
          </td>
          <td>
             <code> <b> <a href="#getRect">getRect</a></b>() </code> 
@@ -185,8 +191,6 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
             
                <a href="SpatialNode.html#removeObject">removeObject</a>,
             
-               <a href="SpatialNode.html#getClassName">getClassName</a>,
-            
          </code></td>
       </tr>
       
@@ -216,9 +220,9 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
 <a name="QuadtreeNode"> </a>
 <h3>QuadtreeNode</h3>
 
-   <pre><b>QuadtreeNode</b>(rect)</pre>
+   <pre><b>QuadtreeNode</b>(rect, rect)</pre>
    <ul>
-      
+      Create a quadtree node instance
    </ul>
    
    <!-- PARAMETERS START -->
@@ -228,6 +232,10 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
       
       <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;rect</code> - The rectangle which defines the area of this node 
+      </ul>
+      
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;rect</code> - The rectangle which defines the node's boundaries 
       </ul>
       
    </ul>
@@ -251,29 +259,29 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
 </table>
 
 
-   <a name="constructor"> </a> <h3>constructor</h3>
-      <pre><b>constructor</b>(rect)</pre> 
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
    <ul>
-      undocumented
+      Get the class name of this object
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   <ul>
-      <b>Parameters:</b>
-      <ul>
-         <code>rect </code> 
-      </ul>
-   </ul>
+   
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>"QuadtreeNode" 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getQuads"> </a> <h3>getQuads</h3>
-      <pre><b>getQuads</b>()</pre> 
+      <pre>Array&nbsp;<b>getQuads</b>()</pre> 
    <ul>
       Get the array of quads within this node.
       
@@ -283,13 +291,18 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Array</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
    <a name="getRect"> </a> <h3>getRect</h3>
-      <pre><b>getRect</b>()</pre> 
+      <pre>Rectangle2D&nbsp;<b>getRect</b>()</pre> 
    <ul>
       Get the rectangle which defines this node.
       
@@ -299,7 +312,12 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Rectangle2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
@@ -315,6 +333,6 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 29 2009 11:53:38 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:18:32 GMT-0500 (EST)</div>
 </body>
 </html>
