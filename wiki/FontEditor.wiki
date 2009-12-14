@@ -8,11 +8,16 @@ The image file should be a PNG image of the font, in white on a transparent back
 
 == Loading and Parsing a Font ==
 
-The font image should be places into the "fonts" folder of The Render Engine.  You can then run the font editor and simply select the font image to load.  Once the font is loaded, a quick analysis is performed to determine the average density of the pixels in each row of the image.  This value is placed in the "Min Alpha" field.  This is just a guideline that might work for the font, but a higher or lower number (from zero to 255) might be necessary.
+A font will need to contain the following characters (in this order exactly):
+{{{
+!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz
+}}}
 
-The "Min Alpha" is the amount of alpha density that can be located in a single row to determine if the row might be a character boundary.  Higher values mean that a row will be more dense, and lower values are obviously less dense.  Thin characters (such as those in courier or times roman) will require a much lower density, whereas thicker characters (such as those in century gothic) will need a higher density.  You will eventually get a feel for the number you can start with.
+The font image should be placed into the "fonts" folder of The Render Engine.  You can then run the font editor and simply select the font image to load.  Once the font is loaded, a quick analysis is performed to determine the average density of the pixels in each row of the image.  This value is placed in the "Min Alpha" field.  This is just a guideline that might work for the font, but a higher or lower number (from zero to 255) might be necessary.
 
-Pressing the "Analyze" button will scan the image and, using the "Min Alpha" value, will attempt to find boundaries between characters.  It is important that you provide the height and width of the bitmap so that the image is not only loaded properly, but also fully scannable.  Once the analysis is complete, the boundaries which were located will be drawn as yellow lines.  Two special boundaries (which you should avoid changing) are the leftmost and rightmost boundary of the whole bitmap.
+The "Min Alpha" is the amount of alpha density that can be located in a single row to determine if the row might be a character boundary.  Higher values mean that a row will be more dense, and lower values are obviously less dense.  Thin characters (such as those in courier or times roman) will require a much lower "Min Alpha", whereas thicker characters (such as those in century gothic) will need a higher value.  You will eventually get a feel for a number to start with.
+
+Pressing the "Analyze" button will scan the image and, using the "Min Alpha" value, will attempt to find boundaries between characters.  It is important that you provide the height and width of the bitmap so that the image is not only loaded properly, but also fully scannable.  Once the analysis is complete, the boundaries which were located will be drawn as yellow lines.  Two special boundaries (which you should avoid changing) are the leftmost and rightmost boundary of the whole bitmap (in orange).
 
 You can adjust these dividers by either clicking on an existing one (to remove it) or clicking in an empty space to create a new one (in blue).  It takes some getting used to, but eventually you should be able to utilize the boundary tool.  Once all of the 91 required dividers (90 characters) have been isolated, the tool will attempt to render a phrase and some other characters to the smaller test area.
 
