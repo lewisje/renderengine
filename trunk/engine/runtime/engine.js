@@ -651,7 +651,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 837 $
+ * @version: $Revision: 880 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1077,19 +1077,33 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    sysInfo: function() {
-      return {
-         "browser" : $.browser.safari ? "safari" : ($.browser.mozilla ? "mozilla" : ($.browser.opera ? "opera" : ($.browser.msie ? "msie" : "unknown"))),
-         "version" : $.browser.version,
-         "agent": navigator.userAgent,
-         "platform": navigator.platform,
-         "cpu": navigator.cpuClass || navigator.oscpu,
-         "language": navigator.language,
-         "online": navigator.onLine,
-         "cookies": navigator.cookieEnabled,
-         "fullscreen": window.fullScreen || false,
-         "width": window.innerWidth || document.body.parentNode.clientWidth,
-         "height": window.innerHeight || document.body.parentNode.clientHeight
-      };
+		if (!EngineSupport._sysInfo) {
+			EngineSupport._sysInfo = {
+	         "browser" : $.browser.chrome ? "chrome" :
+							  ($.browser.Wii ? "wii" : 
+							  ($.browser.iPhone ? "iphone" :
+							  ($.browser.safari ? "safari" : 
+							  ($.browser.mozilla ? "mozilla" : 
+							  ($.browser.opera ? "opera" : 
+							  ($.browser.msie ? "msie" : "unknown")))))),
+	         "version" : $.browser.version,
+	         "agent": navigator.userAgent,
+	         "platform": navigator.platform,
+	         "cpu": navigator.cpuClass || navigator.oscpu,
+	         "language": navigator.language,
+	         "online": navigator.onLine,
+	         "cookies": navigator.cookieEnabled,
+	         "fullscreen": window.fullScreen || false
+	      };
+			$(document).ready(function() {
+				// When the document is ready, we'll go ahead and get the width and height added in
+				EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
+		         "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
+		         "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1
+				});
+			});
+		}
+		return EngineSupport._sysInfo;
    }
 });
 
@@ -1102,7 +1116,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 852 $
+ * @version: $Revision: 880 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1985,6 +1999,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
 
+		// Check for supported browser
+		if (!this.browserSupportCheck()) {
+			return;
+		};
+
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
       this.started = true;
@@ -2277,6 +2296,40 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       }
       $(".items", this.metricDisplay).html(h);
    },
+
+	/**
+	 * Check the current browser to see if it is supported by the
+	 * engine.  If it isn't, there's no reason to load the remainder of
+	 * the engine.  This check can be disabled with the <tt>disableBrowserCheck</tt>
+	 * query parameter set to <tt>true</tt>.
+	 * <p/>
+	 * If the browser isn't supported, the engine is shutdown and a message is
+	 * displayed.
+	 */
+	browserSupportCheck: function() {
+		if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
+			return true;
+		}
+		var sInfo = EngineSupport.sysInfo();
+		var msg = "This browser is not supported by <i>The Render Engine</i>.<br/><br/>";
+		msg += "Please see <a href='http://www.renderengine.com/browsers.php'>the list of ";
+		msg += "supported browsers</a> for more information.";
+		switch (sInfo.browser) {
+			case "chrome":
+			case "Wii":
+			case "iPhone":
+			case "safari":
+			case "mozilla":
+			case "opera": return true;
+			case "msie":
+			case "unknown": $(document).ready(function() {
+									Engine.shutdown();
+									$("body", document).append($("<div class='unsupported'>")
+										.html(msg));
+								});
+		}
+		return false;
+	},
 
    /**
     * Prints the version of the engine.
