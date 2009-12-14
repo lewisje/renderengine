@@ -19,7 +19,11 @@ The "Min Alpha" is the amount of alpha density that can be located in a single r
 
 Pressing the "Analyze" button will scan the image and, using the "Min Alpha" value, will attempt to find boundaries between characters.  It is important that you provide the height and width of the bitmap so that the image is not only loaded properly, but also fully scannable.  Once the analysis is complete, the boundaries which were located will be drawn as yellow lines.  Two special boundaries (which you should avoid changing) are the leftmost and rightmost boundary of the whole bitmap (in orange).
 
-You can adjust these dividers by either clicking on an existing one (to remove it) or clicking in an empty space to create a new one (in blue).  It takes some getting used to, but eventually you should be able to utilize the boundary tool.  Once all of the 91 required dividers (90 characters) have been isolated, the tool will attempt to render a phrase and some other characters to the smaller test area.
+You can adjust these dividers by either clicking on an existing one (to remove it) or clicking in an empty space to create a new one (in blue).  It takes some getting used to, but eventually you should be able to utilize the boundary tool.  Once all of the 91 required dividers (90 characters) have been isolated, the tool will attempt to render a phrase and some other characters to the smaller test area:
+{{{
+   The quick brown fox jumps over the lazy dog.
+   !@#$%^&*()[]/?,.':;\" ABC WMX LIO
+}}}
 
 One small nuance of finding the character boundaries is the double quote character.  It will typically be determined to be two individual characters.  Removing the center divider will fix that.  Other characters to watch out for are the capital W, X, Y, M, and N in serifed fonts.  Their serifs typically run into each other. 
 
