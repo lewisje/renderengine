@@ -434,19 +434,33 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    sysInfo: function() {
-      return {
-         "browser" : $.browser.safari ? "safari" : ($.browser.mozilla ? "mozilla" : ($.browser.opera ? "opera" : ($.browser.msie ? "msie" : "unknown"))),
-         "version" : $.browser.version,
-         "agent": navigator.userAgent,
-         "platform": navigator.platform,
-         "cpu": navigator.cpuClass || navigator.oscpu,
-         "language": navigator.language,
-         "online": navigator.onLine,
-         "cookies": navigator.cookieEnabled,
-         "fullscreen": window.fullScreen || false,
-         "width": window.innerWidth || document.body.parentNode.clientWidth,
-         "height": window.innerHeight || document.body.parentNode.clientHeight
-      };
+		if (!EngineSupport._sysInfo) {
+			EngineSupport._sysInfo = {
+	         "browser" : $.browser.chrome ? "chrome" :
+							  ($.browser.Wii ? "wii" : 
+							  ($.browser.iPhone ? "iphone" :
+							  ($.browser.safari ? "safari" : 
+							  ($.browser.mozilla ? "mozilla" : 
+							  ($.browser.opera ? "opera" : 
+							  ($.browser.msie ? "msie" : "unknown")))))),
+	         "version" : $.browser.version,
+	         "agent": navigator.userAgent,
+	         "platform": navigator.platform,
+	         "cpu": navigator.cpuClass || navigator.oscpu,
+	         "language": navigator.language,
+	         "online": navigator.onLine,
+	         "cookies": navigator.cookieEnabled,
+	         "fullscreen": window.fullScreen || false
+	      };
+			$(document).ready(function() {
+				// When the document is ready, we'll go ahead and get the width and height added in
+				EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
+		         "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
+		         "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1
+				});
+			});
+		}
+		return EngineSupport._sysInfo;
    }
 });
 
