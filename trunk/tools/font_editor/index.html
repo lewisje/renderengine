@@ -94,11 +94,16 @@
 			<b>Width: </b><input type='text' id='fontWidth' size='5' value="1789"/><br/>
 			<b>Height: </b><input type='text' id='fontHeight' size='5' value="37"/><br/>
 			<b>Size: </b><input type='text' id='fontSize' size='5'/><br/>
+			<!-- Deprecated
 			<b>Uppercase Only? </b><input type='checkbox' id='fontUpper'/><br/>
+			-->
 			<b>Kerning: </b><input type='text' size='5' id='fontKerning' value="0.88"/><br/>
 			<b>Space Width: </b><input type='text' size='5' id='fontSpace' value="20"/><br/>
 			<b>Min Alpha: </b><input type='text' size='5' id='minAlpha' value="100"/>
-			<input type="button" id="analyze" value="Analyze Font"/><br/>
+			<input type="button" id="analyze" value="Analyze Font"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			Identified: <span id="identified">0</span> of 90 characters&nbsp;&nbsp;
+			<input type="button" id="generate" value="Generate"/>&nbsp;
+			<input type="checkbox" id="fontBold"/>Bold<br/>
 			<textarea id="fontDef" cols="70" rows="10"></textarea>
 		</div>
    </body>

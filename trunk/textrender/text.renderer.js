@@ -72,6 +72,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
       this.add(Transform2DComponent.create("transform"));
       this.getComponent("TextRenderObject").setText(text || "");
       this.getComponent("transform").setScale(size || 1);
+		this.drawMode = TextRenderer.DRAW_TEXT;
    },
 
    /**
@@ -79,7 +80,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     */
    release: function() {
       this.base();
-      this.drawMode = 0;
+		this.drawMode = TextRenderer.DRAW_TEXT;
 		this.renderer = null;
    },
 

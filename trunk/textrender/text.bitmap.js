@@ -116,7 +116,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       text = (this.font.upperCaseOnly ? String(text).toUpperCase() : text);
 
       // Replace special chars
-      text = text.replace(/&copy;/gi,"(C)").replace(/&reg;/gi,"(R)");
+      //text = text.replace(/&copy;/gi,"(C)").replace(/&reg;/gi,"(R)");
 
       this.base(text);
 
@@ -143,46 +143,19 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       var cS = 0;
 
       // Render the text
-      var pc = new Point2D(0,0);
-
-      // 1st pass: The text
-      pc = new Point2D(0,0);
-      letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
-      lCount = text.length;
-
-		if (renderContext.get2DContext) {
-	      renderContext.get2DContext().globalCompositeOperation = "source-over";
-		}
-
-      while (lCount-- > 0)
-      {
-         var glyph = text.charCodeAt(letter) - 32;
-         if (glyph == 0)
-         {
-            // A space
-            pc.add(space);
-         }
-         else
-         {
-            // Draw the text
-            cS = this.font.info.letters[glyph - 1];
-            cW = this.font.info.letters[glyph] - cS;
-            //debugger;
-				var sRect = Rectangle2D.create(cS, 0, cW, cH);
-				var rect = Rectangle2D.create(pc.x, pc.y, cW, cH);
-            renderContext.drawImage(null, rect, this.font.image, sRect);
-            pc.add(new Point2D(cW, 0).mul(kern));
-         }
-
-         letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
-      }
-
-      // 2nd pass: The color
-		if (renderContext.get2DContext) {
-	      renderContext.get2DContext().globalCompositeOperation = "source-atop";
-	      lCount = text.length;
-	      pc = new Point2D(0,0);
+		var weight = this.getTextWeight();
+		for (var wT = 0; wT < weight; wT++) {
+			
+	      var pc = Point2D.create(wT * 0.5, 0);
+	
+	      // 1st pass: The text
 	      letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
+	      lCount = text.length;
+	
+			if (renderContext.get2DContext) {
+		      renderContext.get2DContext().globalCompositeOperation = "source-over";
+			}
+	
 	      while (lCount-- > 0)
 	      {
 	         var glyph = text.charCodeAt(letter) - 32;
@@ -193,19 +166,25 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 	         }
 	         else
 	         {
-	            // Draw a box the color we want and the size of the character
+	            // Draw the text
 	            cS = this.font.info.letters[glyph - 1];
 	            cW = this.font.info.letters[glyph] - cS;
-	            var r = new Rectangle2D(pc.x, pc.y, cW, cH);
-	            renderContext.setFillStyle(this.getColor());
-	            renderContext.drawFilledRectangle(r);
+					var sRect = Rectangle2D.create(cS, 0, cW, cH);
+					var rect = Rectangle2D.create(pc.x, pc.y, cW, cH);
+	            renderContext.drawImage(null, rect, this.font.image, sRect);
 	            pc.add(new Point2D(cW, 0).mul(kern));
 	         }
 	
 	         letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
 	      }
-	
-	
+		}
+		
+      // 2nd pass: The color
+		if (renderContext.get2DContext) {
+	      renderContext.get2DContext().globalCompositeOperation = "source-atop";
+         var r = new Rectangle2D(0, 0, pc.x, cH);
+         renderContext.setFillStyle(this.getColor());
+         renderContext.drawFilledRectangle(r);
 	      // Reset the composition operation
 	      renderContext.get2DContext().globalCompositeOperation = "source-over";
 		}

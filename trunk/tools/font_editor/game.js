@@ -37,6 +37,8 @@
 Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/resourceloaders/loader.image.js");
+Engine.include("/textrender/text.renderer.js");
+Engine.include("/textrender/text.bitmap.js");
 Engine.include("/engine/engine.timers.js");
 
 Game.load("fontrender.js");
@@ -58,10 +60,11 @@ var FontEditor = Game.extend({
 	editorWidth: 6000,
 	editorHeight: 100,
 	
-	testWidth: 800,
-	testHeight: 80,
+	testWidth: 430,
+	testHeight: 50,
 	
-	testString: "The quick brown fox jumps over the lazy dog. !@#$%^&*()",
+	testString: "The quick brown fox jumps over the lazy dog.",
+	testString2: "!@#$%^&*()[]/?,.':;\" ABC WMX LIO",
 	imageLoader: null,
 	
 	analyzed: false,
@@ -69,6 +72,9 @@ var FontEditor = Game.extend({
 	mouseLine: -1,
 	
 	fontBase: "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz",
+
+	//testString: "@?>=<;:9876543210",
+	//testString2: "ZYXWVUTSRQPONMLKJIHGFEDCBA",
 
    /**
     * Called to set up the game, download any resources, and initialize
@@ -81,6 +87,7 @@ var FontEditor = Game.extend({
       Engine.setFPS(5);
 		
 		$("#fontURL").val(Engine.getEnginePath() + "/fonts/century_gothic_36.png");
+		$("#fontDef").val("");
 
 		// The font file can be specified as a command parameter
 		var fontFile = EngineSupport.getStringParam("fontFile");
@@ -106,27 +113,45 @@ var FontEditor = Game.extend({
 		// Create the test context where the font will be rendered to
 		this.testContext = CanvasContext.create("testing", this.testWidth, this.testHeight);
 		this.testContext.setWorldScale(1);
+		this.testContext.setStatic(true);
 		Engine.getDefaultContext().add(this.testContext);
 		this.testContext.setBackgroundColor("black");
+		this.testContext.jQ().css({
+			position: "absolute",
+			left: 140,
+			top: 217
+		});
 		
 		this.imageLoader = ImageLoader.create();
 
 		// Set some event handlers
 		var self = this;
 		this.editorContext.addEvent(this, "mousedown", function(evt) {
+			
+			function near(pos) {
+				return (self.fontDef.letters[pos - 1] == "X" ||
+						 self.fontDef.letters[pos] == "X" ||
+						 self.fontDef.letters[pos + 1] == "X");
+			}
+			
+			function at(pos) {
+				return (self.fontDef.letters[pos - 1] == "X" ? pos - 1 :
+						  self.fontDef.letters[pos + 1] == "X" ? pos + 1 : pos);
+			}
+			
 			self.mouseBtn = true;
 			var pos = self.mouseLine;
 			var h = parseInt($("#fontHeight").val()) * 2;
 			// This allows manual adjustment of automatic glyph dividers
-			if (self.fontDef.letters[pos] != "X") {
+			if (!near(pos)) {
 				self.fontDef.letters[pos] = "X";
-				self.editorContext.setLineStyle("green");
+				self.editorContext.setLineStyle("#8888ff");
 				self.editorContext.drawLine(Point2D.create(pos,0), Point2D.create(pos, h));
 				self.checkFont();
 			} else {
-				self.fontDef.letters[pos] = null;
+				self.fontDef.letters[at(pos)] = null;
 				self.editorContext.setLineStyle("black");
-				self.editorContext.drawLine(Point2D.create(pos,0), Point2D.create(pos, h));
+				self.editorContext.drawLine(Point2D.create(at(pos),0), Point2D.create(at(pos), h));
 				self.checkFont();
 			}
 		});
@@ -149,7 +174,7 @@ var FontEditor = Game.extend({
 		   "space": 20,
 		   "upperCaseOnly": false,
 		   "bitmapImage": "",
-		   "letters": []
+		   "letters": {}
 		};
 		
 		this.linkEditors();
@@ -177,12 +202,17 @@ var FontEditor = Game.extend({
 	linkEditors: function() {
 		var self = this;
 		$("#loadFile").click(function() {
+			self.testContext.cleanUp();
 			var url=$("#fontURL").val();
 			self.imageLoader.load("font", url, $("#fontWidth").val(), $("#fontHeight").val());
 			self.imageTimeout = Timeout.create("foo", 100, function() {
 				self.waitForResources();
 			});
 		});
+		
+		$("#generate").click(function() {
+			self.checkFont();
+		})
 	},
 
 	waitForResources: function() {
@@ -199,10 +229,20 @@ var FontEditor = Game.extend({
 		this.editorContext.cleanUp();
 		this.editorContext.add(FontRender.create("font"));
 		this.editorContext.render(Engine.worldTime);
+		$("#minAlpha").val(this.getAveragePixelDensity());
 		$("#analyze").click(function() {
 			self.editorContext.render(Engine.worldTime);
 			self.analyze();
 		});
+	},
+
+	getAveragePixelDensity: function() {
+		var pixD = 0;
+		var w = parseInt($("#fontWidth").val()) * 2;
+		for (var x = 0; x < w; x++) {
+			pixD += this.getPixelDensity(x);
+		}
+		return Math.floor((pixD / w) * 255);
 	},
 
 	/**
@@ -213,54 +253,42 @@ var FontEditor = Game.extend({
 	 * possible divider positions.
 	 */
 	analyze: function() {
-		var rowNum = 0;
-		this.fontDef.letters = [];
+		var rowNum = 1;
+		this.fontDef.letters = {};
 		var w = parseInt($("#fontWidth").val()) * 2;
 		var h = parseInt($("#fontHeight").val()) * 2;
+		this.fontDef.letters[0] = "X";
+		this.fontDef.letters[w] = "X";
+		this.editorContext.setLineStyle("orange");
+		this.editorContext.drawLine(Point2D.create(0,0), Point2D.create(0, h));
+		this.editorContext.drawLine(Point2D.create(w,0), Point2D.create(w, h));
+
+		this.editorContext.setLineStyle("yellow");
 		do {
 			var d = this.getPixelDensity(rowNum);
-			//console.debug("Density: ", d);
 			rowNum++;
 			if (d == 0) {
-				//this.editorContext.setLineStyle("blue");
-				//this.editorContext.drawLine(Point2D.create(rowNum,0), Point2D.create(rowNum, h));
 				// Possible letter boundary, check the density of the next rows
 				// until we find one that is higher than zero
 				var nextRow = rowNum + 1;
-				if (this.getPixelDensity(nextRow) != 0) {
-					this.editorContext.setLineStyle("orange");
-					this.editorContext.drawLine(Point2D.create(rowNum,0), Point2D.create(rowNum, h));
-					this.fontDef.letters[rowNum] = "X";
-					rowNum++;
-				} else {
-					while (nextRow < w && this.getPixelDensity(nextRow) < 1) {
-						//this.editorContext.setLineStyle("blue");
-						//this.editorContext.drawLine(Point2D.create(nextRow,0), Point2D.create(nextRow, h));
-						nextRow++;
-					};
-					nextRow--; 
-					// If nextrow and rownum are not the same, find the median
-					var med = 0;
-					if (rowNum != nextRow) {
-						med = Math.floor((nextRow - rowNum) / 2);
-					}
-					rowNum += med;
-					//letArr.push(med);
-					this.editorContext.setLineStyle("yellow");
-					this.editorContext.drawLine(Point2D.create(rowNum,0), Point2D.create(rowNum, h));
-					this.fontDef.letters[rowNum] = "X";
-					rowNum = nextRow + 1;
+				while (nextRow < w && this.getPixelDensity(nextRow) < 1) {
+					nextRow++;
+				};
+				nextRow--; 
+				// If nextrow and rownum are not the same, find the median
+				var med = 0;
+				if (rowNum != nextRow) {
+					med = Math.floor((nextRow - rowNum) / 2);
 				}
+				rowNum += med;
+				this.editorContext.drawLine(Point2D.create(rowNum,0), Point2D.create(rowNum, h));
+				this.fontDef.letters[rowNum] = "X";
+				rowNum = nextRow + 1;
 			} else {
 				// For now, we'll just assume another charater is being processed.
-				// We'll need to do some sort of box analysis to find potential boundaries
-				// at this point.  Maybe look up character recognition.
 				rowNum++;
 			}
-		} while (rowNum < w);
-		//this.editorContext.setLineStyle("yellow");
-		//this.editorContext.drawLine(Point2D.create(w,0), Point2D.create(w, h));
-		//this.fontDef.letters[rowNum] = "X";
+		} while (rowNum < w - 1);
 		this.analyzed = true;
 		this.checkFont();
 	},
@@ -297,17 +325,22 @@ var FontEditor = Game.extend({
 	 * new font and generate the font definition.
 	 */
 	checkFont: function() {
-		var req = $("#fontUpper").val() == "on" ? 58 : this.fontBase.length;
-		var ltrCount = 0;
+		//var req = $("#fontUpper").val() == "on" ? 58 : this.fontBase.length;
 		var ltrs = [];
+		var ltrCount = 0;
 		for (var l in this.fontDef.letters) {
 			if (this.fontDef.letters[l] == "X") {
 				ltrCount++;
-				ltrs.push(Math.floor(l / 2));
+				var z = parseInt(l);
+				ltrs.push(Math.round(z / 2));
 			}
 		}
-		if (ltrCount - 1 ==  this.fontBase.length) {
-			var outDef = this.fontDef;
+		ltrs.sort(function(a,b) {
+			return parseInt(a) - parseInt(b);
+		});
+		$("#identified").text(ltrs.length);
+		if (ltrs.length == 91) {
+			var outDef = $.extend({}, this.fontDef);
 			outDef.name = $("#fontName").val();
 			outDef.width = parseInt($("#fontWidth").val());
 			outDef.height = parseInt($("#fontHeight").val());
@@ -315,10 +348,50 @@ var FontEditor = Game.extend({
 			outDef.space = parseInt($("#fontSpace").val());
 			outDef.size = parseInt($("#fontSize").val());
 			outDef.bitmapImage = $("#fontURL").val().substr($("#fontURL").val().lastIndexOf("/") + 1);
-			outDef.letters = [0].concat(ltrs);
+			outDef.letters = ltrs;
 			var reg = "// Generated by The Render Engine font editor\n// (c)2008-2009 Brett Fattori\n";
 			$("#fontDef").val(reg + "BitmapFontLoader.font=" + JSON.stringify(outDef) + ";");
+			
+			// Highlight the letters
+			this.highlight();
+			
+			// Build a quick test
+			this.buildTest();
+		} else {
+			$("#fontDef").val("");
 		}	
+	},
+	
+	highlight: function() {
+		//this.editorContext.render(Engine.worldTime);
+	},
+	
+	buildTest: function() {
+		// We're going to fake the loading of a bitmap font so the
+		// bitmap text renderer will work
+		window.BitmapFontLoader = {};
+		var fDef = new Function($("#fontDef").val() + " return BitmapFontLoader.font;");
+		var font = {
+			image: this.imageLoader.get("font"),
+			info: fDef()
+		};
+		this.testContext.cleanUp();
+      
+		var tW = $("#fontBold")[0].checked ? 2 : 1;
+		
+		var bText = TextRenderer.create(BitmapText.create(font), this.testString, 0.5);
+      bText.setPosition(Point2D.create(2, 2));
+      bText.setTextWeight(tW);
+      bText.setColor("#ff00ff");
+      this.testContext.add(bText);
+
+		var bText2 = TextRenderer.create(BitmapText.create(font), this.testString2, 0.5);
+      bText2.setPosition(Point2D.create(2, 25));
+      bText2.setTextWeight(tW);
+      bText2.setColor("#ff00ff");
+      this.testContext.add(bText2);
+		
+		this.testContext.render(Engine.worldTime);
 	}
 	
 });
