@@ -61,8 +61,8 @@ The following list is a set of goals to be reached for the intended release.  So
 
 || *Status* || *Goal* || *Description* ||
 || - || *Code freeze* || *No additional features* - Start logging and addressing major bugs. ||
-|| _65%_ || Documentation || Clean up and finish API documentation.  Expand wiki to include more articles about engine use and game development with the engine. ||
-|| _75%_ || Tutorials || Build additional "basics" tutorials. ||
+|| _Complete_ || Documentation || Clean up and finish API documentation. ||
+|| _75%_ || Tutorials || Build additional "basics" tutorials.  Expand wiki to include more articles about engine use and game development with the engine. ||
 
 == Release Candidate 1 (TBA) ==
 
