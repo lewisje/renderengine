@@ -562,7 +562,6 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
     */
    cleanUp: function() {
       this.base();
-      this.clear();
    }
 
 }, /** @scope HashContainer.prototype */{
