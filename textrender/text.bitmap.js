@@ -45,7 +45,7 @@ Engine.initObject("BitmapText", "AbstractTextRenderer", function() {
  * @constructor
  * @param font {Font} A resource obtained by calling {@link FontResourceLoader#get}
  * @extends AbstractTextRenderer
- * @see FontResourceLoader
+ * @see BitmapFontLoader
  */
 var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 

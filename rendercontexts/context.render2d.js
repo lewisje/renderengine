@@ -42,6 +42,10 @@ Engine.initObject("RenderContext2D", "RenderContext", function() {
  * @class All 2D contexts should extend from this to inherit the
  * methods which abstract the drawing methods.
  * @extends RenderContext
+ * @constructor
+ * @description Create a new instance of a 2d render context.
+ * @param name {String} The name of the context
+ * @param surface {HTMLElement} The element which represents the surface of the context
  */
 var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype */{
 
@@ -66,6 +70,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	fontBaseline: "alphabetic",
 	fontStyle: "normal",
 
+	/**
+	 * @private
+	 */
    constructor: function(name, surface) {
       this.base(name || "RenderContext2D", surface);
       this.wPosition = Point2D.create(0,0);
@@ -73,6 +80,10 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
       this.wScale = 1;
    },
 
+   /**
+    * Releases the object back into the object pool.  See {@link PooledObject#release}
+    * for more information.
+    */
    release: function() {
       this.base();
       this.width= 0;
@@ -108,7 +119,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the color assigned to the context background.
-    * @type String
+    * @return {String}
     */
    getBackgroundColor: function() {
       return this.backgroundColor;
@@ -125,7 +136,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the width of the context drawing area.
-    * @type Number
+    * @return {Number}
     */
    getWidth: function() {
       return this.width;
@@ -142,7 +153,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the height of the context drawing area.
-    * @type Number
+    * @render {Number}
     */
    getHeight: function() {
       return this.height;
@@ -150,7 +161,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the bounding box for the rendering context.
-    * @type Rectangle2D
+    * @return {Rectangle2D}
     */
    getBoundingBox: function() {
       if (!this.bBox) {
@@ -170,7 +181,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the current transform position (translation)
-    * @type Point2D
+    * @return {Point2D}
     */
    getPosition: function() {
       return this.position;
@@ -187,7 +198,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the current transform rotation.
-    * @type Number
+    * @return {Number}
     */
    getRotation: function() {
       return this.rotation;
@@ -207,7 +218,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the X scaling factor of the current transform.
-    * @type Number
+    * @return {Number}
     */
    getScaleX: function() {
       return this.scaleX;
@@ -215,7 +226,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the Y scaling factor of the current transform.
-    * @type Number
+    * @return {Number}
     */
    getScaleY: function() {
       return this.scaleY;
@@ -344,14 +355,26 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    setRenderTransform: function(mtx3) {
    },
 
+	/**
+	 * Get the render position relative to the world
+	 * @return {Point2D}
+	 */
    getRenderPosition: function() {
       return Point2D.ZERO;
    },
 
+	/**
+	 * Get the render rotation relative to the world
+	 * @return {Number}
+	 */
    getRenderRotation: function() {
       return 0;
    },
 
+	/**
+	 * Get the render scale relative to the world
+	 * @return {Number}
+	 */
    getRenderScale: function() {
       return 1.0;
    },
@@ -368,7 +391,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    /**
     * Get the current line style for the context.  <tt>null</tt> if
     * not set.
-    * @type String
+    * @return {String}
     */
    getLineStyle: function() {
       return this.lineStyle;
@@ -377,8 +400,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    /**
     * Set the line width for drawing paths.
     *
-    * @param width {Number} The width of lines in pixels
-    * @default 1
+    * @param [width=1] {Number} The width of lines in pixels
     */
    setLineWidth: function(width) {
       this.lineWidth = width;
@@ -386,7 +408,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the current line width for drawing paths.
-    * @type Number
+    * @return {Number}
     */
    getLineWidth: function() {
       return this.lineWidth;
@@ -403,7 +425,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 
    /**
     * Get the current fill style of the context.
-    * @type String
+    * @return {String}
     */
    getFillStyle: function() {
       return this.fillStyle;
@@ -589,8 +611,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * Capture an image from the context.
     *
     * @param rect {Rectangle2D} The area to capture
-    * @returns Image data capture
-    * @type ImageData
+    * @return {ImageData} Image data capture
     */
    getImage: function(rect) {
    },
@@ -712,8 +733,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf RenderContext2D
+    * @return {String} "RenderContext2D"
     */
    getClassName: function() {
       return "RenderContext2D";
@@ -721,67 +741,67 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	
 	/**
 	 * Bold text weight
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_WEIGHT_BOLD: "bold",
 	
 	/**
 	 * Normal text weight
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_WEIGHT_NORMAL: "normal",
 	
 	/**
 	 * Light text weight
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_WEIGHT_LIGHT: "light",
 	
 	/**
 	 * Text align left
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_ALIGN_LEFT: "left",
 	
 	/**
 	 * Text align right
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_ALIGN_RIGHT: "right",
 	
 	/**
 	 * Text align center
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_ALIGN_CENTER: "center",
 	
 	/**
 	 * Text align start of stroke
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_ALIGN_START: "start",
 	
 	/**
 	 * Text align end of stroke
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_ALIGN_END: "end",
 	
 	/**
 	 * Text baseline alphabetic
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_BASELINE_ALPHABETIC: "alphabetic",
 	
 	/**
 	 * Text baseline top of em box
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_BASELINE_TOP: "top",
 	
 	/**
 	 * Text baseline hanging ideograph
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_BASELINE_HANGING: "hanging",
 	
@@ -793,31 +813,31 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	
 	/**
 	 * Text baseline ideographic bottom
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_BASELINE_IDEOGRAPHIC: "ideographic",
 	
 	/**
 	 * Text baseline bottom of em square
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_BASELINE_BOTTOM: "bottom",
 	
 	/**
 	 * Text style italic
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_STYLE_ITALIC: "italic",
 	
 	/**
 	 * Text style normal
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_STYLE_NORMAL: "normal",
 	
 	/**
 	 * Text style oblique
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_STYLE_OBLIQUE: "oblique"
 });

@@ -45,11 +45,13 @@ Engine.initObject("TextRenderer", "Object2D", function() {
  *        context.
  *
  * @constructor
+ * @description Create an instance of one of the text renderers.
  * @param renderer {AbstractTextRenderer} The text renderer to use
  * @param text {String} The text to render
  * @param size {Number} The size of the text to render
  * @see VectorText
  * @see BitmapText
+ * @see ContextText
  */
 var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 

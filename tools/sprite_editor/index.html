@@ -57,22 +57,41 @@
       		font: 10pt Arial;
       	}
 
+			div.loadbox {
+				width: 325px;
+				height: 30px;
+				padding: 10px;
+				font: 10px Arial;
+				border: 1px outset gray;
+				-moz-border-radius: 10px;
+				-webkit-border-radius: 10px;				
+			}
+
          #engine-load-progress {
             position: relative;
-            border: 1px solid;
+            border: 1px inset gray;
             width: 300px;
-            height: 10px;
+            height: 5px;
          }
 
          #engine-load-progress .bar {
-            background: blue;
+            background: silver;
          }
-
       </style>
    </head>
    <body>
-      <span id="loading">Loading Sprite Editor...
-         <div id="engine-load-progress"></div><span id="engine-load-info"></span>
+      <span id="loading">
+      	<table border="0" style="width:100%;height:100%;">
+      		<tr>
+      			<td style="width:100%;height:100%;" valign="middle" align="center">
+						<div class="loadbox">
+							Loading Sprite Editor...
+		         		<div id="engine-load-progress"></div>
+							<span id="engine-load-info"></span>
+						</div>
+					</td>
+      		</tr>
+      	</table>
       </span>
       <script type="text/javascript">
          // Load the game script
@@ -175,10 +194,10 @@
          </div>
          <div class="tool grid">
             <h5>Grid</h5>
-            <input type="radio" id="grid8" name="gridsize" disabled value="8"/>8&nbsp;
-            <input type="radio" id="grid16" name="gridsize" disabled value="16"/>16&nbsp;
+            <input type="radio" id="grid8" name="gridsize" value="8"/>8&nbsp;
+            <input type="radio" id="grid16" name="gridsize" value="16"/>16&nbsp;
             <input type="radio" id="grid32" name="gridsize" value="32"/>32&nbsp;
-            <input type="radio" id="grid64" name="gridsize" disabled value="64"/>64&nbsp;<br/>
+            <input type="radio" id="grid64" name="gridsize" value="64"/>64&nbsp;<br/>
             <input type="checkbox" id="gridVis" checked/>Draw Grid
          </div>
          <div class="tool drawmode">
@@ -190,7 +209,7 @@
          <div style="clear: both"><!-- --></div>
          <div class="tool brushsize">
             <h5>Brush Size</h5>
-            <table class="brushTable" border="1" cellspacing="2">
+            <table class="brushTable" border="1" cellspacing="2" style="border: 1px solid;">
                <tr>
                   <td class="brushPix enabled"><!-- --></td>
                   <td class="brushPix"><!-- --></td>

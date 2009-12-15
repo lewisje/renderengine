@@ -101,8 +101,8 @@ var SpriteLayer = Object2D.extend({
       var pSize = SpriteEditor.pixSize;
       x /= pSize;
       y /= pSize;
-      x = Math.floor(x);
-      y = Math.floor(y);
+      x = Math.round(x);
+      y = Math.round(y);
       return [x,y];     
    },
 

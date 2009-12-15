@@ -199,7 +199,6 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * away from the front the object will draw.
     *
     * @param zIndex {Number} The z-index of this object
-    * @memberOf HostObject
     */
    setZIndex: function(zIndex) {
       this.zIndex = zIndex;

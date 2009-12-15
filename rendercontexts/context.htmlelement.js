@@ -41,6 +41,11 @@ Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
  * 		 class.
  *
  * @extends RenderContext2D
+ * @constructor
+ * @description Create an instance of an HTML element rendering context.  This context
+ * represents any HTML element.
+ * @param name {String} The name of the context
+ * @param element {Number} The element which is the surface of the context.
  * @see DocumentContext
  */
 var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.prototype */{
@@ -52,10 +57,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
    jQObj: null,
 
    /**
-    * Create an instance of an HTML element rendering context.  This context
-    * represents any HTML element.
-    * @memberOf HTMLElementContext
-    * @constructor
+    * @private
     */
    constructor: function(name, element) {
       this.base(name || "HTMLElementContext", element);
@@ -69,7 +71,6 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
 
    /**
     * Eliminate the elements from container element.
-    * @memberOf HTMLElementContext
     */
    destroy: function() {
       var objs = this.getObjects();
@@ -87,8 +88,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
 
    /**
     * Retrieve the jQuery object which represents the element.
-    * @return jQuery Object
-    * @type {jQuery}
+    * @return {jQuery} Object
     */
    jQ: function() {
       if (this.jQObj == null) {
@@ -98,7 +98,8 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
    },
 
    /**
-    * @memberOf HTMLElementContext
+    * Add an object to the context, or create an element to represent the object.
+    * @param obj {HTMLElement} The element, or <tt>null</tt>
     */
    add: function(obj) {
       if (!obj.getElement())
@@ -111,7 +112,8 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
    },
 
    /**
-    * @memberOf HTMLElementContext
+    * Remove an object from the context.
+    * @param obj {HTMLElement} The object to remove
     */
    remove: function(obj) {
       if (obj.getElement())

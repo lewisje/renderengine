@@ -59,7 +59,7 @@ var SpriteEditor = Game.extend({
 
    editorContext: null,
 
-   pixSize: 32,
+   pixSize: 16,
 
    editorSize: 512,
 
@@ -90,6 +90,10 @@ var SpriteEditor = Game.extend({
 	frames: [],
 	
 	frameIdx: 0,
+	
+	pixOffset: [],
+	
+	noPixels: true,
 
    /**
     * Called to set up the editor, download any resources, and initialize
@@ -99,9 +103,11 @@ var SpriteEditor = Game.extend({
      $("#loading").remove();
      $("#controls").css("display", "block");
      $("#menuBar").css("display", "block");
-
+	  
       // Set the FPS so drawing speed is resonable
       Engine.setFPS(25);
+		
+		this.recalcOffset();
 
       // Create the 2D context
       this.editorContext = CanvasContext.create("editor", this.editorSize, this.editorSize);
@@ -120,11 +126,11 @@ var SpriteEditor = Game.extend({
       this.editorContext.addEvent(this, "mousedown", function(evt) {
          self.mouseBtn = true;
          switch (self.drawMode) {
-            case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
+            case SpriteEditor.PAINT : self.setPixel(evt.pageX + self.pixOffset[0], evt.pageY + self.pixOffset[1]);
                                  break;
-            case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
+            case SpriteEditor.ERASE : self.clearPixel(evt.pageX + self.pixOffset[0], evt.pageY + self.pixOffset[1]);
                                  break;
-            case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
+            case SpriteEditor.SELECT : self.getPixel(evt.pageX + self.pixOffset[0], evt.pageY + self.pixOffset[1]);
                                  break;
          }
       });
@@ -136,11 +142,11 @@ var SpriteEditor = Game.extend({
       this.editorContext.addEvent(this, "mousemove", function(evt) {
          if (self.mouseBtn) {
             switch (self.drawMode) {
-               case SpriteEditor.PAINT : self.setPixel(evt.pageX, evt.pageY);
+               case SpriteEditor.PAINT : self.setPixel(evt.pageX + self.pixOffset[0], evt.pageY + self.pixOffset[1]);
                                     break;
-               case SpriteEditor.ERASE : self.clearPixel(evt.pageX, evt.pageY);
+               case SpriteEditor.ERASE : self.clearPixel(evt.pageX + self.pixOffset[0], evt.pageY + self.pixOffset[1]);
                                     break;
-               case SpriteEditor.SELECT : self.getPixel(evt.pageX, evt.pageY);
+               case SpriteEditor.SELECT : self.getPixel(evt.pageX + self.pixOffset[0], evt.pageY + self.pixOffset[1]);
                                     break;
             }
          }
@@ -175,6 +181,10 @@ var SpriteEditor = Game.extend({
 
    //===============================================================================================
    // Editor Functions
+
+	recalcOffset: function() {
+		this.pixOffset = [-Math.floor(this.pixSize * 0.5), -($("#menuBar").height() + Math.floor(this.pixSize * 0.5))];
+	},
 
 	/**
 	 * Set the current frame being displayed in the editor.
@@ -243,6 +253,7 @@ var SpriteEditor = Game.extend({
 	 * @param y {Number} The Y coordinate
 	 */
    setPixel: function(x, y) {
+		this.noPixels = false;
       for (var xB = 0; xB < SpriteEditor.brushSize[0] + 1; xB++) {
          for (var yB = 0; yB < SpriteEditor.brushSize[1] + 1; yB++) {
             SpriteEditor.currentLayer.addPixel(x + (xB * SpriteEditor.pixSize), y + (yB * SpriteEditor.pixSize));
@@ -380,6 +391,25 @@ var SpriteEditor = Game.extend({
          $(".colorTable .selectedColor").css("background", colr);
       }
    },
+	
+	setPixelSize: function(size) {
+		var doIt = false;
+		if (this.frameIdx == 0 && this.frames.length == 1 && this.noPixels) {
+	  		doIt = true;
+		} else {
+	  		doIt = confirm("Changing the pixel size will clear any current frames and reset to frame zero.  Are you sure you want to do this?");
+		}
+
+		if (doIt) {
+			this.frames = [];
+			this.frameIdx = 0;
+	      this.pixSize = size;
+			this.recalcOffset();
+			$(".frames ul").empty();
+			this.actionNewFrame();
+			this.noPixels = true;
+		}
+	},
 
 	/**
 	 * Set the drawing color to the given hexadecimal color value.
@@ -433,22 +463,22 @@ var SpriteEditor = Game.extend({
 
       $("#grid8")
          .change(function() {
-            SpriteEditor.pixSize = 8;
+				SpriteEditor.setPixelSize(8);
          });
 
       $("#grid16")
          .change(function() {
-            SpriteEditor.pixSize = 16;
+				SpriteEditor.setPixelSize(16);
          });
 
       $("#grid32")
          .change(function() {
-            SpriteEditor.pixSize = 32;
+				SpriteEditor.setPixelSize(32);
          });
 
       $("#grid64")
          .change(function() {
-            SpriteEditor.pixSize = 64;
+				SpriteEditor.setPixelSize(64);
          });
 
 
