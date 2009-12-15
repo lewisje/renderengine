@@ -69,9 +69,10 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
 		this.alignment = null;
    },
 
-	/**
-	 * @private
-	 */
+   /**
+    * Releases the object back into the object pool.  See {@link PooledObject#release}
+    * for more information.
+    */
    release: function() {
       this.base();
       this.text = null;

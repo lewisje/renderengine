@@ -46,15 +46,16 @@ Engine.initObject("GridNode", "SpatialNode", function() {
  * 		 entire {@link SpatialGrid}
  *
  * @extends SpatialNode
+ * @constructor
+ * @description Create an instance of a SpatialNode for use within a {@link SpatialGrid}
+ * @param rect {Rectangle2D} The rectangle which defines this node.
  */
 var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
 
    rect: null,
 
 	/**
-	 * Create an instance of a SpatialNode for use within a {@link SpatialGrid}
-	 * @constructor
-	 * @param rect {Rectangle2D} The rectangle which defines this node.
+	 * @private
 	 */
    constructor: function(rect) {
       this.base();
@@ -63,7 +64,7 @@ var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
 
    /**
     * Get the rectangle which defines this node.
-    * @type Rectangle2D
+    * @return {Rectangle2D}
     */
    getRect: function() {
       return this.rect
@@ -72,7 +73,7 @@ var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} "GridNode"
     */
    getClassName: function() {
       return "GridNode";
@@ -91,6 +92,8 @@ Engine.initObject("SpatialGrid", "SpatialContainer", function() {
  *        coarse grid to assist in quickly finding objects within that
  *        space.
  *
+ * @constructor
+ * @description Create an instance of a spatial grid model
  * @param width {Number} The width of the area
  * @param height {Number} The height of the area
  * @param divisions {Number} The number of divisions along both axis
@@ -103,6 +106,9 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
    xLocator: 1,
    yLocator: 1,
 
+	/**
+	 * @private
+	 */
    constructor: function(width, height, divisions) {
       this.base("SpatialGrid", width, height);
 
@@ -126,6 +132,10 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       }
    },
 
+   /**
+    * Releases the object back into the object pool.  See {@link PooledObject#release}
+    * for more information.
+    */
    release: function() {
       this.base();
       this.divisions = 1;
@@ -137,7 +147,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * Find the node that contains the specified point.
     *
     * @param point {Point2D} The point to locate the node for
-    * @type SpatialNode
+    * @return {SpatialNode}
     */
    findNodePoint: function(point) {
       return this.getRoot()[Math.floor(point.x * this.xLocator) + (Math.floor(point.y * this.yLocator) * this.divisions)];
@@ -147,7 +157,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * Get the node within the grid.
     * @param x {Number} The virtual X coordinate in our grid
     * @param y {Number} The virtual Y coordinate in our grid
-    * @type Number
+    * @return {Number}
     * @private
     */
    getNode: function(x, y) {
@@ -171,8 +181,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * </pre>
     *
     * @param point {Point2D} The point to begin the search at.
-    * @returns An array of objects found within the cross
-    * @type Array
+    * @return {Array} An array of objects found within the cross
     */
    getPCL: function(point) {
 
@@ -202,12 +211,11 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       return o;
    }
 
-}, {
+}, /** @scope SpatialGrid.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf Container
+    * @return {String} "SpatialGrid"
     */
    getClassName: function() {
       return "SpatialGrid";

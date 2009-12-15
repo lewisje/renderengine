@@ -88,6 +88,7 @@
    width: 16px;
    height: 18px;
    border: 1px solid white;
+   background: paleGoldenrod;
 }
 
 .brushTable .brushPix.enabled {

@@ -54,6 +54,7 @@ var ContextText = AbstractTextRenderer.extend(/** @scope ContextText.prototype *
 
 	/**
 	 * Initialize some basics
+	 * @private
 	 */
 	tInit: function() {
 		this.setTextAlignment(RenderContext2D.FONT_ALIGN_LEFT);
@@ -97,10 +98,10 @@ var ContextText = AbstractTextRenderer.extend(/** @scope ContextText.prototype *
       renderContext.drawText(Point2D.ZERO, this.getText());
    }
 	
-}, /** @scope BitmapText.prototype */{
+}, /** @scope ContextText.prototype */{
    /**
     * Get the class name of this object
-    * @return {String} The string "BitmapText"
+    * @return {String} The string "ContextText"
     */
    getClassName: function() {
       return "ContextText";

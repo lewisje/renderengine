@@ -45,15 +45,16 @@ Engine.initObject("HTMLDivContext", "HTMLElementContext", function() {
  * context, the decision has been made to drop support for it.
  *
  * @extends HTMLElementContext
- * @deprecated
+ * @constructor
+ * @description Create a new instance of a context drawn on a <tt>div</tt> element.
+ * @param name {String} The name of the context
+ * @param contextWidth {Number} The width (in pixels) of the context.
+ * @param contextHeight {Number} The height (in pixels) of the context.
  */
 var HTMLDivContext = HTMLElementContext.extend(/** @scope HTMLDivContext.prototype */{
 
    /**
-    * Create an instance of a document rendering context.  This context
-    * represents the HTML document body.  Theoretically, only one of these
-    * contexts should ever be created.
-    * @constructor
+    * @private
     */
    constructor: function(name, contextWidth, contextHeight) {
       var ctx = $("<div>").css({
@@ -71,7 +72,7 @@ var HTMLDivContext = HTMLElementContext.extend(/** @scope HTMLDivContext.prototy
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "HTMLDivContext"
+    * @return {String} "HTMLDivContext"
     */
    getClassName: function() {
       return "HTMLDivContext";

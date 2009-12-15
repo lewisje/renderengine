@@ -41,6 +41,9 @@ Engine.initObject("QuadtreeNode", "SpatialNode", function() {
  *
  * @param rect {Rectangle2D} The rectangle which defines the area of this node
  * @extends SpatialNode
+ * @constructor
+ * @description Create a quadtree node instance
+ * @param rect {Rectangle2D} The rectangle which defines the node's boundaries
  */
 var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
 
@@ -48,6 +51,9 @@ var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
 
    quads: null,
 
+	/**
+	 * @private
+	 */
    constructor: function(rect)
    {
       this.base();
@@ -57,7 +63,7 @@ var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
 
    /**
     * Get the rectangle which defines this node.
-    * @type Rectangle2D
+    * @return {Rectangle2D}
     */
    getRect: function() {
       return this.rect
@@ -65,7 +71,7 @@ var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
 
    /**
     * Get the array of quads within this node.
-    * @type Array
+    * @return {Array}
     */
    getQuads: function() {
       return this.quads;
@@ -74,8 +80,7 @@ var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
-    * @memberOf Container
+    * @return {String} "QuadtreeNode"
     */
    getClassName: function() {
       return "QuadtreeNode";
@@ -93,16 +98,18 @@ Engine.initObject("Quadtree", "SpatialContainer", function() {
  * @class A quadtree which divides up a space into smaller and smaller
  *        divisions to quickly locate objects within that space.
  *
+ * @constructor
+ * @description Build a quadtree which can be used to quickly locate objects
+ * within a defined space.
  * @param width {Number} The width of the area
  * @param height {Number} The height of the area
  * @param divisions {Number} The number of divisions determines the smallest node size
  * @extends SpatialContainer
  */
-var Quadtree = SpatialContainer.extend(/** @scope QuadTree.prototype */{
+var Quadtree = SpatialContainer.extend(/** @scope Quadtree.prototype */{
 
-   /*
-    * Build a quadtree which can be used to quickly locate objects
-    * within a defined space.
+   /**
+    * @private
     */
    constructor: function(width, height, divisions) {
 
@@ -151,7 +158,7 @@ var Quadtree = SpatialContainer.extend(/** @scope QuadTree.prototype */{
     *
     * @param point {Point2D} The point to locate
     * @param node {QuadtreeNode} The node to start the search at
-    * @type QuadtreeNode
+    * @return {QuadtreeNode}
     */
    findNodePoint: function(point, node) {
       var fNode = node;
@@ -172,7 +179,7 @@ var Quadtree = SpatialContainer.extend(/** @scope QuadTree.prototype */{
     *
     * @param rect {Rectangle2D} The rectangle to locate
     * @param node {QuadtreeNode} The node to start the search at
-    * @type QuadtreeNode
+    * @return {QuadtreeNode}
     */
    findNodeRect: function(rect, node) {
       var fNode = node;
@@ -193,7 +200,7 @@ var Quadtree = SpatialContainer.extend(/** @scope QuadTree.prototype */{
     * within the defined sub-space of the container.
     *
     * @param node {QuadtreeNode} The node to search against
-    * @type HashContainer
+    * @return {HashContainer}
     */
    getPCL: function(node) {
 
@@ -202,7 +209,7 @@ var Quadtree = SpatialContainer.extend(/** @scope QuadTree.prototype */{
    /**
     * Get the class name of this object
     *
-    * @type String
+    * @return {String} "Quadtree"
     */
    getClassName: function() {
       return "Quadtree";

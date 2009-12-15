@@ -43,6 +43,11 @@ Engine.initObject("CanvasContext", "RenderContext2D", function() {
  * can be saved and restored, allowing for complex, stacked transformations.
  *
  * @extends RenderContext2D
+ * @constructor
+ * @description Create a new instance of a canvas context.
+ * @param name {String} The name of the context
+ * @param width {Number} The width (in pixels) of the canvas context.
+ * @param height {Number} The height (in pixels) of the canvas context.
  */
 var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */{
 
@@ -53,12 +58,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    mouseHandler: false,
 
    /**
-    * Create an instance of a 2D rendering context using the canvas element.
-    *
-    * @param name {String} The name of this context.  Default: CanvasContext
-    * @param width {Number} The width (in pixels) of the canvas context.
-    * @param height {Number} The height (in pixels) of the canvas context.
-    * @constructor
+    * @private
     */
    constructor: function(name, width, height) {
       Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
@@ -80,12 +80,21 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    afterAdd: function(parent) {
    },
 
+   /**
+    * Releases the object back into the object pool.  See {@link PooledObject#release}
+    * for more information.
+    */
    release: function() {
       this.base();
       this.context2D = null;
       this.mouseHandler = false;
    },
 
+	/**
+	 * Set the scale of the world
+	 * @param scaleX {Number} The scale of the world along the X axis
+	 * @param scaleY {Number} The scale of the world along the y axis 
+	 */
    setWorldScale: function(scaleX, scaleY) {
       this.base(scaleX, scaleY);
 
@@ -111,7 +120,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
    /**
     * Push a transform state onto the stack.
-
     */
    pushTransform: function() {
       this.base();
@@ -120,7 +128,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
    /**
     * Pop a transform state off the stack.
-
     */
    popTransform: function() {
       this.base();
@@ -140,6 +147,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.get2DContext().clearRect(d.x, d.y, d.w, d.h);
    },
 
+	/**
+	 * Set up the world for the given time before any rendering is dont.
+	 * @param time {Number} The render time
+	 */
    setupWorld: function(time) {
       this.setScale(this.getWorldScale());
 
@@ -217,8 +228,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    /**
     * Set the line width for drawing paths.
     *
-    * @param width {Number} The width of lines in pixels
-    * @default 1
+    * @param [width=1] {Number} The width of lines in pixels
     */
    setLineWidth: function(width) {
       this.get2DContext().lineWidth = width * 1.0;
@@ -364,8 +374,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * Capture an image from the context.
     *
     * @param rect {Rectangle2D} The area to capture
-    * @returns Image data capture
-    * @type ImageData
+    * @returns {ImageData} Image data capture
     */
    getImage: function(rect) {
       this.base();
@@ -534,8 +543,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    /**
     * Get the class name of this object
     *
-    * @type String
-
+    * @return {String} "CanvasContext"
     */
    getClassName: function() {
       return "CanvasContext";
