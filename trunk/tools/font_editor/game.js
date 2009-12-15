@@ -82,6 +82,7 @@ var FontEditor = Game.extend({
     */
    setup: function() {
      $("#loading").remove();
+	  $("#infoForm").css("display", "block");
 
       // Set the FPS of the game
       Engine.setFPS(5);
