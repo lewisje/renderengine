@@ -269,6 +269,11 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
    /**
     * Update the render context before rendering the objects to the surface.
+    * If the context isn't static, this will reset and then render the context.
+    * If the context is static, you'll need to perform the reset and render yourself.
+    * This allows you to updated objects in the world, skip the reset, and then
+    * render yourself.  This can be an effective way to handle redrawing the world
+    * only as needed.
     *
     * @param parentContext {RenderContext} A parent context, or <tt>null</tt>
     * @param time {Number} The current render time in milliseconds from the engine.
@@ -276,19 +281,18 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    update: function(parentContext, time)
    {
 		if (!this.staticCtx) {
+	      // Clear and render world
+	      this.reset();
 	      this.render(time);
 		}
    },
 
    /**
-    * Called after the update to render all of the objects to the context.
+    * Called to render all of the objects to the context.
     *
     * @param time {Number} The current render time in milliseconds from the engine.
     */
    render: function(time) {
-      // Setup the world
-      this.reset();
-
       // Push the world transform
       this.pushTransform();
 
