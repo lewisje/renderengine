@@ -43,10 +43,11 @@ The execution flow would be:
 {{{
 [START FRAME]
 
-gameContext -> 
-    A -> Ax -> Ay -> Az 
-    B -> Bx -> By -> Bz
-    C -> Cx -> Cy -> Cz
+defaultContext ->
+    gameContext -> 
+        A -> Ax -> Ay -> Az 
+        B -> Bx -> By -> Bz
+        C -> Cx -> Cy -> Cz
 
 [END FRAME]
 }}}
