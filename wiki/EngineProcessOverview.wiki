@@ -52,4 +52,4 @@ defaultContext ->
 [END FRAME]
 }}}
 
-Anything which extends from `BaseObject` has the update() method, whereas components have the `execute()` method.  Contexts and HostObjects extend from Container, whose `update()` method will call `update()` on each object contained within the container.  As you can surmise, this proceeds until all objects which are within a container linked back to the default context have been updated.  After which a new frame is generated.  This goes on until the engine is shut down.
+Anything which extends from `BaseObject` has the `update()` method, whereas components have the `execute()` method.  Contexts and HostObjects extend from Container, whose `update()` method will call `update()` on each object contained within the container.  As you can surmise, this proceeds until all objects which are within a container linked back to the default context have been updated.  After which a new frame is generated.  This goes on until the engine is shut down.
