@@ -3,6 +3,30 @@
 
 My goal in this document is to assist you in understanding the engine architecture.  It is by no means a simple concept to grasp, but once you understand it, it will be easier to work with and modify the engine -- and create games.  Overall, the engine is an object oriented structure, with a clear inheritance model, and some parts that work kinda like COM.
 
+== Engine Flow ==
+
+The `Engine` class contains a private method called `worldTimer()` which executes each frame.  When a frame is executed, `Engine` will call the `update()` method of its default context (the document body).  Your rendering context(s) should have been added to the default context before your game started running.  Anything that is added to your context(s) will then be added to the chain of objects which must be processed.  So lets assume the following scenario:
+
+  * Your context is called "gameContext"
+  * You have 3 objects (extending from `HostObject`) which need to be updated when the frame is rendered, so you add them (A,B,C) to "gameContext"
+  * Each of those objects has 3 components (extending from `BaseComponent`) which were added to the object (x,y,z)
+
+The execution flow would be:
+
+{{{
+[START FRAME]
+
+defaultContext ->
+    gameContext -> 
+        A -> Ax -> Ay -> Az 
+        B -> Bx -> By -> Bz
+        C -> Cx -> Cy -> Cz
+
+[END FRAME]
+}}}
+
+Anything which extends from `BaseObject` has the `update()` method, whereas components have the `execute()` method.  `RenderContext` and `HostObject` extend from `Container`, whose `update()` method will call `update()` on each object contained within the container.  As you can surmise, this proceeds until all objects which are within a container linked back to the default context have been updated.  After which a new frame is generated.  This goes on until the engine is shut down.
+
 == Engine Process ==
 
 Each object in the engine is one of two object types: A single object that _is not_ a container, or an object that contains other objects.  When the engine processes a frame, it starts with a known object (the default render context) which is a container, and runs through each object within it.  For containers, the object's contained objects are iterated over (etc. on down the line) until all objects have been processed.
@@ -29,27 +53,3 @@ This creates a `CanvasContext` (itself, a container) and adds it to the engine's
 The process becomes quite evident after you've explored it and used it a few times.  Container objects update the objects they contain, and so on...  Keep that phrase in your mind and you'll soon understand how simple the process really is.
 
 _Hint:_ Another type of Container are the HostObjects.
-
-== Engine Flow ==
-
-The `Engine` class contains a private method called `worldTimer()` which executes each frame.  When a frame is executed, `Engine` will call the `update()` method of its default context (the document body).  Your rendering context(s) should have been added to the default context before your game started running.  Anything that is added to your context(s) will then be added to the chain of objects which must be processed.  So lets assume the following scenario:
-
-  * Your context is called "gameContext"
-  * You have 3 objects (extending from `HostObject`) which need to be updated when the frame is rendered, so you add them (A,B,C) to "gameContext"
-  * Each of those objects has 3 components (extending from `BaseComponent`) which were added to the object (x,y,z)
-
-The execution flow would be:
-
-{{{
-[START FRAME]
-
-defaultContext ->
-    gameContext -> 
-        A -> Ax -> Ay -> Az 
-        B -> Bx -> By -> Bz
-        C -> Cx -> Cy -> Cz
-
-[END FRAME]
-}}}
-
-Anything which extends from `BaseObject` has the `update()` method, whereas components have the `execute()` method.  `RenderContext` and `HostObject` extend from `Container`, whose `update()` method will call `update()` on each object contained within the container.  As you can surmise, this proceeds until all objects which are within a container linked back to the default context have been updated.  After which a new frame is generated.  This goes on until the engine is shut down.
