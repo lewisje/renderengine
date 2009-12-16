@@ -229,9 +229,11 @@ var FontEditor = Game.extend({
 		var self = this;
 		this.editorContext.cleanUp();
 		this.editorContext.add(FontRender.create("font"));
+		this.editorContext.reset();
 		this.editorContext.render(Engine.worldTime);
 		$("#minAlpha").val(this.getAveragePixelDensity());
 		$("#analyze").click(function() {
+			self.editorContext.reset();
 			self.editorContext.render(Engine.worldTime);
 			self.analyze();
 		});
@@ -392,6 +394,7 @@ var FontEditor = Game.extend({
       bText2.setColor("#ff00ff");
       this.testContext.add(bText2);
 		
+		this.testContext.reset();
 		this.testContext.render(Engine.worldTime);
 	}
 	
