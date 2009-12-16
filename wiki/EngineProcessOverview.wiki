@@ -32,7 +32,7 @@ _Hint:_ Another type of Container are the HostObjects.
 
 == Engine Flow ==
 
-The Engine class contains a method called `worldTimer()` which executes each frame.  When a frame is executed, the Engine will call the `update()` method of its default context (the document body).  Your rendering context(s) should have been added to the default context before your game started running.  Anything that is added to your context(s) will then be added to the chain of objects which must be processed.  So lets assume the following scenario:
+The Engine class contains a private method called `worldTimer()` which executes each frame.  When a frame is executed, the Engine will call the `update()` method of its default context (the document body).  Your rendering context(s) should have been added to the default context before your game started running.  Anything that is added to your context(s) will then be added to the chain of objects which must be processed.  So lets assume the following scenario:
 
   * Your context is called "gameContext"
   * You have 3 objects (extending from `HostObject`) which need to be updated when the frame is rendered, so you add them (A,B,C) to "gameContext"
