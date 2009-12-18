@@ -262,7 +262,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	 * @param size {String} The font size string
 	 */
 	setFontSize: function(size) {
-		this.fontSize = size;	
+		this.fontSize = size + "px";	
 	},
 	
 	/**
@@ -435,16 +435,18 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * Draw an un-filled rectangle on the context.
     *
     * @param rect {Rectangle2D} The rectangle to draw
+    * @param [ref] {HostObject} A reference host object
     */
-   drawRectangle: function(rect) {
+   drawRectangle: function(rect /*, ref */) {
    },
 
    /**
     * Draw a filled rectangle on the context.
     *
     * @param rect {Rectangle2D} The rectangle to draw
+    * @param [ref] {HostObject} A reference host object
     */
-   drawFilledRectangle: function(rect) {
+   drawFilledRectangle: function(rect /*, ref */) {
    },
 
    /**
@@ -455,8 +457,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param radius {Number} The radius of the arc in pixels
     * @param startAngle {Number} The starting angle of the arc in degrees
     * @param endAngle {Number} The end angle of the arc in degrees
+    * @param [ref] {HostObject} A reference host object
     */
-   drawArc: function(point, radius, startAngle, endAngle) {
+   drawArc: function(point, radius, startAngle, endAngle /*, ref */) {
    },
 
    /**
@@ -467,8 +470,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * @param radius {Number} The radius of the arc in pixels
     * @param startAngle {Number} The starting angle of the arc in degrees
     * @param endAngle {Number} The end angle of the arc in degrees
+    * @param [ref] {HostObject} A reference host object
     */
-   drawFilledArc: function(point, radius, startAngle, endAngle) {
+   drawFilledArc: function(point, radius, startAngle, endAngle /*, ref */) {
    },
 
    /**
@@ -477,8 +481,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     *
     * @param point {Point2D} The point around which the circle will be drawn
     * @param radius {Number} The radius of the circle in pixels
+    * @param [ref] {HostObject} A reference host object
     */
-   drawCircle: function(point, radius) {
+   drawCircle: function(point, radius /*, ref */) {
       this.drawArc(point, radius, 0, 6.28);
    },
    
@@ -488,8 +493,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     *
     * @param point {Point2D} The point around which the circle will be drawn
     * @param radius {Number} The radius of the circle in pixels
+    * @param [ref] {HostObject} A reference host object
     */
-   drawFilledCircle: function(point, radius) {
+   drawFilledCircle: function(point, radius /*, ref */) {
       this.drawFilledArc(point, radius, 0, 6.28);
    },
 
@@ -538,8 +544,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * Draw an un-filled polygon on the context.
     *
     * @param pointArray {Array} An array of {@link Point2D} objects
+    * @param [ref] {HostObject} A reference host object
     */
-   drawPolygon: function(pointArray) {
+   drawPolygon: function(pointArray /*, ref */) {
       this._poly(pointArray, true);
       this.strokePath();
       this.lineSeg.moveTo = false;
@@ -549,8 +556,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * Draw a non-closed poly line on the context.
     *
     * @param pointArray {Array} An array of {@link Point2D} objects
+    * @param [ref] {HostObject} A reference host object
     */
-   drawPolyline: function(pointArray) {
+   drawPolyline: function(pointArray /*, ref */) {
       this._poly(pointArray, false);
       this.strokePath();
       this.lineSeg.moveTo = false;
@@ -560,8 +568,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     * Draw an filled polygon on the context.
     *
     * @param pointArray {Array} An array of {@link Point2D} objects
+    * @param [ref] {HostObject} A reference host object
     */
-   drawFilledPolygon: function(pointArray) {
+   drawFilledPolygon: function(pointArray /*, ref */) {
       this._poly(pointArray, true);
       this.fillPath();
       this.lineSeg.moveTo = false;
@@ -572,39 +581,41 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     *
     * @param point1 {Point2D} The start of the line
     * @param point2 {Point2D} The end of the line
+    * @param [ref] {HostObject} A reference host object
     */
-   drawLine: function(point1, point2) {
+   drawLine: function(point1, point2 /*, ref */) {
    },
 
    /**
     * Draw a point on the context.
     *
     * @param point {Point2D} The position to draw the point
+    * @param [ref] {HostObject} A reference host object
     */
-   drawPoint: function(point) {
+   drawPoint: function(point /*, ref */) {
    },
 
    /**
     * Draw a sprite on the context.
     *
-    * @param obj {Object} A reference object, or <tt>null</tt>
     * @param sprite {Sprite} The sprite to draw
     * @param time {Number} The current world time
+    * @param [ref] {HostObject} A reference host object
     */
-   drawSprite: function(obj, sprite, time) {
+   drawSprite: function(sprite, time /*, ref */) {
    },
 
    /**
     * Draw an image on the context.
     *
-    * @param obj {Object} A reference object, or <tt>null</tt>
     * @param rect {Rectangle2D} The rectangle that specifies the position and
     *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
     * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
     *                <tt>null</tt> the entire image is used
+    * @param [ref] {HostObject} A reference host object
     */
-   drawImage: function(obj, rect, image, srcRect) {
+   drawImage: function(rect, image, srcRect /*, ref */) {
    },
 
    /**
@@ -622,8 +633,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     *
     * @param imageData {ImageData} Image data captured
     * @param point {Point2D} The poisition at which to draw the image
+    * @param [ref] {HostObject} A reference host object
     */
-   putImage: function(imageData, point) {
+   putImage: function(imageData, point /*, ref */) {
    },
 
    /**
@@ -631,8 +643,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
     *
     * @param point {Point2D} The top-left position to draw the image.
     * @param text {String} The text to draw
+    * @param [ref] {HostObject} A reference host object
     */
-   drawText: function(point, text) {
+   drawText: function(point, text /*, ref */) {
    },
 
    /**

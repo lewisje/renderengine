@@ -186,8 +186,9 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * Draw an un-filled rectangle on the context.
     *
     * @param rect {Rectangle2D} The rectangle to draw
+    * @param ref {HostObject} A reference host object
     */
-   drawRectangle: function(rect) {
+   drawRectangle: function(rect, ref) {
       var rD = rect.getDims();
       var d = $("<div>").css({
          borderWidth: this.getLineWidth(),
@@ -206,8 +207,9 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * Draw a filled rectangle on the context.
     *
     * @param rect {Rectangle2D} The rectangle to draw
+    * @param ref {HostObject} A reference host object
     */
-   drawFilledRectangle: function(rect) {
+   drawFilledRectangle: function(rect, ref) {
       var rD = rect.getDims();
       var d = $("<div>").css({
          borderWidth: this.getLineWidth(),
@@ -227,95 +229,73 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * Draw a point on the context.
     *
     * @param point {Point2D} The position to draw the point
+    * @param ref {HostObject} A reference host object
     */
-   drawPoint: function(point) {
-      return this.drawFilledRectangle(Rectangle2D.creat(point.x, point.y, 1, 1));
+   drawPoint: function(point, ref) {
+      return this.drawFilledRectangle(Rectangle2D.creat(point.x, point.y, 1, 1), ref);
    },
 
    /**
     * Draw a sprite on the context.
     *
-    * @param obj {Object} A reference object, or <tt>null</tt>
     * @param sprite {Sprite} The sprite to draw
     * @param time {Number} The current world time
+    * @param ref {HostObject} A reference host object
     */
-   drawSprite: function(obj, sprite, time) {
+   drawSprite: function(sprite, time, ref) {
       var f = sprite.getFrame(time);
       var tl = f.getTopLeft();
       var rD = f.getDims();
 
-      // If the reference object is a host object it
+      // The reference object is a host object it
       // will give us a reference to the HTML element which we can then
       // just modify the displayed image for.
-      if (obj && (obj instanceof HostObject) && obj.jQ()) {
-         obj.jQ().css({
+      if (ref && (ref instanceof HostObject) && ref.jQ()) {
+         ref.jQ().css({
             top: this.cursorPos.y,
             left: this.cursorPos.x,
             width: rD.w,
             height: rD.h,
             backgroundPosition: -tl.x + "px " + tl.y + "px"
          });
-      } else {
-         // Otherwise, just draw a new div with the sprite on it
-         var d = $("<div>").css({
-            position: "absolute",
-            top: this.cursorPos.y,
-            left: this.cursorPos.x,
-            width: rD.w,
-            height: rD.h,
-            background: "url(" + f.getSourceImage().src + ")",
-            backgroundPosition: -tl.x + "px " + tl.y + "px"
-         });
-         this.jQ().append(d);
-         return d;
       }
    },
 
    /**
     * Draw an image on the context.
     *
-    * @param obj {Object} A reference object, or <tt>null</tt>
     * @param rect {Rectangle2D} The rectangle that specifies the position and
     *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
     * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
     *                <tt>null</tt> the entire image is used
+    * @param [ref] {HostObject} A reference host object
     */
-   drawImage: function(obj, rect, image, srcRect) {
+   drawImage: function(rect, image, srcRect, ref) {
       var rD = rect.getDims();
+		srcRect = (srcRect instanceof Rectangle2D ? srcRect : null);
 		var sD = srcRect ? srcRect.getDims() : rect.getDims();
+		ref = (srcRect instanceof HostObject ? srcRect : ref);
 
-      // If the reference object is a host object it
+      // The reference object is a host object it
       // will give us a reference to the HTML element which we can then
       // just modify the displayed image for.
-      if (obj && (obj instanceof HostObject) && obj.jQ()) {
-         obj.jQ().css({
+      if (ref && (ref instanceof HostObject) && ref.jQ()) {
+         ref.jQ().css({
             top: rD.t,
             left: rD.l,
             width: rD.w,
             height: rD.h});
          // Only modify the source, width, and height if they change it
-         if (obj.jQ().attr("src") != image.src) {
-            obj.jQ().attr("src", image.src);
+         if (ref.jQ().attr("src") != image.src) {
+            ref.jQ().attr("src", image.src);
          }
-         if (obj.jQ().attr("width") != rD.w) {
-            obj.jQ().attr("width", rD.w)
+         if (ref.jQ().attr("width") != rD.w) {
+            ref.jQ().attr("width", rD.w)
          }
-         if (obj.jQ().attr("height") != rD.h) {
-            obj.jQ().attr("height", rD.h)
+         if (ref.jQ().attr("height") != rD.h) {
+            ref.jQ().attr("height", rD.h)
          }
-      } else {
-         // Otherwise, just draw a new div with the sprite on it
-         var i = $("<img>").attr("src", image.src).css({
-            position: "absolute",
-            top: rD.l,
-            left: rD.t,
-            width: sD.w,
-            height: sD.h
-         });
-			i.attr("width", rD.w);
-			i.attr("height", rD.h);
-			this.jQ().append(i);
       }
    },
 
@@ -324,18 +304,22 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     *
     * @param point {Point2D} The top-left position to draw the image.
     * @param text {String} The text to draw
+    * @param ref {HostObject} A reference host object
     */
-   drawText: function(point, text) {
+   drawText: function(point, text, ref) {
 		this.base(point, text);
-      var d = $("<span>").css({
-         font: this.getFontSize() + " " + this.getFont(),
-			color: this.getFillStyle(),
-			left: this.cursorPos + point.x,
-         top: this.cursorPos + point.y,
-         position: "absolute"
-      }).text(text);
-      this.jQ().append(d);
-      return d;
+      // The reference object is a host object it
+      // will give us a reference to the HTML element which we can then
+      // just modify the displayed image for.
+      if (ref && (ref instanceof HostObject) && ref.jQ()) {
+		  	ref.jQ().css({
+		  		font: this.getNormalizedFont(),
+		  		color: this.getFillStyle(),
+		  		left: this.cursorPos.x + point.x,
+		  		top: this.cursorPos.y + point.y,
+		  		position: "absolute"
+		  	}).text(text);
+		}
    }
 
 }, /** @scope HTMLElementContext.prototype */{

@@ -173,6 +173,8 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
          return;
       }
 
+		renderContext.pushTransform();
+		renderContext.setScale(this.getSize());
       // Set the stroke and fill styles
       if (this.getColor() != null)
       {
@@ -181,6 +183,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
       renderContext.setLineWidth(this.getTextWeight());
       renderContext.drawPolyline(this.rText);
+		renderContext.popTransform();
    }
 
 
