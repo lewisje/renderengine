@@ -12,7 +12,9 @@ A rendering context has a "surface" to which the contents are drawn.  This surfa
 
 === HTMLElementContext ===
 
-The HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base RenderContext2D since that context is aimed at 2D rendering with vectors, paths, and sprites.
+The HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base RenderContext2D since that context is aimed at 2D rendering with vectors and paths.
+
+While the HTMLElementContext is quite suitable for creating a sprite based game, I wouldn't suggest making a game which can switch contexts like the examples do.  The reason being that since all features aren't fully supported in the DOM, your game might not work 100% in all contexts.  It can be done, but you'll want to design to one particular context since that will make your work easier.
 
 _Note:_ This context is being revived due to some refactoring which makes it possible.
 
