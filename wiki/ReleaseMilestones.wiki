@@ -18,6 +18,7 @@ Maybe you're looking for FutureGoals?
     * 2D Text rendering example (Vector, Bitmap, and Context Native)
   # Rendering contexts
     * 2D Canvas
+    * 2D DOM
   # Modular host objects
   # Multiple components
     * Transformation
