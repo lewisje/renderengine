@@ -125,7 +125,7 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
       }
 
       if (this.currentSprite) {
-         renderContext.drawSprite(this.getHostObject(), this.currentSprite, time);
+         renderContext.drawSprite(this.currentSprite, time, this.getHostObject());
       }
    }
 }, /** @scope SpriteComponent.prototype */{ 

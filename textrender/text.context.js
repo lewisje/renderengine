@@ -93,9 +93,10 @@ var ContextText = AbstractTextRenderer.extend(/** @scope ContextText.prototype *
 		renderContext.setFontAlign(this.getTextAlignment());
 		renderContext.setFontWeight(this.getTextWeight());
 		renderContext.setFont(this.getTextFont());
+		renderContext.setFontSize(Math.floor(this.getSize() * TextRenderer.BASE_TEXT_PIXELSIZE) || TextRenderer.BASE_TEXT_PIXELSIZE);
 		
 		renderContext.setFillStyle(this.getColor());
-      renderContext.drawText(Point2D.ZERO, this.getText());
+      renderContext.drawText(Point2D.ZERO, this.getText(), this.getHostObject());
    }
 	
 }, /** @scope ContextText.prototype */{

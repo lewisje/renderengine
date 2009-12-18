@@ -33,6 +33,7 @@
 
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
+Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/textrender/text.vector.js");
 Engine.include("/textrender/text.bitmap.js");
 Engine.include("/textrender/text.context.js");
@@ -117,7 +118,13 @@ Engine.initObject("FontTest", "Game", function(){
          this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+			var ctx = EngineSupport.getNumericParam("context", 1);
+			if (ctx == 1) {
+				this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+			} else {
+				this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+			}
+			
 	      this.renderContext.setBackgroundColor("#000000");
          Engine.getDefaultContext().add(this.renderContext);
 
@@ -167,7 +174,7 @@ Engine.initObject("FontTest", "Game", function(){
 
 	      var context2 = TextRenderer.create(ContextText.create(), "ABCxyz123!@#$%^&*()", 2);
 	      context2.setPosition(Point2D.create(10, 288));
-			context2.setTextFont("Times New Roman")
+			context2.setTextFont("Times New Roman");
 	      context2.setColor("#8888ff");
 	      this.renderContext.add(context2);
 

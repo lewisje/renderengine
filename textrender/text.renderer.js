@@ -73,7 +73,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
       this.add(this.renderer);
       this.add(Transform2DComponent.create("transform"));
       this.getComponent("TextRenderObject").setText(text || "");
-      this.getComponent("transform").setScale(size || 1);
+      //this.getComponent("transform").setScale(size || 1);
+      this.getComponent("TextRenderObject").setSize(size || 1);
 		this.drawMode = TextRenderer.DRAW_TEXT;
    },
 
@@ -129,7 +130,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param size {Number} Defaults to 1
     */
    setTextSize: function(size) {
-      this.getComponent("transform").setScale(size || 1);
+      //this.getComponent("transform").setScale(size || 1);
+      this.getComponent("TextRenderObject").setSize(size || 1);
    },
 
    /**
@@ -137,7 +139,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {Number} The size/scale of the text
     */
    getTextSize: function() {
-      this.getComponent("transform").getScale();
+      return this.getComponent("TextRenderObject").getSize();
    },
 
    /**
@@ -301,7 +303,13 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * Don't draw the text to the context.
     * @type Number
     */
-   NO_DRAW: 1
+   NO_DRAW: 1,
+	
+   /**
+    * The size of a text element, in pixels
+    * @type Number
+    */
+	BASE_TEXT_PIXELSIZE: 12
 });
 
 return TextRenderer;

@@ -133,6 +133,9 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
          return;
       }
 
+		renderContext.pushTransform();
+		renderContext.setScale(this.getSize());
+
       var text = this.getText();
       var lCount = text.length;
       var align = this.getTextAlignment();
@@ -171,7 +174,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 	            cW = this.font.info.letters[glyph] - cS;
 					var sRect = Rectangle2D.create(cS, 0, cW, cH);
 					var rect = Rectangle2D.create(pc.x, pc.y, cW, cH);
-	            renderContext.drawImage(null, rect, this.font.image, sRect);
+	            renderContext.drawImage(rect, this.font.image, sRect, this.getHostObject());
 	            pc.add(new Point2D(cW, 0).mul(kern));
 	         }
 	
@@ -188,6 +191,8 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 	      // Reset the composition operation
 	      renderContext.get2DContext().globalCompositeOperation = "source-over";
 		}
+		
+		renderContext.popTransform();
    }
 }, /** @scope BitmapText.prototype */{
    /**

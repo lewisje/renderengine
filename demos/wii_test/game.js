@@ -33,6 +33,7 @@
 
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
+Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
@@ -122,7 +123,12 @@ Engine.initObject("WiiTest", "Game", function(){
          this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+			var ctx = EngineSupport.getNumericParam("context", 1);
+			if (ctx == 1) {
+		 		this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+		 	} else {
+				this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+			}
 	      this.renderContext.setBackgroundColor("#FFFFFF");
 
 			// Address the context element directly via jQuery
