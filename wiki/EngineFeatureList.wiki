@@ -18,6 +18,7 @@ If you're looking for what is currently supported/available in The Render Engine
   # 2D Sprite-based example game ([http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bounce the Ball])
   # Rendering contexts (RenderContext)
     * 2D Canvas
+    * 2D DOM
   # Modular host objects (HostObjects)
   # Multiple components (HostComponents)
     * Transformation
