@@ -76,7 +76,7 @@ The game object represents an instance of a game.
 <span class='linenumber'>  8</span>  *
 <span class='linenumber'>  9</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 10</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 11</span>  * @version: $Revision: 837 $
+<span class='linenumber'> 11</span>  * @version: $Revision: 930 $
 <span class='linenumber'> 12</span>  *
 <span class='linenumber'> 13</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 14</span>  *
@@ -140,86 +140,93 @@ The game object represents an instance of a game.
 <span class='linenumber'> 72</span>     * with an absolute URL.
 <span class='linenumber'> 73</span>     *
 <span class='linenumber'> 74</span>     * @param scriptSource {String} The relative path to the script to load.
-<span class='linenumber'> 75</span>     * @memberOf Game
-<span class='linenumber'> 76</span>     */</span><span class="WHIT">
-<span class='linenumber'> 77</span> </span><span class="WHIT">   </span><span class="NAME">load</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scriptSource</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 78</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">scriptSource.indexOf</span><span class="PUNC">(</span><span class="STRN">"http"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Game scripts can only be loaded relative to the game's path"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 79</span> </span><span class="WHIT">      </span><span class="NAME">Engine.loadScript</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">scriptSource.charAt</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">"./"</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">scriptSource</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 80</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 81</span> 
-<span class='linenumber'> 82</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 83</span>     * Load a script, relative to the game engine.  Scripts cannot be loaded
-<span class='linenumber'> 84</span>     * with an absolute URL.
-<span class='linenumber'> 85</span>     * 
-<span class='linenumber'> 86</span>     * @param scriptPath {String} The relative path of the script to load.
-<span class='linenumber'> 87</span>     */</span><span class="WHIT">
-<span class='linenumber'> 88</span> </span><span class="WHIT">   </span><span class="NAME">loadEngineScript</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scriptPath</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 89</span> </span><span class="WHIT">      </span><span class="NAME">Engine.loadNow</span><span class="PUNC">(</span><span class="NAME">scriptPath</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Game.scriptLoaded</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 90</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 91</span> 
-<span class='linenumber'> 92</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 93</span>     * Called when the script with the given path is loaded.
-<span class='linenumber'> 94</span>     * @param scriptPath {String}
-<span class='linenumber'> 95</span>     */</span><span class="WHIT">
-<span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="NAME">scriptLoaded</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scriptPath</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 97</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 98</span> 
-<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>100</span>     * Allows a game to inject a function call into the scriping
-<span class='linenumber'>101</span>     * queue to be processed when the queue has an available slot.
-<span class='linenumber'>102</span>     * @param cb {Function} The callback to execute
-<span class='linenumber'>103</span>     */</span><span class="WHIT">
-<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="NAME">setQueueCallback</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cb</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>105</span> </span><span class="WHIT">      </span><span class="NAME">Engine.setQueueCallback</span><span class="PUNC">(</span><span class="NAME">cb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>106</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>107</span> 
-<span class='linenumber'>108</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>109</span>     * Get the number of players the game supports.
-<span class='linenumber'>110</span>     *
-<span class='linenumber'>111</span>     * @return {Number}
-<span class='linenumber'>112</span>     * @memberOf Game
-<span class='linenumber'>113</span>     */</span><span class="WHIT">
-<span class='linenumber'>114</span> </span><span class="WHIT">   </span><span class="NAME">getPlayers</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>115</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>116</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>117</span> 
-<span class='linenumber'>118</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>119</span>     * Get the path where your game class exists.
-<span class='linenumber'>120</span>     * @return {String}
-<span class='linenumber'>121</span>     */</span><span class="WHIT">
-<span class='linenumber'>122</span> </span><span class="WHIT">   </span><span class="NAME">getGamePath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>123</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.location</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>124</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">loc.protocol</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"//"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">loc.host</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">loc.pathname.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NAME">loc.pathname.lastIndexOf</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>125</span> </span><span class="WHIT">      </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">path.charAt</span><span class="PUNC">(</span><span class="NAME">path.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">""</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">path</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>127</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>128</span> 
-<span class='linenumber'>129</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>130</span>     * Get the path of the specified file, relative to your game class.
-<span class='linenumber'>131</span>     * @param fileName {String} The path to the file
-<span class='linenumber'>132</span>     * @return {String}
-<span class='linenumber'>133</span>     */</span><span class="WHIT">
-<span class='linenumber'>134</span> </span><span class="WHIT">   </span><span class="NAME">getFilePath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fileName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>135</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.location</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>136</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">fileName.indexOf</span><span class="PUNC">(</span><span class="NAME">loc.protocol</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">fileName.indexOf</span><span class="PUNC">(</span><span class="NAME">loc.host</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>137</span> </span><span class="WHIT">         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"File cannot be located on another server!"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>138</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>139</span> 
-<span class='linenumber'>140</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">fileName.indexOf</span><span class="PUNC">(</span><span class="NAME">loc.protocol</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>141</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getGamePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">fileName</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>142</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>143</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">file</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>144</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>145</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>146</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>147</span> 
-<span class='linenumber'>148</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Game</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>149</span> 
-<span class='linenumber'>150</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'> 75</span>     * @return {String} An Id for the script which is used in the call to {@link #scriptLoaded}
+<span class='linenumber'> 76</span>     * 					  when the script has completed loading (or errored out)
+<span class='linenumber'> 77</span>     * @memberOf Game
+<span class='linenumber'> 78</span>     */</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span><span class="WHIT">   </span><span class="NAME">load</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scriptSource</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 80</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">scriptSource.indexOf</span><span class="PUNC">(</span><span class="STRN">"http"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Game scripts can only be loaded relative to the game's path"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">      </span><span class="NAME">Engine.loadScript</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">scriptSource.charAt</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">"./"</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"."</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">scriptSource</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 82</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">self</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT">		</span><span class="NAME">this.setQueueCallback</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">			</span><span class="NAME">self.scriptLoaded</span><span class="PUNC">(</span><span class="NAME">scriptSource</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 86</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 87</span> 
+<span class='linenumber'> 88</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 89</span>     * Load a script, relative to the game engine.  Scripts cannot be loaded
+<span class='linenumber'> 90</span>     * with an absolute URL.
+<span class='linenumber'> 91</span>     * 
+<span class='linenumber'> 92</span>     * @param scriptPath {String} The relative path of the script to load.
+<span class='linenumber'> 93</span>     */</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT">   </span><span class="NAME">loadEngineScript</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scriptPath</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">      </span><span class="NAME">Engine.loadNow</span><span class="PUNC">(</span><span class="NAME">scriptPath</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Game.scriptLoaded</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 97</span> 
+<span class='linenumber'> 98</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 99</span>     * [ABSTRACT] Will be called with the path of a loaded script. You can
+<span class='linenumber'>100</span>     * be guaranteed that the script either loaded and is ready or failed to load.
+<span class='linenumber'>101</span>     * @param scriptPath {String} The script path
+<span class='linenumber'>102</span>     */</span><span class="WHIT">
+<span class='linenumber'>103</span> </span><span class="WHIT">   </span><span class="NAME">scriptLoaded</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">scriptPath</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>105</span> 
+<span class='linenumber'>106</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>107</span>     * Allows a game to inject a function call into the scriping
+<span class='linenumber'>108</span>     * queue to be processed when the queue has an available slot.
+<span class='linenumber'>109</span>     * @param cb {Function} The callback to execute
+<span class='linenumber'>110</span>     */</span><span class="WHIT">
+<span class='linenumber'>111</span> </span><span class="WHIT">   </span><span class="NAME">setQueueCallback</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cb</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>112</span> </span><span class="WHIT">      </span><span class="NAME">Engine.setQueueCallback</span><span class="PUNC">(</span><span class="NAME">cb</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>113</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>114</span> 
+<span class='linenumber'>115</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>116</span>     * Get the number of players the game supports.
+<span class='linenumber'>117</span>     *
+<span class='linenumber'>118</span>     * @return {Number}
+<span class='linenumber'>119</span>     * @memberOf Game
+<span class='linenumber'>120</span>     */</span><span class="WHIT">
+<span class='linenumber'>121</span> </span><span class="WHIT">   </span><span class="NAME">getPlayers</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>122</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>123</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>124</span> 
+<span class='linenumber'>125</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>126</span>     * Get the path where your game class exists.
+<span class='linenumber'>127</span>     * @return {String}
+<span class='linenumber'>128</span>     */</span><span class="WHIT">
+<span class='linenumber'>129</span> </span><span class="WHIT">   </span><span class="NAME">getGamePath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.location</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">loc.protocol</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"//"</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">loc.host</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">loc.pathname.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NAME">loc.pathname.lastIndexOf</span><span class="PUNC">(</span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>132</span> </span><span class="WHIT">      </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">path.charAt</span><span class="PUNC">(</span><span class="NAME">path.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">""</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"/"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>133</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">path</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>135</span> 
+<span class='linenumber'>136</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>137</span>     * Get the path of the specified file, relative to your game class.
+<span class='linenumber'>138</span>     * @param fileName {String} The path to the file
+<span class='linenumber'>139</span>     * @return {String}
+<span class='linenumber'>140</span>     */</span><span class="WHIT">
+<span class='linenumber'>141</span> </span><span class="WHIT">   </span><span class="NAME">getFilePath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fileName</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>142</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">loc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.location</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>143</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">fileName.indexOf</span><span class="PUNC">(</span><span class="NAME">loc.protocol</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">fileName.indexOf</span><span class="PUNC">(</span><span class="NAME">loc.host</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>144</span> </span><span class="WHIT">         </span><span class="KEYW">throw</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Error</span><span class="PUNC">(</span><span class="STRN">"File cannot be located on another server!"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>145</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>146</span> 
+<span class='linenumber'>147</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">fileName.indexOf</span><span class="PUNC">(</span><span class="NAME">loc.protocol</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getGamePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">fileName</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>149</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>150</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">file</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>153</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>154</span> 
+<span class='linenumber'>155</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Game</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>156</span> 
+<span class='linenumber'>157</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:27:53 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:12 GMT-0500 (EST)</div>
 </body>
 </html>

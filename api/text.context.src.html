@@ -75,7 +75,7 @@ A text renderer which draws text from a bitmap font file.
 <span class='linenumber'>  7</span>  *
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 10</span>  * @version: $Revision: 779 $
+<span class='linenumber'> 10</span>  * @version: $Revision: 922 $
 <span class='linenumber'> 11</span>  *
 <span class='linenumber'> 12</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 13</span>  *
@@ -161,29 +161,30 @@ A text renderer which draws text from a bitmap font file.
 <span class='linenumber'> 93</span> </span><span class="WHIT">		</span><span class="NAME">renderContext.setFontAlign</span><span class="PUNC">(</span><span class="NAME">this.getTextAlignment</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'> 94</span> </span><span class="WHIT">		</span><span class="NAME">renderContext.setFontWeight</span><span class="PUNC">(</span><span class="NAME">this.getTextWeight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'> 95</span> </span><span class="WHIT">		</span><span class="NAME">renderContext.setFont</span><span class="PUNC">(</span><span class="NAME">this.getTextFont</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 96</span> </span><span class="WHIT">		</span><span class="WHIT">
-<span class='linenumber'> 97</span> </span><span class="WHIT">		</span><span class="NAME">renderContext.setFillStyle</span><span class="PUNC">(</span><span class="NAME">this.getColor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 98</span> </span><span class="WHIT">      </span><span class="NAME">renderContext.drawText</span><span class="PUNC">(</span><span class="NAME">Point2D.ZERO</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getText</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 99</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>100</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>101</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope ContextText.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>102</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>103</span>     * Get the class name of this object
-<span class='linenumber'>104</span>     * @return {String} The string "ContextText"
-<span class='linenumber'>105</span>     */</span><span class="WHIT">
-<span class='linenumber'>106</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>107</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"ContextText"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>108</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>109</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>110</span> 
-<span class='linenumber'>111</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ContextText</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>112</span> 
-<span class='linenumber'>113</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>114</span> </span></pre>
+<span class='linenumber'> 96</span> </span><span class="WHIT">		</span><span class="NAME">renderContext.setFontSize</span><span class="PUNC">(</span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">this.getSize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">TextRenderer.BASE_TEXT_PIXELSIZE</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">TextRenderer.BASE_TEXT_PIXELSIZE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='linenumber'> 98</span> </span><span class="WHIT">		</span><span class="NAME">renderContext.setFillStyle</span><span class="PUNC">(</span><span class="NAME">this.getColor</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">      </span><span class="NAME">renderContext.drawText</span><span class="PUNC">(</span><span class="NAME">Point2D.ZERO</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getText</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>100</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>101</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>102</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope ContextText.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>103</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>104</span>     * Get the class name of this object
+<span class='linenumber'>105</span>     * @return {String} The string "ContextText"
+<span class='linenumber'>106</span>     */</span><span class="WHIT">
+<span class='linenumber'>107</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"ContextText"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>110</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>111</span> 
+<span class='linenumber'>112</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ContextText</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>113</span> 
+<span class='linenumber'>114</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>115</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:28:04 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:23 GMT-0500 (EST)</div>
 </body>
 </html>

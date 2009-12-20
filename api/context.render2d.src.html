@@ -76,7 +76,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
 <span class='linenumber'>  8</span>  *
 <span class='linenumber'>  9</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 10</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 11</span>  * @version: $Revision: 779 $
+<span class='linenumber'> 11</span>  * @version: $Revision: 922 $
 <span class='linenumber'> 12</span>  *
 <span class='linenumber'> 13</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 14</span>  *
@@ -330,7 +330,7 @@ All 2D contexts should extend from this to inherit themethods which abstract th
 <span class='linenumber'>262</span> 	 * @param size {String} The font size string
 <span class='linenumber'>263</span> 	 */</span><span class="WHIT">
 <span class='linenumber'>264</span> </span><span class="WHIT">	</span><span class="NAME">setFontSize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">size</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>265</span> </span><span class="WHIT">		</span><span class="NAME">this.fontSize</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">size</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>265</span> </span><span class="WHIT">		</span><span class="NAME">this.fontSize</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">size</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"px"</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="WHIT">
 <span class='linenumber'>266</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>267</span> </span><span class="WHIT">	</span><span class="WHIT">
 <span class='linenumber'>268</span> </span><span class="WHIT">	</span><span class="COMM">/**
@@ -503,420 +503,433 @@ All 2D contexts should extend from this to inherit themethods which abstract th
 <span class='linenumber'>435</span>     * Draw an un-filled rectangle on the context.
 <span class='linenumber'>436</span>     *
 <span class='linenumber'>437</span>     * @param rect {Rectangle2D} The rectangle to draw
-<span class='linenumber'>438</span>     */</span><span class="WHIT">
-<span class='linenumber'>439</span> </span><span class="WHIT">   </span><span class="NAME">drawRectangle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>440</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>441</span> 
-<span class='linenumber'>442</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>443</span>     * Draw a filled rectangle on the context.
-<span class='linenumber'>444</span>     *
-<span class='linenumber'>445</span>     * @param rect {Rectangle2D} The rectangle to draw
-<span class='linenumber'>446</span>     */</span><span class="WHIT">
-<span class='linenumber'>447</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledRectangle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>448</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>449</span> 
-<span class='linenumber'>450</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>451</span>     * Draw an un-filled arc on the context.  Arcs are drawn in clockwise
-<span class='linenumber'>452</span>     * order.
-<span class='linenumber'>453</span>     *
-<span class='linenumber'>454</span>     * @param point {Point2D} The point around which the arc will be drawn
-<span class='linenumber'>455</span>     * @param radius {Number} The radius of the arc in pixels
-<span class='linenumber'>456</span>     * @param startAngle {Number} The starting angle of the arc in degrees
-<span class='linenumber'>457</span>     * @param endAngle {Number} The end angle of the arc in degrees
-<span class='linenumber'>458</span>     */</span><span class="WHIT">
-<span class='linenumber'>459</span> </span><span class="WHIT">   </span><span class="NAME">drawArc</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>460</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>461</span> 
-<span class='linenumber'>462</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>463</span>     * Draw a filled arc on the context.  Arcs are drawn in clockwise
-<span class='linenumber'>464</span>     * order.
-<span class='linenumber'>465</span>     *
-<span class='linenumber'>466</span>     * @param point {Point2D} The point around which the arc will be drawn
-<span class='linenumber'>467</span>     * @param radius {Number} The radius of the arc in pixels
-<span class='linenumber'>468</span>     * @param startAngle {Number} The starting angle of the arc in degrees
-<span class='linenumber'>469</span>     * @param endAngle {Number} The end angle of the arc in degrees
-<span class='linenumber'>470</span>     */</span><span class="WHIT">
-<span class='linenumber'>471</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledArc</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>472</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>473</span> 
-<span class='linenumber'>474</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>475</span>     * Helper method to draw a circle by calling the {@link #drawArc} method
-<span class='linenumber'>476</span>     * with predefined start and end angle of zero and 6.28 radians.
-<span class='linenumber'>477</span>     *
-<span class='linenumber'>478</span>     * @param point {Point2D} The point around which the circle will be drawn
-<span class='linenumber'>479</span>     * @param radius {Number} The radius of the circle in pixels
-<span class='linenumber'>480</span>     */</span><span class="WHIT">
-<span class='linenumber'>481</span> </span><span class="WHIT">   </span><span class="NAME">drawCircle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>482</span> </span><span class="WHIT">      </span><span class="NAME">this.drawArc</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">6.28</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>483</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>484</span> </span><span class="WHIT">   </span><span class="WHIT">
-<span class='linenumber'>485</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>486</span>     * Helper method to draw a filled circle by calling the {@link #drawFilledArc} method
-<span class='linenumber'>487</span>     * with predefined start and end angle of zero and 6.28 radians.
-<span class='linenumber'>488</span>     *
-<span class='linenumber'>489</span>     * @param point {Point2D} The point around which the circle will be drawn
-<span class='linenumber'>490</span>     * @param radius {Number} The radius of the circle in pixels
-<span class='linenumber'>491</span>     */</span><span class="WHIT">
-<span class='linenumber'>492</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledCircle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>493</span> </span><span class="WHIT">      </span><span class="NAME">this.drawFilledArc</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">6.28</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>494</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>495</span> 
-<span class='linenumber'>496</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>497</span>     * Draw a polygon or polyline using a Duff's device for
-<span class='linenumber'>498</span>     * efficiency and loop unrolling with inversion for speed.
-<span class='linenumber'>499</span>     *
-<span class='linenumber'>500</span>     * @param pointArray {Array} An array of &lt;tt>Point2D&lt;/tt> objects
-<span class='linenumber'>501</span>     * @param closedLoop {Boolean} &lt;tt>true&lt;/tt> to close the polygon
-<span class='linenumber'>502</span>     * @private
-<span class='linenumber'>503</span>     */</span><span class="WHIT">
-<span class='linenumber'>504</span> </span><span class="WHIT">   </span><span class="NAME">_poly</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">closedLoop</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>505</span> </span><span class="WHIT">      </span><span class="NAME">this.startPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>506</span> </span><span class="WHIT">      </span><span class="NAME">this.moveTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>507</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>508</span> 
-<span class='linenumber'>509</span> </span><span class="WHIT">      </span><span class="COMM">// Using Duff's device with loop inversion</span><span class="WHIT">
-<span class='linenumber'>510</span> </span><span class="WHIT">      </span><span class="KEYW">switch</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">pointArray.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&</span><span class="WHIT"> </span><span class="NUMB">0x3</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>511</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>512</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">:</span><span class="WHIT">
-<span class='linenumber'>513</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>514</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">:</span><span class="WHIT">
-<span class='linenumber'>515</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>516</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">:</span><span class="WHIT">
-<span class='linenumber'>517</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>518</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>519</span> 
-<span class='linenumber'>520</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">pointArray.length</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>521</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>522</span> </span><span class="WHIT">         </span><span class="KEYW">do</span><span class="WHIT">
-<span class='linenumber'>523</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>524</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>525</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>526</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>527</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>528</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">pointArray.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>529</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>530</span> 
-<span class='linenumber'>531</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">closedLoop</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>532</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>533</span> </span><span class="WHIT">         </span><span class="NAME">this.endPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>534</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>535</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>438</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>439</span>     */</span><span class="WHIT">
+<span class='linenumber'>440</span> </span><span class="WHIT">   </span><span class="NAME">drawRectangle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>441</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>442</span> 
+<span class='linenumber'>443</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>444</span>     * Draw a filled rectangle on the context.
+<span class='linenumber'>445</span>     *
+<span class='linenumber'>446</span>     * @param rect {Rectangle2D} The rectangle to draw
+<span class='linenumber'>447</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>448</span>     */</span><span class="WHIT">
+<span class='linenumber'>449</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledRectangle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>450</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>451</span> 
+<span class='linenumber'>452</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>453</span>     * Draw an un-filled arc on the context.  Arcs are drawn in clockwise
+<span class='linenumber'>454</span>     * order.
+<span class='linenumber'>455</span>     *
+<span class='linenumber'>456</span>     * @param point {Point2D} The point around which the arc will be drawn
+<span class='linenumber'>457</span>     * @param radius {Number} The radius of the arc in pixels
+<span class='linenumber'>458</span>     * @param startAngle {Number} The starting angle of the arc in degrees
+<span class='linenumber'>459</span>     * @param endAngle {Number} The end angle of the arc in degrees
+<span class='linenumber'>460</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>461</span>     */</span><span class="WHIT">
+<span class='linenumber'>462</span> </span><span class="WHIT">   </span><span class="NAME">drawArc</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>463</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>464</span> 
+<span class='linenumber'>465</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>466</span>     * Draw a filled arc on the context.  Arcs are drawn in clockwise
+<span class='linenumber'>467</span>     * order.
+<span class='linenumber'>468</span>     *
+<span class='linenumber'>469</span>     * @param point {Point2D} The point around which the arc will be drawn
+<span class='linenumber'>470</span>     * @param radius {Number} The radius of the arc in pixels
+<span class='linenumber'>471</span>     * @param startAngle {Number} The starting angle of the arc in degrees
+<span class='linenumber'>472</span>     * @param endAngle {Number} The end angle of the arc in degrees
+<span class='linenumber'>473</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>474</span>     */</span><span class="WHIT">
+<span class='linenumber'>475</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledArc</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">startAngle</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">endAngle</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>476</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>477</span> 
+<span class='linenumber'>478</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>479</span>     * Helper method to draw a circle by calling the {@link #drawArc} method
+<span class='linenumber'>480</span>     * with predefined start and end angle of zero and 6.28 radians.
+<span class='linenumber'>481</span>     *
+<span class='linenumber'>482</span>     * @param point {Point2D} The point around which the circle will be drawn
+<span class='linenumber'>483</span>     * @param radius {Number} The radius of the circle in pixels
+<span class='linenumber'>484</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>485</span>     */</span><span class="WHIT">
+<span class='linenumber'>486</span> </span><span class="WHIT">   </span><span class="NAME">drawCircle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>487</span> </span><span class="WHIT">      </span><span class="NAME">this.drawArc</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">6.28</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>488</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>489</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>490</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>491</span>     * Helper method to draw a filled circle by calling the {@link #drawFilledArc} method
+<span class='linenumber'>492</span>     * with predefined start and end angle of zero and 6.28 radians.
+<span class='linenumber'>493</span>     *
+<span class='linenumber'>494</span>     * @param point {Point2D} The point around which the circle will be drawn
+<span class='linenumber'>495</span>     * @param radius {Number} The radius of the circle in pixels
+<span class='linenumber'>496</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>497</span>     */</span><span class="WHIT">
+<span class='linenumber'>498</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledCircle</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>499</span> </span><span class="WHIT">      </span><span class="NAME">this.drawFilledArc</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">6.28</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>500</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>501</span> 
+<span class='linenumber'>502</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>503</span>     * Draw a polygon or polyline using a Duff's device for
+<span class='linenumber'>504</span>     * efficiency and loop unrolling with inversion for speed.
+<span class='linenumber'>505</span>     *
+<span class='linenumber'>506</span>     * @param pointArray {Array} An array of &lt;tt>Point2D&lt;/tt> objects
+<span class='linenumber'>507</span>     * @param closedLoop {Boolean} &lt;tt>true&lt;/tt> to close the polygon
+<span class='linenumber'>508</span>     * @private
+<span class='linenumber'>509</span>     */</span><span class="WHIT">
+<span class='linenumber'>510</span> </span><span class="WHIT">   </span><span class="NAME">_poly</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">closedLoop</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>511</span> </span><span class="WHIT">      </span><span class="NAME">this.startPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>512</span> </span><span class="WHIT">      </span><span class="NAME">this.moveTo</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>513</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>514</span> 
+<span class='linenumber'>515</span> </span><span class="WHIT">      </span><span class="COMM">// Using Duff's device with loop inversion</span><span class="WHIT">
+<span class='linenumber'>516</span> </span><span class="WHIT">      </span><span class="KEYW">switch</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">pointArray.length</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&</span><span class="WHIT"> </span><span class="NUMB">0x3</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>517</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>518</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">:</span><span class="WHIT">
+<span class='linenumber'>519</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>520</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">:</span><span class="WHIT">
+<span class='linenumber'>521</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>522</span> </span><span class="WHIT">         </span><span class="KEYW">case</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">:</span><span class="WHIT">
+<span class='linenumber'>523</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>524</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>525</span> 
+<span class='linenumber'>526</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">pointArray.length</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>527</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>528</span> </span><span class="WHIT">         </span><span class="KEYW">do</span><span class="WHIT">
+<span class='linenumber'>529</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>530</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>531</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>532</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>533</span> </span><span class="WHIT">            </span><span class="NAME">this.lineSeg</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">[</span><span class="NAME">p</span><span class="PUNC">++</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>534</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">p</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">pointArray.length</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>535</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
 <span class='linenumber'>536</span> 
-<span class='linenumber'>537</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>538</span>     * Draw an un-filled polygon on the context.
-<span class='linenumber'>539</span>     *
-<span class='linenumber'>540</span>     * @param pointArray {Array} An array of {@link Point2D} objects
-<span class='linenumber'>541</span>     */</span><span class="WHIT">
-<span class='linenumber'>542</span> </span><span class="WHIT">   </span><span class="NAME">drawPolygon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>543</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>544</span> </span><span class="WHIT">      </span><span class="NAME">this.strokePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>545</span> </span><span class="WHIT">      </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>546</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>547</span> 
-<span class='linenumber'>548</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>549</span>     * Draw a non-closed poly line on the context.
-<span class='linenumber'>550</span>     *
-<span class='linenumber'>551</span>     * @param pointArray {Array} An array of {@link Point2D} objects
-<span class='linenumber'>552</span>     */</span><span class="WHIT">
-<span class='linenumber'>553</span> </span><span class="WHIT">   </span><span class="NAME">drawPolyline</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>554</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>555</span> </span><span class="WHIT">      </span><span class="NAME">this.strokePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>556</span> </span><span class="WHIT">      </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>557</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>558</span> 
-<span class='linenumber'>559</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>560</span>     * Draw an filled polygon on the context.
-<span class='linenumber'>561</span>     *
-<span class='linenumber'>562</span>     * @param pointArray {Array} An array of {@link Point2D} objects
-<span class='linenumber'>563</span>     */</span><span class="WHIT">
-<span class='linenumber'>564</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledPolygon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>565</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>566</span> </span><span class="WHIT">      </span><span class="NAME">this.fillPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>567</span> </span><span class="WHIT">      </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>568</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>569</span> 
-<span class='linenumber'>570</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>571</span>     * Draw a line on the context.
-<span class='linenumber'>572</span>     *
-<span class='linenumber'>573</span>     * @param point1 {Point2D} The start of the line
-<span class='linenumber'>574</span>     * @param point2 {Point2D} The end of the line
-<span class='linenumber'>575</span>     */</span><span class="WHIT">
-<span class='linenumber'>576</span> </span><span class="WHIT">   </span><span class="NAME">drawLine</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>537</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">closedLoop</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>538</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>539</span> </span><span class="WHIT">         </span><span class="NAME">this.endPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>540</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>541</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>542</span> 
+<span class='linenumber'>543</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>544</span>     * Draw an un-filled polygon on the context.
+<span class='linenumber'>545</span>     *
+<span class='linenumber'>546</span>     * @param pointArray {Array} An array of {@link Point2D} objects
+<span class='linenumber'>547</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>548</span>     */</span><span class="WHIT">
+<span class='linenumber'>549</span> </span><span class="WHIT">   </span><span class="NAME">drawPolygon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>550</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>551</span> </span><span class="WHIT">      </span><span class="NAME">this.strokePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>552</span> </span><span class="WHIT">      </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>553</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>554</span> 
+<span class='linenumber'>555</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>556</span>     * Draw a non-closed poly line on the context.
+<span class='linenumber'>557</span>     *
+<span class='linenumber'>558</span>     * @param pointArray {Array} An array of {@link Point2D} objects
+<span class='linenumber'>559</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>560</span>     */</span><span class="WHIT">
+<span class='linenumber'>561</span> </span><span class="WHIT">   </span><span class="NAME">drawPolyline</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>562</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>563</span> </span><span class="WHIT">      </span><span class="NAME">this.strokePath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>564</span> </span><span class="WHIT">      </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>565</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>566</span> 
+<span class='linenumber'>567</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>568</span>     * Draw an filled polygon on the context.
+<span class='linenumber'>569</span>     *
+<span class='linenumber'>570</span>     * @param pointArray {Array} An array of {@link Point2D} objects
+<span class='linenumber'>571</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>572</span>     */</span><span class="WHIT">
+<span class='linenumber'>573</span> </span><span class="WHIT">   </span><span class="NAME">drawFilledPolygon</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>574</span> </span><span class="WHIT">      </span><span class="NAME">this._poly</span><span class="PUNC">(</span><span class="NAME">pointArray</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>575</span> </span><span class="WHIT">      </span><span class="NAME">this.fillPath</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>576</span> </span><span class="WHIT">      </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>577</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>578</span> 
 <span class='linenumber'>579</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>580</span>     * Draw a point on the context.
+<span class='linenumber'>580</span>     * Draw a line on the context.
 <span class='linenumber'>581</span>     *
-<span class='linenumber'>582</span>     * @param point {Point2D} The position to draw the point
-<span class='linenumber'>583</span>     */</span><span class="WHIT">
-<span class='linenumber'>584</span> </span><span class="WHIT">   </span><span class="NAME">drawPoint</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>585</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>586</span> 
-<span class='linenumber'>587</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>588</span>     * Draw a sprite on the context.
-<span class='linenumber'>589</span>     *
-<span class='linenumber'>590</span>     * @param obj {Object} A reference object, or &lt;tt>null&lt;/tt>
-<span class='linenumber'>591</span>     * @param sprite {Sprite} The sprite to draw
-<span class='linenumber'>592</span>     * @param time {Number} The current world time
-<span class='linenumber'>593</span>     */</span><span class="WHIT">
-<span class='linenumber'>594</span> </span><span class="WHIT">   </span><span class="NAME">drawSprite</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sprite</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>595</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>596</span> 
-<span class='linenumber'>597</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>598</span>     * Draw an image on the context.
-<span class='linenumber'>599</span>     *
-<span class='linenumber'>600</span>     * @param obj {Object} A reference object, or &lt;tt>null&lt;/tt>
-<span class='linenumber'>601</span>     * @param rect {Rectangle2D} The rectangle that specifies the position and
-<span class='linenumber'>602</span>     *             dimensions of the image rectangle.
-<span class='linenumber'>603</span>     * @param image {Object} The image to draw onto the context
-<span class='linenumber'>604</span>     * @param [srcRect] {Rectangle2D} &lt;i>[optional]&lt;/i> The source rectangle within the image, if
-<span class='linenumber'>605</span>     *                &lt;tt>null&lt;/tt> the entire image is used
-<span class='linenumber'>606</span>     */</span><span class="WHIT">
-<span class='linenumber'>607</span> </span><span class="WHIT">   </span><span class="NAME">drawImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">rect</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">image</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">srcRect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>608</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>609</span> 
-<span class='linenumber'>610</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>611</span>     * Capture an image from the context.
-<span class='linenumber'>612</span>     *
-<span class='linenumber'>613</span>     * @param rect {Rectangle2D} The area to capture
-<span class='linenumber'>614</span>     * @return {ImageData} Image data capture
-<span class='linenumber'>615</span>     */</span><span class="WHIT">
-<span class='linenumber'>616</span> </span><span class="WHIT">   </span><span class="NAME">getImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>617</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>618</span> 
-<span class='linenumber'>619</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>620</span>     * Draw an image, captured with {@link #getImage}, to
-<span class='linenumber'>621</span>     * the context.
-<span class='linenumber'>622</span>     *
-<span class='linenumber'>623</span>     * @param imageData {ImageData} Image data captured
-<span class='linenumber'>624</span>     * @param point {Point2D} The poisition at which to draw the image
-<span class='linenumber'>625</span>     */</span><span class="WHIT">
-<span class='linenumber'>626</span> </span><span class="WHIT">   </span><span class="NAME">putImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">imageData</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>627</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>628</span> 
-<span class='linenumber'>629</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>630</span>     * Draw text on the context.
-<span class='linenumber'>631</span>     *
-<span class='linenumber'>632</span>     * @param point {Point2D} The top-left position to draw the image.
-<span class='linenumber'>633</span>     * @param text {String} The text to draw
-<span class='linenumber'>634</span>     */</span><span class="WHIT">
-<span class='linenumber'>635</span> </span><span class="WHIT">   </span><span class="NAME">drawText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">text</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>636</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>637</span> 
-<span class='linenumber'>638</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>639</span>     * Start a path.
-<span class='linenumber'>640</span>     */</span><span class="WHIT">
-<span class='linenumber'>641</span> </span><span class="WHIT">   </span><span class="NAME">startPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>642</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>643</span> 
-<span class='linenumber'>644</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>645</span>     * End a path.
-<span class='linenumber'>646</span>     */</span><span class="WHIT">
-<span class='linenumber'>647</span> </span><span class="WHIT">   </span><span class="NAME">endPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>648</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>649</span> 
-<span class='linenumber'>650</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>651</span>     * Stroke a path using the current line style and width.
-<span class='linenumber'>652</span>     */</span><span class="WHIT">
-<span class='linenumber'>653</span> </span><span class="WHIT">   </span><span class="NAME">strokePath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>654</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>655</span> 
-<span class='linenumber'>656</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>657</span>     * Fill a path using the current fill style.
-<span class='linenumber'>658</span>     */</span><span class="WHIT">
-<span class='linenumber'>659</span> </span><span class="WHIT">   </span><span class="NAME">fillPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>660</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>661</span> 
-<span class='linenumber'>662</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>663</span>     * Move the current path to the point sepcified.
-<span class='linenumber'>664</span>     *
-<span class='linenumber'>665</span>     * @param point {Point2D} The point to move to
-<span class='linenumber'>666</span>     */</span><span class="WHIT">
-<span class='linenumber'>667</span> </span><span class="WHIT">   </span><span class="NAME">moveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>668</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>669</span> 
-<span class='linenumber'>670</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>671</span>     * Draw a line from the current point to the point specified.
-<span class='linenumber'>672</span>     *
-<span class='linenumber'>673</span>     * @param point {Point2D} The point to draw a line to
-<span class='linenumber'>674</span>     */</span><span class="WHIT">
-<span class='linenumber'>675</span> </span><span class="WHIT">   </span><span class="NAME">lineTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>676</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>677</span> 
-<span class='linenumber'>678</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>679</span>     * Used to draw line segments for polylines.  If &lt;tt>point&lt;/tt>
-<span class='linenumber'>680</span>     * is &lt;tt>null&lt;/tt>, the context will move to the next point.  Otherwise,
-<span class='linenumber'>681</span>     * it will draw a line to the point.
-<span class='linenumber'>682</span>     *
-<span class='linenumber'>683</span>     * @param point {Point2D} The point to draw a line to, or null.
-<span class='linenumber'>684</span>     */</span><span class="WHIT">
-<span class='linenumber'>685</span> </span><span class="WHIT">   </span><span class="NAME">lineSeg</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>686</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">point</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>687</span> </span><span class="WHIT">         </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>688</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>689</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>582</span>     * @param point1 {Point2D} The start of the line
+<span class='linenumber'>583</span>     * @param point2 {Point2D} The end of the line
+<span class='linenumber'>584</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>585</span>     */</span><span class="WHIT">
+<span class='linenumber'>586</span> </span><span class="WHIT">   </span><span class="NAME">drawLine</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>587</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>588</span> 
+<span class='linenumber'>589</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>590</span>     * Draw a point on the context.
+<span class='linenumber'>591</span>     *
+<span class='linenumber'>592</span>     * @param point {Point2D} The position to draw the point
+<span class='linenumber'>593</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>594</span>     */</span><span class="WHIT">
+<span class='linenumber'>595</span> </span><span class="WHIT">   </span><span class="NAME">drawPoint</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>596</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>597</span> 
+<span class='linenumber'>598</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>599</span>     * Draw a sprite on the context.
+<span class='linenumber'>600</span>     *
+<span class='linenumber'>601</span>     * @param sprite {Sprite} The sprite to draw
+<span class='linenumber'>602</span>     * @param time {Number} The current world time
+<span class='linenumber'>603</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>604</span>     */</span><span class="WHIT">
+<span class='linenumber'>605</span> </span><span class="WHIT">   </span><span class="NAME">drawSprite</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">sprite</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>606</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>607</span> 
+<span class='linenumber'>608</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>609</span>     * Draw an image on the context.
+<span class='linenumber'>610</span>     *
+<span class='linenumber'>611</span>     * @param rect {Rectangle2D} The rectangle that specifies the position and
+<span class='linenumber'>612</span>     *             dimensions of the image rectangle.
+<span class='linenumber'>613</span>     * @param image {Object} The image to draw onto the context
+<span class='linenumber'>614</span>     * @param [srcRect] {Rectangle2D} &lt;i>[optional]&lt;/i> The source rectangle within the image, if
+<span class='linenumber'>615</span>     *                &lt;tt>null&lt;/tt> the entire image is used
+<span class='linenumber'>616</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>617</span>     */</span><span class="WHIT">
+<span class='linenumber'>618</span> </span><span class="WHIT">   </span><span class="NAME">drawImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">image</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">srcRect</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>619</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>620</span> 
+<span class='linenumber'>621</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>622</span>     * Capture an image from the context.
+<span class='linenumber'>623</span>     *
+<span class='linenumber'>624</span>     * @param rect {Rectangle2D} The area to capture
+<span class='linenumber'>625</span>     * @return {ImageData} Image data capture
+<span class='linenumber'>626</span>     */</span><span class="WHIT">
+<span class='linenumber'>627</span> </span><span class="WHIT">   </span><span class="NAME">getImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>628</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>629</span> 
+<span class='linenumber'>630</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>631</span>     * Draw an image, captured with {@link #getImage}, to
+<span class='linenumber'>632</span>     * the context.
+<span class='linenumber'>633</span>     *
+<span class='linenumber'>634</span>     * @param imageData {ImageData} Image data captured
+<span class='linenumber'>635</span>     * @param point {Point2D} The poisition at which to draw the image
+<span class='linenumber'>636</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>637</span>     */</span><span class="WHIT">
+<span class='linenumber'>638</span> </span><span class="WHIT">   </span><span class="NAME">putImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">imageData</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>639</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>640</span> 
+<span class='linenumber'>641</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>642</span>     * Draw text on the context.
+<span class='linenumber'>643</span>     *
+<span class='linenumber'>644</span>     * @param point {Point2D} The top-left position to draw the image.
+<span class='linenumber'>645</span>     * @param text {String} The text to draw
+<span class='linenumber'>646</span>     * @param [ref] {HostObject} A reference host object
+<span class='linenumber'>647</span>     */</span><span class="WHIT">
+<span class='linenumber'>648</span> </span><span class="WHIT">   </span><span class="NAME">drawText</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">text</span><span class="WHIT"> </span><span class="COMM">/*, ref */</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>649</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>650</span> 
+<span class='linenumber'>651</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>652</span>     * Start a path.
+<span class='linenumber'>653</span>     */</span><span class="WHIT">
+<span class='linenumber'>654</span> </span><span class="WHIT">   </span><span class="NAME">startPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>655</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>656</span> 
+<span class='linenumber'>657</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>658</span>     * End a path.
+<span class='linenumber'>659</span>     */</span><span class="WHIT">
+<span class='linenumber'>660</span> </span><span class="WHIT">   </span><span class="NAME">endPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>661</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>662</span> 
+<span class='linenumber'>663</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>664</span>     * Stroke a path using the current line style and width.
+<span class='linenumber'>665</span>     */</span><span class="WHIT">
+<span class='linenumber'>666</span> </span><span class="WHIT">   </span><span class="NAME">strokePath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>667</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>668</span> 
+<span class='linenumber'>669</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>670</span>     * Fill a path using the current fill style.
+<span class='linenumber'>671</span>     */</span><span class="WHIT">
+<span class='linenumber'>672</span> </span><span class="WHIT">   </span><span class="NAME">fillPath</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>673</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>674</span> 
+<span class='linenumber'>675</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>676</span>     * Move the current path to the point sepcified.
+<span class='linenumber'>677</span>     *
+<span class='linenumber'>678</span>     * @param point {Point2D} The point to move to
+<span class='linenumber'>679</span>     */</span><span class="WHIT">
+<span class='linenumber'>680</span> </span><span class="WHIT">   </span><span class="NAME">moveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>681</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>682</span> 
+<span class='linenumber'>683</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>684</span>     * Draw a line from the current point to the point specified.
+<span class='linenumber'>685</span>     *
+<span class='linenumber'>686</span>     * @param point {Point2D} The point to draw a line to
+<span class='linenumber'>687</span>     */</span><span class="WHIT">
+<span class='linenumber'>688</span> </span><span class="WHIT">   </span><span class="NAME">lineTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>689</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>690</span> 
-<span class='linenumber'>691</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.lineSeg.moveTo</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>692</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>693</span> </span><span class="WHIT">         </span><span class="COMM">// Cannot have two subsequent nulls</span><span class="WHIT">
-<span class='linenumber'>694</span> </span><span class="WHIT">         </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">point</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"LineSeg repeated null!"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>695</span> </span><span class="WHIT">         </span><span class="NAME">this.moveTo</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>696</span> </span><span class="WHIT">         </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>697</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>698</span> </span><span class="WHIT">      </span><span class="KEYW">else</span><span class="WHIT">
-<span class='linenumber'>699</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>700</span> </span><span class="WHIT">         </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>701</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>702</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>691</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>692</span>     * Used to draw line segments for polylines.  If &lt;tt>point&lt;/tt>
+<span class='linenumber'>693</span>     * is &lt;tt>null&lt;/tt>, the context will move to the next point.  Otherwise,
+<span class='linenumber'>694</span>     * it will draw a line to the point.
+<span class='linenumber'>695</span>     *
+<span class='linenumber'>696</span>     * @param point {Point2D} The point to draw a line to, or null.
+<span class='linenumber'>697</span>     */</span><span class="WHIT">
+<span class='linenumber'>698</span> </span><span class="WHIT">   </span><span class="NAME">lineSeg</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>699</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">point</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>700</span> </span><span class="WHIT">         </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>701</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>702</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
 <span class='linenumber'>703</span> 
-<span class='linenumber'>704</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>705</span>     * Draw a quadratic curve from the current point to the specified point.
-<span class='linenumber'>706</span>     *
-<span class='linenumber'>707</span>     * @param cPoint {Point2D} The control point
-<span class='linenumber'>708</span>     * @param point {Point2D} The point to draw to
-<span class='linenumber'>709</span>     */</span><span class="WHIT">
-<span class='linenumber'>710</span> </span><span class="WHIT">   </span><span class="NAME">quadraticCurveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cPoint</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>711</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>712</span> 
-<span class='linenumber'>713</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>714</span>     * Draw a bezier curve from the current point to the specified point.
-<span class='linenumber'>715</span>     *
-<span class='linenumber'>716</span>     * @param cPoint1 {Point2D} Control point 1
-<span class='linenumber'>717</span>     * @param cPoint2 {Point2D} Control point 2
-<span class='linenumber'>718</span>     * @param point {Point2D} The point to draw to
-<span class='linenumber'>719</span>     */</span><span class="WHIT">
-<span class='linenumber'>720</span> </span><span class="WHIT">   </span><span class="NAME">bezierCurveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cPoint1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cPoint2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>721</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>722</span> 
-<span class='linenumber'>723</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>724</span>     * Draw an arc from the current point to the specified point.
-<span class='linenumber'>725</span>     *
-<span class='linenumber'>726</span>     * @param point1 {Point2D} Arc point 1
-<span class='linenumber'>727</span>     * @param point2 {Point2D} Arc point 2
-<span class='linenumber'>728</span>     * @param radius {Number} The radius of the arc
-<span class='linenumber'>729</span>     */</span><span class="WHIT">
-<span class='linenumber'>730</span> </span><span class="WHIT">   </span><span class="NAME">arcTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>731</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>732</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>733</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>734</span>     * Get the class name of this object
-<span class='linenumber'>735</span>     *
-<span class='linenumber'>736</span>     * @return {String} "RenderContext2D"
-<span class='linenumber'>737</span>     */</span><span class="WHIT">
-<span class='linenumber'>738</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>739</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RenderContext2D"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>740</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>741</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>742</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>743</span> 	 * Bold text weight
-<span class='linenumber'>744</span> 	 * @type {String}
-<span class='linenumber'>745</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>746</span> </span><span class="WHIT">	</span><span class="NAME">FONT_WEIGHT_BOLD</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"bold"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>747</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>748</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>749</span> 	 * Normal text weight
-<span class='linenumber'>750</span> 	 * @type {String}
-<span class='linenumber'>751</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>752</span> </span><span class="WHIT">	</span><span class="NAME">FONT_WEIGHT_NORMAL</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"normal"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>753</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>754</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>755</span> 	 * Light text weight
-<span class='linenumber'>756</span> 	 * @type {String}
-<span class='linenumber'>757</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>758</span> </span><span class="WHIT">	</span><span class="NAME">FONT_WEIGHT_LIGHT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"light"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>759</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>760</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>761</span> 	 * Text align left
-<span class='linenumber'>762</span> 	 * @type {String}
-<span class='linenumber'>763</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>764</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_LEFT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"left"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>765</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>766</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>767</span> 	 * Text align right
-<span class='linenumber'>768</span> 	 * @type {String}
-<span class='linenumber'>769</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>770</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_RIGHT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"right"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>771</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>772</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>773</span> 	 * Text align center
-<span class='linenumber'>774</span> 	 * @type {String}
-<span class='linenumber'>775</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>776</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_CENTER</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"center"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>777</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>778</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>779</span> 	 * Text align start of stroke
-<span class='linenumber'>780</span> 	 * @type {String}
-<span class='linenumber'>781</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>782</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_START</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"start"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>783</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>784</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>785</span> 	 * Text align end of stroke
-<span class='linenumber'>786</span> 	 * @type {String}
-<span class='linenumber'>787</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>788</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_END</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"end"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>789</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>790</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>791</span> 	 * Text baseline alphabetic
-<span class='linenumber'>792</span> 	 * @type {String}
-<span class='linenumber'>793</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>794</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_ALPHABETIC</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"alphabetic"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>795</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>796</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>797</span> 	 * Text baseline top of em box
-<span class='linenumber'>798</span> 	 * @type {String}
-<span class='linenumber'>799</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>800</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_TOP</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"top"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>801</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>802</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>803</span> 	 * Text baseline hanging ideograph
-<span class='linenumber'>804</span> 	 * @type {String}
-<span class='linenumber'>805</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>806</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_HANGING</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"hanging"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>807</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>808</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>809</span> 	 * Text baseline middle of em square
-<span class='linenumber'>810</span> 	 * @memberOf RenderContext2D
-<span class='linenumber'>811</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>812</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_MIDDLE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"middle"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>813</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>814</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>815</span> 	 * Text baseline ideographic bottom
-<span class='linenumber'>816</span> 	 * @type {String}
-<span class='linenumber'>817</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>818</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_IDEOGRAPHIC</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"ideographic"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>819</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>820</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>821</span> 	 * Text baseline bottom of em square
-<span class='linenumber'>822</span> 	 * @type {String}
-<span class='linenumber'>823</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>824</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_BOTTOM</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"bottom"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>825</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>826</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>827</span> 	 * Text style italic
-<span class='linenumber'>828</span> 	 * @type {String}
-<span class='linenumber'>829</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>830</span> </span><span class="WHIT">	</span><span class="NAME">FONT_STYLE_ITALIC</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"italic"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>831</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>832</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>833</span> 	 * Text style normal
-<span class='linenumber'>834</span> 	 * @type {String}
-<span class='linenumber'>835</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>836</span> </span><span class="WHIT">	</span><span class="NAME">FONT_STYLE_NORMAL</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"normal"</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>837</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>838</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>839</span> 	 * Text style oblique
-<span class='linenumber'>840</span> 	 * @type {String}
-<span class='linenumber'>841</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>842</span> </span><span class="WHIT">	</span><span class="NAME">FONT_STYLE_OBLIQUE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"oblique"</span><span class="WHIT">
-<span class='linenumber'>843</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>844</span> 
-<span class='linenumber'>845</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">RenderContext2D</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>846</span> 
-<span class='linenumber'>847</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>704</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.lineSeg.moveTo</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>705</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>706</span> </span><span class="WHIT">         </span><span class="COMM">// Cannot have two subsequent nulls</span><span class="WHIT">
+<span class='linenumber'>707</span> </span><span class="WHIT">         </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">point</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"LineSeg repeated null!"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>708</span> </span><span class="WHIT">         </span><span class="NAME">this.moveTo</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>709</span> </span><span class="WHIT">         </span><span class="NAME">this.lineSeg.moveTo</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>710</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>711</span> </span><span class="WHIT">      </span><span class="KEYW">else</span><span class="WHIT">
+<span class='linenumber'>712</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>713</span> </span><span class="WHIT">         </span><span class="NAME">this.lineTo</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>714</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>715</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>716</span> 
+<span class='linenumber'>717</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>718</span>     * Draw a quadratic curve from the current point to the specified point.
+<span class='linenumber'>719</span>     *
+<span class='linenumber'>720</span>     * @param cPoint {Point2D} The control point
+<span class='linenumber'>721</span>     * @param point {Point2D} The point to draw to
+<span class='linenumber'>722</span>     */</span><span class="WHIT">
+<span class='linenumber'>723</span> </span><span class="WHIT">   </span><span class="NAME">quadraticCurveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cPoint</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>724</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>725</span> 
+<span class='linenumber'>726</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>727</span>     * Draw a bezier curve from the current point to the specified point.
+<span class='linenumber'>728</span>     *
+<span class='linenumber'>729</span>     * @param cPoint1 {Point2D} Control point 1
+<span class='linenumber'>730</span>     * @param cPoint2 {Point2D} Control point 2
+<span class='linenumber'>731</span>     * @param point {Point2D} The point to draw to
+<span class='linenumber'>732</span>     */</span><span class="WHIT">
+<span class='linenumber'>733</span> </span><span class="WHIT">   </span><span class="NAME">bezierCurveTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">cPoint1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">cPoint2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>734</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>735</span> 
+<span class='linenumber'>736</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>737</span>     * Draw an arc from the current point to the specified point.
+<span class='linenumber'>738</span>     *
+<span class='linenumber'>739</span>     * @param point1 {Point2D} Arc point 1
+<span class='linenumber'>740</span>     * @param point2 {Point2D} Arc point 2
+<span class='linenumber'>741</span>     * @param radius {Number} The radius of the arc
+<span class='linenumber'>742</span>     */</span><span class="WHIT">
+<span class='linenumber'>743</span> </span><span class="WHIT">   </span><span class="NAME">arcTo</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">point2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">radius</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>744</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>745</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>746</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>747</span>     * Get the class name of this object
+<span class='linenumber'>748</span>     *
+<span class='linenumber'>749</span>     * @return {String} "RenderContext2D"
+<span class='linenumber'>750</span>     */</span><span class="WHIT">
+<span class='linenumber'>751</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>752</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RenderContext2D"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>753</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>754</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>755</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>756</span> 	 * Bold text weight
+<span class='linenumber'>757</span> 	 * @type {String}
+<span class='linenumber'>758</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>759</span> </span><span class="WHIT">	</span><span class="NAME">FONT_WEIGHT_BOLD</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"bold"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>760</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>761</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>762</span> 	 * Normal text weight
+<span class='linenumber'>763</span> 	 * @type {String}
+<span class='linenumber'>764</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>765</span> </span><span class="WHIT">	</span><span class="NAME">FONT_WEIGHT_NORMAL</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"normal"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>766</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>767</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>768</span> 	 * Light text weight
+<span class='linenumber'>769</span> 	 * @type {String}
+<span class='linenumber'>770</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>771</span> </span><span class="WHIT">	</span><span class="NAME">FONT_WEIGHT_LIGHT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"light"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>772</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>773</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>774</span> 	 * Text align left
+<span class='linenumber'>775</span> 	 * @type {String}
+<span class='linenumber'>776</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>777</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_LEFT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"left"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>778</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>779</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>780</span> 	 * Text align right
+<span class='linenumber'>781</span> 	 * @type {String}
+<span class='linenumber'>782</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>783</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_RIGHT</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"right"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>784</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>785</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>786</span> 	 * Text align center
+<span class='linenumber'>787</span> 	 * @type {String}
+<span class='linenumber'>788</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>789</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_CENTER</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"center"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>790</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>791</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>792</span> 	 * Text align start of stroke
+<span class='linenumber'>793</span> 	 * @type {String}
+<span class='linenumber'>794</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>795</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_START</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"start"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>796</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>797</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>798</span> 	 * Text align end of stroke
+<span class='linenumber'>799</span> 	 * @type {String}
+<span class='linenumber'>800</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>801</span> </span><span class="WHIT">	</span><span class="NAME">FONT_ALIGN_END</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"end"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>802</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>803</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>804</span> 	 * Text baseline alphabetic
+<span class='linenumber'>805</span> 	 * @type {String}
+<span class='linenumber'>806</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>807</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_ALPHABETIC</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"alphabetic"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>808</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>809</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>810</span> 	 * Text baseline top of em box
+<span class='linenumber'>811</span> 	 * @type {String}
+<span class='linenumber'>812</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>813</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_TOP</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"top"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>814</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>815</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>816</span> 	 * Text baseline hanging ideograph
+<span class='linenumber'>817</span> 	 * @type {String}
+<span class='linenumber'>818</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>819</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_HANGING</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"hanging"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>820</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>821</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>822</span> 	 * Text baseline middle of em square
+<span class='linenumber'>823</span> 	 * @memberOf RenderContext2D
+<span class='linenumber'>824</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>825</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_MIDDLE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"middle"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>826</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>827</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>828</span> 	 * Text baseline ideographic bottom
+<span class='linenumber'>829</span> 	 * @type {String}
+<span class='linenumber'>830</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>831</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_IDEOGRAPHIC</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"ideographic"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>832</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>833</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>834</span> 	 * Text baseline bottom of em square
+<span class='linenumber'>835</span> 	 * @type {String}
+<span class='linenumber'>836</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>837</span> </span><span class="WHIT">	</span><span class="NAME">FONT_BASELINE_BOTTOM</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"bottom"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>838</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>839</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>840</span> 	 * Text style italic
+<span class='linenumber'>841</span> 	 * @type {String}
+<span class='linenumber'>842</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>843</span> </span><span class="WHIT">	</span><span class="NAME">FONT_STYLE_ITALIC</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"italic"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>844</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>845</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>846</span> 	 * Text style normal
+<span class='linenumber'>847</span> 	 * @type {String}
+<span class='linenumber'>848</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>849</span> </span><span class="WHIT">	</span><span class="NAME">FONT_STYLE_NORMAL</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"normal"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>850</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>851</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>852</span> 	 * Text style oblique
+<span class='linenumber'>853</span> 	 * @type {String}
+<span class='linenumber'>854</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>855</span> </span><span class="WHIT">	</span><span class="NAME">FONT_STYLE_OBLIQUE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"oblique"</span><span class="WHIT">
+<span class='linenumber'>856</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>857</span> 
+<span class='linenumber'>858</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">RenderContext2D</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>859</span> 
+<span class='linenumber'>860</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:28:00 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:19 GMT-0500 (EST)</div>
 </body>
 </html>

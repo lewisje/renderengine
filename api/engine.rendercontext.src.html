@@ -74,7 +74,7 @@ A base rendering context.
 <span class='linenumber'>  6</span>  *
 <span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  8</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  9</span>  * @version: $Revision: 888 $
+<span class='linenumber'>  9</span>  * @version: $Revision: 914 $
 <span class='linenumber'> 10</span>  *
 <span class='linenumber'> 11</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 12</span>  *
@@ -337,124 +337,128 @@ A base rendering context.
 <span class='linenumber'>269</span> 
 <span class='linenumber'>270</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>271</span>     * Update the render context before rendering the objects to the surface.
-<span class='linenumber'>272</span>     *
-<span class='linenumber'>273</span>     * @param parentContext {RenderContext} A parent context, or &lt;tt>null&lt;/tt>
-<span class='linenumber'>274</span>     * @param time {Number} The current render time in milliseconds from the engine.
-<span class='linenumber'>275</span>     */</span><span class="WHIT">
-<span class='linenumber'>276</span> </span><span class="WHIT">   </span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">parentContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>277</span> </span><span class="WHIT">   </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>278</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.staticCtx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>279</span> </span><span class="WHIT">	      </span><span class="NAME">this.render</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>280</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>281</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>282</span> 
-<span class='linenumber'>283</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>284</span>     * Called after the update to render all of the objects to the context.
-<span class='linenumber'>285</span>     *
-<span class='linenumber'>286</span>     * @param time {Number} The current render time in milliseconds from the engine.
-<span class='linenumber'>287</span>     */</span><span class="WHIT">
-<span class='linenumber'>288</span> </span><span class="WHIT">   </span><span class="NAME">render</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>289</span> </span><span class="WHIT">      </span><span class="COMM">// Setup the world</span><span class="WHIT">
-<span class='linenumber'>290</span> </span><span class="WHIT">      </span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>291</span> 
-<span class='linenumber'>292</span> </span><span class="WHIT">      </span><span class="COMM">// Push the world transform</span><span class="WHIT">
-<span class='linenumber'>293</span> </span><span class="WHIT">      </span><span class="NAME">this.pushTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>294</span> 
-<span class='linenumber'>295</span> </span><span class="WHIT">		</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>296</span> </span><span class="WHIT">	      </span><span class="NAME">this.setupWorld</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>297</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>298</span> </span><span class="WHIT">	      </span><span class="COMM">// Run the objects if they are visible</span><span class="WHIT">
-<span class='linenumber'>299</span> </span><span class="WHIT">	      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">objs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>300</span> </span><span class="WHIT">	      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">objs</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>301</span> </span><span class="WHIT">	      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>302</span> </span><span class="WHIT">	         </span><span class="NAME">this.renderObject</span><span class="PUNC">(</span><span class="NAME">objs</span><span class="PUNC">[</span><span class="NAME">o</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>303</span> </span><span class="WHIT">	      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>304</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">finally</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>305</span> </span><span class="WHIT">	      </span><span class="COMM">// Restore the world transform</span><span class="WHIT">
-<span class='linenumber'>306</span> </span><span class="WHIT">	      </span><span class="NAME">this.popTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>307</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>308</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>309</span> 
-<span class='linenumber'>310</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>311</span>     * Render a single object into the world for the given time.
-<span class='linenumber'>312</span>     * @param obj {BaseObject} An object to render
-<span class='linenumber'>313</span>     * @param time {Number} The world time, in milliseconds
-<span class='linenumber'>314</span>     */</span><span class="WHIT">
-<span class='linenumber'>315</span> </span><span class="WHIT">   </span><span class="NAME">renderObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>316</span> </span><span class="WHIT">      </span><span class="NAME">obj.update</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>317</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>318</span> 
-<span class='linenumber'>319</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>320</span>     * [ABSTRACT] Gives the render context a chance to initialize the world.
-<span class='linenumber'>321</span>     * Use this method to change the world position, rotation, scale, etc.
-<span class='linenumber'>322</span>     *
-<span class='linenumber'>323</span>     * @param time {Number} The current world time
-<span class='linenumber'>324</span>     */</span><span class="WHIT">
-<span class='linenumber'>325</span> </span><span class="WHIT">   </span><span class="NAME">setupWorld</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>326</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>327</span> 
-<span class='linenumber'>328</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>329</span>     * Increment the transform stack counter.
-<span class='linenumber'>330</span>     */</span><span class="WHIT">
-<span class='linenumber'>331</span> </span><span class="WHIT">   </span><span class="NAME">pushTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>332</span> </span><span class="WHIT">      </span><span class="NAME">this.transformStackDepth</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>333</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>334</span> 
-<span class='linenumber'>335</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>336</span>     * Decrement the transform stack counter and ensure that the stack
-<span class='linenumber'>337</span>     * is not unbalanced.  An unbalanced stack can be indicative of
-<span class='linenumber'>338</span>     * objects that do not reset the state after rendering themselves.
-<span class='linenumber'>339</span>     */</span><span class="WHIT">
-<span class='linenumber'>340</span> </span><span class="WHIT">   </span><span class="NAME">popTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>341</span> </span><span class="WHIT">      </span><span class="NAME">this.transformStackDepth</span><span class="PUNC">--</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>342</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">this.transformStackDepth</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Unbalanced transform stack!"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>343</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>344</span> 
-<span class='linenumber'>345</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>346</span>     * This is a potentially expensive call, and can lead to rendering
-<span class='linenumber'>347</span>     * errors.  It is recommended against calling this method!
-<span class='linenumber'>348</span>     */</span><span class="WHIT">
-<span class='linenumber'>349</span> </span><span class="WHIT">   </span><span class="NAME">resetTransformStack</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>350</span> </span><span class="WHIT">      </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.transformStackDepth</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>351</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>352</span> </span><span class="WHIT">         </span><span class="NAME">this.popTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>353</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>354</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>355</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope RenderContext.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
-<span class='linenumber'>356</span> 
-<span class='linenumber'>357</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>358</span>     * Sort the objects to draw from objects with the lowest
-<span class='linenumber'>359</span>     * z-index to the highest z-index.
-<span class='linenumber'>360</span>     * @static
-<span class='linenumber'>361</span>     */</span><span class="WHIT">
-<span class='linenumber'>362</span> </span><span class="WHIT">   </span><span class="NAME">sortFn</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>363</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj1</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
-<span class='linenumber'>364</span> </span><span class="WHIT">          </span><span class="NAME">obj2</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>365</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>366</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>367</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>368</span> 
-<span class='linenumber'>369</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj1.getZIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">obj2.getZIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>370</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>371</span> 
-<span class='linenumber'>372</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>373</span>     * Get the class name of this object
-<span class='linenumber'>374</span>     * @return {String} "RenderContext"
-<span class='linenumber'>375</span>     */</span><span class="WHIT">
-<span class='linenumber'>376</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>377</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RenderContext"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>378</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>379</span> 
-<span class='linenumber'>380</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>381</span> 
-<span class='linenumber'>382</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">RenderContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>272</span>     * If the context isn't static, this will reset and then render the context.
+<span class='linenumber'>273</span>     * If the context is static, you'll need to perform the reset and render yourself.
+<span class='linenumber'>274</span>     * This allows you to updated objects in the world, skip the reset, and then
+<span class='linenumber'>275</span>     * render yourself.  This can be an effective way to handle redrawing the world
+<span class='linenumber'>276</span>     * only as needed.
+<span class='linenumber'>277</span>     *
+<span class='linenumber'>278</span>     * @param parentContext {RenderContext} A parent context, or &lt;tt>null&lt;/tt>
+<span class='linenumber'>279</span>     * @param time {Number} The current render time in milliseconds from the engine.
+<span class='linenumber'>280</span>     */</span><span class="WHIT">
+<span class='linenumber'>281</span> </span><span class="WHIT">   </span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">parentContext</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>282</span> </span><span class="WHIT">   </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>283</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.staticCtx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>284</span> </span><span class="WHIT">	      </span><span class="COMM">// Clear and render world</span><span class="WHIT">
+<span class='linenumber'>285</span> </span><span class="WHIT">	      </span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>286</span> </span><span class="WHIT">	      </span><span class="NAME">this.render</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>287</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>288</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>289</span> 
+<span class='linenumber'>290</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>291</span>     * Called to render all of the objects to the context.
+<span class='linenumber'>292</span>     *
+<span class='linenumber'>293</span>     * @param time {Number} The current render time in milliseconds from the engine.
+<span class='linenumber'>294</span>     */</span><span class="WHIT">
+<span class='linenumber'>295</span> </span><span class="WHIT">   </span><span class="NAME">render</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>296</span> </span><span class="WHIT">      </span><span class="COMM">// Push the world transform</span><span class="WHIT">
+<span class='linenumber'>297</span> </span><span class="WHIT">      </span><span class="NAME">this.pushTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>298</span> 
+<span class='linenumber'>299</span> </span><span class="WHIT">		</span><span class="KEYW">try</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>300</span> </span><span class="WHIT">	      </span><span class="NAME">this.setupWorld</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>301</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>302</span> </span><span class="WHIT">	      </span><span class="COMM">// Run the objects if they are visible</span><span class="WHIT">
+<span class='linenumber'>303</span> </span><span class="WHIT">	      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">objs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>304</span> </span><span class="WHIT">	      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">objs</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>305</span> </span><span class="WHIT">	      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>306</span> </span><span class="WHIT">	         </span><span class="NAME">this.renderObject</span><span class="PUNC">(</span><span class="NAME">objs</span><span class="PUNC">[</span><span class="NAME">o</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>307</span> </span><span class="WHIT">	      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>308</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">finally</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>309</span> </span><span class="WHIT">	      </span><span class="COMM">// Restore the world transform</span><span class="WHIT">
+<span class='linenumber'>310</span> </span><span class="WHIT">	      </span><span class="NAME">this.popTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>311</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>312</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>313</span> 
+<span class='linenumber'>314</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>315</span>     * Render a single object into the world for the given time.
+<span class='linenumber'>316</span>     * @param obj {BaseObject} An object to render
+<span class='linenumber'>317</span>     * @param time {Number} The world time, in milliseconds
+<span class='linenumber'>318</span>     */</span><span class="WHIT">
+<span class='linenumber'>319</span> </span><span class="WHIT">   </span><span class="NAME">renderObject</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>320</span> </span><span class="WHIT">      </span><span class="NAME">obj.update</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>321</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>322</span> 
+<span class='linenumber'>323</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>324</span>     * [ABSTRACT] Gives the render context a chance to initialize the world.
+<span class='linenumber'>325</span>     * Use this method to change the world position, rotation, scale, etc.
+<span class='linenumber'>326</span>     *
+<span class='linenumber'>327</span>     * @param time {Number} The current world time
+<span class='linenumber'>328</span>     */</span><span class="WHIT">
+<span class='linenumber'>329</span> </span><span class="WHIT">   </span><span class="NAME">setupWorld</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>330</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>331</span> 
+<span class='linenumber'>332</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>333</span>     * Increment the transform stack counter.
+<span class='linenumber'>334</span>     */</span><span class="WHIT">
+<span class='linenumber'>335</span> </span><span class="WHIT">   </span><span class="NAME">pushTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>336</span> </span><span class="WHIT">      </span><span class="NAME">this.transformStackDepth</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>337</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>338</span> 
+<span class='linenumber'>339</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>340</span>     * Decrement the transform stack counter and ensure that the stack
+<span class='linenumber'>341</span>     * is not unbalanced.  An unbalanced stack can be indicative of
+<span class='linenumber'>342</span>     * objects that do not reset the state after rendering themselves.
+<span class='linenumber'>343</span>     */</span><span class="WHIT">
+<span class='linenumber'>344</span> </span><span class="WHIT">   </span><span class="NAME">popTransform</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>345</span> </span><span class="WHIT">      </span><span class="NAME">this.transformStackDepth</span><span class="PUNC">--</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>346</span> </span><span class="WHIT">      </span><span class="NAME">Assert</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">this.transformStackDepth</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"Unbalanced transform stack!"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>347</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>348</span> 
+<span class='linenumber'>349</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>350</span>     * This is a potentially expensive call, and can lead to rendering
+<span class='linenumber'>351</span>     * errors.  It is recommended against calling this method!
+<span class='linenumber'>352</span>     */</span><span class="WHIT">
+<span class='linenumber'>353</span> </span><span class="WHIT">   </span><span class="NAME">resetTransformStack</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>354</span> </span><span class="WHIT">      </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.transformStackDepth</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>355</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>356</span> </span><span class="WHIT">         </span><span class="NAME">this.popTransform</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>357</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>358</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>359</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope RenderContext.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
+<span class='linenumber'>360</span> 
+<span class='linenumber'>361</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>362</span>     * Sort the objects to draw from objects with the lowest
+<span class='linenumber'>363</span>     * z-index to the highest z-index.
+<span class='linenumber'>364</span>     * @static
+<span class='linenumber'>365</span>     */</span><span class="WHIT">
+<span class='linenumber'>366</span> </span><span class="WHIT">   </span><span class="NAME">sortFn</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">obj2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>367</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">obj1</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT">
+<span class='linenumber'>368</span> </span><span class="WHIT">          </span><span class="NAME">obj2</span><span class="WHIT"> </span><span class="KEYW">instanceof</span><span class="WHIT"> </span><span class="NAME">HostObject</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>369</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>370</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>371</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>372</span> 
+<span class='linenumber'>373</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">obj1.getZIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">obj2.getZIndex</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>374</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>375</span> 
+<span class='linenumber'>376</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>377</span>     * Get the class name of this object
+<span class='linenumber'>378</span>     * @return {String} "RenderContext"
+<span class='linenumber'>379</span>     */</span><span class="WHIT">
+<span class='linenumber'>380</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>381</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"RenderContext"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>382</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
 <span class='linenumber'>383</span> 
 <span class='linenumber'>384</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>385</span> </span></pre>
+<span class='linenumber'>385</span> 
+<span class='linenumber'>386</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">RenderContext</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>387</span> 
+<span class='linenumber'>388</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>389</span> </span></pre>
 <hr>
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:27:57 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:16 GMT-0500 (EST)</div>
 </body>
 </html>

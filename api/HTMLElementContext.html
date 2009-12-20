@@ -157,7 +157,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawFilledRectangle">drawFilledRectangle</a></b>(rect) </code> 
+            <code> <b> <a href="#drawFilledRectangle">drawFilledRectangle</a></b>(rect, ref) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a filled rectangle on the context.
  
@@ -169,7 +169,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawImage">drawImage</a></b>(obj, rect, image, srcRect) </code> 
+            <code> <b> <a href="#drawImage">drawImage</a></b>(rect, image, srcRect, ref) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an image on the context.
  
@@ -181,7 +181,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawPoint">drawPoint</a></b>(point) </code> 
+            <code> <b> <a href="#drawPoint">drawPoint</a></b>(point, ref) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a point on the context.
  
@@ -193,7 +193,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawRectangle">drawRectangle</a></b>(rect) </code> 
+            <code> <b> <a href="#drawRectangle">drawRectangle</a></b>(rect, ref) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw an un-filled rectangle on the context.
  
@@ -205,7 +205,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawSprite">drawSprite</a></b>(obj, sprite, time) </code> 
+            <code> <b> <a href="#drawSprite">drawSprite</a></b>(sprite, time, ref) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw a sprite on the context.
  
@@ -217,7 +217,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#drawText">drawText</a></b>(point, text) </code> 
+            <code> <b> <a href="#drawText">drawText</a></b>(point, text, ref) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Draw text on the context.
  
@@ -705,7 +705,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <hr>
 
    <a name="drawFilledRectangle"> </a> <h3>drawFilledRectangle</h3>
-      <pre><b>drawFilledRectangle</b>(rect)</pre> 
+      <pre><b>drawFilledRectangle</b>(rect, ref)</pre> 
    <ul>
       Draw a filled rectangle on the context.
       
@@ -715,6 +715,9 @@ A wrapper for any HTML element to convert it into a targetable render context.	
       <b>Parameters:</b>
       <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle to draw 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;ref </code> - A reference host object 
       </ul>
    </ul>
    
@@ -726,7 +729,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <hr>
 
    <a name="drawImage"> </a> <h3>drawImage</h3>
-      <pre><b>drawImage</b>(obj, rect, image, srcRect)</pre> 
+      <pre><b>drawImage</b>(rect, image, srcRect, ref)</pre> 
    <ul>
       Draw an image on the context.
       
@@ -735,9 +738,6 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
-      </ul>
-      <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that specifies the position and            dimensions of the image rectangle. 
       </ul>
       <ul>
@@ -745,6 +745,9 @@ A wrapper for any HTML element to convert it into a targetable render context.	
       </ul>
       <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;srcRect </code> - <i>[optional]</i> The source rectangle within the image, if               <tt>null</tt> the entire image is used 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;ref </code> - A reference host object 
       </ul>
    </ul>
    
@@ -756,7 +759,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <hr>
 
    <a name="drawPoint"> </a> <h3>drawPoint</h3>
-      <pre><b>drawPoint</b>(point)</pre> 
+      <pre><b>drawPoint</b>(point, ref)</pre> 
    <ul>
       Draw a point on the context.
       
@@ -766,6 +769,9 @@ A wrapper for any HTML element to convert it into a targetable render context.	
       <b>Parameters:</b>
       <ul>
          <code>[<i>Point2D</i>]&nbsp;point </code> - The position to draw the point 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;ref </code> - A reference host object 
       </ul>
    </ul>
    
@@ -777,7 +783,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <hr>
 
    <a name="drawRectangle"> </a> <h3>drawRectangle</h3>
-      <pre><b>drawRectangle</b>(rect)</pre> 
+      <pre><b>drawRectangle</b>(rect, ref)</pre> 
    <ul>
       Draw an un-filled rectangle on the context.
       
@@ -787,6 +793,9 @@ A wrapper for any HTML element to convert it into a targetable render context.	
       <b>Parameters:</b>
       <ul>
          <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle to draw 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;ref </code> - A reference host object 
       </ul>
    </ul>
    
@@ -798,7 +807,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <hr>
 
    <a name="drawSprite"> </a> <h3>drawSprite</h3>
-      <pre><b>drawSprite</b>(obj, sprite, time)</pre> 
+      <pre><b>drawSprite</b>(sprite, time, ref)</pre> 
    <ul>
       Draw a sprite on the context.
       
@@ -807,13 +816,13 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Object</i>]&nbsp;obj </code> - A reference object, or <tt>null</tt> 
-      </ul>
-      <ul>
          <code>[<i>Sprite</i>]&nbsp;sprite </code> - The sprite to draw 
       </ul>
       <ul>
          <code>[<i>Number</i>]&nbsp;time </code> - The current world time 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;ref </code> - A reference host object 
       </ul>
    </ul>
    
@@ -825,7 +834,7 @@ A wrapper for any HTML element to convert it into a targetable render context.	
    <hr>
 
    <a name="drawText"> </a> <h3>drawText</h3>
-      <pre><b>drawText</b>(point, text)</pre> 
+      <pre><b>drawText</b>(point, text, ref)</pre> 
    <ul>
       Draw text on the context.
       
@@ -838,6 +847,9 @@ A wrapper for any HTML element to convert it into a targetable render context.	
       </ul>
       <ul>
          <code>[<i>String</i>]&nbsp;text </code> - The text to draw 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;ref </code> - A reference host object 
       </ul>
    </ul>
    
@@ -1049,6 +1061,6 @@ A wrapper for any HTML element to convert it into a targetable render context.	
 
    <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Mon Dec 14 2009 14:28:08 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:26 GMT-0500 (EST)</div>
 </body>
 </html>
