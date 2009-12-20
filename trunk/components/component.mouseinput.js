@@ -45,8 +45,8 @@ Engine.initObject("MouseInputComponent", "InputComponent", function() {
 	 * <li><tt>onMouseOver()</tt> - The mouse moved over the host object, or the object 
 	 *     moved under the mouse</li>
 	 * <li><tt>onMouseOut()</tt> - The mouse moved out of the host object (after being over it)</li>
-	 * <li><tt>onMouseDown()</tt> - A mouse button was depressed over the host object</li>
-	 * <li><tt>onMouseUp()</tt> - A mouse button was released over the host object</li>
+	 * <li><tt>onMouseDown()</tt> - A mouse button was depressed</li>
+	 * <li><tt>onMouseUp()</tt> - A mouse button was released</li>
 	 * <li><tt>onMouseMove()</tt> - The mouse was moved</li>
 	 * </ul>
 	 * Each event receives the "mouseInfo" object as its only argument which contains the following:
