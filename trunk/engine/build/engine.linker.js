@@ -300,38 +300,24 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    },
 
    /**
-    * Process anonymous functions
+    * Process anonymous functions, extracting the function arguments
     * @private
     */
-   findAnonDeps: function(objectName, str) {
-      var fTable = {};
-      var strR = /(["|']).*?\1/g;
+   findAnonArgs: function(objectName, str) {
+      var a = [];
 
-      var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\r|\\n)*?)\\};?","g");
-      var a = 0;
+      var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)","g");
       while ((m = aFnRE.exec(str)) != null) {
-         var f = "_" + (a++);
-         var fdef = m[2].replace(strR, "");
-
-         // Process each function
-         fTable[f] = { vars: Linker.findVars(objectName, fdef),
-                       deps: Linker.findDependencies(objectName, fdef) };
-         fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
-            return (e != "" && e != "this" && e != "arguments");
-         });
-
          var args = m[1].split(",");
-         var vs = fTable[f].vars;
-         for (var a in args) {
-            if (EngineSupport.indexOf(vs, args[a]) == -1) {
-               vs.push(args[a].replace(" ",""));
-            }
+
+         for (var x in args) {
+	         a.push(args[x].replace(" ",""));
          }
       }
 
-      return Linker.procDeps(objectName, fTable);
+      return a;
    },
-
+	
    /**
     * Finds all of the dependencies within an object class.
     * @private
@@ -360,16 +346,23 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
+		var kInstance = null;
       if ($.isFunction(k)) {
          // If the class is an instance, get it's class object
+			kInstance = k;
          k = k.prototype;
       }
 
       // Find the internal functions
       for (var f in k) {
-         if ($.isFunction(k[f]) && k.hasOwnProperty(f)) {
-            var def = k[f].toString();
-
+         var def = k[f];
+			if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
+				// If it's an instance, we're looking at the constructor, and the
+				// instance has its own constructor (not inherited)
+				def = kInstance;
+			}
+         if ($.isFunction(def) && k.hasOwnProperty(f)) {
+				def = def.toString();
             var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\s)*)","g");
             var m = fR.exec(def);
             if (m) {
@@ -378,10 +371,8 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
                fdef = fdef.replace(/\/\/.*\r\n/g, "");
                fdef = fdef.replace("\/\*(.|\s)*?\*\/", "");
 
-               // Process, then remove anonymous functions
-               var anonDeps = Linker.findAnonDeps(objectName, fdef);
-               var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\r|\\n)*?)\\};?","g");
-               fdef = fdef.replace(aFnRE, "");
+               // Process anonymous function arguments
+               var anonArgs = Linker.findAnonArgs(objectName, fdef);
 
                // Process each function
                fTable[f] = { vars: Linker.findVars(objectName, fdef),
@@ -390,6 +381,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
                   return (e != "" && e != "this" && e != "arguments");
                });
 
+					// Consider arguments as local variables
                var args = m[1].split(",");
                var vs = fTable[f].vars;
                for (var a in args) {
@@ -398,9 +390,11 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
                   }
                }
 
-               // Combine in the anonymous dependencies
-               for (var a in anonDeps) {
-                  fTable[f].deps.push(anonDeps[a]);
+               // Combine args with the anonymous function args
+               for (var a in anonArgs) {
+                  if (EngineSupport.indexOf(vs, anonArgs[a]) == -1) {
+                     vs.push(anonArgs[a]);
+                  }
                }
             }
          }
@@ -473,22 +467,24 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       Linker.dependencyProcessor = null;      
 
       // Build the list
-      var unresDeps = "", dCount = 0;
+      var unresolved = [], unresDeps = "", dCount = 0;
       for (var obj in Linker.dependencyList) {
          dCount++;
-         unresDeps += "Object '" + obj + "' has the following unresolved dependencies:\n";
+         unresDeps += "Object '" + obj + "' has the following unresolved dependencies: ";
+			unresDeps += "(" + Linker.dependencyList[obj].deps.length + ") ";
          for (var d in Linker.dependencyList[obj].deps) {
-            unresDeps += "   " + Linker.dependencyList[obj].deps[d] + "\n";
-            // Display the dependencies we found for this object
-            
+            unresDeps += Linker.dependencyList[obj].deps[d] + " ";
          }
-         unresDeps += "\n";
+         unresolved.push(unresDeps);
+			unresDeps = "";
       }
       
       if (dCount != 0) {
          // Dump the dependency list
          Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-         Console.error(unresDeps);
+			for (var ud in unresolved) {
+	         Console.error(unresolved[ud]);
+			}
          Engine.shutdown();
       }
    },

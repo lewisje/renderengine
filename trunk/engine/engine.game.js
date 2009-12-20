@@ -72,11 +72,17 @@ var Game = Base.extend(/** @scope Game.prototype */{
     * with an absolute URL.
     *
     * @param scriptSource {String} The relative path to the script to load.
+    * @return {String} An Id for the script which is used in the call to {@link #scriptLoaded}
+    * 					  when the script has completed loading (or errored out)
     * @memberOf Game
     */
    load: function(scriptSource) {
       Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game's path");
       Engine.loadScript( (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource );
+		var self = this;
+		this.setQueueCallback(function() {
+			self.scriptLoaded(scriptSource);
+		});
    },
 
    /**
@@ -90,8 +96,9 @@ var Game = Base.extend(/** @scope Game.prototype */{
    },
 
    /**
-    * Called when the script with the given path is loaded.
-    * @param scriptPath {String}
+    * [ABSTRACT] Will be called with the path of a loaded script. You can
+    * be guaranteed that the script either loaded and is ready or failed to load.
+    * @param scriptPath {String} The script path
     */
    scriptLoaded: function(scriptPath) {
    },
