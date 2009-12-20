@@ -97,7 +97,7 @@ var Engine = Engine.extend({
     * @param scriptPath {String} The URL of a script to load.
     * @memberOf Engine
     */
-   loadScript: function(scriptPath) {
+   loadScript: function(scriptPath, owner) {
       // Put script into load queue
       Engine.scriptQueue.push(scriptPath);
       Engine.runScriptQueue();

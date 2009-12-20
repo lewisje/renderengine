@@ -461,6 +461,14 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 			});
 		}
 		return EngineSupport._sysInfo;
-   }
+   },
+	
+	whenReady: function(obj, fn) {
+		if (typeof obj != "undefined") {
+			fn();
+		} else {
+			setTimeout(arguments.callee, 50);
+		}
+	}
 });
 
