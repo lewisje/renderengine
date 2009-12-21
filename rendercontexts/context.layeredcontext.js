@@ -72,7 +72,7 @@ Engine.initObject("LayeredContext", "RenderContext", function() {
          this.lWidth = width;
          this.lHeight = height;
          this.layers = HashContainer.create("layers");
-         this.base(name, surface);
+         this.base(name, surface[0]);
       },
       
       /**
