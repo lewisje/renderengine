@@ -222,8 +222,8 @@ var MathObject = Base.extend({
     */
    destroy: function() {
       this.release();
-   },
-}, { /** @scope MathObject.prototype */
+   }
+}, /** @scope MathObject.prototype */{ 
    poolNew: 0,
 
    poolSize: 0,
