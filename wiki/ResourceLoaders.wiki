@@ -15,14 +15,55 @@ _needs content_
 _needs content_
 
 == Sound Loader ==
-_needs content_
+
+The [http://renderengine.googlecode.com/svn/api/SoundLoader.html SoundLoader] is paired with the [http://renderengine.googlecode.com/svn/api/Sound.html Sound] object to abstract whatever sound engine _The Render Engine_ is using.  Currently, the engine is using !SoundManager2 which is a Flash to Javascript bridge (the only thing _not_ 100% Javascript in the engine).
+
+Sound files are loaded and associated with a name for later retrieval.  When you request a sound from the loader, you are given a `Sound` object which has methods for playing, pausing, volume adjustment and more.  Loading a sound is simple:
+
+{{{
+   this.soundLoader.load("explode", this.getFilePath("resources/explode1.mp3"));
+}}}
+
+And so is working with a sound:
+
+{{{
+   this.soundLoader.get("explode").play()
+}}}
+
 
 == Image Loader ==
 _needs content_
 
 == Sprite Loader ==
-_needs content_
+
+The !SpriteLoader is a way to load sprites based on a definition file which describes the sprite (or sprites) located in a single bitmap.  The descriptor says what the base image file is, the overall height and width of the image, and then an object which describes each sprite (either a single static frame, or an animation).  If you look at the documentation for the [http://renderengine.googlecode.com/svn/api/SpriteLoader.html SpriteLoader] class, you can see an example of the descriptor.  The bitmap is either a single sprite, or more commonly, it is a sprite "sheet" with multiple sprites on it.  For example, [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/resources/redball.png this is] the sprite for the [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 "Bounce The Ball"] example, and the following is the descriptor for it:
+
+{{{
+{
+   // Frame (f): left, top, frameWidth, frameHeight
+   // Animation (a): left, top, frameWidth, frameHeight, frameCount, speedMS, loop/toggle
+   bitmapImage: "redball.png",
+   bitmapWidth: 120,
+   bitmapHeight: 60,
+   sprites: {
+      "red": {
+         "f" : [0, 0, 60, 60]
+      },
+      "blue": {
+         "f" : [60, 0, 60, 60]
+      }
+   }
+}
+}}} 
+
+You would load the sprite "sheet" using code like the following from the previously mentioned example:
+
+{{{
+   // Load the sprites
+   this.spriteLoader.load("redball", this.getFilePath("resources/redball.js"));
+}}}
+
+Once you have loaded a sprite descriptor, you'll be able to access those sprites by requesting them from the !SpriteLoader by the name of the sprite "sheet", in this case it's _"redball"_.  You request sprites by name from that sprite "sheet".
 
 == Bitmap Font Loader ==
 _needs content_
-
