@@ -9,17 +9,22 @@
    <property name="engine.src" value="${basedir}/engine/build"  />
    <property name="make.dir" value="${basedir}/make"/>
    <property name="compressor.jar" value="${make.dir}/yuicompressor-2.4.2.jar"/>
-
+   <property name="compiler.jar" value="${make.dir}/compiler.jar"/>
   
    <!-- Locations of distributed files -->
    <property name="min.home" value="${dist.home}/min-js"/>
    <property name="full.home" value="${dist.home}/full"/>
+   <property name="zip.home" value="${dist.home}/min-gzip-js"/>
 
 	<!-- Demos and tools won't be copied unless specified in build.properties -->
 	<property name="demo.set" value="NO_COPY"/>
 	<property name="tool.set" value="NO_COPY"/>
 
-	<!-- Dumpt the system date (this is for Windows) -->
+	<!-- Which compression option to use (either "engine.compress" or "engine.compile")
+	     The second option uses the Google Closure Compiler. -->
+	<property name="compress.option" value="engine.compress"/>
+
+	<!-- Dump the system date (this is for Windows) -->
 	<exec executable="cmd.exe" outputproperty="build.date" >  
 		<arg line="/c"/>
 		<arg line="date.exe"/>
@@ -40,7 +45,7 @@
 
 
    <!-- =========================== ENGINE BUILD TARGETS ========================== -->
-	<target name="engine.build" description="Main engine build, concatenates source files and replaces @ENGINE_VERSION">
+	<target name="engine.build" description="Main engine build, concatenates source files and replaces some tags">
 		<echo message="Building ${engine.file}" />
 		<concat destfile="${engine.file}">
 			<fileset dir="${make.dir}" includes="intro.js" />
@@ -109,6 +114,7 @@
    <target name="engine.zip" depends="engine.min,engine.full" description="Create and zip the engine distributions">
       <zip basedir="${min.home}" destfile="${dist.home}/${app.name}_${app.version}-min.zip"/>
       <zip basedir="${full.home}" destfile="${dist.home}/${app.name}_${app.version}.zip"/>
+      <zip basedir="${zip.home}" destfile="${dist.home}/${app.name}_${app.version}-min-gzip.zip"/>
    </target>
   
   
@@ -129,6 +135,7 @@
       <mkdir dir="${build.home}/libs"/>
       <mkdir dir="${build.home}/demos"/>
       <mkdir dir="${build.home}/tools"/>
+      <mkdir dir="${build.home}/tutorials"/>
       <mkdir dir="${build.home}/setup"/>
       <mkdir dir="${build.home}/test"/>
            
@@ -145,6 +152,7 @@
             <include name="*.png"/>
             <include name="*.jpg"/>
             <include name="*.gif"/>
+            <exclude name="**/Thumbs.db"/>
          </fileset>
       </copy>
   
@@ -152,6 +160,7 @@
       <copy todir="${build.home}/fonts">
          <fileset dir="${basedir}/fonts" includes="${font.set}">
          	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
          </fileset>
       </copy>
 
@@ -159,6 +168,14 @@
       <copy todir="${build.home}/test">
          <fileset dir="${basedir}/test" includes="${test.set}">
          	<exclude name="**/.svn"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the tutorials -->     
+      <copy todir="${build.home}/tutorials">
+         <fileset dir="${basedir}/tutorials" includes="**">
+         	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
          </fileset>
       </copy>
  
@@ -194,6 +211,7 @@
       <copy todir="${build.home}/demos">
          <fileset dir="${basedir}/demos" includes="${demo.set}">
          	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
          </fileset>
       </copy>
  
@@ -201,6 +219,7 @@
       <copy todir="${build.home}/tools">
          <fileset dir="${basedir}/tools" includes="${tool.set}">
          	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
          </fileset>
       </copy>
   
@@ -241,12 +260,16 @@
          <param name="build.home" value="${full.home}"/>
       </antcall>
    
-   	<antcall target="engine.build">
-			<param name="engine.file" value="${full.home}/engine/runtime/engine.js" />
-   	</antcall>
+   	<antcall target="engine.build"/>
       <!-- ### FINISH ### Pre-compilation tasks -->
  
       <!-- Copy the engine files -->     
+      <copy todir="${full.home}/engine/runtime">
+         <fileset dir="${basedir}/engine/runtime">
+            <include name="engine.js"/>
+         </fileset>
+      </copy>
+
       <copy todir="${full.home}/engine">
          <fileset dir="${basedir}/engine">
             <include name="*.js"/>
@@ -304,8 +327,21 @@
 		<replaceregexp match="Console.info\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
   	</target>
+
+	<target name="engine.compile" description="Use the Google Closure Compiler to compress the code">
+		<java jar="${compiler.jar}" fork="true" failonerror="true"
+			jvm="${compiler.jvm}">
+		   <arg line="--js ${basedir}/${input.file} --js_output_file ${min.home}/${input.file}"/>
+		</java>
+
+		<antcall target="min.nodebug">
+			<param name="input.file" value="${min.home}/${input.file}"/>
+		</antcall>
+
+      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
+	</target>
   
-	<target name="engine.compress" description="Compress a source file into a destination file">
+	<target name="engine.compress" description="Use the Yahoo!UI Compressor to compress the code">
 	
       <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
          <arg line="--nomunge -o ${min.home}/${input.file} ${basedir}/${input.file}"/>
@@ -317,15 +353,19 @@
 		<antcall target="min.nodebug">
 			<param name="input.file" value="${min.home}/${input.file}"/>
 		</antcall>
+
+      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
 	</target>
- 
+
    <target name="engine.min" description="Create the minified/compressed distribution of the engine">
   
       <!-- ### START ### Pre-compilation tasks -->
+      
+      <!-- MINIMIZED -->
       <antcall target="makedirs">
          <param name="build.home" value="${min.home}"/>
       </antcall>
- 
+
       <antcall target="basecopy">
          <param name="build.home" value="${min.home}"/>
          <param name="source.flag" value=""/>
@@ -339,13 +379,26 @@
          <param name="build.home" value="${min.home}"/>
       </antcall>
 
-   	<antcall target="engine.build">
-			<param name="engine.file" value="${make.dir}/temp_engine.js" />
-   	</antcall>
+      <!-- GZIPPED -->
+      <antcall target="makedirs">
+         <param name="build.home" value="${zip.home}"/>
+      </antcall>
 
-		<antcall target="min.nodebug">
-			<param name="input.file" value="${make.dir}/temp_engine.js"/>
-		</antcall>
+      <antcall target="basecopy">
+         <param name="build.home" value="${zip.home}"/>
+         <param name="source.flag" value=""/>
+      </antcall>
+ 
+      <antcall target="copydemos">
+         <param name="build.home" value="${zip.home}"/>
+      </antcall>
+
+      <antcall target="licenses">
+         <param name="build.home" value="${zip.home}"/>
+      </antcall>
+
+
+		<antcall target="engine.build"/>
    	   	
       <!-- ### FINISH ### Pre-compilation tasks -->
  
@@ -353,68 +406,67 @@
       <!-- Compress and copy the engine files -->
       <echo message="Compressing engine..."/>
 
-		<!-- Get the engine out out the way -->
-      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/engine/runtime/engine.js ${make.dir}/temp_engine.js"/>
-         <classpath>
-            <pathelement path="${compressor.jar}"/>
-         </classpath>
-      </java>
-		<delete file="${make.dir}/temp_engine.js"/>
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/runtime/engine.js"/>
+		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.baseobject.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.baseobject.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.container.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.events.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.fnv1hash.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.game.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.hostobject.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.math2d.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.object2d.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.particles.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.pooledobject.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.rendercontext.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.resourceloader.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.spatialcontainer.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.timers.js"/>
 		</antcall>
 
@@ -422,67 +474,71 @@
       <!-- Compress and copy the object components -->     
       <echo message="Compressing components..."/>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.base.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.boxcollider.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.circlecollider.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.collider.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.host.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.input.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.image.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.keyboardinput.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.logic.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.mouseinput.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.mover2d.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.notifier.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.render.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.sprite.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.transform2d.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.vector2d.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.wiimoteinput.js"/>
 		</antcall>
  
@@ -490,27 +546,27 @@
       <!-- Compress and copy the render contexts -->     
       <echo message="Compressing rendercontexts..."/>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.canvascontext.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.documentcontext.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.htmlelement.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.render2d.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.scrollingbackground.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.svgcontext.js"/>
 		</antcall>
 
@@ -518,35 +574,35 @@
       <!-- Compress and copy the resource loaders -->     
       <echo message="Compressing resourceloaders..."/>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.bitmapfont.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.image.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.level.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.object.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.remote.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.sound.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.sprite.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.xml.js"/>
 		</antcall>
  
@@ -554,11 +610,11 @@
       <!-- Copy the collision models -->     
       <echo message="Compressing spatial..."/>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="spatial/container.quadtree.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="spatial/container.spatialgrid.js"/>
 		</antcall>
  
@@ -566,19 +622,23 @@
       <!-- Copy the text rendering -->     
       <echo message="Compressing textrender..."/>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="textrender/text.abstractrender.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="textrender/text.bitmap.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
+			<param name="input.file" value="textrender/text.context.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="textrender/text.renderer.js"/>
 		</antcall>
 
-		<antcall target="engine.compress">
+		<antcall target="${compress.option}">
 			<param name="input.file" value="textrender/text.vector.js"/>
 		</antcall>
   

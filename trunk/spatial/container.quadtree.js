@@ -39,7 +39,6 @@ Engine.initObject("QuadtreeNode", "SpatialNode", function() {
 /**
  * @class A single node within a quadtree.  Contains references to sub-nodes.
  *
- * @param rect {Rectangle2D} The rectangle which defines the area of this node
  * @extends SpatialNode
  * @constructor
  * @description Create a quadtree node instance
@@ -51,9 +50,9 @@ var QuadtreeNode = SpatialNode.extend(/** @scope QuadtreeNode.prototype */{
 
    quads: null,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(rect)
    {
       this.base();
