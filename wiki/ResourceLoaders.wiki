@@ -27,9 +27,9 @@ Sound files are loaded and associated with a name for later retrieval.  When you
 And so is working with a sound:
 
 {{{
-   this.soundLoader.get("explode").play()
+   this.soundLoader.get("explode").setVolume(75);
+   this.soundLoader.get("explode").play();
 }}}
-
 
 == Image Loader ==
 _needs content_
