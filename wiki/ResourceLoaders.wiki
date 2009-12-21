@@ -6,13 +6,42 @@ A resource loader is an abstraction of an interface allowing the loading, and ca
 
 Caching is performed to speed up processing, and reduce memory overhead when loading the same resource over and over.  Eventually resource loaders will be able to be pooled so that once resource loader can handle loading resources of many types and properly caching and retrieving them.
 
-Currently, the following resource loaders are available:
+== Ready State of Resources ==
+
+When you load a resource, you'll need to wait until it is ready before you use it.  A lot of times, you'll want to wait until resources are loaded before starting your game.  Using a timer in the engine, you can write a simple method which will poll the resource loaders for readiness.  Here's an example:
+
+{{{
+      // Don't start until all of the resources are loaded
+      WiiTest.loadTimeout = Timeout.create("wait", 250, WiiTest.waitForResources);
+      this.waitForResources();
+   },
+      
+   /**
+    * Wait for resources to become available before starting the game
+    * @private
+    */
+   waitForResources: function(){
+      if (WiiTest.spriteLoader.isReady()) {
+            WiiTest.loadTimeout.destroy();
+            WiiTest.run();
+            return;
+      }
+      else {
+         // Continue waiting
+         WiiTest.loadTimeout.restart();
+      }
+   },
+}}}
+
+You can either query a loader for a single resource by specifying the name in the `isReady()` method call.  Or you can simple ask if all resources which were loading are now loaded by calling `isReady()` with no arguments.
 
 == XML Loader ==
-_needs content_
+
+The [http://renderengine.googlecode.com/svn/api/XMLLoader.html XML resource loader] simply loads an XML document and makes it available.  Once the resource is loaded, the DOM will be returned as the object from the resource loader.
 
 == JSON Object Loader ==
-_needs content_
+
+Loads JSON (!JavaScript Object Notation) files from the server.  The [http://renderengine.googlecode.com/svn/api/ObjectLoader.html ObjectLoader] will load a JSON object and when you request the object from the loader, you will be passed a !JavaScript object.
 
 == Sound Loader ==
 
@@ -32,7 +61,21 @@ And so is working with a sound:
 }}}
 
 == Image Loader ==
-_needs content_
+
+The [http://renderengine.googlecode.com/svn/api/ImageLoader.html ImageLoader] is the foundation for a few other resource loaders, such as the `BitmapFontLoader` and the `SpriteLoader`.  Loading and retrieving an image is fairly straightforward, like the following from [http://www.renderengine.com/tutorials/tutorial4a_1.php Tutorial 4]:
+
+{{{
+   Tutorial4.imageLoader = ImageLoader.create();
+   Tutorial4.imageLoader.load("keys", this.getFilePath("resources/fingerboard.png"), 220, 171);
+}}}
+
+And using it to seed a component with an image:
+
+{{{
+   this.add(ImageComponent.create("draw", Tutorial4.imageLoader, "keys"));
+}}}
+
+The [http://renderengine.googlecode.com/svn/api/ImageComponent.html ImageComponent] takes the `ImageLoader` and the image name as arguments, but you could also access the image simply by calling the `get()` method of the resource loader.
 
 == Sprite Loader ==
 
