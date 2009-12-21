@@ -20,9 +20,7 @@ _Note:_ This context is being revived due to some refactoring which makes it pos
 
 === RenderContext2D ===
 
-This context is the base class for the !CanvasContext and SVGContext which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.  A context could be created from this which would also wrap the DOM in such a mechanism, but since line drawing isn't natively supported by the DOM it doesn't make much sense.
-
-(I've have an experiment in wrapping up [http://www.walterzorn.com/jsgraphics/jsgraphics_e.htm Walter Zorn's JS Graphics library] in a context, but have found that the performance doesn't lend itself to games.  It's useful for drawing vector graphics, but anything higher than a single frame every 4-7 seconds is futile.)
+This context is the base class for the !CanvasContext and SVGContext which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.
 
 == Transformation Stacks ==
 
