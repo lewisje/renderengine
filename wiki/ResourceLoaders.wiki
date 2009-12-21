@@ -106,7 +106,17 @@ You would load the sprite "sheet" using code like the following from the previou
    this.spriteLoader.load("redball", this.getFilePath("resources/redball.js"));
 }}}
 
-Once you have loaded a sprite descriptor, you'll be able to access those sprites by requesting them from the !SpriteLoader by the name of the sprite "sheet", in this case it's _"redball"_.  You request sprites by name from that sprite "sheet".
+Once you have loaded a sprite descriptor, you'll be able to access those sprites by requesting them from the !SpriteLoader by the name of the sprite "sheet", in this case it's _"redball"_.  You request sprites by name from that sprite "sheet", like so:
+
+{{{
+   // The sprites
+   this.sprites = [];
+   this.sprites.push(WiiTest.spriteLoader.getSprite("redball", "red"));
+   this.sprites.push(WiiTest.spriteLoader.getSprite("redball", "blue"));
+   this.setSprite(0);
+}}}
+
+You'll get a [http://renderengine.googlecode.com/svn/api/Sprite.html Sprite] object back which is not only used by the [http://renderengine.googlecode.com/svn/api/SpriteComponent.html SpriteComponent], but allows you to manipulate the sprite itself.
 
 == Bitmap Font Loader ==
 
