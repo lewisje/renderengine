@@ -5,6 +5,7 @@
 The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.
 
 || *Date* || *Notes* ||
+|| 12/20/2009 || Fixed the !MouseInputComponent which was totally broken.  I also created the start of a manual test harness which helped get the component up and running.  In addition, the linker was updated to parse constructors (which it apparently wasn't doing). ||
 || 12/17/2009 || Revived the 2D DOM context due to some refactoring which makes it possible. ||
 || 12/14/2009 || Finished the API documentation. Updated the loading messages for all examples. Modified the engine to detect which browser it is running within and stop if it's not compatible. Fixed the way that Chrome Frame is loaded. ||
 || 12/13/2009 || Moved the particle editor to version 2.0.  Dropped the "Music Player" example. Finished the bitmap font editor - adding documentation to the Wiki.  Ended up removing Arial bitmap font since it wouldn't parse cleanly. ||
