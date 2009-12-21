@@ -90,3 +90,7 @@ If the object is an instance of a player object, and that object's bounding box 
 The point of using an object oriented architecture is to allow classes to inherit functionality from some parent class.  For example, the `Mover2D` component inherits from the `Transform2D` component.  The reason for this is that `Transform2D` can handle position, rotation, and scale and that is what the `Mover2D` component needs.  However, `Transform2D` only stores a single position, rotation, and scale so it must be continually updated to be of much use.
 
 `Mover2D` inherits from `Transform2D` to get access to those values, but adds the ability to update the position based on a velocity vector and update the rotation based on an  angular velocity.
+
+== Components Example ==
+
+[http://www.renderengine.com/tutorials/tutorial2_1.php Tutorial 2] on _The Render Engine_ website has more information on the topic.  [http://www.renderengine.com/tutorials/tutorial3_1.php Tutorial 3] shows multiple components working together in a simple HostObject.
