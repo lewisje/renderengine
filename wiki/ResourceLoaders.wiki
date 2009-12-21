@@ -13,7 +13,6 @@ When you load a resource, you'll need to wait until it is ready before you use i
 {{{
       // Don't start until all of the resources are loaded
       WiiTest.loadTimeout = Timeout.create("wait", 250, WiiTest.waitForResources);
-      this.waitForResources();
    },
       
    /**
