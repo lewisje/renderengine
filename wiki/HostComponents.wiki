@@ -93,4 +93,4 @@ The point of using an object oriented architecture is to allow classes to inheri
 
 == Components Example ==
 
-[http://www.renderengine.com/tutorials/tutorial2_1.php Tutorial 2] on _The Render Engine_ website has more information on the topic.  [http://www.renderengine.com/tutorials/tutorial3_1.php Tutorial 3] shows multiple components working together in a simple HostObject.
+[http://www.renderengine.com/tutorials/tutorial2_1.php Tutorial 2] on _The Render Engine_ website has more information on the topic.  [http://www.renderengine.com/tutorials/tutorial3_1.php Tutorial 3] shows multiple components working together in a simple !HostObject.
