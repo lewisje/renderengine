@@ -109,4 +109,20 @@ You would load the sprite "sheet" using code like the following from the previou
 Once you have loaded a sprite descriptor, you'll be able to access those sprites by requesting them from the !SpriteLoader by the name of the sprite "sheet", in this case it's _"redball"_.  You request sprites by name from that sprite "sheet".
 
 == Bitmap Font Loader ==
-_needs content_
+
+Currently, the [http://renderengine.googlecode.com/svn/api/BitmapFontLoader.html BitmapFontLoader] is only used by the [http://renderengine.googlecode.com/svn/api/BitmapText.html BitmapText] text renderer, but that doesn't mean it can't be used elsewhere.  A simple example of loading a bitmap font, and then using it can be seen below (from the [http://renderengine.googlecode.com/svn/trunk/test/textrender/index.html?metrics=true text render demo]):
+
+{{{
+   FontTest.fontLoader = BitmapFontLoader.create();
+   FontTest.fontLoader.load("lucida", "lucida_sans_36.js");
+}}}
+
+The font descriptor file is loaded, which contains the definition of the font (image, size, glyph positions) and is associated with a name.  That name is later used to retrieve the font for rendering:
+
+{{{
+   var bitmap2 = TextRenderer.create(BitmapText.create(FontTest.fontLoader.get("lucida")), "ABCxyz123!@#$%^&*()", 1);
+   bitmap2.setPosition(Point2D.create(10, 143));
+   bitmap2.setTextWeight(1);
+   bitmap2.setColor("#ff0000");
+   this.renderContext.add(bitmap2);
+}}}
