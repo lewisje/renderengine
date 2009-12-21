@@ -398,6 +398,14 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       // Closing tag
       xml += indent + "</" + this.constructor.getClassName() + ">\n";
       return xml;
+   },
+   
+   /**
+    * Returns an iterator over the collection.
+    * @return {Iterator} An iterator
+    */
+   iterator: function() {
+      return Iterator.create(this);   
    }
 
 }, /** @scope Container.prototype */{
