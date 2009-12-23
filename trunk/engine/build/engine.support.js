@@ -463,6 +463,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 		return EngineSupport._sysInfo;
    },
 	
+	/**
+	 * When the object is no longer <tt>undefined</tt>, the function will
+	 * be executed.
+	 * @param obj {Object} The object to wait for
+	 * @param fn {Function} The function to execute when the object is ready
+	 */
 	whenReady: function(obj, fn) {
 		if (typeof obj != "undefined") {
 			fn();
