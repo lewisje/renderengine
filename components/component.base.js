@@ -170,16 +170,15 @@ var BaseComponent = BaseObject.extend(/** @scope BaseComponent.prototype */{
    },
 
    /**
-    * This method is called by the host object to run the component, 
+    * [ABSTRACT] This method is called by the host object to run the component, 
     * updating its state.  Not all components will need an execute
     * method.  However, it is important to include one if you need to 
     * update the state of the component each engine cycle.
     *
     * @param renderContext {RenderContext} The context the component will render within.
     * @param time {Number} The global engine time
-    * @param rendering {Boolean} <tt>true</tt> during the rendering phase
     */
-   execute: function(renderContext, time, rendering) {
+   execute: function(renderContext, time) {
       // ABSTRACT METHOD DECLARATION
    },
 
