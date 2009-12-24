@@ -39,6 +39,7 @@ Engine.initObject("ManualTest", "Game", function(){
    var ManualTest = Game.extend({
    
       constructor: null,
+		testName: null,
       
       /**
        * Called to set up the game, download any resources, and initialize
@@ -48,13 +49,17 @@ Engine.initObject("ManualTest", "Game", function(){
          // Set the FPS of the game
          Engine.setFPS(30);
 
-			var testName = EngineSupport.getStringParam("test", "");
-			if (testName != "") {
+			this.testName = EngineSupport.getStringParam("test", "");
+			if (this.testName != "") {
 				// Load a known file
 				TestRunner = {};
-				Game.load("/" + testName + "/testrun.js");
+				Game.load("/" + this.testName + "/testrun.js");
 			}		
       },
+		
+		getTest: function() {
+			return this.testName;
+		},
 		
 		log: function(txt) {
 			$("div.output").append($("<span>").text(txt)).append($("<br/>")).scrollTop(500000);

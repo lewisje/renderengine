@@ -45,6 +45,12 @@ Engine.initObject("TestRunner", null, function() {
 			for (var x = 6; x < 9; x++) {
 				ctx.drawFilledArc(Point2D.create(20 + (x * 30), 40), 10, Math2D.degToRad(x * 8), 5.45);
 			}
+			
+			ctx.setLineStyle("green");
+			ctx.strokeText(Point2D.create(10, 70), "Stroked Text Testing");
+
+			ctx.setFillStyle("green");
+			ctx.drawText(Point2D.create(10, 90), "Filled Text Testing");
 
 		}
 		
