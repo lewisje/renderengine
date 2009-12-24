@@ -95,11 +95,10 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
          }
 
          this.queuedSprites++;
-
          var thisObj = this;
 
          // Get the file from the server
-         $.get(url, function(data) {
+         $.get(url, function(data, status) {
             var spriteInfo = EngineSupport.evalJSON(data);
             // get the path to the resource file
             var path = url.substring(0, url.lastIndexOf("/"));
