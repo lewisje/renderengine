@@ -61,6 +61,10 @@ Engine.initObject("ManualTest", "Game", function(){
 			return this.testName;
 		},
 		
+		showOutput: function() {
+			$("div.output").css("display", "block");
+		},
+		
 		log: function(txt) {
 			$("div.output").append($("<span>").text(txt)).append($("<br/>")).scrollTop(500000);
 		}      
