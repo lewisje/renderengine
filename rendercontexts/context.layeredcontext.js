@@ -41,7 +41,7 @@ Engine.include("/engine/engine.container.js");
 Engine.initObject("LayeredContext", "RenderContext", function() {
 
    /**
-    * @class A context which hosts multiple contexts in a layered fashion.  Each
+    * @class A context which hosts multiple contexts in a layered manner.  Each
     * context which is added works together in unison so that world transformations
     * are applied across all contexts.
     *
@@ -80,10 +80,19 @@ Engine.initObject("LayeredContext", "RenderContext", function() {
        * @private
        */
       release: function() {
+         this.base();
          this.lWidth = 0;
          this.lHeight = 0;
          this.layers.destroy();
          this.layers = null;
+      },
+      
+      /**
+       * Get the collection of layers.
+       * @return {HashContainer}
+       */
+      getLayers: function() {
+         return this.layers;
       },
       
       /**
