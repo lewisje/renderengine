@@ -15,6 +15,7 @@ Engine.initObject("TestRunner", null, function() {
 			var ctx = CanvasContext.create("context", 400, 400);
 			ctx.setBackgroundColor("black");
 			ctx.setStatic(true);
+			ctx.setFontSize(36);
 			
 			Engine.getDefaultContext().add(ctx);
 			
@@ -47,10 +48,11 @@ Engine.initObject("TestRunner", null, function() {
 			}
 			
 			ctx.setLineStyle("green");
-			ctx.strokeText(Point2D.create(10, 70), "Stroked Text Testing");
+			ctx.setLineWidth(1);
+			ctx.strokeText(Point2D.create(10, 80), "Stroked Text Testing");
 
 			ctx.setFillStyle("green");
-			ctx.drawText(Point2D.create(10, 90), "Filled Text Testing");
+			ctx.drawText(Point2D.create(10, 110), "Filled Text Testing");
 
 		}
 		

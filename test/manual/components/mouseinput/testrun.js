@@ -65,6 +65,8 @@ Engine.initObject("TestRunner", null, function() {
 		viewRect: Rectangle2D.create(0,0,200,200),
 		
 		run: function() {
+			ManualTest.showOutput();
+			
 			// Set up a canvas for a simple object
 			var ctx = CanvasContext.create("context", 200, 200);
 			ctx.setBackgroundColor("black");

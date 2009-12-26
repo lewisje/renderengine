@@ -141,11 +141,17 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    },
 
    /**
-    * Get the callback function for this timer.
+    * Get the callback function for this timer.  When the callback is called,
+    * the scope of the function will be the {@link Timer} itself.
     * @return {Function} The callback function
     */
    getCallback: function() {
-      return this.callback;
+		var timerFn = function() {
+			arguments.callee.cb.call(arguments.callee.timer);	
+		};
+		timerFn.cb = this.callback;
+		timerFn.timer = this;
+      return timerFn;
    },
 
    /**
@@ -251,12 +257,10 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
    constructor: function(name, interval, callback) {
 
       var cb = function() {
-         var aC = arguments.callee;
-         aC.timer.destroy();
-         aC.cbFn();
+         this.destroy();
+         aC.cbFn.call(this);
       };
       cb.cbFn = callback;
-      cb.timer = this;
 
       this.base(name, interval, cb);
    },
@@ -310,7 +314,7 @@ var OneShotTrigger = OneShotTimeout.extend(/** @scope OneShotTimeout.prototype *
       var doneFn = function() {
          var aC = arguments.callee;
          aC.intv.destroy();
-         aC.cb();
+         aC.cb.call(this);
       };
       // Create an Interval internally
       doneFn.intv = Interval.create(name + "_trigger", triggerInterval, triggerCallback);
@@ -355,15 +359,13 @@ var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
       var cb = function() {
          var aC = arguments.callee;
          if (aC.reps-- > 0) {
-            aC.cbFn(aC.reps);
-            aC.timer.restart();
+            aC.cbFn.call(this, aC.reps);
+            this.restart();
          } else {
-            aC.timer.destroy();
+            this.destroy();
          }
       };
       cb.cbFn = callback;
-      cb.timer = this;
-      cb.reps = reps;
 
       this.base(name, interval, cb);
    }
