@@ -49,7 +49,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
 
    constructor: function(pos, ttl) {
       this.base(ttl || 2000);
-      this.pos = new Point2D(pos);
+      this.pos = Point2D.create(pos);
 
       var a = Math.floor(Math.random() * 360);
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, SimpleParticle.ref, a);
@@ -57,6 +57,12 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       this.vec.mul(vel);
    },
 
+	destroy: function() {
+		this.pos.destroy();
+		this.vec.destroy();
+		this.base();
+	},
+	
    release: function() {
       this.base();
       this.pos = null;
@@ -122,12 +128,18 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
    constructor: function(pos, rot, spread, color, ttl) {
       this.base(ttl || 2000);
       this.clr = color;
-      this.pos = new Point2D(pos);
+      this.pos = Point2D.create(pos);
       var a = rot + Math.floor((180 - (spread / 2)) + (Math.random() * (spread * 2)));
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, TrailParticle.ref, a);
       var vel = 1 + (Math.random() * 2);
       this.vec.mul(vel);
    },
+
+	destroy: function() {
+		this.pos.destroy();
+		this.vec.destroy();
+		this.base();
+	},
 
    release: function() {
       this.base();
@@ -155,7 +167,7 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
    },
 
    // A simple reference point for the "up" vector
-   ref: new Point2D(0, -1)
+   ref: Point2D.create(0, -1)
 });
 
 return TrailParticle;

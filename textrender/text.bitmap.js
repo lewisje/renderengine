@@ -103,7 +103,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
          }
       }
 
-      this.getHostObject().setBoundingBox(new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
+      this.getHostObject().getBoundingBox().set(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
    },
 
    /**
@@ -141,7 +141,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       var align = this.getTextAlignment();
       var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
       var kern = (align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.kerning : this.font.info.kerning);
-      var space = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.space : this.font.info.space), 0);
+      var space = Point2D.create((align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.space : this.font.info.space), 0);
       var cW, cH = this.font.info.height;
       var cS = 0;
 
@@ -185,13 +185,16 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       // 2nd pass: The color
 		if (renderContext.get2DContext) {
 	      renderContext.get2DContext().globalCompositeOperation = "source-atop";
-         var r = new Rectangle2D(0, 0, pc.x, cH);
+         var r = Rectangle2D.create(0, 0, pc.x, cH);
          renderContext.setFillStyle(this.getColor());
          renderContext.drawFilledRectangle(r);
 	      // Reset the composition operation
 	      renderContext.get2DContext().globalCompositeOperation = "source-over";
+			r.destroy();
 		}
 		
+		pc.destroy();
+		space.destroy();
 		renderContext.popTransform();
    }
 }, /** @scope BitmapText.prototype */{

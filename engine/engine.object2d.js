@@ -52,15 +52,29 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 
    /** @private */
    bBox: null,
+	wBox: null,
+	lastPosition: null,
 
    /**
     * @private
     */
    constructor: function(name) {
       this.base(name);
-      this.lastPosition = new Point2D(5,5);
+      this.lastPosition = Point2D.create(5,5);
+		this.bBox = Rectangle2D.create(0,0,1,1);
+		this.wBox = Rectangle2D.create(0,0,1,1);
       this.zIndex = 1;
    },
+	
+	/**
+	 * Destroy the object.
+	 */
+	destroy: function() {
+		this.bBox.destroy();
+		this.wBox.destroy();
+		this.lastPosition.destroy();
+		this.base();
+	},
 
    /**
     * Release the object back into the pool.
@@ -69,16 +83,20 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       this.base();
       this.zIndex = 1;
       this.bBox = null;
+		this.lastPosition = null;
    },
 
    /**
     * Set the bounding box of this object
     *
-    * @param rect {Rectangle2D} The rectangle that completely encompasses
-    *                           this object.
+    * @param x {Number|Rectangle2D} The X coordinate, or the rectangle that completely encompasses
+    *                           		this object.
+    * @param y {Number} If X is a coordinate, this is the Y coordinate
+    * @param w {Number} If X is a coordinate, this is the width
+    * @param h {Number} If X is a coordinate, this is the height
     */
-   setBoundingBox: function(rect) {
-      this.bBox = rect;
+   setBoundingBox: function(x,y,w,h) {
+		this.bBox.set(x,y,w,h);
    },
 
    /**
@@ -95,7 +113,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @return {Rectangle2D} The world bounding rectangle
     */
    getWorldBox: function() {
-      return new Rectangle2D(this.getBoundingBox()).offset(this.getRenderPosition());
+		this.wBox.set(this.getBoundingBox());
+      return this.wBox.offset(this.getRenderPosition());
    },
    
    /**

@@ -47,9 +47,7 @@ Engine.initObject("SpaceroidsBullet", "Object2D", function() {
 var SpaceroidsBullet = Object2D.extend({
 
    player: null,
-
    field: null,
-
    rot: null,
 
    constructor: function(player) {
@@ -82,10 +80,13 @@ var SpaceroidsBullet = Object2D.extend({
       var dir = Math2D.getDirectionVector(Point2D.ZERO, SpaceroidsBullet.tip, r);
 
       var p = Point2D.create(p_mover.getPosition());
-
-      c_mover.setPosition(p.add(Point2D.create(dir).mul(10)));
+		var dPos = Point2D.create(dir).mul(10);
+      c_mover.setPosition(p.add(dPos));
       c_mover.setVelocity(dir.mul(8));
       c_mover.setCheckLag(false);
+		dir.destroy();
+		p.destroy();
+		dPos.destroy();
    },
 
    release: function() {
@@ -156,12 +157,14 @@ var SpaceroidsBullet = Object2D.extend({
       {
          this.player.removeBullet(this);
          this.destroy();
+			bBox.destroy();
          return;
       }
 
       renderContext.pushTransform();
       this.base(renderContext, time);
       renderContext.popTransform();
+		bBox.destroy();
    },
 
    /**
@@ -177,7 +180,7 @@ var SpaceroidsBullet = Object2D.extend({
     *          objects in the PCL should be tested.
     */
    onCollide: function(obj) {
-      if ((obj instanceof SpaceroidsRock) &&
+      if ((SpaceroidsRock.isInstance(obj)) &&
           ( (obj.getWorldBox().containsPoint(this.getPosition())) ||
             (Math2D.lineBoxCollision(this.getPosition(), this.getLastPosition(), obj.getWorldBox())) )
          )
@@ -208,11 +211,11 @@ var SpaceroidsBullet = Object2D.extend({
    },
 
    // Why we have this, I don't know...
-   shape: [ new Point2D(-1, -1), new Point2D( 1, -1),
-            new Point2D( 1,  1), new Point2D(-1,  1)],
+   shape: [ Point2D.create(-1, -1), Point2D.create( 1, -1),
+            Point2D.create( 1,  1), Point2D.create(-1,  1)],
 
    // The tip of the player at zero rotation (up)
-   tip: new Point2D(0, -1)
+   tip: Point2D.create(0, -1)
 });
 
 return SpaceroidsBullet;

@@ -75,11 +75,11 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.setSprite(0);
 
          this.setPosition(Point2D.create(5, 5));
-         this.setGravity(Point2D.create(0, 1));
+         this.setGravity(Point2D.create(0, 1.5));
          this.setVelocity(Vector2D.create(2, 0));
          this.atRest = false;
          
-         this.circle = Circle2D.create(Point2D.create(0, 0), 30);
+         this.circle = Circle2D.create(Point2D.create(0, 0), 15);
          this.upVec = Vector2D.create(0, -1);
          
          this.getComponent("move").setLagAdjustment(0.08);
@@ -197,6 +197,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
             // Adjust
             var b = Point2D.create(p.x, fb.h - bb.h - 3);
             this.setPosition(b);
+				b.destroy();
          }
 
          // Walls
@@ -209,6 +210,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
             // Adjust
             var b = Point2D.create((p.x < 0 ? 5 : fb.w - bb.w - 5), p.y);
             this.setPosition(b);
+				b.destroy();
          }
 
       },
@@ -220,6 +222,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
          var xD = (Math.random() * 100) < 50 ? -1 : 1;
          var v = Vector2D.create((Math.random() * 4) * xD, -20);
          this.setVelocity(v);
+			v.destroy();
       },
 
       /**
@@ -227,7 +230,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
        * change the sprite which represents it.
        */
       onCollide: function(obj) {
-         if (obj instanceof WiiBall &&
+         if (WiiBall.isInstance(obj) &&
              this.getWorldBox().isIntersecting(obj.getWorldBox())) {
             if (!this.isAtRest()) {
                // Bounce the balls
@@ -238,7 +241,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
             }
          }
 
-         if (obj instanceof WiiHost &&
+         if (WiiHost.isInstance(obj) &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
             this.setSprite(1);
             return ColliderComponent.STOP;
@@ -270,7 +273,9 @@ Engine.initObject("WiiBall", "Object2D", function() {
          // B.center - A.center is less that or equal to 0,
          // A isn't isn't moving towards B
          if (dot <= 0) {
-           return false;
+				norm.destroy();
+				c.destroy();
+         	return false;
          }
          
          var lenC = c.len();
@@ -281,7 +286,9 @@ Engine.initObject("WiiBall", "Object2D", function() {
          // way they are going collide
          var sumRad2 = sumRad * sumRad;
          if (f >= sumRad2) {
-           return false;
+				norm.destroy();
+				c.destroy();
+         	return false;
          }
          
          // We now have F and sumRadii, two sides of a right triangle.
@@ -293,7 +300,9 @@ Engine.initObject("WiiBall", "Object2D", function() {
          // Better to check now than perform a square root of a
          // negative number.
          if (t < 0) {
-           return false;
+				norm.destroy();
+				c.destroy();
+         	return false;
          }
          
          // Therefore the distance the circle has to travel along
@@ -307,15 +316,23 @@ Engine.initObject("WiiBall", "Object2D", function() {
          // to touch B is not greater than the magnitude of the
          // movement vector.
          if (mag < distance) {
-           return false;
+				norm.destroy();
+				c.destroy();
+         	return false;
          }
          
          // Set the length of the movevec so that the circles will just
          // touch
          var moveVec = this.getVelocity().normalize();
          movevec = moveVec.mul(distance);
-         this.setPosition(Point2D.create(this.getPosition()).add(movevec));
+			
+			var newPos = Point2D.create(this.getPosition()).add(movevec);
+         this.setPosition(newPos);
          
+			norm.destroy();
+			c.destroy();
+			newPos.destroy();
+			
          return true;         
       },
       
@@ -358,6 +375,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
          
          this.setVelocity(v1P);
          ball.setVelocity(v2P);
+			
+			n.destroy();
+			omn1.destroy();
+			omn2.destroy();
       },
       
       getMass: function() {

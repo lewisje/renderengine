@@ -145,6 +145,12 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    error: function() {
    },
 
+	/**
+	 * Dump a stack trace to the console.
+	 */	
+	trace: function() {
+	},
+
    /**
     * Get the class name of this object
     *
@@ -437,6 +443,15 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
          console.error.apply(console, arguments);
       }
    },
+	
+	/**
+	 * Write a stack trace to the console
+	 */
+	trace: function() {
+		if (typeof console != "undefined") {
+			console.trace.apply(arguments);
+		}
+	},
 
    /**
     * Get the class name of this object
@@ -608,7 +623,11 @@ var Console = Base.extend(/** @scope Console.prototype */{
    error: function() {
       if (this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
          this.consoleRef.error.apply(this.consoleRef, arguments);
-   }
+   },
+	
+	trace: function() {
+		this.consoleRef.trace();
+	}
 });
 
 
@@ -622,6 +641,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
+		if (arguments.length > 2) {
+			for (var a = 2; a < arguments.length; a++) {
+				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+				Console.error("*ASSERT* ", arguments[a]);
+				Console.trace();
+			}
+		}
+		
       Engine.shutdown();
       // This will provide a stacktrace for browsers that support it
       throw new Error(error);
@@ -637,6 +664,12 @@ var Assert = function(test, error) {
 var AssertWarn = function(test, warning) {
    if (!test)
    {
+		if (arguments.length > 2) {
+			for (var a = 2; a < arguments.length; a++) {
+				Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+				Console.warn("*ASSERT-WARN* ", arguments[a]);
+			}
+		}
       Console.warn(warning);
    }
 };
@@ -651,7 +684,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 901 $
+ * @version: $Revision: 949 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1106,6 +1139,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 		return EngineSupport._sysInfo;
    },
 	
+	/**
+	 * When the object is no longer <tt>undefined</tt>, the function will
+	 * be executed.
+	 * @param obj {Object} The object to wait for
+	 * @param fn {Function} The function to execute when the object is ready
+	 */
 	whenReady: function(obj, fn) {
 		if (typeof obj != "undefined") {
 			fn();
@@ -1124,7 +1163,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 880 $
+ * @version: $Revision: 930 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1379,8 +1418,9 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       var nR = "([\\$_\\w\\.]*)";
       var nwR = new RegExp("(new\\s+" + nR + ")","g");
       var ctR = new RegExp("(" + nR + "\\.create\\()","g");
-      var fcR = new RegExp("(" + nR + "\\()", "g");
-      var inR = new RegExp("(intanceof\\s+"+ nR + ")", "g");
+      var fcR = new RegExp("(" + nR + ".isInstance\\()", "g");
+      var inR = new RegExp("(" + nR + "\\()", "g");
+      //var inR = new RegExp("(instanceof\\s+"+ nR + ")", "g");
       var m;
 
       // "new"-ing objects
@@ -1407,12 +1447,24 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
+      // "isInstance" method dependencies
+      while ((m = fcR.exec(def)) != null) {
+         if (m[2].indexOf(".") != -1) {
+            var k = m[2].split(".")[0];
+            if (EngineSupport.indexOf(dTable, k) == -1) {
+               EngineSupport.arrayRemove(dTable, k);
+            }
+         }
+      }
+
       // "instanceof" checks
+		/*
       while ((m = inR.exec(def)) != null) {
          if (EngineSupport.indexOf(dTable, m[2]) == -1) {
             dTable.push(m[2]);
          }
       }
+      */
       return dTable;
    },
 
@@ -1557,18 +1609,19 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    },
 
    /**
-    * Perform a quick resolution on first-level circular references.
+    * Perform resolution on first-level circular references.
     * @private
     */
    checkCircularRefs: function(objectName) {
+		// Remove first-level dependencies				
       var deps = Linker.dependencyList[objectName].deps;
-      var r = [];
       for (var dep in deps) {
          if (Linker.dependencyList[deps[dep]] && EngineSupport.indexOf(Linker.dependencyList[deps[dep]].deps, objectName) != -1) {
             // Try removing the circular reference
             EngineSupport.arrayRemove(Linker.dependencyList[objectName].deps, deps[dep]);
          }
       }
+		
    },
 
    /**
@@ -1949,9 +2002,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    destroy: function(obj) {
-      Assert((obj != null), "Trying to destroy non-existent object!");
+      Assert((obj != null), "Trying to destroy non-existent object!", obj);
       var objId = obj.getId();
-      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!");
+      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!", this.gameObjects[objId]);
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
@@ -2081,26 +2134,26 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
       this.running = false;
-      for (var o in this.gameObjects)
-      {
-         this.gameObjects[o].destroy();
-      }
-      this.gameObjects = null;
-
+		
+		// Kill off the default context and anything
+		// that's attached to it.  We'll alert the
+		// developer if there's an issue with orphaned objects
+		this.getDefaultContext().destroy();
+		
       // Dump the object pool
       if (typeof PooledObject != "undefined") {
          PooledObject.objectPool = null;
       }
 
-      Assert((this.livingObjects == 0), "Object references not cleaned up!");
+      AssertWarn((this.livingObjects == 0), "Object references not cleaned up!");
       
       this.loadedScripts = {};
       this.scriptLoadCount = 0;
       this.scriptsProcessed = 0;
       this.defaultContext = null;
 
-      // Perform final cleanup (silly hack for unit testing)
-      if (!Engine.UNIT_TESTING) {
+      // Perform final cleanup
+      if (!Engine.UNIT_TESTING /* Is this a hack? */) {
          this.cleanup();
       }
    },
@@ -2248,7 +2301,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Add a metric to the game engine that can be displayed
     * while it is running.  If smoothing is selected, a 3 point
     * running average will be used to smooth out jitters in the
-    * value that is shown.  For the <tt>value</tt> argument,
+    * value that is shown.  For the <tt>fmt</tt> argument,
     * you can provide a string which contains the pound sign "#"
     * that will be used to determine where the calculated value will
     * occur in the formatted string.
@@ -2256,6 +2309,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param metricName {String} The name of the metric to track
     * @param value {String/Number} The value of the metric.
     * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
+    * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
     * @memberOf Engine
     */
    addMetric: function(metricName, value, smoothing, fmt) {
@@ -2315,8 +2369,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 			return true;
 		}
 		var sInfo = EngineSupport.sysInfo();
-		var msg = "This browser is not supported by <i>The Render Engine</i>.<br/><br/>";
-		msg += "Please see <a href='http://www.renderengine.com/browsers.php'>the list of ";
+		var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
+		msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
 		msg += "supported browsers</a> for more information.";
 		switch (sInfo.browser) {
 			case "chrome":
@@ -2362,8 +2416,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       var nextFrame = Engine.fpsClock;
 
       // Update the world
-      if (Engine.running && Engine.getDefaultContext() != null)
-      {
+      if (Engine.running && Engine.getDefaultContext() != null) {
          Engine.vObj = 0;
 
          // Render a frame
@@ -2644,7 +2697,6 @@ var Engine = Engine.extend({
                      // Delete the script node
                      $(n).remove(); 
                   }
-
                }
                Engine.readyForNextScript = true;
             };

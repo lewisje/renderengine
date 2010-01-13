@@ -64,7 +64,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     */
    constructor: function(renderer, text, size) {
 
-      Assert((renderer instanceof AbstractTextRenderer), "Text renderer must extend AbstractTextRenderer");
+      Assert((AbstractTextRenderer.isInstance(renderer)), "Text renderer must extend AbstractTextRenderer");
 
       this.base("TextRenderer");
 
@@ -212,6 +212,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     */
    setPosition: function(point) {
       this.getComponent("transform").setPosition(point);
+		point.destroy();
    },
 
    /**

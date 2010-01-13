@@ -189,7 +189,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
          var status = ColliderComponent.CONTINUE;
          EngineSupport.forEach(pcl, function(obj) {
             if (this.getHostObject() != obj && 
-                (this.getObjectType() == null || obj instanceof this.getObjectType()) &&
+                (this.getObjectType() == null || this.getObjectType().isInstance(obj)) &&
                 status == ColliderComponent.CONTINUE)
             {
                status = this.testCollision(time, obj);

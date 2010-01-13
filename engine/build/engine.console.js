@@ -114,6 +114,12 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    error: function() {
    },
 
+	/**
+	 * Dump a stack trace to the console.
+	 */	
+	trace: function() {
+	},
+
    /**
     * Get the class name of this object
     *
@@ -406,6 +412,15 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
          console.error.apply(console, arguments);
       }
    },
+	
+	/**
+	 * Write a stack trace to the console
+	 */
+	trace: function() {
+		if (typeof console != "undefined") {
+			console.trace.apply(arguments);
+		}
+	},
 
    /**
     * Get the class name of this object
@@ -577,7 +592,11 @@ var Console = Base.extend(/** @scope Console.prototype */{
    error: function() {
       if (this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
          this.consoleRef.error.apply(this.consoleRef, arguments);
-   }
+   },
+	
+	trace: function() {
+		this.consoleRef.trace();
+	}
 });
 
 
@@ -591,6 +610,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
+		if (arguments.length > 2) {
+			for (var a = 2; a < arguments.length; a++) {
+				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+				Console.error("*ASSERT* ", arguments[a]);
+				Console.trace();
+			}
+		}
+		
       Engine.shutdown();
       // This will provide a stacktrace for browsers that support it
       throw new Error(error);
@@ -606,6 +633,12 @@ var Assert = function(test, error) {
 var AssertWarn = function(test, warning) {
    if (!test)
    {
+		if (arguments.length > 2) {
+			for (var a = 2; a < arguments.length; a++) {
+				Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+				Console.warn("*ASSERT-WARN* ", arguments[a]);
+			}
+		}
       Console.warn(warning);
    }
 };

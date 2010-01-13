@@ -262,8 +262,9 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       var nR = "([\\$_\\w\\.]*)";
       var nwR = new RegExp("(new\\s+" + nR + ")","g");
       var ctR = new RegExp("(" + nR + "\\.create\\()","g");
-      var fcR = new RegExp("(" + nR + "\\()", "g");
-      var inR = new RegExp("(intanceof\\s+"+ nR + ")", "g");
+      var fcR = new RegExp("(" + nR + ".isInstance\\()", "g");
+      var inR = new RegExp("(" + nR + "\\()", "g");
+      //var inR = new RegExp("(instanceof\\s+"+ nR + ")", "g");
       var m;
 
       // "new"-ing objects
@@ -290,12 +291,24 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
+      // "isInstance" method dependencies
+      while ((m = fcR.exec(def)) != null) {
+         if (m[2].indexOf(".") != -1) {
+            var k = m[2].split(".")[0];
+            if (EngineSupport.indexOf(dTable, k) == -1) {
+               EngineSupport.arrayRemove(dTable, k);
+            }
+         }
+      }
+
       // "instanceof" checks
+		/*
       while ((m = inR.exec(def)) != null) {
          if (EngineSupport.indexOf(dTable, m[2]) == -1) {
             dTable.push(m[2]);
          }
       }
+      */
       return dTable;
    },
 
@@ -440,18 +453,19 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    },
 
    /**
-    * Perform a quick resolution on first-level circular references.
+    * Perform resolution on first-level circular references.
     * @private
     */
    checkCircularRefs: function(objectName) {
+		// Remove first-level dependencies				
       var deps = Linker.dependencyList[objectName].deps;
-      var r = [];
       for (var dep in deps) {
          if (Linker.dependencyList[deps[dep]] && EngineSupport.indexOf(Linker.dependencyList[deps[dep]].deps, objectName) != -1) {
             // Try removing the circular reference
             EngineSupport.arrayRemove(Linker.dependencyList[objectName].deps, deps[dep]);
          }
       }
+		
    },
 
    /**

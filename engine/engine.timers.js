@@ -258,7 +258,7 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
 
       var cb = function() {
          this.destroy();
-         aC.cbFn.call(this);
+         arguments.callee.cbFn.call(this);
       };
       cb.cbFn = callback;
 
@@ -366,6 +366,7 @@ var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
          }
       };
       cb.cbFn = callback;
+		cb.reps = reps;
 
       this.base(name, interval, cb);
    }

@@ -49,15 +49,10 @@ Engine.initObject("Vector2DComponent", "RenderComponent", function() {
 var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prototype */{
 
    strokeStyle: "#ffffff",     // Default to white lines
-
    lineWidth: 1,
-
    fillStyle: null,          // Default to none
-
    points: null,
-
    fullBox: null,
-
    closedManifold: null,
 
    /**
@@ -66,7 +61,17 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    constructor: function(name, priority) {
       this.base(name, priority || 0.1);
       this.closedManifold = true;
+		this.points = [];
+		this.fullBox = Rectangle2D.create(0,0,0,0);
    },
+
+	destroy: function() {
+		this.fullBox.destroy();
+		while (this.points.length > 0) {
+			this.points.shift().destroy();
+		}
+		this.base();
+	},
 
    /**
     * Release the component back into the object pool. See {@link PooledObject#release} for
@@ -114,17 +119,17 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
          }
       }
 
-      var bbox = new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
-      this.getHostObject().setBoundingBox(bbox);
-
+		this.getHostObject().setBoundingBox(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
+		var bbox = this.getHostObject().getBoundingBox();
+		
       // Figure out longest axis
       if (bbox.len_x() > bbox.len_y)
       {
-         this.fullBox = new Rectangle2D(x1,x1,Math.abs(x1) + x2,Math.abs(x1) + x2);
+         this.fullBox.set(x1,x1,Math.abs(x1) + x2,Math.abs(x1) + x2);
       }
       else
       {
-         this.fullBox = new Rectangle2D(y1,y1,Math.abs(y1) + y2,Math.abs(y1) + y2);
+         this.fullBox.set(y1,y1,Math.abs(y1) + y2,Math.abs(y1) + y2);
       }
    },
 
@@ -135,7 +140,11 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * @param pointArray {Point2D[]} An array of <tt>Point2D</tt> instances
     */
    setPoints: function(pointArray) {
-      this.points = pointArray;
+		var pc = [];
+		for (var p in pointArray) {
+			pc.push(Point2D.create(pointArray[p]));
+		}
+      this.points = pc;
       this.renderState = null;
       this.calculateBoundingBox();
    },
