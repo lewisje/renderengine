@@ -301,9 +301,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    destroy: function(obj) {
-      Assert((obj != null), "Trying to destroy non-existent object!");
+      Assert((obj != null), "Trying to destroy non-existent object!", obj);
       var objId = obj.getId();
-      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!");
+      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!", this.gameObjects[objId]);
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
@@ -433,26 +433,26 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
       this.running = false;
-      for (var o in this.gameObjects)
-      {
-         this.gameObjects[o].destroy();
-      }
-      this.gameObjects = null;
-
+		
+		// Kill off the default context and anything
+		// that's attached to it.  We'll alert the
+		// developer if there's an issue with orphaned objects
+		this.getDefaultContext().destroy();
+		
       // Dump the object pool
       if (typeof PooledObject != "undefined") {
          PooledObject.objectPool = null;
       }
 
-      Assert((this.livingObjects == 0), "Object references not cleaned up!");
+      AssertWarn((this.livingObjects == 0), "Object references not cleaned up!");
       
       this.loadedScripts = {};
       this.scriptLoadCount = 0;
       this.scriptsProcessed = 0;
       this.defaultContext = null;
 
-      // Perform final cleanup (silly hack for unit testing)
-      if (!Engine.UNIT_TESTING) {
+      // Perform final cleanup
+      if (!Engine.UNIT_TESTING /* Is this a hack? */) {
          this.cleanup();
       }
    },
@@ -600,7 +600,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * Add a metric to the game engine that can be displayed
     * while it is running.  If smoothing is selected, a 3 point
     * running average will be used to smooth out jitters in the
-    * value that is shown.  For the <tt>value</tt> argument,
+    * value that is shown.  For the <tt>fmt</tt> argument,
     * you can provide a string which contains the pound sign "#"
     * that will be used to determine where the calculated value will
     * occur in the formatted string.
@@ -608,6 +608,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param metricName {String} The name of the metric to track
     * @param value {String/Number} The value of the metric.
     * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
+    * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
     * @memberOf Engine
     */
    addMetric: function(metricName, value, smoothing, fmt) {
@@ -667,8 +668,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 			return true;
 		}
 		var sInfo = EngineSupport.sysInfo();
-		var msg = "This browser is not supported by <i>The Render Engine</i>.<br/><br/>";
-		msg += "Please see <a href='http://www.renderengine.com/browsers.php'>the list of ";
+		var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
+		msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
 		msg += "supported browsers</a> for more information.";
 		switch (sInfo.browser) {
 			case "chrome":
@@ -714,8 +715,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       var nextFrame = Engine.fpsClock;
 
       // Update the world
-      if (Engine.running && Engine.getDefaultContext() != null)
-      {
+      if (Engine.running && Engine.getDefaultContext() != null) {
          Engine.vObj = 0;
 
          // Render a frame

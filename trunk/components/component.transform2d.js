@@ -48,14 +48,11 @@ Engine.initObject("Transform2DComponent", "BaseComponent", function() {
 var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.prototype */{
 
    position: null,
-
    rotation: 0,
-
    scale: 1.0,
-
    lastPosition: null,
-
    lastRenderPosition: null,
+	worldPos: null,
 
    /**
     * @private
@@ -63,11 +60,20 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_TRANSFORM, priority || 1.0);
       this.position = Point2D.create(0,0);
+		this.worldPos = Point2D.create(0,0);
       this.lastPosition = Point2D.create(0,0);
       this.lastRenderPosition = Point2D.create(0,0);
       this.rotation = 0;
       this.scale = 1.0;
    },
+	
+	destroy: function() {
+		this.position.destroy();
+		this.worldPos.destroy();
+		this.lastPosition.destroy();
+		this.lastRenderPosition.destroy();
+		this.base();
+	},
 
    /**
     * Releases the component back into the object pool. See {@link PooledObject#release} for
@@ -80,6 +86,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
       this.scale = 1.0;
       this.lastPosition = null;
       this.lastRenderPosition = null;
+		this.worldPos = null;
    },
 
    /**
@@ -105,9 +112,9 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     * @return {Point2D}
     */
    getRenderPosition: function() {
-      var wP = Point2D.create(this.getHostObject().getRenderContext().getWorldPosition());
-      var p = Point2D.create(this.position).sub(wP);
-      return p;
+		this.worldPos.set(this.getPosition());
+		this.worldPos.sub(this.getHostObject().getRenderContext().getWorldPosition());
+      return this.worldPos;
    },
 
    /**
@@ -117,8 +124,6 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     */
    setLastPosition: function(point) {
       this.lastPosition.set(point);
-      //var wP = Point2D.create(this.getHostObject().getRenderContext().getWorldPosition());
-      //this.lastRenderPosition.set(wP.sub(point));
    },
 
    /**

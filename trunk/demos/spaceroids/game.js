@@ -89,6 +89,7 @@ var Spaceroids = Game.extend({
    level: 0,
 
    evolved: false,
+	titlePos: null,
 
    /**
     * Handle the keypress which starts the game
@@ -129,7 +130,8 @@ var Spaceroids = Game.extend({
     * and start message are displayed with asteroids in the background
     */
    attractMode: function() {
-
+		var titlePos = Point2D.create(150, 100);
+		var copyPos = Point2D.create(140, 121);
       this.cleanupPlayfield();
       Spaceroids.isAttractMode = true;
 
@@ -146,7 +148,7 @@ var Spaceroids = Game.extend({
       }
 
       var title = TextRenderer.create(VectorText.create(), "Asteroids", 2);
-      title.setPosition(Point2D.create(150, 100));
+      title.setPosition(titlePos);
       title.setTextWeight(1);
       title.setColor("#ffffff");
       this.renderContext.add(title);
@@ -159,7 +161,7 @@ var Spaceroids = Game.extend({
          copy = TextRenderer.create(VectorText.create(), "&copy;1979 Atari Games", 0.6);
       }
       copy.setColor("#ffffff");
-      copy.setPosition(Point2D.create(140, 121));
+      copy.setPosition(copyPos);
       this.renderContext.add(copy);
 
       // Instructions
@@ -355,8 +357,6 @@ var Spaceroids = Game.extend({
     */
    gameOver: function() {
 
-      //var g = new TextRenderer(new BitmapText(Spaceroids.fontLoader.get("lucida")), "Game Over", 1.5);
-
       var g = TextRenderer.create(VectorText.create(), "Game Over", 3);
       g.setPosition(Point2D.create(100, 260));
       g.setTextWeight(0.25);
@@ -442,7 +442,6 @@ var Spaceroids = Game.extend({
       if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
          $(this.renderContext.getSurface()).css("background", color || "white");
          var surf = this.renderContext.getSurface();
-         //window.setTimeout
          OneShotTimeout.create("blink", 100, function() {
             $(surf).css("background", "black");
          });
@@ -458,8 +457,11 @@ var Spaceroids = Game.extend({
     * @type Boolean
     */
    inField: function(pos, bBox) {
-      var newPos = this.wrap(pos, bBox);
-      return newPos.equals(pos);
+		var p = Point2D.create(pos);
+      var newPos = this.wrap(p, bBox);
+      var b = newPos.equals(pos);
+		p.destroy();
+		return b;
    },
 
    /**
@@ -474,12 +476,9 @@ var Spaceroids = Game.extend({
       var rY = bBox.len_y();
 
       // Wrap if it's off the playing field
-      var p = new Point2D(pos);
-      var x = p.x;
-      var y = p.y;
+      var x = pos.x;
+      var y = pos.y;
       var fb = this.renderContext.getViewport().get();
-
-      //console.debug(p, fb);
 
       if (pos.x < fb.x || pos.x > fb.r ||
           pos.y < fb.y || pos.y > fb.b)
@@ -500,9 +499,9 @@ var Spaceroids = Game.extend({
          {
             y = (fb.b + (rY - 1));
          }
-         p.set(x,y);
+         pos.set(x,y);
       }
-      return p;
+      return pos;
    }
 
 });

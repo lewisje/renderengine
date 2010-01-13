@@ -98,11 +98,29 @@ Base.extend = function(_instance, _static) {
    klass.toString = function() {
       return String(constructor);
    };
+	
+	klass.isInstance = function(obj) {
+		return (typeof obj != "undefined" && obj !== null && 
+				  obj.constructor && obj.constructor.__ancestors &&
+				  obj.constructor.__ancestors[klass.getClassName()]);
+	};
    extend.call(klass, _static);
    // single instance
    var object = constructor ? klass : _prototype;
    // class initialisation
    if (object.init instanceof Function) object.init();
+
+	if (!klass.__ancestors) {
+		klass.__ancestors = {};
+		klass.__ancestors[klass.getClassName()] = true;
+		var chain = function(k) {
+			if (k.prototype && k.prototype.constructor && k.prototype.constructor.getClassName) {
+				klass.__ancestors[k.prototype.constructor.getClassName()] = true;
+				chain(k.prototype.constructor);
+			}
+		};
+		chain(klass);
+	}
 
    if (klass.getClassName) {
       // remember the class name
@@ -122,4 +140,7 @@ Base.create = function() {
 
 Base.getClassName = function() {
    return "Base";
+};
+
+Base.isInstance = function() {
 };

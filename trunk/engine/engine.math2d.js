@@ -44,13 +44,17 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    constructor: null,
 
    /**
-    * An approximation of PI for speedier calculations.
+    * An approximation of PI for speedier calculations.  (3.14159)
+    * @type {Number}
+    * @const
     */
    PI: 3.14159,
 
    /**
     * An approximation of the inverse of PI so we can
-    * avoid divisions.
+    * avoid divisions. (0.31831)
+    * @type {Number}
+    * @const
     */
    INV_PI: 0.31831,
 
@@ -135,7 +139,9 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    lineBoxCollision: function(p1, p2, rect) {
       // Convert the line to a box itself and do a quick box box test
       var lRect = Rectangle2D.create(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-      return Math2D.boxBoxCollision(lRect, rect);
+		var coll = Math2D.boxBoxCollision(lRect, rect);
+		lRect.destroy();
+		return coll;
    },
 
    /*
@@ -207,77 +213,20 @@ return Math2D;
 
 });
 
-Engine.initObject("MathObject", null, function() {
-
-var MathObject = Base.extend({
-   constructor: function() {
-   },
-   
-   release: function() {
-   },
-
-   /**
-    * Destroy this object instance (remove it from the Engine).  The object
-    * is returned to the pool of math objects so it can be used again.
-    */
-   destroy: function() {
-      this.release();
-   }
-}, /** @scope MathObject.prototype */{ 
-   poolNew: 0,
-
-   poolSize: 0,
-
-   /**
-    * This method is used in place of a constructor.  If an object of this
-    * type is available in the pool, it will be used, rather than creating
-    * a new instance.  If the object is not in the pool, it will be created.
-    * Upon destruction, the object will return to the pool.
-    * <p/>
-    * Usage: <tt>var obj = [MathObjectClass].create(arg1, arg2, arg3...);</tt>
-    *
-    */
-   create: function() {
-      return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],arguments[5],arguments[6],arguments[7],arguments[8],arguments[9]);
-   },
-
-   /**
-    * During object destruction, it needs to return itself to the
-    * pool so it can be used again.  Instead of creating new instances
-    * of each object, we utilize a pooled object so we don't need the
-    * garbage collector to be invoked for removed objects.
-    * @private
-    */
-   returnToPool: function(obj) {
-   },
-
-   /**
-    * The pool of all math objects.  Each object is stored
-    * by it's classname, retrieved from <tt>getClassName()</tt>
-    * that should be defined by all objects.
-    * @private
-    */
-   objectPool: {},
-
-   /**
-    * Return the classname of the math object
-    * @return {String}
-    */
-   getClassName: function() {
-      return "MathObject";
-   }
-});
-
-return MathObject;
-
-});
-
-Engine.initObject("Point2D", "MathObject", function() {
+Engine.initObject("Point2D", "PooledObject", function() {
 
 /**
  * @class A 2D point class with helpful methods for manipulation
+ *
+ * @param x {Point2D|Number} If this arg is a Point2D, its values will be
+ *                           copied into the new point.
+ * @param y {Number} The Y coordinate of the point.  Only required if X
+ *                   was a number.
+ * @constructor
+ * @description Create a new 2D point.
+ * @extends PooledObject
  */
-var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
+var Point2D = PooledObject.extend(/** @scope Point2D.prototype */{
 
    _vec: null,
 
@@ -285,12 +234,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    y: 0,
 
    /**
-    * Create a new 2D point.
-    *
-    * @param x {Point2D/Number} If this arg is a Point2D, its values will be
-    *                           copied into the new point.
-    * @param y {Number} The Y coordinate of the point.  Only required if X
-    *                   was a number.
+    * @private
     */
    constructor: function(x, y) {
       this.base("Point2D");
@@ -319,6 +263,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the two points are equal
     */
    equals: function(point) {
+		this.upd();
       return (this.x == point.x && this.y == point.y);
    },
 
@@ -331,12 +276,9 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     *                   was a number.
     */
    set: function(x, y) {
-      if (x instanceof Point2D)
-      {
+      if (Point2D.isInstance(x)) {
          this._vec = x._vec.dup();
-      }
-      else
-      {
+      } else {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
          this._vec = $V([x, y || 0]);
       }
@@ -503,7 +445,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 /**
  * The "zero" point. This point should not be modified.
  */
-Point2D.ZERO = new Point2D(0,0);
+Point2D.ZERO = Point2D.create(0,0);
 
 return Point2D;
 
@@ -513,9 +455,24 @@ Engine.initObject("Vector2D", "Point2D", function() {
 
 /**
  * @class A 2D vector class with helpful manipulation methods.
+ * 
+ * @param x {Point2D|Number} If this arg is a Vector2D, its values will be
+ *                           copied into the new vector.  If a number,
+ *                           the X length of the vector.
+ * @param y {Number} The Y length of the vector.  Only required if X
+ *                   was a number.
+ * @constructor
+ * @description Create a new 2D Vector
  * @extends Point2D
  */
 var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
+
+   /**
+    * @private
+    */
+   constructor: function(x, y) {
+      this.base(x,y);
+   },
 
    /**
     * A mutator method that normalizes this vector, returning a unit length vector.
@@ -584,15 +541,17 @@ return Vector2D;
 
 });
 
-Engine.initObject("Rectangle2D", "MathObject", function() {
+Engine.initObject("Rectangle2D", "PooledObject", function() {
 
 /**
  * @class A 2D rectangle class with helpful manipulation methods.
  */
-var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
+var Rectangle2D = PooledObject.extend(/** @scope Rectangle2D.prototype */{
 
    topLeft: null,
+	bottomRight: null,
    dims: null,
+	center: null,
 
    /**
     * Create a rectangle object specifying the X and Y position and
@@ -605,10 +564,27 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    constructor: function(x, y, width, height) {
       this.topLeft = Point2D.create(0,0);
+      this.bottomRight = Point2D.create(0,0);
       this.dims = Point2D.create(0,0);
+		this.center = Point2D.create(0,0);
       this.set(x,y,width,height);
+		this.base("Rectangle2D");
    },
 
+	/**
+	 * @private
+	 */
+	destroy: function() {
+		this.topLeft.destroy();
+		this.bottomRight.destroy();
+		this.dims.destroy();
+		this.center.destroy();
+		this.base();
+	},
+
+	/**
+	 * @private
+	 */
    release: function() {
       this.base();
       this.topLeft = null;
@@ -625,14 +601,14 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    set: function(x, y, width, height)
    {
-      if (x instanceof Rectangle2D) {
+      if (Rectangle2D.isInstance(x)) {
          this.topLeft.set(x.getTopLeft());
          this.dims.set(x.getDims());
       }
       else
       {
-         this.topLeft.set((x != null ? x : 0.0), (y != null ? y : 0.0));
-         this.dims.set((width != null ? width : 0.0), (height != null ? height : 0.0));
+         this.topLeft.set(x || 0, y || 0);
+         this.dims.set(width || 0, height || 0);
       }
    },
 
@@ -663,7 +639,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * The first parameter can be either a point, or the value for the X axis.  If the X axis is 
     * specified, the second parameter should be the amount to offset in the Y axis.
     *
-    * @param offsetPtOrX {Point/int} Either a {@link Point} which contains the offset in X and Y, or an integer
+    * @param offsetPtOrX {Point2D|int} Either a {@link Point} which contains the offset in X and Y, or an integer
     *                                representing the offset in the X axis.
     * @param offsetY {int} If <code>offsetPtOrX</code> is an integer value for the offset in the X axis, this should be
     *                      the offset along the Y axis.
@@ -672,16 +648,14 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    offset: function(offsetPtOrX, offsetY)
    {
       var offs = Point2D.create(0,0);
-      if (offsetPtOrX instanceof Point2D)
-      {
+      if (Point2D.isInstance(offsetPtOrX)) {
          offs.set(offsetPtOrX);
-      }
-      else
-      {
+      } else {
          offs.set(offsetPtOrX, offsetY);
       }
 
       this.topLeft.add(offs);
+		offs.destroy();
       return this;
    },
 
@@ -692,12 +666,9 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param y {Number} If the top left wasn't specified as the first argument, this is the Y coordinate
     */
    setTopLeft: function(ptOrX, y) {
-      if (ptOrX instanceof Point2D)
-      {
+      if (Point2D.isInstance(ptOrX)) {
          this.topLeft.set(ptOrX);
-      }
-      else
-      {
+      } else {
          this.topLeft.set(ptOrX, y);
       }
    },
@@ -708,7 +679,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param [y] {Number} If the top left isn't a point, this is the Y coordinate
     */
    setDims: function(ptOrX, y) {
-      if (ptOrX instanceof Point2D) {
+      if (Point2D.isInstance(ptOrX)) {
          this.dims.set(ptOrX.x, ptOrX.y);
       } else {
          this.dims.set(ptOrX, y)
@@ -721,7 +692,9 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param width {Number} The new width of the rectangle
     */
    setWidth: function(width) {
-      this.setDims(Point2D.create(width, this.get().h));
+		var p = Point2D.create(width, this.get().h);
+      this.setDims(p);
+		p.destroy();
    },
 
    /**
@@ -730,7 +703,9 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param height {Number} The new height of the rectangle
     */
    setHeight: function(height) {
-      this.setDims(Point2D.create(this.get().w, height));
+		var p = Point2D.create(this.get().w, height);
+      this.setDims(p);
+		p.destroy();
    },
 
    /**
@@ -740,6 +715,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     *
     * @param rect A {@link Rectangle} to compare against
     * @return {Vector2D} The vector to resolve the overlap
+    * @private
     */
    isOverlapped: function(rect)
    {
@@ -816,7 +792,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    getCenter: function()
    {
-      return Point2D.create(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
+		this.center.set(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
+		return this.center;
    },
 
    /**
@@ -861,7 +838,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    getTopLeft: function()
    {
-      return Point2D.create(this.topLeft);
+      return this.topLeft;
    },
 
    /**
@@ -870,7 +847,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    getDims: function()
    {
-      return Point2D.create(this.dims);
+      return this.dims;
    },
 
    /**
@@ -879,10 +856,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    getBottomRight: function()
    {
-      var p = Point2D.create(this.topLeft);
-      p.add(this.dims);
-
-      return p;
+		this.bottomRight.set(this.topLeft).add(this.dims);
+      return this.bottomRight;
    },
 
    /**
@@ -909,12 +884,12 @@ return Rectangle2D;
 });
 
 
-Engine.initObject("Circle2D", "MathObject", function() {
+Engine.initObject("Circle2D", "PooledObject", function() {
 
 /**
  * @class A 2D circle class with helpful manipulation methods.
  */
-var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
+var Circle2D = PooledObject.extend(/** @scope Circle2D.prototype */{
 
    center: null,
    
@@ -933,6 +908,11 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
       this.radius = 0;
       this.set(x,y,radius);
    },
+	
+	destroy: function() {
+		this.center.destroy();
+		this.base();
+	},
 
    release: function() {
       this.base();
@@ -943,24 +923,24 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
    /**
     * Set the values of this circle.
     *
-    * @param x {Number} An optional value to initialize the X coordinate of the circle
+    * @param x {Number|Point2D|Circle2D} An optional value to initialize the X coordinate of the circle
     * @param y {Number} An optional value to initialize the Y coordinate of the circle
     * @param radius {Number} An optional value to initialize the radius
     */
    set: function(x, y, radius)
    {
-      if (x instanceof Circle2D) {
+      if (Circle2D.isInstance(x)) {
          this.center.set(x.getCenter());
          this.radius = x.getRadius();
       }
-      else if (x instanceof Point2D) {
+      else if (Point2D.isInstance(x)) {
          this.center.set(x);
          this.radius = y;
       }
       else
       {
-         this.center.set((x != null ? x : 0.0), (y != null ? y : 0.0));
-         this.radius = (radius != null ? radius : 0.0);
+         this.center.set(x || 0, y || 0);
+         this.radius = radius || 0.0;
       }
    },
 
@@ -997,17 +977,15 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
     */
    offset: function(offsetPtOrX, offsetY)
    {
-      var offs = new Point2D(0,0);
-      if (offsetPtOrX instanceof Point2D)
-      {
+      var offs = Point2D.create(0,0);
+      if (Point2D.isInstance(offsetPtOrX)) {
          offs.set(offsetPtOrX);
-      }
-      else
-      {
+      } else {
          offs.set(offsetPtOrX, offsetY);
       }
 
       this.center.add(offs);
+		offs.destroy();
       return this;
    },
    
@@ -1016,7 +994,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
     * @return {Point2D} The center point
     */
    getCenter: function() {
-      return Point2D.create(this.center);
+      return this.center;
    },
    
    /**
@@ -1050,7 +1028,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
    /**
     * Determine if this circle is contained within the specified circle.
     *
-    * @param circle A {@link Circle2D} to compare against
+    * @param circle {Circle} A circle to compare against
     * @return {Boolean} <tt>true</tt> if the this circle is fully contained in the specified circle.
     */
    isContained: function(circle)
@@ -1060,9 +1038,9 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
    },
 
    /**
-    * Determine if this rectangle contains the specified rectangle.
+    * Determine if this circle contains the specified circle.
     *
-    * @param rect A {@link Rectangle2D} to compare against
+    * @param circle {Circle} A circle to compare against
     * @return {Boolean} <tt>true</tt> if the rectangle is fully contained within this rectangle.
     */
    containsCircle: function(circle)
@@ -1071,7 +1049,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
    },
 
    /**
-    * Returns <tt>true</tt> if this rectangle contains the specified point.
+    * Returns <tt>true</tt> if this circle contains the specified point.
     *
     * @param point {Point} The point to test
     * @return {Boolean} <tt>true</tt> if the point is within the circle

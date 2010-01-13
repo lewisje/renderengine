@@ -81,7 +81,6 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * to be used again.
     */
    destroy: function() {
-
       PooledObject.returnToPool(this);
 
       // Clean up the engine reference to this object
@@ -119,9 +118,9 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       var self = this;
       var prop = {};
       return $.extend(prop, {
-         "Id"           : [function() { return self.getId(); },
+         "Id"     : [function() { return self.getId(); },
                            null, false],
-         "ObjectName"   : [function() { return self.getName(); },
+         "Name"   : [function() { return self.getName(); },
                            function(i) { self.setName(i); }, true]
       });
    },
@@ -144,7 +143,6 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       xml += "/>\n";
       return xml;
    }
-
 }, /** @scope PooledObject.prototype **/{
 
    /**
@@ -170,6 +168,10 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * @type {Number}
     */
    poolSize: 0,
+	
+	/* pragma:DEBUG_START 
+	classPool: {},
+	   pragma:DEBUG_END */
 
    /**
     * Similar to a constructor, all pooled objects implement this method.
@@ -189,10 +191,26 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
          Engine.addMetric("poolUse", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
          var obj = PooledObject.objectPool[this.getClassName()].shift();
          obj.constructor.apply(obj, arguments);
+
+			/* pragma:DEBUG_START 
+			PooledObject.classPool[this.getClassName()][1]++;
+		 	PooledObject.classPool[this.getClassName()][2]--;
+			   pragma:DEBUG_END */
+
          return obj;
       } else {
          PooledObject.poolNew++;
          Engine.addMetric("newObjs", PooledObject.poolNew, false, "#");
+			
+			/* pragma:DEBUG_START 
+			if (PooledObject.classPool[this.getClassName()]) {
+				PooledObject.classPool[this.getClassName()][0]++;
+			} else {
+				// 0: new, 1: in use, 2: pooled
+				PooledObject.classPool[this.getClassName()] = [1,0,0];
+			}
+			   pragma:DEBUG_END */
+			
          // TODO: Any more than 15 arguments and construction will fail!
          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
 								 arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
@@ -210,12 +228,22 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    returnToPool: function(obj) {
       // If there is no pool for objects of this type, create one
       if (!PooledObject.objectPool[obj.constructor.getClassName()]) {
-         PooledObject.objectPool[obj.constructor.getClassName()] = new Array;
+         PooledObject.objectPool[obj.constructor.getClassName()] = [];
       }
 
       // Push this object into the pool
       PooledObject.poolSize++;
       PooledObject.objectPool[obj.constructor.getClassName()].push(obj);
+
+		/* pragma:DEBUG_START 
+		if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
+			PooledObject.classPool[obj.constructor.getClassName()][1]--;
+		}
+		PooledObject.classPool[obj.constructor.getClassName()][2]++;
+		   pragma:DEBUG_END */
+			
+
+      Engine.addMetric("pooled", PooledObject.poolSize, false, "#");
    },
 
    /**
@@ -235,6 +263,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       }
       return "PooledObject";
    }
+
 });
 
 return PooledObject;

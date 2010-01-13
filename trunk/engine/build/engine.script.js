@@ -250,7 +250,6 @@ var Engine = Engine.extend({
                      // Delete the script node
                      $(n).remove(); 
                   }
-
                }
                Engine.readyForNextScript = true;
             };

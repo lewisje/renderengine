@@ -50,31 +50,18 @@ Engine.initObject("Mover2DComponent", "Transform2DComponent", function() {
 var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.prototype */{
 
    lastTime: -1,
-
    velocity: null,
-
    vDecay: 0,
-
    angularVelocity: 0,
-
    lPos: null,
-   
    maxVelocity: 0,
-
    acceleration: null,
-   
    gravity: null,
-   
    mass: null,
-
    atRest: null,
-   
    checkRest: null,
-   
    restingVelocity: null,
-   
    lagAdjustment: null,
-   
    checkLag: null,
    
    /**
@@ -95,6 +82,14 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
       this.lagAdjustment = Mover2DComponent.DEFAULT_LAG_ADJUSTMENT;
       this.checkLag = true;
    },
+
+	destroy: function() {
+		this.velocity.destroy();
+		this.acceleration.destroy();
+		this.lPos.destroy();
+		this.gravity.destroy();
+		this.base();
+	},
 
    /**
     * Releases the component back into the object pool. See {@link PooledObject#release}
@@ -148,6 +143,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
                invVelocity.mul(this.getVelocityDecay());
    
                this.velocity.add(invVelocity);
+					invVelocity.destroy();
             }
    
             var oldVel = Vector2D.create(this.velocity);
@@ -156,6 +152,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
             if (this.maxVelocity != -1 && this.velocity.len() > this.maxVelocity) {
                this.velocity.set(oldVel);
             }
+				oldVel.destroy();
 
             // Calculate lag?
             var lag;
@@ -168,6 +165,7 @@ var Mover2DComponent = Transform2DComponent.extend(/** @scope Mover2DComponent.p
             var vz = Vector2D.create(this.velocity).mul(lag);
             this.setPosition(this.lPos.add(vz));
             this.setRotation(rot + this.angularVelocity * (lag));
+				vz.destroy();
          }
          
          // Check rest state  

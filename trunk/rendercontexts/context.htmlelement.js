@@ -82,7 +82,8 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
             this.getSurface().removeChild(e);
          }
       }
-
+		this.cursorPos.destroy();
+		this.getViewport().destroy();
       this.base();
    },
 
@@ -158,7 +159,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param point {Point2D} The translation
     */
    setPosition: function(point) {
-      this.cursorPos = Point2D.create(point);
+      this.cursorPos.set(point);
       this.base(point);
    },
 

@@ -126,7 +126,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     */
    add: function(component) {
 
-      Assert((component instanceof BaseComponent), "Cannot add a non-component to a HostObject");
+      Assert((BaseComponent.isInstance(component)), "Cannot add a non-component to a HostObject");
       Assert(!this.isInHash(component.getName()), "Components must have a unique name within the host");
 
       this.base(component.getName(), component);
@@ -137,7 +137,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
          this.sort(HostObject.componentSort);
       }
       
-      if (component instanceof HostComponent) {
+      if (HostComponent.isInstance(component)) {
          component.set
       }
    },

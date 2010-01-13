@@ -57,7 +57,7 @@ Engine.initObject("WiiTest", "Game", function(){
       renderContext: null,
       
       // Engine frames per second
-      engineFPS: 60,
+      engineFPS: 30,
       
       // The play field
       fieldBox: null,

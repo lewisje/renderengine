@@ -49,26 +49,17 @@ Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
 var SpaceroidsPlayer = Object2D.extend({
 
    size: 4,
-
    field: null,
-
    rotDir: 0,
-
    thrusting: false,
-
    bullets: 0,
-
    tip: null,
-
    players: 3,
-
    alive: false,
-
    playerShape: null,
-   
    nukes: null,
-   
    nuking: null,
+	pBox: null,
 
    constructor: function() {
       this.base("Player");
@@ -97,13 +88,15 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("move").setCheckLag(false);
       this.nukes = 1;
       this.nuking = false;
-
+		this.pBox = Rectangle2D.create(0,0,1,1);
    },
 
    destroy: function() {
       if (this.ModelData && this.ModelData.lastNode) {
          this.ModelData.lastNode.removeObject(this);
       }
+		this.tip.destroy();
+		this.pBox.destroy();
       this.base();
    },
 
@@ -119,6 +112,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.playerShape = null;
       this.nukes = null;
       this.nuking = null;
+		this.pBox = null;
    },
 
    /**
@@ -132,8 +126,10 @@ var SpaceroidsPlayer = Object2D.extend({
     */
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
-      c_mover.setPosition(this.field.wrap(c_mover.getPosition(), this.getBoundingBox()));
+		var p = Point2D.create(c_mover.getPosition());
+      c_mover.setPosition(this.field.wrap(p, this.getBoundingBox()));
       c_mover.setRotation(c_mover.getRotation() + this.rotDir);
+		p.destroy();
 
       if (this.thrusting)
       {
@@ -147,7 +143,9 @@ var SpaceroidsPlayer = Object2D.extend({
             var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
             var colr = SpaceroidsPlayer.trailColors[Math.floor(Math.random() * 3)];
             this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
+				inv.destroy();
          }
+			dir.destroy();
       } else {
          c_mover.setAcceleration(Point2D.ZERO);
       }
@@ -169,17 +167,21 @@ var SpaceroidsPlayer = Object2D.extend({
       for (var l = 0; l <= this.players; l++) {
          renderContext.pushTransform();
          renderContext.setScale(0.7);
-         renderContext.setPosition(new Point2D(posX, 60));
+			var dp = Point2D.create(posX, 60);
+         renderContext.setPosition(dp);
          renderContext.drawPolygon(this.playerShape);
          renderContext.popTransform();
          posX -= 20;
+			dp.destroy();
       }
       
       // If they have their nuke, draw that too
       if (Spaceroids.evolved && this.nukes > 0) {
          renderContext.pushTransform();
-         renderContext.drawRectangle(Rectangle2D.create(70, 35, 6, 6));
+			var dr = Rectangle2D.create(70, 35, 6, 6);
+         renderContext.drawRectangle(dr);
          renderContext.popTransform();
+			dr.destroy();
       }
    },
 
@@ -251,7 +253,7 @@ var SpaceroidsPlayer = Object2D.extend({
    setup: function(pWidth, pHeight) {
 
       // Playfield bounding box for quick checks
-      this.pBox = Rectangle2D.create(0, 0, pWidth, pHeight);
+      this.pBox.set(0, 0, pWidth, pHeight);
 
       // Randomize the position and velocity
       var c_mover = this.getComponent("move");
@@ -423,16 +425,21 @@ var SpaceroidsPlayer = Object2D.extend({
 
       // Give it some time and move the player somewhere random
       OneShotTimeout.create("hyperspace", 800, function() {
-         self.getComponent("move").setVelocity(Point2D.create(0,0));
+         self.getComponent("move").setVelocity(Point2D.ZERO);
          var randPt = Math2D.randomPoint(self.getRenderContext().getBoundingBox());
          self.getComponent("move").setPosition(randPt);
          self.setScale(1);
          self.getComponent("draw").setDrawMode(RenderComponent.DRAW);
          self.alive = true;
          self.hyperjump = false;
+			randPt.destroy();
       });
    },
    
+	/**
+	 * Nuke everything on the screen, causing any rocks to split if they
+	 * are above the smallest size.
+	 */
    nuke: function() {
       if (this.nukes-- <= 0 || this.nuking) {
          return;
@@ -448,7 +455,7 @@ var SpaceroidsPlayer = Object2D.extend({
       });
       
       for (var g in Engine.gameObjects) {
-         if (Engine.gameObjects[g] instanceof SpaceroidsRock) {
+         if (SpaceroidsRock.isInstance(Engine.gameObjects[g])) {
             Engine.gameObjects[g].kill();
          }
       }

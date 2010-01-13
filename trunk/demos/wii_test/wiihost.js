@@ -108,7 +108,7 @@ Engine.initObject("WiiHost", "Object2D", function() {
        */
       getWorldBox: function() {
          var bBox = this.base();
-         return bBox.offset(Point2D.create(-10, -10));
+         return bBox.offset(-10, -10);
       },
 
       /**
@@ -133,7 +133,9 @@ Engine.initObject("WiiHost", "Object2D", function() {
       onWiimotePosition: function(c, sx, sy) {
          if (c == 0) {
             // If controller zero, update the position
-            this.setPosition(Point2D.create(sx, sy));
+				var p = Point2D.create(sx, sy);
+            this.setPosition(p);
+				p.destroy();
          }
       },
 
@@ -163,7 +165,7 @@ Engine.initObject("WiiHost", "Object2D", function() {
        * @see {ColliderComponent}
        */
       onCollide: function(obj) {
-         if (obj instanceof WiiBall &&
+         if (WiiBall.isInstance(obj) &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
             this.overBall = obj;
             return ColliderComponent.STOP;
