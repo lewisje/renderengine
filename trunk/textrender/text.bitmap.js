@@ -103,7 +103,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
          }
       }
 
-      this.getHostObject().getBoundingBox().set(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
+      this.getHostObject().getBoundingBox().set(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
    },
 
    /**
