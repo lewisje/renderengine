@@ -221,7 +221,7 @@ var Spaceroids = Game.extend({
       Spaceroids.intv = Timeout.create("startkey", 1000, flash);
 
       // Start up a particle engine
-      this.pEngine = ParticleEngine.create()
+      this.pEngine = ParticleEngine.create();
       this.renderContext.add(this.pEngine);
 
       this.addHiScore();
@@ -309,7 +309,7 @@ var Spaceroids = Game.extend({
       this.playerObj.setup(pWidth, pHeight);
 
       // Start up a particle engine
-      this.pEngine = ParticleEngine.create()
+      this.pEngine = ParticleEngine.create();
       this.renderContext.add(this.pEngine);
 
       this.addHiScore();
@@ -427,7 +427,7 @@ var Spaceroids = Game.extend({
     * destroy the rendering context.
     */
    teardown: function() {
-      this.scoreObj = null
+      this.scoreObj = null;
       this.hscoreObj = null;
 
       EventEngine.removeHandler(document, "keypress", Spaceroids.onKeyPress);

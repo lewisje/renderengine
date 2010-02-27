@@ -126,7 +126,7 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
       }
 
       if (this.currentImage) {
-         renderContext.drawImage(this.bbox, this.currentImage, this.getHostObject());
+         renderContext.drawImage(this.bbox, this.currentImage, null, this.getHostObject());
       }
    }
 }, /** @scope ImageComponent.prototype */{ 

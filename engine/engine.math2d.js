@@ -31,6 +31,9 @@
  *
  */
 
+// Includes
+Engine.include("/engine/engine.mathobject.js");
+
 Engine.initObject("Math2D", null, function() {
 
 /**
@@ -213,7 +216,7 @@ return Math2D;
 
 });
 
-Engine.initObject("Point2D", "PooledObject", function() {
+Engine.initObject("Point2D", "MathObject", function() {
 
 /**
  * @class A 2D point class with helpful methods for manipulation
@@ -224,9 +227,9 @@ Engine.initObject("Point2D", "PooledObject", function() {
  *                   was a number.
  * @constructor
  * @description Create a new 2D point.
- * @extends PooledObject
+ * @extends MathObject
  */
-var Point2D = PooledObject.extend(/** @scope Point2D.prototype */{
+var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
    _vec: null,
 
@@ -541,12 +544,12 @@ return Vector2D;
 
 });
 
-Engine.initObject("Rectangle2D", "PooledObject", function() {
+Engine.initObject("Rectangle2D", "MathObject", function() {
 
 /**
  * @class A 2D rectangle class with helpful manipulation methods.
  */
-var Rectangle2D = PooledObject.extend(/** @scope Rectangle2D.prototype */{
+var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 
    topLeft: null,
 	bottomRight: null,
@@ -884,12 +887,12 @@ return Rectangle2D;
 });
 
 
-Engine.initObject("Circle2D", "PooledObject", function() {
+Engine.initObject("Circle2D", "MathObject", function() {
 
 /**
  * @class A 2D circle class with helpful manipulation methods.
  */
-var Circle2D = PooledObject.extend(/** @scope Circle2D.prototype */{
+var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
 
    center: null,
    
