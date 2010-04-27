@@ -406,6 +406,7 @@ var Spaceroids = Game.extend({
 
       // We'll need something to detect collisions
       this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 7);
+		this.collisionModel.setAccuracy(SpatialGrid.GOOD_ACCURACY);
 
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
 

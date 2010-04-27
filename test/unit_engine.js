@@ -118,7 +118,7 @@ test("EngineSupport", function() {
 	var fArr = [];
 	var rand = [];
 	for (var x = 0; x < 10; x++) {
-		rand[x] = Math.floor(Math.random() * 49);
+		rand[x] = Math.floor(Math2.random() * 49);
 	}
 	EngineSupport.fillArray(fArr, 50, "dog");
 	// Test a 10-point random sampling of the array
