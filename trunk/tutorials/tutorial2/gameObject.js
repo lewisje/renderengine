@@ -21,12 +21,12 @@ Engine.initObject("GameObject", "Object2D", function() {
 
          // Pick a random position to start at
 			var fBox = Tutorial2.getFieldBox().get();
-         var start = Point2D.create(50 + (Math.floor(Math.random() * fBox.w - this.width)), 
-												50 + (Math.floor(Math.random() * fBox.h - this.height)));
+         var start = Point2D.create(50 + (Math.floor(Math2.random() * fBox.w - this.width)), 
+												50 + (Math.floor(Math2.random() * fBox.h - this.height)));
 
 			// Pick a random velocity for each axis
-			this.velocity = Point2D.create(1 + Math.floor(Math.random() * 3), 
-								 					 1 + Math.floor(Math.random() * 3));
+			this.velocity = Point2D.create(1 + Math.floor(Math2.random() * 3), 
+								 					 1 + Math.floor(Math2.random() * 3));
 			
 			// Set our object's shape
 			this.shape = Rectangle2D.create(0, 0, this.width, this.height);

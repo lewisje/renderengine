@@ -50,6 +50,7 @@
 		<concat destfile="${engine.file}">
 			<fileset dir="${make.dir}" includes="intro.js" />
 			<fileset dir="${engine.src}" includes="engine.console.js" />
+			<fileset dir="${engine.src}" includes="engine.math2.js" />
 			<fileset dir="${engine.src}" includes="engine.support.js" />
 			<fileset dir="${engine.src}" includes="engine.linker.js" />
 			<fileset dir="${engine.src}" includes="engine.main.js" />

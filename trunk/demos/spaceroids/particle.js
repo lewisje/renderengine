@@ -51,9 +51,9 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       this.base(ttl || 2000);
       this.pos = Point2D.create(pos);
 
-      var a = Math.floor(Math.random() * 360);
+      var a = Math.floor(Math2.random() * 360);
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, SimpleParticle.ref, a);
-      var vel = 1 + (Math.random() * 2);
+      var vel = 1 + (Math2.random() * 2);
       this.vec.mul(vel);
    },
 
@@ -85,8 +85,8 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
          var s = time - this.getBirth();
          var e = this.getTTL() - this.getBirth();
          colr = 255 - Math.floor(255 * (s / e));
-         colr += (-10 + (Math.floor(Math.random() * 20)));
-         var fb = (Math.random() * 100);
+         colr += (-10 + (Math.floor(Math2.random() * 20)));
+         var fb = (Math2.random() * 100);
          if (fb > 90) {
             colr = 255;
          }
@@ -129,9 +129,9 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
       this.base(ttl || 2000);
       this.clr = color;
       this.pos = Point2D.create(pos);
-      var a = rot + Math.floor((180 - (spread / 2)) + (Math.random() * (spread * 2)));
+      var a = rot + Math.floor((180 - (spread / 2)) + (Math2.random() * (spread * 2)));
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, TrailParticle.ref, a);
-      var vel = 1 + (Math.random() * 2);
+      var vel = 1 + (Math2.random() * 2);
       this.vec.mul(vel);
    },
 

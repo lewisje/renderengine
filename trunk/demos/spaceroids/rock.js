@@ -72,8 +72,8 @@ var SpaceroidsRock = Object2D.extend({
       if (!position)
       {
          // Set the position
-         position = new Point2D( Math.floor(Math.random() * this.pBox.getDims().x),
-                                 Math.floor(Math.random() * this.pBox.getDims().y));
+         position = new Point2D( Math.floor(Math2.random() * this.pBox.getDims().x),
+                                 Math.floor(Math2.random() * this.pBox.getDims().y));
       }
       this.setPosition(position);
       this.getComponent("move").setCheckLag(false);
@@ -181,7 +181,7 @@ var SpaceroidsRock = Object2D.extend({
 
       // Pick one of the three shapes
       var tmp = [];
-      tmp = SpaceroidsRock.shapes[Math.floor(Math.random() * 3)];
+      tmp = SpaceroidsRock.shapes[Math.floor(Math2.random() * 3)];
 
       // Scale the shape
       var s = [];
@@ -206,12 +206,12 @@ var SpaceroidsRock = Object2D.extend({
       var c_mover = this.getComponent("move");
 
       // Pick a random rotation and spin speed
-      c_mover.setRotation( Math.floor(Math.random() * 360));
-      c_mover.setAngularVelocity( Math.floor(Math.random() * 10) > 5 ? 0.5 : -0.5);
+      c_mover.setRotation( Math.floor(Math2.random() * 360));
+      c_mover.setAngularVelocity( Math.floor(Math2.random() * 10) > 5 ? 0.5 : -0.5);
 
 
       var b = Point2D.create(0,-1.2);
-      var vec = Math2D.getDirectionVector(Point2D.ZERO, b, Math.floor(Math.random() * 360));
+      var vec = Math2D.getDirectionVector(Point2D.ZERO, b, Math.floor(Math2.random() * 360));
 		b.destroy();
 		
       c_mover.setVelocity(vec);

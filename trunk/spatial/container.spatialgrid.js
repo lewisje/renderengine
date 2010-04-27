@@ -105,6 +105,8 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
 
    xLocator: 1,
    yLocator: 1,
+   
+   accuracy: 1,
 
 	/**
 	 * @private
@@ -142,6 +144,25 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       this.xLocator = 1;
       this.yLocator = 1;
    },
+
+	/**
+	 * Set the accuracy of the collision checks to either {@link SpatialGrid#GOOD_ACCURACY} or
+	 * {@link SpatialGrid#BEST_ACCURACY}.
+	 * 
+	 * @param accuracy {Number} The level of accuracy during PCL generation
+	 */
+	setAccuracy: function(accuracy) {
+		this.accuracy = (accuracy > SpatialGrid.BEST_ACCURACY || accuracy < SpatialGrid.GOOD_ACCURACY) ? 
+			SpatialGrid.BEST_ACCURACY : accuracy;
+	},
+	
+	/**
+	 * Get the accuracy level of collision checks.
+	 * @return {Number} The accuracy level
+	 */
+	getAccuracy: function() {
+		return this.accuracy;
+	},
 
    /**
     * Find the node that contains the specified point.
@@ -185,17 +206,21 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     */
    getPCL: function(point) {
 
-      // We'll build our list from the 5 node cross section
+      // The origin node
       var x = Math.floor(point.x * this.xLocator);
       var y = Math.floor(point.y * this.yLocator);
 
-      // if our borders cross the margin, we can drop up to two nodes
+		// build the node set
       var nodes = [];
       nodes.push(this.getNode(x, y));
-      if (x > 0) { nodes.push(this.getNode(x - 1, y)); }
-      if (x < this.divisions) { nodes.push(this.getNode(x + 1, y)); }
-      if (y > 0) { nodes.push(this.getNode(x, y - 1)); }
-      if (y < this.divisions) { nodes.push(this.getNode(x, y + 1)); }
+	  
+      // if our borders cross the margin, we can drop up to two nodes
+		if (this.accuracy == SpatialGrid.BEST_ACCURACY) {
+			if (x > 0) { nodes.push(this.getNode(x - 1, y)); }
+			if (x < this.divisions) { nodes.push(this.getNode(x + 1, y)); }
+			if (y > 0) { nodes.push(this.getNode(x, y - 1)); }
+			if (y < this.divisions) { nodes.push(this.getNode(x, y + 1)); }
+		}
 
       var o = [];
       if (nodes.length > 0)
@@ -219,7 +244,21 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     */
    getClassName: function() {
       return "SpatialGrid";
-   }
+   },
+   
+   /**
+    * Collision checks are limited to the exact node where the
+    * object being tested resides.
+    * @type {Number}
+    */
+   GOOD_ACCURACY: 0,
+   
+   /**
+    * Collision checks are performed in the node where the object
+    * being tested resides, and in the four surrounding polar nodes.
+    * @type {Number}
+    */
+   BEST_ACCURACY: 1
 });
 
 return SpatialGrid;

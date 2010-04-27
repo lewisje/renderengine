@@ -219,8 +219,8 @@ Engine.initObject("WiiBall", "Object2D", function() {
        * If the ball was clicked on, make it bounce a random way.
        */
       clicked: function() {
-         var xD = (Math.random() * 100) < 50 ? -1 : 1;
-         var v = Vector2D.create((Math.random() * 4) * xD, -20);
+         var xD = (Math2.random() * 100) < 50 ? -1 : 1;
+         var v = Vector2D.create((Math2.random() * 4) * xD, -20);
          this.setVelocity(v);
 			v.destroy();
       },

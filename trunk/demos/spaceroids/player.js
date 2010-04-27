@@ -141,7 +141,7 @@ var SpaceroidsPlayer = Object2D.extend({
          // Particle trail
          if (Spaceroids.evolved) {
             var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
-            var colr = SpaceroidsPlayer.trailColors[Math.floor(Math.random() * 3)];
+            var colr = SpaceroidsPlayer.trailColors[Math.floor(Math2.random() * 3)];
             this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
 				inv.destroy();
          }

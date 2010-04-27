@@ -206,8 +206,8 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     */
    randomPoint: function(rect) {
       var r = rect.get();
-      return Point2D.create(Math.floor(r.x + Math.random() * r.w),
-                            Math.floor(r.y + Math.random() * r.h));
+      return Point2D.create(Math.floor(r.x + Math2.random() * r.w),
+                            Math.floor(r.y + Math2.random() * r.h));
    }
 
 });
