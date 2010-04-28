@@ -60,9 +60,12 @@ var SpaceroidsPlayer = Object2D.extend({
    nukes: null,
    nuking: null,
 	pBox: null,
+	
+	rec: false,
 
    constructor: function() {
       this.base("Player");
+		this.rec = false;
 
       this.field = Spaceroids;
 
@@ -72,6 +75,11 @@ var SpaceroidsPlayer = Object2D.extend({
 //      } else {
          this.add(KeyboardInputComponent.create("input"));
 //      }
+
+		if (Spaceroids.rec) {
+			this.getComponent("input").startRecording();
+		}
+
 
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
@@ -482,7 +490,7 @@ var SpaceroidsPlayer = Object2D.extend({
             this.shoot();
          }
       }
-
+		
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
             this.rotDir = -5;
