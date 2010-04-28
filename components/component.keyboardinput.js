@@ -99,12 +99,21 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       this.base();
    },
 
+	/**
+	 * @private
+	 */
+	playEvent: function(e) {
+		var evt = document.createEvent("KeyboardEvent");
+		evt.initKeyEvent(e.type, true, false, null, e.ctrlKey, false, e.shiftKey, false, e.keyCode, 0);
+		this.getHostObject().getRenderContext().getSurface().dispatchEvent(evt);
+	},
+
    /**
     * @private
     */
    _keyDownListener: function(eventObj) {
-      if (this.getHostObject().onKeyDown)
-      {
+      if (this.getHostObject().onKeyDown) {
+			this.record(eventObj,KeyboardInputComponent.RECORD_PART);
          return this.getHostObject().onKeyDown(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    },
@@ -113,8 +122,8 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
     * @private
     */
    _keyUpListener: function(eventObj) {
-      if (this.getHostObject().onKeyUp)
-      {
+      if (this.getHostObject().onKeyUp) {
+			this.record(eventObj,KeyboardInputComponent.RECORD_PART);
          return this.getHostObject().onKeyUp(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    },
@@ -123,8 +132,8 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
     * @private
     */
    _keyPressListener: function(eventObj) {
-      if (this.getHostObject().onKeyPress)
-      {
+      if (this.getHostObject().onKeyPress) {
+			this.record(eventObj,KeyboardInputComponent.RECORD_PART);
          return this.getHostObject().onKeyPress(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
    }
@@ -137,7 +146,9 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
     */
    getClassName: function() {
       return "KeyboardInputComponent";
-   }
+   },
+	
+	RECORD_PART: ["shiftKey","ctrlKey","altKey","keyCode"]
 });
 
 return KeyboardInputComponent;
