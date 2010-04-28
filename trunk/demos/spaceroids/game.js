@@ -90,6 +90,9 @@ var Spaceroids = Game.extend({
 
    evolved: false,
 	titlePos: null,
+	
+	rec: false,
+	play: false,
 
    /**
     * Handle the keypress which starts the game
@@ -278,6 +281,31 @@ var Spaceroids = Game.extend({
       this.scoreObj.setText(this.playerScore);
    },
 
+	recordDemo: function() {
+      if (EngineSupport.checkBooleanParam("evolved")) {
+	  		Spaceroids.evolved = true;
+		}
+	  
+		Spaceroids.rec = true;
+		Spaceroids.demoScript = {};
+		Spaceroids.demoScript.seed = Math2.randomInt();
+		
+		Math2.seed(Spaceroids.demoScript.seed);
+		Spaceroids.startGame();
+	},
+	
+	playDemo: function() {
+      if (EngineSupport.checkBooleanParam("evolved")) {
+	  		Spaceroids.evolved = true;
+		}
+
+		Spaceroids.play = true;
+		var demoMode = Spaceroids.demoModes[0];
+		Math2.seed(demoMode.seed);
+		this.startGame();
+		this.playerObj.getComponent("input").playScript(demoMode.player);
+	},
+
    /**
     * Start the game, resetting the playfield and creating the player.
     * If the game is already running, has no effect.
@@ -291,10 +319,12 @@ var Spaceroids = Game.extend({
 
       this.gameRunning = true;
 
-      Spaceroids.attractTimer.destroy();
-      Spaceroids.isAttractMode = false;
-
-      Spaceroids.intv.destroy();
+		if (!Spaceroids.rec && !Spaceroids.play) {
+	      Spaceroids.attractTimer.destroy();
+	      Spaceroids.isAttractMode = false;
+	
+	      Spaceroids.intv.destroy();
+		}
 
       this.playerScore = 0;
       this.cleanupPlayfield();
@@ -357,6 +387,13 @@ var Spaceroids = Game.extend({
     */
    gameOver: function() {
 
+		if (Spaceroids.rec) {
+			this.playerObj.getComponent("input").stopRecording();
+			Spaceroids.demoScript.player = this.playerObj.getComponent("input").getScript();
+			console.debug(JSON.stringify(Spaceroids.demoScript));
+			return;	
+		}
+
       var g = TextRenderer.create(VectorText.create(), "Game Over", 3);
       g.setPosition(Point2D.create(100, 260));
       g.setTextWeight(0.25);
@@ -406,7 +443,7 @@ var Spaceroids = Game.extend({
 
       // We'll need something to detect collisions
       this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 7);
-		this.collisionModel.setAccuracy(SpatialGrid.GOOD_ACCURACY);
+		this.collisionModel.setAccuracy(SpatialGrid.BEST_ACCURACY);
 
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
 
@@ -419,6 +456,17 @@ var Spaceroids = Game.extend({
       this.soundLoader.load("lowboop", this.getFilePath("resources/low.mp3"));
       this.soundLoader.load("hiboop", this.getFilePath("resources/hi.mp3"));
 
+
+		if (EngineSupport.checkBooleanParam("record")) {
+			Spaceroids.recordDemo();
+			return;
+		}
+		
+		if (EngineSupport.checkBooleanParam("playback")) {
+			Spaceroids.playDemo();
+			return;
+		}
+		
       Spaceroids.attractMode();
    },
 
@@ -503,7 +551,60 @@ var Spaceroids = Game.extend({
          pos.set(x,y);
       }
       return pos;
-   }
+   },
+	
+	demoModes: [
+		{"seed":3880520576,"player":[{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":1391,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":560,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":33,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":44,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":33,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":0,"type":"keyup"},{"shiftKey":false,"ctrlKey":true,"keyCode":17,"delay":326,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":17,"delay":115,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":1301,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":388,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":252,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":129,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":97,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":495,"type":"keyup"},{"shiftKey":false,"ctrlKey":true,"keyCode":17,"delay":964,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":17,"delay":127,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":860,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":541,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":63,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":28,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":56,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":28,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":27,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":27,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":28,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":30,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":29,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":29,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":29,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":59,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":29,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":0,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":220,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":255,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":666,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":489,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":444,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":128,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":true,"keyCode":17,"delay":421,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":17,"delay":96,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":1520,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":587,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":26,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":27,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":26,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":26,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":55,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":29,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":30,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":0,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":66,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":0,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":64,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":30,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":30,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":30,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":60,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":30,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":0,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":32,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":428,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":0,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":1026,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":350,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":384,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":541,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":31,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":526,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":34,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":57,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":30,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":790,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":575,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":29,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":30,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":391,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":223,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":3637,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":563,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":31,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":288,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":192,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":true,"keyCode":17,"delay":432,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":17,"delay":59,"type":"keyup"},{"shiftKey":false,"ctrlKey":true,"keyCode":17,"delay":1154,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":17,"delay":82,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":625,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":548,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":578,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":0,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":62,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":30,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":30,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":0,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":93,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":579,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":30,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":29,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":30,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":0,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":60,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":354,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":251,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":357,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":537,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":343,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":1158,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":576,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":32,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":33,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":293,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":566,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":31,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":34,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":34,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":34,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":33,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":0,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":132,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":336,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":530,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":297,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":0,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":246,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":488,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":35,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":0,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":0,"type":"keydown"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":555,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":395,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":0,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":552,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":602,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":39,"delay":410,"type":"keyup"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":0,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":38,"delay":391,"type":"keyup"},
+		{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":33,"type":"keydown"},{"shiftKey":false,"ctrlKey":false,"keyCode":37,"delay":198,"type":"keyup"}]}]
 
 });
 
