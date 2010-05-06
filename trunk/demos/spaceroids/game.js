@@ -433,7 +433,7 @@ var Spaceroids = Game.extend({
 
       // Set the FPS of the game
       if (EngineSupport.sysInfo().browser == "chrome") {
-         this.engineFPS = 60;
+         this.engineFPS = 35;
       }
       
       Engine.setFPS(this.engineFPS);
