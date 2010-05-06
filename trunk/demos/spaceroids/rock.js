@@ -96,7 +96,7 @@ var SpaceroidsRock = Object2D.extend({
       if (this.ModelData.lastNode) {
          this.ModelData.lastNode.removeObject(this);
       }
-		this.pBox.destroy();
+      this.pBox.destroy();
       this.base();
    },
 
@@ -108,9 +108,9 @@ var SpaceroidsRock = Object2D.extend({
     */
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
-		var p = Point2D.create(c_mover.getPosition());
+      var p = Point2D.create(c_mover.getPosition());
       c_mover.setPosition(Spaceroids.wrap(p, this.getBoundingBox()));
-		p.destroy();
+      p.destroy();
 
       renderContext.pushTransform();
       this.base(renderContext, time);
@@ -212,8 +212,8 @@ var SpaceroidsRock = Object2D.extend({
 
       var b = Point2D.create(0,-1.2);
       var vec = Math2D.getDirectionVector(Point2D.ZERO, b, Math.floor(Math2.random() * 360));
-		b.destroy();
-		
+      b.destroy();
+      
       c_mover.setVelocity(vec);
    },
 
@@ -238,6 +238,10 @@ var SpaceroidsRock = Object2D.extend({
    kill: function() {
       // Make some particles
       var pCount = Spaceroids.evolved && !Spaceroids.isAttractMode ? 30 : 4;
+
+      if (EngineSupport.sysInfo().browser == "chrome") {
+         pCount = 80;
+      }
 
       for (var x = 0; x < pCount; x++)
       {
