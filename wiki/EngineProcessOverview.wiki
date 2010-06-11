@@ -39,7 +39,7 @@ Objects that are created, and need to be updated, have to be added to a parent o
    this.renderContext.setWorldScale(this.areaScale);
    Engine.getDefaultContext().add(this.renderContext);
 }}}
-This creates a `CanvasContext` (itself, a container) and adds it to the engine's default context.  By doing so, anything added to the game's `renderContext` will be updated each time the engine's default context updates the `renderContext`.  You can see that as we create rocks in attract mode for the game, they are added to the game's `renderContext`:
+This creates a `CanvasContext` (itself, a container) and adds it to the engine's default context.  By doing so, anything added to the game's `renderContext` will be updated each time the engine's default context updates the `renderContext`.  You can see that as we create rocks in attract mode for the "Spaceroids" example game, they are added to the game's `renderContext`:
 {{{
    // Add some asteroids
    for (var a = 0; a < 3; a++)
