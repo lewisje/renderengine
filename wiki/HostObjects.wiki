@@ -22,7 +22,7 @@ Components break down into one of five functional areas.  Those areas, in order 
 
 Not every host object will use components of each type.  Some game objects may only have a logic and rendering component, while others may have just a collider component.  Plus, there isn't a limit on the number of components of _one type_ that can be used.  A host might have two input components and five rendering components.  The idea here is that each component is focused on doing only one thing.
 
-Host objects call the `execute()` method of each component added to it.  This gives the host a chance to update itself before the container it is in moves onto the next object.  Components can be prioritized within their macro type, so that you can assure that one rendering component is executed before another.  Thus, if you need to rotate a shoulder before an elbow, you can prioritize them as such.
+Host objects call the [http://renderengine.googlecode.com/svn/api/BaseComponent.html#execute execute()] method of each component added to it.  This gives the host a chance to update itself before the container it is in moves on to the next object.  Components can be prioritized within their macro type, so that you can assure that one rendering component is executed before another.  Thus, if you need to rotate a shoulder before an elbow, you can prioritize them as such.
 
 == Quick and Dirty Components ==
 
@@ -70,7 +70,7 @@ From the `SpaceroidsBullet` object's `constructor()` method, you can see how it 
 
 == Host Execution ==
 
-Each frame of execution, every host object is processed and all components are executed.  The host object, through its `update()` method, is given the opportunity to modify the operation of its components.  Typically, only transformation (movement) of the host will need to be modified.  The collision component will, typically, automatically notify the host when a collision occurs with something, giving the host an opportunity to respond.
+Each frame of execution, every host object is processed and all components are executed.  The host object, through its [http://renderengine.googlecode.com/svn/api/HostObject.html#update update()] method, is given the opportunity to modify the operation of its components.  Typically, only transformation (movement) of the host will need to be modified, however, some components even make _that_ unnecessary.  The collision component will, typically, automatically notify the host when a collision occurs with something, giving the host an opportunity to respond.
 
 Finally, the rendering component will be executed (yes, components are executed in a defined order) and the host will be drawn to the RenderContext.  If your power-up was using an animated sprite, there's no need to even update the frame being displayed as that is done automatically for you.
 
@@ -101,6 +101,8 @@ For example, the `update()` method of the `SpaceroidsBullet` object:
       }
 
       renderContext.pushTransform();
+
+      // Finally, call the super class' method
       this.base(renderContext, time);
       renderContext.popTransform();
    }
