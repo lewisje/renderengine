@@ -91,7 +91,7 @@ The point of using an object oriented architecture is to allow classes to inheri
 
 `Mover2D` inherits from `Transform2D` to gain access to those values, but adds the ability to update the single position based on velocity, and update the rotation based on angular velocity, each and every frame.  Many other components in the system extend existing components to gain access to their methods and provide layered functionality.  You may find yourself in a situation where an existing component provides 99% of what you need.  In that case, extending the component is your best option.  That will save you time in the long run.
 
-Rather than modifying an existing engine component, or placing components in the `/components/` folder, you can put them into your game's folder.  That way, if the engine is updated with new features or bug fixes, you can upgrade the engine without losing your own objects and also avoid the problem of having to merge code.
+Rather than modifying an existing engine component, or placing your own components in the `/components/` folder, you can put them into your game's folder.  That way, if the engine is updated with new features or bug fixes, you can upgrade the engine without losing your own objects and also avoid the problem of having to merge code.
 
 == Components Example ==
 
