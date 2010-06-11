@@ -57,7 +57,7 @@ Once we get the component, we can call its methods to set it up.  From that poin
 
 == Callback Components ==
 
-Some components need to interact with the host object.  Those components will call predefined methods on your host object.  The component defines the method names that you must implement.  If you don't implement the method don't worry... Components must be able to handle that situation gracefully.
+Some components need to interact with the host object.  Those components will call methods defined on your host object.  The component defines the method name, or names, that your host object must implement.  If you don't implement the method, don't worry... Components will check for a method's existence before trying to call it.  By implementing callbacks this way, you can selectively determine what parts of some components to utilize.
 
 The rock object has one method that it needs to implement for the collider component to be effective.  The method, as long as it is defined, will be called by the component whenever it needs to update the host object.  In this case, the rock needs to know if it has collided with the player object:
 {{{
