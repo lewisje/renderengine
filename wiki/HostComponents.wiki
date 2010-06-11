@@ -27,7 +27,7 @@ As was stated in the EngineProcessOverview, host objects contain components.  Ea
       this.setPosition(position);
    }
 }}}
-As you can see, a rock contains three components: one mover, one renderer, and one collider.  By doing so, the rock doesn't have to worry about where it's positioned or how it moves, nor does it have to understand how to render to the context.  We feed each component with information that it needs, and the component does the work for us.  For example, the "draw" component needs to know what points to render and how to render it:
+As you can see, a rock contains three components: one mover, one renderer, and one collider.  By doing so, the rock object doesn't need to be written to position itself or how to move around the playfield, nor does it have to implement the code to render to the context.  We feed each component with information that it needs, and the component does the work for us.  For example, the "draw" component needs to know what points to render and how to render it:
 {{{
 setShape: function() {
    var c_draw = this.getComponent("draw");
