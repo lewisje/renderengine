@@ -36,4 +36,8 @@ The following is a quick test I put together to test text rendering with the thr
 Another tool that will be provided with the engine will dissect a bitmap image of a font for use with the canvas context.  It analyzes a bitmap for breaks between the characters, and generates a font definition.  The editor allows the user to create, adjust, and remove dividers.  For information about using the tool, see the page for the FontEditor.
    * [http://renderengine.googlecode.com/svn/trunk/tools/font_editor/index.html?metrics=true Font Editor alpha]
 
+==!PistolSlut by Mary Rose Cook==
+
+[http://pistolslut.com PistolSlut] is a 2D side-scrolling shooter that is in development by a third party.
+
 There will be more examples, in the future, which will appear on this page.  If you have any good examples of the engine in use, let me know and I'll include them here as well!
