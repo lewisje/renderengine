@@ -7,7 +7,7 @@ The following is a list of browsers that I have tested the engine and examples i
 || [http://www.google.com/chrome Google Chrome] || 3.0+ || Windows || Great || Excellent ||
 || [http://www.firefox.com/ Mozilla Firefox] || 3.6+ || Windows, Linux || Perfect || Excellent ||
 || [http://www.apple.com/safari/download/ Apple Safari] || 3.0+ || Windows, Mac || Perfect || Excellent ||
-|| [http://www.opera.com/ Opera] || 9.5+ || Windows || Great || Fair ||
+|| [http://www.opera.com/ Opera] || 9.5+ || Windows || Great || Good ||
 || *Chrome* || 1.0, 2.0 || Windows || Great || Great ||
 || *Android* || 7.0 || Android 2.1 || Good || Fair ||
 || *iPhone/iPod* || ?? || iPhone 2.0+ || Good || Fair ||
