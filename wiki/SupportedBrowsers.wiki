@@ -5,7 +5,7 @@ The following is a list of browsers that I have tested the engine and examples i
 
 ||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||  *Performance*  ||
 || [http://www.google.com/chrome Google Chrome] || 3.0+ || Windows || Great || Excellent ||
-|| [http://www.firefox.com/ Mozilla Firefox] || 3.6+ || Windows, Linux || Perfect || Excellent ||
+|| [http://www.firefox.com/ Mozilla Firefox] || 3.6+ || Windows, Linux || Perfect || Great ||
 || [http://www.apple.com/safari/download/ Apple Safari] || 3.0+ || Windows, Mac || Perfect || Excellent ||
 || [http://www.opera.com/ Opera] || 9.5+ || Windows || Great || Good ||
 || *Chrome* || 1.0, 2.0 || Windows || Great || Great ||
