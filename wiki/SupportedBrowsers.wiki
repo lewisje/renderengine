@@ -34,6 +34,7 @@ For those who are using Internet Explorer, and prefer to keep their browser inta
 _Notes:_
 
   * Just as a note, the best performance of any browser is Google's _Chrome_.  Their V8 Javascript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete!  However, there are some features not yet supported in Chromium which need to be addressed before I _will_ endorse it fully.
+  * Firefox 3.6 has significantly improved the overall performance of the engine.  The lengthy pauses when the browser was running the GC are now much less noticeable, but still there.
   * Additional tests for different browsers on multiple platforms would be nice.  I only have a Windows PC and occasional access to a Mac and/or iPhone.
   * Requests for additional browsers should be added to the comments of this page.
   * There is a project to bring the Cairo (Firefox's renderer) canvas to Internet Explorer.  When this works, I will test and add IE to my list of browsers.  The !ExCanvas object doesn't perform fast enough for this engine.
