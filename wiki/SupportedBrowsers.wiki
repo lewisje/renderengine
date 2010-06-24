@@ -20,7 +20,7 @@ The following is a list of browsers that I have tested the engine and examples i
   * Perfect - All features working as expected
   * Great - Fully functional with minor issues
   * Good - Baseline, functioning
-  * Ok - Runs, missing features or poor performance
+  * Ok - Runs, missing features
   * Poor - Most features not working
   * Fail - Engine not working on this browser
 
