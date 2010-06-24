@@ -37,7 +37,7 @@ My definition of load may not be the same as others, so let me try to summarize 
 
 ==Internet Explorer Support==
 
-For those who are using Internet Explorer, that would like to enjoy The Render Engine and what it has to offer, should consider downloading the following plug-in:
+Those folks who are using Internet Explorer, that would like to enjoy The Render Engine and what it has to offer, should consider downloading the following plug-in:
 
 [http://code.google.com/chrome/chromeframe/ ChromeFrame for Internet Explorer]
 
