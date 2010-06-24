@@ -3,19 +3,20 @@
 
 The following is a list of browsers that I have tested the engine and examples in.  As more browsers are tested and pass, I will add them to this list.  
 
-||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||
-|| [http://www.google.com/chrome Google Chrome] || 3.0+ || Windows || _Near_ Perfect ||
-|| [http://www.firefox.com/ Mozilla Firefox] || 3.5+ || Windows, Linux || Perfect ||
-|| [http://www.apple.com/safari/download/ Apple Safari] || 3.0+ || Windows, Mac, iPhone || Perfect - Win/Mac, Good - iPhone ||
-|| [http://www.opera.com/ Opera] || 9.5+ || Windows || Great ||
-|| *Android Chrome* || 7.0 || Android 2.1 || Good ||
-|| *Chrome* || 1.0,2.0 || Windows || Great ||
-|| *Firefox* || 3.0 || Windows || Great ||
-|| *Firefox* || 1.5,2.0 || Windows || Good ||
-|| *Opera* || 9.5+ || Wii || Ok - Needs optimization ||
-|| *Internet Explorer* || 6.0+ || Windows || Fail ||
+||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||  *Performance*  ||
+|| [http://www.google.com/chrome Google Chrome] || 3.0+ || Windows || Great || Excellent ||
+|| [http://www.firefox.com/ Mozilla Firefox] || 3.6+ || Windows, Linux || Perfect || Excellent ||
+|| [http://www.apple.com/safari/download/ Apple Safari] || 3.0+ || Windows, Mac || Perfect || Excellent ||
+|| [http://www.opera.com/ Opera] || 9.5+ || Windows || Great || Fair ||
+|| *Chrome* || 1.0, 2.0 || Windows || Great || Great ||
+|| *Android* || 7.0 || Android 2.1 || Good || Fair ||
+|| *iPhone/iPod* || ?? || iPhone 2.0+ || Good || Fair ||
+|| *Firefox* || 3.0, 3.5 || Windows || Great || Good ||
+|| *Firefox* || 1.5, 2.0 || Windows || Good || Fair ||
+|| *Opera* || 9.5+ || Wii || Ok || Poor ||
+|| *Internet Explorer* || 6.0+ || Windows || Fail || -- ||
 
-Levels of support:
+*Levels of support:*
   * Perfect - All features working as expected
   * Great - Fully functional with minor issues
   * Good - Baseline, functioning
@@ -23,9 +24,20 @@ Levels of support:
   * Poor - Most features not working
   * Fail - Engine not working on this browser
 
+*Levels of performance:*
+  * Excellent - High framerate under any load
+  * Great - High framerate under normal load, drops under high load
+  * Good - Medium framerate, drops noticeably under high load
+  * Fair - Low framerate, drops under medium load
+  * Poor - Very low framerate
+
+*Explanation of "Load":*
+
+My definition of load may not be the same as others, so let me try to summarize it in my own words.  When I speak of load, I think about the amount of processing that must occur to render one frame to the screen.  This involves everything from moving objects around to checking collisions, getting input and general game logic.  The more objects on screen, at any time, which must be updated and subsequently rendered increases load.  So, the more objects on screen, the higher the load.  A good example of high load is when the Asteroids Redux demo has upwards of fifty rocks, the player, five bullets, and hundreds of particles all being animated in one frame (about 400 objects on screen).  Medium load is about half that (200 objects), and low load would be about one eighth of medium (25 objects).
+
 ==Internet Explorer Support==
 
-For those who are using Internet Explorer, and prefer to keep their browser intact, that would like to enjoy The Render Engine and what it has to offer should consider downloading the following plug-in for Internet Explorer:
+For those who are using Internet Explorer, that would like to enjoy The Render Engine and what it has to offer, should consider downloading the following plug-in:
 
 [http://code.google.com/chrome/chromeframe/ ChromeFrame for Internet Explorer]
 
@@ -33,7 +45,7 @@ For those who are using Internet Explorer, and prefer to keep their browser inta
 
 _Notes:_
 
-  * Just as a note, the best performance of any browser is Google's _Chrome_.  Their V8 Javascript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete!  However, there are some features not yet supported in Chromium which need to be addressed before I _will_ endorse it fully.
+  * The best performance of any browser is Google's _Chrome_.  Their V8 !JavaScript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete!  However, there are some features not yet supported in Chromium which need to be addressed before I _will_ endorse it fully.
   * Firefox 3.6 has significantly improved the overall performance of the engine.  The lengthy pauses when the browser was running the GC are now much less noticeable, but still there.
   * Additional tests for different browsers on multiple platforms would be nice.  I only have a Windows PC and occasional access to a Mac and/or iPhone.
   * Requests for additional browsers should be added to the comments of this page.
