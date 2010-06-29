@@ -15,7 +15,7 @@ These engines are _free_ for your use.  They require no licensing fee, and are n
   * [http://retrogames.cc/ RetroGames]
   * [http://gogomakeplay.com/gmp GMP Engine]
   * [http://www.codeproject.com/KB/scripting/TomsHallsJavascriptGame.aspx Tom's Halls]
-  * [http://www.lukewallin.co.uk/?go=engine 2D Game Engine]
+  * [http://www.lukewallin.co.uk/?go=engine 2D Game Engine (with Physics)]
   * [http://jsge.athlabs.com/ JSGE]
   * [http://www.ambiera.com/copperlicht/index.html Copperlicht 3D Engine]
   * [http://tommysmind.com/ GameJS]
