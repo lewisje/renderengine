@@ -13,7 +13,7 @@ These engines are _free_ for your use.  They require no licensing fee, and are n
   * [http://www.kesiev.com/akihabara/ Akihabara]
   * [http://gamequery.onaluf.org/ GameQuery]
   * [http://retrogames.cc/ RetroGames]
-  * [http://freshmeat.net/projects/gmp-javascript-game-engine GMP Engine]
+  * [http://gogomakeplay.com/gmp GMP Engine]
   * [http://www.codeproject.com/KB/scripting/TomsHallsJavascriptGame.aspx Tom's Halls]
   * [http://www.lukewallin.co.uk/?go=engine 2D Game Engine]
   * [http://jsge.athlabs.com/ JSGE]
@@ -34,4 +34,3 @@ The following is an expanding list of tutorials and articles which cover topics 
   * [http://www.javascriptgaming.com/ JavaScript Gaming]
   * [http://www.irt.org/games/howto/ex003/index.htm Game Development in JavaScript]
   * [http://rebelfive.wordpress.com/ JavaScript Arcade Game Development]
-
