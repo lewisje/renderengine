@@ -1,0 +1,37 @@
+#summary Other !JavaScript game engines worth a mention.
+
+= Other !JavaScript Engines =
+
+Listed below are other !JavaScript game engines that I have found around the web.  Each one is a unique work, usually by an individual much like myself who has a passion for gaming.  Games themselves are a dime a dozen, however, a fully functioning engine which simplifies the process of developing a game are not as abundant.
+
+I suggest you take a look at the engines listed below.  If _The Render Engine_ isn't what you're looking for, maybe one of these would suit your project better.
+
+
+==Open Source==
+These engines are _free_ for your use.  They require no licensing fee, and are non-restrictive in their usage.  Some are more complete than others, but they all have fairly extensive feature sets.  These are in no particular order:
+
+  * [http://www.kesiev.com/akihabara/ Akihabara]
+  * [http://gamequery.onaluf.org/ GameQuery]
+  * [http://retrogames.cc/ RetroGames]
+  * [http://freshmeat.net/projects/gmp-javascript-game-engine GMP Engine]
+  * [http://www.codeproject.com/KB/scripting/TomsHallsJavascriptGame.aspx Tom's Halls]
+  * [http://www.lukewallin.co.uk/?go=engine 2D Game Engine]
+  * [http://jsge.athlabs.com/ JSGE]
+  * [http://www.ambiera.com/copperlicht/index.html Copperlicht 3D Engine]
+  * [http://tommysmind.com/ GameJS]
+
+
+==For a Fee==
+These engines require you to pay a fee to use them.  Either a cost to get the engine, or a cost to host your game on their servers.  This doesn't mean they are any less important, or that you shouldn't consider them.  They may have benefits that the free engines will not have.  These are in no particular order:
+  
+  * [http://www.dextrose.com/en/projects/aves-engine AVES Engine]
+  * [http://www.effectgames.com/effect/ Effect Games]
+
+==Information==
+The following is an expanding list of tutorials and articles which cover topics that may be of use when you are developing a game.  Some of these may even fix an issue you are having while developing your game with _The Render Engine_.
+
+  * [http://metalab.at/wiki/JavaScript_game_development MetaLab]
+  * [http://www.javascriptgaming.com/ JavaScript Gaming]
+  * [http://www.irt.org/games/howto/ex003/index.htm Game Development in JavaScript]
+  * [http://rebelfive.wordpress.com/ JavaScript Arcade Game Development]
+
