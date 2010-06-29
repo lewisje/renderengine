@@ -1,4 +1,4 @@
-#summary Other !JavaScript game engines worth a mention.
+#summary Other JavaScript game engines worth a mention.
 
 = Other !JavaScript Engines =
 
