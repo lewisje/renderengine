@@ -84,17 +84,21 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * attached to this object.
     */
    destroy: function() {
-      // We need to make sure to remove any event's attached to us
-      // that weren't already cleaned up
-      for (var ref in this.events) {
-         var r = ref;
-         var fn = this.events[r];
-         var type = r.split(",")[1];
-         if (fn) {
-            EventEngine.clearHandler(this.getElement(), type, fn);
+      if (!this.getObjectAliveState()) {
+         // We need to make sure to remove any event's attached to us
+         // that weren't already cleaned up
+         for (var ref in this.events) {
+            var r = ref;
+            var fn = this.events[r];
+            var type = r.split(",")[1];
+            if (fn) {
+               EventEngine.clearHandler(this.getElement(), type, fn);
+            }
          }
+         this.base();
+      } else {
+         this.safeDestroy();
       }
-      this.base();
    },
 
    /**
