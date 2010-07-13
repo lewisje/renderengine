@@ -317,7 +317,10 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param time {Number} The world time, in milliseconds
     */
    renderObject: function(obj, time) {
-      obj.update(this, time);
+		// Only update an object if it is still alive
+		if (obj.isAlive()) {
+	      obj.update(this, time);
+		}
    },
 
    /**

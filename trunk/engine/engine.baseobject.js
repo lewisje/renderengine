@@ -69,6 +69,8 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
    jQObject: null,
 
    events: null,
+	
+	alive: false,
 
    /**
     * @private
@@ -77,6 +79,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
       this.base(name);
       this.events = {};
       this.jQObject = null;
+		this.alive = true;
    },
 
    /**
@@ -84,6 +87,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * attached to this object.
     */
    destroy: function() {
+		this.alive = false;
       // We need to make sure to remove any event's attached to us
       // that weren't already cleaned up
       for (var ref in this.events) {
@@ -139,6 +143,14 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
       }
       return this.jQObject;
    },
+
+	/**
+	 * Returns <code>true</code> if the object has been constructed, but not
+	 * destroyed.  When an object has been destroyed, it is considered a dead object.
+	 */
+	isAlive: function() {
+		return this.alive;
+	},
 
    /**
     * Abstract update method to set the state of the object.  This method
