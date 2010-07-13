@@ -614,7 +614,7 @@ var Assert = function(test, error) {
 			for (var a = 1; a < arguments.length; a++) {
 				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
 				Console.error("*ASSERT* ", arguments[a]);
-				Console.trace();
+				//Console.trace();
 			}
 		}
 		
