@@ -87,17 +87,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
-    * Destroy the rendering context, and detach the surface from its
-    * parent container.
-    */
-   destroy: function() {
-      if (this.surface) {
-         $(this.surface).remove();
-      }
-      this.base();
-   },
-
-   /**
     * Set the surface element that objects will be rendered to.
     *
     * @param element {HTMLElement} The document node that all objects will be rendered to.
