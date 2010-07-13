@@ -302,9 +302,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
          this.setupWorld(time);
    
          // Run the objects if they are visible
-         var objs = this.getObjects();
-         for (var o in objs) {
-            this.renderObject(objs[o], time);
+         var objs = this.iterator();
+         while (objs.hasNext()) {
+            this.renderObject(objs.next(), time);
          }
       } finally {
          // Restore the world transform
