@@ -56,13 +56,19 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
    // The name of the object
    name: "",
+	
+	alive: false,
+	
+	mutationState: null,
 
    /**
     * @private
     */
    constructor: function(name) {
+		this.alive = true;
       this.name = name;
       this.id = Engine.create(this);
+		this.mutationState = PooledObject.AFTER_UPDATE;
    },
 
    /**
@@ -73,6 +79,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    release: function() {
       this.name = "";
       this.id = -1;
+		this.mutationState = null;
    },
 
    /**
@@ -81,6 +88,8 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * to be used again.
     */
    destroy: function() {
+		this.alive = false;
+		
       PooledObject.returnToPool(this);
 
       // Clean up the engine reference to this object
@@ -142,7 +151,34 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
       xml += "/>\n";
       return xml;
-   }
+   },
+	
+	/**
+	 * Returns <code>true</code> if the object has been constructed, but not
+	 * destroyed.  When an object has been destroyed, it is considered a dead object.
+	 */
+	isAlive: function() {
+		return this.alive;
+	},
+	
+	/**
+	 * Set the current mutation state of the object.  Primarily used
+	 * to make sure an object is safe to destroy.
+	 * @param mutationState {Number}
+	 */
+	setMutationState: function(mutationState) {
+		this.mutationState = mutationState;
+	},
+	
+	/**
+	 * Returns the current mutation state of the object.
+	 * @return {Number} The mutation state
+	 */
+	getMutationState: function() {
+		return this.mutationState;
+	}
+
+
 }, /** @scope PooledObject.prototype **/{
 
    /**
@@ -262,7 +298,13 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
          Console.warn("Object is missing getClassName()");
       }
       return "PooledObject";
-   }
+   },
+	
+	// The object is being updated and is not safe to destroy
+	BEFORE_UPDATE: 1,
+	
+	// The object has been updated and is save to destroy
+	AFTER_UPDATE: 0
 
 });
 

@@ -66,7 +66,7 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     */
    destroy: function() {
 		if (!moTransient) {
-			if (this.getMutationState() != BaseObject.AFTER_UPDATE) {
+			if (this.getMutationState() != PooledObject.AFTER_UPDATE) {
 				this.base();	
 			} else {
 				Engine.getDefaultRenderContext().safeDelete(this);
