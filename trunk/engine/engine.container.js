@@ -34,7 +34,7 @@
 Engine.include("/engine/engine.pooledobject.js");
 Engine.include("/engine/engine.baseobject.js");
 
-Engine.initObject("Iterator", "PooledObject", function() {
+Engine.initObject("ContainerIterator", "PooledObject", function() {
 
 /**
  * @class Create an iterator over a {@link Container} instance. An
@@ -42,7 +42,7 @@ Engine.initObject("Iterator", "PooledObject", function() {
  * within the container.  The simplest way to traverse the list is
  * as follows:
  * <pre>
- * for (var itr = Iterator.create(containerObj); itr.hasNext(); ) {
+ * for (var itr = ContainerIterator.create(containerObj); itr.hasNext(); ) {
  *    // Get the next object in the container
  *    var o = itr.next();
  *    
@@ -62,7 +62,7 @@ Engine.initObject("Iterator", "PooledObject", function() {
  * @extends PooledObject
  * @description Create an iterator over a collection
  */
-var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
+var ContainerIterator = PooledObject.extend(/** @scope ContainerIterator.prototype */{
 
    idx: 0,
 
@@ -74,9 +74,10 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * @private
     */
    constructor: function(container) {
-      this.base("Iterator");
+      this.base("ContainerIterator");
       this.idx = 0;
       this.c = container;
+      this.c.setConcurrentModification(true);
 
       // Duplicate the elements in the container
       this.objs = new Array().concat(container.getObjects());
@@ -88,6 +89,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
    release: function() {
       this.base();
       this.idx = 0;
+      this.c.setConcurrentModification(false);
       this.c = null;
       this.objs = null;
    },
@@ -97,7 +99,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * iterating over them.  You cannot call this method after you have called {@link #next}.
     */
    reverse: function() {
-      Assert(this.idx == 0, "Cannot reverse Iterator after calling next()");
+      Assert(this.idx == 0, "Cannot reverse ContainerIterator after calling next()");
       this.objs.reverse();
    },
 
@@ -122,18 +124,18 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       return (this.idx < this.c.size());
    }
 
-}, /** @scope Iterator.prototype */{ 
+}, /** @scope ContainerIterator.prototype */{ 
    /**
     * Get the class name of this object
     *
-    * @return {String} "Iterator"
+    * @return {String} "ContainerIterator"
     */
    getClassName: function() {
-      return "Iterator";
+      return "ContainerIterator";
    }
 });
 
-return Iterator;
+return ContainerIterator;
 
 });
 
@@ -153,6 +155,7 @@ Engine.initObject("Container", "BaseObject", function() {
 var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    objects: null,
+   references: null,
 
    /**
     * @private
@@ -160,6 +163,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    constructor: function(containerName) {
       this.base(containerName || "Container");
       this.objects = [];
+      this.references = 0;
    },
 
    /**
@@ -168,6 +172,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    release: function() {
       this.base();
       this.objects = null;
+      this.references = null;
    },
 
    /**
@@ -176,12 +181,21 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * to perform clean up operations.
     */
    destroy: function() {
-		if (!this.isAlive()) {
-	      this.cleanUp();
-	      this.base();
-		} else {
-			Engine.getDefaultContext().safeDelete(this);
-		}
+      Assert((this.references == 0), "Concurrent modification exception");
+      if (this.base()) {
+         this.cleanUp();
+      }
+   },
+
+   /**
+    * Flag indicating that the container is being iterated over
+    * and shouldn't be modified while that is occurring.
+    * @param concurrentModification {Boolean} 
+    * @private
+    */
+   setConcurrentModification: function(concurrentModification) {
+      this.references += concurrentModification ? 1 : -1;
+      AssertWarn((this.references >= 0), "Re-release of concurrency by iterator");
    },
 
    /**
@@ -200,6 +214,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {Object} The object to add to the container.
     */
    add: function(obj) {
+      Assert((this.references == 0), "Concurrent modification exception");
       this.objects.push(obj);
       if (obj.getId) {
          Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
@@ -215,6 +230,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {Object} The object to insert into the container
     */
    insert: function(index, obj) {
+      Assert((this.references == 0), "Concurrent modification exception");
       Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
       this.objects.splice(index, 0, obj);
    },
@@ -242,6 +258,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Object} The object which was replaced
     */
    replaceAt: function(index, obj) {
+      Assert((this.references == 0), "Concurrent modification exception");
       Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
       return this.objects.splice(index, 1, obj);      
    },
@@ -253,6 +270,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {Object} The object to remove from the container.
     */
    remove: function(obj) {
+      Assert((this.references == 0), "Concurrent modification exception");
       if (obj.getId) {
          Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
       }
@@ -270,9 +288,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
 
       var obj = this.objects[idx];
-
-      Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
-      this.objects.splice(idx, 1);
+      this.remove(obj);
 
       return obj;
    },
@@ -303,13 +319,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    },
 
    /**
-    * Remove and destroy all objects from the container.
+    * Destroy all objects in the container.
     */
    cleanUp: function() {
-      while(this.objects.length > 0)
-      {
-         var o = this.objects.shift();
-         o.destroy();
+      while(this.objects.length > 0) {
+         this.objects.shift().destroy();
       }
       this.clear();
    },
@@ -361,6 +375,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     *          will be sorted in "natural" order.
     */
    sort: function(fn) {
+      Assert((this.references == 0), "Concurrent modification exception");
       Console.log("Sorting ", this.getName(), "[" + this.getId() + "]");
       this.objects.sort(fn);
    },
@@ -378,9 +393,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       });
    },
 
-	toString: function() {
-		return this.constructor.getClassName();	
-	},
+   toString: function() {
+      return this.constructor.getClassName();   
+   },
 
    /**
     * Serializes a container to XML.
@@ -410,10 +425,10 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    
    /**
     * Returns an iterator over the collection.
-    * @return {Iterator} An iterator
+    * @return {ContainerIterator} An iterator
     */
    iterator: function() {
-      return Iterator.create(this);   
+      return ContainerIterator.create(this);   
    }
 
 }, /** @scope Container.prototype */{

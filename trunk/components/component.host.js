@@ -75,8 +75,9 @@ var HostComponent = LogicComponent.extend(/** @scope HostComponent.prototype */{
     * @private
     */
    destroy: function() {
-      this.objects.destroy();
-      this.base();
+      if (this.base()) {
+         this.objects.destroy();
+      }
    },
 
    /**

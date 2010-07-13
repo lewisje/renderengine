@@ -57,8 +57,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    worldPosition: null,
    worldRotation: null,
    worldScale: null,
-	staticCtx: null,
-	destroyAfterUpdate: null,
+   staticCtx: null
 
    /**
     * @private
@@ -71,8 +70,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldPosition = Point2D.create(0, 0);
       this.worldRotation = 0;
       this.viewport = Rectangle2D.create(0, 0, 100, 100);
-		this.staticCtx = false;
-		this.destroyAfterUpdate = [];
+      this.staticCtx = false;
    },
 
    /**
@@ -85,8 +83,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldScale = null;
       this.worldPosition = null;
       this.worldRotation = null;
-		this.staticCtx = null;
-		this.destroyAfterUpdate = null;
+      this.staticCtx = null;
    },
 
    /**
@@ -95,7 +92,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     */
    destroy: function() {
       this.base();
-      this.surface = null;
+      if (this.surface) {
+         $(this.surface).remove();
+      }
    },
 
    /**
@@ -116,26 +115,26 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       return this.surface;
    },
 
-	/**
-	 * Set the context to be static.  Setting a context to be static effectively removes 
-	 * it from the automatic update when the world is updated.  The user will need to call
-	 * {@link render}, passing the world time (gotten with {@link Engine#worldTime})
-	 * to manually render the context.  Any objects within the context will then render
-	 * to the context.
-	 * 
-	 * @param state {Boolean} <tt>true</tt> to set the context to static
-	 */
-	setStatic: function(state) {
-		this.staticCtx = state;
-	},
-	
-	/**
-	 * Determine if the context is static.
-	 * @return {Boolean}
-	 */
-	isStatic: function() {
-		return this.staticCtx;
-	},
+   /**
+    * Set the context to be static.  Setting a context to be static effectively removes 
+    * it from the automatic update when the world is updated.  The user will need to call
+    * {@link render}, passing the world time (gotten with {@link Engine#worldTime})
+    * to manually render the context.  Any objects within the context will then render
+    * to the context.
+    * 
+    * @param state {Boolean} <tt>true</tt> to set the context to static
+    */
+   setStatic: function(state) {
+      this.staticCtx = state;
+   },
+   
+   /**
+    * Determine if the context is static.
+    * @return {Boolean}
+    */
+   isStatic: function() {
+      return this.staticCtx;
+   },
 
    /**
     * [ABSTRACT] Set the scale of the rendering context.
@@ -283,16 +282,11 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     */
    update: function(parentContext, time)
    {
-		if (!this.staticCtx) {
-	      // Clear and render world
-	      this.reset();
-	      this.render(time);
-		}
-		
-		// Destroy any objects which have been safely deleted
-		while (this.destroyAfterUpdate.length > 0) {
-			this.destroyAfterUpdate.shift().destroy();
-		}
+      if (!this.staticCtx) {
+         // Clear and render world
+         this.reset();
+         this.render(time);
+      }
    },
 
    /**
@@ -304,19 +298,18 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       // Push the world transform
       this.pushTransform();
 
-		try {
-	      this.setupWorld(time);
-	
-	      // Run the objects if they are visible
-	      var objs = this.getObjects();
-	      for (var o in objs)
-	      {
-	         this.renderObject(objs[o], time);
-	      }
-		} finally {
-	      // Restore the world transform
-	      this.popTransform();
-		}
+      try {
+         this.setupWorld(time);
+   
+         // Run the objects if they are visible
+         var objs = this.getObjects().iterator();
+         while (objs.hasNext()) {
+            this.renderObject(objs.next(), time);
+         }
+      } finally {
+         // Restore the world transform
+         this.popTransform();
+      }
    },
 
    /**
@@ -325,12 +318,10 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param time {Number} The world time, in milliseconds
     */
    renderObject: function(obj, time) {
-		// Only update an object if it is still alive
-		if (obj.isAlive()) {
-			obj.setMutationState(PooledObject.BEFORE_UPDATE);
-	      obj.update(this, time);
-			obj.setMutationState(PooledObject.AFTER_UPDATE);
-		}
+      // Only update an object if it hasn't been destroyed
+      if (obj.getObjectAliveState()) {
+         obj.update(this, time);
+      }
    },
 
    /**
@@ -369,19 +360,19 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
          this.popTransform();
       }
    },
-	
-	/**
-	 * Safely destroy objects which are no longer alive.  This allows
-	 * for objects to be processed without causing a disruption in the
-	 * frame state.
-	 * @param obj {BaseObject} The object to destroy after all objects have been updated
-	 */
-	safeDelete: function(obj) {
-		// The object is no longer alive and awaiting destruction
-		obj.dead();
-		this.destroyAfterUpdate.push(obj);
-	}
-	
+   
+   /**
+    * Safely destroy objects which are no longer alive.  This allows
+    * for objects to be processed without causing a disruption in the
+    * frame state.
+    * @param obj {BaseObject} The object to destroy after all objects have been updated
+    */
+   safeDelete: function(obj) {
+      // The object is no longer alive and awaiting destruction
+      obj.dead();
+      this.destroyAfterUpdate.push(obj);
+   }
+   
 }, /** @scope RenderContext.prototype */{ 
 
    /**

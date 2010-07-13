@@ -51,7 +51,7 @@ Engine.initObject("HostObject", "HashContainer", function() {
 var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    renderContext: null,
-	
+   
    /**
     * Release the object back into the object pool.
     */
@@ -65,16 +65,10 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * remove this object from it's render context.
     */
    destroy: function() {
-		if (!this.isAlive()) {
-		  	if (this.getRenderContext()) {
-		  		this.getRenderContext().remove(this);
-		  	}
-		  	this.base();
-		} else {
-			// This object is not safe to destroy.  Queue it for destruction after
-			// the object has finished updating.
-			Engine.getDefaultContext().safeDelete(this);
-		}
+      this.base();
+      if (this.getRenderContext()) {
+         this.getRenderContext().remove(this);
+      }
    },
 
 
@@ -105,15 +99,18 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     */
    update: function(renderContext, time) {
 
-      // Run the components
-      var components = this.getObjects();
+      if (!this.getObjectAliveState()) {
+         // If the object has been destroyed, don't bother updating it
+         return;
+      }
 
-      for (var c in components) {
-			if (this.isAlive()) {
-				// If the object is destroyed during its update,
-				// don't continue to update its components
-	         components[c].execute(renderContext, time);
-			}
+      // Run the components
+      var cItr = this.iterator();
+      while (cItr.hasNext()) {
+         // Only update if the object hasn't been destroyed
+         if (this.getObjectAliveState()) {
+            cItr.next().execute(renderContext, time);
+         }
       }
 
       this.base(renderContext, time);
@@ -143,7 +140,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
       component.setHostObject(this);
       if (this.getObjects().length > 1) {
-			// Sort the components
+         // Sort the components
          this.sort(HostObject.componentSort);
       }
    },
