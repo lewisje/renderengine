@@ -240,7 +240,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @private
     */
    constructor: function(x, y) {
-      this.base("Point2D");
+      //this.base("Point2D");
       this.set(x, y);
    },
 
@@ -571,7 +571,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       this.dims = Point2D.create(0,0);
       this.center = Point2D.create(0,0);
       this.set(x,y,width,height);
-      this.base("Rectangle2D");
+      //this.base("Rectangle2D");
    },
 
    /**
