@@ -110,7 +110,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
          // Only update if the object hasn't been destroyed
          cItr.next().execute(renderContext, time);
       }
-
+      cItr.destroy();
       this.base(renderContext, time);
    },
 

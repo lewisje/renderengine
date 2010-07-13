@@ -57,7 +57,7 @@ switch (EngineSupport.sysInfo().browser) {
  * @constructor
  * @description Create a math object. 
  */
-var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
+var MathObject = BaseObject.extend(/** @scope MathObject.prototype */{
 
    /**
     * Destroy this object instance (remove it from the Engine).  The object's release
@@ -65,9 +65,6 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * to be used again.
     */
    destroy: function() {
-      //if (!moTransient) {
-      // this.base();   
-      //}
    }
 
  }, /** @scope BaseObject.prototype */{
@@ -84,15 +81,9 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * @memberOf PooledObject
     */
    create: function() {
-      //if (moTransient) {
-      //   PooledObject.poolNew++;
-      //   Engine.addMetric("newObjs", PooledObject.poolNew, false, "#");
-         return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
-                         arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
-                         arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
-      //} else {
-      //   return PooledObject.create.apply(this, arguments);
-      //}
+      return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
+                      arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+                      arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
    },
 
    /**
