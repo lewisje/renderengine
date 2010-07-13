@@ -88,16 +88,21 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * to be used again.
     */
    destroy: function() {
-		this.alive = false;
-		
-      PooledObject.returnToPool(this);
-
-      // Clean up the engine reference to this object
-      Engine.destroy(this);
-
-      // Reset any variables on the object before putting
-      // it back in the pool.
-      this.release();
+		if (!this.alive) {
+			
+	      PooledObject.returnToPool(this);
+	
+	      // Clean up the engine reference to this object
+	      Engine.destroy(this);
+	
+	      // Reset any variables on the object before putting
+	      // it back in the pool.
+	      this.release();
+			
+		} else {
+			this.alive = false;
+			Engine.getDefaultContext().safeDelete(this);
+		}
    },
 
    /**
