@@ -57,7 +57,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    worldPosition: null,
    worldRotation: null,
    worldScale: null,
-   staticCtx: null
+   staticCtx: null,
 
    /**
     * @private
