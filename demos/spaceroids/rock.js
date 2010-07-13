@@ -96,7 +96,7 @@ var SpaceroidsRock = Object2D.extend({
       if (this.ModelData.lastNode) {
          this.ModelData.lastNode.removeObject(this);
       }
-      this.pBox.destroy();
+      //this.pBox.destroy();
       this.base();
    },
 
