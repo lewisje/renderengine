@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1013 $
+ * @version: $Revision: 1014 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -641,12 +641,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
+		Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
 		if (arguments.length > 1) {
+			var ar = ["*ASSERT* "];
 			for (var a = 1; a < arguments.length; a++) {
-				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-				Console.error("*ASSERT* ", arguments[a]);
-				//Console.trace();
+				ar.push(arguments[a]);
 			}
+			Console.error.apply(Console, ar);
+			Console.trace();
 		}
 		
       Engine.shutdown();
@@ -2089,7 +2091,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    destroy: function(obj) {
       Assert((obj != null), "Trying to destroy non-existent object!", obj);
       var objId = obj.getId();
-      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!", this.gameObjects[objId]);
+      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!", objId);
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
