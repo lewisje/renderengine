@@ -100,7 +100,6 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 	      this.release();
 			
 		} else {
-			this.alive = false;
 			Engine.getDefaultContext().safeDelete(this);
 		}
    },
