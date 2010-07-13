@@ -450,7 +450,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 	         "language": navigator.language,
 	         "online": navigator.onLine,
 	         "cookies": navigator.cookieEnabled,
-	         "fullscreen": window.fullScreen || false
+	         "fullscreen": window.fullScreen || false,
+				"support" : {
+					"multithreaded": typeof Worker !== "undefined",
+					"sockets": typeof WebSocket !== "undefined",
+					"xhr": typeof XMLHttpRequest !== "undefined"
+				}
 	      };
 			$(document).ready(function() {
 				// When the document is ready, we'll go ahead and get the width and height added in
