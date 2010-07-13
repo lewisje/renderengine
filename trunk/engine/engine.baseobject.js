@@ -202,7 +202,24 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
          // Remove the reference
          delete this.events[ref.getName() + "," + type];
       }
-   }
+   },
+	
+	/**
+	 * Set the current mutation state of the object.  Primarily used
+	 * to make sure an object is safe to destroy.
+	 * @param mutationState {Number}
+	 */
+	setMutationState: function(mutationState) {
+		this.mutationState = mutationState;
+	},
+	
+	/**
+	 * Returns the current mutation state of the object.
+	 * @return {Number} The mutation state
+	 */
+	getMutationState: function() {
+		return this.mutationState;
+	}
 
  }, /** @scope BaseObject.prototype */{
 
@@ -213,7 +230,13 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     */
    getClassName: function() {
       return "BaseObject";
-   }
+   },
+	
+	// The object is being updated and is not safe to destroy
+	BEFORE_UPDATE: 1,
+	
+	// The object has been updated and is save to destroy
+	AFTER_UPDATE: 0
 
 });
 

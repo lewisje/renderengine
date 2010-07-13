@@ -58,6 +58,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    worldRotation: null,
    worldScale: null,
 	staticCtx: null,
+	destroyAfterUpdate: null,
 
    /**
     * @private
@@ -71,6 +72,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldRotation = 0;
       this.viewport = Rectangle2D.create(0, 0, 100, 100);
 		this.staticCtx = false;
+		this.destroyAfterUpdate = [];
    },
 
    /**
@@ -84,6 +86,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldPosition = null;
       this.worldRotation = null;
 		this.staticCtx = null;
+		this.destroyAfterUpdate = null;
    },
 
    /**
@@ -285,6 +288,11 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 	      this.reset();
 	      this.render(time);
 		}
+		
+		// Destroy any objects which have been safely deleted
+		while (this.destroyAfterUpdate.length > 0) {
+			this.destroyAfterUpdate.shift().destroy();
+		}
    },
 
    /**
@@ -319,7 +327,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    renderObject: function(obj, time) {
 		// Only update an object if it is still alive
 		if (obj.isAlive()) {
+			obj.setMutationState(BaseObject.BEFORE_UPDATE);
 	      obj.update(this, time);
+			obj.setMutationState(BaseObject.AFTER_UPDATE);
 		}
    },
 
@@ -358,7 +368,18 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       {
          this.popTransform();
       }
-   }
+   },
+	
+	/**
+	 * Safely destroy objects which are no longer alive.  This allows
+	 * for objects to be processed without causing a disruption in the
+	 * frame state.
+	 * @param obj {BaseObject} The object to destroy after all objects have been updated
+	 */
+	safeDelete: function(obj) {
+		this.destroyAfterUpdate.push[obj];
+	}
+	
 }, /** @scope RenderContext.prototype */{ 
 
    /**

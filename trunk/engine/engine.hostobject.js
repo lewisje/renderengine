@@ -65,10 +65,16 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * remove this object from it's render context.
     */
    destroy: function() {
-      if (this.getRenderContext()) {
-         this.getRenderContext().remove(this);
-      }
-      this.base();
+		if (this.getMutationState() != BaseObject.BEFORE_UPDATE) {
+		  	if (this.getRenderContext()) {
+		  		this.getRenderContext().remove(this);
+		  	}
+		  	this.base();
+		} else {
+			// This object is not safe to destroy.  Queue it for destruction after
+			// the object has finished updating.
+			Engine.getDefaultContext().safeDelete(this);
+		}
    },
 
 
@@ -103,7 +109,11 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       var components = this.getObjects();
 
       for (var c in components) {
-         components[c].execute(renderContext, time);
+			if (this.isAlive()) {
+				// If the object is destroyed during its update,
+				// don't continue to update its components
+	         components[c].execute(renderContext, time);
+			}
       }
 
       this.base(renderContext, time);
