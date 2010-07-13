@@ -51,7 +51,14 @@ Engine.initObject("HostObject", "HashContainer", function() {
 var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    renderContext: null,
-
+	
+	alive: false,
+	
+	constructor: function(hostName) {
+		this.base(hostName);
+		this.alive = true;
+	},
+	
    /**
     * Release the object back into the object pool.
     */
@@ -65,6 +72,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * remove this object from it's render context.
     */
    destroy: function() {
+		this.alive = false;
       if (this.getRenderContext()) {
          this.getRenderContext().remove(this);
       }
@@ -99,6 +107,12 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     */
    update: function(renderContext, time) {
 
+		if (!this.alive) {
+			// This component is dead, but hasn't been removed from
+			// the render context yet
+			return;
+		}
+
       // Run the components
       var components = this.getObjects();
 
@@ -132,13 +146,9 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       this.base(component.getName(), component);
 
       component.setHostObject(this);
-      if (this.getObjects().length > 1)
-      {
+      if (this.getObjects().length > 1) {
+			// Sort the components
          this.sort(HostObject.componentSort);
-      }
-      
-      if (HostComponent.isInstance(component)) {
-         component.set
       }
    },
 
