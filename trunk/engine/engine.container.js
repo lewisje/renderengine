@@ -374,11 +374,15 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       });
    },
 
+	toString: function() {
+		return this.constructor.getClassName();	
+	},
+
    /**
     * Serializes a container to XML.
     * @return {String} The XML string
     */
-   toString: function(indent) {
+   toXML: function(indent) {
       indent = indent ? indent : "";
       var props = this.getProperties();
       var xml = indent + "<" + this.constructor.getClassName();
