@@ -484,6 +484,9 @@ var Spaceroids = Game.extend({
    teardown: function() {
       this.scoreObj = null;
       this.hscoreObj = null;
+      if (Spaceroids.isAttractMode) {
+         Spaceroids.attractTimer.destroy();
+      }
 
       EventEngine.removeHandler(document, "keypress", Spaceroids.onKeyPress);
 
