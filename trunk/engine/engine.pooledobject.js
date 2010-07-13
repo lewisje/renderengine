@@ -162,6 +162,13 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 	},
 	
 	/**
+	 * The object is dead and awaiting destruction after a call to safeDelete()
+	 */
+	dead: function() {
+		this.alive = false;
+	},
+	
+	/**
 	 * Set the current mutation state of the object.  Primarily used
 	 * to make sure an object is safe to destroy.
 	 * @param mutationState {Number}

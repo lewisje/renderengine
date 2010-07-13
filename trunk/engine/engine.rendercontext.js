@@ -377,6 +377,8 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 	 * @param obj {BaseObject} The object to destroy after all objects have been updated
 	 */
 	safeDelete: function(obj) {
+		// The object is no longer alive and awaiting destruction
+		obj.dead();
 		this.destroyAfterUpdate.push[obj];
 	}
 	
