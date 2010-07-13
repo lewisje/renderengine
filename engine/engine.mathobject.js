@@ -38,8 +38,8 @@ Engine.initObject("MathObject", "PooledObject", function() {
 // Use the browser to determine the super class
 var moTransient = false;
 switch (EngineSupport.sysInfo().browser) {
-	case "chrome" : moTransient = true;
-				  		 break;
+   case "chrome" : moTransient = true;
+                   break;
 }
 
 /**
@@ -65,9 +65,9 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * to be used again.
     */
    destroy: function() {
-		if (!moTransient) {
-			this.base();	
-	   }
+      //if (!moTransient) {
+      // this.base();   
+      //}
    }
 
  }, /** @scope BaseObject.prototype */{
@@ -84,15 +84,15 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * @memberOf PooledObject
     */
    create: function() {
-		if (moTransient) {
+      if (moTransient) {
          PooledObject.poolNew++;
          Engine.addMetric("newObjs", PooledObject.poolNew, false, "#");
          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
-								 arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
-								 arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
-		} else {
-			return PooledObject.create.apply(this, arguments);
-		}
+                         arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+                         arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
+      } else {
+         return PooledObject.create.apply(this, arguments);
+      }
    },
 
    /**
