@@ -2,9 +2,7 @@
 #labels Featured
 
 = _*The examples are currently non-functioning*_ =
-Due to a major change in the codebase, which is underway, the examples are
-currently not functional.  I hope to have all of the examples back online
-shortly...
+Due to a major change in the codebase, which is underway, the examples are currently not functional.  I hope to have all of the examples back online shortly... A major bug was found, with the release of Firefox 4.0b1, which has existed in The Render Engine for a while.  Objects which are destroyed are destroyed out of order and were causing issues when cleaned up.  Know that I am working diligently to get this issue fixed and will have the examples back online as soon as I possibly can.
 
 =Engine Examples=
 
