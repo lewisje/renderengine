@@ -186,8 +186,8 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       if (this.references != 0) {
          this.safeDestroy();   
       } else {
-         this.base();
          this.destroyObjects();
+         this.base();
       }
    },
 

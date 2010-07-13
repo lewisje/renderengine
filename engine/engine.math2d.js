@@ -578,11 +578,11 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @private
     */
    destroy: function() {
-      this.base();
       this.topLeft.destroy();
       this.bottomRight.destroy();
       this.dims.destroy();
       this.center.destroy();
+      this.base();
    },
 
    /**
@@ -913,8 +913,8 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
    },
    
    destroy: function() {
-      this.base();
       this.center.destroy();
+      this.base();
    },
 
    release: function() {
