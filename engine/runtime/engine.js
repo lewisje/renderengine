@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 852 $
+ * @version: $Revision: 956 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -641,8 +641,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
-		if (arguments.length > 2) {
-			for (var a = 2; a < arguments.length; a++) {
+		if (arguments.length > 1) {
+			for (var a = 1; a < arguments.length; a++) {
 				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
 				Console.error("*ASSERT* ", arguments[a]);
 				Console.trace();
@@ -673,6 +673,39 @@ var AssertWarn = function(test, warning) {
       Console.warn(warning);
    }
 };
+
+/**
+ * The Render Engine
+ * Math2 Class
+ *
+ * @fileoverview A math static class which provides a method for generating
+ * 				  pseudo random numbers.
+ *
+ * @author: Brett Fattori (brettf@renderengine.com)
+ * @author: $Author: bfattori $
+ * @version: $Revision: 962 $
+ *
+ * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
 
 /**
  * @class A static class which provides methods for generating random integers
@@ -721,7 +754,6 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 
 // Seed the random number generator initially
 Math2.seed();
-
 
 /**
  * The Render Engine
@@ -1174,7 +1206,12 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 	         "language": navigator.language,
 	         "online": navigator.onLine,
 	         "cookies": navigator.cookieEnabled,
-	         "fullscreen": window.fullScreen || false
+	         "fullscreen": window.fullScreen || false,
+				"support" : {
+					"multithreaded": typeof Worker !== "undefined",
+					"sockets": typeof WebSocket !== "undefined",
+					"xhr": typeof XMLHttpRequest !== "undefined"
+				}
 	      };
 			$(document).ready(function() {
 				// When the document is ready, we'll go ahead and get the width and height added in
@@ -1211,7 +1248,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 930 $
+ * @version: $Revision: 958 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1263,7 +1300,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    dependencyCount: 0,
    dependencyProcessor: null,
    dependencyTimer: null,
-   dependencyCheckTimeout: $.browser.Wii ? 6500 : 3500,
+   dependencyCheckTimeout: $.browser.Wii ? 8500 : 6500,
    dependencyProcessTimeout: 100,
    
    loadedClasses: [],
@@ -1756,7 +1793,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 903 $
+ * @version: $Revision: 956 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -2137,6 +2174,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
 
+		// Output support
+		Console.debug("System info: ", EngineSupport.sysInfo());
    },
 
    /**

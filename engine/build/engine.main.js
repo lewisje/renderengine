@@ -388,6 +388,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
 
+		// Output support
+		Console.debug("System info: ", EngineSupport.sysInfo());
    },
 
    /**

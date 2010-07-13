@@ -610,8 +610,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
-		if (arguments.length > 2) {
-			for (var a = 2; a < arguments.length; a++) {
+		if (arguments.length > 1) {
+			for (var a = 1; a < arguments.length; a++) {
 				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
 				Console.error("*ASSERT* ", arguments[a]);
 				Console.trace();
