@@ -70,10 +70,10 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * Destroy the object.
     */
    destroy: function() {
-      this.base();
       this.bBox.destroy();
       this.wBox.destroy();
       this.lastPosition.destroy();
+      this.base();
    },
 
    /**
