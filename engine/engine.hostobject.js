@@ -106,11 +106,9 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
       // Run the components
       var cItr = this.iterator();
-      while (cItr.hasNext()) {
+      while (this.getObjectAliveState() && cItr.hasNext()) {
          // Only update if the object hasn't been destroyed
-         if (this.getObjectAliveState()) {
-            cItr.next().execute(renderContext, time);
-         }
+         cItr.next().execute(renderContext, time);
       }
 
       this.base(renderContext, time);
