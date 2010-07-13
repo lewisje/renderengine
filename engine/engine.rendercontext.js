@@ -359,18 +359,6 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       {
          this.popTransform();
       }
-   },
-   
-   /**
-    * Safely destroy objects which are no longer alive.  This allows
-    * for objects to be processed without causing a disruption in the
-    * frame state.
-    * @param obj {BaseObject} The object to destroy after all objects have been updated
-    */
-   safeDelete: function(obj) {
-      // The object is no longer alive and awaiting destruction
-      obj.dead();
-      this.destroyAfterUpdate.push(obj);
    }
    
 }, /** @scope RenderContext.prototype */{ 
