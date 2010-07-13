@@ -379,7 +379,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 	safeDelete: function(obj) {
 		// The object is no longer alive and awaiting destruction
 		obj.dead();
-		this.destroyAfterUpdate.push[obj];
+		this.destroyAfterUpdate.push(obj);
 	}
 	
 }, /** @scope RenderContext.prototype */{ 
