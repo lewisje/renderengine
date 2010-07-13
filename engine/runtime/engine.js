@@ -1795,7 +1795,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1018 $
+ * @version: $Revision: 1033 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -2534,6 +2534,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          if (Engine.showMetricsWindow) {
             Engine.renderMetrics();
          }
+         
+         // Clean up any objects which need to be safely destroyed
+         PooledObject.destroySafely();
       }
 
       // When the process is done, start all over again

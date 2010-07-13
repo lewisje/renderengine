@@ -183,9 +183,12 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * to perform clean up operations.
     */
    destroy: function() {
-      Assert((this.references == 0), "Concurrent modification exception");
-      this.cleanUp();
-      this.base();
+      if (this.references != 0) {
+         this.safeDestroy();   
+      } else {
+         this.cleanUp();
+         this.base();
+      }
    },
 
    /**
