@@ -327,9 +327,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    renderObject: function(obj, time) {
 		// Only update an object if it is still alive
 		if (obj.isAlive()) {
-			obj.setMutationState(BaseObject.BEFORE_UPDATE);
+			obj.setMutationState(PooledObject.BEFORE_UPDATE);
 	      obj.update(this, time);
-			obj.setMutationState(BaseObject.AFTER_UPDATE);
+			obj.setMutationState(PooledObject.AFTER_UPDATE);
 		}
    },
 
