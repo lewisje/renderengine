@@ -92,12 +92,12 @@ var SpaceroidsRock = Object2D.extend({
     * in the last collision model node.
     */
    destroy: function() {
+      this.base();
       AssertWarn(this.ModelData.lastNode, "Rock not located in a node!");
       if (this.ModelData.lastNode) {
          this.ModelData.lastNode.removeObject(this);
       }
-      //this.pBox.destroy();
-      this.base();
+      this.pBox.destroy();
    },
 
    /**
