@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 956 $
+ * @version: $Revision: 1013 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -645,7 +645,7 @@ var Assert = function(test, error) {
 			for (var a = 1; a < arguments.length; a++) {
 				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
 				Console.error("*ASSERT* ", arguments[a]);
-				Console.trace();
+				//Console.trace();
 			}
 		}
 		
@@ -764,7 +764,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 949 $
+ * @version: $Revision: 1013 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1793,7 +1793,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 956 $
+ * @version: $Revision: 1013 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
