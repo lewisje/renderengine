@@ -142,9 +142,9 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    lineBoxCollision: function(p1, p2, rect) {
       // Convert the line to a box itself and do a quick box box test
       var lRect = Rectangle2D.create(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
-		var coll = Math2D.boxBoxCollision(lRect, rect);
-		lRect.destroy();
-		return coll;
+      var coll = Math2D.boxBoxCollision(lRect, rect);
+      lRect.destroy();
+      return coll;
    },
 
    /*
@@ -266,7 +266,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the two points are equal
     */
    equals: function(point) {
-		this.upd();
+      this.upd();
       return (this.x == point.x && this.y == point.y);
    },
 
@@ -552,9 +552,9 @@ Engine.initObject("Rectangle2D", "MathObject", function() {
 var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 
    topLeft: null,
-	bottomRight: null,
+   bottomRight: null,
    dims: null,
-	center: null,
+   center: null,
 
    /**
     * Create a rectangle object specifying the X and Y position and
@@ -569,25 +569,25 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       this.topLeft = Point2D.create(0,0);
       this.bottomRight = Point2D.create(0,0);
       this.dims = Point2D.create(0,0);
-		this.center = Point2D.create(0,0);
+      this.center = Point2D.create(0,0);
       this.set(x,y,width,height);
-		this.base("Rectangle2D");
+      this.base("Rectangle2D");
    },
 
-	/**
-	 * @private
-	 */
-	destroy: function() {
-		this.topLeft.destroy();
-		this.bottomRight.destroy();
-		this.dims.destroy();
-		this.center.destroy();
-		this.base();
-	},
+   /**
+    * @private
+    */
+   destroy: function() {
+      this.base();
+      this.topLeft.destroy();
+      this.bottomRight.destroy();
+      this.dims.destroy();
+      this.center.destroy();
+   },
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.topLeft = null;
@@ -658,7 +658,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       }
 
       this.topLeft.add(offs);
-		offs.destroy();
+      offs.destroy();
       return this;
    },
 
@@ -695,9 +695,9 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param width {Number} The new width of the rectangle
     */
    setWidth: function(width) {
-		var p = Point2D.create(width, this.get().h);
+      var p = Point2D.create(width, this.get().h);
       this.setDims(p);
-		p.destroy();
+      p.destroy();
    },
 
    /**
@@ -706,9 +706,9 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param height {Number} The new height of the rectangle
     */
    setHeight: function(height) {
-		var p = Point2D.create(this.get().w, height);
+      var p = Point2D.create(this.get().w, height);
       this.setDims(p);
-		p.destroy();
+      p.destroy();
    },
 
    /**
@@ -795,8 +795,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    getCenter: function()
    {
-		this.center.set(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
-		return this.center;
+      this.center.set(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
+      return this.center;
    },
 
    /**
@@ -859,7 +859,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    getBottomRight: function()
    {
-		this.bottomRight.set(this.topLeft).add(this.dims);
+      this.bottomRight.set(this.topLeft).add(this.dims);
       return this.bottomRight;
    },
 
@@ -911,11 +911,11 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
       this.radius = 0;
       this.set(x,y,radius);
    },
-	
-	destroy: function() {
-		this.center.destroy();
-		this.base();
-	},
+   
+   destroy: function() {
+      this.base();
+      this.center.destroy();
+   },
 
    release: function() {
       this.base();
@@ -988,7 +988,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
       }
 
       this.center.add(offs);
-		offs.destroy();
+      offs.destroy();
       return this;
    },
    
