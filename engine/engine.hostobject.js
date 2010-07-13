@@ -65,10 +65,10 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * remove this object from it's render context.
     */
    destroy: function() {
+      this.base();
       if (this.getRenderContext()) {
          this.getRenderContext().remove(this);
       }
-      this.base();
    },
 
 
