@@ -115,7 +115,9 @@ var Spaceroids = Game.extend({
    cleanupPlayfield: function() {
 
       // Remove any rocks still floating around
-      this.renderContext.cleanUp();
+      if (this.renderContext.size() > 0) {
+         this.renderContext.cleanUp();
+      }
 
       this.rocks = 0;
       this.level = 0;
