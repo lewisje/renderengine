@@ -77,6 +77,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * the pool for reuse. The variables should be returned to an "uninitialized" state.
     */
    release: function() {
+      AssertWarn((this.id != -1), "Release called before constructor!", this);
       AssertWarn((!this._alive), "Release called before destroy!", this);
       this.name = "";
       this.id = -1;
