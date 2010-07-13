@@ -208,12 +208,12 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    },
 
    /**
-    * Add an object to the container.
+    * Add an object to the container.  Objects added while an iterator is being used
+    * may not be recognized.
     *
     * @param obj {Object} The object to add to the container.
     */
    add: function(obj) {
-      Assert((this.references == 0), "Concurrent modification exception");
       this.objects.push(obj);
       if (obj.getId) {
          Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
