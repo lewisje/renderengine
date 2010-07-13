@@ -326,10 +326,14 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Destroy all objects in the container.
     */
    cleanUp: function() {
-      while(this.objects.length > 0) {
-         this.objects.shift().destroy();
+      var itr = this.iterator();
+      while(itr.hasNext()) {
+         itr.next().safeDestroy();
       }
-      this.clear();
+      var self = this;
+      Engine.afterFrame(function() {
+         self.clear();
+      });
    },
 
    /**
