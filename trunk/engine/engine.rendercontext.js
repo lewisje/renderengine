@@ -291,7 +291,9 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 		
 		// Destroy any objects which have been safely deleted
 		while (this.destroyAfterUpdate.length > 0) {
-			this.destroyAfterUpdate.shift().destroy();
+			var o = this.destroyAfterUpdate.shift();
+			console.debug("Destroy ", o);
+			o.destroy();
 		}
    },
 
