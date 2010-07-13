@@ -1,4 +1,6 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-_07/12/2009_ Recently I've been noticing a few small bugs which are making the engine fail on both Chrome and Firefox 4.0b1.  I see issues where the engine _crashes_ (stops executing).  I'm excited to start integrating some of the newer features which both browsers support natively, but I need to get these simple crash bugs ironed out.
+_07/12/2010_ The bugs in FF4.0b1 have been rectified.
+
+_07/12/2010_ Recently I've been noticing a few small bugs which are making the engine fail on both Chrome and Firefox 4.0b1.  I see issues where the engine _crashes_ (stops executing).  I'm excited to start integrating some of the newer features which both browsers support natively, but I need to get these simple crash bugs ironed out.
