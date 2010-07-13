@@ -46,7 +46,6 @@ Those folks who are using Internet Explorer, that would like to enjoy The Render
 
 _Notes:_
 
-  * Brief testing in Firefox 4.0 beta 1 has revealed a couple of bugs which will need to be fixed before the engine works properly.  I'm excited to get to testing WebGL, WebSockets, and IndexedDB support to enhance the engine's feature list.
   * The best performance of any browser is Google's _Chrome_.  Their V8 !JavaScript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete!  However, there are some features not yet supported in Chromium which need to be addressed before I _will_ endorse it fully.
   * Firefox 3.6 has significantly improved the overall performance of the engine.  The lengthy pauses when the browser was running the GC are now much less noticeable, but still there.
   * Additional tests for different browsers on multiple platforms would be nice.  I only have a Windows PC and occasional access to a Mac and/or iPhone.
