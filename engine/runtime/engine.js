@@ -1795,7 +1795,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1033 $
+ * @version: $Revision: 1039 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -2502,6 +2502,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //====================================================================================================
    //====================================================================================================
 
+   afterFrameCBs: [],
+   
+   /**
+    * Things to do after a frame has been rendered.  Primarily used
+    * by containers to clean up their object references after they've
+    * been safely destroyed.
+    */
+   afterFrame: function(fn) {
+      Engine.afterFrameCBs.push(fn);
+   },
+
    /**
     * This is the process which updates the world.  It starts with the default
     * context, telling it to update itself.  Since each context is a container,
@@ -2537,6 +2548,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          
          // Clean up any objects which need to be safely destroyed
          PooledObject.destroySafely();
+         
+         // Perform any after frame functions
+         while (Engine.afterFrameCBs.length > 0) {
+            Engine.afterFrameCBs.shift()();
+         }
       }
 
       // When the process is done, start all over again
