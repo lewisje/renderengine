@@ -100,12 +100,12 @@ var SpaceroidsPlayer = Object2D.extend({
    },
 
    destroy: function() {
+      this.base();
       if (this.ModelData && this.ModelData.lastNode) {
          this.ModelData.lastNode.removeObject(this);
       }
       this.tip.destroy();
       this.pBox.destroy();
-      this.base();
    },
 
    release: function() {
