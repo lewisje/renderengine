@@ -57,7 +57,7 @@ switch (EngineSupport.sysInfo().browser) {
  * @constructor
  * @description Create a math object. 
  */
-var MathObject = BaseObject.extend(/** @scope MathObject.prototype */{
+var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
 
    /**
     * Destroy this object instance (remove it from the Engine).  The object's release
