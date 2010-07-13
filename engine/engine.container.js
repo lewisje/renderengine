@@ -176,8 +176,12 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * to perform clean up operations.
     */
    destroy: function() {
-      this.cleanUp();
-      this.base();
+		if (!this.isAlive()) {
+	      this.cleanUp();
+	      this.base();
+		} else {
+			Engine.getDefaultContext().safeDelete(this);
+		}
    },
 
    /**
