@@ -255,10 +255,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Sort the render context's objects by their respective Z-index value.
     */
    sort: function() {
-      var self = this;
-      Engine.afterFrame(function() {
-         self.base(RenderContext.sortFn);
-      });
+      this.base(RenderContext.sortFn);
    },
 
    /**
