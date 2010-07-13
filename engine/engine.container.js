@@ -186,7 +186,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       if (this.references != 0) {
          this.safeDestroy();   
       } else {
-         this.cleanUp();
+         this.destroyObjects();
          this.base();
       }
    },
@@ -331,13 +331,24 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    /**
     * Destroy all objects in the container.
     */
-   cleanUp: function() {
+   destroyObjects: function() {
       var itr = this.iterator();
       while(itr.hasNext()) {
-         itr.next().safeDestroy();
+         itr.next().destroy();
       }
+      this.clear();
+   },
+   
+   /**
+    * Destroy all objects in the container when it is safe
+    */
+   cleanUp: function() {
       var self = this;
       Engine.afterFrame(function() {
+         var itr = self.iterator();
+         while(itr.hasNext()) {
+            itr.next().destroy();
+         }
          self.clear();
       });
    },
