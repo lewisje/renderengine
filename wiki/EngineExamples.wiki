@@ -2,6 +2,9 @@
 #labels Featured
 
 = _*The examples are currently non-functioning*_ =
+Due to a major change in the codebase, which is underway, the examples are
+currently not functional.  I hope to have all of the examples back online
+shortly...
 
 =Engine Examples=
 
