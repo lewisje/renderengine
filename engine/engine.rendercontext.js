@@ -295,6 +295,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
          while (objs.hasNext()) {
             this.renderObject(objs.next(), time);
          }
+         objs.destroy();
       } finally {
          // Restore the world transform
          this.popTransform();
