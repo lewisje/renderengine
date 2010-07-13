@@ -302,7 +302,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
          this.setupWorld(time);
    
          // Run the objects if they are visible
-         var objs = this.getObjects().iterator();
+         var objs = this.iterator();
          while (objs.hasNext()) {
             this.renderObject(objs.next(), time);
          }
