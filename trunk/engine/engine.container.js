@@ -69,6 +69,8 @@ var ContainerIterator = PooledObject.extend(/** @scope ContainerIterator.prototy
    c: null,
 
    objs: null,
+   
+   ln: 0,
 
    /**
     * @private
@@ -76,8 +78,9 @@ var ContainerIterator = PooledObject.extend(/** @scope ContainerIterator.prototy
    constructor: function(container) {
       this.base("ContainerIterator");
       this.idx = 0;
+      this.ln = container.size();
       this.c = container;
-      this.c.setConcurrentModification(true);
+      container.setConcurrentModification(true);
 
       // Duplicate the elements in the container
       this.objs = new Array().concat(container.getObjects());
@@ -109,8 +112,7 @@ var ContainerIterator = PooledObject.extend(/** @scope ContainerIterator.prototy
     * @throws {Error} An error if called when no more elements are available
     */
    next: function() {
-      if (this.idx < this.c.size())
-      {
+      if (this.idx < this.ln) {
          return this.objs[this.idx++];
       }
       throw new Error("Index out of range");
@@ -121,7 +123,7 @@ var ContainerIterator = PooledObject.extend(/** @scope ContainerIterator.prototy
     * @return {Boolean}
     */
    hasNext: function() {
-      return (this.idx < this.c.size());
+      return (this.idx < this.ln);
    }
 
 }, /** @scope ContainerIterator.prototype */{ 
