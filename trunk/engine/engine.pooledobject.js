@@ -100,6 +100,18 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
       return true;
    },
+   
+   /**
+    * The object is in the process of being read or modified.
+    * Mark it dead and wait until it is safe to destroy it.
+    */
+   safeDestroy: function() {
+      if (this._alive) {
+         // Only push it once
+         this._alive = false;
+         PooledObject.waitToDestroy(this);
+      }
+   },
 
    /**
     * Get the managed Id of this object within the Engine.
@@ -194,6 +206,28 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * @type {Number}
     */
    poolSize: 0,
+   
+   // Objects which are waiting to be destroyed
+   safeDestroyList: [],
+
+   /**
+    * Push an object onto the safe to destroy list
+    * which will be handled when it is safe to destroy them.
+    * @private
+    */
+   waitToDestroy: function(obj) {
+      PooledObject.safeDestroyList.push(obj);
+   },
+   
+   /**
+    * Clean up objects safely
+    * @private
+    */
+   destroySafely: function() {
+      while (PooledObject.safeDestroyList.length > 0) {
+         PooledObject.safeDestroyList.shift().destroy();
+      }
+   },
    
    /* pragma:DEBUG_START 
    classPool: {},

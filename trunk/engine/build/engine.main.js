@@ -746,6 +746,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          if (Engine.showMetricsWindow) {
             Engine.renderMetrics();
          }
+         
+         // Clean up any objects which need to be safely destroyed
+         PooledObject.destroySafely();
       }
 
       // When the process is done, start all over again
