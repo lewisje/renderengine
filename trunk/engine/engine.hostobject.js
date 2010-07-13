@@ -65,7 +65,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     * remove this object from it's render context.
     */
    destroy: function() {
-		if (this.getMutationState() != PooledObject.BEFORE_UPDATE) {
+		if (this.getRenderContext().getMutationState() != PooledObject.BEFORE_UPDATE) {
 		  	if (this.getRenderContext()) {
 		  		this.getRenderContext().remove(this);
 		  	}
