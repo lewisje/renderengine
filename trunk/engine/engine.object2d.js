@@ -52,8 +52,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 
    /** @private */
    bBox: null,
-	wBox: null,
-	lastPosition: null,
+   wBox: null,
+   lastPosition: null,
 
    /**
     * @private
@@ -61,20 +61,20 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    constructor: function(name) {
       this.base(name);
       this.lastPosition = Point2D.create(5,5);
-		this.bBox = Rectangle2D.create(0,0,1,1);
-		this.wBox = Rectangle2D.create(0,0,1,1);
+      this.bBox = Rectangle2D.create(0,0,1,1);
+      this.wBox = Rectangle2D.create(0,0,1,1);
       this.zIndex = 1;
    },
-	
-	/**
-	 * Destroy the object.
-	 */
-	destroy: function() {
-		this.bBox.destroy();
-		this.wBox.destroy();
-		this.lastPosition.destroy();
-		this.base();
-	},
+   
+   /**
+    * Destroy the object.
+    */
+   destroy: function() {
+      this.base();
+      this.bBox.destroy();
+      this.wBox.destroy();
+      this.lastPosition.destroy();
+   },
 
    /**
     * Release the object back into the pool.
@@ -83,20 +83,20 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       this.base();
       this.zIndex = 1;
       this.bBox = null;
-		this.lastPosition = null;
+      this.lastPosition = null;
    },
 
    /**
     * Set the bounding box of this object
     *
     * @param x {Number|Rectangle2D} The X coordinate, or the rectangle that completely encompasses
-    *                           		this object.
+    *                               this object.
     * @param y {Number} If X is a coordinate, this is the Y coordinate
     * @param w {Number} If X is a coordinate, this is the width
     * @param h {Number} If X is a coordinate, this is the height
     */
    setBoundingBox: function(x,y,w,h) {
-		this.bBox.set(x,y,w,h);
+      this.bBox.set(x,y,w,h);
    },
 
    /**
@@ -113,7 +113,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @return {Rectangle2D} The world bounding rectangle
     */
    getWorldBox: function() {
-		this.wBox.set(this.getBoundingBox());
+      this.wBox.set(this.getBoundingBox());
       return this.wBox.offset(this.getRenderPosition());
    },
    

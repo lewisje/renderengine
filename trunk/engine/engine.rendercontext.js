@@ -91,10 +91,10 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * parent container.
     */
    destroy: function() {
+      this.base();
       if (this.surface) {
          $(this.surface).remove();
       }
-      this.base();
    },
 
    /**

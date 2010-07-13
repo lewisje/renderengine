@@ -85,6 +85,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     */
    destroy: function() {
       if (!this.getObjectAliveState()) {
+         this.base();
          // We need to make sure to remove any event's attached to us
          // that weren't already cleaned up
          for (var ref in this.events) {
@@ -95,7 +96,6 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
                EventEngine.clearHandler(this.getElement(), type, fn);
             }
          }
-         this.base();
       } else {
          this.safeDestroy();
       }
