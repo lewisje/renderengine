@@ -234,9 +234,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {Object} The object to insert into the container
     */
    insert: function(index, obj) {
-      Assert((this.references == 0), "Concurrent modification exception");
       Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
-      this.objects.splice(index, 0, obj);
+      var self = this;
+      Engine.afterFrame(function() {
+         self.objects.splice(index, 0, obj);
+      });
    },
    
    /**
@@ -262,9 +264,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Object} The object which was replaced
     */
    replaceAt: function(index, obj) {
-      Assert((this.references == 0), "Concurrent modification exception");
       Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
-      return this.objects.splice(index, 1, obj);      
+      var self = this;
+      Engine.afterFrame(function() {
+         return self.objects.splice(index, 1, obj);      
+      });
    },
    
    /**
@@ -274,11 +278,13 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {Object} The object to remove from the container.
     */
    remove: function(obj) {
-      Assert((this.references == 0), "Concurrent modification exception");
       if (obj.getId) {
          Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
       }
-      EngineSupport.arrayRemove(this.objects, obj);
+      var self = this;
+      Engine.afterFrame(function() {
+         EngineSupport.arrayRemove(self.objects, obj);
+      });
    },
 
    /**
@@ -383,9 +389,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     *          will be sorted in "natural" order.
     */
    sort: function(fn) {
-      Assert((this.references == 0), "Concurrent modification exception");
-      Console.log("Sorting ", this.getName(), "[" + this.getId() + "]");
-      this.objects.sort(fn);
+      var self = this;
+      Engine.afterFrame(function() {
+         Console.log("Sorting ", self.getName(), "[" + self.getId() + "]");
+         self.objects.sort(fn);
+      });
    },
 
    /**
