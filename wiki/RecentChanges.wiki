@@ -5,6 +5,7 @@
 The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.
 
 || *Date* || *Notes* ||
+|| 07/14/2010 || *v1.0 RC1 has been tagged.* ||
 || 12/21/2009 || Added Google's Closure Compiler as an option for the compressed engine.  Added a GZIP version of the engine to the build process.  Updated a couple of files where CC picked up some errors. ||
 || 12/20/2009 || Fixed the !MouseInputComponent which was totally broken.  I also created the start of a manual test harness which helped get the component up and running.  In addition, the linker was updated to parse constructors (which it apparently wasn't doing). ||
 || 12/17/2009 || Revived the 2D DOM context due to some refactoring which makes it possible. ||
