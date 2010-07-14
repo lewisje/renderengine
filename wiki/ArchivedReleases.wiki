@@ -2,6 +2,13 @@
 
 See the ReleaseMilestones page for current development information.  The FutureGoals page is where the planning begins for the next major release.
 
+== v1.0 RC1 (July 14, 2010) ==
+
+|| *Status* || *Goal* || *Description* ||
+|| _Complete_ || Bug Fixing || Fix bugs from beta 1.4 ||
+|| _Complete_ || *Code freeze* || *No additional features* - Start logging and addressing major bugs. ||
+|| _Complete_ || Documentation || Clean up and finish API documentation. ||
+
 == Beta 1.4 (November 15, 2009) ==
 
 || *Status* || *Goal* || *Description* ||
