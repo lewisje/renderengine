@@ -77,6 +77,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    localMode: false,          // Local run flag
    started: false,            // Engine started flag
    running: false,            // Engine running flag
+   shuttingDown: false,			// Engine is shutting down
    upTime: 0,                 // The startup time
    downTime: 0,               // The shutdown time
    skipFrames: true,          // Skip missed frames
@@ -284,7 +285,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      Assert((this.started == true), "Creating an object when the engine is stopped!");
+		Assert((this.shuttingDown === false), "Creating an object when the engine is shutting down!", obj);
+      Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
@@ -339,6 +341,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // The basics needed by the engine to get started
       this.loadNow("/engine/engine.game.js");
       this.loadNow("/engine/engine.rendercontext.js");
+		this.loadNow("/engine/engine.pooledobject.js");
       this.loadNow("/rendercontexts/context.render2d.js");
       this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");
@@ -374,7 +377,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
-      if (this.running) {
+      if (Engine.shuttingDown || Engine.running) {
          return;
       }
       
@@ -384,6 +387,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       mode += "]"
       Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
       this.running = true;
+		this.shuttingDown = false;
 
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
@@ -395,6 +399,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    pause: function() {
+		if (Engine.shuttingDown) {
+			return;
+		}
+		
       Console.warn(">>> Engine paused <<<");
       window.clearTimeout(Engine.globalTimer);
       this.running = false;
@@ -406,6 +414,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
+		if (Engine.shuttingDown) {
+			// Prevent another shutdown
+			return;
+		}
+		
+		Engine.shuttingDown = true;
+		
       if (!this.running && this.started)
       {
          // If the engine is not currently running (i.e. paused) 
@@ -479,6 +494,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       
       // Final cleanup
       Linker.cleanup();
+		
+		// Shutdown complete
+		Engine.shuttingDown = false;
    },
 
 
@@ -712,6 +730,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
+		if (Engine.shuttingDown) {
+			return;
+		}
+		
       var nextFrame = Engine.fpsClock;
 
       // Update the world
