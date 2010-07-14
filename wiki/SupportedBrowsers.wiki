@@ -36,6 +36,8 @@ My definition of load may not be the same as others, so let me try to summarize 
 
 = List of Unsupported Browsers =
 
+Non-stable (non-release) versions of browsers are not supported.  Thus, browsers which are alpha, or even beta, are in the "Unsupported Browsers" table if they have been at least tested with the engine.  Due to the possibility that the browser may still change operation, supporting these browsers doesn't make sense.
+
 ||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||  *Reason*  ||
 || [http://www.mozilla.com/en-US/firefox/4.0b1/whatsnew/ Mozilla Firefox] || 4.0b1 || Windows || *Fail* (_see notes_) || Beta ||
 || *Internet Explorer* || 6.0+ || Windows || *Fail* (_see notes_) || No canvas ||
@@ -51,7 +53,6 @@ Those folks who are using Internet Explorer, that would like to enjoy The Render
 
 _Notes:_
 
-  * Non-stable (non-release) versions of browsers are not supported.  Thus, browsers which are alpha, or even beta, are in the "Unsupported Browsers" table if they have been at least tested with the engine.  Due to the possibility that the browser may still change operation, supporting these browsers doesn't make sense.
   * Firefox 4.0b1 has an issue with concurrent modification which didn't present itself in earlier versions.  I'm aware of the issue and working to resolve it.
   * The best performance of any browser is Google's _Chrome_.  Their V8 !JavaScript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete!  However, there are some features not yet supported in Chromium which need to be addressed before I _will_ endorse it fully.
   * Firefox 3.6 has significantly improved the overall performance of the engine.  The lengthy pauses when the browser was running the GC are now much less noticeable, but still there.
