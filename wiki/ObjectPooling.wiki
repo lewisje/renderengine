@@ -26,7 +26,7 @@ Glad you asked this...  Here is how objects are traditionally created:
    host.add(new Vector2D("draw"));
 }}}
 
-The problem is that using `new` like this will create an object instance that we cannot track very well.  Most classes in the system now implement a `create()` static method which should be used instead.  This method will intercept the call for a new object and see if one is available in the object pool.  If an object is available, that instance is pulled from the pool and the arguments normally passed to the constructor are passed to the constructor method, but a new instance isn't created.  If no object exists in the pool, a new instance is constructed and returned.
+The problem is that using `new` like this will create an object instance that we cannot track very well.  Most classes in the system now implement a `create()` class method which should be used instead.  This method will intercept the call for a new object and see if one is available in the object pool.  If an object is available, that instance is pulled from the pool and the arguments normally passed to the constructor are passed to the constructor method, but a new instance isn't created.  If no object exists in the pool, a new instance is constructed and returned.
 
 {{{
    var host = HostObject.create("myHost");
