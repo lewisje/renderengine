@@ -30,7 +30,7 @@ Now the dependency checker will properly handle the reference for `r` and not mi
 
 Since debugging isn't the best on the Wii, The Render Engine contains some aid.  To enable the console for the Wii, just supply the URL parameter `debug=true` and set `debugLevel=1`.  Doing so will output a lot of helpful information.  Class dependency resolution has, historically, been one of the most troublesome areas.  The debugger will help determine which classes are having an issue.
 
-Another major issue is syntax errors.  After many problems with my own development, I'm going to try to create a syntax checked for the most common problems that I run into on the Wii (during optimization, but maybe before since it causes _me_ big headaches).  There are some patterns which are easily detectable, but creating a decent syntax checker will surely give me migraines.
+Another major issue is syntax errors.  After many problems with my own development, I'm going to try to create a syntax checker for the most common problems that I run into on the Wii (during optimization, but maybe before since it causes _me_ big headaches).  There are some patterns which are easily detectable, but creating a decent syntax checker will surely give me migraines.
 
 === `onload` and `onerror` Events ===
 
