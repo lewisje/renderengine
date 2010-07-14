@@ -56,19 +56,13 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
    // The name of the object
    name: "",
-   
-   _alive: false,
-   
-   mutationState: null,
 
    /**
     * @private
     */
    constructor: function(name) {
-      this._alive = true;
       this.name = name;
       this.id = Engine.create(this);
-      this.mutationState = PooledObject.AFTER_UPDATE;
    },
 
    /**
@@ -77,11 +71,8 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * the pool for reuse. The variables should be returned to an "uninitialized" state.
     */
    release: function() {
-      AssertWarn((this.id != -1), "Release called before constructor!", this);
-      AssertWarn((!this._alive), "Release called before destroy!", this);
       this.name = "";
       this.id = -1;
-      this.mutationState = null;
    },
 
    /**
@@ -90,7 +81,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * to be used again.
     */
    destroy: function() {
-      this._alive = false;
+      PooledObject.returnToPool(this);
 
       // Clean up the engine reference to this object
       Engine.destroy(this);
@@ -98,21 +89,6 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       // Reset any variables on the object before putting
       // it back in the pool.
       this.release();
-      PooledObject.returnToPool(this);
-
-      return true;
-   },
-   
-   /**
-    * The object is in the process of being read or modified.
-    * Mark it dead and wait until it is safe to destroy it.
-    */
-   safeDestroy: function() {
-      if (this._alive) {
-         // Only push it once
-         this._alive = false;
-         PooledObject.waitToDestroy(this);
-      }
    },
 
    /**
@@ -166,23 +142,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
       xml += "/>\n";
       return xml;
-   },
-   
-   /**
-    * Returns <code>true</code> if the object has been constructed, but not
-    * destroyed.  When an object has been destroyed, it is considered a dead object.
-    */
-   getObjectAliveState: function() {
-      return this._alive;
-   },
-   
-   /**
-    * The object is dead and awaiting destruction after a call to safeDelete()
-    */
-   setObjectAliveState: function(alive) {
-      this._alive = alive || false;
    }
-
 }, /** @scope PooledObject.prototype **/{
 
    /**
@@ -208,32 +168,10 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * @type {Number}
     */
    poolSize: 0,
-   
-   // Objects which are waiting to be destroyed
-   safeDestroyList: [],
-
-   /**
-    * Push an object onto the safe to destroy list
-    * which will be handled when it is safe to destroy them.
-    * @private
-    */
-   waitToDestroy: function(obj) {
-      PooledObject.safeDestroyList.push(obj);
-   },
-   
-   /**
-    * Clean up objects safely
-    * @private
-    */
-   destroySafely: function() {
-      while (PooledObject.safeDestroyList.length > 0) {
-         PooledObject.safeDestroyList.shift().destroy();
-      }
-   },
-   
-   /* pragma:DEBUG_START 
-   classPool: {},
-      pragma:DEBUG_END */
+	
+	/* pragma:DEBUG_START 
+	classPool: {},
+	   pragma:DEBUG_END */
 
    /**
     * Similar to a constructor, all pooled objects implement this method.
@@ -254,29 +192,29 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
          var obj = PooledObject.objectPool[this.getClassName()].shift();
          obj.constructor.apply(obj, arguments);
 
-         /* pragma:DEBUG_START 
-         PooledObject.classPool[this.getClassName()][1]++;
-         PooledObject.classPool[this.getClassName()][2]--;
-            pragma:DEBUG_END */
+			/* pragma:DEBUG_START 
+			PooledObject.classPool[this.getClassName()][1]++;
+		 	PooledObject.classPool[this.getClassName()][2]--;
+			   pragma:DEBUG_END */
 
          return obj;
       } else {
          PooledObject.poolNew++;
          Engine.addMetric("newObjs", PooledObject.poolNew, false, "#");
-         
-         /* pragma:DEBUG_START 
-         if (PooledObject.classPool[this.getClassName()]) {
-            PooledObject.classPool[this.getClassName()][0]++;
-         } else {
-            // 0: new, 1: in use, 2: pooled
-            PooledObject.classPool[this.getClassName()] = [1,0,0];
-         }
-            pragma:DEBUG_END */
-         
+			
+			/* pragma:DEBUG_START 
+			if (PooledObject.classPool[this.getClassName()]) {
+				PooledObject.classPool[this.getClassName()][0]++;
+			} else {
+				// 0: new, 1: in use, 2: pooled
+				PooledObject.classPool[this.getClassName()] = [1,0,0];
+			}
+			   pragma:DEBUG_END */
+			
          // TODO: Any more than 15 arguments and construction will fail!
          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
-                         arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
-                         arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
+								 arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+								 arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
       }
    },
 
@@ -297,13 +235,13 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       PooledObject.poolSize++;
       PooledObject.objectPool[obj.constructor.getClassName()].push(obj);
 
-      /* pragma:DEBUG_START 
-      if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
-         PooledObject.classPool[obj.constructor.getClassName()][1]--;
-      }
-      PooledObject.classPool[obj.constructor.getClassName()][2]++;
-         pragma:DEBUG_END */
-         
+		/* pragma:DEBUG_START 
+		if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
+			PooledObject.classPool[obj.constructor.getClassName()][1]--;
+		}
+		PooledObject.classPool[obj.constructor.getClassName()][2]++;
+		   pragma:DEBUG_END */
+			
 
       Engine.addMetric("pooled", PooledObject.poolSize, false, "#");
    },

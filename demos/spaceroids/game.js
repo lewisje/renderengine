@@ -115,8 +115,10 @@ var Spaceroids = Game.extend({
    cleanupPlayfield: function() {
 
       // Remove any rocks still floating around
-      if (this.renderContext.size() > 0) {
-         this.renderContext.cleanUp();
+      var objs = this.renderContext.getObjects();
+      while (objs.length > 0)
+      {
+         objs.shift().destroy();
       }
 
       this.rocks = 0;
@@ -484,9 +486,6 @@ var Spaceroids = Game.extend({
    teardown: function() {
       this.scoreObj = null;
       this.hscoreObj = null;
-      if (Spaceroids.isAttractMode) {
-         Spaceroids.attractTimer.destroy();
-      }
 
       EventEngine.removeHandler(document, "keypress", Spaceroids.onKeyPress);
 

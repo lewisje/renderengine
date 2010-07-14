@@ -50,7 +50,7 @@ Engine.initObject("SpaceroidsRock", "Object2D", function() {
  */
 var SpaceroidsRock = Object2D.extend({
 
-   asteroidSize: 10,
+   size: 10,
    speed: 0.3,
    pBox: null,
    scoreValue: 10,
@@ -67,8 +67,8 @@ var SpaceroidsRock = Object2D.extend({
       this.pBox = Rectangle2D.create(0, 0, pWidth, pHeight);
 
       // Set size and position
-      this.asteroidSize = size || 10;
-      this.scoreValue = SpaceroidsRock.values[String(this.asteroidSize)];
+      this.size = size || 10;
+      this.scoreValue = SpaceroidsRock.values[String(this.size)];
       if (!position)
       {
          // Set the position
@@ -81,7 +81,7 @@ var SpaceroidsRock = Object2D.extend({
 
    release: function() {
       this.base();
-      this.asteroidSize = 10;
+      this.size = 10;
       this.speed = 0.3;
       this.pBox = null;
       this.scoreValue = 10;
@@ -188,7 +188,7 @@ var SpaceroidsRock = Object2D.extend({
       for (var p = 0; p < tmp.length; p++)
       {
          var pt = Point2D.create(tmp[p][0], tmp[p][1]);
-         pt.mul(this.asteroidSize);
+         pt.mul(this.size);
          s.push(pt);
       }
 
@@ -258,12 +258,12 @@ var SpaceroidsRock = Object2D.extend({
       }
 
       // Break the rock up into smaller chunks
-      if (this.asteroidSize - 4 > 1)
+      if (this.size - 4 > 1)
       {
          var curVel = this.getComponent("move").getVelocity().len();
          for (var p = 0; p < 3; p++)
          {
-            var rock = SpaceroidsRock.create(this.asteroidSize - 4, this.getPosition());
+            var rock = SpaceroidsRock.create(this.size - 4, this.getPosition());
             this.getRenderContext().add(rock);
             rock.setup(this.pBox.getDims().x, this.pBox.getDims().y);
             

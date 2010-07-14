@@ -80,13 +80,13 @@ var SpaceroidsBullet = Object2D.extend({
       var dir = Math2D.getDirectionVector(Point2D.ZERO, SpaceroidsBullet.tip, r);
 
       var p = Point2D.create(p_mover.getPosition());
-      var dPos = Point2D.create(dir).mul(10);
+		var dPos = Point2D.create(dir).mul(10);
       c_mover.setPosition(p.add(dPos));
       c_mover.setVelocity(dir.mul(8));
       c_mover.setCheckLag(false);
-      dir.destroy();
-      p.destroy();
-      dPos.destroy();
+		dir.destroy();
+		p.destroy();
+		dPos.destroy();
    },
 
    release: function() {
@@ -157,14 +157,14 @@ var SpaceroidsBullet = Object2D.extend({
       {
          this.player.removeBullet(this);
          this.destroy();
-         bBox.destroy();
+			bBox.destroy();
          return;
       }
 
       renderContext.pushTransform();
       this.base(renderContext, time);
       renderContext.popTransform();
-      bBox.destroy();
+		bBox.destroy();
    },
 
    /**

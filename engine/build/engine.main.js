@@ -77,7 +77,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    localMode: false,          // Local run flag
    started: false,            // Engine started flag
    running: false,            // Engine running flag
-   shuttingDown: false,       // Engine is in shutdown phase
    upTime: 0,                 // The startup time
    downTime: 0,               // The shutdown time
    skipFrames: true,          // Skip missed frames
@@ -304,7 +303,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    destroy: function(obj) {
       Assert((obj != null), "Trying to destroy non-existent object!", obj);
       var objId = obj.getId();
-      Assert((this.gameObjects[objId] != null), "Re-destroying object!", obj);
+      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!", this.gameObjects[objId]);
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
@@ -356,10 +355,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
 
-      // Check for supported browser
-      if (!this.browserSupportCheck()) {
-         return;
-      };
+		// Check for supported browser
+		if (!this.browserSupportCheck()) {
+			return;
+		};
 
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
@@ -389,8 +388,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
 
-      // Output support
-      Console.debug("System info: ", EngineSupport.sysInfo());
    },
 
    /**
@@ -409,11 +406,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
-      if (this.shuttingDown) {
-         // Can't re-shutdown the engine
-         return;
-      }
-      
       if (!this.running && this.started)
       {
          // If the engine is not currently running (i.e. paused) 
@@ -423,7 +415,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          return;
       }
 
-      this.shuttingDown = true;
       this.started = false;
       window.clearTimeout(Engine.dependencyProcessor);
 
@@ -442,12 +433,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
       this.running = false;
-      
-      // Kill off the default context and anything
-      // that's attached to it.  We'll alert the
-      // developer if there's an issue with orphaned objects
-      this.getDefaultContext().destroy();
-      
+		
+		// Kill off the default context and anything
+		// that's attached to it.  We'll alert the
+		// developer if there's an issue with orphaned objects
+		this.getDefaultContext().destroy();
+		
       // Dump the object pool
       if (typeof PooledObject != "undefined") {
          PooledObject.objectPool = null;
@@ -488,9 +479,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       
       // Final cleanup
       Linker.cleanup();
-      
-      // Shutdown complete
-      this.shuttingDown = false;
    },
 
 
@@ -666,39 +654,39 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       $(".items", this.metricDisplay).html(h);
    },
 
-   /**
-    * Check the current browser to see if it is supported by the
-    * engine.  If it isn't, there's no reason to load the remainder of
-    * the engine.  This check can be disabled with the <tt>disableBrowserCheck</tt>
-    * query parameter set to <tt>true</tt>.
-    * <p/>
-    * If the browser isn't supported, the engine is shutdown and a message is
-    * displayed.
-    */
-   browserSupportCheck: function() {
-      if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
-         return true;
-      }
-      var sInfo = EngineSupport.sysInfo();
-      var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
-      msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
-      msg += "supported browsers</a> for more information.";
-      switch (sInfo.browser) {
-         case "chrome":
-         case "Wii":
-         case "iPhone":
-         case "safari":
-         case "mozilla":
-         case "opera": return true;
-         case "msie":
-         case "unknown": $(document).ready(function() {
-                           Engine.shutdown();
-                           $("body", document).append($("<div class='unsupported'>")
-                              .html(msg));
-                        });
-      }
-      return false;
-   },
+	/**
+	 * Check the current browser to see if it is supported by the
+	 * engine.  If it isn't, there's no reason to load the remainder of
+	 * the engine.  This check can be disabled with the <tt>disableBrowserCheck</tt>
+	 * query parameter set to <tt>true</tt>.
+	 * <p/>
+	 * If the browser isn't supported, the engine is shutdown and a message is
+	 * displayed.
+	 */
+	browserSupportCheck: function() {
+		if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
+			return true;
+		}
+		var sInfo = EngineSupport.sysInfo();
+		var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
+		msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
+		msg += "supported browsers</a> for more information.";
+		switch (sInfo.browser) {
+			case "chrome":
+			case "Wii":
+			case "iPhone":
+			case "safari":
+			case "mozilla":
+			case "opera": return true;
+			case "msie":
+			case "unknown": $(document).ready(function() {
+									Engine.shutdown();
+									$("body", document).append($("<div class='unsupported'>")
+										.html(msg));
+								});
+		}
+		return false;
+	},
 
    /**
     * Prints the version of the engine.
@@ -713,17 +701,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //                                        THE WORLD TIMER
    //====================================================================================================
    //====================================================================================================
-
-   afterFrameCBs: [],
-   
-   /**
-    * Things to do after a frame has been rendered.  Primarily used
-    * by containers to clean up their object references after they've
-    * been safely destroyed.
-    */
-   afterFrame: function(fn) {
-      Engine.afterFrameCBs.push(fn);
-   },
 
    /**
     * This is the process which updates the world.  It starts with the default
@@ -756,14 +733,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Output any metrics
          if (Engine.showMetricsWindow) {
             Engine.renderMetrics();
-         }
-         
-         // Clean up any objects which need to be safely destroyed
-         PooledObject.destroySafely();
-         
-         // Perform any after frame functions
-         while (Engine.afterFrameCBs.length > 0) {
-            Engine.afterFrameCBs.shift()();
          }
       }
 
