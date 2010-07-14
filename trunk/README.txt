@@ -1,5 +1,5 @@
 The Render Engine @BUILD_VERSION [@BUILD_DATE]
-(c)2008-2009 Brett Fattori (bfattori AT gmail DOT com)
+(c)2008-2010 Brett Fattori (bfattori AT gmail DOT com)
 
 ---------------------------------------------------------
 
