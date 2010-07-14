@@ -37,8 +37,8 @@ Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
 
 /**
  * @class A wrapper for any HTML element to convert it into a targetable render context.
- *        The {@link DocumentContext} and {@link HTMLDivContext} use this as their base
- *        class.
+ * 		 The {@link DocumentContext} and {@link HTMLDivContext} use this as their base
+ * 		 class.
  *
  * @extends RenderContext2D
  * @constructor
@@ -78,11 +78,12 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       {
          var e = objs[o].getElement();
          if (e && e != document.body) {
-            $(e).remove();
+            
+            this.getSurface().removeChild(e);
          }
       }
-      this.cursorPos.destroy();
-      this.getViewport().destroy();
+		this.cursorPos.destroy();
+		this.getViewport().destroy();
       this.base();
    },
 
@@ -104,8 +105,8 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
    add: function(obj) {
       if (!obj.getElement())
       {
-         // Create an element for the object
-         obj.setElement($("<div>").css("position", "absolute"));
+			// Create an element for the object
+			obj.setElement($("<div>").css("position", "absolute"));
       }
       this.jQ().append(obj.getElement());
       this.base(obj);
@@ -273,9 +274,9 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    drawImage: function(rect, image, srcRect, ref) {
       var rD = rect.getDims();
-      srcRect = (srcRect instanceof Rectangle2D ? srcRect : null);
-      var sD = srcRect ? srcRect.getDims() : rect.getDims();
-      ref = (srcRect instanceof HostObject ? srcRect : ref);
+		srcRect = (srcRect instanceof Rectangle2D ? srcRect : null);
+		var sD = srcRect ? srcRect.getDims() : rect.getDims();
+		ref = (srcRect instanceof HostObject ? srcRect : ref);
 
       // The reference object is a host object it
       // will give us a reference to the HTML element which we can then
@@ -307,19 +308,19 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param ref {HostObject} A reference host object
     */
    drawText: function(point, text, ref) {
-      this.base(point, text);
+		this.base(point, text);
       // The reference object is a host object it
       // will give us a reference to the HTML element which we can then
       // just modify the displayed image for.
       if (ref && (ref instanceof HostObject) && ref.jQ()) {
-         ref.jQ().css({
-            font: this.getNormalizedFont(),
-            color: this.getFillStyle(),
-            left: this.cursorPos.x + point.x,
-            top: this.cursorPos.y + point.y,
-            position: "absolute"
-         }).text(text);
-      }
+		  	ref.jQ().css({
+		  		font: this.getNormalizedFont(),
+		  		color: this.getFillStyle(),
+		  		left: this.cursorPos.x + point.x,
+		  		top: this.cursorPos.y + point.y,
+		  		position: "absolute"
+		  	}).text(text);
+		}
    }
 
 }, /** @scope HTMLElementContext.prototype */{
@@ -332,31 +333,31 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
    getClassName: function() {
       return "HTMLElementContext";
    },
-   
-   /**
-    * When the HTMLElementContext's dependencies are resolved, check the browser
-    * type and load a specific object which handles specific processing.
-    */
-   resolved: function() {
-      var version = parseFloat(EngineSupport.sysInfo().version);
-      switch (EngineSupport.sysInfo().browser) {
-         case "safari" :
-               if (version >= 3) {
-                  // Load support for webkit transforms
-                  Engine.include("/rendercontexts/support/context.htmlelement.safari.js");
-               }
-            break;
-         case "mozilla" :
-               if (version >= 1.9) {
-                  // Load support for gecko transforms
-                  Engine.include("/rendercontexts/support/context.htmlelement.gecko.js");
-               }
-            break;
-         default:
-            break;
-      };
-      
-   }
+	
+	/**
+	 * When the HTMLElementContext's dependencies are resolved, check the browser
+	 * type and load a specific object which handles specific processing.
+	 */
+	resolved: function() {
+		var version = parseFloat(EngineSupport.sysInfo().version);
+		switch (EngineSupport.sysInfo().browser) {
+			case "safari" :
+					if (version >= 3) {
+						// Load support for webkit transforms
+						Engine.include("/rendercontexts/support/context.htmlelement.safari.js");
+					}
+				break;
+			case "mozilla" :
+					if (version >= 1.9) {
+						// Load support for gecko transforms
+						Engine.include("/rendercontexts/support/context.htmlelement.gecko.js");
+					}
+				break;
+			default:
+				break;
+		};
+		
+	}
 });
 
 return HTMLElementContext;

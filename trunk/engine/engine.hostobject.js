@@ -51,7 +51,7 @@ Engine.initObject("HostObject", "HashContainer", function() {
 var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    renderContext: null,
-   
+
    /**
     * Release the object back into the object pool.
     */
@@ -99,18 +99,13 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     */
    update: function(renderContext, time) {
 
-      if (!this.getObjectAliveState()) {
-         // If the object has been destroyed, don't bother updating it
-         return;
+      // Run the components
+      var components = this.getObjects();
+
+      for (var c in components) {
+         components[c].execute(renderContext, time);
       }
 
-      // Run the components
-      var cItr = this.iterator();
-      while (this.getObjectAliveState() && cItr.hasNext()) {
-         // Only update if the object hasn't been destroyed
-         cItr.next().execute(renderContext, time);
-      }
-      cItr.destroy();
       this.base(renderContext, time);
    },
 
@@ -137,9 +132,13 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       this.base(component.getName(), component);
 
       component.setHostObject(this);
-      if (this.getObjects().length > 1) {
-         // Sort the components
+      if (this.getObjects().length > 1)
+      {
          this.sort(HostObject.componentSort);
+      }
+      
+      if (HostComponent.isInstance(component)) {
+         component.set
       }
    },
 

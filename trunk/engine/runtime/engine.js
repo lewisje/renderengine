@@ -6,7 +6,7 @@
  *
  * author: Brett Fattori (brettf@renderengine.com)
  * version: beta 1.4.0
- * date: 
+ * date: 11/15/2009
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1016 $
+ * @version: $Revision: 852 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -641,14 +641,12 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
-		Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-		if (arguments.length > 1) {
-			var ar = ["*ASSERT* "];
-			for (var a = 1; a < arguments.length; a++) {
-				ar.push(arguments[a]);
+		if (arguments.length > 2) {
+			for (var a = 2; a < arguments.length; a++) {
+				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+				Console.error("*ASSERT* ", arguments[a]);
+				Console.trace();
 			}
-			Console.error.apply(Console, ar);
-			Console.trace();
 		}
 		
       Engine.shutdown();
@@ -675,39 +673,6 @@ var AssertWarn = function(test, warning) {
       Console.warn(warning);
    }
 };
-
-/**
- * The Render Engine
- * Math2 Class
- *
- * @fileoverview A math static class which provides a method for generating
- * 				  pseudo random numbers.
- *
- * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 962 $
- *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- *
- */
 
 /**
  * @class A static class which provides methods for generating random integers
@@ -757,6 +722,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 // Seed the random number generator initially
 Math2.seed();
 
+
 /**
  * The Render Engine
  * Engine Support Class
@@ -766,7 +732,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1013 $
+ * @version: $Revision: 949 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1208,12 +1174,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 	         "language": navigator.language,
 	         "online": navigator.onLine,
 	         "cookies": navigator.cookieEnabled,
-	         "fullscreen": window.fullScreen || false,
-				"support" : {
-					"multithreaded": typeof Worker !== "undefined",
-					"sockets": typeof WebSocket !== "undefined",
-					"xhr": typeof XMLHttpRequest !== "undefined"
-				}
+	         "fullscreen": window.fullScreen || false
 	      };
 			$(document).ready(function() {
 				// When the document is ready, we'll go ahead and get the width and height added in
@@ -1250,7 +1211,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 958 $
+ * @version: $Revision: 930 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1302,7 +1263,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    dependencyCount: 0,
    dependencyProcessor: null,
    dependencyTimer: null,
-   dependencyCheckTimeout: $.browser.Wii ? 8500 : 6500,
+   dependencyCheckTimeout: $.browser.Wii ? 6500 : 3500,
    dependencyProcessTimeout: 100,
    
    loadedClasses: [],
@@ -1795,7 +1756,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1039 $
+ * @version: $Revision: 903 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1865,7 +1826,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    localMode: false,          // Local run flag
    started: false,            // Engine started flag
    running: false,            // Engine running flag
-   shuttingDown: false,       // Engine is in shutdown phase
    upTime: 0,                 // The startup time
    downTime: 0,               // The shutdown time
    skipFrames: true,          // Skip missed frames
@@ -2092,7 +2052,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    destroy: function(obj) {
       Assert((obj != null), "Trying to destroy non-existent object!", obj);
       var objId = obj.getId();
-      Assert((this.gameObjects[objId] != null), "Re-destroying object!", obj);
+      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!", this.gameObjects[objId]);
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
@@ -2144,10 +2104,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
 
-      // Check for supported browser
-      if (!this.browserSupportCheck()) {
-         return;
-      };
+		// Check for supported browser
+		if (!this.browserSupportCheck()) {
+			return;
+		};
 
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
@@ -2177,8 +2137,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
 
-      // Output support
-      Console.debug("System info: ", EngineSupport.sysInfo());
    },
 
    /**
@@ -2197,11 +2155,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
-      if (this.shuttingDown) {
-         // Can't re-shutdown the engine
-         return;
-      }
-      
       if (!this.running && this.started)
       {
          // If the engine is not currently running (i.e. paused) 
@@ -2211,7 +2164,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          return;
       }
 
-      this.shuttingDown = true;
       this.started = false;
       window.clearTimeout(Engine.dependencyProcessor);
 
@@ -2230,12 +2182,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
       this.running = false;
-      
-      // Kill off the default context and anything
-      // that's attached to it.  We'll alert the
-      // developer if there's an issue with orphaned objects
-      this.getDefaultContext().destroy();
-      
+		
+		// Kill off the default context and anything
+		// that's attached to it.  We'll alert the
+		// developer if there's an issue with orphaned objects
+		this.getDefaultContext().destroy();
+		
       // Dump the object pool
       if (typeof PooledObject != "undefined") {
          PooledObject.objectPool = null;
@@ -2276,9 +2228,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       
       // Final cleanup
       Linker.cleanup();
-      
-      // Shutdown complete
-      this.shuttingDown = false;
    },
 
 
@@ -2454,39 +2403,39 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       $(".items", this.metricDisplay).html(h);
    },
 
-   /**
-    * Check the current browser to see if it is supported by the
-    * engine.  If it isn't, there's no reason to load the remainder of
-    * the engine.  This check can be disabled with the <tt>disableBrowserCheck</tt>
-    * query parameter set to <tt>true</tt>.
-    * <p/>
-    * If the browser isn't supported, the engine is shutdown and a message is
-    * displayed.
-    */
-   browserSupportCheck: function() {
-      if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
-         return true;
-      }
-      var sInfo = EngineSupport.sysInfo();
-      var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
-      msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
-      msg += "supported browsers</a> for more information.";
-      switch (sInfo.browser) {
-         case "chrome":
-         case "Wii":
-         case "iPhone":
-         case "safari":
-         case "mozilla":
-         case "opera": return true;
-         case "msie":
-         case "unknown": $(document).ready(function() {
-                           Engine.shutdown();
-                           $("body", document).append($("<div class='unsupported'>")
-                              .html(msg));
-                        });
-      }
-      return false;
-   },
+	/**
+	 * Check the current browser to see if it is supported by the
+	 * engine.  If it isn't, there's no reason to load the remainder of
+	 * the engine.  This check can be disabled with the <tt>disableBrowserCheck</tt>
+	 * query parameter set to <tt>true</tt>.
+	 * <p/>
+	 * If the browser isn't supported, the engine is shutdown and a message is
+	 * displayed.
+	 */
+	browserSupportCheck: function() {
+		if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
+			return true;
+		}
+		var sInfo = EngineSupport.sysInfo();
+		var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
+		msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
+		msg += "supported browsers</a> for more information.";
+		switch (sInfo.browser) {
+			case "chrome":
+			case "Wii":
+			case "iPhone":
+			case "safari":
+			case "mozilla":
+			case "opera": return true;
+			case "msie":
+			case "unknown": $(document).ready(function() {
+									Engine.shutdown();
+									$("body", document).append($("<div class='unsupported'>")
+										.html(msg));
+								});
+		}
+		return false;
+	},
 
    /**
     * Prints the version of the engine.
@@ -2501,17 +2450,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //                                        THE WORLD TIMER
    //====================================================================================================
    //====================================================================================================
-
-   afterFrameCBs: [],
-   
-   /**
-    * Things to do after a frame has been rendered.  Primarily used
-    * by containers to clean up their object references after they've
-    * been safely destroyed.
-    */
-   afterFrame: function(fn) {
-      Engine.afterFrameCBs.push(fn);
-   },
 
    /**
     * This is the process which updates the world.  It starts with the default
@@ -2544,14 +2482,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Output any metrics
          if (Engine.showMetricsWindow) {
             Engine.renderMetrics();
-         }
-         
-         // Clean up any objects which need to be safely destroyed
-         PooledObject.destroySafely();
-         
-         // Perform any after frame functions
-         while (Engine.afterFrameCBs.length > 0) {
-            Engine.afterFrameCBs.shift()();
          }
       }
 
