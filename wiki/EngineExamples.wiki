@@ -1,9 +1,6 @@
 #summary A list of examples using The Render Engine
 #labels Featured
 
-= _*The examples are currently non-functioning*_ =
-Due to a major change in the codebase, which is underway, the examples are currently not functional.  I hope to have all of the examples back online shortly... A major bug was found, with the release of Firefox 4.0b1, which has existed in The Render Engine for a while.  Objects which are destroyed are destroyed out of order and were causing issues when being cleaned up.  Know that I am working diligently to get this issue fixed and will have the examples back online as soon as I possibly can.
-
 =Engine Examples=
 
 The Render Engine is a fully featured engine which can be used to write both games and to write applications.  Below are examples of the engine in use.  All of the following examples were written using The Render Engine and, as you can tell, are the old "eat your own dog food" type of examples.
@@ -12,32 +9,32 @@ The Render Engine is a fully featured engine which can be used to write both gam
 
 This example is a clone of Asteroids by Atari.  There are two modes in which the game runs.  The first is a clone of the original, mostly complete, with sounds and vector rendering.  It's not meant to be a complete game, but more how to make the engine work.  The second has more visual effects and some simple particle animations.  Both games run from the same source.
 
-   * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true Asteroids clone] (_not functional_)
-   * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids clone - Evolved] (_not functional_)
+   * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true Asteroids clone]
+   * [http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids clone - Evolved]
 
 ==Ball Physics, Sprites, and the Wii==
 
 The next game, if it can be called that, is a test I put together to get the engine running on the Wii.  It not only runs on the Wii, but on PCs and Macs.  On the Wii, just point and click the "A" button.  In addition, this is the first test of the "ball physics" which have since been converted to a collider component.
 
-   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 Bounce the Ball] (_not functional_)
+   * [http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true&context=1 Bounce the Ball]
 
 ==The Sprite Editor==
 
 In addition to games, The Render Engine can be (and, as you can see with this example, is) used to create applications.  In this case I'm using it to develop the Sprite Editor.  Eventually, this will be a part of the online release for the creation of sprites in your games.
 
-   * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor alpha] (_not functional_)
+   * [http://renderengine.googlecode.com/svn/trunk/tools/sprite_editor/index.html?metrics=true Sprite Editor alpha]
 
 
 ==Text Rendering Capabilities==
 
 The following is a quick test I put together to test text rendering with the three supported renderers.  If your browser doesn't support natively rendering fonts to the canvas, you'll only see the first two (Vector and Bitmap).  In most cases, the bitmap fonts are a decent alternative to rendering text to the canvas.
 
-   * [http://renderengine.googlecode.com/svn/trunk/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering] (_not functional_)
+   * [http://renderengine.googlecode.com/svn/trunk/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
 
 ==The Bitmap Font Editor==
 
 Another tool that will be provided with the engine will dissect a bitmap image of a font for use with the canvas context.  It analyzes a bitmap for breaks between the characters, and generates a font definition.  The editor allows the user to create, adjust, and remove dividers.  For information about using the tool, see the page for the FontEditor.
-   * [http://renderengine.googlecode.com/svn/trunk/tools/font_editor/index.html?metrics=true Font Editor alpha] (_not functional_)
+   * [http://renderengine.googlecode.com/svn/trunk/tools/font_editor/index.html?metrics=true Font Editor alpha]
 
 ==!PistolSlut by Mary Rose Cook==
 
