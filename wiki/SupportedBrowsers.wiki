@@ -4,7 +4,6 @@
 The following is a list of browsers that I have tested the engine and examples in.  As more browsers are tested and pass, I will add them to this list.  
 
 ||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||  *Performance*  ||
-|| [http://www.mozilla.com/en-US/firefox/4.0b1/whatsnew/ Mozilla Firefox] || 4.0b1 || Windows || *Fail* (_see notes_) || -- ||
 || [http://www.google.com/chrome Google Chrome] || 3.0+ || Windows || Great || Excellent ||
 || [http://www.firefox.com/ Mozilla Firefox] || 3.6+ || Windows, Linux || Perfect || Great ||
 || [http://www.apple.com/safari/download/ Apple Safari] || 3.0+ || Windows, Mac || Perfect || Excellent ||
@@ -15,7 +14,6 @@ The following is a list of browsers that I have tested the engine and examples i
 || *Firefox* || 3.0, 3.5 || Windows || Great || Good ||
 || *Firefox* || 1.5, 2.0 || Windows || Good || Fair ||
 || *Opera* || 9.5+ || Wii || Ok || Poor ||
-|| *Internet Explorer* || 6.0+ || Windows || *Fail* _(See Below)_ || -- ||
 
 *Levels of support:*
   * Perfect - All features working as expected
@@ -36,7 +34,14 @@ The following is a list of browsers that I have tested the engine and examples i
 
 My definition of load may not be the same as others, so let me try to summarize it in my own words.  When I speak of load, I think about the amount of processing that must occur to render one frame to the screen.  This involves everything from moving objects around to checking collisions, getting input and general game logic.  The more objects on screen, at any time, which must be updated and subsequently rendered increases load.  So, the more objects on screen, the higher the load.  A good example of high load is when the Asteroids Redux demo has upwards of fifty rocks, the player, five bullets, and hundreds of particles all being animated in one frame (about 400 objects on screen).  Medium load is about half that (200 objects), and low load would be about one eighth of medium (25 objects).
 
-==Internet Explorer Support==
+= List of Unsupported Browsers =
+
+||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||  *Reason*  ||
+|| [http://www.mozilla.com/en-US/firefox/4.0b1/whatsnew/ Mozilla Firefox] || 4.0b1 || Windows || *Fail* (_see notes_) || Beta ||
+|| *Internet Explorer* || 6.0+ || Windows || *Fail* (_see notes_) || No canvas ||
+
+
+==Internet Explorer !ChromeFrame Plug-in==
 
 Those folks who are using Internet Explorer, that would like to enjoy The Render Engine and what it has to offer, should consider downloading the following plug-in:
 
@@ -46,6 +51,7 @@ Those folks who are using Internet Explorer, that would like to enjoy The Render
 
 _Notes:_
 
+  * Non-stable (non-release) versions of browsers are not supported.  Thus, browsers which are alpha, or even beta, are in the "Unsupported Browsers" table if they have been at least tested with the engine.  Due to the possibility that the browser may still change operation, supporting of these browsers doesn't make sense.
   * Firefox 4.0b1 has an issue with concurrent modification which didn't present itself in earlier versions.  I'm aware of the issue and working to resolve it.
   * The best performance of any browser is Google's _Chrome_.  Their V8 !JavaScript engine is just fantastic.  I'm not stating this as an endorsement, but more as a challenge for the other browser makers to step up and compete!  However, there are some features not yet supported in Chromium which need to be addressed before I _will_ endorse it fully.
   * Firefox 3.6 has significantly improved the overall performance of the engine.  The lengthy pauses when the browser was running the GC are now much less noticeable, but still there.
