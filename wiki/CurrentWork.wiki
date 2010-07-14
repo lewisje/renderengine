@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+_07/13/2010_ I had to revert to revision 994 from the repository to get the examples running again.  I guess I should change the examples to run from a stable version, eh?  Anyways, the concurrency issue still exists in FF4.0b1 which is really driving me nuts.  I will continue to look at the issue and see if I can't get a resolution in there.  It's a shame because FF4.0b1's JS engine seems so promising.  Plus, a small bug has made itself known in Chrome...
+
 _07/12/2010_ The bugs which appeared with FF4.0b1 go a lot deeper than I originally thought.  I am working to rectify the issue, but is has caused the examples to fail.  The issue stems from objects which are destroyed out-of-order.  If, for example, a component within a host object is destroyed and then the host object is destroyed which should clean up its components, the components will fail when being destroyed since they already has been destroyed.  It's a complicated issue and I hope to have a fix soon.
 
 _07/12/2010_ Recently I've been noticing a few small bugs which are making the engine fail on both Chrome and Firefox 4.0b1.  I see issues where the engine _crashes_ (stops executing).  I'm excited to start integrating some of the newer features which both browsers support natively, but I need to get these simple crash bugs ironed out.
