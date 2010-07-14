@@ -38,10 +38,15 @@
 
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
-   <target name="dist" depends="engine.clean,engine.zip" description="Creates the full and compressed distribution zip files for The Render Engine"/>
+   <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
    <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
    <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
+
+
+	<target name="dist.finish" description="Cleanup tasks to perform after building the distribution">
+      <delete quiet="true" includeemptydirs="true" dir="${dist.home}/engine"/>
+	</target>
 
 
    <!-- =========================== ENGINE BUILD TARGETS ========================== -->
@@ -107,6 +112,11 @@
   
       <!-- Create the distribution home directory -->
       <mkdir dir="${dist.home}"/>
+
+		<!-- Build the engine runtime -->
+		<antcall target="engine.build">
+			<param name="engine.file" value="${dist.home}/engine/runtime/engine.js"/>
+		</antcall>
   
    </target>
   
@@ -128,6 +138,7 @@
       <mkdir dir="${build.home}/engine/runtime"/>
       <mkdir dir="${build.home}/components"/>
       <mkdir dir="${build.home}/rendercontexts"/>
+      <mkdir dir="${build.home}/rendercontexts/support"/>
       <mkdir dir="${build.home}/resourceloaders"/>
       <mkdir dir="${build.home}/spatial"/>
       <mkdir dir="${build.home}/textrender"/>
@@ -261,12 +272,11 @@
          <param name="build.home" value="${full.home}"/>
       </antcall>
    
-   	<antcall target="engine.build"/>
       <!-- ### FINISH ### Pre-compilation tasks -->
  
       <!-- Copy the engine files -->     
       <copy todir="${full.home}/engine/runtime">
-         <fileset dir="${basedir}/engine/runtime">
+         <fileset dir="${dist.home}/engine/runtime">
             <include name="engine.js"/>
          </fileset>
       </copy>
@@ -397,9 +407,6 @@
       <antcall target="licenses">
          <param name="build.home" value="${zip.home}"/>
       </antcall>
-
-
-		<antcall target="engine.build"/>
    	   	
       <!-- ### FINISH ### Pre-compilation tasks -->
  
@@ -408,11 +415,8 @@
       <echo message="Compressing engine..."/>
 
 		<antcall target="${compress.option}">
+			<param name="basedir" value="${dist.home}"/>
 			<param name="input.file" value="engine/runtime/engine.js"/>
-		</antcall>
-
-		<antcall target="${compress.option}">
-			<param name="input.file" value="engine/engine.baseobject.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -441,6 +445,10 @@
 
 		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.math2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.mathobject.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -496,11 +504,11 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
-			<param name="input.file" value="components/component.input.js"/>
+			<param name="input.file" value="components/component.image.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
-			<param name="input.file" value="components/component.image.js"/>
+			<param name="input.file" value="components/component.input.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -556,6 +564,10 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.htmldivcontext.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.htmlelement.js"/>
 		</antcall>
 
@@ -567,9 +579,15 @@
 			<param name="input.file" value="rendercontexts/context.scrollingbackground.js"/>
 		</antcall>
 
+<!--
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.layeredcontext.js"/>
+		</antcall>
+
 		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.svgcontext.js"/>
 		</antcall>
+-->
 
  
       <!-- Compress and copy the resource loaders -->     
@@ -596,6 +614,10 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.remotefile.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="resourceloaders/loader.sound.js"/>
 		</antcall>
 
@@ -611,9 +633,11 @@
       <!-- Copy the collision models -->     
       <echo message="Compressing spatial..."/>
 
+<!--
 		<antcall target="${compress.option}">
 			<param name="input.file" value="spatial/container.quadtree.js"/>
 		</antcall>
+-->
 
 		<antcall target="${compress.option}">
 			<param name="input.file" value="spatial/container.spatialgrid.js"/>
