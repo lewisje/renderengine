@@ -1,4 +1,4 @@
-#summary Overriding the built-in "Loading...: dialog
+#summary Overriding the built-in "Loading..." dialog
 
 = Overriding the "Loading" dialog =
 
