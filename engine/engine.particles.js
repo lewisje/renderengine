@@ -226,7 +226,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          return;
       }
       particle.init(this, this.lastTime);
-      Engine.addMetric("particles", i, true, "#");
    },
    
    /**
@@ -303,6 +302,15 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       }
       
       renderContext.popTransform();
+      
+      var p;
+      for (p in this.particles) {
+         // Find first available slot and insert the particle
+         if (this.particles[p] == null) {
+            break;
+         }
+      }
+      Engine.addMetric("particles", p, true, "#");
    },
 
    /**
