@@ -35,13 +35,6 @@ Engine.include("/engine/engine.pooledobject.js");
 
 Engine.initObject("MathObject", "PooledObject", function() {
 
-// Use the browser to determine the super class
-var moTransient = false;
-switch (EngineSupport.sysInfo().browser) {
-	case "chrome" : moTransient = true;
-				  		 break;
-}
-
 /**
  * @class The base object class which represents a math object within
  * the engine.  All math objects should extend from this class mainly due to
@@ -65,9 +58,12 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * to be used again.
     */
    destroy: function() {
-		if (!moTransient) {
-			this.base();
-	   }
+      if (!MathObject.transient) {
+         this.base();
+      } else {
+         // Clean up the engine reference to this object
+         Engine.destroy(this);
+      }
    }
 
  }, /** @scope BaseObject.prototype */{
@@ -84,15 +80,15 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * @memberOf PooledObject
     */
    create: function() {
-		if (moTransient) {
+      if (MathObject.transient) {
          PooledObject.poolNew++;
          Engine.addMetric("newObjs", PooledObject.poolNew, false, "#");
          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
-								 arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
-								 arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
-		} else {
-			return PooledObject.create.apply(this, arguments);
-		}
+                         arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+                         arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
+      } else {
+         return PooledObject.create.apply(this, arguments);
+      }
    },
 
    /**
@@ -102,9 +98,18 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     */
    getClassName: function() {
       return "MathObject";
-   }
+   },
+   
+   // Transient math objects aren't pooled
+   transient: false
 
 });
+
+// On certain browsers, we want to let math objects die and not pool them
+switch (EngineSupport.sysInfo().browser) {
+   case "chrome" : MathObject.transient = true;
+                   break;
+}
 
 return MathObject;
 

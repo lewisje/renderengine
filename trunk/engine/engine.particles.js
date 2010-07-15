@@ -96,9 +96,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
    update: function(renderContext, time) {
       if (time < this.life) {
          // Draw it ( I think this is an optimization point )
-         renderContext.pushTransform();
          this.draw(renderContext, time);
-         renderContext.popTransform();
          return true;
       } else {
          return false;
@@ -219,9 +217,12 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       } else if (i == this.maximum) {
          // If there are no free slots, insert new particles 
          // at the beginning of the list
-         this.particles[this.force].destroy();
+         var oldParticle = this.particles[this.force];
          this.particles[this.force] = particle;
          this.force = this.force++ > (this.maximum - 2) ? 0 : this.force;
+         
+         // Destroy the old particle
+         oldParticle.destroy();
          return;
       }
       particle.init(this, this.lastTime);
@@ -273,6 +274,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @param time {Number} The global time within the engine.
     */
    update: function(renderContext, time) {
+      renderContext.pushTransform();
       var p = 1;
       this.lastTime = time;
       if (this.particles.length == 0) {
@@ -298,6 +300,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
             this.runParticle(p++,renderContext,time);
          } while (p < this.particles.length);
       }
+      renderContext.popTransform();
    },
 
    /**
