@@ -57,12 +57,12 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       this.vec.mul(vel);
    },
 
-	destroy: function() {
-		this.pos.destroy();
-		this.vec.destroy();
-		this.base();
-	},
-	
+   destroy: function() {
+      this.pos.destroy();
+      this.vec.destroy();
+      this.base();
+   },
+   
    release: function() {
       this.base();
       this.pos = null;
@@ -78,7 +78,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
     */
    draw: function(renderContext, time) {
       this.pos.add(this.vec);
-      renderContext.setPosition(this.pos);
+      //renderContext.setPosition(this.pos);
 
       var colr = "#fff";
       if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
@@ -95,7 +95,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       }
 
       renderContext.setFillStyle(colr);
-      renderContext.drawPoint(Point2D.ZERO);
+      renderContext.drawPoint(this.pos);
    }
 
 }, {
@@ -135,11 +135,11 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
       this.vec.mul(vel);
    },
 
-	destroy: function() {
-		this.pos.destroy();
-		this.vec.destroy();
-		this.base();
-	},
+   destroy: function() {
+      this.pos.destroy();
+      this.vec.destroy();
+      this.base();
+   },
 
    release: function() {
       this.base();
@@ -156,9 +156,9 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
     */
    draw: function(renderContext, time) {
       this.pos.add(this.vec);
-      renderContext.setPosition(this.pos);
+      //renderContext.setPosition(this.pos);
       renderContext.setFillStyle(this.clr);
-      renderContext.drawPoint(Point2D.ZERO);
+      renderContext.drawPoint(this.pos);
    }
 
 }, {
