@@ -275,6 +275,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
    update: function(renderContext, time) {
       var p = 1,live=0;
       this.lastTime = time;
+      this.sortParticles();
       for (live=0;live<this.particles.length;live++) {
          if (this.particles[live] == null) {
             break;
