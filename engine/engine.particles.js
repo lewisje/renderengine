@@ -221,7 +221,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          // at the beginning of the list
          this.particles[this.force].destroy();
          this.particles[this.force] = particle;
-         this.force = this.force++ > (this.maximum - 1) ? 0 : this.force;
+         this.force = this.force++ > (this.maximum - 2) ? 0 : this.force;
          return;
       }
       particle.init(this, this.lastTime);
