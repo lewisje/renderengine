@@ -110,6 +110,8 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
 switch (EngineSupport.sysInfo().browser) {
    case "chrome" : MathObject.transient = true;
                    break;
+   case "mozilla" : if (EngineSupport.sysInfo().version.indexOf("1.9") == 0) MathObject.transient = true;
+                   break;
 }
 
 return MathObject;
