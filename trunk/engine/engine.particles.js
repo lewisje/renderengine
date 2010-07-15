@@ -273,9 +273,15 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @param time {Number} The global time within the engine.
     */
    update: function(renderContext, time) {
-      var p = 1;
+      var p = 1,live;
       this.lastTime = time;
-      if (this.particles.length == 0) {
+      for (live in this.particles) {
+         if (this.particles[live] == null) {
+            break;
+         }
+      }
+      Engine.addMetric("particles", live, true, "#");
+      if (live == 0) {
          return;
       }
 
@@ -302,15 +308,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       }
       
       renderContext.popTransform();
-      
-      var p;
-      for (p in this.particles) {
-         // Find first available slot and insert the particle
-         if (this.particles[p] == null) {
-            break;
-         }
-      }
-      Engine.addMetric("particles", p, true, "#");
    },
 
    /**
