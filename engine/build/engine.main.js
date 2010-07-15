@@ -114,6 +114,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    liveTime: 0,               // The "alive" time (worldTime-upTime)
 
+	// Issue #18 - Intrinsic loading dialog
+	loadingCSS: "<style type='text/css'>div.loadbox {width:325px;height:30px;padding:10px;font:10px Arial;border:1px outset gray;-moz-border-radius:10px;-webkit-border-radius:10px} #engine-load-progress { position:relative;border:1px inset gray;width:300px;height:5px} #engine-load-progress .bar {background:silver;}</style>",
 
    //====================================================================================================
    //====================================================================================================

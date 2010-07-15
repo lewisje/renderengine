@@ -2,6 +2,7 @@
 body {
 	overflow: hidden;
 	margin: 0;
+	font: 10pt Arial;
 }
 
 div.metrics {
@@ -51,3 +52,4 @@ div.metric-button {
 .maximize {
    background: url('$<enginePath>/css/maximize.png') no-repeat;
 }
+
