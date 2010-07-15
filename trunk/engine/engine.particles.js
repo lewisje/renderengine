@@ -301,6 +301,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
             this.runParticle(p++,renderContext,time);
          } while (p < this.particles.length);
       }
+      
       renderContext.popTransform();
    },
 
