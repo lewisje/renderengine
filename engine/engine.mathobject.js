@@ -53,7 +53,7 @@ Engine.initObject("MathObject", "PooledObject", function() {
 var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
 
    constructor: function(name) {
-      if (MathObject.transient) {
+      if (!MathObject.transient) {
          this.base(name);
       }
    },
@@ -66,9 +66,6 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
    destroy: function() {
       if (!MathObject.transient) {
          this.base();
-      } else {
-         // Clean up the engine reference to this object
-         Engine.destroy(this);
       }
    }
 
