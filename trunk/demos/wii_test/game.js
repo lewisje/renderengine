@@ -116,9 +116,6 @@ Engine.initObject("WiiTest", "Game", function(){
        * Run the game
        */
       run: function(){
-         // Remove the "loading" message
-         $("#loading").remove();
-         
          // Create the render context
          this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);

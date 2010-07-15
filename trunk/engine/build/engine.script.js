@@ -305,6 +305,22 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    loadGame: function(gameSource, gameObjectName) {
+
+		$(document).ready(function() {
+			// Determine if the developer has provided a "loading" element of their own
+			if ($("span.loading").length == 0) {
+				// They haven't, so create one for them
+				$("head").append($(Engine.loadingCSS));
+
+				var loadingDialog = "<span id='loading' class='intrinsic'><table border='0' style='width:100%;height:100%;'><tr>";
+				loadingDialog += "<td style='width:100%;height:100%;' valign='middle' align='center'><div class='loadbox'>Loading ";
+				loadingDialog += gameObjectName + "...<div id='engine-load-progress'></div><span id='engine-load-info'></span></div>";
+				loadingDialog += "</td></tr></table></span>";
+
+				$("body",document).append($(loadingDialog));	
+			}
+		});
+
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
       Engine.gameLoadTimer = setInterval(function() {
@@ -328,17 +344,18 @@ var Engine = Engine.extend({
                         window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
 
-                     // Remove the "loading" message
-                     $("#loading").remove();
                      Console.warn("Starting: " + gameObjectName);
                      
+                     // Remove the "loading" message (if we provided it)
+                     $("#loading.intrinsic").remove();
+							
                      // Start the game
                      window[gameObjectName].setup();
                   }
                }, 100);
             }
          }
-      }, 100);
+      }, 2);
    },
 
    /**

@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 852 $
+ * @version: $Revision: 1064 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -675,6 +675,39 @@ var AssertWarn = function(test, warning) {
 };
 
 /**
+ * The Render Engine
+ * Math2 Class
+ *
+ * @fileoverview A math static class which provides a method for generating
+ * 				  pseudo random numbers.
+ *
+ * @author: Brett Fattori (brettf@renderengine.com)
+ * @author: $Author: bfattori $
+ * @version: $Revision: 962 $
+ *
+ * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
+
+/**
  * @class A static class which provides methods for generating random integers
  * 		 and floats between 0 and 1.  The class also provides a way to seed the
  * 		 random number generator for repeatable results.
@@ -722,7 +755,6 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 // Seed the random number generator initially
 Math2.seed();
 
-
 /**
  * The Render Engine
  * Engine Support Class
@@ -732,7 +764,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 949 $
+ * @version: $Revision: 1064 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1211,7 +1243,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 930 $
+ * @version: $Revision: 958 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1263,7 +1295,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    dependencyCount: 0,
    dependencyProcessor: null,
    dependencyTimer: null,
-   dependencyCheckTimeout: $.browser.Wii ? 6500 : 3500,
+   dependencyCheckTimeout: $.browser.Wii ? 8500 : 6500,
    dependencyProcessTimeout: 100,
    
    loadedClasses: [],
@@ -1756,7 +1788,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 903 $
+ * @version: $Revision: 1065 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1826,6 +1858,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    localMode: false,          // Local run flag
    started: false,            // Engine started flag
    running: false,            // Engine running flag
+   shuttingDown: false,			// Engine is shutting down
    upTime: 0,                 // The startup time
    downTime: 0,               // The shutdown time
    skipFrames: true,          // Skip missed frames
@@ -1862,6 +1895,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    liveTime: 0,               // The "alive" time (worldTime-upTime)
 
+	// Issue #18 - Intrinsic loading dialog
+	loadingCSS: "<style type='text/css'>div.loadbox {width:325px;height:30px;padding:10px;font:10px Arial;border:1px outset gray;-moz-border-radius:10px;-webkit-border-radius:10px} #engine-load-progress { position:relative;border:1px inset gray;width:300px;height:5px} #engine-load-progress .bar {background:silver;}</style>",
 
    //====================================================================================================
    //====================================================================================================
@@ -2033,7 +2068,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      Assert((this.started == true), "Creating an object when the engine is stopped!");
+		Assert((this.shuttingDown === false), "Creating an object when the engine is shutting down!", obj);
+      Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
@@ -2088,6 +2124,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // The basics needed by the engine to get started
       this.loadNow("/engine/engine.game.js");
       this.loadNow("/engine/engine.rendercontext.js");
+		this.loadNow("/engine/engine.pooledobject.js");
       this.loadNow("/rendercontexts/context.render2d.js");
       this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");
@@ -2123,7 +2160,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
-      if (this.running) {
+      if (Engine.shuttingDown || Engine.running) {
          return;
       }
       
@@ -2133,6 +2170,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       mode += "]"
       Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
       this.running = true;
+		this.shuttingDown = false;
 
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
@@ -2144,6 +2182,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    pause: function() {
+		if (Engine.shuttingDown) {
+			return;
+		}
+		
       Console.warn(">>> Engine paused <<<");
       window.clearTimeout(Engine.globalTimer);
       this.running = false;
@@ -2155,6 +2197,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
+		if (Engine.shuttingDown) {
+			// Prevent another shutdown
+			return;
+		}
+		
+		Engine.shuttingDown = true;
+		
       if (!this.running && this.started)
       {
          // If the engine is not currently running (i.e. paused) 
@@ -2228,6 +2277,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       
       // Final cleanup
       Linker.cleanup();
+		
+		// Shutdown complete
+		Engine.shuttingDown = false;
    },
 
 
@@ -2461,6 +2513,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
+		if (Engine.shuttingDown) {
+			return;
+		}
+		
       var nextFrame = Engine.fpsClock;
 
       // Update the world
@@ -2800,6 +2856,22 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    loadGame: function(gameSource, gameObjectName) {
+
+		$(document).ready(function() {
+			// Determine if the developer has provided a "loading" element of their own
+			if ($("span.loading").length == 0) {
+				// They haven't, so create one for them
+				$("head").append($(Engine.loadingCSS));
+
+				var loadingDialog = "<span id='loading' class='intrinsic'><table border='0' style='width:100%;height:100%;'><tr>";
+				loadingDialog += "<td style='width:100%;height:100%;' valign='middle' align='center'><div class='loadbox'>Loading ";
+				loadingDialog += gameObjectName + "...<div id='engine-load-progress'></div><span id='engine-load-info'></span></div>";
+				loadingDialog += "</td></tr></table></span>";
+
+				$("body",document).append($(loadingDialog));	
+			}
+		});
+
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
       Engine.gameLoadTimer = setInterval(function() {
@@ -2823,17 +2895,18 @@ var Engine = Engine.extend({
                         window[gameObjectName].setup) {
                      clearInterval(Engine.gameRunTimer);
 
-                     // Remove the "loading" message
-                     $("#loading").remove();
                      Console.warn("Starting: " + gameObjectName);
                      
+                     // Remove the "loading" message (if we provided it)
+                     $("#loading.intrinsic").remove();
+							
                      // Start the game
                      window[gameObjectName].setup();
                   }
                }, 100);
             }
          }
-      }, 100);
+      }, 2);
    },
 
    /**
