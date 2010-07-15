@@ -274,12 +274,13 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @param time {Number} The global time within the engine.
     */
    update: function(renderContext, time) {
-      renderContext.pushTransform();
       var p = 1;
       this.lastTime = time;
       if (this.particles.length == 0) {
          return;
       }
+
+      renderContext.pushTransform();
 
       // Using Duff's device with loop inversion for speed
       switch((this.particles.length - 1) & 0x3) {
