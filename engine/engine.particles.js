@@ -202,7 +202,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       this.sortParticles();
       for (var p in this.particles) {
          // Find first available slot and insert the particle
-         if (!this.particles[p]) {
+         if (this.particles[p] == null) {
             this.particles[p] = particle;
             this.force = 0;
             break;
@@ -226,7 +226,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          return;
       }
       particle.init(this, this.lastTime);
-      Engine.addMetric("particles", this.particles.length, true, "#");
+      Engine.addMetric("particles", i, true, "#");
    },
    
    /**
