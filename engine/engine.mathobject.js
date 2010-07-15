@@ -52,6 +52,12 @@ Engine.initObject("MathObject", "PooledObject", function() {
  */
 var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
 
+   constructor: function(name) {
+      if (MathObject.transient) {
+         this.base(name);
+      }
+   },
+
    /**
     * Destroy this object instance (remove it from the Engine).  The object's release
     * method is called after destruction so it will be returned to the pool of objects 
