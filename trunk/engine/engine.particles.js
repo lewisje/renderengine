@@ -52,7 +52,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
    life: 0,
    engine: null,
    birth: 0,
-	dead: false,
+   dead: false,
 
    /**
     * @private
@@ -61,7 +61,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       this.base("Particle");
       this.life = lifetime;
       this.birth = 0;
-		this.dead = false;
+      this.dead = false;
    },
 
    /**
@@ -72,7 +72,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       this.life = 0;
       this.engine = null;
       this.birth = 0;
-		this.dead = true;
+      this.dead = true;
    },
 
    /**
@@ -85,7 +85,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       this.engine = pEngine;
       this.life += time;
       this.birth = time;
-		this.dead = false;
+      this.dead = false;
    },
 
    /**
@@ -99,9 +99,9 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
          renderContext.pushTransform();
          this.draw(renderContext, time);
          renderContext.popTransform();
-			return true;
+         return true;
       } else {
-			return false;
+         return false;
       }
    },
 
@@ -161,8 +161,8 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 
    particles: null,
    lastTime: 0,
-	maximum: 0,
-	force: 0,
+   maximum: 0,
+   force: 0,
 
    /**
     * @private
@@ -170,19 +170,19 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
    constructor: function() {
       this.base("ParticleEngine");
       this.particles = [];
-		this.maximum = ParticleEngine.MAX_PARTICLES;
+      this.maximum = ParticleEngine.MAX_PARTICLES;
    },
 
-	/**
-	 * @private
-	 */
-	destroy: function() {
-		while (this.particles.length > 0) {
-			var p = this.particles.shift();
-			if (p) p.destroy();
-		}
-		this.base();
-	},	
+   /**
+    * @private
+    */
+   destroy: function() {
+      while (this.particles.length > 0) {
+         var p = this.particles.shift();
+         if (p) p.destroy();
+      }
+      this.base();
+   }, 
 
    /**
     * Releases the object back into the pool.
@@ -191,7 +191,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       this.base();
       this.particles = null,
       this.lastTime = 0;
-		this.maximum = 0;
+      this.maximum = 0;
    },
 
    /**
@@ -200,71 +200,71 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @param particle {Particle} A particle to animate
     */
    addParticle: function(particle) {
-		var i = 0;
-		this.sortParticles();
-		for (var p in this.particles) {
-			// Find first available slot and insert the particle
-			if (!this.particles[p]) {
-				this.particles[p] = particle;
-				this.force = 0;
-				break;
-			}
-			i++;
-		}
-		if (i == this.particles.length && this.particles.length < this.maximum) {
-			// If there are no available slots, add to the list until
-			// we've hit the maximum the engine will support
-	      this.particles.push(particle);
-			this.force = 0;
-		} else if (i == this.maximum) {
-			// If there are no free slots, insert new particles 
-			// at the beginning of the list
-			this.particles[this.force].destroy();
-			this.particles[this.force] = particle;
-			this.force++;
-			return;
-		}
+      var i = 0;
+      this.sortParticles();
+      for (var p in this.particles) {
+         // Find first available slot and insert the particle
+         if (!this.particles[p]) {
+            this.particles[p] = particle;
+            this.force = 0;
+            break;
+         }
+         i++;
+      }
+      if (i == this.particles.length && this.particles.length < this.maximum) {
+         // If there are slots available, add the particle
+         // and reset the override pointer
+         this.particles.push(particle);
+         this.force = 0;
+      } else if (i == this.maximum) {
+         // If there are no free slots, insert new particles 
+         // at the beginning of the list
+         this.particles[this.force].destroy();
+         this.particles[this.force] = particle;
+         this.force = this.force++ > (this.maximum - 1) ? 0 : this.force;
+         return;
+      }
       particle.init(this, this.lastTime);
       Engine.addMetric("particles", this.particles.length, true, "#");
    },
-	
-	/**
-	 * Set the absolute maximum number of particles the engine will allow.
-	 * @param maximum {Number} The maximum particles the particle engine allows
-	 */
-	setMaximum: function(maximum) {
-		this.maximum = maximum;
-	},
-	
-	/**
-	 * Get the maximum number of particles allowed in the particle engine.
-	 * @return {Number}
-	 */
-	getMaximum: function() {
-		return this.maximum;
-	},
-	
-	/**
-	 * Sort live particles to the beginning of the list, ordered by remaining life
-	 * @private
-	 */
-	sortParticles: function() {
-		this.particles.sort(function(a,b) {
-			return a && b ? (a.getTTL() - Engine.worldTime) - (b.getTTL() - Engine.worldTime) : !a ? 1 : b ? -1 : 0;
-		});
-	},
+   
+   /**
+    * Set the absolute maximum number of particles the engine will allow.
+    * @param maximum {Number} The maximum particles the particle engine allows
+    */
+   setMaximum: function(maximum) {
+      this.maximum = maximum;
+   },
+   
+   /**
+    * Get the maximum number of particles allowed in the particle engine.
+    * @return {Number}
+    */
+   getMaximum: function() {
+      return this.maximum;
+   },
+   
+   /**
+    * Sort live particles to the beginning of the list, ordered by remaining life
+    * @private
+    */
+   sortParticles: function() {
+      this.particles.sort(function(a,b) {
+         return a && b ? (a.getTTL() - Engine.worldTime) - (b.getTTL() - Engine.worldTime) : !a ? 1 : b ? -1 : 0;
+      });
+   },
 
-	/**
-	 * Update a particle, removing it and nulling its reference
-	 * if it is dead.  Only live particles are updated
-	 * @private
-	 */
-	runParticle: function(idx, renderContext, time) {
-		if (this.particles[idx] !== null && !this.particles[idx].update(renderContext, time)) {
-			this.particles[idx].destroy();
-			this.particles[idx] = null;
-		}
-	},
+   /**
+    * Update a particle, removing it and nulling its reference
+    * if it is dead.  Only live particles are updated
+    * @private
+    */
+   runParticle: function(idx, renderContext, time) {
+      if (this.particles[idx] !== null && !this.particles[idx].update(renderContext, time)) {
+         this.particles[idx].destroy();
+         this.particles[idx] = null;
+      }
+   },
 
    /**
     * Update the particles within the render context, and for the specified time.
@@ -323,13 +323,13 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
    getClassName: function() {
       return "ParticleEngine";
    },
-	
-	/**
-	 * Default maximum number of particles in the system. To change
-	 * the value, see {@link ParticleEngine#setMaximum}
-	 * @type Number
-	 */
-	MAX_PARTICLES: 120
+   
+   /**
+    * Default maximum number of particles in the system. To change
+    * the value, see {@link ParticleEngine#setMaximum}
+    * @type Number
+    */
+   MAX_PARTICLES: 120
 });
 
 return ParticleEngine;
