@@ -250,7 +250,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     */
    sortParticles: function() {
       this.particles.sort(function(a,b) {
-         return a && b ? (a.getTTL() - Engine.worldTime) - (b.getTTL() - Engine.worldTime) : !a ? 1 : b ? -1 : 0;
+         return a && b ? (a.getTTL() - Engine.worldTime) - (b.getTTL() - Engine.worldTime) : !a ? 1 : !b ? -1 : 0;
       });
    },
 
