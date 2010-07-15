@@ -281,7 +281,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
             break;
          }
       }
-      Engine.addMetric("particles", live, true, "#");
+      Engine.addMetric("particles", live, false, "#");
       if (live == 0) {
          return;
       }
