@@ -273,7 +273,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @param time {Number} The global time within the engine.
     */
    update: function(renderContext, time) {
-      var p = 1,live;
+      var p = 1,live=0;
       this.lastTime = time;
       for (live in this.particles) {
          if (this.particles[live] == null) {
