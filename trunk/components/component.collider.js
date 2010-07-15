@@ -132,26 +132,28 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
       // Get the model data for the object
       var obj = this.getHostObject();
-      if (!obj.ModelData)
-      {
+      if (!obj.ModelData) {
          obj.ModelData = { lastNode: null };
       }
 
-      if ( obj.ModelData.lastNode && obj.ModelData.lastNode.getRect().containsPoint(obj.getPosition()) )
-      {
+      if ( obj.ModelData.lastNode !==null && obj.ModelData.lastNode.getRect().containsPoint(obj.getPosition()) ) {
          // The object is within the same node
          return;
       }
 
       // Find the node that contains the object
       var aNode = this.getCollisionModel().findNodePoint(obj.getPosition());
-      if (aNode != null)
-      {
-         if (obj.ModelData.lastNode && (obj.ModelData.lastNode.getIndex() != aNode.getIndex()))
-         {
+      if (aNode != null) {
+         if (obj.ModelData.lastNode !==null && (obj.ModelData.lastNode.getIndex() != aNode.getIndex())) {
+				// If the last node the object was in isn't the same as the node its position is in,
+				// remove it from the old node and add it to the new node
             obj.ModelData.lastNode.removeObject(obj);
             aNode.addObject(obj);
-         }
+         } else if (obj.ModelData.lastNode === null) {
+				// If the last node isn't specified, make sure to add it to the node
+				aNode.addObject(obj);
+			}
+			
          obj.ModelData.lastNode = aNode;
       }
    },
@@ -192,7 +194,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
                 (this.getObjectType() == null || this.getObjectType().isInstance(obj)) &&
                 status == ColliderComponent.CONTINUE)
             {
-               status = this.testCollision(time, obj);
+               status = this.testCollision(time, obj); 
             }
          }, this);
       }
