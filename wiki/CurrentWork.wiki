@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+_07/16/2010_ In addition to other fixes, the particle engine has been revamped a bit and optimized to use native methods where possible.  Overall, it should run faster and cleaner than it did before.  v1.0 RC2 is looking to be "on track" for a release next week.  The bug which was causing Chrome to fail was a part of the particle engine and has since been fixed.
+
 _07/14/2010_ *Tagged v1.0 RC1* There's one small enhancement that will show up in RC2 along with bugs identified in RC1 but, other than that, _no new features will be added_.  Everything that the engine has today, it will have in the v1.0 release.  Demos and tutorials are running from a b1.4 stabilized branch in the repository so that trunk updates won't impact them.
 
 _07/13/2010_ I had to revert to revision 994 from the repository to get the examples running again.  I guess I should change the examples to run from a stable version, eh?  Anyways, the concurrency issue still exists in FF4.0b1 which is really driving me nuts.  I will continue to look at the issue and see if I can't get a resolution in there.  It's a shame because FF4.0b1's JS engine seems so promising.  Plus, a small bug has made itself known in Chrome...
