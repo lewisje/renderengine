@@ -215,7 +215,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     */
    getObjectsOfType: function(clazz) {
       return EngineSupport.filter(this.getObjects(), function(obj) {
-         return obj.isInstance(clazz);
+         return clazz.isInstance(obj);
       }, this);
    }
 
