@@ -403,7 +403,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 
       // Clean up particle list
       this.particles.length = this.maximum;
-      for (var u = this.maximum - this.particles.length; u < this.maximum; u++) {
+      for (var u = this.liveParticles; u < this.maximum; u++) {
          this.particles[u] = null;
       }
    },
