@@ -159,6 +159,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 
    particles: null,
    liveParticles: 0,
+   deadParticles: 0,
    lastTime: 0,
    maximum: 0,
    force: 0,
@@ -176,6 +177,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          this.particles[u] = null;
       }
       this.liveParticles = 0;
+      this.deadParticles = 0;
    },
 
    /**
@@ -198,6 +200,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       this.lastTime = 0;
       this.maximum = 0;
       this.liveParticles = 0;
+      this.deadParticles = 0;
    },
 
    /**
@@ -245,6 +248,9 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
             this.particles[u] = null;
          }
       
+         // The maximum number of particles to animate
+         this.liveParticles = i + particleArray.length;
+      
       } else {
          // There aren't enough free slots. Split the operation into two
          // calls.  The first will insert what we can fit without forcing
@@ -277,6 +283,9 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
                oldParticles[o].destroy();
             }
          }
+         
+         // The maximum number of particles to animate
+         this.liveParticles = this.maximum;
       }
    },
 
@@ -339,6 +348,8 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       if (this.particles[idx] != null && !this.particles[idx].update(renderContext, time)) {
          this.particles[idx].destroy();
          this.particles[idx] = null;
+         
+         this.deadParticles++;
       }
    },
 
@@ -352,17 +363,20 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       var p = 1;
       this.lastTime = time;
 
-      //Engine.addMetric("particles", this.getLiveParticles(), false, "#");
+      Engine.addMetric("particles", this.liveParticles, false, "#");
       
       // If there are no live particles, don't do anything
-      //if (this.liveParticles == 0) {
-      //   return;
-      //}
+      if (this.liveParticles == 0) {
+         return;
+      }
+
+      // We'll count up how many particles die
+      this.deadParticles = 0;
 
       renderContext.pushTransform();
 
       // Using Duff's device with loop inversion for speed
-      switch((this.particles.length - 1) & 0x3) {
+      switch((this.liveParticles) & 0x3) {
          case 3:
             this.runParticle(p++,renderContext,time);
          case 2:
@@ -371,17 +385,21 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
             this.runParticle(p++,renderContext,time);
       }
 
-      if (p < this.particles.length) {
+      if (p < this.liveParticles) {
          do
          {
             this.runParticle(p++,renderContext,time);
             this.runParticle(p++,renderContext,time);
             this.runParticle(p++,renderContext,time);
             this.runParticle(p++,renderContext,time);
-         } while (p < this.particles.length);
+         } while (p < this.liveParticles);
       }
       
       renderContext.popTransform();
+      
+      // Subtract the dead particles from the live so we can update
+      // only when necessary
+      this.liveParticles -= this.deadParticles;
    },
 
    /**
