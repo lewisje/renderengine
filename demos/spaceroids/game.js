@@ -225,6 +225,12 @@ var Spaceroids = Game.extend({
 
       // Start up a particle engine
       this.pEngine = ParticleEngine.create();
+      
+      if (EngineSupport.sysInfo().browser == "chrome") {
+         // Chrome can handle a LOT!
+         this.pEngine.setMaximum(5000);
+      }
+      
       this.renderContext.add(this.pEngine);
 
       this.addHiScore();
