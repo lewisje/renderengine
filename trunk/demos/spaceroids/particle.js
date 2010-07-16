@@ -81,7 +81,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
     */
    draw: function(renderContext, time) {
       if (this.decel > 0 && this.vec.len() > 0) {
-         var invVel = Vector2D.create(this.vel).neg();
+         var invVel = Vector2D.create(this.vec).neg();
          invVel.mul(this.decel);
          this.vec.add(invVel);
          invVel.destroy();
