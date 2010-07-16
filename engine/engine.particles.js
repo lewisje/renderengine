@@ -397,9 +397,21 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       
       renderContext.popTransform();
       
-      // Subtract the dead particles from the live so we can update
-      // only when necessary
-      this.liveParticles -= this.deadParticles;
+      if (this.deadParticles > 0) {
+         // Subtract the dead particles from the live so we can update
+         // only when necessary.  Collapse the particles so that the
+         // nulls are at the end
+         this.liveParticles -= this.deadParticles;
+         this.particles = EngineSupport.filter(this.particles, function(v) {
+            return (v != null);
+         });
+         
+         // Clean up particle list
+         this.particles.length = this.maximum;
+         for (var u = this.maximum - this.particles.length; u < this.maximum; u++) {
+            this.particles[u] = null;
+         }
+      }
    },
 
    /**
