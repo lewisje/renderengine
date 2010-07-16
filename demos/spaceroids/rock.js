@@ -243,10 +243,12 @@ var SpaceroidsRock = Object2D.extend({
          pCount = 80;
       }
 
+      var p = [];
       for (var x = 0; x < pCount; x++)
       {
-         Spaceroids.pEngine.addParticle(SimpleParticle.create(this.getPosition()));
+         p.push(SimpleParticle.create(this.getPosition()));
       }
+      Spaceroids.pEngine.addParticles(p);
 
       Spaceroids.blinkScreen();
       Spaceroids.rocks--;

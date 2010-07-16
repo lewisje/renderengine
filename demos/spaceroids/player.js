@@ -59,13 +59,13 @@ var SpaceroidsPlayer = Object2D.extend({
    playerShape: null,
    nukes: null,
    nuking: null,
-	pBox: null,
-	
-	rec: false,
+   pBox: null,
+   
+   rec: false,
 
    constructor: function() {
       this.base("Player");
-		this.rec = false;
+      this.rec = false;
 
       this.field = Spaceroids;
 
@@ -76,9 +76,9 @@ var SpaceroidsPlayer = Object2D.extend({
          this.add(KeyboardInputComponent.create("input"));
 //      }
 
-		if (Spaceroids.rec) {
-			this.getComponent("input").startRecording();
-		}
+      if (Spaceroids.rec) {
+         this.getComponent("input").startRecording();
+      }
 
 
       this.add(Mover2DComponent.create("move"));
@@ -96,15 +96,15 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("move").setCheckLag(false);
       this.nukes = 1;
       this.nuking = false;
-		this.pBox = Rectangle2D.create(0,0,1,1);
+      this.pBox = Rectangle2D.create(0,0,1,1);
    },
 
    destroy: function() {
       if (this.ModelData && this.ModelData.lastNode) {
          this.ModelData.lastNode.removeObject(this);
       }
-		this.tip.destroy();
-		this.pBox.destroy();
+      this.tip.destroy();
+      this.pBox.destroy();
       this.base();
    },
 
@@ -120,7 +120,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.playerShape = null;
       this.nukes = null;
       this.nuking = null;
-		this.pBox = null;
+      this.pBox = null;
    },
 
    /**
@@ -134,10 +134,10 @@ var SpaceroidsPlayer = Object2D.extend({
     */
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
-		var p = Point2D.create(c_mover.getPosition());
+      var p = Point2D.create(c_mover.getPosition());
       c_mover.setPosition(this.field.wrap(p, this.getBoundingBox()));
       c_mover.setRotation(c_mover.getRotation() + this.rotDir);
-		p.destroy();
+      p.destroy();
 
       if (this.thrusting)
       {
@@ -151,9 +151,9 @@ var SpaceroidsPlayer = Object2D.extend({
             var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
             var colr = SpaceroidsPlayer.trailColors[Math.floor(Math2.random() * 3)];
             this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
-				inv.destroy();
+            inv.destroy();
          }
-			dir.destroy();
+         dir.destroy();
       } else {
          c_mover.setAcceleration(Point2D.ZERO);
       }
@@ -175,21 +175,21 @@ var SpaceroidsPlayer = Object2D.extend({
       for (var l = 0; l <= this.players; l++) {
          renderContext.pushTransform();
          renderContext.setScale(0.7);
-			var dp = Point2D.create(posX, 60);
+         var dp = Point2D.create(posX, 60);
          renderContext.setPosition(dp);
          renderContext.drawPolygon(this.playerShape);
          renderContext.popTransform();
          posX -= 20;
-			dp.destroy();
+         dp.destroy();
       }
       
       // If they have their nuke, draw that too
       if (Spaceroids.evolved && this.nukes > 0) {
          renderContext.pushTransform();
-			var dr = Rectangle2D.create(70, 35, 6, 6);
+         var dr = Rectangle2D.create(70, 35, 6, 6);
          renderContext.drawRectangle(dr);
          renderContext.popTransform();
-			dr.destroy();
+         dr.destroy();
       }
    },
 
@@ -372,13 +372,15 @@ var SpaceroidsPlayer = Object2D.extend({
       var pCount = Spaceroids.evolved ? 40 : 8;
 
       // Make some particles
+      var p = [];
       for (var x = 0; x < pCount; x++)
       {
          if (Spaceroids.evolved) {
-            this.field.pEngine.addParticle(TrailParticle.create(this.getPosition(), this.getRotation(), 45, "#ffffaa", 2000));
+            p.push(TrailParticle.create(this.getPosition(), this.getRotation(), 45, "#ffffaa", 2000));
          }
-         this.field.pEngine.addParticle(SimpleParticle.create(this.getPosition(), 3000));
+         p.push(SimpleParticle.create(this.getPosition(), 3000));
       }
+      this.field.pEngine.addParticles(p);
 
       this.getComponent("move").setVelocity(Point2D.ZERO);
       this.getComponent("move").setPosition(this.getRenderContext().getBoundingBox().getCenter());
@@ -440,14 +442,14 @@ var SpaceroidsPlayer = Object2D.extend({
          self.getComponent("draw").setDrawMode(RenderComponent.DRAW);
          self.alive = true;
          self.hyperjump = false;
-			randPt.destroy();
+         randPt.destroy();
       });
    },
    
-	/**
-	 * Nuke everything on the screen, causing any rocks to split if they
-	 * are above the smallest size.
-	 */
+   /**
+    * Nuke everything on the screen, causing any rocks to split if they
+    * are above the smallest size.
+    */
    nuke: function() {
       if (this.nukes-- <= 0 || this.nuking) {
          return;
@@ -456,10 +458,12 @@ var SpaceroidsPlayer = Object2D.extend({
       var p = this;
       var t = MultiTimeout.create("particles", 3, 150, function(rep) {
          // Make some particles
+         var n = [];
          for (var x = 0; x < 60; x++)
          {
-            p.field.pEngine.addParticle(TrailParticle.create(p.getPosition(), p.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
+            n.push(TrailParticle.create(p.getPosition(), p.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
          }
+         p.field.pEngine.addParticles[n];
       });
       
       for (var g in Engine.gameObjects) {
@@ -490,7 +494,7 @@ var SpaceroidsPlayer = Object2D.extend({
             this.shoot();
          }
       }
-		
+      
       switch (event.keyCode) {
          case EventEngine.KEYCODE_LEFT_ARROW:
             this.rotDir = -5;
@@ -500,9 +504,9 @@ var SpaceroidsPlayer = Object2D.extend({
             break;
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.DRAW);
-				if (!this.thrusting) {
-	            this.field.soundLoader.get("thrust").play({volume: 30});
-				}
+            if (!this.thrusting) {
+               this.field.soundLoader.get("thrust").play({volume: 30});
+            }
             this.thrusting = true;
             break;
          case EventEngine.KEYCODE_SPACE:
