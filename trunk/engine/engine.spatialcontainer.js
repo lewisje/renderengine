@@ -198,6 +198,25 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     */
    getPCL: function(point) {
       return new HashContainer();
+   },
+
+   /**
+    * Returns all objects within the spatial container.
+    * @return {Array} An array of all objects in the container
+    */
+   getObjects: function() {
+      return [];
+   },
+   
+   /**
+    * Returns all objects within the spatial container of a particular
+    * class type.
+    * @return {Array} An array of objects in the container, filtered by class
+    */
+   getObjectsOfType: function(clazz) {
+      return EngineSupport.filter(this.getObjects(), function(obj) {
+         return obj.isInstance(clazz);
+      }, this);
    }
 
 }, /** @scope SpatialContainer.prototype */{ 

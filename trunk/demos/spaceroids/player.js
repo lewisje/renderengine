@@ -463,14 +463,15 @@ var SpaceroidsPlayer = Object2D.extend({
          {
             n.push(TrailParticle.create(p.getPosition(), p.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
          }
-         p.field.pEngine.addParticles[n];
+         p.field.pEngine.addParticles(n);
       });
       
-      for (var g in Engine.gameObjects) {
-         if (SpaceroidsRock.isInstance(Engine.gameObjects[g])) {
-            Engine.gameObjects[g].kill();
-         }
-      }
+      
+      var rocks = this.field.collisionModel.getObjectsOfType(SpaceroidsRock);
+      EngineSupport.forEach(rocks, function(r) {
+         r.kill();
+      });
+
       this.nuking = false;
    },
 

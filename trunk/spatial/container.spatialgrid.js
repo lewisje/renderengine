@@ -3,8 +3,8 @@
  * SpatialGrid
  *
  * @fileoverview A simple collision model which divides a finite space up into 
- * 				  a coarse grid to assist in quickly finding objects within that
- * 				  space.
+ *               a coarse grid to assist in quickly finding objects within that
+ *               space.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -41,9 +41,9 @@ Engine.initObject("GridNode", "SpatialNode", function() {
 
 /**
  * @class A single node within a SpatialGrid.  When the collision model is
- * 		 updated, the nodes within the grid will be updated to reflect the
- * 		 objects within it.  A node defines a single rectangle within the
- * 		 entire {@link SpatialGrid}
+ *        updated, the nodes within the grid will be updated to reflect the
+ *        objects within it.  A node defines a single rectangle within the
+ *        entire {@link SpatialGrid}
  *
  * @extends SpatialNode
  * @constructor
@@ -54,9 +54,9 @@ var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
 
    rect: null,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(rect) {
       this.base();
       this.rect = rect;
@@ -108,9 +108,9 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
    
    accuracy: 1,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(width, height, divisions) {
       this.base("SpatialGrid", width, height);
 
@@ -145,24 +145,24 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       this.yLocator = 1;
    },
 
-	/**
-	 * Set the accuracy of the collision checks to either {@link SpatialGrid#GOOD_ACCURACY} or
-	 * {@link SpatialGrid#BEST_ACCURACY}.
-	 * 
-	 * @param accuracy {Number} The level of accuracy during PCL generation
-	 */
-	setAccuracy: function(accuracy) {
-		this.accuracy = (accuracy > SpatialGrid.BEST_ACCURACY || accuracy < SpatialGrid.GOOD_ACCURACY) ? 
-			SpatialGrid.BEST_ACCURACY : accuracy;
-	},
-	
-	/**
-	 * Get the accuracy level of collision checks.
-	 * @return {Number} The accuracy level
-	 */
-	getAccuracy: function() {
-		return this.accuracy;
-	},
+   /**
+    * Set the accuracy of the collision checks to either {@link SpatialGrid#GOOD_ACCURACY} or
+    * {@link SpatialGrid#BEST_ACCURACY}.
+    * 
+    * @param accuracy {Number} The level of accuracy during PCL generation
+    */
+   setAccuracy: function(accuracy) {
+      this.accuracy = (accuracy > SpatialGrid.BEST_ACCURACY || accuracy < SpatialGrid.GOOD_ACCURACY) ? 
+         SpatialGrid.BEST_ACCURACY : accuracy;
+   },
+   
+   /**
+    * Get the accuracy level of collision checks.
+    * @return {Number} The accuracy level
+    */
+   getAccuracy: function() {
+      return this.accuracy;
+   },
 
    /**
     * Find the node that contains the specified point.
@@ -210,17 +210,17 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       var x = Math.floor(point.x * this.xLocator);
       var y = Math.floor(point.y * this.yLocator);
 
-		// build the node set
+      // build the node set
       var nodes = [];
       nodes.push(this.getNode(x, y));
-	  
+     
       // if our borders cross the margin, we can drop up to two nodes
-		if (this.accuracy == SpatialGrid.BEST_ACCURACY) {
-			if (x > 0) { nodes.push(this.getNode(x - 1, y)); }
-			if (x < this.divisions) { nodes.push(this.getNode(x + 1, y)); }
-			if (y > 0) { nodes.push(this.getNode(x, y - 1)); }
-			if (y < this.divisions) { nodes.push(this.getNode(x, y + 1)); }
-		}
+      if (this.accuracy == SpatialGrid.BEST_ACCURACY) {
+         if (x > 0) { nodes.push(this.getNode(x - 1, y)); }
+         if (x < this.divisions) { nodes.push(this.getNode(x + 1, y)); }
+         if (y > 0) { nodes.push(this.getNode(x, y - 1)); }
+         if (y < this.divisions) { nodes.push(this.getNode(x, y + 1)); }
+      }
 
       var o = [];
       if (nodes.length > 0)
@@ -234,6 +234,18 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
          }
       }
       return o;
+   },
+   
+   /**
+    * Returns all objects within every node of the spatial grid.
+    * @return {Array} An array of all objects in the spatial grid
+    */
+   getObjects: function() {
+      var objs = [];
+      EngineSupport.forEach(this.getRoot(), function(node) {
+         objs.concat(node.getObjects());
+      });
+      return objs;
    }
 
 }, /** @scope SpatialGrid.prototype */{
