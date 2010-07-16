@@ -46,8 +46,9 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
 
    pos: null,
    vec: null,
+   decel: 0,
 
-   constructor: function(pos, ttl) {
+   constructor: function(pos, ttl, decel) {
       this.base(ttl || 2000);
       this.pos = Point2D.create(pos);
 
@@ -55,6 +56,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, SimpleParticle.ref, a);
       var vel = 1 + (Math2.random() * 2);
       this.vec.mul(vel);
+      this.decel = decel;
    },
 
    destroy: function() {
@@ -67,6 +69,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       this.base();
       this.pos = null;
       this.vec = null;
+      this.decel = 0;
    },
 
    /**
@@ -77,6 +80,13 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
     * @param time {Number} The engine time in milliseconds
     */
    draw: function(renderContext, time) {
+      if (this.decel > 0 && this.vec.len() > 0) {
+         var invVel = Vector2D.create(this.vel).neg();
+         invVel.mul(this.decel);
+         this.vec.add(invVel);
+         invVel.destroy();
+      }
+      
       this.pos.add(this.vec);
       //renderContext.setPosition(this.pos);
 
