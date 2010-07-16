@@ -159,7 +159,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 
    particles: null,
    liveParticles: 0,
-   deadParticles: 0,
    lastTime: 0,
    maximum: 0,
    force: 0,
@@ -177,7 +176,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          this.particles[u] = null;
       }
       this.liveParticles = 0;
-      this.deadParticles = 0;
    },
 
    /**
@@ -200,7 +198,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       this.lastTime = 0;
       this.maximum = 0;
       this.liveParticles = 0;
-      this.deadParticles = 0;
    },
 
    /**
@@ -348,8 +345,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       if (this.particles[idx] != null && !this.particles[idx].update(renderContext, time)) {
          this.particles[idx].destroy();
          this.particles[idx] = null;
-         
-         this.deadParticles++;
       }
    },
 
@@ -369,9 +364,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       if (this.liveParticles == 0) {
          return;
       }
-
-      // We'll count up how many particles die
-      this.deadParticles = 0;
 
       renderContext.pushTransform();
 
@@ -397,20 +389,19 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       
       renderContext.popTransform();
       
-      if (this.deadParticles > 0) {
-         // Subtract the dead particles from the live so we can update
-         // only when necessary.  Collapse the particles so that the
-         // nulls are at the end
-         this.liveParticles -= this.deadParticles;
-         this.particles = EngineSupport.filter(this.particles, function(v) {
-            return (v != null);
-         });
-         
-         // Clean up particle list
-         this.particles.length = this.maximum;
-         for (var u = this.maximum - this.particles.length; u < this.maximum; u++) {
-            this.particles[u] = null;
-         }
+      // Subtract the dead particles from the live so we can update
+      // only when necessary.  Collapse the particles so that the
+      // nulls are at the end
+      this.particles = EngineSupport.filter(this.particles, function(v) {
+         return (v != null);
+      });
+      
+      this.liveParticles = this.particles.length;
+
+      // Clean up particle list
+      this.particles.length = this.maximum;
+      for (var u = this.maximum - this.particles.length; u < this.maximum; u++) {
+         this.particles[u] = null;
       }
    },
 
