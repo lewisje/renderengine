@@ -307,7 +307,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @private
     */
    runParticle: function(idx, renderContext, time) {
-      if (this.particles[idx] !== null && !this.particles[idx].update(renderContext, time)) {
+      if (this.particles[idx] != null && !this.particles[idx].update(renderContext, time)) {
          this.particles[idx].destroy();
          this.particles[idx] = null;
       }
