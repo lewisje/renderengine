@@ -261,7 +261,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          if (avail > 0) {
             // Insert what we can
             this.particles.length = i;
-            this.particles.concat(particleArray.slice(0, avail));
+            this.particles = this.particles.concat(particleArray.slice(0, avail));
             particleArray = particleArray.slice(avail);
 
             // Clean up the particle array
