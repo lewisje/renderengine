@@ -283,6 +283,9 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
                oldParticles[o].destroy();
             }
          }
+         
+         // Resort the particles
+         this.sortParticles();
       }
    },
 
