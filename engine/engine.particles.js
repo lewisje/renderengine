@@ -170,6 +170,11 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       this.base("ParticleEngine");
       this.particles = [];
       this.maximum = ParticleEngine.MAX_PARTICLES;
+      
+      // Initialize the particles
+      for (var u = 0; u < this.maximum; u++) {
+         this.particles[u] = null;
+      }
       this.liveParticles = 0;
    },
 
@@ -201,7 +206,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @param particleArray {Particle[]} A group of particles to add at one time
     */
    addParticles: function(particleArray) {
-      var i = 0;
+      var i = 0,u;
       
       // If the new particles exceed the size of the engine's
       // maximum, truncate the remainder
@@ -231,8 +236,14 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
       // the engine
       if (i + particleArray.length < this.maximum) {
          // There's enough space, bulk add the particles
-         this.particles.splice(i, 0, particleArray);
+         this.particles.length = i;
+         this.particles = this.particles.concat(particleArray);
+         
+         // Clean up the particle array
          this.particles.length = this.maximum;
+         for (u = i + particleArray.length; u < this.maximum; u++) {
+            this.particles[u] = null;
+         }
       
       } else {
          // There aren't enough free slots. Split the operation into two
@@ -243,8 +254,15 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          var avail = this.maximum - i;
          if (avail > 0) {
             // Insert what we can
-            this.particles.splice(i, 0, particleArray.slice(0, avail));
+            this.particles.length = i;
+            this.particles.concat(particleArray.slice(0, avail));
             particleArray = particleArray.slice(avail);
+
+            // Clean up the particle array
+            this.particles.length = this.maximum;
+            for (u = i + particleArray.length; u < this.maximum; u++) {
+               this.particles[u] = null;
+            }
          }
          
          // Take the remainder of the particles and force into
@@ -252,7 +270,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          // destroying them
          if (particleArray.length > 0) {
             var oldParticles = this.particles.splice(0, particleArray.length);
-            this.particles.splice(0, 0, particleArray);
+            this.particles = particleArray.concat(this.particles);
 
             // Destroy the particles which were forced out
             for (var o in oldParticles) {
@@ -278,7 +296,18 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @param maximum {Number} The maximum particles the particle engine allows
     */
    setMaximum: function(maximum) {
+      var oldMax = this.maximum;
       this.maximum = maximum;
+      
+      // Adjust the particle array
+      if (this.maximum < oldMax) {
+         this.particles.length = this.maximum;
+      } else if (this.maximum > oldMax) {
+         // Add new empty slots
+         for (var u = oldMax; u < this.maximum; u++) {
+            this.particles[u] = null;
+         }
+      }
    },
    
    /**
