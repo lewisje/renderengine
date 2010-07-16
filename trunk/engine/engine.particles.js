@@ -234,6 +234,12 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          particleArray[n].init(this, this.lastTime);
       }
       
+      // The maximum number of particles to animate
+      this.liveParticles += particleArray.length;
+      if (this.liveParticles > this.maximum) {
+         this.liveParticles = this.maximum;
+      }
+      
       // If the remaining slots of the array will contain the entire group of
       // particles, we can use some native methods to speed up adding them to
       // the engine
@@ -247,9 +253,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
          for (u = i + particleArray.length; u < this.maximum; u++) {
             this.particles[u] = null;
          }
-      
-         // The maximum number of particles to animate
-         this.liveParticles = i + particleArray.length;
       
       } else {
          // There aren't enough free slots. Split the operation into two
@@ -283,9 +286,6 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
                oldParticles[o].destroy();
             }
          }
-         
-         // The maximum number of particles to animate
-         this.liveParticles = this.maximum;
       }
    },
 
