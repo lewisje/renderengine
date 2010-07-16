@@ -246,7 +246,7 @@ var SpaceroidsRock = Object2D.extend({
       var p = [];
       for (var x = 0; x < pCount; x++)
       {
-         var decel = Spaceroids.evolved ? Math2.random() * 0.4 : 0;
+         var decel = Spaceroids.evolved ? Math2.random() : 0;
          p.push(SimpleParticle.create(this.getPosition(), 2000, decel));
       }
       Spaceroids.pEngine.addParticles(p);
