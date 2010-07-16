@@ -54,7 +54,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
 
       var a = Math.floor(Math2.random() * 360);
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, SimpleParticle.ref, a);
-      var vel = 1 + (Math2.random() * 2);
+      var vel = 1 + (Math2.random() * (Spaceroids.evolved ? 4 : 2));
       this.vec.mul(vel);
       this.decel = decel;
    },
