@@ -243,7 +243,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
    getObjects: function() {
       var objs = [];
       EngineSupport.forEach(this.getRoot(), function(node) {
-         objs.concat(node.getObjects());
+         objs = objs.concat(node.getObjects());
       });
       return objs;
    }
