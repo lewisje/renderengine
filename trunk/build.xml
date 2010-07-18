@@ -1,4 +1,4 @@
-<project name="The Render Engine" default="engine.dist" basedir=".">
+<project name="The Render Engine" default="dist" basedir=".">
    <property file="build.properties"/>
  
    <property name="app.name" value="renderengine"/>
@@ -95,6 +95,19 @@
 
 		<!-- INFOS -->
 		<replaceregexp match="Console.info\(.*\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- ENGINE METRICS -->
+		<replaceregexp match="Engine.addMetric\(.*\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+		
+		<replaceregexp match="Engine.removeMetric\(.*\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
