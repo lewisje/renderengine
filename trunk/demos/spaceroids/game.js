@@ -156,13 +156,7 @@ var Spaceroids = Game.extend({
       title.setColor("#ffffff");
       this.renderContext.add(title);
 
-      var copy;
-      
-      if (EngineSupport.checkBooleanParam("evolved")) {
-         copy = TextRenderer.create(VectorText.create(), "&copy;2009 Brett Fattori", 0.6);
-      } else {
-         copy = TextRenderer.create(VectorText.create(), "&copy;1979 Atari Games", 0.6);
-      }
+      var copy = TextRenderer.create(VectorText.create(), "&copy;2009 Brett Fattori", 0.6);
       copy.setColor("#ffffff");
       copy.setPosition(copyPos);
       this.renderContext.add(copy);
@@ -195,7 +189,7 @@ var Spaceroids = Game.extend({
       if (EngineSupport.checkBooleanParam("evolved")) {
          Spaceroids.evolved = true;
 
-         var evolved = TextRenderer.create(VectorText.create(), "Redux", 1);
+         var evolved = TextRenderer.create(VectorText.create(), "Evolution", 1);
          evolved.setColor("#ff0000");
          evolved.setPosition(Point2D.create(290, 120));
          this.renderContext.add(evolved);
@@ -227,7 +221,7 @@ var Spaceroids = Game.extend({
       this.pEngine = ParticleEngine.create();
       
       if (EngineSupport.sysInfo().browser == "chrome") {
-         // Chrome can handle a LOT!
+         // Chrome can handle a lot of particles
          this.pEngine.setMaximum(5000);
       }
       
@@ -422,7 +416,6 @@ var Spaceroids = Game.extend({
       // Remove the player
       if (this.playerObj)
       {
-         //this.renderContext.remove(this.playerObj);
          this.playerObj.destroy();
       }
 
@@ -442,9 +435,6 @@ var Spaceroids = Game.extend({
       
       Engine.setFPS(this.engineFPS);
 
-//    this.fieldWidth *= this.areaScale;
-//    this.fieldHeight *= this.areaScale;
-
       // Create the 2D context
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
@@ -457,6 +447,7 @@ var Spaceroids = Game.extend({
       this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 7);
       this.collisionModel.setAccuracy(SpatialGrid.BEST_ACCURACY);
 
+		// Prepare for keyboard input to start the game
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
 
       // Load the sounds
@@ -468,7 +459,7 @@ var Spaceroids = Game.extend({
       this.soundLoader.load("lowboop", this.getFilePath("resources/low.mp3"));
       this.soundLoader.load("hiboop", this.getFilePath("resources/hi.mp3"));
 
-
+		// Demo recording and playback
       if (EngineSupport.checkBooleanParam("record")) {
          Spaceroids.recordDemo();
          return;
@@ -479,6 +470,7 @@ var Spaceroids = Game.extend({
          return;
       }
       
+		// Go into attract mode
       Spaceroids.attractMode();
    },
 
