@@ -136,10 +136,6 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       {
          this.sort(HostObject.componentSort);
       }
-      
-      if (HostComponent.isInstance(component)) {
-         component.set
-      }
    },
 
    /**
