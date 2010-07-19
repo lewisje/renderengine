@@ -472,6 +472,11 @@ var SpaceroidsPlayer = Object2D.extend({
       var t = Timeout.create("nukerocks", 1000, function() {
          this.destroy();
 
+         var rocks = Spaceroids.collisionModel.getObjectsOfType(SpaceroidsRock);
+         EngineSupport.forEach(rocks, function(r) {
+            r.kill();
+         });
+
          // Make some particles
          var t = MultiTimeout.create("particles", 3, 150, function(rep) {
             var n = [];
