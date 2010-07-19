@@ -10,23 +10,10 @@ The following table lists query parameters you can pass to the engine to configu
 || *Query Parameter* || *Description* ||
 || `debug` ||Set this vale to `true` to enable debugging output from the engine.  The engine will try to utilize a method best suited for the browser you are running within. ||
 || `debugLevel` || The level determines the amount of output in debugging mode.  0 = Verbose, 1 = Semi-verbose, 2 = Debug messages, 3 = Warnings, 4 = Errors.  Each level, starting at Warn(2) will also display messages of the following level.  So, Debug(1) shows Warnings and Errors too. See the article about the EngineConsole for more information. ||
-|| `metrics` ||Setting this value to `true` will enable the display of engine metrics collected during runtime.  You can use these values to tune your game. See the list below for metric values. ||
+|| `metrics` ||Setting this value to `true` will enable the display of engine metrics collected during runtime.  You can use these values to tune your game. See [MetricsWindow this list] for values and their meaning. ||
 || `debugSound` ||To see the sound engine initialization messages, and get a better idea of what !SoundManager2 is doing, set this value to `true`.||
 || `fps` ||The FPS to default the engine to.||
 || `simWii` || `true` to simulate running on a Wii. Uses the HTMLConsole which appears in the browser's window. ||
-
-=== Metrics Values ===
-
-The following is a list of metrics that are currently tracked by the engine:
-
-   * `FPS` - The desired engine frames per second
-   * `aFPS` - The "actual" frames per second being generated
-   * `avail` - The time available (in milliseconds) to render a frame.  This is based off of the desired `FPS`
-   * `frame` - The average time to render a frame (in milliseconds)
-   * `load` - The amount of load a frame is generating. This is the ratio between the availble frame time, and the time taken to render a frame.
-   * `visObj` - The number of visible objects in a scene
-   * `newObjs` - The number of times a new instance has been created via ObjectPooling
-   * `poolUse` - The percentage of all of the pooled objects available for use
 
 == Engine methods ==
 
