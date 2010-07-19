@@ -109,7 +109,21 @@ var SpaceroidsRock = Object2D.extend({
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
       var p = Point2D.create(c_mover.getPosition());
-      c_mover.setPosition(Spaceroids.wrap(p, this.getBoundingBox()));
+      var wP = Spaceroids.wrap(p, this.getBoundingBox());
+      if (!p.equals(wP)) {
+         c_mover.setPosition(wP);
+      }
+
+      // If the player is nuking, adjust our position depending on
+      // how close we are to the player
+      if (Spaceroids.playerObj().isNuking()) {
+         var grav = 2;
+         var dVec = Vector2D.create(Spaceroids.playerObj().getPosition()).sub(this.getPosition());
+         grav /= dVec.len();
+         p.add(dVec.mul(grav));
+         c_mover.setPosition(p);
+      }
+
       p.destroy();
 
       renderContext.pushTransform();
@@ -294,6 +308,7 @@ var SpaceroidsRock = Object2D.extend({
     */
    onCollide: function(obj) {
       if (SpaceroidsPlayer.isInstance(obj) &&
+          !Spaceroids.playerObj().isNuking() &&
           (this.getWorldBox().isIntersecting(obj.getWorldBox())))
       {
          if (obj.isAlive())

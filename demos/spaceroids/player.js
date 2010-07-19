@@ -447,6 +447,13 @@ var SpaceroidsPlayer = Object2D.extend({
    },
    
    /**
+    * Returns true if the player has initiated their nuke
+    */
+   isNuking: function() {
+      return this.nuking;
+   },
+   
+   /**
     * Nuke everything on the screen, causing any rocks to split if they
     * are above the smallest size.
     */
@@ -454,25 +461,30 @@ var SpaceroidsPlayer = Object2D.extend({
       if (this.nukes-- <= 0 || this.nuking) {
          return;
       }
+
+      // Add a shield of protection around the player and
+      // cause the nearby rocks to gravitate toward the player
       this.nuking = true;
-      var p = this;
-      var t = MultiTimeout.create("particles", 3, 150, function(rep) {
+
+      // Get all of the asteroids and adjust their direction
+      // So they are pulled toward the player gradually
+      var self = this;
+      var t = Timeout.create("nukerocks", 3000, function() {
+         this.destroy();
+
          // Make some particles
-         var n = [];
-         for (var x = 0; x < 60; x++)
-         {
-            n.push(TrailParticle.create(p.getPosition(), p.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
-         }
-         p.field.pEngine.addParticles(n);
-      });
-      
-      
-      var rocks = this.field.collisionModel.getObjectsOfType(SpaceroidsRock);
-      EngineSupport.forEach(rocks, function(r) {
-         r.kill();
+         var t = MultiTimeout.create("particles", 3, 150, function(rep) {
+            var n = [];
+            for (var x = 0; x < 60; x++)
+            {
+               n.push(TrailParticle.create(p.getPosition(), p.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
+            }
+            p.field.pEngine.addParticles(n);
+         });
+         
+         self.nuking = false;
       });
 
-      this.nuking = false;
    },
 
    /**
