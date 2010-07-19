@@ -1,0 +1,28 @@
+#summary Built-in engine metrics and their meanings
+
+= Engine Metrics =
+
+The engine collects metrics about itself to help you tune your game.  The metrics sample everything from new objects to visible objects.  Including different objects in your game will change what metrics are displayed.  The following are the metrics, categorized by their location in the engine.
+
+=== Metrics Values ===
+
+|| *Area* || *Name* || *Description* ||
+|| _Engine_ || `FPS` || The desired engine frames per second (constant) ||
+|| _Engine_ || `aFPS` || The "actual" frames per second being generated ||
+|| _Engine_ || `availTime` || The time available (in milliseconds) to render a frame.  This is based off of the desired `FPS` and the time to generate each frame ||
+|| _Engine_ || `frameGenTime` || The average time to render a frame (in milliseconds) ||
+|| _Engine_ || `engineLoad` || The amount of load a frame is generating. This is the ratio between the availble frame time, and the time taken to render each frame. ||
+|| _Engine_ || `visibleObj` || The number of visible, rendered objects in a frame. ||
+|| _Engine_ || `poolNew` || The number of times a new instance has been created via ObjectPooling ||
+|| _Engine_ || `poolRatio` || The ratio between objects currently in the pool and the number of new objects created. ||
+|| _Engine_ || `pooledObjects` || The number of objects currently in the pool, available for use. ||
+|| _Engine_ || `droppedFrames` || The number of frames which have been skipped (dropped) to keep the frame rate constant. ||
+|| _ParticleEngine_ || `particles` || The number of active particles being updated each frame. ||
+ 
+
+The display of the metrics window can be toggled from code, using the two methods:
+
+  * `Engine.showMetrics()` - Display the metrics window
+  * `Engine.hideMetrics()` - Hide the metrics window
+
+Additionally, specifying the "metrics=true" query parameter will show the metrics window when the engine is starting.  The metrics window can be used to pause, run, and shutdown the engine, at any point, to allow a developer to examine metrics values or to interrogate parts of the engine from debugging tools.  Note that timers which are running are currently _not paused_ when the engine is paused.
