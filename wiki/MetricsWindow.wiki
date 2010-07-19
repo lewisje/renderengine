@@ -2,7 +2,7 @@
 
 = Engine Metrics =
 
-The engine collects metrics about itself to help you tune your game.  The metrics sample everything from new objects to visible objects.  Including different objects in your game will change what metrics are displayed.  The following are the metrics, categorized by their location in the engine.
+The engine collects metrics about itself to help you tune your game.  The metrics sample everything from new objects to visible objects.  Including different engine classes in your game will change what metrics are displayed.  The following are the metrics, categorized by their location in the engine.
 
 === Metrics Values ===
 
