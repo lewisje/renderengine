@@ -5,8 +5,8 @@
  * http://code.google.com/p/renderengine for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.0 RC2
- * date: Jul 18, 2010
+ * version: v1.0 RC1
+ * date: Jul 7, 2010
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1788,7 +1788,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1096 $
+ * @version: $Revision: 1154 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1836,7 +1836,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.0 RC2",
+   version: "v1.0 RC1",
 
    constructor: null,
 
@@ -2359,6 +2359,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay.append(this.metricButton("run", function() { Engine.run(); }));
          this.metricDisplay.append(this.metricButton("pause", function() { Engine.pause(); }));
          this.metricDisplay.append(this.metricButton("shutdown", function() { Engine.shutdown(); }));
+
+         this.metricDisplay.append(this.metricButton("close", function() { Engine.hideMetrics(); }));
          this.metricDisplay.append(this.metricButton("minimize", function() { Engine.manMetrics(); }));
 
          this.metricDisplay.append($("<div class='items'/>"));
@@ -2371,11 +2373,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Add some metrics to assist the developer
          Engine.addMetric("FPS", this.getFPS(), false, "#");
          Engine.addMetric("aFPS", this.getActualFPS(), true, "#");
-         Engine.addMetric("avail", this.fpsClock, false, "#ms");
-         Engine.addMetric("frame", Engine.frameTime, true, "#ms");
-         Engine.addMetric("load", Math.floor(this.getEngineLoad() * 100), true, "#%");
-         Engine.addMetric("visObj", Engine.vObj, false, "#");
-         Engine.addMetric("dropped", Engine.droppedFrames, false, "#");
+         Engine.addMetric("availTime", this.fpsClock, false, "#ms");
+         Engine.addMetric("frameGenTime", Engine.frameTime, true, "#ms");
+         Engine.addMetric("engineLoad", Math.floor(this.getEngineLoad() * 100), true, "#%");
+         Engine.addMetric("visibleObj", Engine.vObj, false, "#");
+         Engine.addMetric("droppedFrames", Engine.droppedFrames, false, "#");
 
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;
