@@ -116,7 +116,7 @@ var SpaceroidsRock = Object2D.extend({
 
       // If the player is nuking, adjust our position depending on
       // how close we are to the player
-      if (Spaceroids.playerObj.isNuking()) {
+      if (Spaceroids.playerObj && Spaceroids.playerObj.isNuking()) {
          var grav = 2;
          var dVec = Vector2D.create(Spaceroids.playerObj().getPosition()).sub(this.getPosition());
          grav /= dVec.len();
@@ -307,7 +307,7 @@ var SpaceroidsRock = Object2D.extend({
     * object.
     */
    onCollide: function(obj) {
-      if (SpaceroidsPlayer.isInstance(obj) &&
+      if (SpaceroidsPlayer.isInstance(obj) && Spaceroids.playerObj &&
           !Spaceroids.playerObj.isNuking() &&
           (this.getWorldBox().isIntersecting(obj.getWorldBox())))
       {
