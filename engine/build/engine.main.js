@@ -597,7 +597,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          Engine.addMetric("engineLoad", Math.floor(this.getEngineLoad() * 100), true, "#%");
          Engine.addMetric("visibleObj", Engine.vObj, false, "#");
          Engine.addMetric("droppedFrames", Engine.droppedFrames, false, "#");
-         Engine.addMetric("upTime", ((Engine.worldTime - Engine.upTime)/1000).toFixed(1), false, "# seconds");
+         Engine.addMetric("upTime", Math.floor((Engine.worldTime - Engine.upTime)/1000), false, "# sec");
 
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;

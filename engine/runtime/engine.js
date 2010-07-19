@@ -1788,7 +1788,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1155 $
+ * @version: $Revision: 1169 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -2378,7 +2378,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          Engine.addMetric("engineLoad", Math.floor(this.getEngineLoad() * 100), true, "#%");
          Engine.addMetric("visibleObj", Engine.vObj, false, "#");
          Engine.addMetric("droppedFrames", Engine.droppedFrames, false, "#");
-         Engine.addMetric("upTime", ((Engine.worldTime - Engine.upTime)/1000).toFixed(0), true, "# seconds");
+         Engine.addMetric("upTime", Math.floor((Engine.worldTime - Engine.upTime)/1000), false, "# sec");
 
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;
