@@ -6,7 +6,7 @@ See the ReleaseMilestones page for current development information.  The FutureG
 
 || *Status* || *Goal* || *Description* ||
 || - || Bug Fixing || Fix bugs found during RC1. ||
-|| _75%_ || Tutorials || Build additional "basics" tutorials.  Expand wiki to include more articles about engine use and game development with the engine. ||
+
 
 == v1.0 RC1 (July 14, 2010) ==
 
