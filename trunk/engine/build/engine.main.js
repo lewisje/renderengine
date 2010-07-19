@@ -578,6 +578,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay.append(this.metricButton("run", function() { Engine.run(); }));
          this.metricDisplay.append(this.metricButton("pause", function() { Engine.pause(); }));
          this.metricDisplay.append(this.metricButton("shutdown", function() { Engine.shutdown(); }));
+
+         this.metricDisplay.append(this.metricButton("close", function() { Engine.hideMetrics(); }));
          this.metricDisplay.append(this.metricButton("minimize", function() { Engine.manMetrics(); }));
 
          this.metricDisplay.append($("<div class='items'/>"));
@@ -590,11 +592,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Add some metrics to assist the developer
          Engine.addMetric("FPS", this.getFPS(), false, "#");
          Engine.addMetric("aFPS", this.getActualFPS(), true, "#");
-         Engine.addMetric("avail", this.fpsClock, false, "#ms");
-         Engine.addMetric("frame", Engine.frameTime, true, "#ms");
-         Engine.addMetric("load", Math.floor(this.getEngineLoad() * 100), true, "#%");
-         Engine.addMetric("visObj", Engine.vObj, false, "#");
-         Engine.addMetric("dropped", Engine.droppedFrames, false, "#");
+         Engine.addMetric("availTime", this.fpsClock, false, "#ms");
+         Engine.addMetric("frameGenTime", Engine.frameTime, true, "#ms");
+         Engine.addMetric("engineLoad", Math.floor(this.getEngineLoad() * 100), true, "#%");
+         Engine.addMetric("visibleObj", Engine.vObj, false, "#");
+         Engine.addMetric("droppedFrames", Engine.droppedFrames, false, "#");
 
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;

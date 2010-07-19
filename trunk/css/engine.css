@@ -33,6 +33,13 @@ div.metric-button {
    margin-right: 3px;
 }
 
+div.metric-button.close,
+div.metric-button.minimize,
+div.metric-button.maximize {
+   float: right;
+}
+
+
 .run {
    background: url('$<enginePath>/css/run.png') no-repeat;
 }
@@ -51,5 +58,9 @@ div.metric-button {
 
 .maximize {
    background: url('$<enginePath>/css/maximize.png') no-repeat;
+}
+
+.close {
+   background: url('$<enginePath>/css/close.png') no-repeat;
 }
 

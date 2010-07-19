@@ -82,6 +82,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     */
    destroy: function() {
       PooledObject.returnToPool(this);
+      Engine.addMetric("poolRatio", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
 
       // Clean up the engine reference to this object
       Engine.destroy(this);
@@ -168,10 +169,10 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * @type {Number}
     */
    poolSize: 0,
-	
-	/* pragma:DEBUG_START 
-	classPool: {},
-	   pragma:DEBUG_END */
+   
+   /* pragma:DEBUG_START 
+   classPool: {},
+      pragma:DEBUG_END */
 
    /**
     * Similar to a constructor, all pooled objects implement this method.
@@ -188,33 +189,33 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       // Check the pool for the object type
       if (PooledObject.objectPool[this.getClassName()] && PooledObject.objectPool[this.getClassName()].length != 0) {
          PooledObject.poolSize--;
-         Engine.addMetric("poolUse", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
+         Engine.addMetric("poolRatio", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
          var obj = PooledObject.objectPool[this.getClassName()].shift();
          obj.constructor.apply(obj, arguments);
 
-			/* pragma:DEBUG_START 
-			PooledObject.classPool[this.getClassName()][1]++;
-		 	PooledObject.classPool[this.getClassName()][2]--;
-			   pragma:DEBUG_END */
+         /* pragma:DEBUG_START 
+         PooledObject.classPool[this.getClassName()][1]++;
+         PooledObject.classPool[this.getClassName()][2]--;
+            pragma:DEBUG_END */
 
          return obj;
       } else {
          PooledObject.poolNew++;
-         Engine.addMetric("newObjs", PooledObject.poolNew, false, "#");
-			
-			/* pragma:DEBUG_START 
-			if (PooledObject.classPool[this.getClassName()]) {
-				PooledObject.classPool[this.getClassName()][0]++;
-			} else {
-				// 0: new, 1: in use, 2: pooled
-				PooledObject.classPool[this.getClassName()] = [1,0,0];
-			}
-			   pragma:DEBUG_END */
-			
+         Engine.addMetric("poolNew", PooledObject.poolNew, false, "#");
+         
+         /* pragma:DEBUG_START 
+         if (PooledObject.classPool[this.getClassName()]) {
+            PooledObject.classPool[this.getClassName()][0]++;
+         } else {
+            // 0: new, 1: in use, 2: pooled
+            PooledObject.classPool[this.getClassName()] = [1,0,0];
+         }
+            pragma:DEBUG_END */
+         
          // TODO: Any more than 15 arguments and construction will fail!
          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
-								 arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
-								 arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
+                         arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+                         arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
       }
    },
 
@@ -235,15 +236,15 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       PooledObject.poolSize++;
       PooledObject.objectPool[obj.constructor.getClassName()].push(obj);
 
-		/* pragma:DEBUG_START 
-		if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
-			PooledObject.classPool[obj.constructor.getClassName()][1]--;
-		}
-		PooledObject.classPool[obj.constructor.getClassName()][2]++;
-		   pragma:DEBUG_END */
-			
+      /* pragma:DEBUG_START 
+      if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
+         PooledObject.classPool[obj.constructor.getClassName()][1]--;
+      }
+      PooledObject.classPool[obj.constructor.getClassName()][2]++;
+         pragma:DEBUG_END */
+         
 
-      Engine.addMetric("pooled", PooledObject.poolSize, false, "#");
+      Engine.addMetric("pooledObjects", PooledObject.poolSize, false, "#");
    },
 
    /**
