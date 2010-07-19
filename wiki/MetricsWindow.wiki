@@ -8,7 +8,7 @@ The engine collects metrics about itself to help you tune your game.  The metric
 
 || *Area* || *Name* || *Description* ||
 || _Engine_ || `FPS` || The desired engine frames per second (constant) ||
-|| _Engine_ || `aFPS` || The "actual" frames per second being generated ||
+|| _Engine_ || `aFPS` || The "actual" maximum frames per second the engine can generate, based on load and available time. ||
 || _Engine_ || `availTime` || The time available (in milliseconds) to render a frame.  This is based off of the desired `FPS` and the time to generate each frame ||
 || _Engine_ || `frameGenTime` || The average time to render a frame (in milliseconds) ||
 || _Engine_ || `engineLoad` || The amount of load a frame is generating. This is the ratio between the availble frame time, and the time taken to render each frame. ||
