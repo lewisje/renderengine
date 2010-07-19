@@ -114,7 +114,7 @@ var SpaceroidsRock = Object2D.extend({
       // If the player is nuking, adjust our position depending on
       // how close we are to the player
       if (Spaceroids.playerObj && Spaceroids.playerObj.isNuking()) {
-         var grav = 2;
+         var grav = 8;
          var dVec = Vector2D.create(Spaceroids.playerObj.getPosition()).sub(this.getPosition());
          grav /= dVec.len();
          p.add(dVec.mul(grav));
