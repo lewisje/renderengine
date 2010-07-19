@@ -82,7 +82,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     */
    destroy: function() {
       PooledObject.returnToPool(this);
-      Engine.addMetric("poolRatio", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
+      Engine.addMetric("poolLoad", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
 
       // Clean up the engine reference to this object
       Engine.destroy(this);
@@ -189,7 +189,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       // Check the pool for the object type
       if (PooledObject.objectPool[this.getClassName()] && PooledObject.objectPool[this.getClassName()].length != 0) {
          PooledObject.poolSize--;
-         Engine.addMetric("poolRatio", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
+         Engine.addMetric("poolLoad", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
          var obj = PooledObject.objectPool[this.getClassName()].shift();
          obj.constructor.apply(obj, arguments);
 
