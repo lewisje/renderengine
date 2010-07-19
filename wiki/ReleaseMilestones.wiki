@@ -52,12 +52,6 @@ Note: The support for the iPhone and Wii platform will be minimal.  Version 2.0 
 
 The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Release Candidate 2 (_July 22, 2010_) ==
-
-|| *Status* || *Goal* || *Description* ||
-|| - || Bug Fixing || Fix bugs found during RC1. ||
-|| _75%_ || Tutorials || Build additional "basics" tutorials.  Expand wiki to include more articles about engine use and game development with the engine. ||
-
 
 == Gold Candidate - Version 1.0 (_July 31, 2010_) ==
 
