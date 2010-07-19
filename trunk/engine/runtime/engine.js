@@ -1788,7 +1788,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1154 $
+ * @version: $Revision: 1155 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
