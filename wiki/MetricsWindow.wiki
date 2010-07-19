@@ -17,7 +17,7 @@ The engine collects metrics about itself to help you tune your game.  The metric
 || _Engine_ || `poolRatio` || The ratio between objects currently in the pool and the number of new objects created. ||
 || _Engine_ || `pooledObjects` || The number of objects currently in the pool, available for use. ||
 || _Engine_ || `droppedFrames` || The number of frames which have been skipped (dropped) to keep the frame rate constant. ||
-|| _ParticleEngine_ || `particles` || The number of active particles being updated each frame. ||
+|| _!ParticleEngine_ || `particles` || The number of active particles being updated each frame. ||
  
 
 The display of the metrics window can be toggled from code, using the two methods:
