@@ -477,9 +477,9 @@ var SpaceroidsPlayer = Object2D.extend({
             var n = [];
             for (var x = 0; x < 60; x++)
             {
-               n.push(TrailParticle.create(p.getPosition(), p.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
+               n.push(TrailParticle.create(self.getPosition(), self.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
             }
-            p.field.pEngine.addParticles(n);
+            Spaceroids.pEngine.addParticles(n);
          });
          
          self.nuking = false;
