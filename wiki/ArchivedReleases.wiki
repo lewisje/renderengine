@@ -5,7 +5,7 @@ See the ReleaseMilestones page for current development information.  The FutureG
 == v1.0 RC2 (July 18, 2010) ==
 
 || *Status* || *Goal* || *Description* ||
-|| - || Bug Fixing || Fix bugs found during RC1. ||
+|| _Complete_ || Bug Fixing || Fix bugs found during RC1. ||
 
 
 == v1.0 RC1 (July 14, 2010) ==
