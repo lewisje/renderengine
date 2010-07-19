@@ -77,7 +77,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    localMode: false,          // Local run flag
    started: false,            // Engine started flag
    running: false,            // Engine running flag
-   shuttingDown: false,			// Engine is shutting down
+   shuttingDown: false,       // Engine is shutting down
    upTime: 0,                 // The startup time
    downTime: 0,               // The shutdown time
    skipFrames: true,          // Skip missed frames
@@ -114,8 +114,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    liveTime: 0,               // The "alive" time (worldTime-upTime)
 
-	// Issue #18 - Intrinsic loading dialog
-	loadingCSS: "<style type='text/css'>div.loadbox {width:325px;height:30px;padding:10px;font:10px Arial;border:1px outset gray;-moz-border-radius:10px;-webkit-border-radius:10px} #engine-load-progress { position:relative;border:1px inset gray;width:300px;height:5px} #engine-load-progress .bar {background:silver;}</style>",
+   // Issue #18 - Intrinsic loading dialog
+   loadingCSS: "<style type='text/css'>div.loadbox {width:325px;height:30px;padding:10px;font:10px Arial;border:1px outset gray;-moz-border-radius:10px;-webkit-border-radius:10px} #engine-load-progress { position:relative;border:1px inset gray;width:300px;height:5px} #engine-load-progress .bar {background:silver;}</style>",
 
    //====================================================================================================
    //====================================================================================================
@@ -287,7 +287,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-		Assert((this.shuttingDown === false), "Creating an object when the engine is shutting down!", obj);
+      Assert((this.shuttingDown === false), "Creating an object when the engine is shutting down!", obj);
       Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
       this.idRef++;
       var objId = obj.getName() + this.idRef;
@@ -343,7 +343,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       // The basics needed by the engine to get started
       this.loadNow("/engine/engine.game.js");
       this.loadNow("/engine/engine.rendercontext.js");
-		this.loadNow("/engine/engine.pooledobject.js");
+      this.loadNow("/engine/engine.pooledobject.js");
       this.loadNow("/rendercontexts/context.render2d.js");
       this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");
@@ -360,10 +360,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    startup: function(debugMode) {
       Assert((this.running == false), "An attempt was made to restart the engine!");
 
-		// Check for supported browser
-		if (!this.browserSupportCheck()) {
-			return;
-		};
+      // Check for supported browser
+      if (!this.browserSupportCheck()) {
+         return;
+      };
 
       this.upTime = new Date().getTime();
       this.debugMode = debugMode ? true : false;
@@ -389,7 +389,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       mode += "]"
       Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
       this.running = true;
-		this.shuttingDown = false;
+      this.shuttingDown = false;
 
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
@@ -401,10 +401,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    pause: function() {
-		if (Engine.shuttingDown) {
-			return;
-		}
-		
+      if (Engine.shuttingDown) {
+         return;
+      }
+      
       Console.warn(">>> Engine paused <<<");
       window.clearTimeout(Engine.globalTimer);
       this.running = false;
@@ -416,13 +416,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
-		if (Engine.shuttingDown) {
-			// Prevent another shutdown
-			return;
-		}
-		
-		Engine.shuttingDown = true;
-		
+      if (Engine.shuttingDown) {
+         // Prevent another shutdown
+         return;
+      }
+      
+      Engine.shuttingDown = true;
+      
       if (!this.running && this.started)
       {
          // If the engine is not currently running (i.e. paused) 
@@ -450,12 +450,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
 
       this.running = false;
-		
-		// Kill off the default context and anything
-		// that's attached to it.  We'll alert the
-		// developer if there's an issue with orphaned objects
-		this.getDefaultContext().destroy();
-		
+      
+      // Kill off the default context and anything
+      // that's attached to it.  We'll alert the
+      // developer if there's an issue with orphaned objects
+      this.getDefaultContext().destroy();
+      
       // Dump the object pool
       if (typeof PooledObject != "undefined") {
          PooledObject.objectPool = null;
@@ -496,9 +496,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       
       // Final cleanup
       Linker.cleanup();
-		
-		// Shutdown complete
-		Engine.shuttingDown = false;
+      
+      // Shutdown complete
+      Engine.shuttingDown = false;
    },
 
 
@@ -583,10 +583,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay.append($("<div class='items'/>"));
          this.metricDisplay.appendTo($("body"));
       }
-      else if (!this.showMetricsWindow && this.metricDisplay) {
-         this.metricDisplay.remove();
-         this.metricDisplay = null;
-      }
+      
 
       if (this.showMetricsWindow && this.lastMetricSample-- == 0)
       {
@@ -674,39 +671,39 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       $(".items", this.metricDisplay).html(h);
    },
 
-	/**
-	 * Check the current browser to see if it is supported by the
-	 * engine.  If it isn't, there's no reason to load the remainder of
-	 * the engine.  This check can be disabled with the <tt>disableBrowserCheck</tt>
-	 * query parameter set to <tt>true</tt>.
-	 * <p/>
-	 * If the browser isn't supported, the engine is shutdown and a message is
-	 * displayed.
-	 */
-	browserSupportCheck: function() {
-		if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
-			return true;
-		}
-		var sInfo = EngineSupport.sysInfo();
-		var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
-		msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
-		msg += "supported browsers</a> for more information.";
-		switch (sInfo.browser) {
-			case "chrome":
-			case "Wii":
-			case "iPhone":
-			case "safari":
-			case "mozilla":
-			case "opera": return true;
-			case "msie":
-			case "unknown": $(document).ready(function() {
-									Engine.shutdown();
-									$("body", document).append($("<div class='unsupported'>")
-										.html(msg));
-								});
-		}
-		return false;
-	},
+   /**
+    * Check the current browser to see if it is supported by the
+    * engine.  If it isn't, there's no reason to load the remainder of
+    * the engine.  This check can be disabled with the <tt>disableBrowserCheck</tt>
+    * query parameter set to <tt>true</tt>.
+    * <p/>
+    * If the browser isn't supported, the engine is shutdown and a message is
+    * displayed.
+    */
+   browserSupportCheck: function() {
+      if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
+         return true;
+      }
+      var sInfo = EngineSupport.sysInfo();
+      var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
+      msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
+      msg += "supported browsers</a> for more information.";
+      switch (sInfo.browser) {
+         case "chrome":
+         case "Wii":
+         case "iPhone":
+         case "safari":
+         case "mozilla":
+         case "opera": return true;
+         case "msie":
+         case "unknown": $(document).ready(function() {
+                           Engine.shutdown();
+                           $("body", document).append($("<div class='unsupported'>")
+                              .html(msg));
+                        });
+      }
+      return false;
+   },
 
    /**
     * Prints the version of the engine.
@@ -732,10 +729,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
-		if (Engine.shuttingDown) {
-			return;
-		}
-		
+      if (Engine.shuttingDown) {
+         return;
+      }
+      
       var nextFrame = Engine.fpsClock;
 
       // Update the world
@@ -757,6 +754,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          // Output any metrics
          if (Engine.showMetricsWindow) {
             Engine.renderMetrics();
+         } else if (!Engine.showMetricsWindow && Engine.metricDisplay) {
+            Engine.metricDisplay.remove();
+            Engine.metricDisplay = null;
          }
       }
 
