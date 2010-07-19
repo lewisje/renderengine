@@ -9,6 +9,7 @@ Ideas for the next release.  This list is always evolving...
 == Version 2.0 ==
 
 || *Status* || *Goal* || *Description* ||
+|| _75%_ || Tutorials || Build additional "basics" tutorials.  Expand wiki to include more articles about engine use and game development with the engine. ||
 || _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
 || _20%_ || Demo || 2D Sprite demo - Super Mario like game.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _10%_ || Tool || 2D game editor for creating levels and collision maps. ||
