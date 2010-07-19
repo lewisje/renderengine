@@ -8,6 +8,7 @@ The engine collects metrics about itself to help you tune your game.  The metric
 
 || *Area* || *Name* || *Description* ||
 || _Engine_ || `FPS` || The desired engine frames per second (constant) ||
+|| _Engine_ || `upTime` || The number of seconds the engine has been running. ||
 || _Engine_ || `aFPS` || The "actual" maximum frames per second the engine can generate, based on load and available time.  This value is very dependent on the platform on which the code is being executed.  Google's Chrome browser, for example, typically has a higher actual FPS, whereas Opera has a lower actual FPS. ||
 || _Engine_ || `availTime` || The time available (in milliseconds) to render a frame.  This is based off of the desired `FPS` and the time to generate each frame ||
 || _Engine_ || `frameGenTime` || The average time to render a frame (in milliseconds).  A higher value in this metric indicates that too much processing is required to create each frame.  Occasional spikes, however, are not abnormal. ||
