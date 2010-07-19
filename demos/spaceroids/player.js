@@ -469,7 +469,7 @@ var SpaceroidsPlayer = Object2D.extend({
       // Get all of the asteroids and adjust their direction
       // So they are pulled toward the player gradually
       var self = this;
-      var t = Timeout.create("nukerocks", 1000, function() {
+      var t = Timeout.create("nukerocks", 850, function() {
          this.destroy();
 
          var rocks = Spaceroids.collisionModel.getObjectsOfType(SpaceroidsRock);
