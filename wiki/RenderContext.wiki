@@ -12,13 +12,13 @@ A rendering context has a [http://renderengine.googlecode.com/svn/api/RenderCont
 
 === HTMLElementContext ===
 
-The HTMLElementContext is an object that can wrap any HTML element as a context.  The !DocumentContext is an extension of this class.  You might think that the !CanvasContext should be, as well, but it extends the base RenderContext2D since that context is aimed at 2D rendering with vectors and paths.
+The [http://renderengine.googlecode.com/svn/api/HTMLElementContext.html HTMLElementContext] is an object that can wrap any HTML element as a context.  The [http://renderengine.googlecode.com/svn/api/DocumentContext.html DocumentContext] is an extension of this class.  You might think that the [http://renderengine.googlecode.com/svn/api/CanvasContext.html CanvasContext] should be, as well, but it extends the base [http://renderengine.googlecode.com/svn/api/RenderContext2D.html RenderContext2D] since that context is aimed at 2D rendering with vectors and paths.
 
-While the HTMLElementContext is quite suitable for creating a sprite based game, I wouldn't suggest making a game which can switch contexts like the examples do.  The reason being that since all features aren't fully supported in the DOM, your game might not work 100% in all contexts.  It can be done, but you'll want to design to one particular context since that will make your work easier.
+While the [http://renderengine.googlecode.com/svn/api/HTMLElementContext.html HTMLElementContext] is quite suitable for creating a sprite based game, I wouldn't suggest making a game which can switch contexts like the examples do.  The reason being that since all features aren't fully supported in the DOM, your game might not work 100% in all contexts.  It can be done, but you'll want to design to one particular context since that will make your work easier.
 
 === RenderContext2D ===
 
-This context is the base class for the !CanvasContext, and the future SVGContext, which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.
+This context is the base class for the [http://renderengine.googlecode.com/svn/api/CanvasContext.html CanvasContext], and the future SVGContext, which are well suited for displaying imagery drawn with more traditional techniques: rectangles, arcs, lines, curves, sprites, etc.
 
 == Transformation Stacks ==
 
