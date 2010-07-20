@@ -5,7 +5,7 @@ My goal in this document is to assist you in understanding the engine architectu
 
 == Engine Flow ==
 
-The `Engine` class contains a private method called `worldTimer()` which executes each frame.  When a frame is executed, `Engine` will call the `update()` method of its default context (the document body).  Your rendering context(s) should have been added to the default context before your game started running.  Anything that is added to your context(s) will then be added to the chain of objects which must be processed.  So lets assume the following scenario:
+The `Engine` class contains a private method called `worldTimer()` which executes each frame.  When a frame is executed, `Engine` will call the [http://renderengine.googlecode.com/svn/api/RenderContext.html#update update()] method of its default context (the document body).  Your rendering context(s) should have been added to the default context before your game started running.  Anything that is added to your context(s) will then be added to the chain of objects which must be processed.  So lets assume the following scenario:
 
   * Your context is called "gameContext"
   * You have 3 objects (extending from `HostObject`) which need to be updated when the frame is rendered, so you add them (A,B,C) to "gameContext"
@@ -25,21 +25,21 @@ defaultContext ->
 [END FRAME]
 }}}
 
-Anything which extends from `BaseObject` has the `update()` method, whereas components have the `execute()` method.  `RenderContext` and `HostObject` extend from `Container`, whose `update()` method will call `update()` on each object contained within the container.  As you can surmise, this proceeds until all objects which are within a container linked back to the default context have been updated.  After which a new frame is generated.  This goes on until the engine is shut down.
+Anything which extends from [http://renderengine.googlecode.com/svn/api/BaseObject.html BaseObject] has the [http://renderengine.googlecode.com/svn/api/BaseObject.html#update update()] method, whereas components have the [http://renderengine.googlecode.com/svn/api/BaseComponent.html#execute execute()] method.  [http://renderengine.googlecode.com/svn/api/RenderContext.html RenderContext] and [http://renderengine.googlecode.com/svn/api/HostObject.html HostObject] extend from [http://renderengine.googlecode.com/svn/api/Container.html Container], whose [http://renderengine.googlecode.com/svn/api/Container.html#update update()] method will call `update()` on each object contained within the container.  As you can surmise, this proceeds until all objects which are within a container linked back to the default context have been updated.  After which a new frame is generated.  This goes on until the engine is shut down.
 
 == Engine Process ==
 
 Each object in the engine is one of two object types: A single object that _is not_ a container, or an object that contains other objects.  When the engine processes a frame, it starts with a known object (the default render context) which is a container, and runs through each object within it.  For containers, the object's contained objects are iterated over (etc. on down the line) until all objects have been processed.
 
-The default engine context (a wrapper for the `HTMLDocument` object) contains objects, which must be updated, and each of those objects can contain their own objects, and so on.  It's basically a chain reaction of objects updating objects until everything has been given a chance to update itself.
+The [http://renderengine.googlecode.com/svn/api/Engine.html#getDefaultContext default engine context] (a wrapper for the `HTMLDocument` object) contains objects, which must be updated, and each of those objects can contain their own objects, and so on.  It's basically a chain reaction of objects updating objects until everything has been given a chance to update itself.
 
-Objects that are created, and need to be updated, have to be added to a parent object that is itself contained in an object which will be updated for each frame.  That is why most objects extend from the `Container` object.  For example, in the example game, you'll see the following in the `Spaceroids.setup()` method:
+Objects that are created, and need to be updated, have to be added to a parent object that is itself contained in an object which will be updated for each frame.  That is why most objects extend from the [http://renderengine.googlecode.com/svn/api/Container.html Container] object.  For example, in the example game, you'll see the following in the `Spaceroids.setup()` method:
 {{{
    this.renderContext = CanvasContext.create(this.fieldWidth, this.fieldHeight);
    this.renderContext.setWorldScale(this.areaScale);
    Engine.getDefaultContext().add(this.renderContext);
 }}}
-This creates a `CanvasContext` (itself, a container) and adds it to the engine's default context.  By doing so, anything added to the game's `renderContext` will be updated each time the engine's default context updates the `renderContext`.  You can see that as we create rocks in attract mode for the "Spaceroids" example game, they are added to the game's `renderContext`:
+This creates a [http://renderengine.googlecode.com/svn/api/CanvasContext.html CanvasContext] (itself, a container) and adds it to the engine's default context.  By doing so, anything added to the game's `renderContext` will be updated each time the engine's default context updates the `renderContext`.  You can see that as we create rocks in attract mode for the "Spaceroids" example game, they are added to the game's `renderContext`:
 {{{
    // Add some asteroids
    for (var a = 0; a < 3; a++)
