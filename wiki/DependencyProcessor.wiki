@@ -9,7 +9,7 @@ Due to this fact, The Render Engine uses a simple "dependency processor" which p
 
 Except for `/engine/engine.js` which is loaded via a game's `index.html` page, the remainder of the classes are loaded as needed.  A simple method of including classes is provided so that only the classes needed to execute an object are loaded.  Before this dependency processor, all of the engine was loaded.  This caused examples to take _at least_ 30 seconds to start up.
 
-Each object is declared in a very strict fashion.  First, includes are handled, then an object is passed to the dependency processor via the `Engine.initObject()` method.  A simple example would be like the following:
+Each object is declared in a very strict fashion.  First, includes are handled, then an object is passed to the dependency processor via the [http://renderengine.googlecode.com/svn/api/Linker.html#initObject Engine.initObject()] method.  A simple example would be like the following:
 
 {{{
 Engine.include("/engine/engine.math2d.js");
@@ -39,7 +39,7 @@ Engine.initObject("MyObject", "Container", function() {
 });
 }}}
 
-`MyObject` is dependent on `Container`, which we tell the dependency processor via the first two arguments to `Engine.initObject()`. The final argument to `Engine.initObject()` is an anonymous function which contains _a single object declaration_ as a variable which is returned as the only value of that anonymous function.
+`MyObject` is dependent on [http://renderengine.googlecode.com/svn/api/Container.html Container], which we tell the dependency processor via the first two arguments to `Engine.initObject()`. The final argument to `Engine.initObject()` is an anonymous function which contains _a single object declaration_ as a variable which is returned as the only value of that anonymous function.
 
 When the engine receives this call, it will examine the function's return object and grab each function within that object.  For each function, it looks for patterns which indicate potential object dependencies.  Such potential dependencies are:
 
@@ -50,7 +50,7 @@ When the engine receives this call, it will examine the function's return object
 
 Dependencies which can be resolved by function arguments or by internal variables are discarded as "internal dependencies".  Method calls and new objects are what we're most interested in.  If a function contains internal anonymous functions, they are handled just like class functions and examined for possible dependencies.
 
-`MyObject` has five dependencies: `this`, `Point2D`, `Math`, `Container`, and `MyObject`.  Until these dependencies have been resolved (loaded and initialized), `MyObject` cannot be initialized.  Of these dependencies, we can immediately ignore a couple of them.  `this` either refers to the function, or to the `MyObject` instance.  We know this will exist, so we discard it.  Additionally, `MyObject` refers to itself, so we discard it as well.
+`MyObject` has five dependencies: `this`, [http://renderengine.googlecode.com/svn/api/Point2D.html Point2D], `Math`, `Container`, and `MyObject`.  Until these dependencies have been resolved (loaded and initialized), `MyObject` cannot be initialized.  Of these dependencies, we can immediately ignore a couple of them.  `this` either refers to the function, or to the `MyObject` instance.  We know this will exist, so we discard it.  Additionally, `MyObject` refers to itself, so we discard it as well.
 
 This leaves us with three _actual dependencies_.  Of those dependencies, one is availble natively within each browser: `Math` so it could be discarded.  However, we'll leave it since it doesn't hurt to have it there.  Really, there are only the remaining two dependencies which need to be resolved.
 
@@ -76,7 +76,7 @@ Two types of circular references can be resolved for you:
   * A class that refers to itself
   * Two classes that have immediate references to each other
 
-Secondary, tertiary, and so forth are not currently handled.  If you find a class isn't loading, it will be helpful to enable the debug mode of the engine and set the debug level to `DEBUGLEVEL_LOG`.  Since there is no way to really tell when all class files have been loaded, a game will appear to "hang" when loading.  You can see the dependencies by issuing a `Engine.dumpDependencies()` call to the console.
+Secondary, tertiary, and so forth are not currently handled.  If you find a class isn't loading, it will be helpful to enable the debug mode of the engine and set the debug level to `DEBUGLEVEL_LOG`.  Since there is no way to really tell when all class files have been loaded, a game will appear to "hang" when loading.  You can see the dependencies by issuing a [http://renderengine.googlecode.com/svn/api/Linker.html#dumpDependencies Engine.dumpDependencies()] call to the console.
 
 == Coding Style ==
 
