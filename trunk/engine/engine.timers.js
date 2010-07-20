@@ -358,7 +358,7 @@ var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
 
       var cb = function() {
          var aC = arguments.callee;
-         if (aC.reps-- > 0) {
+         if (aC.reps-- >= 0) {
             aC.cbFn.call(this, aC.totalReps);
             aC.totalReps++;
             this.restart();
