@@ -609,19 +609,26 @@ var Console = Base.extend(/** @scope Console.prototype */{
  * @param error {String} The error message to throw if the test fails
  */
 var Assert = function(test, error) {
-   if (!test)
-   {
-      if (arguments.length > 2) {
-         for (var a = 2; a < arguments.length; a++) {
-            Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-            Console.error("*ASSERT* ", arguments[a]);
-            Console.trace();
+   try {
+      if (!test)
+      {
+         Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+         if (arguments.length > 2) {
+            for (var a = 2; a < arguments.length; a++) {
+               Console.error("*ASSERT* ", arguments[a]);
+               Console.trace();
+            }
          }
+
+         Engine.shutdown();
+         // This will provide a stacktrace for browsers that support it
+         throw new Error(error);
       }
-      
-      Engine.shutdown();
-      // This will provide a stacktrace for browsers that support it
-      throw new Error(error);
+   } catch (ex) {
+      var pr = Console.getDebugLevel();
+      Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+      Console.warn("*ASSERT* 'test' would result in an exception: ", ex);
+      Console.setDebugLevel(pr);
    }
 };
 
@@ -632,15 +639,22 @@ var Assert = function(test, error) {
  * @param error {String} The warning to display if the test fails
  */
 var AssertWarn = function(test, warning) {
-   if (!test)
-   {
-      if (arguments.length > 2) {
-         for (var a = 2; a < arguments.length; a++) {
-            Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-            Console.warn("*ASSERT-WARN* ", arguments[a]);
+   try {
+      if (!test)
+      {
+         Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+         if (arguments.length > 2) {
+            for (var a = 2; a < arguments.length; a++) {
+               Console.warn("*ASSERT-WARN* ", arguments[a]);
+            }
          }
+         Console.warn(warning);
       }
-      Console.warn(warning);
+   } catch (ex) {
+      var pr = Console.getDebugLevel();
+      Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+      Console.warn("*ASSERT-WARN* 'test' would result in an exception: ", ex);
+      Console.setDebugLevel(pr);
    }
 };
 
