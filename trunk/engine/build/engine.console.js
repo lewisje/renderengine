@@ -114,11 +114,11 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    error: function() {
    },
 
-	/**
-	 * Dump a stack trace to the console.
-	 */	
-	trace: function() {
-	},
+   /**
+    * Dump a stack trace to the console.
+    */   
+   trace: function() {
+   },
 
    /**
     * Get the class name of this object
@@ -412,15 +412,15 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
          console.error.apply(console, arguments);
       }
    },
-	
-	/**
-	 * Write a stack trace to the console
-	 */
-	trace: function() {
-		if (typeof console != "undefined") {
-			console.trace.apply(arguments);
-		}
-	},
+   
+   /**
+    * Write a stack trace to the console
+    */
+   trace: function() {
+      if (typeof console != "undefined") {
+         console.trace.apply(arguments);
+      }
+   },
 
    /**
     * Get the class name of this object
@@ -434,11 +434,12 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
 /**
  * @class A class for logging messages to a console reference object.  There are
- *        currently three supported console references:
+ *        currently four supported console references:
  *        <ul>
  *        <li>Firebug - logs to the Firebug/Firebug Lite error console</li>
  *        <li>OperaConsoleRef - logs to the Opera error console</li>
- *        <li>ConsoleRef - A simple popup window for logging messages</li>
+ *        <li>HTMLConsoleRef - logs to an HTML div element in the body</li>
+ *        <li>SafariConsoleRef - logging for Apple's Safari browser</li>
  *        </ul>
  */
 var Console = Base.extend(/** @scope Console.prototype */{
@@ -593,10 +594,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
       if (this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
          this.consoleRef.error.apply(this.consoleRef, arguments);
    },
-	
-	trace: function() {
-		this.consoleRef.trace();
-	}
+   
+   trace: function() {
+      this.consoleRef.trace();
+   }
 });
 
 
@@ -610,14 +611,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
-		if (arguments.length > 2) {
-			for (var a = 2; a < arguments.length; a++) {
-				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-				Console.error("*ASSERT* ", arguments[a]);
-				Console.trace();
-			}
-		}
-		
+      if (arguments.length > 2) {
+         for (var a = 2; a < arguments.length; a++) {
+            Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+            Console.error("*ASSERT* ", arguments[a]);
+            Console.trace();
+         }
+      }
+      
       Engine.shutdown();
       // This will provide a stacktrace for browsers that support it
       throw new Error(error);
@@ -633,12 +634,12 @@ var Assert = function(test, error) {
 var AssertWarn = function(test, warning) {
    if (!test)
    {
-		if (arguments.length > 2) {
-			for (var a = 2; a < arguments.length; a++) {
-				Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-				Console.warn("*ASSERT-WARN* ", arguments[a]);
-			}
-		}
+      if (arguments.length > 2) {
+         for (var a = 2; a < arguments.length; a++) {
+            Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+            Console.warn("*ASSERT-WARN* ", arguments[a]);
+         }
+      }
       Console.warn(warning);
    }
 };
