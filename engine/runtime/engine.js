@@ -5,7 +5,7 @@
  * http://code.google.com/p/renderengine for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.0 RC1
+ * version: v1.0 RC2
  * date: Jul 7, 2010
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1064 $
+ * @version: $Revision: 1194 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -145,11 +145,11 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    error: function() {
    },
 
-	/**
-	 * Dump a stack trace to the console.
-	 */	
-	trace: function() {
-	},
+   /**
+    * Dump a stack trace to the console.
+    */   
+   trace: function() {
+   },
 
    /**
     * Get the class name of this object
@@ -443,15 +443,15 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
          console.error.apply(console, arguments);
       }
    },
-	
-	/**
-	 * Write a stack trace to the console
-	 */
-	trace: function() {
-		if (typeof console != "undefined") {
-			console.trace.apply(arguments);
-		}
-	},
+   
+   /**
+    * Write a stack trace to the console
+    */
+   trace: function() {
+      if (typeof console != "undefined") {
+         console.trace.apply(arguments);
+      }
+   },
 
    /**
     * Get the class name of this object
@@ -465,11 +465,12 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
 /**
  * @class A class for logging messages to a console reference object.  There are
- *        currently three supported console references:
+ *        currently four supported console references:
  *        <ul>
  *        <li>Firebug - logs to the Firebug/Firebug Lite error console</li>
  *        <li>OperaConsoleRef - logs to the Opera error console</li>
- *        <li>ConsoleRef - A simple popup window for logging messages</li>
+ *        <li>HTMLConsoleRef - logs to an HTML div element in the body</li>
+ *        <li>SafariConsoleRef - logging for Apple's Safari browser</li>
  *        </ul>
  */
 var Console = Base.extend(/** @scope Console.prototype */{
@@ -624,10 +625,10 @@ var Console = Base.extend(/** @scope Console.prototype */{
       if (this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
          this.consoleRef.error.apply(this.consoleRef, arguments);
    },
-	
-	trace: function() {
-		this.consoleRef.trace();
-	}
+   
+   trace: function() {
+      this.consoleRef.trace();
+   }
 });
 
 
@@ -641,14 +642,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
 var Assert = function(test, error) {
    if (!test)
    {
-		if (arguments.length > 2) {
-			for (var a = 2; a < arguments.length; a++) {
-				Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-				Console.error("*ASSERT* ", arguments[a]);
-				Console.trace();
-			}
-		}
-		
+      if (arguments.length > 2) {
+         for (var a = 2; a < arguments.length; a++) {
+            Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+            Console.error("*ASSERT* ", arguments[a]);
+            Console.trace();
+         }
+      }
+      
       Engine.shutdown();
       // This will provide a stacktrace for browsers that support it
       throw new Error(error);
@@ -664,12 +665,12 @@ var Assert = function(test, error) {
 var AssertWarn = function(test, warning) {
    if (!test)
    {
-		if (arguments.length > 2) {
-			for (var a = 2; a < arguments.length; a++) {
-				Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-				Console.warn("*ASSERT-WARN* ", arguments[a]);
-			}
-		}
+      if (arguments.length > 2) {
+         for (var a = 2; a < arguments.length; a++) {
+            Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+            Console.warn("*ASSERT-WARN* ", arguments[a]);
+         }
+      }
       Console.warn(warning);
    }
 };
@@ -1788,7 +1789,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1169 $
+ * @version: $Revision: 1170 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1836,7 +1837,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.0 RC1",
+   version: "v1.0 RC2",
 
    constructor: null,
 
@@ -1845,6 +1846,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    idRef: 0,                  // Object reference Id
    gameObjects: {},           // Live objects cache
+   timerPool: {},             // Pool of running timers
    livingObjects: 0,          // Count of live objects
 
    /*
@@ -2094,6 +2096,26 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       delete this.gameObjects[objId];
       this.livingObjects--;
    },
+   
+   /**
+    * Add a timer to the pool so it can be cleaned up when
+    * the engine is shutdown, or paused when the engine is
+    * paused.
+    * @param timerName {String} The timer name
+    * @param timer {Timer} The timer to add
+    */
+   addTimer: function(timerName, timer) {
+      Engine.timerPool[timerName] = timer;   
+   },
+
+   /**
+    * Remove a timer from the pool when it is destroyed.
+    * @param timerName {String} The timer name
+    */
+   removeTimer: function(timerName) {
+      Engine.timerPool[timerName] = null;
+      delete Engine.timerPool[timerName];
+   },
 
    /**
     * Get an object by the Id that was assigned during the call to {@link #create}.
@@ -2164,6 +2186,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          return;
       }
       
+      // Restart all of the timers
+      for (var tm in Engine.timerPool) {
+         Engine.timerPool[tm].restart();
+      }
+      
       var mode = "[";
       mode += (this.debugMode ? "DEBUG" : "");
       mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
@@ -2184,6 +2211,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    pause: function() {
       if (Engine.shuttingDown) {
          return;
+      }
+
+      // Pause all of the timers
+      Console.debug("Pausing all timers");
+      for (var tm in Engine.timerPool) {
+         Engine.timerPool[tm].pause();
       }
       
       Console.warn(">>> Engine paused <<<");
@@ -2226,6 +2259,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay.remove();
          this.metricDisplay = null;
       }
+
+      // Cancel all of the timers
+      Console.debug("Cancelling all timers");
+      for (var tm in Engine.timerPool) {
+         Engine.timerPool[tm].cancel();
+      }
+      Engine.timerPool = {};
 
       this.downTime = new Date().getTime();
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
