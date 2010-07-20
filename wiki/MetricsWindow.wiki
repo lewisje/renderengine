@@ -2,7 +2,7 @@
 
 = Engine Metrics =
 
-The engine collects metrics about itself to help you tune your game.  The metrics sample everything from new objects to visible objects.  Including different engine classes in your game will change what metrics are displayed.  The following are the metrics, categorized by their location in the engine.
+The engine collects metrics to help you tune your game.  The metrics sample everything from new objects to visible objects.  Including different engine classes in your game will change what metrics are displayed.  Metrics, by default, are sampled once every 10 frames.  This rate can be modified by calling [http://renderengine.googlecode.com/svn/api/Engine.html#setMetricSampleRate Engine.setMetricSampleRate()].  The following are the metrics, categorized by their location in the engine.
 
 === Metrics Values ===
 
@@ -23,7 +23,23 @@ The engine collects metrics about itself to help you tune your game.  The metric
 
 The display of the metrics window can be toggled from code, using the two methods:
 
-  * `Engine.showMetrics()` - Display the metrics window
-  * `Engine.hideMetrics()` - Hide the metrics window
+  * [http://renderengine.googlecode.com/svn/api/Engine.html#showMetrics Engine.showMetrics()] - Display the metrics window
+  * [http://renderengine.googlecode.com/svn/api/Engine.html#hideMetrics Engine.hideMetrics()] - Hide the metrics window
 
 Additionally, specifying the "metrics=true" query parameter will show the metrics window when the engine is starting.  The metrics window can be used to pause, run, and shutdown the engine, at any point, to allow a developer to examine metrics values or to interrogate parts of the engine from debugging tools.  Note that timers which are running are currently _not paused_ when the engine is paused.
+
+==Adding Your Own Metrics==
+
+It is possible to add your own metrics to the window while your game is executing.  Just make a call to [http://renderengine.googlecode.com/svn/api/Engine.html#addMetric Engine.addMetric()] each time you want to update the value.
+
+Examples:
+{{{
+   // Add a simple value, updated with each sample
+   Engine.addMetric("myValue", value);
+
+   // Add a value which should be smoothed
+   Engine.addMetric("smoothValue", value2, true);
+
+   // Special formatting
+   Engine.addMetric("ratio", Math.floor((value3 / value4)*100), true, "#%");
+}}}
