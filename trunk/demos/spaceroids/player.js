@@ -469,6 +469,17 @@ var SpaceroidsPlayer = Object2D.extend({
       // Get all of the asteroids and adjust their direction
       // So they are pulled toward the player gradually
       var self = this;
+
+      // Make some particles for the effect
+      var t = MultiTimeout.create("particles", 3, 280, function(rep) {
+         var n = [];
+         for (var x = 0; x < 60; x++)
+         {
+            n.push(TrailParticle.create(self.getPosition(), self.getRotation(), 350, SpaceroidsPlayer.nukeColors[rep], 1500));
+         }
+         Spaceroids.pEngine.addParticles(n);
+      });
+
       var t = Timeout.create("nukerocks", 850, function() {
          this.destroy();
 
@@ -477,16 +488,6 @@ var SpaceroidsPlayer = Object2D.extend({
             r.kill();
          });
 
-         // Make some particles
-         var t = MultiTimeout.create("particles", 3, 150, function(rep) {
-            var n = [];
-            for (var x = 0; x < 60; x++)
-            {
-               n.push(TrailParticle.create(self.getPosition(), self.getRotation(), 355, SpaceroidsPlayer.nukeColors[rep], 1500));
-            }
-            Spaceroids.pEngine.addParticles(n);
-         });
-         
          self.nuking = false;
       });
 
