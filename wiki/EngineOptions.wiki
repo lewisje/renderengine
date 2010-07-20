@@ -20,21 +20,21 @@ The following table lists query parameters you can pass to the engine to configu
 This table lists methods you can call, on the `Engine` global object, to modify it during runtime or from within a game.  This is, by no means, a complete list.  You should refer to the engine API for more detailed listings:
 
 || *Method Name* || *Description * ||
-|| `setFPS(int)` || Set the FPS the engine will attempt to render at. ||
-|| `toggleMetrics()` || Toggle the display of engine metrics. ||
-|| `showMetrics()` || Show the metrics display. ||
-|| `hideMetrics()` || Hide the metrics display. ||
-|| `setMetricSampleRate()` || Set how often metrics, that are averaged, are sampled.  This is the number of generated frames between samples. ||
-|| `addMetric(str,val,bool,str)` || Add a metric to the engine's metrics display. Usage: `Engine.addMetric('displayName', calculatedValue, true, '#%');` You can average the metric with the third arg.  The final argument will replace the `#` sign with the value, so you can format the output.  e.g. The value of 123 using the format `#ms` would appear as `123ms` ||
-|| `getObject(str)` || Get a reference to an object created in the engine.  The string is the one returned by the engine when it was created. ||
-|| `setDebugMode(bool)` || Enable or disable debug output. ||
-|| `getDebugMode()` || Determine if debugging is enabled. ||
-|| `isSoundEnabled()` || Determine if the sound engine initialized. ||
-|| `pause()` || Pause the execution of the engine.  No additional frames will be processed until `run()` is called. ||
-|| `run()` || Run the engine after it has been paused. ||
-|| `shutdown()` || Shutdown the engine and clean up object instances. ||
-|| `getDefaultContext()` || Get the engine's default rendering context.  You will need to add objects to this for the engine to process them. ||
-|| `getEnginePath()` || Retrieve the path where the engine was started from.  All other scripts will be loaded relative to that. ||
-|| `dumpScripts()` || Outputs all of the scripts loaded by the engine to the debugger window. ||
-|| `clearScriptCache()` || Clears any references to scripts that have been loaded, allowing them to be loaded again. ||
-|| `toString()` || Output the engine name and version. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#setFPS setFPS(int)] || Set the FPS the engine will attempt to render at. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#toggleMetrics toggleMetrics()] || Toggle the display of engine metrics. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#showMetrics showMetrics()] || Show the metrics display. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#hideMetrics hideMetrics()] || Hide the metrics display. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#setMetricSampleRate setMetricSampleRate()] || Set how often metrics, that are averaged, are sampled.  This is the number of generated frames between samples. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#addMetric addMetric(str,val,bool,str)] || Add a metric to the engine's metrics display. Usage: `Engine.addMetric('displayName', calculatedValue, true, '#%');` You can average the metric with the third arg.  The final argument will replace the `#` sign with the value, so you can format the output.  e.g. The value of 123 using the format `#ms` would appear as `123ms` ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#getObject getObject(str)] || Get a reference to an object created in the engine.  The string is the one returned by the engine when it was created. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#setDebugMode setDebugMode(bool)] || Enable or disable debug output. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#getDebugMode getDebugMode()] || Determine if debugging is enabled. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#isSoundEnabled isSoundEnabled()] || Determine if the sound engine initialized. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#pause pause()] || Pause the execution of the engine.  No additional frames will be processed until `run()` is called. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#run run()] || Run the engine after it has been paused. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#shutdown shutdown()] || Shutdown the engine and clean up object instances. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#getDefaultContext getDefaultContext()] || Get the engine's default rendering context.  You will need to add objects to this for the engine to process them. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#getEnginePath getEnginePath()] || Retrieve the path where the engine was started from.  All other scripts will be loaded relative to that. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#dumpScripts dumpScripts()] || Outputs all of the scripts loaded by the engine to the debugger window. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#clearScriptCache clearScriptCache()] || Clears any references to scripts that have been loaded, allowing them to be loaded again. ||
+|| [http://renderengine.googlecode.com/svn/api/Engine.html#toString toString()] || Output the engine name and version. ||
