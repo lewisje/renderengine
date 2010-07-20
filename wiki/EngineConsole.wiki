@@ -1,15 +1,15 @@
 #summary Getting information to assist you in debugging
 = The Engine Console =
 
-The Render Engine provides an abstraction for the many consoles which are available in the different browsers.  Instead of having to know that in Firefox (with Firebug installed) it's "console", and in Opera it's "window.opera.postError", you can just refer to the `Console` object.  The `Console` object has a few methods that you can call:
+The Render Engine provides an abstraction for the many consoles which are available in the different browsers.  Instead of having to know that in Firefox (with Firebug installed) it's "console", and in Opera it's "window.opera.postError", you can just refer to the [http://renderengine.googlecode.com/svn/api/Console.html Console] object.  The `Console` object has a few methods that you can call:
 
 || *Method* || *Result* ||
-|| Console.log() || Lowest level logging.  At this level, object creation and destruction will be reported.  Prints out when `debugLevel` is set to `0` or `Console.DEBUGLEVEL_VERBOSE` ||
-|| Console.info() || Semi-verbose logging.  Displays object initialization.  Prints out when `debugLevel` is set to `1` or `Console.DEBUGLEVEL_INFO` ||
-|| Console.debug() || Debug messages.  Prints out when `debugLevel` is set to `2`(the default) or `Console.DEBUGLEVEL_DEBUG` ||
-|| Console.warn() || Prints warnings.  Engine startup and shutdown, sounds initialization.  Prints out when `debugLevel` is set to `3` or `Console.DEBUGLEVEL_WARNING` ||
-|| Console.error() || Prints errors.  Prints out when `debugLevel` is set to `4` or `Console.DEBUGLEVEL_ERRORS` ||
+|| [http://renderengine.googlecode.com/svn/api/Console.html#log log()] || Lowest level logging.  At this level, object creation and destruction will be reported.  Prints out when `debugLevel` is set to `0` or `Console.DEBUGLEVEL_VERBOSE` ||
+|| [http://renderengine.googlecode.com/svn/api/Console.html#info info()] || Semi-verbose logging.  Displays object initialization.  Prints out when `debugLevel` is set to `1` or `Console.DEBUGLEVEL_INFO` ||
+|| [http://renderengine.googlecode.com/svn/api/Console.html#debug debug()] || Debug messages.  Prints out when `debugLevel` is set to `2`(the default) or `Console.DEBUGLEVEL_DEBUG` ||
+|| [http://renderengine.googlecode.com/svn/api/Console.html#warn warn()] || Prints warnings.  Engine startup and shutdown, sounds initialization.  Prints out when `debugLevel` is set to `3` or `Console.DEBUGLEVEL_WARNING` ||
+|| [http://renderengine.googlecode.com/svn/api/Console.html#error error()] || Prints errors.  Prints out when `debugLevel` is set to `4` or `Console.DEBUGLEVEL_ERRORS` ||
 
-You can set the debug level by calling `Engine.setDebugLevel()` and passing one of the constants.
+You can set the debug level by calling [http://renderengine.googlecode.com/svn/api/Engine.html#setDebugLevel Engine.setDebugLevel()] and passing one of the constants.
 
 *NOTE:* _It is recommended that you use this object for cross-browser compatibility._
