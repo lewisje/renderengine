@@ -64,6 +64,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    idRef: 0,                  // Object reference Id
    gameObjects: {},           // Live objects cache
+   timerPool: {},             // Pool of running timers
    livingObjects: 0,          // Count of live objects
 
    /*
@@ -313,6 +314,26 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       delete this.gameObjects[objId];
       this.livingObjects--;
    },
+   
+   /**
+    * Add a timer to the pool so it can be cleaned up when
+    * the engine is shutdown, or paused when the engine is
+    * paused.
+    * @param timerName {String} The timer name
+    * @param timer {Timer} The timer to add
+    */
+   addTimer: function(timerName, timer) {
+      Engine.timerPool[timerName] = timer;   
+   },
+
+   /**
+    * Remove a timer from the pool when it is destroyed.
+    * @param timerName {String} The timer name
+    */
+   removeTimer: function(timerName) {
+      Engine.timerPool[timerName] = null;
+      delete Engine.timerPool[timerName];
+   },
 
    /**
     * Get an object by the Id that was assigned during the call to {@link #create}.
@@ -383,6 +404,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          return;
       }
       
+      // Restart all of the timers
+      for (var tm in Engine.timerPool) {
+         Engine.timerPool[tm].restart();
+      }
+      
       var mode = "[";
       mode += (this.debugMode ? "DEBUG" : "");
       mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
@@ -403,6 +429,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    pause: function() {
       if (Engine.shuttingDown) {
          return;
+      }
+
+      // Pause all of the timers
+      Console.debug("Pausing all timers");
+      for (var tm in Engine.timerPool) {
+         Engine.timerPool[tm].pause();
       }
       
       Console.warn(">>> Engine paused <<<");
@@ -445,6 +477,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay.remove();
          this.metricDisplay = null;
       }
+
+      // Cancel all of the timers
+      Console.debug("Cancelling all timers");
+      for (var tm in Engine.timerPool) {
+         Engine.timerPool[tm].cancel();
+      }
+      Engine.timerPool = {};
 
       this.downTime = new Date().getTime();
       Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");

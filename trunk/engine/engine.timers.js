@@ -51,6 +51,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    timer: null,
 
    running: false,
+   paused: false,
 
    /**
     * @private
@@ -65,6 +66,10 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
       this.base(name);
       this.interval = interval;
       this.callback = callback;
+      
+      // The engine needs to know about this timer
+      Engine.addTimer(this.getId(), this);
+      
       this.restart();
    },
 
@@ -75,12 +80,16 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
       this.base();
       this.timer = null;
       this.running = false;
+      this.paused = false;
    },
 
    /**
     * Stop the timer and remove it from the system
     */
    destroy: function() {
+      // The engine needs to remove this timer
+      Engine.removeTimer(this.getId());
+
       this.timer = null;
       this.base();
    },
@@ -118,11 +127,24 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    },
 
    /**
+    * Pause the timer.  In the case where a timer was already processing,
+    * a restart would begin the timing process again with the full time
+    * allocated to the timer.  In the case of multi-timers (ones that retrigger
+    * a callback, or restart automatically a number of times) only the remaining
+    * iterations will be processed.
+    */
+   pause: function() {
+      this.cancel();
+      this.paused = true;
+   },
+
+   /**
     * Cancel the running timer and restart it.
     */
    restart: function() {
       this.cancel();
       this.running = true;
+      this.paused = false;
    },
 
    /**
@@ -207,7 +229,7 @@ var Timeout = Timer.extend(/** @scope Timeout.prototype */{
       window.clearTimeout(this.getTimer());
       this.base();
    },
-
+   
    /**
     * Cancel and destroy the timeout
     */
@@ -270,7 +292,7 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
     * @private
     */
    restart: function() {
-      if (this.running)
+      if (!this.paused && this.running)
       {
          return;
       }
