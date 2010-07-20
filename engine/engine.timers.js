@@ -146,11 +146,11 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
     * @return {Function} The callback function
     */
    getCallback: function() {
-		var timerFn = function() {
-			arguments.callee.cb.call(arguments.callee.timer);	
-		};
-		timerFn.cb = this.callback;
-		timerFn.timer = this;
+      var timerFn = function() {
+         arguments.callee.cb.call(arguments.callee.timer);  
+      };
+      timerFn.cb = this.callback;
+      timerFn.timer = this;
       return timerFn;
    },
 
@@ -359,14 +359,16 @@ var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
       var cb = function() {
          var aC = arguments.callee;
          if (aC.reps-- > 0) {
-            aC.cbFn.call(this, aC.reps);
+            aC.cbFn.call(this, aC.totalReps);
+            aC.totalReps++;
             this.restart();
          } else {
             this.destroy();
          }
       };
       cb.cbFn = callback;
-		cb.reps = reps;
+      cb.reps = reps;
+      cb.totalReps = 0;
 
       this.base(name, interval, cb);
    }
