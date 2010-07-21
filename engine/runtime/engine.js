@@ -779,7 +779,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1064 $
+ * @version: $Revision: 1205 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1232,7 +1232,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                   "global" : (typeof globalStorage !== undefined)
                } : null),
                "database": (typeof indexedDB !== undefined),
-               "geo": (typeof navigator.geolocation !== undefined && navigator.geolocation)
+               "geo": (typeof navigator.geolocation !== undefined)
             }
          };
          $(document).ready(function() {
@@ -1815,7 +1815,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1200 $
+ * @version: $Revision: 1205 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *

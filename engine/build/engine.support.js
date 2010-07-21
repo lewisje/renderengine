@@ -461,7 +461,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                   "global" : (typeof globalStorage !== undefined)
                } : null),
                "database": (typeof indexedDB !== undefined),
-               "geo": (typeof navigator.geolocation !== undefined && navigator.geolocation)
+               "geo": (typeof navigator.geolocation !== undefined)
             }
          };
          $(document).ready(function() {
