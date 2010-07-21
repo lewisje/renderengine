@@ -6,7 +6,7 @@
  *
  * author: Brett Fattori (brettf@renderengine.com)
  * version: v1.0 RC2
- * date: Jul 7, 2010
+ * date: Jul 21, 2010
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1194 $
+ * @version: $Revision: 1201 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1205,48 +1205,60 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    sysInfo: function() {
-		if (!EngineSupport._sysInfo) {
-			EngineSupport._sysInfo = {
-	         "browser" : $.browser.chrome ? "chrome" :
-							  ($.browser.Wii ? "wii" : 
-							  ($.browser.iPhone ? "iphone" :
-							  ($.browser.safari ? "safari" : 
-							  ($.browser.mozilla ? "mozilla" : 
-							  ($.browser.opera ? "opera" : 
-							  ($.browser.msie ? "msie" : "unknown")))))),
-	         "version" : $.browser.version,
-	         "agent": navigator.userAgent,
-	         "platform": navigator.platform,
-	         "cpu": navigator.cpuClass || navigator.oscpu,
-	         "language": navigator.language,
-	         "online": navigator.onLine,
-	         "cookies": navigator.cookieEnabled,
-	         "fullscreen": window.fullScreen || false
-	      };
-			$(document).ready(function() {
-				// When the document is ready, we'll go ahead and get the width and height added in
-				EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
-		         "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
-		         "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1
-				});
-			});
-		}
-		return EngineSupport._sysInfo;
+      if (!EngineSupport._sysInfo) {
+         EngineSupport._sysInfo = {
+            "browser" : $.browser.chrome ? "chrome" :
+                       ($.browser.Wii ? "wii" : 
+                       ($.browser.iPhone ? "iphone" :
+                       ($.browser.safari ? "safari" : 
+                       ($.browser.mozilla ? "mozilla" : 
+                       ($.browser.opera ? "opera" : 
+                       ($.browser.msie ? "msie" : "unknown")))))),
+            "version" : $.browser.version,
+            "agent": navigator.userAgent,
+            "platform": navigator.platform,
+            "cpu": navigator.cpuClass || navigator.oscpu,
+            "language": navigator.language,
+            "online": navigator.onLine,
+            "cookies": navigator.cookieEnabled,
+            "fullscreen": window.fullScreen || false,
+            "support": {
+               "xhr": (typeof XMLHttpRequest !== undefined),
+               "threads": (typeof Worker !== undefined),
+               "sockets": (typeof WebSocket !== undefined),
+               "storage": (typeof Storage !== undefined ? {
+                  "local" : (typeof localStorage !== undefined),
+                  "session" : (typeof sessionStorage !== undefined),
+                  "global" : (typeof globalStorage !== undefined)
+               } : null),
+               "database": (typeof indexedDB !== undefined),
+               "geo": (typeof navigator.geolocation !== undefined && navigator.geolocation)
+            }
+         };
+         $(document).ready(function() {
+            // When the document is ready, we'll go ahead and get the width and height added in
+            EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
+               "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
+               "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1
+            });
+         });
+      }
+      return EngineSupport._sysInfo;
    },
-	
-	/**
-	 * When the object is no longer <tt>undefined</tt>, the function will
-	 * be executed.
-	 * @param obj {Object} The object to wait for
-	 * @param fn {Function} The function to execute when the object is ready
-	 */
-	whenReady: function(obj, fn) {
-		if (typeof obj != "undefined") {
-			fn();
-		} else {
-			setTimeout(arguments.callee, 50);
-		}
-	}
+   
+   /**
+    * When the object is no longer <tt>undefined</tt>, the function will
+    * be executed.
+    * @param obj {Object} The object to wait for
+    * @param fn {Function} The function to execute when the object is ready
+    */
+   whenReady: function(obj, fn) {
+      if (typeof obj != "undefined") {
+         fn();
+      } else {
+         setTimeout(arguments.callee, 50);
+      }
+   }
 });
 
 
@@ -2212,6 +2224,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
       this.running = true;
       this.shuttingDown = false;
+
+      Console.debug(">>> sysinfo: ", EngineSupport.sysInfo());
 
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);

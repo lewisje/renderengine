@@ -417,6 +417,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.running = true;
       this.shuttingDown = false;
 
+      Console.debug(">>> sysinfo: ", EngineSupport.sysInfo());
+
       // Start world timer
       Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
 

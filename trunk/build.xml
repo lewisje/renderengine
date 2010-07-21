@@ -350,6 +350,10 @@
 		<!-- INFOS -->
 		<replaceregexp match="Console.info\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
+		<!-- ENGINE METRICS -->
+		<replaceregexp match="Engine.addMetric\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="Engine.removeMetric\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
   	</target>
 
 	<target name="engine.compile" description="Use the Google Closure Compiler to compress the code">
