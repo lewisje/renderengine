@@ -429,6 +429,20 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * <li>fullscreen - If the browser is running in fullscreen mode</li>
     * <li>width - The browser's viewable width</li>
     * <li>height - The browser's viewable height</li>
+    * <li>support:
+    *    <ul><li>xhr - Browser supports XMLHttpRequest object</li>
+    *    <li>geo - navigator.geolocation is supported</li>
+    *    <li>threads - Browser supports Worker threads</li>
+    *    <li>sockets - Browser supports WebSocket object</li>
+    *    <li>storage:
+    *       <ul><li>local - localStorage object is supported</li>
+    *       <li>session - sessionStorage object is supported</li>
+    *       <li>global - gloablStorage object is supported</li>
+    *       <li>database - indexedDB storage is supported</li>
+    *       </ul>
+    *    </li>
+    *    </ul>
+    * </li>
     * </ul>
     * @return An object with system information
     * @memberOf EngineSupport
