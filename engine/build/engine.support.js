@@ -452,16 +452,16 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             "cookies": navigator.cookieEnabled,
             "fullscreen": window.fullScreen || false,
             "support": {
-               "xhr": (typeof XMLHttpRequest !== undefined),
-               "threads": (typeof Worker !== undefined),
-               "sockets": (typeof WebSocket !== undefined),
-               "storage": (typeof Storage !== undefined ? {
-                  "local" : (typeof localStorage !== undefined),
-                  "session" : (typeof sessionStorage !== undefined),
-                  "global" : (typeof globalStorage !== undefined),
-                  "database": (typeof indexedDB !== undefined)
+               "xhr": (typeof XMLHttpRequest !== "undefined"),
+               "threads": (typeof Worker !== "undefined"),
+               "sockets": (typeof WebSocket !== "undefined"),
+               "storage": (typeof Storage !== "undefined" ? {
+                  "local" : (typeof localStorage !== "undefined"),
+                  "session" : (typeof sessionStorage !== "undefined"),
+                  "global" : (typeof globalStorage !== "undefined"),
+                  "database": (typeof indexedDB !== "undefined")
                } : null),
-               "geo": (typeof navigator.geolocation !== undefined)
+               "geo": (typeof navigator.geolocation !== "undefined")
             }
          };
          $(document).ready(function() {
