@@ -6,13 +6,14 @@ The following changes affect the "trunk" of the development repository.  Changes
 
 || *Date* || *Notes* ||
 || 07/21/2010 || Uploaded RC2 files. ||
-|| 07/20/2010 || Timers are now pooled to allow pausing and destruction when the engine is paused and shutdown, respectively.  A few minor updates to the Asteroids Evolved demo game. ||
+|| 07/20/2010 || Timers are now pooled (Issue 25) to allow pausing and destruction when the engine is paused and shutdown, respectively.  A few minor updates to the Asteroids Evolved demo game.  Fixed a bug when an HTML context was destroyed and it tried to remove non-element nodes from the DOM (Issue 23 & Issue 24). ||
+|| 07/19/2010 || Transient math objects don't affect object and pool counts. (Issue 21) ||
 
 ----
 
 || *Date* || *Notes* ||
 || 07/18/2010 || *v1.0 RC2 has been tagged.* Performed some cleanup on the sources.  Upgraded to jQuery v1.4.2. Moved the advanced tutorial to the "/tutorials" folder.  Fixed mime type for PNG files.  Removed jQuery v1.2.6 from repository.  Visual enhancements to Asteroids demo.  Added keyboard input component test. ||
-|| 07/16/2010 || Some crash bugs has been addressed.  Minor enhancements to the engine have also been implemented.  The particle engine was optimized and revamped.  Also, some work was done to address an issue that only showed up in Chrome. ||
+|| 07/16/2010 || Some crash bugs has been addressed.  Minor enhancements to the engine have also been implemented.  The particle engine was optimized and revamped. (Issue 20 & Issue 19)  Also, some work was done to address an issue that only showed up in Chrome. ||
 
 ----
 
