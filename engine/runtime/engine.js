@@ -779,7 +779,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1205 $
+ * @version: $Revision: 1206 $
  *
  * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
  *
@@ -1229,9 +1229,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                "storage": (typeof Storage !== undefined ? {
                   "local" : (typeof localStorage !== undefined),
                   "session" : (typeof sessionStorage !== undefined),
-                  "global" : (typeof globalStorage !== undefined)
+                  "global" : (typeof globalStorage !== undefined),
+                  "database": (typeof indexedDB !== undefined)
                } : null),
-               "database": (typeof indexedDB !== undefined),
                "geo": (typeof navigator.geolocation !== undefined)
             }
          };

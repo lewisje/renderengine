@@ -458,9 +458,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                "storage": (typeof Storage !== undefined ? {
                   "local" : (typeof localStorage !== undefined),
                   "session" : (typeof sessionStorage !== undefined),
-                  "global" : (typeof globalStorage !== undefined)
+                  "global" : (typeof globalStorage !== undefined),
+                  "database": (typeof indexedDB !== undefined)
                } : null),
-               "database": (typeof indexedDB !== undefined),
                "geo": (typeof navigator.geolocation !== undefined)
             }
          };
