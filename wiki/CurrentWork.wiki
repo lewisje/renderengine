@@ -1,6 +1,8 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
+_07/21/2010_ Tonight I created a !Billboard2DComponent which looks promising.  It is used with any render component to create a 2D billboard of the component's output and render that instead of always updating and drawing the actual rendered component.  This seems like it might be good for vector based objects such as the vector text renderer and the demo game Asteroids Evolution.  This isn't going to make it into v1.0, but it should follow shortly thereafter.
+
 _07/16/2010_ In addition to other fixes, the particle engine has been revamped a bit and optimized to use native methods where possible.  Overall, it should run faster and cleaner than it did before.  v1.0 RC2 is looking to be "on track" for a release next week.  The bug which was causing Chrome to fail was a part of the particle engine and has since been fixed.
 
 _07/14/2010_ *Tagged v1.0 RC1* There's one small enhancement that will show up in RC2 along with bugs identified in RC1 but, other than that, _no new features will be added_.  Everything that the engine has today, it will have in the v1.0 release.  Demos and tutorials are running from a b1.4 stabilized branch in the repository so that trunk updates won't impact them.
