@@ -111,7 +111,7 @@ var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
     * @return {Number} The key code for the given character
     */
    keyCodeForChar: function(charStr, literal) {
-      return (literal ? keyStr : keyStr.toLowerCase()).charCodeAt(0);
+      return (literal ? charStr : charStr.toLowerCase()).charCodeAt(0);
    },
 
    //====================================================================================================================
