@@ -504,11 +504,11 @@ var SpaceroidsPlayer = Object2D.extend({
          return;
       }
 
-      if (event.shiftKey) {
+      if (event.keyCode == EventEngine.keyCodeForChar("a")) {
          this.hyperSpace();
       }
       
-      if (event.ctrlKey) {
+      if (event.keyCode == EventEngine.keyCodeForChar("z")) {
          if (this.bullets < 5) {
             this.shoot();
          }
@@ -528,7 +528,7 @@ var SpaceroidsPlayer = Object2D.extend({
             }
             this.thrusting = true;
             break;
-         case EventEngine.KEYCODE_SPACE:
+         case EventEngine.KEYCODE_ENTER:
             if (Spaceroids.evolved) {
                this.nuke();
             }

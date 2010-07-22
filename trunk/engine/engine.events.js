@@ -99,7 +99,20 @@ var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
       }
       jQuery(target).unbind(name, handler);
    },
-
+   
+   /**
+    * Get the key code for the provided character.  The value returned
+    * will be for the lowercase key value, unless the second argument is
+    * set to <code>true</code> which will return the exact key code for the
+    * provided character.
+    * @param charStr {String} A single character to get the key code for
+    * @param [literal] {Boolean} <code>true</code> to return the literal code without
+    *        first converting the character to lower case.
+    * @return {Number} The key code for the given character
+    */
+   keyCodeForChar: function(charStr, literal) {
+      return (literal ? keyStr : keyStr.toLowerCase()).charCodeAt(0);
+   },
 
    //====================================================================================================================
    // MOUSE BUTTON CONSTANTS

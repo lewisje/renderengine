@@ -162,9 +162,9 @@ var Spaceroids = Game.extend({
       this.renderContext.add(copy);
 
       // Instructions
-      var inst = ["left/right arrows to turn","up arrow to thrust","ctrl key to fire missile", "shift key to hyperjump"];
+      var inst = ["left/right arrows to turn","up arrow to thrust","Z to fire missile", "A to hyperjump"];
       if (EngineSupport.checkBooleanParam("evolved")) {
-         inst.push("space bar to detonate nuke");
+         inst.push("ENTER to detonate nuke");
       }
       for (var x = 0; x < inst.length; x++) {
          inst[x] = TextRenderer.create(VectorText.create(), inst[x], 0.8);
@@ -447,7 +447,7 @@ var Spaceroids = Game.extend({
       this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 7);
       this.collisionModel.setAccuracy(SpatialGrid.BEST_ACCURACY);
 
-		// Prepare for keyboard input to start the game
+      // Prepare for keyboard input to start the game
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
 
       // Load the sounds
@@ -459,7 +459,7 @@ var Spaceroids = Game.extend({
       this.soundLoader.load("lowboop", this.getFilePath("resources/low.mp3"));
       this.soundLoader.load("hiboop", this.getFilePath("resources/hi.mp3"));
 
-		// Demo recording and playback
+      // Demo recording and playback
       if (EngineSupport.checkBooleanParam("record")) {
          Spaceroids.recordDemo();
          return;
@@ -470,7 +470,7 @@ var Spaceroids = Game.extend({
          return;
       }
       
-		// Go into attract mode
+      // Go into attract mode
       Spaceroids.attractMode();
    },
 
