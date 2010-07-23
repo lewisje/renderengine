@@ -5,6 +5,7 @@
 The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.
 
 || *Date* || *Notes* ||
+|| 07/23/2010 || *The Render Engine v1.0 has been tagged* ||
 || 07/21/2010 || Uploaded RC2 files.  Added ANT tasks to remove `Engine.addMetric()` and `Engine.removeMetric()` calls from the compressed version, with option for full version (Issue 22) ||
 || 07/20/2010 || Timers are now pooled (Issue 25) to allow pausing and destruction when the engine is paused and shutdown, respectively.  A few minor updates to the Asteroids Evolved demo game.  Fixed a bug when an HTML context was destroyed and it tried to remove non-element nodes from the DOM (Issue 23 & Issue 24). ||
 || 07/19/2010 || Transient math objects don't affect object and pool counts. (Issue 21) ||
