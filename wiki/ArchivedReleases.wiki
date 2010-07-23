@@ -2,6 +2,12 @@
 
 See the ReleaseMilestones page for current development information.  The FutureGoals page is where the planning begins for the next major release.
 
+== Version 1.0 (July 23, 2010) ==
+
+|| *Status* || *Goal* || *Description* ||
+|| _Complete_ || Bug Fixing || Fix bugs found during RC2. ||
+|| _Complete_ || Final || This release will be tagged v1.0 ||
+
 == v1.0 RC2 (July 18, 2010) ==
 
 || *Status* || *Goal* || *Description* ||
