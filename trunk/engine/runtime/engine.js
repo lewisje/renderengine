@@ -1,14 +1,14 @@
 /*!
  * The Render Engine is a Javascript game engine written from the ground
  * up to be easy to use and fully expandable.  It runs on a number of
- * browser platforms, including Gecko, Webkit, and Opera.  Visit
- * http://code.google.com/p/renderengine for more information.
+ * browser platforms, including Gecko, Webkit, Chrome, and Opera.  Visit
+ * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.0 RC2
- * date: Jul 21, 2010
+ * version: v1.0
+ * date: Jul 23, 2010
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@
  * @author: $Author: bfattori $
  * @version: $Revision: 1201 $
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -565,6 +565,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
    setDebugLevel: function(level) {
       this.verbosity = level;
    },
+	
+	/**
+	 * Get the debug level which the console is currently at.
+	 * @return {Number} The debug level
+	 */
+	getDebugLevel: function() {
+		return this.verbosity;
+	},
 
    /**
     * Verifies that the debug level is the same as the message to output
@@ -640,20 +648,21 @@ var Console = Base.extend(/** @scope Console.prototype */{
  * @param error {String} The error message to throw if the test fails
  */
 var Assert = function(test, error) {
+	var fail = false;
    try {
       if (!test)
       {
+			fail = true;
          Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-         if (arguments.length > 2) {
-            for (var a = 2; a < arguments.length; a++) {
+         if (arguments.length > 1) {
+            for (var a = 1; a < arguments.length; a++) {
                Console.error("*ASSERT* ", arguments[a]);
                Console.trace();
             }
          }
 
          Engine.shutdown();
-         // This will provide a stacktrace for browsers that support it
-         throw new Error(error);
+			
       }
    } catch (ex) {
       var pr = Console.getDebugLevel();
@@ -661,6 +670,11 @@ var Assert = function(test, error) {
       Console.warn("*ASSERT* 'test' would result in an exception: ", ex);
       Console.setDebugLevel(pr);
    }
+	
+   // This will provide a stacktrace for browsers that support it
+   if (fail) {
+		throw new Error(error);
+	}
 };
 
 /**
@@ -674,8 +688,8 @@ var AssertWarn = function(test, warning) {
       if (!test)
       {
          Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-         if (arguments.length > 2) {
-            for (var a = 2; a < arguments.length; a++) {
+         if (arguments.length > 1) {
+            for (var a = 1; a < arguments.length; a++) {
                Console.warn("*ASSERT-WARN* ", arguments[a]);
             }
          }
@@ -700,7 +714,7 @@ var AssertWarn = function(test, warning) {
  * @author: $Author: bfattori $
  * @version: $Revision: 962 $
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -779,9 +793,9 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1208 $
+ * @version: $Revision: 1209 $
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1286,7 +1300,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  * @author: $Author: bfattori $
  * @version: $Revision: 958 $
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1831,7 +1845,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @author: $Author: bfattori $
  * @version: $Revision: 1205 $
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1877,7 +1891,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.0 RC2",
+   version: "v1.0",
 
    constructor: null,
 
@@ -2644,7 +2658,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -3110,7 +3124,7 @@ var Engine = Engine.extend({
  * @author: $Author: bfattori $
  * @version: $Revision: 852 $
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

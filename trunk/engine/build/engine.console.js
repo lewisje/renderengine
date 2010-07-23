@@ -8,7 +8,7 @@
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2009 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -534,6 +534,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
    setDebugLevel: function(level) {
       this.verbosity = level;
    },
+	
+	/**
+	 * Get the debug level which the console is currently at.
+	 * @return {Number} The debug level
+	 */
+	getDebugLevel: function() {
+		return this.verbosity;
+	},
 
    /**
     * Verifies that the debug level is the same as the message to output
@@ -609,20 +617,21 @@ var Console = Base.extend(/** @scope Console.prototype */{
  * @param error {String} The error message to throw if the test fails
  */
 var Assert = function(test, error) {
+	var fail = false;
    try {
       if (!test)
       {
+			fail = true;
          Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-         if (arguments.length > 2) {
-            for (var a = 2; a < arguments.length; a++) {
+         if (arguments.length > 1) {
+            for (var a = 1; a < arguments.length; a++) {
                Console.error("*ASSERT* ", arguments[a]);
                Console.trace();
             }
          }
 
          Engine.shutdown();
-         // This will provide a stacktrace for browsers that support it
-         throw new Error(error);
+			
       }
    } catch (ex) {
       var pr = Console.getDebugLevel();
@@ -630,6 +639,11 @@ var Assert = function(test, error) {
       Console.warn("*ASSERT* 'test' would result in an exception: ", ex);
       Console.setDebugLevel(pr);
    }
+	
+   // This will provide a stacktrace for browsers that support it
+   if (fail) {
+		throw new Error(error);
+	}
 };
 
 /**
@@ -643,8 +657,8 @@ var AssertWarn = function(test, warning) {
       if (!test)
       {
          Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-         if (arguments.length > 2) {
-            for (var a = 2; a < arguments.length; a++) {
+         if (arguments.length > 1) {
+            for (var a = 1; a < arguments.length; a++) {
                Console.warn("*ASSERT-WARN* ", arguments[a]);
             }
          }

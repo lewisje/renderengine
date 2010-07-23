@@ -11,7 +11,7 @@
    <property name="compressor.jar" value="${make.dir}/yuicompressor-2.4.2.jar"/>
    <property name="compiler.jar" value="${make.dir}/compiler.jar"/>
   
-   <!-- Locations of distributed files -->
+   <!-- Locations of distribution files -->
    <property name="min.home" value="${dist.home}/min-js"/>
    <property name="full.home" value="${dist.home}/full"/>
    <property name="zip.home" value="${dist.home}/min-gzip-js"/>
@@ -19,6 +19,9 @@
 	<!-- Demos and tools won't be copied unless specified in build.properties -->
 	<property name="demo.set" value="NO_COPY"/>
 	<property name="tool.set" value="NO_COPY"/>
+	<property name="font.set" value="NO_COPY"/>
+	<property name="test.set" value="NO_COPY"/>
+	<property name="exclude.set" value="NO_COPY"/>
 
 	<!-- Which compression option to use (either "engine.compress" or "engine.compile")
 	     The second option uses the Google Closure Compiler. -->
@@ -36,9 +39,11 @@
 	</propertyregex>
 	-->
 
+	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${make.dir}/ant-googlecode-0.0.2.jar" name="gcupload"/>
+
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
-   <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
+   <target name="dist" depends="engine.clean,engine.zip,dist.upload,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
    <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
    <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
@@ -48,6 +53,42 @@
       <delete quiet="true" includeemptydirs="true" dir="${dist.home}/engine"/>
 	</target>
 
+
+	<target name="upload" description="Upload a single file to the GoogleCode site">
+		<gcupload 
+		        projectname="renderengine" 
+		        filename="${upload.file}" 
+		        targetfilename="${upload.targetFile}"
+		        summary="${upload.targetDescription}"
+		        labels="Featured,${upload.targetLabel},OpSys-All" />
+	</target>
+
+	<target name="dist.upload" description="Upload the distribution to the GoogleCode site">
+		<!-- Full -->
+		<antcall target="upload">
+			<param name="upload.file" value="${dist.home}/${app.name}_${app.version}.zip"/>
+			<param name="upload.targetFile" value="renderengine_${app.version}.zip"/>
+			<param name="upload.targetDescription" value="The Render Engine - ${app.version} (full)"/>
+			<param name="upload.targetLabels" value="Type-Source"/>
+		</antcall>
+
+		<!-- Compiled -->
+		<antcall target="upload">
+			<param name="upload.file" value="${dist.home}/${app.name}_${app.version}-min.zip"/>
+			<param name="upload.targetFile" value="renderengine_${app.version}-min.zip"/>
+			<param name="upload.targetDescription" value="The Render Engine - ${app.version} (compressed)"/>
+			<param name="upload.targetLabels" value="Type-SourceMin"/>
+		</antcall>
+
+		<!-- GZipped -->
+		<antcall target="upload">
+			<param name="upload.file" value="${dist.home}/${app.name}_${app.version}-min-gzip.zip"/>
+			<param name="upload.targetFile" value="renderengine_${app.version}-min-gzip.zip"/>
+			<param name="upload.targetDescription" value="The Render Engine - ${app.version} (gzipped)"/>
+			<param name="upload.targetLabels" value="Type-SourceMin"/>
+		</antcall>
+		
+	</target>
 
    <!-- =========================== ENGINE BUILD TARGETS ========================== -->
 	<target name="engine.build" description="Main engine build, concatenates source files and replaces some tags">
@@ -334,6 +375,13 @@
             <include name="*.js"/>
          </fileset>
       </copy>
+
+		<!-- Exclude any specified files -->
+		<delete quiet="true">
+			<fileset dir="${full.home}">
+				<include name="${exclude.set}"/>
+			</fileset>
+		</delete>
  
    </target>
 
@@ -596,11 +644,10 @@
 			<param name="input.file" value="rendercontexts/context.scrollingbackground.js"/>
 		</antcall>
 
-<!--
 		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.layeredcontext.js"/>
 		</antcall>
-
+<!--
 		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.svgcontext.js"/>
 		</antcall>
@@ -650,11 +697,9 @@
       <!-- Copy the collision models -->     
       <echo message="Compressing spatial..."/>
 
-<!--
 		<antcall target="${compress.option}">
 			<param name="input.file" value="spatial/container.quadtree.js"/>
 		</antcall>
--->
 
 		<antcall target="${compress.option}">
 			<param name="input.file" value="spatial/container.spatialgrid.js"/>
@@ -683,6 +728,13 @@
 		<antcall target="${compress.option}">
 			<param name="input.file" value="textrender/text.vector.js"/>
 		</antcall>
+ 
+ 		<!-- Exclude any specified files -->
+		<delete quiet="true">
+			<fileset dir="${min.home}">
+				<include name="${exclude.set}"/>
+			</fileset>
+		</delete>
   
    </target>
   
