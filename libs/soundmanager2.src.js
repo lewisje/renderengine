@@ -3,7 +3,7 @@
    --------------------------------------------
    http://schillmania.com/projects/soundmanager2/
 
-   Copyright (c) 2008, Scott Schiller. All rights reserved.
+   Copyright (c) 2010, Scott Schiller. All rights reserved.
    Code licensed under the BSD License:
    http://schillmania.com/projects/soundmanager2/license.txt
 

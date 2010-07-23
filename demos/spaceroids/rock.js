@@ -9,7 +9,7 @@
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@
 
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
+Engine.include("/components/component.billboard2d.js");
 Engine.include("/components/component.collider.js");
 Engine.include("/engine/engine.object2d.js");
 Engine.include("/engine/engine.timers.js");
@@ -60,6 +61,7 @@ var SpaceroidsRock = Object2D.extend({
 
       // Add components to move and draw the asteroid
       this.add(Mover2DComponent.create("move"));
+      //this.add(Billboard2DComponent.create("draw", Vector2DComponent.create("vector")));
       this.add(Vector2DComponent.create("draw"));
       this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
 
@@ -188,6 +190,7 @@ var SpaceroidsRock = Object2D.extend({
     * available shapes.
     */
    setShape: function() {
+      //var c_draw = this.getComponent("draw").getComponent();
       var c_draw = this.getComponent("draw");
 
       // Pick one of the three shapes
@@ -207,6 +210,7 @@ var SpaceroidsRock = Object2D.extend({
       c_draw.setPoints(s);
       c_draw.setLineStyle("white");
       c_draw.setLineWidth(0.8);
+		//this.getComponent("draw").regenerate();
    },
 
    /**

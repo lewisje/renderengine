@@ -9,7 +9,7 @@
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -363,7 +363,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
          this.get2DContext().drawImage(image,
             s.x, s.y, s.w, s.h, d.x, d.y, d.w, d.h);
       } else {
-         this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
+			try {
+         	this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
+			}catch(ex) {
+			}
       }
       this.base(rect, image);
    },
@@ -396,8 +399,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * current state of the canvas context.  The URL can be passed to
     * an image element. <i>Note: Only works in Firefox and Opera!</i>
     *
-    * @param {String} format The format of the output, or <tt>null</tt> for
-    *                 the PNG default.
+    * @param {String} format The mime-type of the output, or <tt>null</tt> for
+    *                 the PNG default. (unsupported)
     * @return {String} The data URL
     */
    getDataURL: function(format) {
