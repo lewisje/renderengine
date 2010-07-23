@@ -627,7 +627,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          this.metricDisplay.appendTo($("body"));
       }
       
-
       if (this.showMetricsWindow && this.lastMetricSample-- == 0)
       {
          // Add some metrics to assist the developer
