@@ -33,7 +33,7 @@
 
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
-Engine.include("/components/component.billboard2d.js");
+//Engine.include("/components/component.billboard2d.js");
 Engine.include("/components/component.collider.js");
 Engine.include("/engine/engine.object2d.js");
 Engine.include("/engine/engine.timers.js");

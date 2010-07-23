@@ -43,7 +43,7 @@
 
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
-   <target name="dist" depends="engine.clean,engine.zip,dist.upload,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
+   <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
    <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
    <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
@@ -121,34 +121,34 @@
 	<target name="engine.nodebug.full" depends="engine.full" description="Build a version of the engine with all debug messages removed">
 		
 		<!-- LOGS -->
-		<replaceregexp match="Console.log\(.*\);" replace="" flags="g" byline="true">
+		<replaceregexp match="Console.log\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
 		</replaceregexp>
 
 		<!-- DEBUGS -->
-		<replaceregexp match="Console.debug\(.*\);" replace="" flags="g" byline="true">
+		<replaceregexp match="Console.debug\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
 		</replaceregexp>
 
 		<!-- INFOS -->
-		<replaceregexp match="Console.info\(.*\);" replace="" flags="g" byline="true">
+		<replaceregexp match="Console.info\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
 		</replaceregexp>
 
 		<!-- ENGINE METRICS -->
-		<replaceregexp match="Engine.addMetric\(.*\);" replace="" flags="g" byline="true">
+		<replaceregexp match="Engine.addMetric\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
 		</replaceregexp>
 		
-		<replaceregexp match="Engine.removeMetric\(.*\);" replace="" flags="g" byline="true">
+		<replaceregexp match="Engine.removeMetric\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
@@ -187,6 +187,8 @@
    <target name="makedirs" description="Create the directory structure">
  
       <mkdir dir="${build.home}"/>
+ 
+      <mkdir dir="${build.home}/temp"/>
  
       <mkdir dir="${build.home}/engine"/>
       <mkdir dir="${build.home}/engine/runtime"/>
@@ -256,9 +258,10 @@
       <!-- Copy the supporting libraries -->     
       <copy todir="${build.home}/libs">
          <fileset dir="${basedir}/libs">
+            <include name="AC_OETags.js"/>
             <include name="base.js"/>
             <include name="json2.js"/>
-            <include name="jquery-1.2.6.js"/>
+            <include name="jquery.js"/>
             <include name="jquery.ext.engine.js"/>
             <include name="soundmanager2.js"/>
             <include name="soundmanager2.swf"/>
@@ -390,46 +393,59 @@
   	<target name="min.nodebug" description="Remove debug, log, and info messages">
 
 		<!-- LOGS -->
-		<replaceregexp match="Console.log\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="Console.log\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- DEBUGS -->
-		<replaceregexp match="Console.debug\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="Console.debug\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- INFOS -->
-		<replaceregexp match="Console.info\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="Console.info\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- ENGINE METRICS -->
-		<replaceregexp match="Engine.addMetric\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
-		<replaceregexp match="Engine.removeMetric\(.*\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="Engine.addMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="Engine.removeMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
   	</target>
 
 	<target name="engine.compile" description="Use the Google Closure Compiler to compress the code">
-		<java jar="${compiler.jar}" fork="true" failonerror="true"
-			jvm="${compiler.jvm}">
-		   <arg line="--js ${basedir}/${input.file} --js_output_file ${min.home}/${input.file}"/>
-		</java>
+		
+      <copy todir="${min.home}/temp">
+         <fileset dir="${basedir}">
+            <include name="${input.file}"/>
+         </fileset>
+      </copy>
 
 		<antcall target="min.nodebug">
-			<param name="input.file" value="${min.home}/${input.file}"/>
+			<param name="input.file" value="${min.home}/temp/${input.file}"/>
 		</antcall>
+
+		<java jar="${compiler.jar}" fork="true" failonerror="true"
+			jvm="${compiler.jvm}">
+		   <arg line="--js ${min.home}/temp/${input.file} --js_output_file ${min.home}/${input.file}"/>
+		</java>
 
       <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
 	</target>
   
 	<target name="engine.compress" description="Use the Yahoo!UI Compressor to compress the code">
+
+      <copy todir="${min.home}/temp">
+         <fileset dir="${basedir}">
+            <include name="${input.file}"/>
+         </fileset>
+      </copy>
+
+		<antcall target="min.nodebug">
+			<param name="input.file" value="${min.home}/temp/${input.file}"/>
+		</antcall>
 	
       <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
-         <arg line="--nomunge -o ${min.home}/${input.file} ${basedir}/${input.file}"/>
+         <arg line="--nomunge --disable-optimizations --preserve-semi --line-break 200 -o ${min.home}/${input.file} ${min.home}/temp/${input.file}"/>
          <classpath>
             <pathelement path="${compressor.jar}"/>
          </classpath>
       </java>
 	
-		<antcall target="min.nodebug">
-			<param name="input.file" value="${min.home}/${input.file}"/>
-		</antcall>
-
       <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
 	</target>
 
@@ -483,6 +499,20 @@
 			<param name="basedir" value="${dist.home}"/>
 			<param name="input.file" value="engine/runtime/engine.js"/>
 		</antcall>
+
+		<concat destfile="${dist.home}/engine/engine.js">
+			<fileset dir="${make.dir}" includes="intro.js" />
+			<fileset dir="${min.home}/engine/runtime" includes="engine.js" />
+		</concat>
+		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
+		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
+		<replaceregexp match="@ENGINE_VERSION" replace="${build.version}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
+
+      <copy todir="${min.home}/engine/runtime">
+         <fileset dir="${dist.home}/engine">
+            <include name="engine.js"/>
+         </fileset>
+      </copy>
 
 		<antcall target="${compress.option}">
 			<param name="input.file" value="engine/engine.baseobject.js"/>
