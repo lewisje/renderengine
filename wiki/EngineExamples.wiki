@@ -17,13 +17,6 @@ The next game, if it can be called that, is a test I put together to get the eng
 
    * [http://renderengine.googlecode.com/svn/tags/v1.0/demos/wii_test/index.html?metrics=true&context=1 Bounce the Ball]
 
-==The Sprite Editor==
-
-In addition to games, The Render Engine can be (and, as you can see with this example, is) used to create applications.  In this case I'm using it to develop the Sprite Editor.  Eventually, this will be a part of the online release for the creation of sprites in your games.
-
-   * [http://renderengine.googlecode.com/svn/tags/v1.0/tools/sprite_editor/index.html?metrics=true Sprite Editor alpha]
-
-
 ==Text Rendering Capabilities==
 
 The following is a quick test I put together to test text rendering with the three supported renderers.  If your browser doesn't support natively rendering fonts to the canvas, you'll only see the first two (Vector and Bitmap).  In most cases, the bitmap fonts are a decent alternative to rendering text to the canvas.
