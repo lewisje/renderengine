@@ -39,8 +39,9 @@
 	</propertyregex>
 	-->
 
+<!--
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${make.dir}/ant-googlecode-0.0.2.jar" name="gcupload"/>
-
+-->
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
    <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
