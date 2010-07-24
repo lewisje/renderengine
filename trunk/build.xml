@@ -382,9 +382,7 @@
 
 		<!-- Exclude any specified files -->
 		<delete quiet="true">
-			<fileset dir="${full.home}">
-				<include name="${exclude.set}"/>
-			</fileset>
+			<fileset dir="${full.home}" includes="${exclude.set}"/>
 		</delete>
  
    </target>
@@ -762,9 +760,11 @@
  
  		<!-- Exclude any specified files -->
 		<delete quiet="true">
-			<fileset dir="${min.home}">
-				<include name="${exclude.set}"/>
-			</fileset>
+			<fileset dir="${min.home}" includes="${exclude.set}"/>
+		</delete>
+
+		<delete quiet="true">
+			<fileset dir="${zip.home}" includes="${exclude.set}"/>
 		</delete>
   
    </target>
