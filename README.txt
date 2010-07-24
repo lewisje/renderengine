@@ -39,12 +39,12 @@ http://tortoisesvn.tigris.org/
 Setting up a Tomcat server for testing & development
 --------------------------------------------------------
 
-Go to the Apache Tomcat website and download the 5.5.27 version of the server.  Install Tomcat and then copy the "[INSTALL_DIR]/setup/tomcat/renderengine.xml" file to the "${CATALINA_HOME}/conf/Catalina/localhost" directory.  You will need to edit the file and change the "docBase" property to point to the location where the engine was installed.
+Go to the Apache Tomcat website and download the latest version of the server.  Install Tomcat and then copy the "[INSTALL_DIR]/setup/tomcat/renderengine.xml" file to the "${CATALINA_HOME}/conf/Catalina/localhost" directory.  You will need to edit the file and change the "docBase" property to point to the location where the engine was installed.
 
-Start up, or restart, the Tomcat server and navigate to "http://localhost:8080/renderengine/demos/spaceroids" to test the installation.  If all went well, you should be presented with the Asteroids clone game.
+Start up, or restart, the Tomcat server and navigate to "http://localhost:8080/renderengine/demos/spaceroids" to test the installation.  If all went well, you should be presented with the Asteroids demo game.
 
-Get Tomcat 5.5 @
-http://tomcat.apache.org/download-55.cgi
+Get Tomcat @
+http://tomcat.apache.org
 
 
 
