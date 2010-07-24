@@ -65,7 +65,9 @@
       |
       +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<b>BaseComponent</b></pre>
+         +--<b>BaseComponent</b>
+            |
+            +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>BaseComponent</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -193,9 +195,9 @@ All components extend from this object class.  A component is one       part of
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#execute">execute</a></b>(renderContext, time, rendering) </code> 
+            <code> <b> <a href="#execute">execute</a></b>(renderContext, time) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This method is called by the host object to run the component, updating its state.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ABSTRACT] This method is called by the host object to run the component, updating its state.
  
          </td>
       </tr>
@@ -217,7 +219,7 @@ All components extend from this object class.  A component is one       part of
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;HostObject
+            &nbsp;<a href='HostObject.html' target='main'>HostObject</a>
             </code></font> 
          </td>
          <td>
@@ -499,9 +501,9 @@ All components extend from this object class.  A component is one       part of
 
 
    <a name="execute"> </a> <h3>execute</h3>
-      <pre><b>execute</b>(renderContext, time, rendering)</pre> 
+      <pre><b>execute</b>(renderContext, time)</pre> 
    <ul>
-      This method is called by the host object to run the component, updating its state.  Not all components will need an executemethod.  However, it is important to include one if you need to update the state of the component each engine cycle.
+      [ABSTRACT] This method is called by the host object to run the component, updating its state.  Not all components will need an executemethod.  However, it is important to include one if you need to update the state of the component each engine cycle.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -513,9 +515,6 @@ All components extend from this object class.  A component is one       part of
       <ul>
          <code>[<i>Number</i>]&nbsp;time </code> - The global engine time 
       </ul>
-      <ul>
-         <code>[<i>Boolean</i>]&nbsp;rendering </code> - <tt>true</tt> during the rendering phase 
-      </ul>
    </ul>
    
    <!-- METHOD PARAMETERS END -->
@@ -523,6 +522,10 @@ All components extend from this object class.  A component is one       part of
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -544,6 +547,10 @@ All components extend from this object class.  A component is one       part of
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getHostObject"> </a> <h3>getHostObject</h3>
@@ -560,11 +567,15 @@ All components extend from this object class.  A component is one       part of
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>HostObject</i>&nbsp;</code> 
+         <code><i><a href='HostObject.html' target='main'>HostObject</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getPriority"> </a> <h3>getPriority</h3>
@@ -586,6 +597,10 @@ All components extend from this object class.  A component is one       part of
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getType"> </a> <h3>getType</h3>
@@ -602,6 +617,10 @@ All components extend from this object class.  A component is one       part of
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getTypeString"> </a> <h3>getTypeString</h3>
@@ -623,6 +642,10 @@ All components extend from this object class.  A component is one       part of
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -639,6 +662,10 @@ All components extend from this object class.  A component is one       part of
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setHostObject"> </a> <h3>setHostObject</h3>
@@ -660,6 +687,10 @@ All components extend from this object class.  A component is one       part of
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setPriority"> </a> <h3>setPriority</h3>
@@ -681,6 +712,10 @@ All components extend from this object class.  A component is one       part of
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -692,8 +727,8 @@ All components extend from this object class.  A component is one       part of
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:24 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

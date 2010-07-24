@@ -69,7 +69,9 @@
             |
             +--<a href='InputComponent.html' target='main'>InputComponent</a>
                |
-               +--<b>KeyboardInputComponent</b></pre>
+               +--<b>KeyboardInputComponent</b>
+                  |
+                  +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>KeyboardInputComponent</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -79,7 +81,7 @@
    Extends <a href="InputComponent.html">InputComponent</a>.<br/>
 
 <p>
-A component which responds to keyboard events and notifiesits host object by calling one of three methods.  The host objectshould implement any of the following methods to receive the corresponding event:<ul><li>onKeyDown - A key was pressed down</li><li>onKeyUp - A key was released</li><li>onKeyPress - A key was pressed and released</li></ul>Each function should take up to six arguments.  The first argument is the charactercode, a number which represents the key that was pressed. The second argument is the<tt>keyCode</tt>, a number which represents special keys that were pressed, such asthe arrow keys and function keys.  See the<a href='EventEngine.html'>EventEngine</a> for key codes of the non-alphabetic keys. The third argumentis a boolean indicating if the Control key was pressed.  The fourth argument is aboolean indicating if the Alt key was pressed.  The fifth argument is a booleanindicating if the Shift key was pressed.  The sixth and final argument is theactual event object itself.</p>
+A component which responds to keyboard events and notifiesits <a href='HostObject.html'>HostObject</a> by calling one of three methods.  The <tt>HostObject</tt>should implement any of the following methods to receive the corresponding event:<ul><li><tt>onKeyDown()</tt> - A key was pressed down</li><li><tt>onKeyUp()</tt> - A key was released</li><li><tt>onKeyPress()</tt> - A key was pressed and released</li></ul>Each function should take up to six arguments.  The first argument is the charactercode, a number which represents the key that was pressed. The second argument is the<tt>keyCode</tt>, a number which represents special keys that were pressed, such asthe arrow keys and function keys.  See the<a href='EventEngine.html'>EventEngine</a> for key codes of the non-alphabetic keys. The third argumentis a boolean indicating if the Control key was pressed.  The fourth argument is aboolean indicating if the Alt key was pressed.  The fifth argument is a booleanindicating if the Shift key was pressed.  The sixth and final argument is theactual event object itself.</p>
 
 
 
@@ -155,31 +157,6 @@ A component which responds to keyboard events and notifiesits host object by ca
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseObject.html#destroy">destroy</a>,
-            
-               <a href="BaseObject.html#setElement">setElement</a>,
-            
-               <a href="BaseObject.html#getElement">getElement</a>,
-            
-               <a href="BaseObject.html#jQ">jQ</a>,
-            
-               <a href="BaseObject.html#update">update</a>,
-            
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
             <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
          </td>
       </tr>
@@ -201,6 +178,31 @@ A component which responds to keyboard events and notifiesits host object by ca
                <a href="BaseComponent.html#execute">execute</a>,
             
                <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -310,6 +312,10 @@ A component which responds to keyboard events and notifiesits host object by ca
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -321,8 +327,8 @@ A component which responds to keyboard events and notifiesits host object by ca
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:25 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

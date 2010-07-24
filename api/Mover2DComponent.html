@@ -69,7 +69,9 @@
             |
             +--<a href='Transform2DComponent.html' target='main'>Transform2DComponent</a>
                |
-               +--<b>Mover2DComponent</b></pre>
+               +--<b>Mover2DComponent</b>
+                  |
+                  +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>Mover2DComponent</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -164,6 +166,18 @@ A mover component that adds physical transformations to an object.       Proper
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#execute">execute</a></b>(renderContext, time) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Updates the transformation of the component, setting theposition and rotation based on the time that has elapsed sincethe last update.
@@ -174,7 +188,7 @@ A mover component that adds physical transformations to an object.       Proper
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Vector2D
+            &nbsp;<a href='Vector2D.html' target='main'>Vector2D</a>
             </code></font> 
          </td>
          <td>
@@ -228,7 +242,7 @@ A mover component that adds physical transformations to an object.       Proper
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Vector2D
+            &nbsp;<a href='Vector2D.html' target='main'>Vector2D</a>
             </code></font> 
          </td>
          <td>
@@ -298,7 +312,7 @@ A mover component that adds physical transformations to an object.       Proper
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Vector2D
+            &nbsp;<a href='Vector2D.html' target='main'>Vector2D</a>
             </code></font> 
          </td>
          <td>
@@ -522,6 +536,52 @@ A mover component that adds physical transformations to an object.       Proper
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
+            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
+            
+               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
+            
+               <a href="BaseComponent.html#getType">getType</a>,
+            
+               <a href="BaseComponent.html#setPriority">setPriority</a>,
+            
+               <a href="BaseComponent.html#getPriority">getPriority</a>,
+            
+               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
             <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
          </td>
       </tr>
@@ -572,54 +632,6 @@ A mover component that adds physical transformations to an object.       Proper
                <a href="Transform2DComponent.html#getScale">getScale</a>,
             
                <a href="Transform2DComponent.html#getRenderScale">getRenderScale</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
-            
-               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
-            
-               <a href="BaseComponent.html#getType">getType</a>,
-            
-               <a href="BaseComponent.html#setPriority">setPriority</a>,
-            
-               <a href="BaseComponent.html#getPriority">getPriority</a>,
-            
-               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseObject.html#destroy">destroy</a>,
-            
-               <a href="BaseObject.html#setElement">setElement</a>,
-            
-               <a href="BaseObject.html#getElement">getElement</a>,
-            
-               <a href="BaseObject.html#jQ">jQ</a>,
-            
-               <a href="BaseObject.html#update">update</a>,
-            
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -722,6 +734,26 @@ A mover component that adds physical transformations to an object.       Proper
 </table>
 
 
+   <a name="destroy"> </a> <h3>destroy</h3>
+      <pre><b>destroy</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
    <a name="execute"> </a> <h3>execute</h3>
       <pre><b>execute</b>(renderContext, time)</pre> 
    <ul>
@@ -744,6 +776,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getAcceleration"> </a> <h3>getAcceleration</h3>
@@ -760,11 +796,15 @@ A mover component that adds physical transformations to an object.       Proper
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Vector2D</i>&nbsp;</code>The acceleration vector 
+         <code><i><a href='Vector2D.html' target='main'>Vector2D</a></i>&nbsp;</code>The acceleration vector 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getAngularVelocity"> </a> <h3>getAngularVelocity</h3>
@@ -781,6 +821,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getCheckRestState"> </a> <h3>getCheckRestState</h3>
@@ -802,6 +846,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -823,6 +871,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getGravity"> </a> <h3>getGravity</h3>
@@ -839,11 +891,15 @@ A mover component that adds physical transformations to an object.       Proper
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Vector2D</i>&nbsp;</code>The gravity vector 
+         <code><i><a href='Vector2D.html' target='main'>Vector2D</a></i>&nbsp;</code>The gravity vector 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getLagAdjustment"> </a> <h3>getLagAdjustment</h3>
@@ -865,6 +921,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getMass"> </a> <h3>getMass</h3>
@@ -886,6 +946,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getMaxVelocity"> </a> <h3>getMaxVelocity</h3>
@@ -907,6 +971,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getRestingVelocity"> </a> <h3>getRestingVelocity</h3>
@@ -928,6 +996,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getVelocity"> </a> <h3>getVelocity</h3>
@@ -944,11 +1016,15 @@ A mover component that adds physical transformations to an object.       Proper
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Vector2D</i>&nbsp;</code> 
+         <code><i><a href='Vector2D.html' target='main'>Vector2D</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getVelocityDecay"> </a> <h3>getVelocityDecay</h3>
@@ -970,6 +1046,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="isCheckLag"> </a> <h3>isCheckLag</h3>
@@ -991,6 +1071,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="isResting"> </a> <h3>isResting</h3>
@@ -1012,6 +1096,10 @@ A mover component that adds physical transformations to an object.       Proper
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -1028,6 +1116,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setAcceleration"> </a> <h3>setAcceleration</h3>
@@ -1049,6 +1141,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setAngularVelocity"> </a> <h3>setAngularVelocity</h3>
@@ -1070,6 +1166,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setCheckLag"> </a> <h3>setCheckLag</h3>
@@ -1091,6 +1191,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setCheckRestState"> </a> <h3>setCheckRestState</h3>
@@ -1112,6 +1216,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setGravity"> </a> <h3>setGravity</h3>
@@ -1133,6 +1241,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setLagAdjustment"> </a> <h3>setLagAdjustment</h3>
@@ -1154,6 +1266,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setMass"> </a> <h3>setMass</h3>
@@ -1175,6 +1291,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setMaxVelocity"> </a> <h3>setMaxVelocity</h3>
@@ -1196,6 +1316,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setResting"> </a> <h3>setResting</h3>
@@ -1217,6 +1341,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setRestingVelocity"> </a> <h3>setRestingVelocity</h3>
@@ -1238,6 +1366,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setVelocity"> </a> <h3>setVelocity</h3>
@@ -1259,6 +1391,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setVelocityDecay"> </a> <h3>setVelocityDecay</h3>
@@ -1280,6 +1416,10 @@ A mover component that adds physical transformations to an object.       Proper
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -1291,8 +1431,8 @@ A mover component that adds physical transformations to an object.       Proper
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:26 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:48 GMT-0400 (EDT)</div>
 </body>
 </html>

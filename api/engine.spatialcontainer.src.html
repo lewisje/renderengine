@@ -86,9 +86,9 @@ A single node within a spatial container.
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 11</span>  * @version: $Revision: 837 $
+<span class='linenumber'> 11</span>  * @version: $Revision: 1216 $
 <span class='linenumber'> 12</span>  *
-<span class='linenumber'> 13</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 13</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 14</span>  *
 <span class='linenumber'> 15</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
 <span class='linenumber'> 16</span>  * of this software and associated documentation files (the "Software"), to deal
@@ -276,27 +276,46 @@ A single node within a spatial container.
 <span class='linenumber'>198</span>     */</span><span class="WHIT">
 <span class='linenumber'>199</span> </span><span class="WHIT">   </span><span class="NAME">getPCL</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>200</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">HashContainer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>201</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>201</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>202</span> 
-<span class='linenumber'>203</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope SpatialContainer.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
-<span class='linenumber'>204</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>205</span>     * Get the class name of this object
-<span class='linenumber'>206</span>     *
-<span class='linenumber'>207</span>     * @return {String} "SpatialContainer"
-<span class='linenumber'>208</span>     */</span><span class="WHIT">
-<span class='linenumber'>209</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"SpatialContainer"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>211</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>212</span> 
-<span class='linenumber'>213</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>214</span> 
-<span class='linenumber'>215</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">SpatialContainer</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>216</span> 
-<span class='linenumber'>217</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>203</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>204</span>     * Returns all objects within the spatial container.
+<span class='linenumber'>205</span>     * @return {Array} An array of all objects in the container
+<span class='linenumber'>206</span>     */</span><span class="WHIT">
+<span class='linenumber'>207</span> </span><span class="WHIT">   </span><span class="NAME">getObjects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>208</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>209</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>210</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>211</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>212</span>     * Returns all objects within the spatial container of a particular
+<span class='linenumber'>213</span>     * class type.
+<span class='linenumber'>214</span>     * @return {Array} An array of objects in the container, filtered by class
+<span class='linenumber'>215</span>     */</span><span class="WHIT">
+<span class='linenumber'>216</span> </span><span class="WHIT">   </span><span class="NAME">getObjectsOfType</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">clazz</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>217</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">EngineSupport.filter</span><span class="PUNC">(</span><span class="NAME">this.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>218</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">clazz.isInstance</span><span class="PUNC">(</span><span class="NAME">obj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>219</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>220</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>221</span> 
+<span class='linenumber'>222</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope SpatialContainer.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
+<span class='linenumber'>223</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>224</span>     * Get the class name of this object
+<span class='linenumber'>225</span>     *
+<span class='linenumber'>226</span>     * @return {String} "SpatialContainer"
+<span class='linenumber'>227</span>     */</span><span class="WHIT">
+<span class='linenumber'>228</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>229</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"SpatialContainer"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>230</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>231</span> 
+<span class='linenumber'>232</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>233</span> 
+<span class='linenumber'>234</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">SpatialContainer</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>235</span> 
+<span class='linenumber'>236</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:16 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:42 GMT-0400 (EDT)</div>
 </body>
 </html>

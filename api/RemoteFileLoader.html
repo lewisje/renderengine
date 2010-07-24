@@ -67,7 +67,9 @@
          |
          +--<a href='ResourceLoader.html' target='main'>ResourceLoader</a>
             |
-            +--<b>RemoteFileLoader</b></pre>
+            +--<b>RemoteFileLoader</b>
+               |
+               +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>RemoteFileLoader</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -77,7 +79,7 @@
    Extends <a href="ResourceLoader.html">ResourceLoader</a>.<br/>
 
 <p>
-Loads JSON objects from a specified URL.</p>
+Loads a text or XML file from the specified URL.  It is possible to check for the       existence of a file with this type of loader.</p>
 
 
 
@@ -322,6 +324,27 @@ Loads JSON objects from a specified URL.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
             <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
          </td>
       </tr>
@@ -343,27 +366,6 @@ Loads JSON objects from a specified URL.</p>
                <a href="ResourceLoader.html#clear">clear</a>,
             
                <a href="ResourceLoader.html#getResources">getResources</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="PooledObject.html#getId">getId</a>,
-            
-               <a href="PooledObject.html#getName">getName</a>,
-            
-               <a href="PooledObject.html#getProperties">getProperties</a>,
-            
-               <a href="PooledObject.html#toString">toString</a>,
-            
-               <a href="PooledObject.html#create">create</a>,
             
          </code></td>
       </tr>
@@ -449,7 +451,7 @@ Loads JSON objects from a specified URL.</p>
       <b>Parameters:</b>
       
       <ul>
-         <code>[<i>String</i>]&nbsp;name</code> - The name of the resource loader 
+         <code>name</code> 
       </ul>
       
    </ul>
@@ -492,6 +494,10 @@ Loads JSON objects from a specified URL.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="exists"> </a> <h3>exists</h3>
@@ -521,6 +527,10 @@ Loads JSON objects from a specified URL.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getCacheRecord"> </a> <h3>getCacheRecord</h3>
@@ -545,6 +555,10 @@ Loads JSON objects from a specified URL.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -566,6 +580,10 @@ Loads JSON objects from a specified URL.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getData"> </a> <h3>getData</h3>
@@ -587,6 +605,10 @@ Loads JSON objects from a specified URL.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getResourceType"> </a> <h3>getResourceType</h3>
@@ -608,6 +630,10 @@ Loads JSON objects from a specified URL.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="load"> </a> <h3>load</h3>
@@ -638,6 +664,10 @@ Loads JSON objects from a specified URL.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -654,6 +684,10 @@ Loads JSON objects from a specified URL.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="success"> </a> <h3>success</h3>
@@ -675,6 +709,10 @@ Loads JSON objects from a specified URL.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -686,8 +724,8 @@ Loads JSON objects from a specified URL.</p>
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:26 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:48 GMT-0400 (EDT)</div>
 </body>
 </html>

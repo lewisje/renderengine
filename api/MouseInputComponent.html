@@ -69,7 +69,9 @@
             |
             +--<a href='InputComponent.html' target='main'>InputComponent</a>
                |
-               +--<b>MouseInputComponent</b></pre>
+               +--<b>MouseInputComponent</b>
+                  |
+                  +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>MouseInputComponent</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -79,7 +81,7 @@
    Extends <a href="InputComponent.html">InputComponent</a>.<br/>
 
 <p>
-A component which responds to mouse events and notifiesthe host object when one of the events occurs.  The host should implementany of the five methods listed below to be notified of the corresponding event:<ul><li><tt>onMouseOver()</tt> - The mouse moved over the host object, or the object     moved under the mouse</li><li><tt>onMouseOut()</tt> - The mouse moved out of the host object (after being over it)</li><li><tt>onMouseDown()</tt> - A mouse button was depressed over the host object</li><li><tt>onMouseUp()</tt> - A mouse button was released over the host object</li><li><tt>onMouseMove()</tt> - The mouse was moved</li></ul>Each event receives the "mouseInfo" object as its only argument which contains the following:<ul><li><tt>position [Point2D]</tt> - The position of the mouse in screen coordinates</li><li><tt>lastPosition [Point2D]</tt> - The last updated position of the mouse</li><li><tt>button [Number]</tt> - One of the mouse button constants from <a href='EventEngine.html'>EventEngine</a></li></ul>Objects which wish to be notified via the <tt>onMouseOver()</tt> event handler will needto define their bounding box.</p>
+A component which responds to mouse events and notifiesthe host object when one of the events occurs.  The host should implementany of the five methods listed below to be notified of the corresponding event:<ul><li><tt>onMouseOver()</tt> - The mouse moved over the host object, or the object     moved under the mouse</li><li><tt>onMouseOut()</tt> - The mouse moved out of the host object (after being over it)</li><li><tt>onMouseDown()</tt> - A mouse button was depressed</li><li><tt>onMouseUp()</tt> - A mouse button was released</li><li><tt>onMouseMove()</tt> - The mouse was moved</li></ul>Each event receives the "mouseInfo" object as its only argument which contains the following:<ul><li><tt>position [Point2D]</tt> - The position of the mouse in screen coordinates</li><li><tt>lastPosition [Point2D]</tt> - The last updated position of the mouse</li><li><tt>button [Number]</tt> - One of the mouse button constants from <a href='EventEngine.html'>EventEngine</a></li></ul>Objects which wish to be notified via the <tt>onMouseOver()</tt> event handler will needto define their bounding box.</p>
 
 
 
@@ -155,31 +157,6 @@ A component which responds to mouse events and notifiesthe host object when one
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseObject.html#destroy">destroy</a>,
-            
-               <a href="BaseObject.html#setElement">setElement</a>,
-            
-               <a href="BaseObject.html#getElement">getElement</a>,
-            
-               <a href="BaseObject.html#jQ">jQ</a>,
-            
-               <a href="BaseObject.html#update">update</a>,
-            
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
             <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
          </td>
       </tr>
@@ -201,6 +178,31 @@ A component which responds to mouse events and notifiesthe host object when one
                <a href="BaseComponent.html#execute">execute</a>,
             
                <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -310,6 +312,10 @@ A component which responds to mouse events and notifiesthe host object when one
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -321,8 +327,8 @@ A component which responds to mouse events and notifiesthe host object when one
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:24 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

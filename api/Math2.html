@@ -4,7 +4,7 @@
 <html>
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-   <title>JsDoc: Linker</title>
+   <title>JsDoc: Math2</title>
    <style type="text/css">
       body { background-color: #FFFFFF; }
       .TableHeadingColor { background: #CCCCFF; }
@@ -55,15 +55,15 @@
 
 <hr>
 
-<h2>Static Class Linker</h2>
+<h2>Static Class Math2</h2>
 
 
 <p>
-A static class for processing class files, looking for dependencies, and       ensuring that all dependencies exist before initializing a class.  The linker       expects that files will follow a fairly strict format, so that patterns can be       identified and all dependencies resolved.       <p/>       These methods handle object dependencies so that each object will be       initialized as soon as its dependencies become available.  Using this method       scripts can be loaded immediately, using the browsers threading model, and       executed when dependencies are fulfilled.</p>
+A static class which provides methods for generating random integers		 and floats between 0 and 1.  The class also provides a way to seed the		 random number generator for repeatable results.</p>
 
 
 
-<br/><i>Defined in <a href="engine.linker.src.html">engine.linker.js</a></i>
+<br/><i>Defined in <a href="engine.math2.src.html">engine.math2.js</a></i>
 
 <hr>
 
@@ -86,13 +86,27 @@ A static class for processing class files, looking for dependencies, and       
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Object
+            &nbsp;Number
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#dumpDependencies">dumpDependencies</a></b>() </code> 
+            <code> <b> <a href="#random">random</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dump out any unresolved class dependencies to the console.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a random float between 0 (inclusive) and 1 (exclusive)
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#randomInt">randomInt</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a random integer from the pseduo random number generator.
  
          </td>
       </tr>
@@ -102,9 +116,9 @@ A static class for processing class files, looking for dependencies, and       
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#initObject">initObject</a></b>(objectName, primaryDependency, fn) </code> 
+            <code> <b> <a href="#seed">seed</a></b>(seed) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Initializes an object for use in the engine.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Seed the random number generator with a known number.
  
          </td>
       </tr>
@@ -142,10 +156,10 @@ A static class for processing class files, looking for dependencies, and       
 </table>
 
 
-   <a name="dumpDependencies"> </a> <h3>dumpDependencies</h3>
-      <pre>Object&nbsp;<b>dumpDependencies</b>()</pre> 
+   <a name="random"> </a> <h3>random</h3>
+      <pre>Number&nbsp;<b>random</b>()</pre> 
    <ul>
-      Dump out any unresolved class dependencies to the console.
+      Get a random float between 0 (inclusive) and 1 (exclusive)
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -156,7 +170,7 @@ A static class for processing class files, looking for dependencies, and       
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Object</i>&nbsp;</code>A list of all classes that haven't been loaded due to resolution conflicts. 
+         <code><i>Number</i>&nbsp;</code>A number between 0 and 1 
       </ul>
    </ul>
    
@@ -167,23 +181,42 @@ A static class for processing class files, looking for dependencies, and       
 
    <hr>
 
-   <a name="initObject"> </a> <h3>initObject</h3>
-      <pre><b>initObject</b>(objectName, primaryDependency, fn)</pre> 
+   <a name="randomInt"> </a> <h3>randomInt</h3>
+      <pre>Number&nbsp;<b>randomInt</b>()</pre> 
    <ul>
-      Initializes an object for use in the engine.  Calling this method is required to make surethat all dependencies are resolved before actually instantiating an object of the specifiedclass.
+      Get a random integer from the pseduo random number generator.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>An integer between 0 and 2^32 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="seed"> </a> <h3>seed</h3>
+      <pre><b>seed</b>(seed)</pre> 
+   <ul>
+      Seed the random number generator with a known number.  Thisensures that random numbers occur in a known sequence.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>String</i>]&nbsp;objectName </code> - The name of the object class 
-      </ul>
-      <ul>
-         <code>[<i>String</i>]&nbsp;primaryDependency </code> - The name of the class for which the <tt>objectName</tt> class is                                  dependent upon.  Specifying <tt>null</tt> will assume the <tt>Base</tt> class. 
-      </ul>
-      <ul>
-         <code>[<i>Function</i>]&nbsp;fn </code> - The function to run when the object can be initialized. 
+         <code>[<i>Number</i>]&nbsp;seed </code> - An integer to seed the number generator with 
       </ul>
    </ul>
    
@@ -209,6 +242,6 @@ A static class for processing class files, looking for dependencies, and       
 
    <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:48 GMT-0400 (EDT)</div>
 </body>
 </html>

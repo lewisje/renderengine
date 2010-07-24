@@ -125,9 +125,9 @@ A 2D circle class with helpful manipulation methods.</p>
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#containsCircle">containsCircle</a></b>(rect) </code> 
+            <code> <b> <a href="#containsCircle">containsCircle</a></b>(circle) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Determine if this rectangle contains the specified rectangle.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Determine if this circle contains the specified circle.
  
          </td>
       </tr>
@@ -141,7 +141,19 @@ A 2D circle class with helpful manipulation methods.</p>
          <td>
             <code> <b> <a href="#containsPoint">containsPoint</a></b>(point) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if this rectangle contains the specified point.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if this circle contains the specified point.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -177,7 +189,7 @@ A 2D circle class with helpful manipulation methods.</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Point2D
+            &nbsp;<a href='Point2D.html' target='main'>Point2D</a>
             </code></font> 
          </td>
          <td>
@@ -365,19 +377,23 @@ A 2D circle class with helpful manipulation methods.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="containsCircle"> </a> <h3>containsCircle</h3>
-      <pre>Boolean&nbsp;<b>containsCircle</b>(rect)</pre> 
+      <pre>Boolean&nbsp;<b>containsCircle</b>(circle)</pre> 
    <ul>
-      Determine if this rectangle contains the specified rectangle.
+      Determine if this circle contains the specified circle.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>rect </code> - A <a href='Rectangle2D.html'>Rectangle2D</a> to compare against 
+         <code>[<i>Circle</i>]&nbsp;circle </code> - A circle to compare against 
       </ul>
    </ul>
    
@@ -391,12 +407,16 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="containsPoint"> </a> <h3>containsPoint</h3>
       <pre>Boolean&nbsp;<b>containsPoint</b>(point)</pre> 
    <ul>
-      Returns <tt>true</tt> if this rectangle contains the specified point.
+      Returns <tt>true</tt> if this circle contains the specified point.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -417,6 +437,30 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="destroy"> </a> <h3>destroy</h3>
+      <pre><b>destroy</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="equals"> </a> <h3>equals</h3>
@@ -443,6 +487,10 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="get"> </a> <h3>get</h3>
@@ -464,6 +512,10 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getCenter"> </a> <h3>getCenter</h3>
@@ -480,11 +532,15 @@ A 2D circle class with helpful manipulation methods.</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Point2D</i>&nbsp;</code>The center point 
+         <code><i><a href='Point2D.html' target='main'>Point2D</a></i>&nbsp;</code>The center point 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getRadius"> </a> <h3>getRadius</h3>
@@ -506,6 +562,10 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="isContained"> </a> <h3>isContained</h3>
@@ -518,7 +578,7 @@ A 2D circle class with helpful manipulation methods.</p>
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>circle </code> - A <a href='Circle2D.html'>Circle2D</a> to compare against 
+         <code>[<i>Circle</i>]&nbsp;circle </code> - A circle to compare against 
       </ul>
    </ul>
    
@@ -532,6 +592,10 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="isIntersecting"> </a> <h3>isIntersecting</h3>
@@ -558,6 +622,10 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="offset"> </a> <h3>offset</h3>
@@ -582,6 +650,10 @@ A 2D circle class with helpful manipulation methods.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -598,6 +670,10 @@ A 2D circle class with helpful manipulation methods.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="set"> </a> <h3>set</h3>
@@ -610,7 +686,7 @@ A 2D circle class with helpful manipulation methods.</p>
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Number</i>]&nbsp;x </code> - An optional value to initialize the X coordinate of the circle 
+         <code>[<i>Number|Point2D|Circle2D</i>]&nbsp;x </code> - An optional value to initialize the X coordinate of the circle 
       </ul>
       <ul>
          <code>[<i>Number</i>]&nbsp;y </code> - An optional value to initialize the Y coordinate of the circle 
@@ -625,6 +701,10 @@ A 2D circle class with helpful manipulation methods.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="toString"> </a> <h3>toString</h3>
@@ -646,6 +726,10 @@ A 2D circle class with helpful manipulation methods.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -657,8 +741,8 @@ A 2D circle class with helpful manipulation methods.</p>
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:24 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

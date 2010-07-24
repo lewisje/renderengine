@@ -67,7 +67,9 @@
          |
          +--<a href='BaseComponent.html' target='main'>BaseComponent</a>
             |
-            +--<b>ColliderComponent</b></pre>
+            +--<b>ColliderComponent</b>
+               |
+               +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>ColliderComponent</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -77,7 +79,7 @@
    Extends <a href="BaseComponent.html">BaseComponent</a>.<br/>
 
 <p>
-A collider component is responsible for handling potential collisions by        updating the associated collision model and checking for possible collisions.</p>
+Creates a collider component which tests the collision model for             potential collisions. Each frame, the component will update a potential             collision list (PCL) for the host object, using its current position             obtained from <a href='Object2D.html#getPosition'>Object2D.getPosition</a>. Each object which meets             certain criteria will be passed to an <tt>onCollide()</tt> method which             must be implemented by the host object.             <p/>             The event handler will be passed the time the collision was detected             as its first argument, and the potential collision object as the second.             The host must determine if the collision is valid for itself, and then             return a value which indicates whether the component should contine to             check for collisions, or if it should stop.             <p/>             If the <tt>onCollide()</tt> method is not implemented on the host, no              collision events will be passed.</p>
 
 
 
@@ -138,7 +140,7 @@ A collider component is responsible for handling potential collisions by       
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Creates a collider component which tests the collision model for             potential collisions.
+        A collider component is responsible for handling potential collisions by        updating the associated collision model and checking for possible collisions.
         </td>
    </tr>
 
@@ -186,7 +188,7 @@ A collider component is responsible for handling potential collisions by       
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;SpatialContainer
+            &nbsp;<a href='SpatialContainer.html' target='main'>SpatialContainer</a>
             </code></font> 
          </td>
          <td>
@@ -200,7 +202,7 @@ A collider component is responsible for handling potential collisions by       
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;BaseObject
+            &nbsp;<a href='BaseObject.html' target='main'>BaseObject</a>
             </code></font> 
          </td>
          <td>
@@ -276,6 +278,29 @@ A collider component is responsible for handling potential collisions by       
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
+            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
+            
+               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
+            
+               <a href="BaseComponent.html#getType">getType</a>,
+            
+               <a href="BaseComponent.html#setPriority">setPriority</a>,
+            
+               <a href="BaseComponent.html#getPriority">getPriority</a>,
+            
+               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
             <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
          </td>
       </tr>
@@ -295,29 +320,6 @@ A collider component is responsible for handling potential collisions by       
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
                <a href="BaseObject.html#removeEvent">removeEvent</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
-            
-               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
-            
-               <a href="BaseComponent.html#getType">getType</a>,
-            
-               <a href="BaseComponent.html#setPriority">setPriority</a>,
-            
-               <a href="BaseComponent.html#getPriority">getPriority</a>,
-            
-               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
             
          </code></td>
       </tr>
@@ -404,7 +406,7 @@ A collider component is responsible for handling potential collisions by       
 
    <pre><b>ColliderComponent</b>(name, collisionModel, priority)</pre>
    <ul>
-      Creates a collider component which tests the collision model for             potential collisions. Each frame, the component will update a potential             collision list (PCL) for the host object, using its current position             obtained from <a href='Object2D.html#getPosition'>Object2D.getPosition</a>. Each object which meets             certain criteria will be passed to an <tt>onCollide()<tt> method which             must be implemented by the host object.             <p/>             The event handler will be passed the time the collision was detected             as its first argument, and the potential collision object as the second.             The host must determine if the collision is valid for itself, and then             return a value which indicates whether the component should contine to             check for collisions, or if it should stop.             <p/>             If the <tt>onCollide()</tt> method is not implemented on the host, no              collision events will be passed.
+      A collider component is responsible for handling potential collisions by        updating the associated collision model and checking for possible collisions.
    </ul>
    
    <!-- PARAMETERS START -->
@@ -467,6 +469,10 @@ A collider component is responsible for handling potential collisions by       
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -488,6 +494,10 @@ A collider component is responsible for handling potential collisions by       
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getCollisionModel"> </a> <h3>getCollisionModel</h3>
@@ -504,11 +514,15 @@ A collider component is responsible for handling potential collisions by       
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>SpatialContainer</i>&nbsp;</code>The collision model 
+         <code><i><a href='SpatialContainer.html' target='main'>SpatialContainer</a></i>&nbsp;</code>The collision model 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getObjectType"> </a> <h3>getObjectType</h3>
@@ -525,11 +539,15 @@ A collider component is responsible for handling potential collisions by       
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>BaseObject</i>&nbsp;</code>The only object type to collide with, or <tt>null</tt> for any object 
+         <code><i><a href='BaseObject.html' target='main'>BaseObject</a></i>&nbsp;</code>The only object type to collide with, or <tt>null</tt> for any object 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -546,6 +564,10 @@ A collider component is responsible for handling potential collisions by       
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setObjectType"> </a> <h3>setObjectType</h3>
@@ -567,6 +589,10 @@ A collider component is responsible for handling potential collisions by       
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="testCollision"> </a> <h3>testCollision</h3>
@@ -596,6 +622,10 @@ A collider component is responsible for handling potential collisions by       
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="updateModel"> </a> <h3>updateModel</h3>
@@ -612,6 +642,10 @@ A collider component is responsible for handling potential collisions by       
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -623,8 +657,8 @@ A collider component is responsible for handling potential collisions by       
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:26 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:48 GMT-0400 (EDT)</div>
 </body>
 </html>

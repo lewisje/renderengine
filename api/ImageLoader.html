@@ -69,7 +69,9 @@
             |
             +--<a href='RemoteLoader.html' target='main'>RemoteLoader</a>
                |
-               +--<b>ImageLoader</b></pre>
+               +--<b>ImageLoader</b>
+                  |
+                  +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>ImageLoader</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -79,7 +81,13 @@
    Extends <a href="RemoteLoader.html">RemoteLoader</a>.<br/>
 
 <p>
-Loads images and stores the reference to those images.</p>
+Loads images and stores the reference to those images.  Images       are stored on the client-side in a simple cache for faster re-use.       When loading images, you assign a name to the image.  This would allow       you to re-use the image without having to load it again for another       purpose.       <p/>       Loading images is fairly simple.  You only need to create an instance       of an image loader (multiple images can be loaded by the same resource       loader) and then use it to load the images:
+ <pre>
+          this.imageLoader = ImageLoader.create();
+          
+          // Load an image
+          this.imageLoader.load("keys", this.getFilePath("resources/fingerboard.png"), 220, 171);
+ </pre>       In the example above, <tt>this</tt> refers to a <a href='Game.html'>Game</a> object which       implements the <a href='Game.html#getFilePath'>getFilePath()</a> method which is       used to get a path relative to where the game is located on the server.</p>
 
 
 
@@ -179,7 +187,7 @@ Loads images and stores the reference to those images.</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Point2D
+            &nbsp;<a href='Point2D.html' target='main'>Point2D</a>
             </code></font> 
          </td>
          <td>
@@ -245,25 +253,27 @@ Loads images and stores the reference to those images.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="ResourceLoader.html#setReady">setReady</a>,
+               <a href="BaseObject.html#destroy">destroy</a>,
             
-               <a href="ResourceLoader.html#isReady">isReady</a>,
+               <a href="BaseObject.html#release">release</a>,
             
-               <a href="ResourceLoader.html#unload">unload</a>,
+               <a href="BaseObject.html#setElement">setElement</a>,
             
-               <a href="ResourceLoader.html#set">set</a>,
+               <a href="BaseObject.html#getElement">getElement</a>,
             
-               <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
+               <a href="BaseObject.html#jQ">jQ</a>,
             
-               <a href="ResourceLoader.html#clear">clear</a>,
+               <a href="BaseObject.html#update">update</a>,
             
-               <a href="ResourceLoader.html#getResources">getResources</a>,
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -306,27 +316,25 @@ Loads images and stores the reference to those images.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+            <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="BaseObject.html#destroy">destroy</a>,
+               <a href="ResourceLoader.html#setReady">setReady</a>,
             
-               <a href="BaseObject.html#release">release</a>,
+               <a href="ResourceLoader.html#isReady">isReady</a>,
             
-               <a href="BaseObject.html#setElement">setElement</a>,
+               <a href="ResourceLoader.html#unload">unload</a>,
             
-               <a href="BaseObject.html#getElement">getElement</a>,
+               <a href="ResourceLoader.html#set">set</a>,
             
-               <a href="BaseObject.html#jQ">jQ</a>,
+               <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
             
-               <a href="BaseObject.html#update">update</a>,
+               <a href="ResourceLoader.html#clear">clear</a>,
             
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+               <a href="ResourceLoader.html#getResources">getResources</a>,
             
          </code></td>
       </tr>
@@ -438,6 +446,10 @@ Loads images and stores the reference to those images.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -459,6 +471,10 @@ Loads images and stores the reference to those images.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getDimensions"> </a> <h3>getDimensions</h3>
@@ -480,11 +496,15 @@ Loads images and stores the reference to those images.</p>
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Point2D</i>&nbsp;</code>A point which represents the width and height of the image 
+         <code><i><a href='Point2D.html' target='main'>Point2D</a></i>&nbsp;</code>A point which represents the width and height of the image 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getResourceType"> </a> <h3>getResourceType</h3>
@@ -506,6 +526,10 @@ Loads images and stores the reference to those images.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="load"> </a> <h3>load</h3>
@@ -536,6 +560,10 @@ Loads images and stores the reference to those images.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="loadImageResource"> </a> <h3>loadImageResource</h3>
@@ -571,6 +599,10 @@ Loads images and stores the reference to those images.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -582,8 +614,8 @@ Loads images and stores the reference to those images.</p>
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:25 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

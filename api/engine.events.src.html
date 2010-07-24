@@ -52,7 +52,7 @@ Methods for handling events (adding & removing) and keycodes for              s
          </td>
          <td>
             
-A static object for unformly handling events within all browser       platforms.
+A static object for uniformly handling events within all browser       platforms.
          </td>
       </tr>
    
@@ -76,9 +76,9 @@ A static object for unformly handling events within all browser       platforms
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  *
 <span class='linenumber'> 10</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 11</span>  * @version: $Revision: 837 $
+<span class='linenumber'> 11</span>  * @version: $Revision: 1216 $
 <span class='linenumber'> 12</span>  *
-<span class='linenumber'> 13</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 13</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 14</span>  *
 <span class='linenumber'> 15</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
 <span class='linenumber'> 16</span>  * of this software and associated documentation files (the "Software"), to deal
@@ -103,7 +103,7 @@ A static object for unformly handling events within all browser       platforms
 <span class='linenumber'> 35</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"EventEngine"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 36</span> 
 <span class='linenumber'> 37</span> </span><span class="COMM">/**
-<span class='linenumber'> 38</span>  * @class A static object for unformly handling events within all browser
+<span class='linenumber'> 38</span>  * @class A static object for uniformly handling events within all browser
 <span class='linenumber'> 39</span>  *        platforms.  The event engine is an abstraction of the jQuery event
 <span class='linenumber'> 40</span>  *        system.  Methods are provided for adding and removing events in
 <span class='linenumber'> 41</span>  *        a programmatic way.  Additionally the engine has key codes for
@@ -167,178 +167,191 @@ A static object for unformly handling events within all browser       platforms
 <span class='linenumber'> 99</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
 <span class='linenumber'>100</span> </span><span class="WHIT">      </span><span class="NAME">jQuery</span><span class="PUNC">(</span><span class="NAME">target</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">unbind</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">handler</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='linenumber'>101</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>102</span> 
-<span class='linenumber'>103</span> 
-<span class='linenumber'>104</span> </span><span class="WHIT">   </span><span class="COMM">//====================================================================================================================</span><span class="WHIT">
-<span class='linenumber'>105</span> </span><span class="WHIT">   </span><span class="COMM">// MOUSE BUTTON CONSTANTS</span><span class="WHIT">
-<span class='linenumber'>106</span> 
-<span class='linenumber'>107</span> </span><span class="WHIT">   </span><span class="COMM">/** No mouse button pressed. 
-<span class='linenumber'>108</span>     * @type {Number}
-<span class='linenumber'>109</span>     */</span><span class="WHIT">
-<span class='linenumber'>110</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_NO_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>111</span> 
-<span class='linenumber'>112</span> </span><span class="WHIT">   </span><span class="COMM">/** Left mouse button.
-<span class='linenumber'>113</span>     * @type {Number}
-<span class='linenumber'>114</span>     */</span><span class="WHIT">
-<span class='linenumber'>115</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_LEFT_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>102</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>103</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>104</span>     * Get the key code for the provided character.  The value returned
+<span class='linenumber'>105</span>     * will be for the lowercase key value, unless the second argument is
+<span class='linenumber'>106</span>     * set to &lt;code>true&lt;/code> which will return the exact key code for the
+<span class='linenumber'>107</span>     * provided character.
+<span class='linenumber'>108</span>     * @param charStr {String} A single character to get the key code for
+<span class='linenumber'>109</span>     * @param [literal] {Boolean} &lt;code>true&lt;/code> to return the literal code without
+<span class='linenumber'>110</span>     *        first converting the character to lower case.
+<span class='linenumber'>111</span>     * @return {Number} The key code for the given character
+<span class='linenumber'>112</span>     */</span><span class="WHIT">
+<span class='linenumber'>113</span> </span><span class="WHIT">   </span><span class="NAME">keyCodeForChar</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">charStr</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">literal</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>114</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">literal</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">charStr</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">charStr.toUpperCase</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">charCodeAt</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>115</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>116</span> 
-<span class='linenumber'>117</span> </span><span class="WHIT">   </span><span class="COMM">/** Right mouse button.
-<span class='linenumber'>118</span>     * @type {Number}
-<span class='linenumber'>119</span>     */</span><span class="WHIT">
-<span class='linenumber'>120</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_RIGHT_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>121</span> 
-<span class='linenumber'>122</span> </span><span class="WHIT">   </span><span class="COMM">/** Middle mouse button.
-<span class='linenumber'>123</span>     * @type {Number}
-<span class='linenumber'>124</span>     */</span><span class="WHIT">
-<span class='linenumber'>125</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_MIDDLE_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>126</span> 
-<span class='linenumber'>127</span> </span><span class="WHIT">   </span><span class="COMM">//====================================================================================================================</span><span class="WHIT">
-<span class='linenumber'>128</span> </span><span class="WHIT">   </span><span class="COMM">// KEY CODE CONSTANTS</span><span class="WHIT">
+<span class='linenumber'>117</span> </span><span class="WHIT">   </span><span class="COMM">//====================================================================================================================</span><span class="WHIT">
+<span class='linenumber'>118</span> </span><span class="WHIT">   </span><span class="COMM">// MOUSE BUTTON CONSTANTS</span><span class="WHIT">
+<span class='linenumber'>119</span> 
+<span class='linenumber'>120</span> </span><span class="WHIT">   </span><span class="COMM">/** No mouse button pressed. 
+<span class='linenumber'>121</span>     * @type {Number}
+<span class='linenumber'>122</span>     */</span><span class="WHIT">
+<span class='linenumber'>123</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_NO_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>124</span> 
+<span class='linenumber'>125</span> </span><span class="WHIT">   </span><span class="COMM">/** Left mouse button.
+<span class='linenumber'>126</span>     * @type {Number}
+<span class='linenumber'>127</span>     */</span><span class="WHIT">
+<span class='linenumber'>128</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_LEFT_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>129</span> 
-<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Tab" key
+<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="COMM">/** Right mouse button.
 <span class='linenumber'>131</span>     * @type {Number}
 <span class='linenumber'>132</span>     */</span><span class="WHIT">
-<span class='linenumber'>133</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_TAB</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">9</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>133</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_RIGHT_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>134</span> 
-<span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Enter" key
+<span class='linenumber'>135</span> </span><span class="WHIT">   </span><span class="COMM">/** Middle mouse button.
 <span class='linenumber'>136</span>     * @type {Number}
 <span class='linenumber'>137</span>     */</span><span class="WHIT">
-<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_ENTER</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">13</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="NAME">MOUSE_MIDDLE_BUTTON</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'>139</span> 
-<span class='linenumber'>140</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Delete" key
-<span class='linenumber'>141</span>     * @type {Number}
-<span class='linenumber'>142</span>     */</span><span class="WHIT">
-<span class='linenumber'>143</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_DELETE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">46</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>144</span> 
-<span class='linenumber'>145</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Space" key
-<span class='linenumber'>146</span>     * @type {Number}
-<span class='linenumber'>147</span>     */</span><span class="WHIT">
-<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_SPACE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">32</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>149</span> 
-<span class='linenumber'>150</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Backspace"
-<span class='linenumber'>151</span>     * @type {Number}
-<span class='linenumber'>152</span>     */</span><span class="WHIT">
-<span class='linenumber'>153</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_BACKSPACE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>154</span> 
-<span class='linenumber'>155</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Up" key
-<span class='linenumber'>156</span>     * @type {Number}
-<span class='linenumber'>157</span>     */</span><span class="WHIT">
-<span class='linenumber'>158</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_UP_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">38</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>159</span> 
-<span class='linenumber'>160</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Down" key
-<span class='linenumber'>161</span>     * @type {Number}
-<span class='linenumber'>162</span>     */</span><span class="WHIT">
-<span class='linenumber'>163</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_DOWN_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">40</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>164</span> 
-<span class='linenumber'>165</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Left" key
-<span class='linenumber'>166</span>     * @type {Number}
-<span class='linenumber'>167</span>     */</span><span class="WHIT">
-<span class='linenumber'>168</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_LEFT_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">37</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>169</span> 
-<span class='linenumber'>170</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "RIGHT" key
-<span class='linenumber'>171</span>     * @type {Number}
-<span class='linenumber'>172</span>     */</span><span class="WHIT">
-<span class='linenumber'>173</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_RIGHT_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">39</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>174</span> 
-<span class='linenumber'>175</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Plus" key
-<span class='linenumber'>176</span>     * @type {Number}
-<span class='linenumber'>177</span>     */</span><span class="WHIT">
-<span class='linenumber'>178</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_KEYPAD_PLUS</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">61</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>179</span> 
-<span class='linenumber'>180</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Minus" key
-<span class='linenumber'>181</span>     * @type {Number}
-<span class='linenumber'>182</span>     */</span><span class="WHIT">
-<span class='linenumber'>183</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_KEYPAD_MINUS</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">109</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>184</span> 
-<span class='linenumber'>185</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Home" key
-<span class='linenumber'>186</span>     * @type {Number}
-<span class='linenumber'>187</span>     */</span><span class="WHIT">
-<span class='linenumber'>188</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_HOME</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">36</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>189</span> 
-<span class='linenumber'>190</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "End" key
-<span class='linenumber'>191</span>     * @type {Number}
-<span class='linenumber'>192</span>     */</span><span class="WHIT">
-<span class='linenumber'>193</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_END</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">35</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>194</span> 
-<span class='linenumber'>195</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F1" key
-<span class='linenumber'>196</span>     * @type {Number}
-<span class='linenumber'>197</span>     */</span><span class="WHIT">
-<span class='linenumber'>198</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F1</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">112</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>199</span> 
-<span class='linenumber'>200</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F2" key
-<span class='linenumber'>201</span>     * @type {Number}
-<span class='linenumber'>202</span>     */</span><span class="WHIT">
-<span class='linenumber'>203</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F2</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">113</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>204</span> 
-<span class='linenumber'>205</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F3" key
-<span class='linenumber'>206</span>     * @type {Number}
-<span class='linenumber'>207</span>     */</span><span class="WHIT">
-<span class='linenumber'>208</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F3</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">114</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>209</span> 
-<span class='linenumber'>210</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F4" key
-<span class='linenumber'>211</span>     * @type {Number}
-<span class='linenumber'>212</span>     */</span><span class="WHIT">
-<span class='linenumber'>213</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F4</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">115</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>214</span> 
-<span class='linenumber'>215</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F5" key
-<span class='linenumber'>216</span>     * @type {Number}
-<span class='linenumber'>217</span>     */</span><span class="WHIT">
-<span class='linenumber'>218</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F5</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">116</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>219</span> 
-<span class='linenumber'>220</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F6" key
-<span class='linenumber'>221</span>     * @type {Number}
-<span class='linenumber'>222</span>     */</span><span class="WHIT">
-<span class='linenumber'>223</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F6</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">117</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>224</span> 
-<span class='linenumber'>225</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F7" key
-<span class='linenumber'>226</span>     * @type {Number}
-<span class='linenumber'>227</span>     */</span><span class="WHIT">
-<span class='linenumber'>228</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F7</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">118</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>229</span> 
-<span class='linenumber'>230</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F8" key
-<span class='linenumber'>231</span>     * @type {Number}
-<span class='linenumber'>232</span>     */</span><span class="WHIT">
-<span class='linenumber'>233</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F8</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">119</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>234</span> 
-<span class='linenumber'>235</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F9" key
-<span class='linenumber'>236</span>     * @type {Number}
-<span class='linenumber'>237</span>     */</span><span class="WHIT">
-<span class='linenumber'>238</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F9</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">120</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>239</span> 
-<span class='linenumber'>240</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F10" key
-<span class='linenumber'>241</span>     * @type {Number}
-<span class='linenumber'>242</span>     */</span><span class="WHIT">
-<span class='linenumber'>243</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F10</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">121</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>244</span> 
-<span class='linenumber'>245</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F11" key
-<span class='linenumber'>246</span>     * @type {Number}
-<span class='linenumber'>247</span>     */</span><span class="WHIT">
-<span class='linenumber'>248</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F11</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">122</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>249</span> 
-<span class='linenumber'>250</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F12" key
-<span class='linenumber'>251</span>     * @type {Number}
-<span class='linenumber'>252</span>     */</span><span class="WHIT">
-<span class='linenumber'>253</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F12</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">123</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>254</span> 
-<span class='linenumber'>255</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Context Menu" key (Windows)
-<span class='linenumber'>256</span>     * @type {Number}
-<span class='linenumber'>257</span>     */</span><span class="WHIT">
-<span class='linenumber'>258</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_MENU</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">93</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>259</span> 
-<span class='linenumber'>260</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Windows" key (Windows)
-<span class='linenumber'>261</span>     * @type {Number}
-<span class='linenumber'>262</span>     */</span><span class="WHIT">
-<span class='linenumber'>263</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_WINDOW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">91</span><span class="WHIT">
-<span class='linenumber'>264</span> 
-<span class='linenumber'>265</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>266</span> 
-<span class='linenumber'>267</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">EventEngine</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>268</span> 
-<span class='linenumber'>269</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>140</span> </span><span class="WHIT">   </span><span class="COMM">//====================================================================================================================</span><span class="WHIT">
+<span class='linenumber'>141</span> </span><span class="WHIT">   </span><span class="COMM">// KEY CODE CONSTANTS</span><span class="WHIT">
+<span class='linenumber'>142</span> 
+<span class='linenumber'>143</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Tab" key
+<span class='linenumber'>144</span>     * @type {Number}
+<span class='linenumber'>145</span>     */</span><span class="WHIT">
+<span class='linenumber'>146</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_TAB</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">9</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>147</span> 
+<span class='linenumber'>148</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Enter" key
+<span class='linenumber'>149</span>     * @type {Number}
+<span class='linenumber'>150</span>     */</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_ENTER</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">13</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>152</span> 
+<span class='linenumber'>153</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Delete" key
+<span class='linenumber'>154</span>     * @type {Number}
+<span class='linenumber'>155</span>     */</span><span class="WHIT">
+<span class='linenumber'>156</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_DELETE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">46</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>157</span> 
+<span class='linenumber'>158</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Space" key
+<span class='linenumber'>159</span>     * @type {Number}
+<span class='linenumber'>160</span>     */</span><span class="WHIT">
+<span class='linenumber'>161</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_SPACE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">32</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>162</span> 
+<span class='linenumber'>163</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Backspace"
+<span class='linenumber'>164</span>     * @type {Number}
+<span class='linenumber'>165</span>     */</span><span class="WHIT">
+<span class='linenumber'>166</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_BACKSPACE</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">8</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>167</span> 
+<span class='linenumber'>168</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Up" key
+<span class='linenumber'>169</span>     * @type {Number}
+<span class='linenumber'>170</span>     */</span><span class="WHIT">
+<span class='linenumber'>171</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_UP_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">38</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>172</span> 
+<span class='linenumber'>173</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Down" key
+<span class='linenumber'>174</span>     * @type {Number}
+<span class='linenumber'>175</span>     */</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_DOWN_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">40</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>177</span> 
+<span class='linenumber'>178</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Left" key
+<span class='linenumber'>179</span>     * @type {Number}
+<span class='linenumber'>180</span>     */</span><span class="WHIT">
+<span class='linenumber'>181</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_LEFT_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">37</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>182</span> 
+<span class='linenumber'>183</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "RIGHT" key
+<span class='linenumber'>184</span>     * @type {Number}
+<span class='linenumber'>185</span>     */</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_RIGHT_ARROW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">39</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>187</span> 
+<span class='linenumber'>188</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Plus" key
+<span class='linenumber'>189</span>     * @type {Number}
+<span class='linenumber'>190</span>     */</span><span class="WHIT">
+<span class='linenumber'>191</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_KEYPAD_PLUS</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">61</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>192</span> 
+<span class='linenumber'>193</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Minus" key
+<span class='linenumber'>194</span>     * @type {Number}
+<span class='linenumber'>195</span>     */</span><span class="WHIT">
+<span class='linenumber'>196</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_KEYPAD_MINUS</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">109</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>197</span> 
+<span class='linenumber'>198</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Home" key
+<span class='linenumber'>199</span>     * @type {Number}
+<span class='linenumber'>200</span>     */</span><span class="WHIT">
+<span class='linenumber'>201</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_HOME</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">36</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>202</span> 
+<span class='linenumber'>203</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "End" key
+<span class='linenumber'>204</span>     * @type {Number}
+<span class='linenumber'>205</span>     */</span><span class="WHIT">
+<span class='linenumber'>206</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_END</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">35</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>207</span> 
+<span class='linenumber'>208</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F1" key
+<span class='linenumber'>209</span>     * @type {Number}
+<span class='linenumber'>210</span>     */</span><span class="WHIT">
+<span class='linenumber'>211</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F1</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">112</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>212</span> 
+<span class='linenumber'>213</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F2" key
+<span class='linenumber'>214</span>     * @type {Number}
+<span class='linenumber'>215</span>     */</span><span class="WHIT">
+<span class='linenumber'>216</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F2</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">113</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>217</span> 
+<span class='linenumber'>218</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F3" key
+<span class='linenumber'>219</span>     * @type {Number}
+<span class='linenumber'>220</span>     */</span><span class="WHIT">
+<span class='linenumber'>221</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F3</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">114</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>222</span> 
+<span class='linenumber'>223</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F4" key
+<span class='linenumber'>224</span>     * @type {Number}
+<span class='linenumber'>225</span>     */</span><span class="WHIT">
+<span class='linenumber'>226</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F4</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">115</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>227</span> 
+<span class='linenumber'>228</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F5" key
+<span class='linenumber'>229</span>     * @type {Number}
+<span class='linenumber'>230</span>     */</span><span class="WHIT">
+<span class='linenumber'>231</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F5</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">116</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>232</span> 
+<span class='linenumber'>233</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F6" key
+<span class='linenumber'>234</span>     * @type {Number}
+<span class='linenumber'>235</span>     */</span><span class="WHIT">
+<span class='linenumber'>236</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F6</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">117</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>237</span> 
+<span class='linenumber'>238</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F7" key
+<span class='linenumber'>239</span>     * @type {Number}
+<span class='linenumber'>240</span>     */</span><span class="WHIT">
+<span class='linenumber'>241</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F7</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">118</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>242</span> 
+<span class='linenumber'>243</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F8" key
+<span class='linenumber'>244</span>     * @type {Number}
+<span class='linenumber'>245</span>     */</span><span class="WHIT">
+<span class='linenumber'>246</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F8</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">119</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>247</span> 
+<span class='linenumber'>248</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F9" key
+<span class='linenumber'>249</span>     * @type {Number}
+<span class='linenumber'>250</span>     */</span><span class="WHIT">
+<span class='linenumber'>251</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F9</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">120</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>252</span> 
+<span class='linenumber'>253</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F10" key
+<span class='linenumber'>254</span>     * @type {Number}
+<span class='linenumber'>255</span>     */</span><span class="WHIT">
+<span class='linenumber'>256</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F10</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">121</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>257</span> 
+<span class='linenumber'>258</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F11" key
+<span class='linenumber'>259</span>     * @type {Number}
+<span class='linenumber'>260</span>     */</span><span class="WHIT">
+<span class='linenumber'>261</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F11</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">122</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>262</span> 
+<span class='linenumber'>263</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "F12" key
+<span class='linenumber'>264</span>     * @type {Number}
+<span class='linenumber'>265</span>     */</span><span class="WHIT">
+<span class='linenumber'>266</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_F12</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">123</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>267</span> 
+<span class='linenumber'>268</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Context Menu" key (Windows)
+<span class='linenumber'>269</span>     * @type {Number}
+<span class='linenumber'>270</span>     */</span><span class="WHIT">
+<span class='linenumber'>271</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_MENU</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">93</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>272</span> 
+<span class='linenumber'>273</span> </span><span class="WHIT">   </span><span class="COMM">/** Constant for the "Windows" key (Windows)
+<span class='linenumber'>274</span>     * @type {Number}
+<span class='linenumber'>275</span>     */</span><span class="WHIT">
+<span class='linenumber'>276</span> </span><span class="WHIT">   </span><span class="NAME">KEYCODE_WINDOW</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">91</span><span class="WHIT">
+<span class='linenumber'>277</span> 
+<span class='linenumber'>278</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>279</span> 
+<span class='linenumber'>280</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">EventEngine</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>281</span> 
+<span class='linenumber'>282</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:12 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:40 GMT-0400 (EDT)</div>
 </body>
 </html>

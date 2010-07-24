@@ -67,7 +67,9 @@
          |
          +--<a href='SpatialContainer.html' target='main'>SpatialContainer</a>
             |
-            +--<b>SpatialGrid</b></pre>
+            +--<b>SpatialGrid</b>
+               |
+               +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>SpatialGrid</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -86,6 +88,39 @@ A structure which divides a finite space up into a more       coarse grid to as
 <hr>
 
 <!-- =========== FIELD SUMMARY =========== -->
+
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#BEST_ACCURACY">BEST_ACCURACY</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collision checks are performed in the node where the objectbeing tested resides, and in the four surrounding polar nodes.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#GOOD_ACCURACY">GOOD_ACCURACY</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collision checks are limited to the exact node where theobject being tested resides.
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
 
 <!-- =========== END FIELD SUMMARY =========== -->
 
@@ -127,13 +162,27 @@ A structure which divides a finite space up into a more       coarse grid to as
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;SpatialNode
+            &nbsp;<a href='SpatialNode.html' target='main'>SpatialNode</a>
             </code></font> 
          </td>
          <td>
             <code> <b> <a href="#findNodePoint">findNodePoint</a></b>(point) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Find the node that contains the specified point.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getAccuracy">getAccuracy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the accuracy level of collision checks.
  
          </td>
       </tr>
@@ -148,6 +197,20 @@ A structure which divides a finite space up into a more       coarse grid to as
             <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Array
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getObjects">getObjects</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns all objects within every node of the spatial grid.
  
          </td>
       </tr>
@@ -174,6 +237,18 @@ A structure which divides a finite space up into a more       coarse grid to as
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the object back into the object pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setAccuracy">setAccuracy</a></b>(accuracy) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the accuracy of the collision checks to either <a href='SpatialGrid.html#GOOD_ACCURACY'>SpatialGrid.GOOD_ACCURACY</a> or<a href='SpatialGrid.html#BEST_ACCURACY'>SpatialGrid.BEST_ACCURACY</a>.
  
          </td>
       </tr>
@@ -218,25 +293,6 @@ A structure which divides a finite space up into a more       coarse grid to as
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="SpatialContainer.html">SpatialContainer</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="SpatialContainer.html#getWidth">getWidth</a>,
-            
-               <a href="SpatialContainer.html#getHeight">getHeight</a>,
-            
-               <a href="SpatialContainer.html#getRoot">getRoot</a>,
-            
-               <a href="SpatialContainer.html#setRoot">setRoot</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
             <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
          </td>
       </tr>
@@ -256,6 +312,27 @@ A structure which divides a finite space up into a more       coarse grid to as
          </code></td>
       </tr>
       
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="SpatialContainer.html">SpatialContainer</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="SpatialContainer.html#getWidth">getWidth</a>,
+            
+               <a href="SpatialContainer.html#getHeight">getHeight</a>,
+            
+               <a href="SpatialContainer.html#getRoot">getRoot</a>,
+            
+               <a href="SpatialContainer.html#setRoot">setRoot</a>,
+            
+               <a href="SpatialContainer.html#getObjectsOfType">getObjectsOfType</a>,
+            
+         </code></td>
+      </tr>
+      
    </table>
    <br/>
 
@@ -264,6 +341,39 @@ A structure which divides a finite space up into a more       coarse grid to as
 <!-- ========== END INHERITED METHODS SUMMARY =========== -->
 
 <!-- ============ FIELD DETAIL START ========= -->
+
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="BEST_ACCURACY">
+   <!-- -->
+   </a> <h3>BEST_ACCURACY</h3>
+      <pre>Number <b>BEST_ACCURACY</b></pre> 
+   <ul>
+      Collision checks are performed in the node where the objectbeing tested resides, and in the four surrounding polar nodes.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="GOOD_ACCURACY">
+   <!-- -->
+   </a> <h3>GOOD_ACCURACY</h3>
+      <pre>Number <b>GOOD_ACCURACY</b></pre> 
+   <ul>
+      Collision checks are limited to the exact node where theobject being tested resides.
+      
+   </ul>
+   <hr>
+
 
 <!-- ============ FIELD DETAIL END ========== -->
 
@@ -344,11 +454,40 @@ A structure which divides a finite space up into a more       coarse grid to as
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>SpatialNode</i>&nbsp;</code> 
+         <code><i><a href='SpatialNode.html' target='main'>SpatialNode</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="getAccuracy"> </a> <h3>getAccuracy</h3>
+      <pre>Number&nbsp;<b>getAccuracy</b>()</pre> 
+   <ul>
+      Get the accuracy level of collision checks.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The accuracy level 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -370,6 +509,35 @@ A structure which divides a finite space up into a more       coarse grid to as
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="getObjects"> </a> <h3>getObjects</h3>
+      <pre>Array&nbsp;<b>getObjects</b>()</pre> 
+   <ul>
+      Returns all objects within every node of the spatial grid.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Array</i>&nbsp;</code>An array of all objects in the spatial grid 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getPCL"> </a> <h3>getPCL</h3>
@@ -396,6 +564,10 @@ A structure which divides a finite space up into a more       coarse grid to as
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -412,6 +584,35 @@ A structure which divides a finite space up into a more       coarse grid to as
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="setAccuracy"> </a> <h3>setAccuracy</h3>
+      <pre><b>setAccuracy</b>(accuracy)</pre> 
+   <ul>
+      Set the accuracy of the collision checks to either <a href='SpatialGrid.html#GOOD_ACCURACY'>SpatialGrid.GOOD_ACCURACY</a> or<a href='SpatialGrid.html#BEST_ACCURACY'>SpatialGrid.BEST_ACCURACY</a>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;accuracy </code> - The level of accuracy during PCL generation 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -423,8 +624,8 @@ A structure which divides a finite space up into a more       coarse grid to as
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:25 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

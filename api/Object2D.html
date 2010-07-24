@@ -71,7 +71,9 @@
                |
                +--<a href='HostObject.html' target='main'>HostObject</a>
                   |
-                  +--<b>Object2D</b></pre>
+                  +--<b>Object2D</b>
+                     |
+                     +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>Object2D</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -130,8 +132,20 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Destroy the object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Rectangle2D
+            &nbsp;<a href='Rectangle2D.html' target='main'>Rectangle2D</a>
             </code></font> 
          </td>
          <td>
@@ -145,7 +159,7 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Circle2D
+            &nbsp;<a href='Circle2D.html' target='main'>Circle2D</a>
             </code></font> 
          </td>
          <td>
@@ -173,7 +187,7 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Point2D
+            &nbsp;<a href='Point2D.html' target='main'>Point2D</a>
             </code></font> 
          </td>
          <td>
@@ -187,7 +201,7 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Point2D
+            &nbsp;<a href='Point2D.html' target='main'>Point2D</a>
             </code></font> 
          </td>
          <td>
@@ -215,7 +229,7 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Point2D
+            &nbsp;<a href='Point2D.html' target='main'>Point2D</a>
             </code></font> 
          </td>
          <td>
@@ -285,7 +299,7 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Vector2D
+            &nbsp;<a href='Vector2D.html' target='main'>Vector2D</a>
             </code></font> 
          </td>
          <td>
@@ -299,7 +313,7 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;Rectangle2D
+            &nbsp;<a href='Rectangle2D.html' target='main'>Rectangle2D</a>
             </code></font> 
          </td>
          <td>
@@ -341,7 +355,7 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#setBoundingBox">setBoundingBox</a></b>(rect) </code> 
+            <code> <b> <a href="#setBoundingBox">setBoundingBox</a></b>(x, y, w, h) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the bounding box of this object
  
@@ -411,6 +425,56 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Container.html">Container</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
+            
+               <a href="Container.html#getObjects">getObjects</a>,
+            
+               <a href="Container.html#sort">sort</a>,
+            
+               <a href="Container.html#toString">toString</a>,
+            
+               <a href="Container.html#toXML">toXML</a>,
+            
+               <a href="Container.html#iterator">iterator</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
             <b>Methods inherited from class <a href="HashContainer.html">HashContainer</a></b>
          </td>
       </tr>
@@ -442,8 +506,6 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="HostObject.html#destroy">destroy</a>,
-            
                <a href="HostObject.html#setRenderContext">setRenderContext</a>,
             
                <a href="HostObject.html#getRenderContext">getRenderContext</a>,
@@ -472,52 +534,6 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
                <a href="PooledObject.html#getName">getName</a>,
             
                <a href="PooledObject.html#create">create</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="Container.html">Container</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="Container.html#size">size</a>,
-            
-               <a href="Container.html#insert">insert</a>,
-            
-               <a href="Container.html#replace">replace</a>,
-            
-               <a href="Container.html#replaceAt">replaceAt</a>,
-            
-               <a href="Container.html#getObjects">getObjects</a>,
-            
-               <a href="Container.html#sort">sort</a>,
-            
-               <a href="Container.html#toString">toString</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseObject.html#setElement">setElement</a>,
-            
-               <a href="BaseObject.html#getElement">getElement</a>,
-            
-               <a href="BaseObject.html#jQ">jQ</a>,
-            
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -583,6 +599,26 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
 </table>
 
 
+   <a name="destroy"> </a> <h3>destroy</h3>
+      <pre><b>destroy</b>()</pre> 
+   <ul>
+      Destroy the object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
    <a name="getBoundingBox"> </a> <h3>getBoundingBox</h3>
       <pre>Rectangle2D&nbsp;<b>getBoundingBox</b>()</pre> 
    <ul>
@@ -597,11 +633,15 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Rectangle2D</i>&nbsp;</code>The object bounding rectangle 
+         <code><i><a href='Rectangle2D.html' target='main'>Rectangle2D</a></i>&nbsp;</code>The object bounding rectangle 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getCircle"> </a> <h3>getCircle</h3>
@@ -618,11 +658,15 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Circle2D</i>&nbsp;</code> 
+         <code><i><a href='Circle2D.html' target='main'>Circle2D</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -644,6 +688,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getLastPosition"> </a> <h3>getLastPosition</h3>
@@ -660,11 +708,15 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Point2D</i>&nbsp;</code> 
+         <code><i><a href='Point2D.html' target='main'>Point2D</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getPosition"> </a> <h3>getPosition</h3>
@@ -681,11 +733,15 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Point2D</i>&nbsp;</code>The position 
+         <code><i><a href='Point2D.html' target='main'>Point2D</a></i>&nbsp;</code>The position 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getProperties"> </a> <h3>getProperties</h3>
@@ -707,6 +763,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getRenderPosition"> </a> <h3>getRenderPosition</h3>
@@ -723,11 +783,15 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Point2D</i>&nbsp;</code> 
+         <code><i><a href='Point2D.html' target='main'>Point2D</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getRotation"> </a> <h3>getRotation</h3>
@@ -749,6 +813,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getScale"> </a> <h3>getScale</h3>
@@ -770,6 +838,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getScaleX"> </a> <h3>getScaleX</h3>
@@ -791,6 +863,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getScaleY"> </a> <h3>getScaleY</h3>
@@ -812,6 +888,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getVelocity"> </a> <h3>getVelocity</h3>
@@ -828,11 +908,15 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Vector2D</i>&nbsp;</code> 
+         <code><i><a href='Vector2D.html' target='main'>Vector2D</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getWorldBox"> </a> <h3>getWorldBox</h3>
@@ -849,11 +933,15 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>Rectangle2D</i>&nbsp;</code>The world bounding rectangle 
+         <code><i><a href='Rectangle2D.html' target='main'>Rectangle2D</a></i>&nbsp;</code>The world bounding rectangle 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getZIndex"> </a> <h3>getZIndex</h3>
@@ -875,6 +963,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -891,10 +983,14 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setBoundingBox"> </a> <h3>setBoundingBox</h3>
-      <pre><b>setBoundingBox</b>(rect)</pre> 
+      <pre><b>setBoundingBox</b>(x, y, w, h)</pre> 
    <ul>
       Set the bounding box of this object
       
@@ -903,7 +999,16 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Rectangle2D</i>]&nbsp;rect </code> - The rectangle that completely encompasses                          this object. 
+         <code>[<i>Number|Rectangle2D</i>]&nbsp;x </code> - The X coordinate, or the rectangle that completely encompasses                          		this object. 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;y </code> - If X is a coordinate, this is the Y coordinate 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;w </code> - If X is a coordinate, this is the width 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;h </code> - If X is a coordinate, this is the height 
       </ul>
    </ul>
    
@@ -912,6 +1017,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setPosition"> </a> <h3>setPosition</h3>
@@ -933,6 +1042,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setRotation"> </a> <h3>setRotation</h3>
@@ -954,6 +1067,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setScale"> </a> <h3>setScale</h3>
@@ -978,6 +1095,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setZIndex"> </a> <h3>setZIndex</h3>
@@ -999,6 +1120,10 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -1010,8 +1135,8 @@ An object for use in a 2d environment.  Methods for getting the position, rotati
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:25 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:48 GMT-0400 (EDT)</div>
 </body>
 </html>

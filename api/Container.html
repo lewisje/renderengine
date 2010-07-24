@@ -65,7 +65,9 @@
       |
       +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<b>Container</b></pre>
+         +--<b>Container</b>
+            |
+            +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>Container</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -240,6 +242,20 @@ A container is a logical collection of objects.  A container       is responsib
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;<a href='Iterator.html' target='main'>Iterator</a>
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#iterator">iterator</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns an iterator over the collection.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
@@ -332,12 +348,24 @@ A container is a logical collection of objects.  A container       is responsib
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#toString">toString</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;String
             </code></font> 
          </td>
          <td>
-            <code> <b> <a href="#toString">toString</a></b>(indent) </code> 
+            <code> <b> <a href="#toXML">toXML</a></b>(indent) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Serializes a container to XML.
  
@@ -477,6 +505,10 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="cleanUp"> </a> <h3>cleanUp</h3>
@@ -493,6 +525,10 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="clear"> </a> <h3>clear</h3>
@@ -509,6 +545,10 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="destroy"> </a> <h3>destroy</h3>
@@ -525,6 +565,10 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="get"> </a> <h3>get</h3>
@@ -556,6 +600,10 @@ A container is a logical collection of objects.  A container       is responsib
       </ul>
    </ul>
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -577,6 +625,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getObjects"> </a> <h3>getObjects</h3>
@@ -603,6 +655,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getProperties"> </a> <h3>getProperties</h3>
@@ -624,6 +680,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="insert"> </a> <h3>insert</h3>
@@ -648,6 +708,35 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="iterator"> </a> <h3>iterator</h3>
+      <pre>Iterator&nbsp;<b>iterator</b>()</pre> 
+   <ul>
+      Returns an iterator over the collection.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i><a href='Iterator.html' target='main'>Iterator</a></i>&nbsp;</code>An iterator 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -664,6 +753,10 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="remove"> </a> <h3>remove</h3>
@@ -685,6 +778,10 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="removeAtIndex"> </a> <h3>removeAtIndex</h3>
@@ -711,6 +808,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="replace"> </a> <h3>replace</h3>
@@ -740,6 +841,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="replaceAt"> </a> <h3>replaceAt</h3>
@@ -769,6 +874,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="size"> </a> <h3>size</h3>
@@ -790,6 +899,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="sort"> </a> <h3>sort</h3>
@@ -811,10 +924,34 @@ A container is a logical collection of objects.  A container       is responsib
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="toString"> </a> <h3>toString</h3>
-      <pre>String&nbsp;<b>toString</b>(indent)</pre> 
+      <pre><b>toString</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="toXML"> </a> <h3>toXML</h3>
+      <pre>String&nbsp;<b>toXML</b>(indent)</pre> 
    <ul>
       Serializes a container to XML.
       
@@ -837,6 +974,10 @@ A container is a logical collection of objects.  A container       is responsib
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -848,8 +989,8 @@ A container is a logical collection of objects.  A container       is responsib
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:24 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

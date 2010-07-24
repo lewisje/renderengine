@@ -69,7 +69,9 @@
             |
             +--<a href='LogicComponent.html' target='main'>LogicComponent</a>
                |
-               +--<b>HostComponent</b></pre>
+               +--<b>HostComponent</b>
+                  |
+                  +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>HostComponent</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -79,7 +81,7 @@
    Extends <a href="LogicComponent.html">LogicComponent</a>.<br/>
 
 <p>
-A component that can execute host objects.  Allows embedding       of multiple objects into one object.</p>
+A component that can execute host objects.  Allows embedding       of multiple objects into one object.  This is logically       a method to embed further <a href='HostObject.html'>HostObjects</a> within       an existing <tt>HostObject</tt>.</p>
 
 
 
@@ -153,7 +155,7 @@ A component that can execute host objects.  Allows embedding       of multiple 
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;HostObject
+            &nbsp;<a href='HostObject.html' target='main'>HostObject</a>
             </code></font> 
          </td>
          <td>
@@ -193,7 +195,7 @@ A component that can execute host objects.  Allows embedding       of multiple 
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;HostObject
+            &nbsp;<a href='HostObject.html' target='main'>HostObject</a>
             </code></font> 
          </td>
          <td>
@@ -219,6 +221,29 @@ A component that can execute host objects.  Allows embedding       of multiple 
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
+            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
+            
+               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
+            
+               <a href="BaseComponent.html#getType">getType</a>,
+            
+               <a href="BaseComponent.html#setPriority">setPriority</a>,
+            
+               <a href="BaseComponent.html#getPriority">getPriority</a>,
+            
+               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
             <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
          </td>
       </tr>
@@ -238,29 +263,6 @@ A component that can execute host objects.  Allows embedding       of multiple 
                <a href="BaseObject.html#addEvent">addEvent</a>,
             
                <a href="BaseObject.html#removeEvent">removeEvent</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
-            
-               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
-            
-               <a href="BaseComponent.html#getType">getType</a>,
-            
-               <a href="BaseComponent.html#setPriority">setPriority</a>,
-            
-               <a href="BaseComponent.html#getPriority">getPriority</a>,
-            
-               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
             
          </code></td>
       </tr>
@@ -327,7 +329,7 @@ A component that can execute host objects.  Allows embedding       of multiple 
       </ul>
       
       <ul>
-         <code>[<i>Number</i>]&nbsp;priority</code> - The priority of this component 
+         <code>priority</code> 
       </ul>
       
    </ul>
@@ -373,6 +375,10 @@ A component that can execute host objects.  Allows embedding       of multiple 
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="execute"> </a> <h3>execute</h3>
@@ -397,6 +403,10 @@ A component that can execute host objects.  Allows embedding       of multiple 
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="get"> </a> <h3>get</h3>
@@ -418,11 +428,15 @@ A component that can execute host objects.  Allows embedding       of multiple 
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>HostObject</i>&nbsp;</code> 
+         <code><i><a href='HostObject.html' target='main'>HostObject</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -444,6 +458,10 @@ A component that can execute host objects.  Allows embedding       of multiple 
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -460,6 +478,10 @@ A component that can execute host objects.  Allows embedding       of multiple 
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="remove"> </a> <h3>remove</h3>
@@ -481,11 +503,15 @@ A component that can execute host objects.  Allows embedding       of multiple 
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>HostObject</i>&nbsp;</code>The object which was removed 
+         <code><i><a href='HostObject.html' target='main'>HostObject</a></i>&nbsp;</code>The object which was removed 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -497,8 +523,8 @@ A component that can execute host objects.  Allows embedding       of multiple 
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:25 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

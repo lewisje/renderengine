@@ -69,7 +69,9 @@
             |
             +--<a href='HashContainer.html' target='main'>HashContainer</a>
                |
-               +--<b>HostObject</b></pre>
+               +--<b>HostObject</b>
+                  |
+                  +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>HostObject</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -79,7 +81,7 @@
    Extends <a href="HashContainer.html">HashContainer</a>.<br/>
 
 <p>
-A host object is a container for components.  Each component within       the host provides a portion of the overall functionality.  A host object       can have any number of components of any type within it.  Components provide       functionality for things like rendering, collision detection, effects, or        transformations. This way, an object can be anything, depending on it's components.</p>
+A host object is a container for components.  Each component within       the host provides a portion of the overall functionality.  A host object       can have any number of components of any type within it.  Components provide       functionality for things like rendering, collision detection, effects, or        transformations. This way, an object can be anything, depending on it's components.       <p/>       A <tt>HostObject</tt> is the logical foundation for all in-game objects.  It is       through this mechanism that game objects can be created without having to manipulate       large, monolithic objects.  A <tt>HostObject</tt> contains <a href='BaseComponent.html'>Components</a>,       which are the building blocks for complex functionality and ease of development.       <p/>       By building a <tt>HostObject</tt> from multiple components, the object gains the       component's functionality without having to necessarily implement anything.  Many       components already exist in the engine, but you are only limited by your imagination       when it comes to developing new components.</p>
 
 
 
@@ -179,7 +181,7 @@ A host object is a container for components.  Each component within       the h
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;BaseComponent
+            &nbsp;<a href='BaseComponent.html' target='main'>BaseComponent</a>
             </code></font> 
          </td>
          <td>
@@ -207,7 +209,7 @@ A host object is a container for components.  Each component within       the h
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;RenderContext
+            &nbsp;<a href='RenderContext.html' target='main'>RenderContext</a>
             </code></font> 
          </td>
          <td>
@@ -269,6 +271,56 @@ A host object is a container for components.  Each component within       the h
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Container.html">Container</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
+            
+               <a href="Container.html#getObjects">getObjects</a>,
+            
+               <a href="Container.html#sort">sort</a>,
+            
+               <a href="Container.html#toString">toString</a>,
+            
+               <a href="Container.html#toXML">toXML</a>,
+            
+               <a href="Container.html#iterator">iterator</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
             <b>Methods inherited from class <a href="HashContainer.html">HashContainer</a></b>
          </td>
       </tr>
@@ -305,52 +357,6 @@ A host object is a container for components.  Each component within       the h
                <a href="PooledObject.html#getName">getName</a>,
             
                <a href="PooledObject.html#create">create</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="Container.html">Container</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="Container.html#size">size</a>,
-            
-               <a href="Container.html#insert">insert</a>,
-            
-               <a href="Container.html#replace">replace</a>,
-            
-               <a href="Container.html#replaceAt">replaceAt</a>,
-            
-               <a href="Container.html#getObjects">getObjects</a>,
-            
-               <a href="Container.html#sort">sort</a>,
-            
-               <a href="Container.html#toString">toString</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="BaseObject.html#setElement">setElement</a>,
-            
-               <a href="BaseObject.html#getElement">getElement</a>,
-            
-               <a href="BaseObject.html#jQ">jQ</a>,
-            
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -426,6 +432,10 @@ A host object is a container for components.  Each component within       the h
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="componentSort"> </a> <h3>componentSort</h3>
@@ -450,6 +460,10 @@ A host object is a container for components.  Each component within       the h
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="destroy"> </a> <h3>destroy</h3>
@@ -466,6 +480,10 @@ A host object is a container for components.  Each component within       the h
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -487,6 +505,10 @@ A host object is a container for components.  Each component within       the h
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getComponent"> </a> <h3>getComponent</h3>
@@ -508,11 +530,15 @@ A host object is a container for components.  Each component within       the h
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>BaseComponent</i>&nbsp;</code> 
+         <code><i><a href='BaseComponent.html' target='main'>BaseComponent</a></i>&nbsp;</code> 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getProperties"> </a> <h3>getProperties</h3>
@@ -534,6 +560,10 @@ A host object is a container for components.  Each component within       the h
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getRenderContext"> </a> <h3>getRenderContext</h3>
@@ -550,11 +580,15 @@ A host object is a container for components.  Each component within       the h
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>RenderContext</i>&nbsp;</code>The render context the object belongs to 
+         <code><i><a href='RenderContext.html' target='main'>RenderContext</a></i>&nbsp;</code>The render context the object belongs to 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -571,6 +605,10 @@ A host object is a container for components.  Each component within       the h
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setRenderContext"> </a> <h3>setRenderContext</h3>
@@ -592,6 +630,10 @@ A host object is a container for components.  Each component within       the h
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="update"> </a> <h3>update</h3>
@@ -616,6 +658,10 @@ A host object is a container for components.  Each component within       the h
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -627,8 +673,8 @@ A host object is a container for components.  Each component within       the h
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:24 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

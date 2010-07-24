@@ -69,7 +69,9 @@
             |
             +--<a href='Timeout.html' target='main'>Timeout</a>
                |
-               +--<b>OneShotTimeout</b></pre>
+               +--<b>OneShotTimeout</b>
+                  |
+                  +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>OneShotTimeout</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -79,7 +81,7 @@
    Extends <a href="Timeout.html">Timeout</a>.<br/>
 
 <p>
-A one-shot timer that cannot be restarted and will       self-destroy after it completes its interval..</p>
+An extension of <a href='Timer.html'>Timer</a> which is a one-shot timer that cannot        be restarted and will self-destroy after it completes its interval.  Within       the callback, <tt>this</tt> refers to the <tt>Timer</tt> object itself.</p>
 
 
 
@@ -167,42 +169,25 @@ A one-shot timer that cannot be restarted and will       self-destroy after it 
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="Timer.html">Timer</a></b>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="Timer.html#getTimer">getTimer</a>,
+               <a href="BaseObject.html#release">release</a>,
             
-               <a href="Timer.html#setTimer">setTimer</a>,
+               <a href="BaseObject.html#setElement">setElement</a>,
             
-               <a href="Timer.html#isRunning">isRunning</a>,
+               <a href="BaseObject.html#getElement">getElement</a>,
             
-               <a href="Timer.html#setCallback">setCallback</a>,
+               <a href="BaseObject.html#jQ">jQ</a>,
             
-               <a href="Timer.html#getCallback">getCallback</a>,
+               <a href="BaseObject.html#update">update</a>,
             
-               <a href="Timer.html#setInterval">setInterval</a>,
+               <a href="BaseObject.html#addEvent">addEvent</a>,
             
-               <a href="Timer.html#getInterval">getInterval</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
-            <b>Methods inherited from class <a href="Timeout.html">Timeout</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="Timeout.html#cancel">cancel</a>,
-            
-               <a href="Timeout.html#destroy">destroy</a>,
-            
-               <a href="Timeout.html#restart">restart</a>,
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
             
          </code></td>
       </tr>
@@ -230,25 +215,44 @@ A one-shot timer that cannot be restarted and will       self-destroy after it 
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+            <b>Methods inherited from class <a href="Timeout.html">Timeout</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="BaseObject.html#release">release</a>,
+               <a href="Timeout.html#cancel">cancel</a>,
             
-               <a href="BaseObject.html#setElement">setElement</a>,
+               <a href="Timeout.html#destroy">destroy</a>,
             
-               <a href="BaseObject.html#getElement">getElement</a>,
+               <a href="Timeout.html#restart">restart</a>,
             
-               <a href="BaseObject.html#jQ">jQ</a>,
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Timer.html">Timer</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
             
-               <a href="BaseObject.html#update">update</a>,
+               <a href="Timer.html#getTimer">getTimer</a>,
             
-               <a href="BaseObject.html#addEvent">addEvent</a>,
+               <a href="Timer.html#setTimer">setTimer</a>,
             
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+               <a href="Timer.html#isRunning">isRunning</a>,
+            
+               <a href="Timer.html#pause">pause</a>,
+            
+               <a href="Timer.html#setCallback">setCallback</a>,
+            
+               <a href="Timer.html#getCallback">getCallback</a>,
+            
+               <a href="Timer.html#setInterval">setInterval</a>,
+            
+               <a href="Timer.html#getInterval">getInterval</a>,
             
          </code></td>
       </tr>
@@ -353,6 +357,10 @@ A one-shot timer that cannot be restarted and will       self-destroy after it 
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -374,6 +382,10 @@ A one-shot timer that cannot be restarted and will       self-destroy after it 
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -385,8 +397,8 @@ A one-shot timer that cannot be restarted and will       self-destroy after it 
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:24 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:46 GMT-0400 (EDT)</div>
 </body>
 </html>

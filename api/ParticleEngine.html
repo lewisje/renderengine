@@ -65,7 +65,9 @@
       |
       +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<b>ParticleEngine</b></pre>
+         +--<b>ParticleEngine</b>
+            |
+            +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>ParticleEngine</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -75,7 +77,7 @@
    Extends <a href="BaseObject.html">BaseObject</a>.<br/>
 
 <p>
-The particle engine is simply a system for updating, and expiring       particles within a game environment.  This is registered with the       render context so it will be updated at regular intervals.</p>
+The particle engine is a system for updating and expiring       particles within a game environment.  This is registered with the       render context so it will be updated at regular intervals.  The maximum       number of supported particles can be configured, but defaults to 120.       <p/>       Particles should be simple objects which don't need to perform many       calculations before being drawn.  All particles are rendered in world       coordinates to speed up processing.       </p>       It is possible to run multiple particle engines within a render context,       but it might be non-productive to do so.</p>
 
 
 
@@ -84,6 +86,28 @@ The particle engine is simply a system for updating, and expiring       particl
 <hr>
 
 <!-- =========== FIELD SUMMARY =========== -->
+
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#MAX_PARTICLES">MAX_PARTICLES</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default maximum number of particles in the system.
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
 
 <!-- =========== END FIELD SUMMARY =========== -->
 
@@ -103,7 +127,7 @@ The particle engine is simply a system for updating, and expiring       particl
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Create the particle engine
+        Create a particle engine
         </td>
    </tr>
 
@@ -129,7 +153,19 @@ The particle engine is simply a system for updating, and expiring       particl
          <td>
             <code> <b> <a href="#addParticle">addParticle</a></b>(particle) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a particle to the system.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a single particle to the engine.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#addParticles">addParticles</a></b>(particleArray) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a group of particles at one time.
  
          </td>
       </tr>
@@ -144,6 +180,20 @@ The particle engine is simply a system for updating, and expiring       particl
             <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getMaximum">getMaximum</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the maximum number of particles allowed in the particle engine.
  
          </td>
       </tr>
@@ -179,9 +229,9 @@ The particle engine is simply a system for updating, and expiring       particl
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#removeParticle">removeParticle</a></b>(particle) </code> 
+            <code> <b> <a href="#setMaximum">setMaximum</a></b>(maximum) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mark a particle as dead so we can remove it afterthe update.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the absolute maximum number of particles the engine will allow.
  
          </td>
       </tr>
@@ -262,6 +312,28 @@ The particle engine is simply a system for updating, and expiring       particl
 
 <!-- ============ FIELD DETAIL START ========= -->
 
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="MAX_PARTICLES">
+   <!-- -->
+   </a> <h3>MAX_PARTICLES</h3>
+      <pre>Number <b>MAX_PARTICLES</b></pre> 
+   <ul>
+      Default maximum number of particles in the system. To changethe value, see <a href='ParticleEngine.html#setMaximum'>ParticleEngine.setMaximum</a>
+      
+   </ul>
+   <hr>
+
+
 <!-- ============ FIELD DETAIL END ========== -->
 
 
@@ -281,7 +353,7 @@ The particle engine is simply a system for updating, and expiring       particl
 
    <pre><b>ParticleEngine</b>()</pre>
    <ul>
-      Create the particle engine
+      Create a particle engine
    </ul>
    
    <!-- PARAMETERS START -->
@@ -308,7 +380,7 @@ The particle engine is simply a system for updating, and expiring       particl
    <a name="addParticle"> </a> <h3>addParticle</h3>
       <pre><b>addParticle</b>(particle)</pre> 
    <ul>
-      Add a particle to the system.
+      Add a single particle to the engine.  If many particles are beingadded at one time, use <a href='#addParticles'>addParticles</a> instead to add anarray of particles.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -324,6 +396,35 @@ The particle engine is simply a system for updating, and expiring       particl
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="addParticles"> </a> <h3>addParticles</h3>
+      <pre><b>addParticles</b>(particleArray)</pre> 
+   <ul>
+      Add a group of particles at one time.  This reduces the number of callsto <a href='#addParticle'>addParticle</a> which resorts the array of particles each time.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Particle[]</i>]&nbsp;particleArray </code> - A group of particles to add at one time 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getClassName"> </a> <h3>getClassName</h3>
@@ -345,6 +446,35 @@ The particle engine is simply a system for updating, and expiring       particl
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="getMaximum"> </a> <h3>getMaximum</h3>
+      <pre>Number&nbsp;<b>getMaximum</b>()</pre> 
+   <ul>
+      Get the maximum number of particles allowed in the particle engine.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getProperties"> </a> <h3>getProperties</h3>
@@ -366,6 +496,10 @@ The particle engine is simply a system for updating, and expiring       particl
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="release"> </a> <h3>release</h3>
@@ -382,19 +516,23 @@ The particle engine is simply a system for updating, and expiring       particl
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
-   <a name="removeParticle"> </a> <h3>removeParticle</h3>
-      <pre><b>removeParticle</b>(particle)</pre> 
+   <a name="setMaximum"> </a> <h3>setMaximum</h3>
+      <pre><b>setMaximum</b>(maximum)</pre> 
    <ul>
-      Mark a particle as dead so we can remove it afterthe update.
+      Set the absolute maximum number of particles the engine will allow.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Particle</i>]&nbsp;particle </code> - A particle to animate 
+         <code>[<i>Number</i>]&nbsp;maximum </code> - The maximum particles the particle engine allows 
       </ul>
    </ul>
    
@@ -403,6 +541,10 @@ The particle engine is simply a system for updating, and expiring       particl
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="update"> </a> <h3>update</h3>
@@ -427,6 +569,10 @@ The particle engine is simply a system for updating, and expiring       particl
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -438,8 +584,8 @@ The particle engine is simply a system for updating, and expiring       particl
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:25 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

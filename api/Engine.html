@@ -121,9 +121,21 @@ The main engine class which is responsible for keeping the world up to date.Add
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#addMetric">addMetric</a></b>(metricName, value, smoothing) </code> 
+            <code> <b> <a href="#addMetric">addMetric</a></b>(metricName, value, smoothing, fmt) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a metric to the game engine that can be displayedwhile it is running.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#addTimer">addTimer</a></b>(timerName, timer) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a timer to the pool so it can be cleaned up whenthe engine is shutdown, or paused when the engine ispaused.
  
          </td>
       </tr>
@@ -197,7 +209,7 @@ The main engine class which is responsible for keeping the world up to date.Add
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;RenderContext
+            &nbsp;<a href='RenderContext.html' target='main'>RenderContext</a>
             </code></font> 
          </td>
          <td>
@@ -281,7 +293,7 @@ The main engine class which is responsible for keeping the world up to date.Add
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;PooledObject
+            &nbsp;<a href='PooledObject.html' target='main'>PooledObject</a>
             </code></font> 
          </td>
          <td>
@@ -362,6 +374,18 @@ The main engine class which is responsible for keeping the world up to date.Add
             <code> <b> <a href="#removeMetric">removeMetric</a></b>(metricName) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove a metric from the display
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#removeTimer">removeTimer</a></b>(timerName) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove a timer from the pool when it is destroyed.
  
          </td>
       </tr>
@@ -541,9 +565,9 @@ The main engine class which is responsible for keeping the world up to date.Add
 
 
    <a name="addMetric"> </a> <h3>addMetric</h3>
-      <pre><b>addMetric</b>(metricName, value, smoothing)</pre> 
+      <pre><b>addMetric</b>(metricName, value, smoothing, fmt)</pre> 
    <ul>
-      Add a metric to the game engine that can be displayedwhile it is running.  If smoothing is selected, a 3 pointrunning average will be used to smooth out jitters in thevalue that is shown.  For the <tt>value</tt> argument,you can provide a string which contains the pound sign "#"that will be used to determine where the calculated value willoccur in the formatted string.
+      Add a metric to the game engine that can be displayedwhile it is running.  If smoothing is selected, a 3 pointrunning average will be used to smooth out jitters in thevalue that is shown.  For the <tt>fmt</tt> argument,you can provide a string which contains the pound sign "#"that will be used to determine where the calculated value willoccur in the formatted string.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -558,6 +582,9 @@ The main engine class which is responsible for keeping the world up to date.Add
       <ul>
          <code>[<i>Boolean</i>]&nbsp;smoothing </code> - <tt>true</tt> to use 3 point average smoothing 
       </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;fmt </code> - The way the value should be formatted in the display (e.g. "#ms") 
+      </ul>
    </ul>
    
    <!-- METHOD PARAMETERS END -->
@@ -565,6 +592,38 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="addTimer"> </a> <h3>addTimer</h3>
+      <pre><b>addTimer</b>(timerName, timer)</pre> 
+   <ul>
+      Add a timer to the pool so it can be cleaned up whenthe engine is shutdown, or paused when the engine ispaused.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;timerName </code> - The timer name 
+      </ul>
+      <ul>
+         <code>[<i>Timer</i>]&nbsp;timer </code> - The timer to add 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="browserSupportCheck"> </a> <h3>browserSupportCheck</h3>
@@ -581,6 +640,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="create"> </a> <h3>create</h3>
@@ -607,6 +670,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="destroy"> </a> <h3>destroy</h3>
@@ -628,6 +695,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getActualFPS"> </a> <h3>getActualFPS</h3>
@@ -649,6 +720,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getDebugMode"> </a> <h3>getDebugMode</h3>
@@ -670,6 +745,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getDefaultContext"> </a> <h3>getDefaultContext</h3>
@@ -686,11 +765,15 @@ The main engine class which is responsible for keeping the world up to date.Add
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>RenderContext</i>&nbsp;</code>The default rendering context 
+         <code><i><a href='RenderContext.html' target='main'>RenderContext</a></i>&nbsp;</code>The default rendering context 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getDrawTime"> </a> <h3>getDrawTime</h3>
@@ -712,6 +795,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getEngineLoad"> </a> <h3>getEngineLoad</h3>
@@ -733,6 +820,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getEnginePath"> </a> <h3>getEnginePath</h3>
@@ -754,6 +845,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getFPS"> </a> <h3>getFPS</h3>
@@ -775,6 +870,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getFrameTime"> </a> <h3>getFrameTime</h3>
@@ -796,6 +895,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getObject"> </a> <h3>getObject</h3>
@@ -817,11 +920,15 @@ The main engine class which is responsible for keeping the world up to date.Add
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>PooledObject</i>&nbsp;</code>The object 
+         <code><i><a href='PooledObject.html' target='main'>PooledObject</a></i>&nbsp;</code>The object 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="hideMetrics"> </a> <h3>hideMetrics</h3>
@@ -838,6 +945,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="initObject"> </a> <h3>initObject</h3>
@@ -865,6 +976,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="isSoundEnabled"> </a> <h3>isSoundEnabled</h3>
@@ -886,6 +1001,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="manMetrics"> </a> <h3>manMetrics</h3>
@@ -902,6 +1021,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="pause"> </a> <h3>pause</h3>
@@ -918,6 +1041,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="removeMetric"> </a> <h3>removeMetric</h3>
@@ -939,6 +1066,35 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="removeTimer"> </a> <h3>removeTimer</h3>
+      <pre><b>removeTimer</b>(timerName)</pre> 
+   <ul>
+      Remove a timer from the pool when it is destroyed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;timerName </code> - The timer name 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="run"> </a> <h3>run</h3>
@@ -955,6 +1111,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setDebugMode"> </a> <h3>setDebugMode</h3>
@@ -976,6 +1136,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setFPS"> </a> <h3>setFPS</h3>
@@ -997,6 +1161,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setMetricSampleRate"> </a> <h3>setMetricSampleRate</h3>
@@ -1018,6 +1186,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="showMetrics"> </a> <h3>showMetrics</h3>
@@ -1034,6 +1206,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="shutdown"> </a> <h3>shutdown</h3>
@@ -1050,6 +1226,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="startup"> </a> <h3>startup</h3>
@@ -1071,6 +1251,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="toggleMetrics"> </a> <h3>toggleMetrics</h3>
@@ -1087,6 +1271,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="toString"> </a> <h3>toString</h3>
@@ -1103,6 +1291,10 @@ The main engine class which is responsible for keeping the world up to date.Add
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -1114,8 +1306,8 @@ The main engine class which is responsible for keeping the world up to date.Add
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:26 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:48 GMT-0400 (EDT)</div>
 </body>
 </html>

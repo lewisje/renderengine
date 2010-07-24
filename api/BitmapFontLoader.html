@@ -71,7 +71,9 @@
                |
                +--<a href='ImageLoader.html' target='main'>ImageLoader</a>
                   |
-                  +--<b>BitmapFontLoader</b></pre>
+                  +--<b>BitmapFontLoader</b>
+                     |
+                     +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>BitmapFontLoader</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -183,25 +185,44 @@ Loads bitmap fonts and makes them available to the system.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="ResourceLoader.html#setReady">setReady</a>,
+               <a href="BaseObject.html#destroy">destroy</a>,
             
-               <a href="ResourceLoader.html#isReady">isReady</a>,
+               <a href="BaseObject.html#release">release</a>,
             
-               <a href="ResourceLoader.html#unload">unload</a>,
+               <a href="BaseObject.html#setElement">setElement</a>,
             
-               <a href="ResourceLoader.html#set">set</a>,
+               <a href="BaseObject.html#getElement">getElement</a>,
             
-               <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
+               <a href="BaseObject.html#jQ">jQ</a>,
             
-               <a href="ResourceLoader.html#clear">clear</a>,
+               <a href="BaseObject.html#update">update</a>,
             
-               <a href="ResourceLoader.html#getResources">getResources</a>,
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="ImageLoader.html">ImageLoader</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="ImageLoader.html#loadImageResource">loadImageResource</a>,
+            
+               <a href="ImageLoader.html#getDimensions">getDimensions</a>,
+            
+               <a href="ImageLoader.html#getClassName">getClassName</a>,
             
          </code></td>
       </tr>
@@ -229,23 +250,6 @@ Loads bitmap fonts and makes them available to the system.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="ImageLoader.html">ImageLoader</a></b>
-         </td>
-      </tr>
-      <tr bgcolor="#FFFFFF" class="TableRowColor">
-         <td><code>
-            
-               <a href="ImageLoader.html#loadImageResource">loadImageResource</a>,
-            
-               <a href="ImageLoader.html#getDimensions">getDimensions</a>,
-            
-               <a href="ImageLoader.html#getClassName">getClassName</a>,
-            
-         </code></td>
-      </tr>
-      
-      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
-         <td>
             <b>Methods inherited from class <a href="RemoteLoader.html">RemoteLoader</a></b>
          </td>
       </tr>
@@ -261,27 +265,25 @@ Loads bitmap fonts and makes them available to the system.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+            <b>Methods inherited from class <a href="ResourceLoader.html">ResourceLoader</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="BaseObject.html#destroy">destroy</a>,
+               <a href="ResourceLoader.html#setReady">setReady</a>,
             
-               <a href="BaseObject.html#release">release</a>,
+               <a href="ResourceLoader.html#isReady">isReady</a>,
             
-               <a href="BaseObject.html#setElement">setElement</a>,
+               <a href="ResourceLoader.html#unload">unload</a>,
             
-               <a href="BaseObject.html#getElement">getElement</a>,
+               <a href="ResourceLoader.html#set">set</a>,
             
-               <a href="BaseObject.html#jQ">jQ</a>,
+               <a href="ResourceLoader.html#getCachedObjects">getCachedObjects</a>,
             
-               <a href="BaseObject.html#update">update</a>,
+               <a href="ResourceLoader.html#clear">clear</a>,
             
-               <a href="BaseObject.html#addEvent">addEvent</a>,
-            
-               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+               <a href="ResourceLoader.html#getResources">getResources</a>,
             
          </code></td>
       </tr>
@@ -371,6 +373,10 @@ Loads bitmap fonts and makes them available to the system.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getResourceType"> </a> <h3>getResourceType</h3>
@@ -392,6 +398,10 @@ Loads bitmap fonts and makes them available to the system.</p>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="load"> </a> <h3>load</h3>
@@ -416,6 +426,10 @@ Loads bitmap fonts and makes them available to the system.</p>
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -427,8 +441,8 @@ Loads bitmap fonts and makes them available to the system.</p>
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:24 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

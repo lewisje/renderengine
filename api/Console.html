@@ -59,7 +59,7 @@
 
 
 <p>
-A class for logging messages to a console reference object.  There are       currently three supported console references:       <ul>       <li>Firebug - logs to the Firebug/Firebug Lite error console</li>       <li>OperaConsoleRef - logs to the Opera error console</li>       <li>ConsoleRef - A simple popup window for logging messages</li>       </ul></p>
+A class for logging messages to a console reference object.  There are       currently four supported console references:       <ul>       <li>Firebug - logs to the Firebug/Firebug Lite error console</li>       <li>OperaConsoleRef - logs to the Opera error console</li>       <li>HTMLConsoleRef - logs to an HTML div element in the body</li>       <li>SafariConsoleRef - logging for Apple's Safari browser</li>       </ul></p>
 
 
 
@@ -209,6 +209,20 @@ A class for logging messages to a console reference object.  There are       cu
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getDebugLevel">getDebugLevel</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the debug level which the console is currently at.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code></code></font> 
          </td>
          <td>
@@ -263,6 +277,18 @@ A class for logging messages to a console reference object.  There are       cu
             <code> <b> <a href="#startup">startup</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Starts up the console.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#trace">trace</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
@@ -430,6 +456,10 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="error"> </a> <h3>error</h3>
@@ -446,6 +476,35 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="getDebugLevel"> </a> <h3>getDebugLevel</h3>
+      <pre>Number&nbsp;<b>getDebugLevel</b>()</pre> 
+   <ul>
+      Get the debug level which the console is currently at.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The debug level 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="info"> </a> <h3>info</h3>
@@ -462,6 +521,10 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="log"> </a> <h3>log</h3>
@@ -478,6 +541,10 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setConsoleRef"> </a> <h3>setConsoleRef</h3>
@@ -499,6 +566,10 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setDebugLevel"> </a> <h3>setDebugLevel</h3>
@@ -520,6 +591,10 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="startup"> </a> <h3>startup</h3>
@@ -536,6 +611,30 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="trace"> </a> <h3>trace</h3>
+      <pre><b>trace</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="warn"> </a> <h3>warn</h3>
@@ -552,6 +651,10 @@ A class for logging messages to a console reference object.  There are       cu
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -563,8 +666,8 @@ A class for logging messages to a console reference object.  There are       cu
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:26 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:48 GMT-0400 (EDT)</div>
 </body>
 </html>

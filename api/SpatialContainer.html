@@ -65,7 +65,9 @@
       |
       +--<a href='BaseObject.html' target='main'>BaseObject</a>
          |
-         +--<b>SpatialContainer</b></pre>
+         +--<b>SpatialContainer</b>
+            |
+            +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
    Class <b>SpatialContainer</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
@@ -153,7 +155,35 @@ An abstract class to represent spatial containers.  Spatial containers       co
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
-            &nbsp;HashContainer
+            &nbsp;Array
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getObjects">getObjects</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns all objects within the spatial container.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Array
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getObjectsOfType">getObjectsOfType</a></b>(clazz) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns all objects within the spatial container of a particularclass type.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;<a href='HashContainer.html' target='main'>HashContainer</a>
             </code></font> 
          </td>
          <td>
@@ -353,6 +383,10 @@ An abstract class to represent spatial containers.  Spatial containers       co
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getHeight"> </a> <h3>getHeight</h3>
@@ -374,6 +408,65 @@ An abstract class to represent spatial containers.  Spatial containers       co
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="getObjects"> </a> <h3>getObjects</h3>
+      <pre>Array&nbsp;<b>getObjects</b>()</pre> 
+   <ul>
+      Returns all objects within the spatial container.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Array</i>&nbsp;</code>An array of all objects in the container 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
+   <hr>
+
+   <a name="getObjectsOfType"> </a> <h3>getObjectsOfType</h3>
+      <pre>Array&nbsp;<b>getObjectsOfType</b>(clazz)</pre> 
+   <ul>
+      Returns all objects within the spatial container of a particularclass type.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>clazz </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Array</i>&nbsp;</code>An array of objects in the container, filtered by class 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getPCL"> </a> <h3>getPCL</h3>
@@ -395,11 +488,15 @@ An abstract class to represent spatial containers.  Spatial containers       co
    <ul>
       <b>Returns:</b>
       <ul>
-         <code><i>HashContainer</i>&nbsp;</code>The PCL 
+         <code><i><a href='HashContainer.html' target='main'>HashContainer</a></i>&nbsp;</code>The PCL 
       </ul>
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getRoot"> </a> <h3>getRoot</h3>
@@ -421,6 +518,10 @@ An abstract class to represent spatial containers.  Spatial containers       co
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="getWidth"> </a> <h3>getWidth</h3>
@@ -442,6 +543,10 @@ An abstract class to represent spatial containers.  Spatial containers       co
    </ul>
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
    <a name="setRoot"> </a> <h3>setRoot</h3>
@@ -463,6 +568,10 @@ An abstract class to represent spatial containers.  Spatial containers       co
    
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
 
@@ -474,8 +583,8 @@ An abstract class to represent spatial containers.  Spatial containers       co
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:25 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

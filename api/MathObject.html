@@ -4,7 +4,7 @@
 <html>
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-   <title>JsDoc: QuadtreeNode</title>
+   <title>JsDoc: MathObject</title>
    <style type="text/css">
       body { background-color: #FFFFFF; }
       .TableHeadingColor { background: #CCCCFF; }
@@ -55,29 +55,31 @@
 
 <hr>
 
-<h2>Class QuadtreeNode</h2>
+<h2>Class MathObject</h2>
 
    <!-- ============ CLASS INHERITANCE BEGIN ========== -->
 
    <pre>Object
    |
-   +--<a href='SpatialNode.html' target='main'>SpatialNode</a>
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
       |
-      +--<b>QuadtreeNode</b></pre>
+      +--<b>MathObject</b>
+         |
+         +--<a href='undefined' target='main'>undefined</a></pre>
    <hr>
-   Class <b>QuadtreeNode</b><br/>
+   Class <b>MathObject</b><br/>
    <!-- ============ CLASS INHERITANCE END ========== -->
 
 
 
-   Extends <a href="SpatialNode.html">SpatialNode</a>.<br/>
+   Extends <a href="PooledObject.html">PooledObject</a>.<br/>
 
 <p>
-A single node within a quadtree.  Contains references to sub-nodes.</p>
+The base object class which represents a math object withinthe engine.  All math objects should extend from this class mainly due tothe fact that the engine can switch between pooling the object and runningtransiently.<p/>Google's Chrome browser seems to operate better with transient objects whileother browsers appear to run better with pooled objects.<p/></p>
 
 
 
-<br/><i>Defined in <a href="container.quadtree.src.html">container.quadtree.js</a></i>
+<br/><i>Defined in <a href="engine.mathobject.src.html">engine.mathobject.js</a></i>
 
 <hr>
 
@@ -97,11 +99,11 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
       <td>
    
       <code>
-      <b><a href="#QuadtreeNode">QuadtreeNode</a></b>(rect, rect)
+      <b><a href="#MathObject">MathObject</a></b>(name)
       </code>
         <br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Create a quadtree node instance
+        Create a math object.
         </td>
    </tr>
 
@@ -122,42 +124,24 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code>
-            &nbsp;String
-            </code></font> 
+            <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <code> <b> <a href="#constructor">constructor</a></b>(name) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
  
          </td>
       </tr>
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
-            <font size="-1"><code>
-            &nbsp;Array
-            </code></font> 
+            <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#getQuads">getQuads</a></b>() </code> 
+            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the array of quads within this node.
- 
-         </td>
-      </tr>
-   
-      <tr bgcolor="white" class="TableRowColor">
-         <td align="right" valign="top" width="1%">
-            <font size="-1"><code>
-            &nbsp;Rectangle2D
-            </code></font> 
-         </td>
-         <td>
-            <code> <b> <a href="#getRect">getRect</a></b>() </code> 
-            <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the rectangle which defines this node.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Destroy this object instance (remove it from the Engine).
  
          </td>
       </tr>
@@ -177,19 +161,25 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
       
       <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
          <td>
-            <b>Methods inherited from class <a href="SpatialNode.html">SpatialNode</a></b>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
          </td>
       </tr>
       <tr bgcolor="#FFFFFF" class="TableRowColor">
          <td><code>
             
-               <a href="SpatialNode.html#getIndex">getIndex</a>,
+               <a href="PooledObject.html#release">release</a>,
             
-               <a href="SpatialNode.html#getObjects">getObjects</a>,
+               <a href="PooledObject.html#getId">getId</a>,
             
-               <a href="SpatialNode.html#addObject">addObject</a>,
+               <a href="PooledObject.html#getName">getName</a>,
             
-               <a href="SpatialNode.html#removeObject">removeObject</a>,
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+               <a href="PooledObject.html#getClassName">getClassName</a>,
             
          </code></td>
       </tr>
@@ -217,12 +207,12 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
 
 </table>
 
-<a name="QuadtreeNode"> </a>
-<h3>QuadtreeNode</h3>
+<a name="MathObject"> </a>
+<h3>MathObject</h3>
 
-   <pre><b>QuadtreeNode</b>(rect, rect)</pre>
+   <pre><b>MathObject</b>(name)</pre>
    <ul>
-      Create a quadtree node instance
+      Create a math object.
    </ul>
    
    <!-- PARAMETERS START -->
@@ -231,11 +221,7 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
       <b>Parameters:</b>
       
       <ul>
-         <code>[<i>Rectangle2D</i>]&nbsp;rect</code> - The rectangle which defines the area of this node 
-      </ul>
-      
-      <ul>
-         <code>[<i>Rectangle2D</i>]&nbsp;rect</code> - The rectangle which defines the node's boundaries 
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the object 
       </ul>
       
    </ul>
@@ -259,31 +245,35 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
 </table>
 
 
-   <a name="getClassName"> </a> <h3>getClassName</h3>
-      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <a name="constructor"> </a> <h3>constructor</h3>
+      <pre><b>constructor</b>(name)</pre> 
    <ul>
-      Get the class name of this object
+      undocumented
       
    </ul>
    <!-- METHOD PARAMETERS START -->
-   
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
    <ul>
-      <b>Returns:</b>
+      <b>Parameters:</b>
       <ul>
-         <code><i>String</i>&nbsp;</code>"QuadtreeNode" 
+         <code>name </code> 
       </ul>
    </ul>
    
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
    <!-- ADDITIONAL ATTRIBUTES  END -->
+
+   <!-- METHOD SEE ALSO START -->
+   
+
    <hr>
 
-   <a name="getQuads"> </a> <h3>getQuads</h3>
-      <pre>Array&nbsp;<b>getQuads</b>()</pre> 
+   <a name="destroy"> </a> <h3>destroy</h3>
+      <pre><b>destroy</b>()</pre> 
    <ul>
-      Get the array of quads within this node.
+      Destroy this object instance (remove it from the Engine).  The object's releasemethod is called after destruction so it will be returned to the pool of objects to be used again.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -291,35 +281,13 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
-   <ul>
-      <b>Returns:</b>
-      <ul>
-         <code><i>Array</i>&nbsp;</code> 
-      </ul>
-   </ul>
+   
    
    <!-- ADDITIONAL ATTRIBUTES  END -->
-   <hr>
 
-   <a name="getRect"> </a> <h3>getRect</h3>
-      <pre>Rectangle2D&nbsp;<b>getRect</b>()</pre> 
-   <ul>
-      Get the rectangle which defines this node.
-      
-   </ul>
-   <!-- METHOD PARAMETERS START -->
+   <!-- METHOD SEE ALSO START -->
    
-   
-   <!-- METHOD PARAMETERS END -->
-   <!-- ADDITIONAL ATTRIBUTES START -->
-   <ul>
-      <b>Returns:</b>
-      <ul>
-         <code><i>Rectangle2D</i>&nbsp;</code> 
-      </ul>
-   </ul>
-   
-   <!-- ADDITIONAL ATTRIBUTES  END -->
+
    <hr>
 
 
@@ -331,8 +299,8 @@ A single node within a quadtree.  Contains references to sub-nodes.</p>
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:26 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:47 GMT-0400 (EDT)</div>
 </body>
 </html>

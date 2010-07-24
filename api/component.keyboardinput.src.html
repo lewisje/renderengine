@@ -52,7 +52,7 @@ An extension of the input component for dealing with the              keyboard.
          </td>
          <td>
             
-A component which responds to keyboard events and notifiesits host object by calling one of three methods.
+A component which responds to keyboard events and notifiesits {@link HostObject} by calling one of three methods.
          </td>
       </tr>
    
@@ -75,9 +75,9 @@ A component which responds to keyboard events and notifiesits host object by ca
 <span class='linenumber'>  7</span>  *
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 10</span>  * @version: $Revision: 835 $
+<span class='linenumber'> 10</span>  * @version: $Revision: 1216 $
 <span class='linenumber'> 11</span>  *
-<span class='linenumber'> 12</span>  * Copyright (c) 2008 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 12</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 13</span>  *
 <span class='linenumber'> 14</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
 <span class='linenumber'> 15</span>  * of this software and associated documentation files (the "Software"), to deal
@@ -107,12 +107,12 @@ A component which responds to keyboard events and notifiesits host object by ca
 <span class='linenumber'> 39</span> 
 <span class='linenumber'> 40</span> </span><span class="COMM">/**
 <span class='linenumber'> 41</span>  * @class A component which responds to keyboard events and notifies
-<span class='linenumber'> 42</span>  * its host object by calling one of three methods.  The host object
+<span class='linenumber'> 42</span>  * its {@link HostObject} by calling one of three methods.  The &lt;tt>HostObject&lt;/tt>
 <span class='linenumber'> 43</span>  * should implement any of the following methods to receive the corresponding event:
 <span class='linenumber'> 44</span>  * &lt;ul>
-<span class='linenumber'> 45</span>  * &lt;li>onKeyDown - A key was pressed down&lt;/li>
-<span class='linenumber'> 46</span>  * &lt;li>onKeyUp - A key was released&lt;/li>
-<span class='linenumber'> 47</span>  * &lt;li>onKeyPress - A key was pressed and released&lt;/li>
+<span class='linenumber'> 45</span>  * &lt;li>&lt;tt>onKeyDown()&lt;/tt> - A key was pressed down&lt;/li>
+<span class='linenumber'> 46</span>  * &lt;li>&lt;tt>onKeyUp()&lt;/tt> - A key was released&lt;/li>
+<span class='linenumber'> 47</span>  * &lt;li>&lt;tt>onKeyPress()&lt;/tt> - A key was pressed and released&lt;/li>
 <span class='linenumber'> 48</span>  * &lt;/ul>
 <span class='linenumber'> 49</span>  * Each function should take up to six arguments.  The first argument is the character
 <span class='linenumber'> 50</span>  * code, a number which represents the key that was pressed. The second argument is the
@@ -170,51 +170,62 @@ A component which responds to keyboard events and notifiesits host object by ca
 <span class='linenumber'>102</span> </span><span class="WHIT">   </span><span class="COMM">/**
 <span class='linenumber'>103</span>     * @private
 <span class='linenumber'>104</span>     */</span><span class="WHIT">
-<span class='linenumber'>105</span> </span><span class="WHIT">   </span><span class="NAME">_keyDownListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>106</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyDown</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>107</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>108</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyDown</span><span class="PUNC">(</span><span class="NAME">eventObj.which</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.keyCode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.ctrlKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.altKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.shiftKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>109</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>110</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>111</span> 
-<span class='linenumber'>112</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>113</span>     * @private
-<span class='linenumber'>114</span>     */</span><span class="WHIT">
-<span class='linenumber'>115</span> </span><span class="WHIT">   </span><span class="NAME">_keyUpListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>116</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyUp</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>117</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>118</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyUp</span><span class="PUNC">(</span><span class="NAME">eventObj.which</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.keyCode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.ctrlKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.altKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.shiftKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>119</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>120</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>121</span> 
-<span class='linenumber'>122</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>123</span>     * @private
-<span class='linenumber'>124</span>     */</span><span class="WHIT">
-<span class='linenumber'>125</span> </span><span class="WHIT">   </span><span class="NAME">_keyPressListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>126</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyPress</span><span class="PUNC">)</span><span class="WHIT">
-<span class='linenumber'>127</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>128</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyPress</span><span class="PUNC">(</span><span class="NAME">eventObj.which</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.keyCode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.ctrlKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.altKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.shiftKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>129</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>131</span> 
-<span class='linenumber'>132</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope KeyboardInputComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>133</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>134</span>     * Get the class name of this object
-<span class='linenumber'>135</span>     *
-<span class='linenumber'>136</span>     * @return {String} "KeyboardInputComponent"
-<span class='linenumber'>137</span>     */</span><span class="WHIT">
-<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>139</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"KeyboardInputComponent"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>140</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>141</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>142</span> 
-<span class='linenumber'>143</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KeyboardInputComponent</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>144</span> 
-<span class='linenumber'>145</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<span class='linenumber'>105</span> </span><span class="WHIT">   </span><span class="NAME">playEvent</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">e</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.createEvent</span><span class="PUNC">(</span><span class="STRN">"KeyboardEvent"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>107</span> </span><span class="WHIT">      </span><span class="NAME">evt.initKeyEvent</span><span class="PUNC">(</span><span class="NAME">e.type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e.ctrlKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e.shiftKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">e.keyCode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">      </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getRenderContext</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getSurface</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">dispatchEvent</span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>110</span> 
+<span class='linenumber'>111</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>112</span>     * @private
+<span class='linenumber'>113</span>     */</span><span class="WHIT">
+<span class='linenumber'>114</span> </span><span class="WHIT">   </span><span class="NAME">_keyDownListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>115</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyDown</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>116</span> </span><span class="WHIT">         </span><span class="NAME">this.record</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">,</span><span class="NAME">KeyboardInputComponent.RECORD_PART</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>117</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyDown</span><span class="PUNC">(</span><span class="NAME">eventObj.which</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.keyCode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.ctrlKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.altKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.shiftKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>118</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>119</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>120</span> 
+<span class='linenumber'>121</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>122</span>     * @private
+<span class='linenumber'>123</span>     */</span><span class="WHIT">
+<span class='linenumber'>124</span> </span><span class="WHIT">   </span><span class="NAME">_keyUpListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>125</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyUp</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>126</span> </span><span class="WHIT">         </span><span class="NAME">this.record</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">,</span><span class="NAME">KeyboardInputComponent.RECORD_PART</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>127</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyUp</span><span class="PUNC">(</span><span class="NAME">eventObj.which</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.keyCode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.ctrlKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.altKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.shiftKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>128</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>129</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>130</span> 
+<span class='linenumber'>131</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>132</span>     * @private
+<span class='linenumber'>133</span>     */</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">   </span><span class="NAME">_keyPressListener</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyPress</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">         </span><span class="NAME">this.record</span><span class="PUNC">(</span><span class="NAME">eventObj</span><span class="PUNC">,</span><span class="NAME">KeyboardInputComponent.RECORD_PART</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">onKeyPress</span><span class="PUNC">(</span><span class="NAME">eventObj.which</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.keyCode</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.ctrlKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.altKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj.shiftKey</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">eventObj</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>138</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>139</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>140</span> 
+<span class='linenumber'>141</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope KeyboardInputComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>142</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>143</span>     * Get the class name of this object
+<span class='linenumber'>144</span>     *
+<span class='linenumber'>145</span>     * @return {String} "KeyboardInputComponent"
+<span class='linenumber'>146</span>     */</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"KeyboardInputComponent"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>149</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>150</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">   </span><span class="NAME">RECORD_PART</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="STRN">"shiftKey"</span><span class="PUNC">,</span><span class="STRN">"ctrlKey"</span><span class="PUNC">,</span><span class="STRN">"altKey"</span><span class="PUNC">,</span><span class="STRN">"keyCode"</span><span class="PUNC">]</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>153</span> 
+<span class='linenumber'>154</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">KeyboardInputComponent</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>155</span> 
+<span class='linenumber'>156</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2009 Brett Fattori</div>
+   <div class="jsdoc_copy">&copy;2008-2010 Brett Fattori</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Dec 20 2009 18:05:03 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.0b on Sat Jul 24 2010 11:18:36 GMT-0400 (EDT)</div>
 </body>
 </html>
