@@ -2,7 +2,7 @@
 /**
  * The Render Engine
  *
- * Collision box editing object
+ * The actor object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -31,46 +31,48 @@
  *
  */
 
-Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.render.js");
+Engine.include("/components/component.mover2d.js");
+Engine.include("/components/component.sprite.js");
+Engine.include("/components/component.keyboardinput.js");
 Engine.include("/engine/engine.object2d.js");
 
-
-Engine.initObject("SpriteTestCollisionBox", "Object2D", function() {
+Engine.initObject("SpriteActor", "Object2D", function() {
 
 /**
  * @class The player object.  Creates the player and assigns the
  *        components which handle collision, drawing, drawing the thrust
  *        and moving the object.
  */
-var SpriteTestCollisionBox = Object2D.extend({
+var SpriteActor = Object2D.extend({
 
    editing: false,
 
-   boxRect: null,
+   sprite: null,
+
+   velocityVec: null,
 
    constructor: function() {
-      this.base("CollisionBox");
+      this.base("Actor");
 
       this.editing = false;
 
-      this.add(Transform2DComponent.create("move"));
-      this.add(RenderComponent.create("draw"));
+      // Add components to move and draw the player
+      this.add(KeyboardInputComponent.create("input"));
+      this.add(Mover2DComponent.create("move"));
+      this.add(SpriteComponent.create("draw"));
 
       this.setPosition(Point2D.create(100, 100));
-      this.boxRect = Rectangle2D.create(0, 0, 80, 80);
+      this.velocityVec = Point2D.create(0, 0);
    },
 
-	getProperties: function() {
-		var self = this;
-		var prop = this.base(self);
-		return $.extend(prop, {
-        "Width" :         [function() { return self.boxRect.get().w; },
-                            function(i) { self.setWidth(i); }, true],
-         "Height" :        [function() { return self.boxRect.get().h; },
-                            function(i) { self.setHeight(i); }, true]
-		});
-	},
+   getProperties: function() {
+      var self = this;
+      var prop = this.base(self);
+      return $.extend(prop, {
+         "Sprite" :     [function() { return self.sprite.getName(); },
+                         function(i) { self.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", i)); }, true]
+      });
+   },
 
    /**
     * Update the player within the rendering context.  This draws
@@ -86,14 +88,22 @@ var SpriteTestCollisionBox = Object2D.extend({
       this.base(renderContext, time);
 
       if (this.editing) {
-         renderContext.setFillStyle("rgba(255,255,0,0.85)");
-      } else {
-         renderContext.setFillStyle("rgba(255,255,0,0.4)");
+         renderContext.setLineStyle("white");
+         renderContext.setLineWidth(2);
+         renderContext.drawRectangle(this.getSprite().getBoundingBox());
       }
 
-      renderContext.drawFilledRectangle(this.boxRect);
-
       renderContext.popTransform();
+   },
+
+   setSprite: function(sprite) {
+      this.sprite = sprite;
+      this.setBoundingBox(sprite.getBoundingBox());
+      this.getComponent("draw").setSprite(sprite);
+   },
+
+   getSprite: function() {
+      return this.sprite;
    },
 
    /**
@@ -108,21 +118,6 @@ var SpriteTestCollisionBox = Object2D.extend({
       return this.getComponent("move").getRenderPosition();
    },
 
-   setBoxSize: function(width, height) {
-      this.boxRect.setDims(Point2D.create(width, height));
-      this.setBoundingBox(this.boxRect);
-   },
-
-   setWidth: function(width) {
-      this.boxRect.setWidth(width);
-      this.setBoundingBox(this.boxRect);
-   },
-
-   setHeight: function(height) {
-      this.boxRect.setHeight(height);
-      this.setBoundingBox(this.boxRect);
-   },
-
    /**
     * Set, or initialize, the position of the mover component
     *
@@ -131,6 +126,22 @@ var SpriteTestCollisionBox = Object2D.extend({
    setPosition: function(point) {
       this.base(point);
       this.getComponent("move").setPosition(point);
+   },
+
+   getScale: function() {
+      return this.getComponent("move").getScale();
+   },
+
+   setScale: function(s) {
+      this.getComponent("move").setScale(s);
+   },
+
+   getRotation: function() {
+      return this.getComponent("move").getRotation();
+   },
+
+   setRotation: function(r) {
+      this.getComponent("move").setRotation(r);
    },
 
    /**
@@ -160,10 +171,10 @@ var SpriteTestCollisionBox = Object2D.extend({
     * @type String
     */
    getClassName: function() {
-      return "SpriteTestCollisionBox";
+      return "SpriteActor";
    }
 });
 
-return SpriteTestCollisionBox;
+return SpriteActor;
 
 });

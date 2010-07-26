@@ -30,34 +30,119 @@
  *
  */
 
-Engine.initObject("SpriteTestEditor", null, function() {
+Engine.include("/resourceloaders/loader.sound.js");
+Engine.include("/resourceloaders/loader.sprite.js");
+Engine.include("/resourceloaders/loader.level.js");
+
+Engine.initObject("LevelEditor", null, function() {
 
 /**
- * @class The player object.  Creates the player and assigns the
- *        components which handle collision, drawing, drawing the thrust
- *        and moving the object.
+ * @class The 2D level editor.
  */
-var SpriteTestEditor = Base.extend({
+var LevelEditor = Base.extend({
 
    nextZ: 0,
-
    gridSize: 16,
-
    currentSelectedObject: null,
+
+
+   game: null,
+   loaders: {
+      sprite: null,
+      sound: null,
+      level: null
+   },
+   gameRenderContext: null,
 
    constructor: null,
 
-   edit: function() {
+   /**
+    * Read the <tt>Game</tt> which is being edited to get the
+    * relevant parts which are going to be used by the editor.
+    * @param game {Game} The <tt>Game</tt> class
+    */
+   setGame: function(game) {
+      this.game = game;
+      
+      // See what kind of resource loaders the game has assigned to it
+      this.loaders.sprite = [];
+      this.loaders.sound = [];
+      this.loaders.level = [];
+      
+      for (var o in this.game) {
+         try {
+            if (SpriteLoader.isInstance(this.game[o])) {
+               this.loaders.sprite.push(this.game[o]);
+            } else if (SoundLoader.isInstance(this.game[o])) {
+               this.loaders.sound.push(this.game[o]);
+            } else if (LevelLoader.isInstance(this.game[o])) {
+               this.loaders.level.push(this.game[o]);
+            } else if (RenderContext.isInstance(this.game[o])) {
+               // The render context (if there's more than one, we'll need to update this)
+               this.gameRenderContext = this.game[o];
+            }
+         } catch (ex) {
+            // Some objects don't like to be touched
+         }
+      }
+   },
+
+   /**
+    * Get the <tt>Game</tt> object which is being edited
+    * @return {Game} The game being edited
+    */
+   getGame: function() {
+      return game;
+   },
+
+   getAllSprites: function() {
+      var allSprites = [];
+      
+      // For each of the sprite loaders
+      for (var l in this.loaders.sprite) {
+         var loader = this.loaders.sprite[l];
+         
+         // Locate the resources (sprite sheets)
+         var resources = loader.getResources();
+         for (var r in resources) {
+            
+            // Get all of the sprites
+            var sprites = resources[r].getSpriteNames(resources[r]);
+            for (var s in sprites) {
+               allSprites.push({
+                  lookup: l + ":" + r + ":" + s,
+                  sprite: resources[r] + ": " + sprites[s]
+               });
+            }
+         }
+      }
+      
+      return allSprites;
+   },
+
+   /**
+    * This is the main entry point when editing a game.  Providing the
+    * {@link Game} object which is being edited gives the editor a chance
+    * to find all of the resource loaders being used by the game, and
+    * also locate other parts of the game which can be edited.  The editor
+    * will create interfaces for working with the game's structure, plus
+    * it will generate data objects for the level being edited.
+    * @param game {Game} The <tt>Game</tt> object being edited
+    */
+   edit: function(game) {
       // Render the editor controls
       var tbar = $("<div class='toolbar'/>");
       var self = this;
+      
+      // Set the Game object which is being edited
+      this.setGame(game);
 
       // Create actor
       tbar.append($("<span class='tool'>Actors:</span>"));
       var s = $("<select id='actor' class='tool'>");
-      var spr = SpriteTest.spriteLoader.getSpriteNames("smbtiles");
+      var spr = this.getAllSprites();
       $.each(spr, function() {
-         s.append($("<option value='" + this + "'>" + this + "</option>"));
+         s.append($("<option value='" + this.lookup + "'>" + this.sprite + "</option>"));
       });
       tbar.append(s);
       tbar.append($("<input type='button' value='Add' class='tool'/>").click(function() {
@@ -66,16 +151,16 @@ var SpriteTestEditor = Base.extend({
 
       // Remove actor
       tbar.append($("<input type='button' value='Delete' class='tool'/>").click(function() {
-         SpriteTestEditor.deleteObject();
+         self.deleteObject();
       }));
 
       // Update grid size
       tbar.append($("<span class='tool'>Grid Size:</span>"));
       tbar.append($("<input class='tool' type='text' size='3' value='16'/>").change(function() {
          if (!isNaN($(this).val())) {
-            SpriteTestEditor.gridSize = $(this).val();
+            self.gridSize = $(this).val();
          } else {
-            $(this).val(SpriteTestEditor.gridSize);
+            $(this).val(self.gridSize);
          }
       }));
 
@@ -86,8 +171,8 @@ var SpriteTestEditor = Base.extend({
 
       // We need a scrollbar to move the world
       var sb = $("<div style='height: 20px; width: " + SpriteTest.fieldWidth + "px; overflow-x: auto;'><div style='width: " +
-         SpriteTest.getLevel().getFrame().get().w + "px; border: 1px dashed'></div></div>").bind("scroll", function() {
-            SpriteTest.getRenderContext().setHorizontalScroll(this.scrollLeft);
+         game.getLevel().getFrame().get().w + "px; border: 1px dashed'></div></div>").bind("scroll", function() {
+            game.getRenderContext().setHorizontalScroll(this.scrollLeft);
       });
 
       $(document.body).append(sb);
@@ -96,7 +181,7 @@ var SpriteTestEditor = Base.extend({
 
 
       // Add an event handler to the context
-      var ctx = SpriteTest.getRenderContext();
+      var ctx = game.getRenderContext();
       ctx.addEvent(this, "mousedown", function(evt) {
          self.selectObject(evt.pageX, evt.pageY);
          self.mouseDown = true;
@@ -104,7 +189,7 @@ var SpriteTestEditor = Base.extend({
 
       ctx.addEvent(this, "mouseup", function() {
          self.mouseDown = false;
-         SpriteTestEditor.createPropertiesTable(SpriteTestEditor.currentSelectedObject);
+         self.createPropertiesTable(self.currentSelectedObject);
       });
 
       ctx.addEvent(this, "mousemove", function(evt) {
@@ -115,40 +200,40 @@ var SpriteTestEditor = Base.extend({
    },
 
    createActor: function(actorName) {
-      var ctx = SpriteTest.getRenderContext();
-      var actor = SpriteTestActor.create();
-      actor.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", actorName));
+      var ctx = this.getRenderContext();
+      var actor = SpriteActor.create();
+      actor.setSprite(this.getGame().spriteLoader.getSprite("smbtiles", actorName));
 
       // Adjust for scroll
       var s = ctx.getHorizontalScroll();
-      var pT = Point2D.create(SpriteTest.centerPoint.x + s, SpriteTest.centerPoint.y);
+      var pT = Point2D.create(game.centerPoint.x + s, game.centerPoint.y);
 
       actor.setPosition(pT);
       actor.setZIndex(SpriteTest.nextZ++);
       ctx.add(actor);
-      SpriteTestEditor.setSelected(actor);
+      this.setSelected(actor);
    },
 
-   createCollisionBox: function() {
-      var ctx = SpriteTest.getRenderContext();
-      var cbox = SpriteTestCollisionBox.create();
+   createCollisionBox: function(game) {
+      var ctx = game.getRenderContext();
+      var cbox = CollisionBox.create();
 
       // Adjust for scroll
       var s = ctx.getHorizontalScroll();
-      var pT = Point2D.create(SpriteTest.centerPoint.x + s, SpriteTest.centerPoint.y);
+      var pT = Point2D.create(game.centerPoint.x + s, game.centerPoint.y);
 
       cbox.setPosition(pT);
       cbox.setBoxSize(80, 80);
-      cbox.setZIndex(SpriteTestEditor.nextZ++);
+      cbox.setZIndex(this.nextZ++);
       ctx.add(cbox);
-      SpriteTestEditor.setSelected(cbox);
+      this.setSelected(cbox);
    },
 
    selectObject: function(x, y) {
       this.deselectObject();
 
       // Adjust for scroll
-      var ctx = SpriteTest.getRenderContext();
+      var ctx = game.getRenderContext();
       //x += ctx.getHorizontalScroll();
 
       // Check to see if this object falls on top of an object
@@ -160,7 +245,7 @@ var SpriteTestEditor = Base.extend({
          if (obj.isEditable &&
                obj.getWorldBox().containsPoint(pt))
          {
-            SpriteTestEditor.setSelected(obj);
+            this.setSelected(obj);
             break;
          }
       }
@@ -168,9 +253,9 @@ var SpriteTestEditor = Base.extend({
 
    deselectObject: function(obj) {
       if (obj == null) {
-         if (SpriteTestEditor.currentSelectedObject) {
-            SpriteTestEditor.currentSelectedObject.setEditing(false);
-            SpriteTestEditor.currentSelectedObject = null;
+         if (this.currentSelectedObject) {
+            this.currentSelectedObject.setEditing(false);
+            this.currentSelectedObject = null;
          }
       } else {
          obj.setEditing(false);
@@ -179,7 +264,7 @@ var SpriteTestEditor = Base.extend({
 
    deleteObject: function(obj) {
       if (obj == null) {
-         if (SpriteTestEditor.currentSelectedObject) {
+         if (this.currentSelectedObject) {
             SpriteTest.getRenderContext().remove(SpriteTestEditor.currentSelectedObject);
             SpriteTestEditor.currentSelectedObject = null;
          }
@@ -191,22 +276,22 @@ var SpriteTestEditor = Base.extend({
    },
 
    setSelected: function(obj) {
-      SpriteTestEditor.deselectObject();
-      SpriteTestEditor.currentSelectedObject = obj;
+      this.deselectObject();
+      this.currentSelectedObject = obj;
       obj.setEditing(true);
-      SpriteTestEditor.createPropertiesTable(obj);
-      SpriteTestEditor.updateLevelData();
+      this.createPropertiesTable(obj);
+      this.updateLevelData();
    },
 
    moveSelected: function(x, y) {
       // Adjust for scroll
       x += SpriteTest.renderContext.getHorizontalScroll();
 
-      if (SpriteTestEditor.currentSelectedObject) {
-         var grid = SpriteTest.fieldWidth / SpriteTestEditor.gridSize;
-         x = x - x % SpriteTestEditor.gridSize;
-         y = y - y % SpriteTestEditor.gridSize;
-         SpriteTestEditor.currentSelectedObject.setPosition(Point2D.create(x, y));
+      if (this.currentSelectedObject) {
+         var grid = SpriteTest.fieldWidth / this.gridSize;
+         x = x - x % this.gridSize;
+         y = y - y % this.gridSize;
+         this.currentSelectedObject.setPosition(Point2D.create(x, y));
       }
    },
 
@@ -214,7 +299,7 @@ var SpriteTestEditor = Base.extend({
       // Remove any existing property table
       $("#propTable").remove();
 
-      if (SpriteTestEditor.currentSelectedObject == null) {
+      if (this.currentSelectedObject == null) {
          return;
       }
 
@@ -226,18 +311,18 @@ var SpriteTestEditor = Base.extend({
       for (var p in bean) {
          var r = $("<tr>");
          r.append($("<td class='propName'>" + p + "</td>"));
-			var e;
+         var e;
 
          if (bean[p][1]) {
-				var fn = function() {
-	            arguments.callee.cb(this.value);
-	         };
-	         fn.cb = bean[p][1];
+            var fn = function() {
+               arguments.callee.cb(this.value);
+            };
+            fn.cb = bean[p][1];
 
-	         e = $("<input type='text' size='15' value='" + bean[p][0]() + "'/>").change(fn);
-			} else {
-				e = $("<div>").text(bean[p][0]().toString());
-			}
+            e = $("<input type='text' size='15' value='" + bean[p][0]() + "'/>").change(fn);
+         } else {
+            e = $("<div>").text(bean[p][0]().toString());
+         }
 
          r.append(e);
          pTable.append(r);
@@ -245,14 +330,14 @@ var SpriteTestEditor = Base.extend({
 
       // Append the new property table
       $("body", document).append(pTable);
-      SpriteTestEditor.updateLevelData();
+      this.updateLevelData();
    },
 
    updateLevelData: function() {
       var level = "<?xml version='1.0' encoding='UTF-8'?>\n";
       level += "<level resource='" + SpriteTest.getLevel().getName() + "'>\n";
 
-		level += SpriteTest.renderContext.toString("   ");
+      level += SpriteTest.renderContext.toString("   ");
 
       level += "</level>";
       $("#levelData").remove();
@@ -261,6 +346,6 @@ var SpriteTestEditor = Base.extend({
 
 });
 
-return SpriteTestEditor;
+return LevelEditor;
 
 });
