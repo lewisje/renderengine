@@ -37,7 +37,24 @@ Engine.include("/engine/engine.timers.js");
 Engine.initObject("ImageLoader", "RemoteLoader", function() {
 
 /**
- * @class Loads images and stores the reference to those images.
+ * @class Loads images and stores the reference to those images.  Images
+ *        are stored on the client-side in a simple cache for faster re-use.
+ *        When loading images, you assign a name to the image.  This would allow
+ *        you to re-use the image without having to load it again for another
+ *        purpose.
+ *        <p/>
+ *        Loading images is fairly simple.  You only need to create an instance
+ *        of an image loader (multiple images can be loaded by the same resource
+ *        loader) and then use it to load the images:
+ <pre>
+          this.imageLoader = ImageLoader.create();
+          
+          // Load an image
+          this.imageLoader.load("keys", this.getFilePath("resources/fingerboard.png"), 220, 171);
+ </pre>
+ *        In the example above, <tt>this</tt> refers to a {@link Game} object which
+ *        implements the {@link Game#getFilePath getFilePath()} method which is
+ *        used to get a path relative to where the game is located on the server.
  *
  * @constructor
  * @param name {String=ImageLoader} The name of the resource loader
