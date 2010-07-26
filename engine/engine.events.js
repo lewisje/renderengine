@@ -35,7 +35,7 @@
 Engine.initObject("EventEngine", null, function() {
 
 /**
- * @class A static object for unformly handling events within all browser
+ * @class A static object for uniformly handling events within all browser
  *        platforms.  The event engine is an abstraction of the jQuery event
  *        system.  Methods are provided for adding and removing events in
  *        a programmatic way.  Additionally the engine has key codes for

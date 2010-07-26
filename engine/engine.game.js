@@ -35,7 +35,8 @@ Engine.initObject("Game", null, function() {
 /**
  * @class The game object represents an instance of a game.  It is
  * the controlling entity for all of a game and is responsible
- * for setup and teardown of the game.
+ * for setup and teardown of the game.  All games must extend from this class
+ * to be executed by the engine.
  */
 var Game = Base.extend(/** @scope Game.prototype */{
 
@@ -73,16 +74,16 @@ var Game = Base.extend(/** @scope Game.prototype */{
     *
     * @param scriptSource {String} The relative path to the script to load.
     * @return {String} An Id for the script which is used in the call to {@link #scriptLoaded}
-    * 					  when the script has completed loading (or errored out)
+    *                  when the script has completed loading (or errored out)
     * @memberOf Game
     */
    load: function(scriptSource) {
       Assert((scriptSource.indexOf("http") == -1), "Game scripts can only be loaded relative to the game's path");
       Engine.loadScript( (scriptSource.charAt(0) != "/" ? "./" : ".") + scriptSource );
-		var self = this;
-		this.setQueueCallback(function() {
-			self.scriptLoaded(scriptSource);
-		});
+      var self = this;
+      this.setQueueCallback(function() {
+         self.scriptLoaded(scriptSource);
+      });
    },
 
    /**

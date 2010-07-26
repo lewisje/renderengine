@@ -39,7 +39,9 @@ Engine.initObject("HostComponent", "LogicComponent", function() {
 
 /**
  * @class A component that can execute host objects.  Allows embedding
- *        of multiple objects into one object.
+ *        of multiple objects into one object.  This is logically
+ *        a method to embed further {@link HostObject HostObjects} within
+ *        an existing <tt>HostObject</tt>.
  *
  * @param name {String} The name of the component
  * @param [priority=1.0] {Number} The priority of this component

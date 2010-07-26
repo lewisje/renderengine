@@ -38,7 +38,9 @@ Engine.include("/components/component.render.js");
 Engine.initObject("ImageComponent", "RenderComponent", function() {
 
 /**
- * @class A render component that renders an image.
+ * @class A {@link RenderComponent} that draws an image to the render context.
+ *        Images used by this component are loaded via an {@link ImageLoader}
+ *        so that client-side caching can be implemented.
  *
  * @param name {String} The name of the component
  * @param [priority=0.1] {Number} The render priority

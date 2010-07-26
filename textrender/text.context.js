@@ -3,7 +3,7 @@
  * BitmapText
  *
  * @fileoverview A native context font renderer.  Uses the context's font rendering
- * 				  mechanism to generate textual output.
+ *               mechanism to generate textual output.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -37,38 +37,40 @@ Engine.include("/textrender/text.abstractrender.js");
 Engine.initObject("ContextText", "AbstractTextRenderer", function() {
 
 /**
- * @class A text renderer which draws text from a bitmap font file.
+ * @class A text renderer which draws text using the context's native
+ *        text rendering mechansim.  This may not work on all platforms, in
+ *        all browsers.  If not, see {@link BitmapText} as an alternative.
  *
  * @constructor
  * @extends AbstractTextRenderer
  */
 var ContextText = AbstractTextRenderer.extend(/** @scope ContextText.prototype */{
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function() {
       this.base();
-		this.tInit();
+      this.tInit();
    },
 
-	/**
-	 * Initialize some basics
-	 * @private
-	 */
-	tInit: function() {
-		this.setTextAlignment(RenderContext2D.FONT_ALIGN_LEFT);
-		this.setTextWeight(RenderContext2D.FONT_WEIGHT_NORMAL);
-		this.setTextFont("sans-serif");
-		this.setTextStyle(RenderContext2D.FONT_STYLE_NORMAL);
-	},
+   /**
+    * Initialize some basics
+    * @private
+    */
+   tInit: function() {
+      this.setTextAlignment(RenderContext2D.FONT_ALIGN_LEFT);
+      this.setTextWeight(RenderContext2D.FONT_WEIGHT_NORMAL);
+      this.setTextFont("sans-serif");
+      this.setTextStyle(RenderContext2D.FONT_STYLE_NORMAL);
+   },
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    release: function() {
       this.base();
-		this.tInit();
+      this.tInit();
    },
 
    /**
@@ -89,16 +91,16 @@ var ContextText = AbstractTextRenderer.extend(/** @scope ContextText.prototype *
          return;
       }
 
-		renderContext.setFontStyle(this.getTextStyle());
-		renderContext.setFontAlign(this.getTextAlignment());
-		renderContext.setFontWeight(this.getTextWeight());
-		renderContext.setFont(this.getTextFont());
-		renderContext.setFontSize(Math.floor(this.getSize() * TextRenderer.BASE_TEXT_PIXELSIZE) || TextRenderer.BASE_TEXT_PIXELSIZE);
-		
-		renderContext.setFillStyle(this.getColor());
+      renderContext.setFontStyle(this.getTextStyle());
+      renderContext.setFontAlign(this.getTextAlignment());
+      renderContext.setFontWeight(this.getTextWeight());
+      renderContext.setFont(this.getTextFont());
+      renderContext.setFontSize(Math.floor(this.getSize() * TextRenderer.BASE_TEXT_PIXELSIZE) || TextRenderer.BASE_TEXT_PIXELSIZE);
+      
+      renderContext.setFillStyle(this.getColor());
       renderContext.drawText(Point2D.ZERO, this.getText(), this.getHostObject());
    }
-	
+   
 }, /** @scope ContextText.prototype */{
    /**
     * Get the class name of this object

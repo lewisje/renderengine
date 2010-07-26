@@ -42,7 +42,7 @@ Engine.initObject("GridNode", "SpatialNode", function() {
 /**
  * @class A single node within a SpatialGrid.  When the collision model is
  *        updated, the nodes within the grid will be updated to reflect the
- *        objects within it.  A node defines a single rectangle within the
+ *        objects within them.  A node defines a single rectangle within the
  *        entire {@link SpatialGrid}
  *
  * @extends SpatialNode
