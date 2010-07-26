@@ -40,17 +40,17 @@ Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/resourceloaders/loader.level.js");
 Engine.include("/engine/engine.timers.js");
 
-// Load game objects
-Game.load("/editor.js");
-Game.load("/actor.js");
-Game.load("/collisionbox.js");
+Engine.include("/objects/object.spriteactor.js");
+Engine.include("/objects/object.collisionbox.js");
 
-Engine.initObject("SpriteTest", "Game", function() {
+Engine.include("/tools/level_editor/leveleditor.js");
+
+Engine.initObject("SuperMario", "Game", function() {
 
 /**
  * @class The game.
  */
-var SpriteTest = Game.extend({
+var SuperMario = Game.extend({
 
    constructor: null,
 
@@ -71,8 +71,8 @@ var SpriteTest = Game.extend({
    levelLoader: null,
 
    level: null,
-	
-	nextZ: 1,
+   
+   nextZ: 1,
 
    /**
     * Handle the keypress which starts the game
@@ -116,7 +116,7 @@ var SpriteTest = Game.extend({
 
       // Load the sprites
       this.spriteLoader.load("smbtiles", this.getFilePath("resources/smbtiles.js"));
-      SpriteTest.loadTimeout = Timeout.create("wait", 250, SpriteTest.waitForResources);
+      SuperMario.loadTimeout = Timeout.create("wait", 250, SuperMario.waitForResources);
       this.waitForResources();
    },
 
@@ -126,17 +126,17 @@ var SpriteTest = Game.extend({
     */
    waitForResources: function() {
       //Console.debug("checking");
-      if (SpriteTest.spriteLoader.isReady("smbtiles") &&
-          SpriteTest.levelLoader.isReady("level1") &&
-          SpriteTest.soundLoader.isReady("bgm"))
+      if (SuperMario.spriteLoader.isReady("smbtiles") &&
+          SuperMario.levelLoader.isReady("level1") &&
+          SuperMario.soundLoader.isReady("bgm"))
       {
-         SpriteTest.loadTimeout.destroy();
-         SpriteTest.run();
+         this.destroy();
+         SuperMario.run();
          return;
       }
       else
       {
-         SpriteTest.loadTimeout.restart();
+         this.restart();
       }
    },
 
@@ -155,14 +155,14 @@ var SpriteTest = Game.extend({
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
 
-      this.level = SpriteTest.levelLoader.getLevel("level1");
+      this.level = this.levelLoader.getLevel("level1");
 
       this.renderContext = ScrollingBackground.create("bkg", this.level, this.fieldWidth, this.fieldHeight);
       this.renderContext.setWorldScale(this.areaScale);
       Engine.getDefaultContext().add(this.renderContext);
 
       if (EngineSupport.checkBooleanParam("edit")) {
-         SpriteTestEditor.edit();
+         LevelEditor.edit(this);
       } else {
          this.play();
       }
@@ -171,13 +171,13 @@ var SpriteTest = Game.extend({
    play: function() {
       //this.soundLoader.get("bgm").play();
 
-      var player = SpriteTestActor.create();
-      player.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "super_walk"));
+      var player = SpriteActor.create();
+      player.setSprite(this.spriteLoader.getSprite("smbtiles", "super_walk"));
       player.setPosition(Point2D.create(100, 338));
       this.renderContext.add(player);
 
-      var mario = SpriteTestActor.create();
-      mario.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", "mario_walk"));
+      var mario = SpriteActor.create();
+      mario.setSprite(this.spriteLoader.getSprite("smbtiles", "mario_walk"));
       mario.setPosition(Point2D.create(228, 370));
       this.renderContext.add(mario);
    },
@@ -205,9 +205,6 @@ var SpriteTest = Game.extend({
 
 });
 
-// Start the game when all the scripts are loaded.
-//Game.setQueueCallback(function() { SpriteTest.setup(); });
-
-return SpriteTest;
+return SuperMario;
 
 });
