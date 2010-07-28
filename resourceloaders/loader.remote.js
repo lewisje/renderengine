@@ -3,7 +3,7 @@
  * RemoteLoader
  *
  * @fileoverview A resource loader for handling remote objects located on
- *               the server.
+ * 				  the server.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -37,8 +37,7 @@ Engine.include("/engine/engine.resourceloader.js");
 Engine.initObject("RemoteLoader", "ResourceLoader", function() {
 
 /**
- * @class A base loader which implements the {@link #exists} method to
- *        synchronously check for the existence of a file.
+ * @class Loads JSON objects from a specified URL.
  *
  * @constructor
  * @param name {String=RemoteLoader} The name of the resource loader
@@ -91,26 +90,26 @@ var RemoteLoader = ResourceLoader.extend(/** @scope RemoteLoader.prototype */{
    getClassName: function() {
       return "RemoteLoader";
    },
-   
-   /**
-    * Transmit status ok
-    */
-   STATUS_OK: 200,
-   
-   /**
-    * Transmit status - Cached
-    */
-   STATUS_CACHED: 304,
-   
-   /**
-    * Transmit status - Not found
-    */
-   STATUS_NOT_FOUND: 404,
-   
-   /**
-    * Transmit status - Server error
-    */
-   STATUS_SERVER_ERROR: 500
+	
+	/**
+	 * Transmit status ok
+	 */
+	STATUS_OK: 200,
+	
+	/**
+	 * Transmit status - Cached
+	 */
+	STATUS_CACHED: 304,
+	
+	/**
+	 * Transmit status - Not found
+	 */
+	STATUS_NOT_FOUND: 404,
+	
+	/**
+	 * Transmit status - Server error
+	 */
+	STATUS_SERVER_ERROR: 500
 });
 
 return RemoteLoader;

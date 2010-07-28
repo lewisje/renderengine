@@ -44,17 +44,6 @@ Engine.initObject("HostObject", "HashContainer", function() {
  *        can have any number of components of any type within it.  Components provide
  *        functionality for things like rendering, collision detection, effects, or 
  *        transformations. This way, an object can be anything, depending on it's components.
- *        <p/>
- *        A <tt>HostObject</tt> is the logical foundation for all in-game objects.  It is
- *        through this mechanism that game objects can be created without having to manipulate
- *        large, monolithic objects.  A <tt>HostObject</tt> contains {@link BaseComponent Components},
- *        which are the building blocks for complex functionality and ease of development.
- *        <p/>
- *        By building a <tt>HostObject</tt> from multiple components, the object gains the
- *        component's functionality without having to necessarily implement anything.  Many
- *        components already exist in the engine, but you are only limited by your imagination
- *        when it comes to developing new components.
- *
  * @extends HashContainer
  * @constructor
  * @description Create a host object.

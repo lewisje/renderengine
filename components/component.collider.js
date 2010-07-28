@@ -37,11 +37,20 @@ Engine.include("/components/component.base.js");
 Engine.initObject("ColliderComponent", "BaseComponent", function() {
 
 /**
- * @class Creates a collider component which tests the collision model for
+ * @class A collider component is responsible for handling potential collisions by 
+ *        updating the associated collision model and checking for possible collisions.
+ *
+ * @param name {String} Name of the component
+ * @param collisionModel {SpatialCollection} The collision model
+ * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
+ *
+ * @extends BaseComponent
+ * @constructor
+ * @description Creates a collider component which tests the collision model for
  *              potential collisions. Each frame, the component will update a potential
  *              collision list (PCL) for the host object, using its current position
  *              obtained from {@link Object2D#getPosition}. Each object which meets
- *              certain criteria will be passed to an <tt>onCollide()</tt> method which
+ *              certain criteria will be passed to an <tt>onCollide()<tt> method which
  *              must be implemented by the host object.
  *              <p/>
  *              The event handler will be passed the time the collision was detected
@@ -52,15 +61,6 @@ Engine.initObject("ColliderComponent", "BaseComponent", function() {
  *              <p/>
  *              If the <tt>onCollide()</tt> method is not implemented on the host, no 
  *              collision events will be passed.
- *
- * @param name {String} Name of the component
- * @param collisionModel {SpatialCollection} The collision model
- * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
- *
- * @extends BaseComponent
- * @constructor
- * @description A collider component is responsible for handling potential collisions by 
- *        updating the associated collision model and checking for possible collisions.
  */
 var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.prototype */{
 
@@ -145,15 +145,15 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       var aNode = this.getCollisionModel().findNodePoint(obj.getPosition());
       if (aNode != null) {
          if (obj.ModelData.lastNode !==null && (obj.ModelData.lastNode.getIndex() != aNode.getIndex())) {
-            // If the last node the object was in isn't the same as the node its position is in,
-            // remove it from the old node and add it to the new node
+				// If the last node the object was in isn't the same as the node its position is in,
+				// remove it from the old node and add it to the new node
             obj.ModelData.lastNode.removeObject(obj);
             aNode.addObject(obj);
          } else if (obj.ModelData.lastNode === null) {
-            // If the last node isn't specified, make sure to add it to the node
-            aNode.addObject(obj);
-         }
-         
+				// If the last node isn't specified, make sure to add it to the node
+				aNode.addObject(obj);
+			}
+			
          obj.ModelData.lastNode = aNode;
       }
    },

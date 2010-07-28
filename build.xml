@@ -39,9 +39,8 @@
 	</propertyregex>
 	-->
 
-<!--
 	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${make.dir}/ant-googlecode-0.0.2.jar" name="gcupload"/>
--->
+
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
    <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
@@ -382,7 +381,9 @@
 
 		<!-- Exclude any specified files -->
 		<delete quiet="true">
-			<fileset dir="${full.home}" includes="${exclude.set}"/>
+			<fileset dir="${full.home}">
+				<include name="${exclude.set}"/>
+			</fileset>
 		</delete>
  
    </target>
@@ -760,11 +761,9 @@
  
  		<!-- Exclude any specified files -->
 		<delete quiet="true">
-			<fileset dir="${min.home}" includes="${exclude.set}"/>
-		</delete>
-
-		<delete quiet="true">
-			<fileset dir="${zip.home}" includes="${exclude.set}"/>
+			<fileset dir="${min.home}">
+				<include name="${exclude.set}"/>
+			</fileset>
 		</delete>
   
    </target>

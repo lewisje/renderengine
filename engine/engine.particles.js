@@ -95,6 +95,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
     */
    update: function(renderContext, time) {
       if (time < this.life) {
+         // Draw it ( I think this is an optimization point )
          this.draw(renderContext, time);
          return true;
       } else {
@@ -145,17 +146,10 @@ return Particle;
 Engine.initObject("ParticleEngine", "BaseObject", function() {
 
 /**
- * @class The particle engine is a system for updating and expiring
+ * @class The particle engine is a simple system for updating, and expiring
  *        particles within a game environment.  This is registered with the
  *        render context so it will be updated at regular intervals.  The maximum
- *        number of supported particles can be configured, but defaults to 120.
- *        <p/>
- *        Particles should be simple objects which don't need to perform many
- *        calculations before being drawn.  All particles are rendered in world
- *        coordinates to speed up processing.
- *        </p>
- *        It is possible to run multiple particle engines within a render context,
- *        but it might be non-productive to do so.
+ *        number of supported particles can be configured, but defaults to 120. 
  *
  * @extends BaseObject
  * @constructor

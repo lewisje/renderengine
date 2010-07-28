@@ -36,7 +36,7 @@ Engine.include("/engine/engine.baseobject.js");
 Engine.initObject("Timer", "BaseObject", function() {
 
 /**
- * @class The base abstract class for all timer objects.
+ * @class The base abstract class for all timers.
  *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
@@ -211,7 +211,7 @@ return Timer;
 Engine.initObject("Timeout", "Timer", function() {
 
 /**
- * @class An extension of {@link Timer} that wraps the <tt>window.setTimeout</tt> method.
+ * @class A timer that wraps the <tt>window.setTimeout</tt> method.
  *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
@@ -261,9 +261,8 @@ return Timeout;
 Engine.initObject("OneShotTimeout", "Timeout", function() {
 
 /**
- * @class An extension of {@link Timer} which is a one-shot timer that cannot 
- *        be restarted and will self-destroy after it completes its interval.  Within
- *        the callback, <tt>this</tt> refers to the <tt>Timer</tt> object itself.
+ * @class A one-shot timer that cannot be restarted and will
+ *        self-destroy after it completes its interval..
  *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
@@ -318,10 +317,9 @@ return OneShotTimeout;
 Engine.initObject("OneShotTrigger", "OneShotTimeout", function() {
 
 /**
- * @class An extension of {@link Timer} which is a one-shot timer that triggers a callback, 
- *        at regular intervals, until the timer has expired.  When the timer expires, the 
- *        trigger will automatically destroy itself.  Within the callbacks, <tt>this</tt>
- *        refers to the <tt>Timer</tt> object itself.
+ * @class A one-shot timer that triggers a callback, at regular intervals,
+ *        until the timer has expired.  When the timer expires, the trigger
+ *        will automatically destroy itself.
  *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
@@ -364,10 +362,9 @@ return OneShotTrigger;
 Engine.initObject("MultiTimeout", "Timeout", function() {
 
 /**
- * @class An extension of {@link Timer} that will repeat the specified number of times before
+ * @class A timer that will repeat the specified number of times before
  *        destroying itself.  The callback will be triggered with the
- *        repetition number as the only argument.  Within the callback, <tt>this</tt>
- *        refers to the <tt>Timer</tt> object itself.
+ *        repetition number as the only argument.
  *
  * @param name {String} The name of the timer
  * @param reps {Number} The number of repetitions to restart the timer automatically
@@ -416,7 +413,7 @@ return MultiTimeout;
 Engine.initObject("Interval", "Timer", function() {
 
 /**
- * @class An extension of {@link Timer} that wraps the <tt>window.setInterval</tt> method.
+ * @class A timer that wraps the <tt>window.setInterval</tt> method.
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
  * @param callback {Function} The function to call when the interval is reached

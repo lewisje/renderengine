@@ -39,9 +39,8 @@ Engine.initObject("Iterator", "PooledObject", function() {
 /**
  * @class Create an iterator over a {@link Container} instance. An
  * iterator is a convenient object to traverse the list of elements
- * within the container.  Modifying the structure of the underlying
- * list is <i>not supported</i> and could cause concurrency issues.
- * The simplest way to traverse the list is as follows:
+ * within the container.  The simplest way to traverse the list is
+ * as follows:
  * <pre>
  * for (var itr = Iterator.create(containerObj); itr.hasNext(); ) {
  *    // Get the next object in the container
@@ -375,9 +374,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       });
    },
 
-   toString: function() {
-      return this.constructor.getClassName();   
-   },
+	toString: function() {
+		return this.constructor.getClassName();	
+	},
 
    /**
     * Serializes a container to XML.
