@@ -14,8 +14,8 @@ If you're looking to get up and running quickly, and don't plan to make changes 
       <title>Game Loader</title>
 
       <!-- Mobile View Definition
-		<meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0 maximum-scale=1.0; user-scalable=0;"/>
-		 -->
+      <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0 maximum-scale=1.0; user-scalable=0;"/>
+      -->
 
       <!-- Supporting Libraries -->
       <script type="text/javascript" src="http://renderengine.googlecode.com/svn/tags/latest/libs/base.js"></script>
