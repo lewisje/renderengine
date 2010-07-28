@@ -38,7 +38,7 @@ Engine.initObject("GameObject", "Object2D", function() {
          // ### ADD THIS ###
          // Set our object's shape
          var c_draw = this.getComponent("draw");
-         var shape = [[-4,-1], [-1,-1], [0,-5], [1,-1], [4,1], [1,1],
+         var shape = [[-4,-1], [-1,-1], [0,-5], [1,-1], [4,-1], [1,1],
                [4,4], [0,2], [-4,4], [-1,1]];
          
          // Scale the shape
