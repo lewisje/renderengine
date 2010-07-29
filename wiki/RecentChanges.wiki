@@ -2,7 +2,7 @@
 #labels Featured
 = Trunk Changes =
 
-The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.
+The following changes affect the "trunk" of the development repository.  Changes listed here are in development, may contain bugs, and may be refactored or changed frequently.  _Previous changes are archived._
 
 || *Date* || *Notes* ||
 || 07/28/2010 || Split engine metrics into its own file so that it can be "compiled out" of a runtime build. Added a profile graph for metrics to visually see engine load, frame gen time, and visible objects over time. Added Billboard2DComponent to substitute as a render component when regenerating an object would negatively impact gameplay.  Added a !TouchInputComponent for devices which support touch interfaces. ||
