@@ -75,35 +75,53 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
     * @private
     */
    calculateBoundingBox: function() {
-      return;
+      var text = this.getText();
+      var lCount = text.length;
+      var align = this.getTextAlignment();
+      var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
+      var kern = (align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.kerning : this.font.info.kerning);
+      var space = Point2D.create((align == AbstractTextRenderer.ALIGN_RIGHT ? -this.font.info.space : this.font.info.space), 0);
+      var cW, cH = this.font.info.height;
+      var cS = 0;
 
-      var x1 = 0;
-      var x2 = 0;
-      var y1 = 0;
-      var y2 = 0;
-      for (var p = 0; p < this.rText.length; p++)
-      {
-         var pt = this.rText[p];
-
-         if (pt.x < x1)
-         {
-            x1 = pt.x;
-         }
-         if (pt.x > x2)
-         {
-            x2 = pt.x;
-         }
-         if (pt.y < y1)
-         {
-            y1 = pt.y;
-         }
-         if (pt.y > y2)
-         {
-            y2 = pt.y;
+      // Run the text to get its bounding box
+      var weight = this.getTextWeight();
+      for (var wT = 0; wT < weight; wT++) {
+         
+         var pc = Point2D.create(wT * 0.5, 0);
+   
+         // 1st pass: The text
+         letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
+         lCount = text.length;
+   
+         while (lCount-- > 0) {
+            var glyph = text.charCodeAt(letter) - 32;
+            if (glyph == 0) {
+               // A space
+               pc.add(space);
+            } else {
+               // Draw the text
+               cS = this.font.info.letters[glyph - 1];
+               cW = this.font.info.letters[glyph] - cS;
+               pc.add(new Point2D(cW, 0).mul(kern));
+            }
+   
+            letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
          }
       }
+      
+      // Set the bounding box
+      this.getHostObject().getBoundingBox().set(0, 0, pc.x, cH);
+      pc.destroy();
+   },
 
-      this.getHostObject().getBoundingBox().set(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
+   /**
+    * Set the scaling of the text
+    * @param size {Number}
+    */
+   setSize: function(size) {
+      this.base(size);
+      this.calculateBoundingBox();
    },
 
    /**
@@ -117,6 +135,8 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
 
       // Replace special chars
       //text = text.replace(/&copy;/gi,"(C)").replace(/&reg;/gi,"(R)");
+
+      this.calculateBoundingBox();
 
       this.base(text);
    },
@@ -193,9 +213,6 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       
       pc.destroy();
       space.destroy();
-
-      // Set the bounding box
-      this.getHostObject().getBoundingBox().set(0, 0, pc.x, cH);
 
       renderContext.popTransform();
    }

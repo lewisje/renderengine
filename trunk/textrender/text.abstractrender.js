@@ -3,7 +3,7 @@
  * AbstractTextRenderer
  *
  * @fileoverview Abstract class that provides basic interface for all
- *     			  text render objects used by the text renderer.
+ *               text render objects used by the text renderer.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -51,22 +51,22 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
    color: "#000000",
    alignment: null,
    weight: null,
-	size: 1,
-	font: null,
-	style: null,
+   size: 1,
+   font: null,
+   style: null,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(componentName, priority) {
       this.base(componentName || "TextRenderObject", BaseComponent.TYPE_RENDERING, priority || 0.1);
 
       this.text = "";
-		this.size = 1;
+      this.size = 1;
       this.weight = null;
-		this.font = null;
-		this.style = null;
-		this.alignment = null;
+      this.font = null;
+      this.style = null;
+      this.alignment = null;
    },
 
    /**
@@ -77,11 +77,11 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
       this.base();
       this.text = null;
       this.color= "#000000";
-		this.size = 1;
+      this.size = 1;
       this.weight = null;
-		this.font = null;
-		this.style = null;
-		this.alignment = null;
+      this.font = null;
+      this.style = null;
+      this.alignment = null;
    },
 
    /**
@@ -101,21 +101,21 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
       this.text = text;
    },
 
-	/**
-	 * Set the font of the text to be renderer
-	 * @param font {String} The font name
-	 */
-	setTextFont: function(font) {
-		this.font = font;		
-	},
-	
-	/**
-	 * Get the font of the text to be rendered
-	 * @return {String} The font name
-	 */
-	getTextFont: function() {
-		return this.font;
-	},
+   /**
+    * Set the font of the text to be renderer
+    * @param font {String} The font name
+    */
+   setTextFont: function(font) {
+      this.font = font;    
+   },
+   
+   /**
+    * Get the font of the text to be rendered
+    * @return {String} The font name
+    */
+   getTextFont: function() {
+      return this.font;
+   },
 
    /**
     * Set the weight of the text to render.  Higher weights
@@ -134,22 +134,22 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
    getTextWeight: function() {
       return this.weight;
    },
-	
-	/**
-	 * Set the style of the text, usually italics or normal, for the text renderer.
-	 * @param style {Object} The style of the text
-	 */
-	setTextStyle: function(style) {
-		this.style = style;	
-	},
-	
-	/**
-	 * Get the style of the text for the renderer.
-	 * @return {Object} The style of the text
-	 */
-	getTextStyle: function() {
-		return this.style;
-	},
+   
+   /**
+    * Set the style of the text, usually italics or normal, for the text renderer.
+    * @param style {Object} The style of the text
+    */
+   setTextStyle: function(style) {
+      this.style = style;  
+   },
+   
+   /**
+    * Get the style of the text for the renderer.
+    * @return {Object} The style of the text
+    */
+   getTextStyle: function() {
+      return this.style;
+   },
 
    /**
     * Set the alignment of the text.
@@ -167,22 +167,22 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
    getTextAlignment: function() {
       return this.alignment;
    },
-	
-	/**
-	 * Set the scaling of the text
-	 * @param size {Number}
-	 */
-	setSize: function(size) {
-		this.size = size;
-	},
-	
-	/**
-	 * Get the scaling of the text
-	 * @return {Number}
-	 */
-	getSize: function() {
-		return this.size;
-	},
+   
+   /**
+    * Set the scaling of the text
+    * @param size {Number}
+    */
+   setSize: function(size) {
+      this.size = size;
+   },
+   
+   /**
+    * Get the scaling of the text
+    * @return {Number}
+    */
+   getSize: function() {
+      return this.size;
+   },
 
    /**
     * Set the color of the text to render.

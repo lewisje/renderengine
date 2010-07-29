@@ -109,6 +109,15 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
    },
 
    /**
+    * Set the scaling of the text
+    * @param size {Number}
+    */
+   setSize: function(size) {
+      this.base(size);
+      this.calculateBoundingBox();
+   },
+
+   /**
     * Set the text to render.
     *
     * @param text {String} The text to vectorize
