@@ -3,7 +3,7 @@
  * VectorText
  *
  * @fileoverview A simple text renderer which draws text using lines.  It has a
- * 				  limited character set.
+ *               limited character set.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -39,8 +39,8 @@ Engine.initObject("VectorText", "AbstractTextRenderer", function() {
 
 /**
  * @class A text renderer which draws text with simple vectors.  This type of text
- * 		 renderer is only supported by the {@link CanvasContext}.  For an {@link HTMLElementContext}
- * 		 or a derivative, use the {@link ContextText} renderer.
+ *        renderer is only supported by the {@link CanvasContext}.  For an {@link HTMLElementContext}
+ *        or a derivative, use the {@link ContextText} renderer.
  *
  * @constructor
  * @param componentName {String} The name of the text component
@@ -53,23 +53,23 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
    spacing: 0,
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    constructor: function(componentName, priority) {
       this.base(componentName, priority);
       this.rText = [];
-		this.setTextWeight(1);
+      this.setTextWeight(1);
    },
 
-	/**
-	 * @private
-	 */
+   /**
+    * @private
+    */
    release: function() {
       this.base();
       this.rText = null;
       this.spacing = 0;
-		this.setTextWeight(1);
+      this.setTextWeight(1);
    },
 
    /**
@@ -84,25 +84,25 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       var y2 = 0;
       for (var p = 0; p < this.rText.length; p++)
       {
-         var pt = this.rText[p];
-			if (pt) {
-	         if (pt.x < x1)
-	         {
-	            x1 = pt.x;
-	         }
-	         if (pt.x > x2)
-	         {
-	            x2 = pt.x;
-	         }
-	         if (pt.y < y1)
-	         {
-	            y1 = pt.y;
-	         }
-	         if (pt.y > y2)
-	         {
-	            y2 = pt.y;
-	         }
-			}
+         var pt = Point2D.create(this.rText[p]).mul(this.getSize());
+         if (pt) {
+            if (pt.x < x1)
+            {
+               x1 = pt.x;
+            }
+            if (pt.x > x2)
+            {
+               x2 = pt.x;
+            }
+            if (pt.y < y1)
+            {
+               y1 = pt.y;
+            }
+            if (pt.y > y2)
+            {
+               y2 = pt.y;
+            }
+         }
       }
 
       this.getHostObject().setBoundingBox(new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
@@ -173,8 +173,8 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
          return;
       }
 
-		renderContext.pushTransform();
-		renderContext.setScale(this.getSize());
+      renderContext.pushTransform();
+      renderContext.setScale(this.getSize());
       // Set the stroke and fill styles
       if (this.getColor() != null)
       {
@@ -183,7 +183,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
       renderContext.setLineWidth(this.getTextWeight());
       renderContext.drawPolyline(this.rText);
-		renderContext.popTransform();
+      renderContext.popTransform();
    }
 
 
