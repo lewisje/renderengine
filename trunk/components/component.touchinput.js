@@ -35,7 +35,7 @@
 Engine.include("/engine/engine.events.js");
 Engine.include("/components/component.input.js");
 
-Engine.initObject("KeyboardInputComponent", "InputComponent", function() {
+Engine.initObject("TouchInputComponent", "InputComponent", function() {
 
 /**
  * @class A component which responds to touch events and notifies
