@@ -39,7 +39,6 @@ div.metric-button.maximize {
    float: right;
 }
 
-
 .run {
    background: url('$<enginePath>/css/run.png') no-repeat;
 }
@@ -62,5 +61,16 @@ div.metric-button.maximize {
 
 .close {
    background: url('$<enginePath>/css/close.png') no-repeat;
+}
+
+canvas.engine-profile {
+   position: absolute;
+   bottom: 10px;
+   width: 150px;
+	height: 100px;
+   left: 10px;
+   border: 1px solid white;
+   background: black;
+	z-index: 10000;
 }
 

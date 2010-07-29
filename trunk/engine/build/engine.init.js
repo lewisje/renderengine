@@ -45,10 +45,5 @@ if (Engine.getDebugMode())
    Console.setDebugLevel(EngineSupport.getNumericParam("debugLevel", Console.DEBUGLEVEL_DEBUG));
 }
 
-if (EngineSupport.checkBooleanParam("metrics"))
-{
-   Engine.showMetrics();
-}
-
 // Local mode keeps loaded script source available
 Engine.localMode = EngineSupport.checkBooleanParam("local");
