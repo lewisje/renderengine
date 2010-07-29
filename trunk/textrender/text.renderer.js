@@ -72,7 +72,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
       // Add components to move and draw the text
       this.renderer = renderer;
       //this.add(this.renderer);
-      this.add(Billboard2DComponent.create(this.renderer, "billboard"));
+      this.add(Billboard2DComponent.create("billboard", this.renderer));
 
       this.add(Transform2DComponent.create("transform"));
 
