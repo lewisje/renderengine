@@ -84,7 +84,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       var y2 = 0;
       for (var p = 0; p < this.rText.length; p++)
       {
-         var pt = Point2D.create(this.rText[p]).mul(this.getSize());
+         var pt = this.rText[p];
          if (pt) {
             if (pt.x < x1)
             {
@@ -105,7 +105,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
          }
       }
 
-      this.getHostObject().setBoundingBox(new Rectangle2D(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2));
+      this.getHostObject().setBoundingBox(new Rectangle2D(x1 * this.getSize(), y1 * this.getSize(), (Math.abs(x1) + x2) * this.getSize(), (Math.abs(y1) + y2) * this.getSize()));
    },
 
    /**
