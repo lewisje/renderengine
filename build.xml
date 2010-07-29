@@ -52,6 +52,9 @@
 
 	<target name="dist.finish" description="Cleanup tasks to perform after building the distribution">
       <delete quiet="true" includeemptydirs="true" dir="${dist.home}/engine"/>
+      <delete quiet="true" includeemptydirs="true" dir="${full.home}/temp"/>
+      <delete quiet="true" includeemptydirs="true" dir="${min.home}/temp"/>
+      <delete quiet="true" includeemptydirs="true" dir="${zip.home}/temp"/>
 	</target>
 
 
@@ -102,6 +105,7 @@
 			<fileset dir="${engine.src}" includes="engine.linker.js" />
 			<fileset dir="${engine.src}" includes="engine.main.js" />
 			<fileset dir="${engine.src}" includes="engine.script.js" />
+			<fileset dir="${engine.src}" includes="engine.metrics.js" />
 			<fileset dir="${engine.src}" includes="engine.init.js" />
 		</concat>
 		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
@@ -380,7 +384,7 @@
          </fileset>
       </copy>
 
-		<!-- Exclude any specified files -->
+ 		<!-- Exclude any specified files -->
 		<delete quiet="true">
 			<fileset dir="${full.home}" includes="${exclude.set}"/>
 		</delete>
@@ -582,6 +586,10 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.billboard2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.boxcollider.js"/>
 		</antcall>
 
@@ -763,8 +771,9 @@
 			<fileset dir="${min.home}" includes="${exclude.set}"/>
 		</delete>
 
+ 		<!-- Exclude any specified files -->
 		<delete quiet="true">
-			<fileset dir="${zip.home}" includes="${exclude.set}"/>
+         <fileset dir="${zip.home}" includes="${exclude.set}"/>
 		</delete>
   
    </target>
