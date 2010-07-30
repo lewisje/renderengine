@@ -10,9 +10,12 @@ Ideas for the next release.  This list is always evolving...
 
 || *Status* || *Goal* || *Description* ||
 || _75%_ || Tutorials || Build additional "basics" tutorials.  Expand wiki to include more articles about engine use and game development with the engine. ||
-|| _20%_ || Browser support || Safari/iPhone.  Better support for mobile platform with less processing power.  Optimization. ||
-|| _20%_ || Demo || 2D Sprite demo - Super Mario like game.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
+|| _20%_ || Browser support || iPhone/Android.  Better support for mobile platforms with less processing power.  Optimization. ||
+|| _20%_ || Demo || 2D Sprite demo - Super Mario type clone.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _10%_ || Tool || 2D game editor for creating levels and collision maps. ||
+|| _70%_ || New Feature || Update non-native text renderers to draw as billboards rather than render for each frame. ||
+|| _95%_ || New Feature || Show critical engine metrics in a profile graph. ||
+|| _10%_ || Browser Support || Add support for touch devices (such as mobile) and a demo. ||
 || - || New Feature || Server side support written in Java/JSP. This will be a framework for supporting multiplayer pairing, virtual file system for storing data, and game launching. ||
 || - || Browser support || Optimize performance for the Wii. ~~Add in back-version of SoundManager to support Flash 7.~~ ||
 || - || New Feature || ~~Multiplayer networking using AJAX polling and COMET.~~ Use !WebSockets to support multiplayer.  Maybe fallback to AJAX polling and/or COMET. ||
