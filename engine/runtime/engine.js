@@ -1214,6 +1214,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * <li>fullscreen - If the browser is running in fullscreen mode</li>
     * <li>width - The browser's viewable width</li>
     * <li>height - The browser's viewable height</li>
+    * <li>viewWidth - The innerWidth of the viewport</li>
+    * <li>viewHeight - The innerHeight of the viewport</li>
     * <li>support:
     *    <ul><li>xhr - Browser supports XMLHttpRequest object</li>
     *    <li>geo - navigator.geolocation is supported</li>
@@ -1267,7 +1269,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             // When the document is ready, we'll go ahead and get the width and height added in
             EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
                "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
-               "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1
+               "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1,
+					"viewWidth": window.innerWidth,
+					"viewHeight" : window.innerHeight
             });
          });
       }
@@ -1843,7 +1847,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1217 $
+ * @version: $Revision: 1241 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2946,8 +2950,8 @@ var Engine = Engine.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author$
- * @version: $Revision$
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1252 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3234,7 +3238,7 @@ if (EngineSupport.checkBooleanParam("profile"))
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1216 $
+ * @version: $Revision: 1241 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
