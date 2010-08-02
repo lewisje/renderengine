@@ -39,11 +39,11 @@ Engine.initObject("TouchInputComponent", "InputComponent", function() {
 
 /**
  * @class A component which responds to touch events and notifies
- * its {@link HostObject} by calling one of three methods.  The <tt>HostObject</tt>
+ * its {@link HostObject} by calling one of four methods.  The <tt>HostObject</tt>
  * should implement any of the following methods to receive the corresponding event:
  * <ul>
  * <li><tt>onTouchStart()</tt> - A touch event started</li>
- * <li><tt>onTouchStop()</tt> - A touch event ended</li>
+ * <li><tt>onTouchEnd()</tt> - A touch event ended</li>
  * <li><tt>onTouchMove()</tt> - A movement occurred after a touch event started</li>
  * <li><tt>onTouchCancel()</tt> - A touch event was cancelled</li>
  * </ul>
@@ -53,7 +53,8 @@ Engine.initObject("TouchInputComponent", "InputComponent", function() {
  * second argument is the actual event object itself.
  *
  * @param name {String} The unique name of the component.
- * @param priority {Number} The priority of the component among other input components.
+ * @param [passThru] {Boolean} set to <tt>true</tt> to pass the event to the device 
+ * @param [priority] {Number} The priority of the component among other input components.
  * @extends InputComponent
  * @constructor
  * @description Create an instance of a touch input component. 
@@ -63,7 +64,9 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
    /**
     * @private
     */
-   constructor: function(name, priority) {
+   constructor: function(name, passThru, priority) {
+		passThru = (typeof passThru == "number" ? false : passThru);
+		priority = (typeof passThru == "number" ? passThru : null);
       this.base(name, priority);
 
       var ctx = Engine.getDefaultContext();
@@ -71,19 +74,27 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
 
       // Add the event handlers
       ctx.addEvent(this, "touchstart", function(evt) {
-         evt.preventDefault();
+			if (!passThru) {
+	         evt.preventDefault();
+			}
          return self._touchStartListener(evt);
       });
       ctx.addEvent(this, "touchend", function(evt) {
-         evt.preventDefault();
+			if (!passThru) {
+	         evt.preventDefault();
+			}
          return self._touchEndListener(evt);
       });
       ctx.addEvent(this, "touchmove", function(evt) {
-         evt.preventDefault();
+			if (!passThru) {
+	         evt.preventDefault();
+			}
          return self._touchMoveListener(evt);
       });
       ctx.addEvent(this, "touchcancel", function(evt) {
-         evt.preventDefault();
+			if (!passThru) {
+	         evt.preventDefault();
+			}
          return self._touchCancelListener(evt);
       });
    },
@@ -110,9 +121,11 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     */
    processTouches: function(eventObj) {
       var touches = [];
-      for (var i = 0; i < eventObj.touches.length; i++) {
-         touches.push(new Touch(eventObj.touches[i]));
-      }
+		if (eventObj.touches) {
+	      for (var i = 0; i < eventObj.touches.length; i++) {
+	         touches.push(new Touch(eventObj.touches[i]));
+	      }
+		}
       return touches;
    },
 
@@ -121,7 +134,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     */
    _touchStartListener: function(eventObj) {
       if (this.getHostObject().onTouchStart) {
-         return this.getHostObject().onTouchStart(this.processTouches(eventObj), eventObj);
+         return this.getHostObject().onTouchStart(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
 
@@ -130,7 +143,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     */
    _touchEndListener: function(eventObj) {
       if (this.getHostObject().onTouchEnd) {
-         return this.getHostObject().onTouchEnd(this.processTouches(eventObj), eventObj);
+         return this.getHostObject().onTouchEnd(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
 
@@ -139,7 +152,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     */
    _touchMoveListener: function(eventObj) {
       if (this.getHostObject().onTouchMove) {
-         return this.getHostObject().onTouchMove(this.processTouches(eventObj), eventObj);
+         return this.getHostObject().onTouchMove(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
 
@@ -148,7 +161,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     */
    _touchCancelListener: function(eventObj) {
       if (this.getHostObject().onTouchCancel) {
-         return this.getHostObject().onTouchCancel(this.processTouches(eventObj), eventObj);
+         return this.getHostObject().onTouchCancel(this.processTouches(eventObj.originalEvent), eventObj);
       }
    }
 
