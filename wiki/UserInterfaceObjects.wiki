@@ -2,7 +2,7 @@
 
 = User Interface Development =
 
-The next version of _The Render Engine_ (v2.0) will have a new mechanism for creating user interfaces.  This new mechanism aims to simplify the creation of a UI with common, styleable controls and loading from either an XML or JSON file.  The spec is in early development right now, and may change, so be wary of this while using the UI object.
+The next version of _The Render Engine_ (v2.0) will have a new mechanism for creating user interfaces.  This new mechanism aims to simplify the creation of a UI with common, styleable controls and loading from either an XML or JSON file.  The spec is in early development right now, and may change, so be wary of this if using the UI object.
 
 == User Interface Objects ==
 
