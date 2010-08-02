@@ -54,6 +54,8 @@ A UIObject can be created from a JSON object to reduce the need to write a lot o
    /* UIObject */ {
       name: "mainmenu",
       visible: false,
+      width: 320,
+      height: 480,
       elements: [
          { UIImageElement: {
             name: "title",
@@ -63,7 +65,7 @@ A UIObject can be created from a JSON object to reduce the need to write a lot o
                height: 95
             },
             layout: [ ALIGN_CENTER, VALIGN_BOTTOM ],
-            position: [0, 115] 
+            position: ["50%", 115] 
          }},
          { UIImageElement: {
             name: "copyright",
@@ -74,7 +76,7 @@ A UIObject can be created from a JSON object to reduce the need to write a lot o
             },
             layout: [ ALIGN_CENTER, VALIGN_BOTTOM ],
             relativeTo: "title",
-            position: [0, 20]
+            position: ["50%", 20]
          }}
       ]
    };
