@@ -62,7 +62,7 @@ A UIObject can be created from a JSON object to reduce the need to write a lot o
                width: 280,
                height: 95
             },
-            layout: { ALIGN_CENTER, VALIGN_BOTTOM },
+            layout: [ ALIGN_CENTER, VALIGN_BOTTOM ],
             position: [0, 115] 
          }},
          { UIImageElement: {
@@ -72,7 +72,7 @@ A UIObject can be created from a JSON object to reduce the need to write a lot o
                name: "copyright",
                speed: 150
             },
-            layout: { ALIGN_CENTER, VALIGN_BOTTOM },
+            layout: [ ALIGN_CENTER, VALIGN_BOTTOM ],
             relativeTo: "title",
             position: [0, 20]
          }}
