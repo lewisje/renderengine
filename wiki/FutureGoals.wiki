@@ -15,7 +15,7 @@ Ideas for the next release.  This list is always evolving...
 || _10%_ || Tool || 2D game editor for creating levels, collision maps, and editing game logic. ||
 || _70%_ || New Feature || Update non-native text renderers to draw as billboards rather than render for each frame. ||
 || _95%_ || New Feature || Show critical engine metrics in a profile graph. ||
-|| _10%_ || Browser Support || Add support for touch devices (such as mobile) and a demo. ||
+|| _30%_ || Browser Support || Add support for touch devices (such as mobile) and a demo. ||
 || _10%_ || New Feature || User Interface manager object for easily creating and loading UI's ||
 || - || New Feature || Server side support written in Java/JSP. This will be a framework for supporting multiplayer pairing, virtual file system for storing data, and game launching. ||
 || - || Browser support || Optimize performance for the Wii. ~~Add in back-version of SoundManager to support Flash 7.~~ ||
