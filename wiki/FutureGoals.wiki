@@ -13,7 +13,7 @@ Ideas for the next release.  This list is always evolving...
 || _20%_ || Browser support || iPhone/Android.  Better support for mobile platforms with less processing power.  Optimization. ||
 || _20%_ || Demo || 2D Sprite demo - Super Mario type clone.  Test for game logic, editing and object loading, level processing and loading, and level and object editing. ||
 || _10%_ || Tool || 2D game editor for creating levels, collision maps, and editing game logic. ||
-|| _70%_ || New Feature || Update non-native text renderers to draw as billboards rather than render for each frame. ||
+|| _90%_ || New Feature || Update non-native text renderers to draw as billboards rather than render for each frame. ||
 || _95%_ || New Feature || Show critical engine metrics in a profile graph. ||
 || _30%_ || Browser Support || Add support for touch devices (such as mobile) and a demo. ||
 || _10%_ || New Feature || User Interface manager object for easily creating and loading UI's ||
