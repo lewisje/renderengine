@@ -71,11 +71,11 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
       // Add components to move and draw the text
       this.renderer = renderer;
-		if (renderer.isNative()) {
-	      this.add(this.renderer);
-		} else {
-	      this.add(Billboard2DComponent.create("billboard", this.renderer));
-		}
+      if (!Engine.options.billboards || renderer.isNative()) {
+         this.add(this.renderer);
+      } else {
+         this.add(Billboard2DComponent.create("billboard", this.renderer));
+      }
 
       this.add(Transform2DComponent.create("transform"));
 
@@ -110,16 +110,16 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    },
 
-	/**
-	 * @private
-	 */
-	regen: function() {
-		if (this.renderer.isNative()) {
-			return;
-		} else {
-			this.getComponent("billboard").regenerate();
-		}
-	},
+   /**
+    * @private
+    */
+   regen: function() {
+      if (!Engine.options.billboards || this.renderer.isNative()) {
+         return;
+      } else {
+         this.getComponent("billboard").regenerate();
+      }
+   },
 
    /**
     * Set the text for this object to render.  This method

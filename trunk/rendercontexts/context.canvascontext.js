@@ -70,9 +70,18 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       // Create the canvas element
       canvas = document.createElement("canvas");
 
+      if (typeof FlashCanvas != "undefined") {
+         FlashCanvas.setOptions({
+            disableContextMenu: false,
+            turbo: false,
+            delay: 10
+         });
+         FlashCanvas.initElement(canvas);
+      }
+
       this.setViewport(Rectangle2D.create(0, 0, this.width, this.height));
       this.base(name || "CanvasContext", canvas);
-
+      
       canvas.id = this.getId();
       this.setWorldScale(this.getWorldScale());
    },
@@ -90,11 +99,11 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.mouseHandler = false;
    },
 
-	/**
-	 * Set the scale of the world
-	 * @param scaleX {Number} The scale of the world along the X axis
-	 * @param scaleY {Number} The scale of the world along the y axis 
-	 */
+   /**
+    * Set the scale of the world
+    * @param scaleX {Number} The scale of the world along the X axis
+    * @param scaleY {Number} The scale of the world along the y axis 
+    */
    setWorldScale: function(scaleX, scaleY) {
       this.base(scaleX, scaleY);
 
@@ -143,14 +152,14 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     */
    reset: function(rect) {
       var cRect = (rect != null ? rect : this.getViewport());
-		var d = cRect.get();
+      var d = cRect.get();
       this.get2DContext().clearRect(d.x, d.y, d.w, d.h);
    },
 
-	/**
-	 * Set up the world for the given time before any rendering is dont.
-	 * @param time {Number} The render time
-	 */
+   /**
+    * Set up the world for the given time before any rendering is dont.
+    * @param time {Number} The render time
+    */
    setupWorld: function(time) {
       this.setScale(this.getWorldScale());
 
@@ -363,10 +372,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
          this.get2DContext().drawImage(image,
             s.x, s.y, s.w, s.h, d.x, d.y, d.w, d.h);
       } else {
-			try {
-         	this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
-			}catch(ex) {
-			}
+         try {
+            this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
+         }catch(ex) {
+         }
       }
       this.base(rect, image);
    },
@@ -431,43 +440,43 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     */
    drawText: function(point, text) {
       this.base(point, text);
-		if (!this.get2DContext().fillText) {
-			return;	// Unsupported by canvas
-		}
-		this.get2DContext().font = this.getNormalizedFont();
-		this.get2DContext().textBaseline = this.getFontBaseline();
-		this.get2DContext().fillText(text, point.x, point.y);
+      if (!this.get2DContext().fillText) {
+         return;  // Unsupported by canvas
+      }
+      this.get2DContext().font = this.getNormalizedFont();
+      this.get2DContext().textBaseline = this.getFontBaseline();
+      this.get2DContext().fillText(text, point.x, point.y);
    },
-	
-	/**
-	 * Get a rectangle that will approximately enclose the text drawn by the render context.
-	 * @param text {String} The text to measure
-	 * @return {Rectangle2D}
-	 */
-	getTextMetrics: function(text) {
-		var rect = this.base(text);	
-		this.get2DContext().font = this.getNormalizedFont();
-		this.get2DContext().textBaseline = this.getFontBaseline();
-		var metrics = this.get2DContext().measureText(text);
-		// Scale the height a little to account for hanging chars
-		rect.set(0, 0, metrics.width, this.getFontSize() * 1.25);
-		return rect;
-	},
-	
-	/**
-	 * Draw stroked (outline) text on the context.
-	 * 
-	 * @param point {Point2D}
-	 * @param text {String} The text to draw
-	 */
-	strokeText: function(point, text) {
-		if (!this.get2DContext().strokeText) {
-			return;	// Unsupported by canvas
-		}
-		this.get2DContext().font = this.getNormalizedFont();
-		this.get2DContext().textBaseline = this.getFontBaseline();
-		this.get2DContext().strokeText(text, point.x, point.y);
-	},
+   
+   /**
+    * Get a rectangle that will approximately enclose the text drawn by the render context.
+    * @param text {String} The text to measure
+    * @return {Rectangle2D}
+    */
+   getTextMetrics: function(text) {
+      var rect = this.base(text);   
+      this.get2DContext().font = this.getNormalizedFont();
+      this.get2DContext().textBaseline = this.getFontBaseline();
+      var metrics = this.get2DContext().measureText(text);
+      // Scale the height a little to account for hanging chars
+      rect.set(0, 0, metrics.width, this.getFontSize() * 1.25);
+      return rect;
+   },
+   
+   /**
+    * Draw stroked (outline) text on the context.
+    * 
+    * @param point {Point2D}
+    * @param text {String} The text to draw
+    */
+   strokeText: function(point, text) {
+      if (!this.get2DContext().strokeText) {
+         return;  // Unsupported by canvas
+      }
+      this.get2DContext().font = this.getNormalizedFont();
+      this.get2DContext().textBaseline = this.getFontBaseline();
+      this.get2DContext().strokeText(text, point.x, point.y);
+   },
 
    /**
     * Start a path.

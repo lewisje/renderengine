@@ -85,6 +85,9 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
          // TODO: At some point it would be good to mimic the
          // context to which the component is rendering 
          Billboard2DComponent.tempContext = CanvasContext.create("billboardTemp", 800, 800);
+         if (typeof FlashCanvas != "undefined") {
+            FlashCanvas.initElement(Billboard2DComponent.tempContext.getSurface());
+         }
       }
    },
 
@@ -136,6 +139,8 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
       if (!this.base(renderContext, time)) {
          return;
       }
+      
+      Assert((Engine.options.billboards), "Billboards are disabled in the Engine");
 
       // Get the host objects bounding box
       var hostBox = this.getHostObject().getBoundingBox().get();

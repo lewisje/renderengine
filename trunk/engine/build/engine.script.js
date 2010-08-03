@@ -432,7 +432,12 @@ var Engine = Engine.extend({
             // process the data to replace the "enginePath" variable
             var epRE = /(\$<enginePath>)/g;
             data = data.replace(epRE, Engine.getEnginePath());
-            $("head", document).append($("<style type='text/css'/>").text(data));
+            if (EngineSupport.sysInfo().browser == "msie") {
+               // IE likes it this way...
+               $("head", document).append($("<style type='text/css'>" + data + "</script>"));
+            } else {
+               $("head", document).append($("<style type='text/css'/>").text(data));
+            }
             Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
          }, "text");
       };

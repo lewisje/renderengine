@@ -59,6 +59,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    constructor: null,
 
+   // Global engine options
+   options: {
+      debugMode: false,          // Global debug flag
+      localMode: false,          // Local run flag
+      skipFrames: true,          // Skip missed frames
+      soundsEnabled: false,      // Sound engine enabled flag
+      billboards: true           // Use billboards to speed up rendering
+   },
+
    /*
     * Engine objects
     */
@@ -564,13 +573,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
       msg += "supported browsers</a> for more information.";
       switch (sInfo.browser) {
+         case "msie": Engine.options.billboards = false; 
+                      return true;
          case "chrome":
          case "Wii":
          case "iPhone":
          case "safari":
          case "mozilla":
          case "opera": return true;
-         case "msie":
          case "unknown": $(document).ready(function() {
                            Engine.shutdown();
                            $("body", document).append($("<div class='unsupported'>")
@@ -626,8 +636,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          nextFrame = (Engine.skipFrames ? (f > 0 ? f : nextFrame) : Engine.fpsClock);
          Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
 
-			// Update the metrics display
-			Engine.doMetrics();
+         // Update the metrics display
+         Engine.doMetrics();
       }
 
       // When the process is done, start all over again

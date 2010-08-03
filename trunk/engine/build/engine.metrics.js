@@ -39,20 +39,20 @@ var Engine = Engine.extend({
    /** @lends Engine */
    constructor: null,
 
-	/*
+   /*
     * Metrics tracking/display
     */
    metrics: {},               // Tracked metrics
    metricDisplay: null,       // The metric display object
-   profileDisplay: null,		// The profile display object
+   profileDisplay: null,      // The profile display object
    metricSampleRate: 10,      // Frames between samples
    lastMetricSample: 10,      // Last sample frame
    showMetricsWindow: false,  // Metrics display flag
-   showMetricsProfile: false,	// Metrics profile graph display flag
+   showMetricsProfile: false, // Metrics profile graph display flag
    vObj: 0,                   // Visible objects
    droppedFrames: 0,          // Non-rendered frames/frames dropped
    profilePos: 0,
-	profiles: {},
+   profiles: {},
    
 
    /**
@@ -71,14 +71,14 @@ var Engine = Engine.extend({
    showMetrics: function() {
       this.showMetricsWindow = true;
    },
-	
-	/**
-	 * Show a graph of the engine profile
-	 * @memberOf Engine
-	 */
-	showProfile: function() {
-		this.showMetricsProfile = true;
-	},
+   
+   /**
+    * Show a graph of the engine profile
+    * @memberOf Engine
+    */
+   showProfile: function() {
+      this.showMetricsProfile = true;
+   },
 
    /**
     * Hide the metrics window
@@ -142,12 +142,17 @@ var Engine = Engine.extend({
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;
       }
-		
-		if (this.showMetricsProfile && !this.profileDisplay) {
-			this.profileDisplay = $("<canvas width='150' height='100'/>").addClass("engine-profile");
-			this.profileDisplay.appendTo($("body"));
-			this.profileDisplay[0].getContext('2d').save();
-		}
+      
+      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie") {
+         // Profiler not supported in IE
+         this.showMetricsProfile = false;
+      }
+      
+      if (this.showMetricsProfile && !this.profileDisplay) {
+         this.profileDisplay = $("<canvas width='150' height='100'/>").addClass("engine-profile");
+         this.profileDisplay.appendTo($("body"));
+         this.profileDisplay[0].getContext('2d').save();
+      }
    },
 
    /**
@@ -212,63 +217,63 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    updateMetrics: function() {
-		var h = "", ctx;
-		if (this.showMetricsProfile) {
-			ctx = this.profileDisplay[0].getContext('2d');
-			ctx.save();
-			ctx.translate(147, 0);
-		}
+      var h = "", ctx;
+      if (this.showMetricsProfile) {
+         ctx = this.profileDisplay[0].getContext('2d');
+         ctx.save();
+         ctx.translate(147, 0);
+      }
 
       for (var m in this.metrics)
       {
          h += m + ": " + this.metrics[m].val + "<br/>";
-			if (this.showMetricsProfile) {
-				switch (m) {
-					case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
-					case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
-					case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
-				}
-			}
+         if (this.showMetricsProfile) {
+            switch (m) {
+               case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
+               case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
+               case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
+            }
+         }
       }
       $(".items", this.metricDisplay).html(h);
-		if (this.showMetricsProfile) {
-			ctx.restore();
-			this.moveProfiler();
-		}
+      if (this.showMetricsProfile) {
+         ctx.restore();
+         this.moveProfiler();
+      }
    },
 
-	drawProfilePoint: function(color, val) {
-		var ctx = this.profileDisplay[0].getContext('2d');
+   drawProfilePoint: function(color, val) {
+      var ctx = this.profileDisplay[0].getContext('2d');
       ctx.strokeStyle = color
-		try {
-			if (!isNaN(val)) {
-		      ctx.beginPath();
-				ctx.moveTo(0, this.profiles[color] || 100);
-				ctx.lineTo(1, (100 - val < 1 ? 1 : 100 - val));
-				ctx.closePath();
-				ctx.stroke();
-				this.profiles[color] = (100 - val < 1 ? 1 : 100 - val);
-			}
-		} catch(ex) {
-			
-		}
-	},
-	
-	moveProfiler: function() {
-		var ctx = this.profileDisplay[0].getContext('2d');
-		var imgData = ctx.getImageData(1,0,149,100);
-		ctx.save();
-		ctx.translate(-1,0);
-		ctx.putImageData(imgData, 0, 0);
-		ctx.restore();
-	},
+      try {
+         if (!isNaN(val)) {
+            ctx.beginPath();
+            ctx.moveTo(0, this.profiles[color] || 100);
+            ctx.lineTo(1, (100 - val < 1 ? 1 : 100 - val));
+            ctx.closePath();
+            ctx.stroke();
+            this.profiles[color] = (100 - val < 1 ? 1 : 100 - val);
+         }
+      } catch(ex) {
+         
+      }
+   },
+   
+   moveProfiler: function() {
+      var ctx = this.profileDisplay[0].getContext('2d');
+      var imgData = ctx.getImageData(1,0,149,100);
+      ctx.save();
+      ctx.translate(-1,0);
+      ctx.putImageData(imgData, 0, 0);
+      ctx.restore();
+   },
 
-	/**
-	 * Run the metrics display.
-	 * @private
-	 * @memberOf Engine
-	 */
-	doMetrics: function() {	
+   /**
+    * Run the metrics display.
+    * @private
+    * @memberOf Engine
+    */
+   doMetrics: function() { 
       // Output any metrics
       if (Engine.showMetricsWindow) {
          Engine.renderMetrics();
@@ -276,8 +281,8 @@ var Engine = Engine.extend({
          Engine.metricDisplay.remove();
          Engine.metricDisplay = null;
       }
-	}
-	
+   }
+   
 });
 
 if (EngineSupport.checkBooleanParam("metrics"))
