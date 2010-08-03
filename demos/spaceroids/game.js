@@ -62,7 +62,7 @@ var Spaceroids = Game.extend({
 
    fieldBox: null,
    centerPoint: null,
-   areaScale: $.browser.Wii ? 0.7 : 0.93,
+   areaScale: $.browser.Wii ? 0.7 : 1,
 
    engineFPS: 30,
 
@@ -134,7 +134,7 @@ var Spaceroids = Game.extend({
     */
    attractMode: function() {
       var titlePos = Point2D.create(150, 100);
-      var copyPos = Point2D.create(140, 121);
+      var copyPos = Point2D.create(160, 570);
       this.cleanupPlayfield();
       Spaceroids.isAttractMode = true;
 
@@ -152,7 +152,6 @@ var Spaceroids = Game.extend({
 
       var title = TextRenderer.create(VectorText.create(), "Asteroids", 2);
       title.setPosition(titlePos);
-      title.setTextWeight(1);
       title.setColor("#ffffff");
       this.renderContext.add(title);
 
@@ -400,7 +399,7 @@ var Spaceroids = Game.extend({
 
       var g = TextRenderer.create(VectorText.create(), "Game Over", 3);
       g.setPosition(Point2D.create(100, 260));
-      g.setTextWeight(0.25);
+      g.setTextWeight(0.8);
       g.setColor("#ffffff");
       this.renderContext.add(g);
 

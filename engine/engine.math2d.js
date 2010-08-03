@@ -597,7 +597,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    /**
     * Set the values of this rectangle.
     *
-    * @param x {Number} An optional value to initialize the X coordinate of the rectangle
+    * @param x {Number|Rectangle2D} An optional value to initialize the X coordinate of the rectangle, or a rectangle to clone
     * @param y {Number} An optional value to initialize the Y coordinate of the rectangle
     * @param width {Number} An optional value to initialize the width of the rectangle
     * @param height {Number} An optional value to initialize the height of the rectangle
@@ -605,8 +605,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    set: function(x, y, width, height)
    {
       if (Rectangle2D.isInstance(x)) {
-         this.topLeft.set(x.getTopLeft());
-         this.dims.set(x.getDims());
+			var r = x.get();
+         this.set(r.x, r.y, r.w, r.h);
       }
       else
       {

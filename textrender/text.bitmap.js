@@ -84,12 +84,14 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       var cW, cH = this.font.info.height;
       var cS = 0;
 
+      var pc = Point2D.create(0, 0);
+
       // Run the text to get its bounding box
       var weight = this.getTextWeight();
       for (var wT = 0; wT < weight; wT++) {
-         
-         var pc = Point2D.create(wT * 0.5, 0);
-   
+
+	      pc.set(wT * 0.5, 0);
+            
          // 1st pass: The text
          letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
          lCount = text.length;
@@ -111,7 +113,7 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       }
       
       // Set the bounding box
-      this.getHostObject().getBoundingBox().set(0, 0, pc.x, cH);
+      this.getHostObject().getBoundingBox().set(0, 0, pc.x * this.getSize(), cH * this.getSize());
       pc.destroy();
    },
 
@@ -134,11 +136,8 @@ var BitmapText = AbstractTextRenderer.extend(/** @scope BitmapText.prototype */{
       text = (this.font.upperCaseOnly ? String(text).toUpperCase() : text);
 
       // Replace special chars
-      //text = text.replace(/&copy;/gi,"(C)").replace(/&reg;/gi,"(R)");
-
-      this.calculateBoundingBox();
-
       this.base(text);
+      this.calculateBoundingBox();
    },
 
    /**

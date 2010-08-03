@@ -71,15 +71,16 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
       // Add components to move and draw the text
       this.renderer = renderer;
-      //this.add(this.renderer);
-      this.add(Billboard2DComponent.create("billboard", this.renderer));
+		if (renderer.isNative()) {
+	      this.add(this.renderer);
+		} else {
+	      this.add(Billboard2DComponent.create("billboard", this.renderer));
+		}
 
       this.add(Transform2DComponent.create("transform"));
 
-      //this.getComponent("TextRenderObject").setText(text || "");
-      //this.getComponent("TextRenderObject").setSize(size || 1);
-      this.getComponent("billboard").getComponent().setText(text || "");
-      this.getComponent("billboard").getComponent().setSize(size || 1);
+      renderer.setText(text || "");
+      renderer.setSize(size || 1);
       this.drawMode = TextRenderer.DRAW_TEXT;
    },
 
@@ -109,6 +110,17 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
 
    },
 
+	/**
+	 * @private
+	 */
+	regen: function() {
+		if (this.renderer.isNative()) {
+			return;
+		} else {
+			this.getComponent("billboard").regenerate();
+		}
+	},
+
    /**
     * Set the text for this object to render.  This method
     * <i>must</i> be implemented by a text renderer.
@@ -116,9 +128,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param text {String} The text to render.
     */
    setText: function(text) {
-      //this.getComponent("TextRenderObject").setText(text);
-      this.getComponent("billboard").getComponent().setText(text);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setText(text);
+      this.regen();
    },
 
    /**
@@ -128,8 +139,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {String} The text to draw
     */
    getText: function() {
-      //return this.getComponent("TextRenderObject").getText();
-      return this.getComponent("billboard").getComponent().getText();
+      return this.renderer.getText();
    },
 
    /**
@@ -138,9 +148,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param size {Number} Defaults to 1
     */
    setTextSize: function(size) {
-      //this.getComponent("TextRenderObject").setSize(size || 1);
-      this.getComponent("billboard").getComponent().setSize(size || 1);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setSize(size || 1);
+      this.regen();
    },
 
    /**
@@ -148,8 +157,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {Number} The size/scale of the text
     */
    getTextSize: function() {
-      //return this.getComponent("TextRenderObject").getSize();
-      return this.getComponent("billboard").getComponent().getSize();
+      return this.renderer.getSize();
    },
 
    /**
@@ -159,9 +167,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param weight {Object} The boldness of the given text renderer
     */
    setTextWeight: function(weight) {
-      //this.getComponent("TextRenderObject").setTextWeight(weight);
-      this.getComponent("billboard").getComponent().setTextWeight(weight);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setTextWeight(weight);
+      this.regen();
    },
 
    /**
@@ -170,8 +177,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {Object} The boldness of the given text renderer
     */
    getTextWeight: function() {
-      //return this.getComponent("TextRenderObject").getTextWeight();
-      return this.getComponent("billboard").getComponent().getTextWeight();
+      return this.renderer.getTextWeight();
    },
    
    /**
@@ -180,9 +186,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param font {String} The text font
     */
    setTextFont: function(font) {
-      //this.getComponent("TextRenderObject").setTextFont(font);
-      this.getComponent("billboard").getComponent().setTextFont(font);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setTextFont(font);
+      this.regen();
    },
    
    /**
@@ -191,8 +196,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {String} The text font
     */
    getTextFont: function() {
-      //return this.getComponent("TextRenderObject").getTextFont();
-      return this.getComponent("billboard").getComponent().getTextFont();
+      return this.renderer.getTextFont();
    },
    
    /**
@@ -201,9 +205,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param style {String} The text style
     */
    setTextStyle: function(style) {
-      //this.getComponent("TextRenderObject").setTextStyle(style);
-      this.getComponent("billboard").getComponent().setTextStyle(style);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setTextStyle(style);
+      this.regen();
    },
 
    /**
@@ -212,8 +215,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {String} The text style
     */   
    getTextStyle: function() {
-      //return this.getComponent("TextRenderObject").getTextStyle();
-      return this.getComponent("billboard").getComponent().getTextStyle();
+      return this.renderer.getTextStyle();
    },
 
    /**
@@ -241,9 +243,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param alignment {Object} A text alignment mode for the given text renderer.
     */
    setTextAlignment: function(alignment) {
-      //this.getComponent("TextRenderObject").setTextAlignment(alignment);
-      this.getComponent("billboard").getComponent().setTextAlignment(alignment);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setTextAlignment(alignment);
+      this.regen();
    },
 
    /**
@@ -252,8 +253,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {Number} The alignment mode for the given text renderer
     */
    getTextAlignment: function() {
-      //return this.getComponent("TextRenderObject").getTextAlignment();
-      return this.getComponent("billboard").getComponent().getTextAlignment();
+      return this.renderer.getTextAlignment();
    },
 
    /**
@@ -262,9 +262,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param color {String} The color of the text
     */
    setColor: function(color) {
-      //this.getComponent("TextRenderObject").setColor(color);
-      this.getComponent("billboard").getComponent().setColor(color);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setColor(color);
+      this.regen();
    },
 
    /**
@@ -272,8 +271,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {String} The text color
     */
    getColor: function() {
-      //return this.getComponent("TextRenderObject").getColor();
-      return this.getComponent("billboard").getComponent().getColor();
+      return this.renderer.getColor();
    },
 
    /**
@@ -282,9 +280,8 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @param textColor {String} Color of the text.
     */
    setTextColor: function(textColor) {
-      //this.getComponent("TextRenderObject").setColor(textColor);
-      this.getComponent("billboard").getComponent().setColor(textColor);
-      this.getComponent("billboard").regenerate();
+      this.renderer.setColor(textColor);
+      this.regen();
    },
 
    /**
@@ -292,8 +289,7 @@ var TextRenderer = Object2D.extend(/** @scope TextRenderer.prototype */{
     * @return {String} The color or style of the line
     */
    getTextColor: function() {
-      //return this.getComponent("TextRenderObject").getColor();
-      return this.getComponent("billboard").getComponent().getColor();
+      return this.renderer.getColor();
    },
 
    /**

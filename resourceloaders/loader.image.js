@@ -154,6 +154,16 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
       var imgInfo = this.base(name);
       return imgInfo ? imgInfo.image[0] : null;
    },
+	
+	/**
+	 * Get an {@link Image} object from the resource which represents the image, or <tt>null</tt>
+	 * if no such image exists.
+	 * @param name {String} The name of the image resource
+	 * @return {Image}
+	 */
+	getImage: function(name) {
+		return Image.create("Image", name, this); 	
+	},
    
    /**
     * Get the dimensions of an image from the resource stored with 
@@ -192,3 +202,61 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
 return ImageLoader;
 
 });
+
+Engine.initObject("Image", "PooledObject", function() {
+
+var Image = PooledObject.extend(/** @scope Image.prototype */{
+
+	image: null,
+
+   /**
+    * @private
+    */
+   constructor: function(name, imageName, imageResource) {
+      this.base(name || "Image");
+		this.image = imageResource.get(imageName);
+		var dims = imageResource.getDimensions();
+      this.bbox = Rectangle2D.create(0, 0, dims.x, dims.y);
+   },
+	
+   /**
+    * @private
+    */
+   release: function() {
+      this.base();
+      this.image = null;
+      this.bbox = null;
+   },
+
+   /**
+    * Get the bounding box for the image.
+    * @return {Rectangle2D} The bounding box which contains the entire image
+    */
+   getBoundingBox: function() {
+      return this.bbox;
+   },
+
+	/**
+	 * Get the HTML image object which contains the image.
+	 * @return {HTMLImage}
+	 */
+	getImage: function() {
+		return this.image;
+	}		
+	
+},{
+
+   /**
+    * Gets the class name of this object.
+    * @return {String} The string "Image"
+    */
+   getClassName: function() {
+      return "Image";
+   }	
+	
+});
+
+return Image;
+
+});
+
