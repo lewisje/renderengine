@@ -1367,7 +1367,10 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       for (var c in Linker.loadedClasses) {
          var d = Linker.loadedClasses[c]
          var parentObj = Linker.getParentClass(d);
-         delete parentObj[d];
+         if (EngineSupport.sysInfo().browser != "msie") {
+            // IE doesn't allow this
+            delete parentObj[d];
+         }
       }
       Linker.loadedClasses = [];
    },
@@ -1597,7 +1600,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       }
 
       // "instanceof" checks
-		/*
+      /*
       while ((m = inR.exec(def)) != null) {
          if (EngineSupport.indexOf(dTable, m[2]) == -1) {
             dTable.push(m[2]);
@@ -1619,13 +1622,13 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          var args = m[1].split(",");
 
          for (var x in args) {
-	         a.push(args[x].replace(" ",""));
+            a.push(args[x].replace(" ",""));
          }
       }
 
       return a;
    },
-	
+   
    /**
     * Finds all of the dependencies within an object class.
     * @private
@@ -1654,23 +1657,23 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
-		var kInstance = null;
+      var kInstance = null;
       if ($.isFunction(k)) {
          // If the class is an instance, get it's class object
-			kInstance = k;
+         kInstance = k;
          k = k.prototype;
       }
 
       // Find the internal functions
       for (var f in k) {
          var def = k[f];
-			if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
-				// If it's an instance, we're looking at the constructor, and the
-				// instance has its own constructor (not inherited)
-				def = kInstance;
-			}
+         if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
+            // If it's an instance, we're looking at the constructor, and the
+            // instance has its own constructor (not inherited)
+            def = kInstance;
+         }
          if ($.isFunction(def) && k.hasOwnProperty(f)) {
-				def = def.toString();
+            def = def.toString();
             var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\s)*)","g");
             var m = fR.exec(def);
             if (m) {
@@ -1689,7 +1692,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
                   return (e != "" && e != "this" && e != "arguments");
                });
 
-					// Consider arguments as local variables
+               // Consider arguments as local variables
                var args = m[1].split(",");
                var vs = fTable[f].vars;
                for (var a in args) {
@@ -1752,7 +1755,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
     * @private
     */
    checkCircularRefs: function(objectName) {
-		// Remove first-level dependencies				
+      // Remove first-level dependencies           
       var deps = Linker.dependencyList[objectName].deps;
       for (var dep in deps) {
          if (Linker.dependencyList[deps[dep]] && EngineSupport.indexOf(Linker.dependencyList[deps[dep]].deps, objectName) != -1) {
@@ -1760,7 +1763,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
             EngineSupport.arrayRemove(Linker.dependencyList[objectName].deps, deps[dep]);
          }
       }
-		
+      
    },
 
    /**
@@ -1780,20 +1783,20 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       for (var obj in Linker.dependencyList) {
          dCount++;
          unresDeps += "Object '" + obj + "' has the following unresolved dependencies: ";
-			unresDeps += "(" + Linker.dependencyList[obj].deps.length + ") ";
+         unresDeps += "(" + Linker.dependencyList[obj].deps.length + ") ";
          for (var d in Linker.dependencyList[obj].deps) {
             unresDeps += Linker.dependencyList[obj].deps[d] + " ";
          }
          unresolved.push(unresDeps);
-			unresDeps = "";
+         unresDeps = "";
       }
       
       if (dCount != 0) {
          // Dump the dependency list
          Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-			for (var ud in unresolved) {
-	         Console.error(unresolved[ud]);
-			}
+         for (var ud in unresolved) {
+            Console.error(unresolved[ud]);
+         }
          Engine.shutdown();
       }
    },
@@ -1898,6 +1901,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    version: "v1.0",
 
    constructor: null,
+
+   // Global engine options
+   options: {
+      debugMode: false,          // Global debug flag
+      localMode: false,          // Local run flag
+      skipFrames: true,          // Skip missed frames
+      soundsEnabled: false,      // Sound engine enabled flag
+      billboards: true           // Use billboards to speed up rendering
+   },
 
    /*
     * Engine objects
@@ -2404,13 +2416,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
       msg += "supported browsers</a> for more information.";
       switch (sInfo.browser) {
+         case "msie": Engine.options.billboards = false; 
+                      return true;
          case "chrome":
          case "Wii":
          case "iPhone":
          case "safari":
          case "mozilla":
          case "opera": return true;
-         case "msie":
          case "unknown": $(document).ready(function() {
                            Engine.shutdown();
                            $("body", document).append($("<div class='unsupported'>")
@@ -2466,8 +2479,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          nextFrame = (Engine.skipFrames ? (f > 0 ? f : nextFrame) : Engine.fpsClock);
          Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
 
-			// Update the metrics display
-			Engine.doMetrics();
+         // Update the metrics display
+         Engine.doMetrics();
       }
 
       // When the process is done, start all over again
@@ -2912,7 +2925,12 @@ var Engine = Engine.extend({
             // process the data to replace the "enginePath" variable
             var epRE = /(\$<enginePath>)/g;
             data = data.replace(epRE, Engine.getEnginePath());
-            $("head", document).append($("<style type='text/css'/>").text(data));
+            if (EngineSupport.sysInfo().browser == "msie") {
+               // IE likes it this way...
+               $("head", document).append($("<style type='text/css'>" + data + "</script>"));
+            } else {
+               $("head", document).append($("<style type='text/css'/>").text(data));
+            }
             Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
          }, "text");
       };
@@ -2951,7 +2969,7 @@ var Engine = Engine.extend({
  * @author: Brett Fattori (brettf@renderengine.com)
  *
  * @author: $Author: bfattori $
- * @version: $Revision: 1252 $
+ * @version: $Revision: 1266 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -2984,20 +3002,20 @@ var Engine = Engine.extend({
    /** @lends Engine */
    constructor: null,
 
-	/*
+   /*
     * Metrics tracking/display
     */
    metrics: {},               // Tracked metrics
    metricDisplay: null,       // The metric display object
-   profileDisplay: null,		// The profile display object
+   profileDisplay: null,      // The profile display object
    metricSampleRate: 10,      // Frames between samples
    lastMetricSample: 10,      // Last sample frame
    showMetricsWindow: false,  // Metrics display flag
-   showMetricsProfile: false,	// Metrics profile graph display flag
+   showMetricsProfile: false, // Metrics profile graph display flag
    vObj: 0,                   // Visible objects
    droppedFrames: 0,          // Non-rendered frames/frames dropped
    profilePos: 0,
-	profiles: {},
+   profiles: {},
    
 
    /**
@@ -3016,14 +3034,14 @@ var Engine = Engine.extend({
    showMetrics: function() {
       this.showMetricsWindow = true;
    },
-	
-	/**
-	 * Show a graph of the engine profile
-	 * @memberOf Engine
-	 */
-	showProfile: function() {
-		this.showMetricsProfile = true;
-	},
+   
+   /**
+    * Show a graph of the engine profile
+    * @memberOf Engine
+    */
+   showProfile: function() {
+      this.showMetricsProfile = true;
+   },
 
    /**
     * Hide the metrics window
@@ -3087,12 +3105,17 @@ var Engine = Engine.extend({
          this.updateMetrics();
          this.lastMetricSample = this.metricSampleRate;
       }
-		
-		if (this.showMetricsProfile && !this.profileDisplay) {
-			this.profileDisplay = $("<canvas width='150' height='100'/>").addClass("engine-profile");
-			this.profileDisplay.appendTo($("body"));
-			this.profileDisplay[0].getContext('2d').save();
-		}
+      
+      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie") {
+         // Profiler not supported in IE
+         this.showMetricsProfile = false;
+      }
+      
+      if (this.showMetricsProfile && !this.profileDisplay) {
+         this.profileDisplay = $("<canvas width='150' height='100'/>").addClass("engine-profile");
+         this.profileDisplay.appendTo($("body"));
+         this.profileDisplay[0].getContext('2d').save();
+      }
    },
 
    /**
@@ -3157,63 +3180,63 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    updateMetrics: function() {
-		var h = "", ctx;
-		if (this.showMetricsProfile) {
-			ctx = this.profileDisplay[0].getContext('2d');
-			ctx.save();
-			ctx.translate(147, 0);
-		}
+      var h = "", ctx;
+      if (this.showMetricsProfile) {
+         ctx = this.profileDisplay[0].getContext('2d');
+         ctx.save();
+         ctx.translate(147, 0);
+      }
 
       for (var m in this.metrics)
       {
          h += m + ": " + this.metrics[m].val + "<br/>";
-			if (this.showMetricsProfile) {
-				switch (m) {
-					case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
-					case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
-					case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
-				}
-			}
+         if (this.showMetricsProfile) {
+            switch (m) {
+               case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
+               case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
+               case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
+            }
+         }
       }
       $(".items", this.metricDisplay).html(h);
-		if (this.showMetricsProfile) {
-			ctx.restore();
-			this.moveProfiler();
-		}
+      if (this.showMetricsProfile) {
+         ctx.restore();
+         this.moveProfiler();
+      }
    },
 
-	drawProfilePoint: function(color, val) {
-		var ctx = this.profileDisplay[0].getContext('2d');
+   drawProfilePoint: function(color, val) {
+      var ctx = this.profileDisplay[0].getContext('2d');
       ctx.strokeStyle = color
-		try {
-			if (!isNaN(val)) {
-		      ctx.beginPath();
-				ctx.moveTo(0, this.profiles[color] || 100);
-				ctx.lineTo(1, (100 - val < 1 ? 1 : 100 - val));
-				ctx.closePath();
-				ctx.stroke();
-				this.profiles[color] = (100 - val < 1 ? 1 : 100 - val);
-			}
-		} catch(ex) {
-			
-		}
-	},
-	
-	moveProfiler: function() {
-		var ctx = this.profileDisplay[0].getContext('2d');
-		var imgData = ctx.getImageData(1,0,149,100);
-		ctx.save();
-		ctx.translate(-1,0);
-		ctx.putImageData(imgData, 0, 0);
-		ctx.restore();
-	},
+      try {
+         if (!isNaN(val)) {
+            ctx.beginPath();
+            ctx.moveTo(0, this.profiles[color] || 100);
+            ctx.lineTo(1, (100 - val < 1 ? 1 : 100 - val));
+            ctx.closePath();
+            ctx.stroke();
+            this.profiles[color] = (100 - val < 1 ? 1 : 100 - val);
+         }
+      } catch(ex) {
+         
+      }
+   },
+   
+   moveProfiler: function() {
+      var ctx = this.profileDisplay[0].getContext('2d');
+      var imgData = ctx.getImageData(1,0,149,100);
+      ctx.save();
+      ctx.translate(-1,0);
+      ctx.putImageData(imgData, 0, 0);
+      ctx.restore();
+   },
 
-	/**
-	 * Run the metrics display.
-	 * @private
-	 * @memberOf Engine
-	 */
-	doMetrics: function() {	
+   /**
+    * Run the metrics display.
+    * @private
+    * @memberOf Engine
+    */
+   doMetrics: function() { 
       // Output any metrics
       if (Engine.showMetricsWindow) {
          Engine.renderMetrics();
@@ -3221,8 +3244,8 @@ var Engine = Engine.extend({
          Engine.metricDisplay.remove();
          Engine.metricDisplay = null;
       }
-	}
-	
+   }
+   
 });
 
 if (EngineSupport.checkBooleanParam("metrics"))

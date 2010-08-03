@@ -72,7 +72,10 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       for (var c in Linker.loadedClasses) {
          var d = Linker.loadedClasses[c]
          var parentObj = Linker.getParentClass(d);
-         delete parentObj[d];
+         if (EngineSupport.sysInfo().browser != "msie") {
+            // IE doesn't allow this
+            delete parentObj[d];
+         }
       }
       Linker.loadedClasses = [];
    },
@@ -302,7 +305,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       }
 
       // "instanceof" checks
-		/*
+      /*
       while ((m = inR.exec(def)) != null) {
          if (EngineSupport.indexOf(dTable, m[2]) == -1) {
             dTable.push(m[2]);
@@ -324,13 +327,13 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          var args = m[1].split(",");
 
          for (var x in args) {
-	         a.push(args[x].replace(" ",""));
+            a.push(args[x].replace(" ",""));
          }
       }
 
       return a;
    },
-	
+   
    /**
     * Finds all of the dependencies within an object class.
     * @private
@@ -359,23 +362,23 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          }
       }
 
-		var kInstance = null;
+      var kInstance = null;
       if ($.isFunction(k)) {
          // If the class is an instance, get it's class object
-			kInstance = k;
+         kInstance = k;
          k = k.prototype;
       }
 
       // Find the internal functions
       for (var f in k) {
          var def = k[f];
-			if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
-				// If it's an instance, we're looking at the constructor, and the
-				// instance has its own constructor (not inherited)
-				def = kInstance;
-			}
+         if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
+            // If it's an instance, we're looking at the constructor, and the
+            // instance has its own constructor (not inherited)
+            def = kInstance;
+         }
          if ($.isFunction(def) && k.hasOwnProperty(f)) {
-				def = def.toString();
+            def = def.toString();
             var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\s)*)","g");
             var m = fR.exec(def);
             if (m) {
@@ -394,7 +397,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
                   return (e != "" && e != "this" && e != "arguments");
                });
 
-					// Consider arguments as local variables
+               // Consider arguments as local variables
                var args = m[1].split(",");
                var vs = fTable[f].vars;
                for (var a in args) {
@@ -457,7 +460,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
     * @private
     */
    checkCircularRefs: function(objectName) {
-		// Remove first-level dependencies				
+      // Remove first-level dependencies           
       var deps = Linker.dependencyList[objectName].deps;
       for (var dep in deps) {
          if (Linker.dependencyList[deps[dep]] && EngineSupport.indexOf(Linker.dependencyList[deps[dep]].deps, objectName) != -1) {
@@ -465,7 +468,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
             EngineSupport.arrayRemove(Linker.dependencyList[objectName].deps, deps[dep]);
          }
       }
-		
+      
    },
 
    /**
@@ -485,20 +488,20 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       for (var obj in Linker.dependencyList) {
          dCount++;
          unresDeps += "Object '" + obj + "' has the following unresolved dependencies: ";
-			unresDeps += "(" + Linker.dependencyList[obj].deps.length + ") ";
+         unresDeps += "(" + Linker.dependencyList[obj].deps.length + ") ";
          for (var d in Linker.dependencyList[obj].deps) {
             unresDeps += Linker.dependencyList[obj].deps[d] + " ";
          }
          unresolved.push(unresDeps);
-			unresDeps = "";
+         unresDeps = "";
       }
       
       if (dCount != 0) {
          // Dump the dependency list
          Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-			for (var ud in unresolved) {
-	         Console.error(unresolved[ud]);
-			}
+         for (var ud in unresolved) {
+            Console.error(unresolved[ud]);
+         }
          Engine.shutdown();
       }
    },
