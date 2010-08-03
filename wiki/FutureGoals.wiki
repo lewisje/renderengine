@@ -24,7 +24,7 @@ Ideas for the next release.  This list is always evolving...
 || - || Rendering Context || SVG rendering context. ||
 || - || Dev Tool || Write a _very simple_ syntax checker that will only execute when running on the Wii.  Establish common syntax problems and write regular expressions to catch them ||
 || - || Dev Tool || Add a function tracer which logs calls into and out of functions ||
-|| - || Dev Tool || Implement a profiler which I can use on all platforms to test code execution times.  This should be engine specific. ||
+|| - || Dev Tool || ~~Implement a profiler which I can use on all platforms to test code execution times.  This should be engine specific.~~ ||
 || - || New Feature || ~~Considering Google Labs O3D integration.~~ Looking at WebGL for future implementation of a 3D context. ||
 || - || New Feature || Box 2d JS physics support ||
 || - || Tool || Particle editor. ||
