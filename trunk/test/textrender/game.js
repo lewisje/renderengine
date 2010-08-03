@@ -56,7 +56,7 @@ Engine.initObject("FontTest", "Game", function(){
       renderContext: null,
       
       // Engine frames per second
-      engineFPS: 2,
+      engineFPS: 30,
       
       // The play field
       fieldBox: null,

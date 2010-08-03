@@ -440,6 +440,21 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 	
 	/**
+	 * Get a rectangle that will approximately enclose the text drawn by the render context.
+	 * @param text {String} The text to measure
+	 * @return {Rectangle2D}
+	 */
+	getTextMetrics: function(text) {
+		var rect = this.base(text);	
+		this.get2DContext().font = this.getNormalizedFont();
+		this.get2DContext().textBaseline = this.getFontBaseline();
+		var metrics = this.get2DContext().measureText(text);
+		// Scale the height a little to account for hanging chars
+		rect.set(0, 0, metrics.width, this.getFontSize() * 1.25);
+		return rect;
+	},
+	
+	/**
 	 * Draw stroked (outline) text on the context.
 	 * 
 	 * @param point {Point2D}

@@ -63,7 +63,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
 
       this.text = "";
       this.size = 1;
-      this.weight = null;
+      this.weight = 1;
       this.font = null;
       this.style = null;
       this.alignment = null;
@@ -83,6 +83,14 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
       this.style = null;
       this.alignment = null;
    },
+
+	/**
+	 * Return <tt>true</tt> if the text renderer is native to the context.
+	 * @return {Boolean}
+	 */
+	isNative: function() {
+		return false;
+	},
 
    /**
     * Get the text being rendered

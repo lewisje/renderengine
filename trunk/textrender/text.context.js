@@ -73,12 +73,20 @@ var ContextText = AbstractTextRenderer.extend(/** @scope ContextText.prototype *
       this.tInit();
    },
 
+	/**
+	 * Return <tt>true</tt> if the text renderer is native to the context.
+	 * @return {Boolean}
+	 */
+	isNative: function() {
+		return true;
+	},
+
    /**
     * Calculate the bounding box for the text and set it on the host object.
     * @private
     */
    calculateBoundingBox: function() {
-      return;
+      this.getHostObject().setBoundingBox(renderContext.getTextMetrics(this.getText()));
    },
 
    /**

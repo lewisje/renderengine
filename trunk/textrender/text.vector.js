@@ -59,7 +59,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
    constructor: function(componentName, priority) {
       this.base(componentName, priority);
       this.rText = [];
-      this.setTextWeight(1);
+      this.setTextWeight(1.5);
    },
 
    /**
@@ -69,7 +69,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       this.base();
       this.rText = null;
       this.spacing = 0;
-      this.setTextWeight(1);
+      this.setTextWeight(1.5);
    },
 
    /**
@@ -105,7 +105,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
          }
       }
 
-      this.getHostObject().setBoundingBox(new Rectangle2D(x1 * this.getSize(), y1 * this.getSize(), (Math.abs(x1) + x2) * this.getSize(), (Math.abs(y1) + y2) * this.getSize()));
+      this.getHostObject().setBoundingBox(new Rectangle2D(x1 * this.getSize(), y1 * this.getSize(), (Math.abs(x1) + x2 + 2) * this.getSize(), (Math.abs(y1) + y2 + 2) * this.getSize()));
    },
 
    /**

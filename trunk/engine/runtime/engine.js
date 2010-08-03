@@ -793,7 +793,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1216 $
+ * @version: $Revision: 1263 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -3091,6 +3091,7 @@ var Engine = Engine.extend({
 		if (this.showMetricsProfile && !this.profileDisplay) {
 			this.profileDisplay = $("<canvas width='150' height='100'/>").addClass("engine-profile");
 			this.profileDisplay.appendTo($("body"));
+			this.profileDisplay[0].getContext('2d').save();
 		}
    },
 
@@ -3156,7 +3157,13 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    updateMetrics: function() {
-      var h = "";
+		var h = "", ctx;
+		if (this.showMetricsProfile) {
+			ctx = this.profileDisplay[0].getContext('2d');
+			ctx.save();
+			ctx.translate(147, 0);
+		}
+
       for (var m in this.metrics)
       {
          h += m + ": " + this.metrics[m].val + "<br/>";
@@ -3170,6 +3177,7 @@ var Engine = Engine.extend({
       }
       $(".items", this.metricDisplay).html(h);
 		if (this.showMetricsProfile) {
+			ctx.restore();
 			this.moveProfiler();
 		}
    },
@@ -3180,8 +3188,8 @@ var Engine = Engine.extend({
 		try {
 			if (!isNaN(val)) {
 		      ctx.beginPath();
-				ctx.moveTo(-1, this.profiles[color] || 100);
-				ctx.lineTo(0, (100 - val < 1 ? 1 : 100 - val), 1, 1);
+				ctx.moveTo(0, this.profiles[color] || 100);
+				ctx.lineTo(1, (100 - val < 1 ? 1 : 100 - val));
 				ctx.closePath();
 				ctx.stroke();
 				this.profiles[color] = (100 - val < 1 ? 1 : 100 - val);
@@ -3193,13 +3201,11 @@ var Engine = Engine.extend({
 	
 	moveProfiler: function() {
 		var ctx = this.profileDisplay[0].getContext('2d');
-		ctx.translate(1, 0);
-		
-		if(this.profilePos++ > 150) {
-			ctx.translate(-150,0);
-			ctx.clearRect(0, 0, 150, 100);
-			this.profilePos = 0;
-		} 
+		var imgData = ctx.getImageData(1,0,149,100);
+		ctx.save();
+		ctx.translate(-1,0);
+		ctx.putImageData(imgData, 0, 0);
+		ctx.restore();
 	},
 
 	/**

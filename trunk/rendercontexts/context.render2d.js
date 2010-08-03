@@ -330,6 +330,15 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	},
 	
 	/**
+	 * Get a rectangle that will approximately enclose the text drawn by the render context.
+	 * @param text {String} The text to measure
+	 * @return {Rectangle2D}
+	 */
+	getTextMetrics: function(text) {
+		return Rectangle2D.create(0,0,1,1);	
+	},
+	
+	/**
 	 * Get the renderable style of the font
 	 * @return {String}
 	 */
