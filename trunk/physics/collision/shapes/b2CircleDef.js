@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (c) 2006-2007 Erin Catto http:
 *
 * This software is provided 'as-is', without any express or implied
@@ -14,36 +14,43 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/common/math/b2Vec2.js");
+
+Engine.include("/physics/collision/shapes/b2Shape.js");
+Engine.include("/physics/collision/shapes/b2ShapeDef.js");
 
 
+Engine.initObject("b2CircleDef", "b2ShapeDef", function() {
 
+   var b2CircleDef = b2ShapeDef.extend({
+   
+      radius: null,
+   
+      constructor: function() {
+         // The constructor for b2ShapeDef
+         this.type = b2Shape.e_unknownShape;
+         this.userData = null;
+         this.localPosition = new b2Vec2(0.0, 0.0);
+         this.localRotation = 0.0;
+         this.friction = 0.2;
+         this.restitution = 0.0;
+         this.density = 0.0;
+         this.categoryBits = 0x0001;
+         this.maskBits = 0xFFFF;
+         this.groupIndex = 0; 
+         //
 
+         this.type = b2Shape.e_circleShape;
+         this.radius = 1.0;
+      }
+   
+   });
+   
+   return b2CircleDef;
 
-
-var b2CircleDef = Class.create();
-Object.extend(b2CircleDef.prototype, b2ShapeDef.prototype);
-Object.extend(b2CircleDef.prototype, 
-{
-	initialize: function()
-	{
-		// The constructor for b2ShapeDef
-		this.type = b2Shape.e_unknownShape;
-		this.userData = null;
-		this.localPosition = new b2Vec2(0.0, 0.0);
-		this.localRotation = 0.0;
-		this.friction = 0.2;
-		this.restitution = 0.0;
-		this.density = 0.0;
-		this.categoryBits = 0x0001;
-		this.maskBits = 0xFFFF;
-		this.groupIndex = 0;	
-		//
-
-		this.type = b2Shape.e_circleShape;
-		this.radius = 1.0;
-	},
-
-	radius: null});
-
+});

@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (c) 2006-2007 Erin Catto http:
 *
 * This software is provided 'as-is', without any express or implied
@@ -14,27 +14,35 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/common/math/b2Vec2.js");
 
 
+Engine.initObject("b2ContactConstraintPoint", null, function() {
 
+   var b2ContactConstraintPoint = Base.extend({
 
-var b2ContactConstraintPoint = Class.create();
-b2ContactConstraintPoint.prototype = 
-{
-	localAnchor1: new b2Vec2(),
-	localAnchor2: new b2Vec2(),
-	normalImpulse: null,
-	tangentImpulse: null,
-	positionImpulse: null,
-	normalMass: null,
-	tangentMass: null,
-	separation: null,
-	velocityBias: null,
-	initialize: function() {
-		// initialize instance variables for references
-		this.localAnchor1 = new b2Vec2();
-		this.localAnchor2 = new b2Vec2();
-		//
-}};
+      localAnchor1: null,
+      localAnchor2: null,
+      normalImpulse: null,
+      tangentImpulse: null,
+      positionImpulse: null,
+      normalMass: null,
+      tangentMass: null,
+      separation: null,
+      velocityBias: null,
+   
+      constructor: function() {
+         this.localAnchor1 = new b2Vec2();
+         this.localAnchor2 = new b2Vec2();
+      }
+      
+   });
+   
+   return b2ContactConstraintPoint;
+
+});
