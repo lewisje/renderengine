@@ -70,15 +70,6 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       // Create the canvas element
       canvas = document.createElement("canvas");
 
-      if (typeof FlashCanvas != "undefined") {
-         FlashCanvas.setOptions({
-            disableContextMenu: false,
-            turbo: false,
-            delay: 10
-         });
-         FlashCanvas.initElement(canvas);
-      }
-
       this.setViewport(Rectangle2D.create(0, 0, this.width, this.height));
       this.base(name || "CanvasContext", canvas);
       
@@ -87,6 +78,14 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    afterAdd: function(parent) {
+      if (typeof FlashCanvas != "undefined") {
+         FlashCanvas.setOptions({
+            disableContextMenu: false,
+            turbo: true,
+            delay: 1
+         });
+         FlashCanvas.initElement(this.getSurface());
+      }
    },
 
    /**
