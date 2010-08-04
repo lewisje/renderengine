@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (c) 2006-2007 Erin Catto http:
 *
 * This software is provided 'as-is', without any express or implied
@@ -14,17 +14,30 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.initObject("b2ContactRegister", null, function() {
 
+   var b2ContactRegister = Base.extend({
 
-var b2ContactRegister = Class.create();
-b2ContactRegister.prototype = 
-{
-	createFcn: null,
-	destroyFcn: null,
-	primary: null,
-	initialize: function() {}};
+      createFcn: null,
+      destroyFcn: null,
+      primary: null,
+   
+      constructor: function() {
+         this.createFcn = null;
+         this.destroyFcn = null;
+         this.primary = null;
+      }
+      
+   });
+   
+   return b2ContactRegister;
+
+});
 
 
 

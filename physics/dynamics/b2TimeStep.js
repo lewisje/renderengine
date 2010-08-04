@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (c) 2006-2007 Erin Catto http:
 *
 * This software is provided 'as-is', without any express or implied
@@ -14,14 +14,27 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.initObject("b2TimeStep", null, function() {
 
+   var b2TimeStep = Base.extend({
 
-var b2TimeStep = Class.create();
-b2TimeStep.prototype = 
-{
-	dt: null,
-	inv_dt: null,
-	iterations: 0,
-	initialize: function() {}};
+      dt: null,
+      inv_dt: null,
+      iterations: 0,
+
+      constructor: function() {
+         this.dt = null;
+         this.inv_dt = null;
+         this.iterations = 0;
+      }
+      
+   });
+   
+   return b2TimeStep;
+
+});

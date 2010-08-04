@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (c) 2006-2007 Erin Catto http:
 *
 * This software is provided 'as-is', without any express or implied
@@ -14,23 +14,30 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/common/math/b2Vec2.js");
 
 
+Engine.initObject("b2MassData", null, function() {
 
+   var b2MassData = Base.extend({
 
+      mass: 0.0,
+      center: null,
+      I: 0.0,
+   
+      constructor: function() {
+         this.mass = 0.0;
+         this.I = 0.0;
+         this.center = new b2Vec2(0,0);
+      }
+   
+   });
+   
+   return b2MassData;
 
-
-var b2MassData = Class.create();
-b2MassData.prototype = 
-{
-	mass: 0.0,
-	center: new b2Vec2(0,0),
-	I: 0.0,
-
-	initialize: function() {
-		// initialize instance variables for references
-		this.center = new b2Vec2(0,0);
-		//
-}}
+});

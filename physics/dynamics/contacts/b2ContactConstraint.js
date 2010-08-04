@@ -1,4 +1,4 @@
-﻿/*
+/*
 * Copyright (c) 2006-2007 Erin Catto http:
 *
 * This software is provided 'as-is', without any express or implied
@@ -14,32 +14,43 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/common/b2Settings.js");
+Engine.include("/physics/common/math/b2Vec2.js");
+
+Engine.include("/physics/dynamics/contacts/b2ContactConstraintPoint.js");
 
 
+Engine.initObject("b2ContactConstraint", null, function() {
+   
+   var b2ContactConstraint = Base.extend({
+   
+      points: null,
+      normal: null,
+      manifold: null,
+      body1: null,
+      body2: null,
+      friction: null,
+      restitution: null,
+      pointCount: 0,
+   
+      constructor: function() {
+         // initialize instance variables for references
+         this.normal = new b2Vec2();
+         //
 
-
-var b2ContactConstraint = Class.create();
-b2ContactConstraint.prototype = 
-{
-	initialize: function(){
-		// initialize instance variables for references
-		this.normal = new b2Vec2();
-		//
-
-		this.points = new Array(b2Settings.b2_maxManifoldPoints);
-		for (var i = 0; i < b2Settings.b2_maxManifoldPoints; i++){
-			this.points[i] = new b2ContactConstraintPoint();
-		}
-
-
-	},
-	points: null,
-	normal: new b2Vec2(),
-	manifold: null,
-	body1: null,
-	body2: null,
-	friction: null,
-	restitution: null,
-	pointCount: 0};
+         this.points = new Array(b2Settings.b2_maxManifoldPoints);
+         for (var i = 0; i < b2Settings.b2_maxManifoldPoints; i++){
+            this.points[i] = new b2ContactConstraintPoint();
+         }
+      }
+      
+   });
+   
+   return b2ContactConstraint;
+   
+});
