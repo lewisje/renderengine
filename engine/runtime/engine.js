@@ -83,8 +83,10 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    },
 
    cleanup: function(o) {
-      if (typeof o == "undefined") {
+      if (typeof o === "undefined") {
          return "";
+      } else if (o === null) {
+         return "null";
       } else if (typeof o == "function") {
          return "function";
       } else if (o.constructor == Array || (o.slice && o.join && o.splice)) { // An array
@@ -93,7 +95,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
             s += (s.length > 1 ? "," : "") + this.cleanup(o[e]);
          }
          return s + "]";
-      } else if (typeof o == "object") {
+      } else if (typeof o === "object") {
          var s = "{\n";
          for (var e in o) {
             s += e + ": " + this.cleanup(o[e]) + "\n";
@@ -464,6 +466,53 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 });
 
 /**
+ * @class A console reference to the MSIE console.
+ * @extends ConsoleRef
+ */
+var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
+
+   constructor: function() {
+   },
+
+   /**
+    * Write a debug message to the console
+    */
+   info: function() {
+      console.log(this.fixArgs(arguments));
+   },
+
+   /**
+    * Write a debug message to the console
+    */
+   debug: function() {
+      console.info(this.fixArgs(arguments));
+   },
+
+   /**
+    * Write a warning message to the console
+    */
+   warn: function() {
+      console.warn(this.fixArgs(arguments));
+   },
+
+   /**
+    * Write an error message to the console
+    */
+   error: function() {
+      console.error(this.fixArgs(arguments));
+   },
+
+   /**
+    * Get the class name of this object
+    *
+    * @return {String} The string "SafariConsoleRef"
+    */
+   getClassName: function() {
+      return "MSIEConsoleRef";
+   }
+});
+
+/**
  * @class A class for logging messages to a console reference object.  There are
  *        currently four supported console references:
  *        <ul>
@@ -522,6 +571,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
          // Firebug or firebug lite
          this.consoleRef = new FirebugConsoleRef();
       }
+      else if (typeof console != "undefined" && jQuery.browser.msie) {
+         this.consoleRef = new MSIEConsoleRef();
+      }
       else if (jQuery.browser.safari) {
          this.consoleRef = new SafariConsoleRef();
       }
@@ -565,14 +617,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
    setDebugLevel: function(level) {
       this.verbosity = level;
    },
-	
-	/**
-	 * Get the debug level which the console is currently at.
-	 * @return {Number} The debug level
-	 */
-	getDebugLevel: function() {
-		return this.verbosity;
-	},
+   
+   /**
+    * Get the debug level which the console is currently at.
+    * @return {Number} The debug level
+    */
+   getDebugLevel: function() {
+      return this.verbosity;
+   },
 
    /**
     * Verifies that the debug level is the same as the message to output
@@ -648,11 +700,11 @@ var Console = Base.extend(/** @scope Console.prototype */{
  * @param error {String} The error message to throw if the test fails
  */
 var Assert = function(test, error) {
-	var fail = false;
+   var fail = false;
    try {
       if (!test)
       {
-			fail = true;
+         fail = true;
          Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
          if (arguments.length > 1) {
             for (var a = 1; a < arguments.length; a++) {
@@ -662,7 +714,7 @@ var Assert = function(test, error) {
          }
 
          Engine.shutdown();
-			
+         
       }
    } catch (ex) {
       var pr = Console.getDebugLevel();
@@ -670,11 +722,11 @@ var Assert = function(test, error) {
       Console.warn("*ASSERT* 'test' would result in an exception: ", ex);
       Console.setDebugLevel(pr);
    }
-	
+   
    // This will provide a stacktrace for browsers that support it
    if (fail) {
-		throw new Error(error);
-	}
+      throw new Error(error);
+   }
 };
 
 /**
@@ -1302,7 +1354,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1216 $
+ * @version: $Revision: 1269 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1850,7 +1902,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1241 $
+ * @version: $Revision: 1269 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2969,7 +3021,7 @@ var Engine = Engine.extend({
  * @author: Brett Fattori (brettf@renderengine.com)
  *
  * @author: $Author: bfattori $
- * @version: $Revision: 1266 $
+ * @version: $Revision: 1269 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
