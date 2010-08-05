@@ -14,27 +14,34 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/dynamics/joints/b2Joint.js");
 
 
+Engine.initObject("b2JointDef", null, function() {
 
+	var b2JointDef = Base.extend({
 
-var b2JointDef = Class.create();
-b2JointDef.prototype = 
-{
+		type: 0,
+		userData: null,
+		body1: null,
+		body2: null,
+		collideConnected: null,
 
-	initialize: function()
-	{
-		this.type = b2Joint.e_unknownJoint;
-		this.userData = null;
-		this.body1 = null;
-		this.body2 = null;
-		this.collideConnected = false;
-	},
+		constructor: function() {
+			this.type = b2Joint.e_unknownJoint;
+			this.userData = null;
+			this.body1 = null;
+			this.body2 = null;
+			this.collideConnected = false;
+		}
+			
+	});
+	
+	return b2JointDef;
 
-	type: 0,
-	userData: null,
-	body1: null,
-	body2: null,
-	collideConnected: null}
+});

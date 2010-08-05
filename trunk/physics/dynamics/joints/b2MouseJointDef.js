@@ -14,40 +14,48 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/common/math/b2Vec2.js");
+
+Engine.include("/physics/dynamics/joints/b2Joint.js");
+Engine.include("/physics/dynamics/joints/b2JointDef.js");
 
 
+Engine.initObject("b2MouseJointDef", "b2JointDef", function() {
 
+	var b2MouseJointDef = b2JointDef.extend({
 
-var b2MouseJointDef = Class.create();
-Object.extend(b2MouseJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2MouseJointDef.prototype, 
-{
-	initialize: function()
-	{
-		// The constructor for b2JointDef
-		this.type = b2Joint.e_unknownJoint;
-		this.userData = null;
-		this.body1 = null;
-		this.body2 = null;
-		this.collideConnected = false;
-		//
+		target: null,
+		maxForce: null,
+		frequencyHz: null,
+		dampingRatio: null,
+		timeStep: null,
+		
+		constructor: function() {
+			// The constructor for b2JointDef
+			this.type = b2Joint.e_unknownJoint;
+			this.userData = null;
+			this.body1 = null;
+			this.body2 = null;
+			this.collideConnected = false;
+			//
+	
+			// initialize instance variables for references
+			this.target = new b2Vec2();
+			//
+	
+			this.type = b2Joint.e_mouseJoint;
+			this.maxForce = 0.0;
+			this.frequencyHz = 5.0;
+			this.dampingRatio = 0.7;
+			this.timeStep = 1.0 / 60.0;
+		}
+		
+	});
 
-		// initialize instance variables for references
-		this.target = new b2Vec2();
-		//
-
-		this.type = b2Joint.e_mouseJoint;
-		this.maxForce = 0.0;
-		this.frequencyHz = 5.0;
-		this.dampingRatio = 0.7;
-		this.timeStep = 1.0 / 60.0;
-	},
-
-	target: new b2Vec2(),
-	maxForce: null,
-	frequencyHz: null,
-	dampingRatio: null,
-	timeStep: null});
-
+	return b2MouseJointDef;
+});

@@ -14,36 +14,43 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/common/math/b2Vec2.js");
+Engine.include("/physics/dynamics/joints/b2Joint.js");
+Engine.include("/physics/dynamics/joints/b2JointDef.js");
 
 
+Engine.initObject("b2DistanceJointDef", "b2JointDef", function() {
 
+	var b2DistanceJointDef = b2JointDef.extend({
 
-var b2DistanceJointDef = Class.create();
-Object.extend(b2DistanceJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2DistanceJointDef.prototype, 
-{
-	initialize: function()
-	{
-		// The constructor for b2JointDef
-		this.type = b2Joint.e_unknownJoint;
-		this.userData = null;
-		this.body1 = null;
-		this.body2 = null;
-		this.collideConnected = false;
-		//
+		anchorPoint1: null,
+		anchorPoint2: null,
+	
+		constructor: function() {
+			// The constructor for b2JointDef
+			this.type = b2Joint.e_unknownJoint;
+			this.userData = null;
+			this.body1 = null;
+			this.body2 = null;
+			this.collideConnected = false;
+			//
+	
+			// initialize instance variables for references
+			this.anchorPoint1 = new b2Vec2();
+			this.anchorPoint2 = new b2Vec2();
+			//
+	
+			this.type = b2Joint.e_distanceJoint;
+			//this.anchorPoint1.Set(0.0, 0.0);
+			//this.anchorPoint2.Set(0.0, 0.0);
+		}	
+	});
+	
+	return b2DistanceJointDef;
 
-		// initialize instance variables for references
-		this.anchorPoint1 = new b2Vec2();
-		this.anchorPoint2 = new b2Vec2();
-		//
-
-		this.type = b2Joint.e_distanceJoint;
-		//this.anchorPoint1.Set(0.0, 0.0);
-		//this.anchorPoint2.Set(0.0, 0.0);
-	},
-
-	anchorPoint1: new b2Vec2(),
-	anchorPoint2: new b2Vec2()});
-
+});
