@@ -14,20 +14,25 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.initObject("b2JointNode", null, function() {
 
+	var b2JointNode = Base.extend({
 
+		other: null,
+		joint: null,
+		prev: null,
+		next: null,
+		
+		constructor: function() {
+		}	
+		
+	});
+	
+	return b2JointNode;
 
-
-var b2JointNode = Class.create();
-b2JointNode.prototype = 
-{
-
-	other: null,
-	joint: null,
-	prev: null,
-	next: null,
-
-
-	initialize: function() {}}
+});

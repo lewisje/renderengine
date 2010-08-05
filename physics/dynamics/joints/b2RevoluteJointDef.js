@@ -14,42 +14,50 @@
 * 2. Altered source versions must be plainly marked, and must not be
 * misrepresented the original software.
 * 3. This notice may not be removed or altered from any source distribution.
+*
+* Converted for The Render Engine v2.0
+* Aug. 4, 2010 Brett Fattori
 */
 
+Engine.include("/physics/common/math/b2Vec2.js");
+
+Engine.include("/physics/dynamics/joints/b2Joint.js");
+Engine.include("/physics/dynamics/joints/b2JointDef.js");
 
 
+Engine.initObject("b2RevoluteJointDef", "b2JointDef", function() {
 
+	var b2RevoluteJointDef = b2JointDef.extend({
+	
+		anchorPoint: null,
+		lowerAngle: null,
+		upperAngle: null,
+		motorTorque: null,
+		motorSpeed: null,
+		enableLimit: null,
+		enableMotor: null,
 
+		constructor: function() {
+			// The constructor for b2JointDef
+			this.type = b2Joint.e_unknownJoint;
+			this.userData = null;
+			this.body1 = null;
+			this.body2 = null;
+			this.collideConnected = false;
+			//
+	
+			this.type = b2Joint.e_revoluteJoint;
+			this.anchorPoint = new b2Vec2(0.0, 0.0);
+			this.lowerAngle = 0.0;
+			this.upperAngle = 0.0;
+			this.motorTorque = 0.0;
+			this.motorSpeed = 0.0;
+			this.enableLimit = false;
+			this.enableMotor = false;
+		}
+			
+	});
+	
+	return b2RevoluteJointDef;
 
-var b2RevoluteJointDef = Class.create();
-Object.extend(b2RevoluteJointDef.prototype, b2JointDef.prototype);
-Object.extend(b2RevoluteJointDef.prototype, 
-{
-	initialize: function()
-	{
-		// The constructor for b2JointDef
-		this.type = b2Joint.e_unknownJoint;
-		this.userData = null;
-		this.body1 = null;
-		this.body2 = null;
-		this.collideConnected = false;
-		//
-
-		this.type = b2Joint.e_revoluteJoint;
-		this.anchorPoint = new b2Vec2(0.0, 0.0);
-		this.lowerAngle = 0.0;
-		this.upperAngle = 0.0;
-		this.motorTorque = 0.0;
-		this.motorSpeed = 0.0;
-		this.enableLimit = false;
-		this.enableMotor = false;
-	},
-
-	anchorPoint: null,
-	lowerAngle: null,
-	upperAngle: null,
-	motorTorque: null,
-	motorSpeed: null,
-	enableLimit: null,
-	enableMotor: null});
-
+});
