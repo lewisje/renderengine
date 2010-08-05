@@ -6,5 +6,5 @@ The following changes affect the "trunk" of the development repository.  Changes
 
 || *Date* || *Notes* ||
 || 08/04/2010 || Started porting over box2d-js to _The Render Engine_ framework.  Adding engine specific physics objects to abstract calling b2d-js directly. ||
-|| 08/01/2010 || Started work on a UI framework for _The Render Engine_ which will simplify the creation of user interfaces, and the ability to interact with them.  Updated !TouchInputComponent and added a test for it to verify it works. ||
+|| 08/01/2010 || Started work on a UI framework for _The Render Engine_ which will simplify the creation of user interfaces, and the ability to interact with them.  Updated !TouchInputComponent and added a test for it to verify it works. Modified non-native font renderers to use billboards, unless specifically configured not to. ||
 || 07/28/2010 || Split engine metrics into its own file so that it can be "compiled out" of a runtime build. Added a profile graph for metrics to visually see engine load, frame gen time, and visible objects over time. Added Billboard2DComponent to substitute as a render component when regenerating an object would negatively impact gameplay.  Added a !TouchInputComponent for devices which support touch interfaces. ||
