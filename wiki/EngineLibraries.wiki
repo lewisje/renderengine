@@ -11,4 +11,4 @@ I believe fully in code-reuse and find that it is also important to recognize th
   * Michael Mathews: [http://www.jsdoctoolkit.org JSDocToolkit] for documentation
   * Scott Schiller: [http://www.schillmania.com/projects/soundmanager2/ SoundManager2] JS sound library
   * Erin Catto: [http://box2d-js.sourceforge.net/index2.html Box2dJS] Physics Library
-  * Shinya Muramatsu [http://flashcanvas.net FlashCanvas] canvas support for IE
+  * Shinya Muramatsu: [http://flashcanvas.net FlashCanvas] canvas support for IE
