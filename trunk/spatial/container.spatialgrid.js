@@ -202,9 +202,12 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * </pre>
     *
     * @param point {Point2D} The point to begin the search at.
-    * @return {Array} An array of objects found within the cross
+    * @return {Container} A container of objects found that could be collision targets
     */
    getPCL: function(point) {
+
+		var pcl = this.base(point);
+		pcl.clear();
 
       // The origin node
       var x = Math.floor(point.x * this.xLocator);
@@ -222,28 +225,24 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
          if (y < this.divisions) { nodes.push(this.getNode(x, y + 1)); }
       }
 
-      var o = [];
-      if (nodes.length > 0)
-      {
-         for (var n = 0; n < nodes.length; n++)
-         {
-            if (nodes[n])
-            {
-               o = o.concat(nodes[n].getObjects());
+      if (nodes.length > 0) {
+         for (var n = 0; n < nodes.length; n++) {
+            if (nodes[n]) {
+               pcl.addAll(nodes[n].getObjects());
             }
          }
       }
-      return o;
+      return pcl;
    },
    
    /**
     * Returns all objects within every node of the spatial grid.
-    * @return {Array} An array of all objects in the spatial grid
+    * @return {Container} A container with all objects in the spatial grid
     */
    getObjects: function() {
-      var objs = [];
+      var objs = this.base();
       EngineSupport.forEach(this.getRoot(), function(node) {
-         objs = objs.concat(node.getObjects());
+         objs.addAll(node.getObjects());
       });
       return objs;
    }

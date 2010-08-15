@@ -87,10 +87,12 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
-    * Destroy the rendering context, and detach the surface from its
-    * parent container.
+    * Destroy the rendering context, any objects within the context, and detach 
+    * the surface from its parent container.
     */
    destroy: function() {
+		// Destroy all of the objects
+		this.cleanUp();
       this.base();
       this.surface = null;
    },
@@ -299,11 +301,12 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.setupWorld(time);
 
       // Run the objects if they are visible
-      var objs = this.getObjects();
-      for (var o in objs)
-      {
-         this.renderObject(objs[o], time);
+      var objs = this.iterator();
+      while (objs.hasNext()) {
+         this.renderObject(objs.next(), time);
       }
+
+		objs.destroy();	
 
       // Restore the world transform
       this.popTransform();

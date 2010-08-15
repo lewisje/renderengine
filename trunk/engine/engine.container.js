@@ -38,9 +38,10 @@ Engine.initObject("Iterator", "PooledObject", function() {
 
 /**
  * @class Create an iterator over a {@link Container} instance. An
- * iterator is a convenient object to traverse the list of elements
- * within the container.  Modifying the structure of the underlying
- * list is <i>not supported</i> and could cause concurrency issues.
+ * iterator is a convenient object to traverse the list of objects
+ * within the container.  If the backing <code>Container</code> is
+ * modified, the <code>Iterator</code> will reflect these changes.
+ * <p/>
  * The simplest way to traverse the list is as follows:
  * <pre>
  * for (var itr = Iterator.create(containerObj); itr.hasNext(); ) {
@@ -65,11 +66,9 @@ Engine.initObject("Iterator", "PooledObject", function() {
  */
 var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 
-   idx: 0,
-
    c: null,
-
-   objs: null,
+	p: null,
+	r: false,
 
    /**
     * @private
@@ -78,9 +77,8 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       this.base("Iterator");
       this.idx = 0;
       this.c = container;
-
-      // Duplicate the elements in the container
-      this.objs = new Array().concat(container.getObjects());
+		this.p = container._head;
+		this.r = false;
    },
 
    /**
@@ -88,9 +86,9 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     */
    release: function() {
       this.base();
-      this.idx = 0;
       this.c = null;
-      this.objs = null;
+		this.p = null;
+		this.r = false;
    },
 
    /**
@@ -98,8 +96,9 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * iterating over them.  You cannot call this method after you have called {@link #next}.
     */
    reverse: function() {
-      Assert(this.idx == 0, "Cannot reverse Iterator after calling next()");
-      this.objs.reverse();
+      Assert(this.p === this.c.head, "Cannot reverse Iterator after calling next()");
+      this.r = true;
+		this.p = this.c._tail;
    },
 
    /**
@@ -108,11 +107,19 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * @throws {Error} An error if called when no more elements are available
     */
    next: function() {
-      if (this.idx < this.c.size())
-      {
-         return this.objs[this.idx++];
-      }
-      throw new Error("Index out of range");
+		var o = this.p.ptr;
+		while (this.p != null && this.p.ptr.isDestroyed()) {
+			// Skip destroyed objects
+			this.p = (this.r ? this.p.prev : this.p.next);
+			o = this.p.ptr; 
+		}
+
+		this.p = (this.r ? this.p.prev : this.p.next);
+		if (o != null) {
+         return o;
+      } else {
+	      throw new Error("Index out of range");
+		}
    },
 
    /**
@@ -120,7 +127,14 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * @return {Boolean}
     */
    hasNext: function() {
-      return (this.idx < this.c.size());
+		var o = null;
+		if (!this.c.isDestroyed()) {
+			o = this.p;
+			while (o != null && o.ptr != null && o.ptr.isDestroyed()) {
+				o = (this.r ? this.p.prev : this.p.next);
+			}
+		}
+      return o != null;
    }
 
 }, /** @scope Iterator.prototype */{ 
@@ -143,8 +157,11 @@ Engine.initObject("Container", "BaseObject", function() {
 /**
  * @class A container is a logical collection of objects.  A container
  *        is responsible for maintaining the list of objects within it.
- *        When a container is destroyed, all objects within the container
- *        are destroyed with it.
+ *        When a container is destroyed, none of the objects within the container
+ *        are destroyed with it.  If the objects must be destroyed, call
+ *        {@link #cleanUp}.  A container is a doubly linked list of objects
+ *        to all for objects to be added and removed without disrupting the
+ *        structure of the list.
  *
  * @param containerName {String} The name of the container
  * @extends BaseObject
@@ -153,14 +170,16 @@ Engine.initObject("Container", "BaseObject", function() {
  */
 var Container = BaseObject.extend(/** @scope Container.prototype */{
 
-   objects: null,
+   _head: null,
+	_tail: null,
 
    /**
     * @private
     */
    constructor: function(containerName) {
       this.base(containerName || "Container");
-      this.objects = [];
+      this._head = null;
+		this._tail = null;
    },
 
    /**
@@ -168,16 +187,17 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    release: function() {
       this.base();
-      this.objects = null;
+      this._head = null;
+		this._tail = null;
    },
 
    /**
-    * Destroy all objects contained within this object.  Calls the
-    * <tt>destroy()</tt> method on each object, giving them a chance
-    * to perform clean up operations.
+    * Clears the container, however, all of the objects within the container
+    * are not destroyed automatically.  This is to prevent the early clean up of
+    * objects which are being used by a transient container.
     */
    destroy: function() {
-      this.cleanUp();
+      this.clear();
       this.base();
    },
 
@@ -188,8 +208,60 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Number} The number of objects in the container
     */
    size: function() {
-      return this.objects.length;
+		var n = this._head, c = 0;
+		while (n != null) {
+			c++;
+			n = n.next;	
+		}
+      return c;
    },
+
+	/**
+	 * Create a new node for the list
+	 * @param obj {Object} The object
+	 * @private
+	 */
+	_new: function(obj) {
+		var o = {
+			prev: null,
+			next: null,
+			ptr: obj
+		};
+		return o;
+	},
+	
+	/**
+	 * Find the list node at the given index.  No bounds checking
+	 * is performed with this function.
+	 * @param idx {Number} The index where the item exists
+	 * @private
+	 */
+	_find: function(idx) {
+		var n = this._head, c = idx;
+		while ( n != null && c-- > 0) {
+			n = n.next;
+		}
+		return (c > 0 ? null : n);
+	},
+	
+	/**
+	 * Look through the list to find the given object.  If the object is
+	 * found, the  list node is returned.  If no object is found, the method
+	 * returns <code>null</code>.
+	 * 
+	 * @param obj {Object} The object to find
+	 * @private
+	 */
+	_peek: function(obj) {
+		var n = this._head;
+		while (n != null) {
+			if (n.ptr === obj) {
+				return n;
+			}
+			n = n.next;
+		}
+		return null;
+	},
 
    /**
     * Add an object to the container.
@@ -197,23 +269,50 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @param obj {Object} The object to add to the container.
     */
    add: function(obj) {
-      this.objects.push(obj);
+		var n = this._new(obj);
+		if (this._head == null && this._tail == null) {
+			this._head = n;
+			this._tail = n;
+		} else {
+			this._tail.next = n;
+			n.prev = this._tail;
+			this._tail = n;
+		}
+
       if (obj.getId) {
          Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
       }
    },
+	
+	/**
+	 * Add all of the objects in the array to this container.
+	 * 
+	 * @param arr {Array} An array of objects
+	 */
+	addAll: function(arr) {
+		for (var i in arr) {
+			this.add(arr[i]);
+		}
+	},
 
    /**
     * Insert an object into the container at the given index. Asserts if the
     * index is out of bounds for the container.  The index must be greater than
     * or equal to zero, and less than or equal to the size of the container minus one.
+    * The effect is to extend the length of the container by one.
     * 
     * @param index {Number} The index to insert the object at.
     * @param obj {Object} The object to insert into the container
     */
    insert: function(index, obj) {
-      Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
-      this.objects.splice(index, 0, obj);
+      Assert(!(index < 0 || index > this.size()), "Index out of range when inserting object!");
+		var o = this._find(index);
+		var n = this._new(obj);
+		
+		n.prev = o.prev;
+		n.prev.next = n;
+		n.next = o;
+		o.prev = n;
    },
    
    /**
@@ -225,7 +324,12 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Object} The object which was replaced
     */
    replace: function(oldObj, newObj) {
-      return this.replaceAt(EngineSupport.indexOf(this.objects, oldObj), newObj);      
+		var o = this._peek(oldObj), r = null;
+		if (o.ptr != null) {
+			r = o.ptr;
+			o.ptr = newObj;		
+		}
+      return r;      
    },
    
    /**
@@ -239,8 +343,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Object} The object which was replaced
     */
    replaceAt: function(index, obj) {
-      Assert(!(index < 0 || index > this.objects.length - 1), "Index out of range when inserting object!");
-      return this.objects.splice(index, 1, obj);      
+      Assert(!(index < 0 || index > this.size()), "Index out of range when inserting object!");
+		var o = this._find(index);
+		var r = o.ptr;
+		o.ptr = obj;
+      return r;      
    },
    
    /**
@@ -248,12 +355,33 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * not destroyed when it is removed from the container.
     *
     * @param obj {Object} The object to remove from the container.
+    * @return {Object} The object that was removed
     */
    remove: function(obj) {
       if (obj.getId) {
          Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
       }
-      EngineSupport.arrayRemove(this.objects, obj);
+		var o = this._peek(obj);
+		
+		if (o != null) {
+			if (o.next) {
+				o.next.prev = o.prev;
+			}
+			if (o.prev) {
+				o.prev.next = o.next;
+			}
+
+			if (o === this._head) {
+				this._head = o.next;
+			}
+			if (o === this._tail) {
+				this._tail = o.prev;
+			}
+			
+			o.prev = o.next = null;
+			return o.ptr;		
+		}
+		return null;
    },
 
    /**
@@ -266,12 +394,24 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    removeAtIndex: function(idx) {
       Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
 
-      var obj = this.objects[idx];
+		var o = this._find(idx);
+		
+		o.next.prev = o.prev;
+		o.prev.next = o.next;
+		
+		if (o === this._head) {
+			this._head = o.next;
+		}
+		if (o === this.tail) {
+			this._tail = o.prev;
+		}
+		
+		o.prev = o.next = null;
+		var r = o.ptr;
+		
+      Console.log("Removed ", r.getId(), "[", r, "] from ", this.getId(), "[", this, "]");
 
-      Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
-      this.objects.splice(idx, 1);
-
-      return obj;
+      return r;
    },
 
    /**
@@ -286,28 +426,72 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       if (idx < 0 || idx > this.size()) {
          throw new Error("Index out of bounds");
       }
-      
-      return this.objects[idx];
+		return this._find(idx).ptr;
    },
+	
+	/**
+	 * Get an array of all of the objects in this container.
+	 * @return {Array} An array of all of the objects in the container
+	 */
+	getAll: function() {
+		var a = [], i = this.iterator();
+		while (i.hasNext()) {
+			a.push(i.next());
+		}
+		i.destroy();
+		return a;
+	},
 
+	/**
+	 * For each object in the container, the function will be executed.
+	 * The function takes one argument: the object being processed.
+	 * Unless otherwise specified, <code>this</code> refers to the container.
+	 * 
+	 * @param fn {Function} The function to execute for each object
+	 * @param [thisp] {Object} The object to use as <code>this</code> inside the function
+	 */
+	forEach: function(fn, thisp) {
+		var itr = this.iterator();
+		while (itr.hasNext()) {
+			fn.call(thisp || this, itr.next());
+		}
+		itr.destroy();
+	},
+	
+	/**
+	 * Filters the container with the function, returning a new <code>Container</code>
+	 * with the objects that pass the test in the function.  If the object should be
+	 * included in the new <code>Container</code>, the function should return <code>true</code>.
+	 * The function takes one argument: the object being processed.
+	 * Unless otherwise specified, <code>this</code> refers to the container.
+	 * 
+	 * @param fn {Function} The function to execute for each object
+	 * @param [thisp] {Object} The object to use as <code>this</code> inside the function
+	 * @return {Container}
+	 */
+	filter: function(fn, thisp) {
+		var arr = EngineSupport.filter(this.getAll(), fn, thisp || this);
+		var c = Container.create();
+		c.addAll(arr);		
+	},
+	
    /**
     * Remove all objects from the container.  None of the objects are
     * destroyed, only removed from this container.
     */
    clear: function() {
-      this.objects.length = 0;
-      this.objects = [];
+		this._head = null;
+		this._tail = null;
    },
 
    /**
     * Remove and destroy all objects from the container.
     */
    cleanUp: function() {
-      while(this.objects.length > 0)
-      {
-         var o = this.objects.shift();
-         o.destroy();
-      }
+		var a = this.getAll(), h = a.shift();
+		while ((h = a.shift()) != null) {
+			h.destroy();
+		}
       this.clear();
    },
 
@@ -340,10 +524,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Array} The array of filtered objects
     */
    getObjects: function(filterFn) {
+		var a = this.getAll();
       if (filterFn) {
-         return EngineSupport.filter(this.objects, filterFn);
+         return EngineSupport.filter(a, filterFn);
       } else {
-         return this.objects;
+         return a;
       }
    },
 
@@ -359,7 +544,18 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    sort: function(fn) {
       Console.log("Sorting ", this.getName(), "[" + this.getId() + "]");
-      this.objects.sort(fn);
+		var a = this.getAll().sort(fn);
+		
+		// Relink
+		this._head = this._new(a[0]);
+		var p=this._head;
+		for (var i = 1; i < a.length; i++) {
+			var n = this._new(a[i]);
+			p.next = n;
+			n.prev = p;
+			p = n;
+		}
+		this._tail = p;
    },
 
    /**
@@ -370,7 +566,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       var self = this;
       var prop = this.base(self);
       return $.extend(prop, {
-         "Contains"  : [function() { return self.objects.length; },
+         "Contains"  : [function() { return self.size(); },
                         null, false]
       });
    },
@@ -396,7 +592,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       xml += ">\n";
 
       // Dump children
-      for (var o in this.objects) {
+      for (var o in this.getAll()) {
          xml += this.objects[o].toString(indent + "   ");
       }
 
