@@ -44,7 +44,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
 	 *         
 	 * @param name {String} The name of the object
 	 * @param worldBoundary {Rectangle2D} The physical world boundary
-	 * @param [gravity] {Vector2D} The world's gravity vectory. default: [0, 300]
+	 * @param [gravity] {Vector2D} The world's gravity vector. default: [0, 300]
 	 * @extends BaseObject
 	 * @constructor
 	 * @description Create a physical world for Box2dJS
