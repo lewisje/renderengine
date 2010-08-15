@@ -62,7 +62,7 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     */
    constructor: function() {
       this.idx = Engine.NodeIndex++;
-      this.objects = [];
+      this.objects = Container.create();
    },
 
    /**
@@ -78,7 +78,7 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     * @return {BaseObject[]} Objects in the node
     */
    getObjects: function() {
-      return this.objects;
+      return this.objects.getAll();
    },
 
    /**
@@ -87,7 +87,7 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     * @param obj {BaseObject} The object to add to this node.
     */
    addObject: function(objId) {
-      this.objects.push(objId);
+      this.objects.add(objId);
    },
 
    /**
@@ -96,7 +96,7 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     * @param obj {BaseObject} The object to remove from this node
     */
    removeObject: function(obj) {
-      EngineSupport.arrayRemove(this.objects, obj);
+      this.objects.remove(obj);
    }
 }, /** @scope SpatialNode.prototype */{ 
 
@@ -136,6 +136,8 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
    width: 0,
 
    height: 0,
+	
+	pcl: null,
 
    /**
     * @private
@@ -144,6 +146,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
       this.base(name || "SpatialContainer");
       this.width = width;
       this.height = height;
+		this.pcl = Container.create();
    },
 
    /**
@@ -154,6 +157,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
       this.root = null;
       this.width = 0;
       this.height = 0;
+		this.pcl = null;
    },
 
    /**
@@ -194,18 +198,18 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     * within the defined sub-space of the container.
     *
     * @param point {Point2D} The point to build with
-    * @return {HashContainer} The PCL
+    * @return {Container} The PCL
     */
    getPCL: function(point) {
-      return new HashContainer();
+      return this.pcl;
    },
 
    /**
     * Returns all objects within the spatial container.
-    * @return {Array} An array of all objects in the container
+    * @return {Container} A container of all objects in the container
     */
    getObjects: function() {
-      return [];
+      return Container.create();
    },
    
    /**
@@ -214,7 +218,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     * @return {Array} An array of objects in the container, filtered by class
     */
    getObjectsOfType: function(clazz) {
-      return EngineSupport.filter(this.getObjects(), function(obj) {
+      return this.getObjects().filter(function(obj) {
          return clazz.isInstance(obj);
       }, this);
    }

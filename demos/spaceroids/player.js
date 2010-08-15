@@ -484,9 +484,10 @@ var SpaceroidsPlayer = Object2D.extend({
          this.destroy();
 
          var rocks = Spaceroids.collisionModel.getObjectsOfType(SpaceroidsRock);
-         EngineSupport.forEach(rocks, function(r) {
+         rocks.forEach(function(r) {
             r.kill();
          });
+			rocks.destroy();
 
          self.nuking = false;
       });

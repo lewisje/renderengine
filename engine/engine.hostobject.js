@@ -111,11 +111,13 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    update: function(renderContext, time) {
 
       // Run the components
-      var components = this.getObjects();
+      var components = this.iterator();
 
-      for (var c in components) {
-         components[c].execute(renderContext, time);
+      while (components.hasNext()) {
+         components.next().execute(renderContext, time);
       }
+
+		components.destroy();
 
       this.base(renderContext, time);
    },
