@@ -69,6 +69,10 @@ The `Engine.initObject()` method is as follows:
 
 The `Engine.initObject()` method should be preceded by any include calls.  The includes should only be the immediate objects that the class depends upon.  You don't need to include dependencies of dependent classes.  That should be handled automatically by each included class file.
 
+== Object Resolution ==
+
+After an object's dependencies have been resolved and the class can be initialized, it is considered "resolved".  At this point, if a class depended on other classes to initialize properly, it is safe to make calls to those objects.  If your class needs to perform such actions, it should implement the `resolved()` class method (not instance method) which will be called when the class has been resolved.  In this method, it is safe to call upon the dependent classes because they _will assuredly exist_.
+
 == Circular References ==
 
 Two types of circular references can be resolved for you:
