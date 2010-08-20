@@ -22,6 +22,7 @@
 Engine.include("/physics/common/math/b2Math.js");
 Engine.include("/physics/common/math/b2Vec2.js");
 
+Engine.include("/physics/collision/ClipVertex.js");
 
 Engine.initObject("b2Collision", null, function() {
    

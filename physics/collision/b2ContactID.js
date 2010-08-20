@@ -27,7 +27,7 @@ Engine.initObject("b2ContactID", null, function() {
    var b2ContactID = Base.extend({
 
       features: null,
-      _key: 0
+      _key: 0,
 
       constructor: function() {
          // initialize instance variables for references

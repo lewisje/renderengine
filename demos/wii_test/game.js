@@ -37,6 +37,9 @@ Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
+Engine.include("/physics/physics.simulation.js")
+
+Engine.include("/physics/collision/shapes/b2BoxDef.js");
 
 // Load game objects
 Game.load("/wiihost.js");
@@ -69,6 +72,8 @@ Engine.initObject("WiiTest", "Game", function(){
       
       // The collision model
       cModel: null,
+		
+		simulation: null,
       
       /**
        * Called to set up the game, download any resources, and initialize
@@ -120,13 +125,13 @@ Engine.initObject("WiiTest", "Game", function(){
          this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-			var ctx = EngineSupport.getNumericParam("context", 1);
-			if (ctx == 1) {
-		 		this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
-		 	} else {
-				this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
-			}
+			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
 	      this.renderContext.setBackgroundColor("#FFFFFF");
+			this.simulation = Simulation.create("simulation", this.fieldBox);
+
+			this.setupWorld();
+			
+			this.renderContext.add(this.simulation);
 
 			// Address the context element directly via jQuery
          this.renderContext.jQ().css({
@@ -143,6 +148,7 @@ Engine.initObject("WiiTest", "Game", function(){
 
          // Add the first ball
          var ball = WiiBall.create();
+			ball.setSimulation(this.simulation);
          this.getRenderContext().add(ball);
          
          // Add the player object
@@ -150,6 +156,16 @@ Engine.initObject("WiiTest", "Game", function(){
          this.getRenderContext().add(player);
       },
       
+		setupWorld: function() {
+			var groundSd = new b2BoxDef();
+			groundSd.extents.Set(this.fieldBox.get().w, 30);
+			groundSd.restitution = 0.2;
+			var groundBd = new b2BodyDef();
+			groundBd.AddShape(groundSd);
+			groundBd.position.Set(0, this.fieldBox.get().h);
+			return this.simulation.addBody(groundBd)
+		},
+		
       /**
        * Return a reference to the render context
        */

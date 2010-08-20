@@ -30,6 +30,7 @@
  *
  */
 
+Engine.include("/physics/common/b2Settings.js");
 Engine.include("/physics/collision/b2AABB.js");
 Engine.include("/physics/dynamics/b2World.js");
 
@@ -59,19 +60,20 @@ Engine.initObject("Simulation", "BaseObject", function() {
 
 		constructor: function(name, worldBoundary, gravity) {
 			this.base(name);
-			this.gravity = gravity || Vector2D.create(0, 300);
+			this.gravity = gravity || Vector2D.create(0, 450);
 			this.worldAABB = new b2AABB();
 			
 			this.worldBoundary = worldBoundary;
 			var wb = worldBoundary.get();
-			this.worldAABB.minVertex.Set(wb.x, wb.y);
-			this.worldAABB.maxVertex.Set(wb.x + w, wb.y + h);
+			this.worldAABB.minVertex.Set(-1000, -1000);
+			this.worldAABB.maxVertex.Set(1000, 1000);
 			this.doSleep = true;
 
-			var gravity = new b2Vec2(this.gravity.x, this.gravity.y);
+			var g = this.gravity.get();
+			var grav = new b2Vec2(g.x, g.y);
 
 			// Create the world
-			this.world = new b2World(this.worldAABB, gravity, this.doSleep);		
+			this.world = new b2World(this.worldAABB, grav, this.doSleep);		
 		},
 		
 		destroy: function() {
@@ -89,7 +91,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
 		},
 		
 		update: function(renderContext, time) {
-			// step the world	
+			this.world.Step(1/Engine.getFPS(), 1);	
 		},
 		
 		/**
@@ -109,7 +111,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
 		 * @private
 		 */
 		addBody: function(b2jsBody) {
-			this.world.CreateBody(b2jsBody);
+			return this.world.CreateBody(b2jsBody);
 		},
 		
 		/**
@@ -120,7 +122,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
 		 * @private
 		 */
 		addJoint: function(b2jsJoint) {
-			this.world.CreateJoint(b2jsJoint);
+			return this.world.CreateJoint(b2jsJoint);
 		},
 		
 		/**
@@ -144,6 +146,12 @@ Engine.initObject("Simulation", "BaseObject", function() {
 		removeJoint: function(b2jsJoint) {
 			this.world.DestroyJoint(b2jsJoint);
 		}		
+		
+	}, {
+		
+		getClassName: function() {
+			return "Simulation";
+		}
 		
 	});
 

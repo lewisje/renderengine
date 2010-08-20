@@ -21,6 +21,7 @@
 
 Engine.include("/physics/common/b2Settings.js");
 Engine.include("/physics/collision/b2Pair.js");
+Engine.include("/physics/collision/b2BufferedPair.js");
 
 
 Engine.initObject("b2PairManager", null, function() {

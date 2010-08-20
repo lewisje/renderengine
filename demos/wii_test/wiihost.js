@@ -148,12 +148,13 @@ Engine.initObject("WiiHost", "Object2D", function() {
       onWiimoteButtonA: function(c, state) {
          if (c == 0 && state) {
             if (this.overBall) {
-               this.overBall.clicked();
+               this.overBall.clicked(this.getPosition());
                return;
             } else {
                // Create another ball
                var b = WiiBall.create();
-               WiiTest.getRenderContext().add(b);
+ 					b.setSimulation(WiiTest.simulation);
+              WiiTest.getRenderContext().add(b);
             }
          }
       },

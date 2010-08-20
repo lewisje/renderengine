@@ -494,11 +494,16 @@ Engine.initObject("b2PolyShape", "b2Shape", function() {
                   this.m_position.y + (this.m_R.col1.y * this.m_coreVertices[bestIndex].x + this.m_R.col2.y * this.m_coreVertices[bestIndex].y));
 
       }
-      
+     
    }, {
+		
+		resolved: function() {
+	      b2PolyShape.tempVec = new b2Vec2();
+	      b2PolyShape.tAbsR = new b2Mat22();
+		},
       
-      tempVec: new b2Vec2(),
-      tAbsR: new b2Mat22()
+      tempVec: null,
+      tAbsR: null
 
    });
    

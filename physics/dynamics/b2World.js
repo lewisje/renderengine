@@ -25,8 +25,11 @@ Engine.include("/physics/collision/b2BroadPhase.js");
 Engine.include("/physics/collision/b2PairCallback.js");
 
 Engine.include("/physics/dynamics/b2Body.js");
+Engine.include("/physics/dynamics/b2BodyDef.js");
 Engine.include("/physics/dynamics/b2CollisionFilter.js");
 Engine.include("/physics/dynamics/b2ContactManager.js");
+Engine.include("/physics/dynamics/b2TimeStep.js");
+Engine.include("/physics/dynamics/b2Island.js");
 Engine.include("/physics/dynamics/contacts/b2Contact.js");
 Engine.include("/physics/dynamics/contacts/b2NullContact.js");
 

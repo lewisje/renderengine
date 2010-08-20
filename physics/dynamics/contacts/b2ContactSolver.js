@@ -23,6 +23,8 @@ Engine.include("/physics/common/b2Settings.js");
 Engine.include("/physics/common/math/b2Math.js");
 Engine.include("/physics/common/math/b2Vec2.js");
 
+Engine.include("/physics/dynamics/contacts/b2ContactConstraint.js");
+
 Engine.include("/physics/dynamics/b2World.js");
 
 

@@ -200,7 +200,11 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
          PooledObject.poolSize--;
          Engine.addMetric("poolLoad", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
          var obj = PooledObject.objectPool[this.getClassName()].shift();
-         obj.constructor.apply(obj, arguments);
+			try {
+	         obj.constructor.apply(obj, arguments);
+			} catch (pEx) {
+				Console.error("Error constructing " + this.getClassName() + " from pool due to: " + pEx.message, pEx);
+			}
 
          /* pragma:DEBUG_START */ 
          PooledObject.classPool[this.getClassName()][1]++;
@@ -221,10 +225,14 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
          }
          /* pragma:DEBUG_END */
          
-         // TODO: Any more than 15 arguments and construction will fail!
-         return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
-                         arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
-                         arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
+			try {
+	         // TODO: Any more than 15 arguments and construction will fail!
+	         return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
+	                         arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+	                         arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
+			} catch (nEx) {
+				Console.error("Error constructing " + this.getClassName() + " due to: " + nEx.message, nEx);
+			}
       }
    },
 

@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1216 $
+ * @version: $Revision: 1271 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1485,7 +1485,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    checkNSDeps: function(objName) {
       var objHr = objName.split(".");
 
-      if (objHr.length == 0) {
+      if (objHr.length == 1) {
          return true;
       }
 
@@ -1531,17 +1531,19 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
          var deps = Linker.dependencyList[d].deps;
          var resolved = [];
          var miss = false;
-         for (var dep in deps) {
-            if (deps[dep] != null && window[deps[dep]] == null) {
-               miss = true;
-            } else {
-               resolved.push(deps[dep]);
-            }
-         }
-
-         for (var x in resolved) {
-            EngineSupport.arrayRemove(Linker.dependencyList[d].deps, resolved[x]);
-         }
+			if (deps.length > 0) {
+	         for (var dep in deps) {
+	            if (deps[dep] != null && window[deps[dep]] == null) {
+	               miss = true;
+	            } else {
+	               resolved.push(deps[dep]);
+	            }
+	         }
+	
+	         for (var x in resolved) {
+	            EngineSupport.arrayRemove(Linker.dependencyList[d].deps, resolved[x]);
+	         }
+			}
 
          if (!miss && Linker.checkNSDeps(d)) {
             // We can initialize it now
@@ -1557,7 +1559,11 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
             // After it has been initialized, check to see if it has the
             // resolved() class method
             if (parentObj[d].resolved) {
-               parentObj[d].resolved();
+					try {
+	               parentObj[d].resolved();
+					} catch (rEx) {
+						Console.error("Error calling " + d + ".resolved() due to: " + rEx.message, rEx);
+					}
             }
          }
       }
@@ -1817,7 +1823,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       }
       
    },
-
+	
    /**
     * Check the dependency list for any unresolved dependencies.  Anything that hasn't
     * been resolved will be dumped to the console as an error.
