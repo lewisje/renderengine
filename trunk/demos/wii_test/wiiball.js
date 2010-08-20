@@ -65,8 +65,8 @@ Engine.initObject("WiiBall", "Object2D", function() {
 
          // Add components to move and draw the player
          this.add(SpriteComponent.create("draw"));
-			this.add(CircleBodyComponent.create("physics", 27));
-			this.add(ColliderComponent.create("collide", WiiTest.cModel));
+         this.add(CircleBodyComponent.create("physics", 27));
+         this.add(ColliderComponent.create("collide", WiiTest.cModel));
          
          // The sprites
          this.sprites = [];
@@ -77,10 +77,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.setPosition(Point2D.create(25, 15));
       },
 
-		setSimulation: function(simulation) {
-			this.base(simulation);
-			this.getComponent("physics").setSimulation(simulation);
-		},
+      setSimulation: function(simulation) {
+         this.base(simulation);
+         this.getComponent("physics").setSimulation(simulation);
+      },
 
       /**
        * Update the ball within the rendering context.  This draws
@@ -147,8 +147,8 @@ Engine.initObject("WiiBall", "Object2D", function() {
       clicked: function() {
          var xD = (Math2.random() * 100) < 50 ? -1 : 1;
          var v = 1000 + (Math2.random() * 5000) * xD;
-			var p = this.getPosition().get();
-			this.getComponent("physics").applyForce(Vector2D.create(1000,200000), Vector2D.create(v, p.y));
+         var p = this.getPosition().get();
+         this.getComponent("physics").applyForce(Vector2D.create(xD * 2000000,-25000000), Vector2D.create(p.x, p.y));
       },
 
       /**
