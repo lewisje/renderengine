@@ -53,7 +53,7 @@ Engine.initObject("b2Shape", null, function() {
       m_proxyId: 0,
       m_categoryBits: 0,
       m_maskBits: 0,
-      m_groupIndex: 0
+      m_groupIndex: 0,
 
       constructor: function(def, body) {
          // initialize instance variables for references

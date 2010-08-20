@@ -153,14 +153,22 @@ Engine.initObject("b2Math", null, function() {
          return result;
       },
       
-      tempVec2: new b2Vec2(),
-      tempVec3: new b2Vec2(),
-      tempVec4: new b2Vec2(),
-      tempVec5: new b2Vec2(),
-      tempMat: new b2Mat22()
+      tempVec2: null,
+      tempVec3: null,
+      tempVec4: null,
+      tempVec5: null,
+      tempMat: null,
+
+		resolved: function() {
+			b2Math.tempVec2 = new b2Vec2();
+		   b2Math.tempVec3 = new b2Vec2();
+		   b2Math.tempVec4 = new b2Vec2();
+		   b2Math.tempVec5 = new b2Vec2();
+		   b2Math.tempMat = new b2Mat22();
+		}
       
    });
-   
+	
    return b2Math;
    
 });

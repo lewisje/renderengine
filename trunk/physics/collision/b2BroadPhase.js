@@ -25,6 +25,7 @@ Engine.include("/physics/common/math/b2Math.js");
 Engine.include("/physics/common/math/b2Vec2.js");
 Engine.include("/physics/collision/b2PairManager.js");
 Engine.include("/physics/collision/b2Bound.js");
+Engine.include("/physics/collision/b2BoundValues.js");
 Engine.include("/physics/collision/b2Proxy.js");
 
 
@@ -875,14 +876,18 @@ Engine.initObject("b2BroadPhase", null, function() {
          {
             ++this.m_timeStamp;
          }
-      },
-      
-      
+      }      
+		
    }, {
 
       s_validate: false,
-      b2_invalid: b2Settings.USHRT_MAX,
-      b2_nullEdge: b2Settings.USHRT_MAX,
+      b2_invalid: null,
+      b2_nullEdge: null,
+
+      resolved: function() {
+	      b2BroadPhase.b2_invalid = b2Settings.USHRT_MAX;
+	      b2BroadPhase.b2_nullEdge = b2Settings.USHRT_MAX;
+		},
 
       BinarySearch: function(bounds, count, value) {
          var low = 0;

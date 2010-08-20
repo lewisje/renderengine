@@ -29,6 +29,7 @@ Engine.include("/physics/collision/b2OBB.js");
 Engine.include("/physics/collision/b2AABB.js");
 
 Engine.include("/physics/collision/shapes/b2Shape.js");
+Engine.include("/physics/collision/shapes/b2MassData.js");
 
 
 Engine.initObject("b2Body", null, function() {
@@ -42,9 +43,9 @@ Engine.initObject("b2Body", null, function() {
       sMat0: null,
       m_flags: 0,
 
-      m_position: new b2Vec2(),
+      m_position: null,
       m_rotation: null,
-      m_R: new b2Mat22(0),
+      m_R: null,
 
       // Conservative advancement data.
       m_position0: null,

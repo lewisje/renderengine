@@ -23,7 +23,7 @@ Engine.include("/physics/common/b2Settings.js");
 Engine.include("/physics/common/math/b2Math.js");
 Engine.include("/physics/common/math/b2Vec2.js");
 
-Engine.include("/physics/collision/b2Shape.js");
+Engine.include("/physics/collision/shapes/b2Shape.js");
 
 
 Engine.initObject("b2ShapeDef", null, function () {

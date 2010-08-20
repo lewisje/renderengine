@@ -45,10 +45,12 @@ Engine.initObject("b2CollisionFilter", null, function() {
       
    }, {
       
-      b2_defaultFilter: new b2CollisionFilter()
+      b2_defaultFilter: null
       
    });
    
+	b2CollisionFilter.b2_defaultFilter = new b2CollisionFilter();
+	
    return b2CollisionFilter;
 
 });

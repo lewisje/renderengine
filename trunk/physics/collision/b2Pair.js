@@ -75,11 +75,18 @@ Engine.initObject("b2Pair", null, function() {
       }
       
    }, {
+
+		resolved: function() {
+	      b2Pair.b2_nullPair = b2Settings.USHRT_MAX;
+	      b2Pair.b2_nullProxy = b2Settings.USHRT_MAX;
+	      b2Pair.b2_tableCapacity = b2Settings.b2_maxPairs;
+	      b2Pair.b2_tableMask = b2Pair.b2_tableCapacity - 1;
+		},
       
-      b2_nullPair: b2Settings.USHRT_MAX,
-      b2_nullProxy: b2Settings.USHRT_MAX,
-      b2_tableCapacity: b2Settings.b2_maxPairs,
-      b2_tableMask: b2Pair.b2_tableCapacity - 1,
+      b2_nullPair: 0,
+      b2_nullProxy: 0,
+      b2_tableCapacity: 0,
+      b2_tableMask: 0,
       e_pairBuffered: 0x0001,
       e_pairRemoved: 0x0002,
       e_pairFinal: 0x0004
