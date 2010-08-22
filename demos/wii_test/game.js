@@ -147,9 +147,7 @@ Engine.initObject("WiiTest", "Game", function(){
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
 
          // Add the first ball
-         var ball = WiiBall.create();
-         ball.setSimulation(this.simulation);
-         this.getRenderContext().add(ball);
+			this.createBall();
          
          // Add the player object
          var player = WiiHost.create();
@@ -179,6 +177,13 @@ Engine.initObject("WiiTest", "Game", function(){
          rightBd.position.Set(this.fieldBox.get().w - 10, 100);
          this.simulation.addBody(rightBd);
       },
+		
+		createBall: function() {
+         var ball = WiiBall.create();
+         ball.setSimulation(this.simulation);
+         this.getRenderContext().add(ball);
+			ball.simulate();
+		},
       
       /**
        * Return a reference to the render context

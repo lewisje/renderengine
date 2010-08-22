@@ -63,7 +63,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.base("WiiBall");
          this.sprite = null;
 
-         // Add components to move and draw the player
+         // Add components to move, draw, and collide with the player
          this.add(SpriteComponent.create("draw"));
          this.add(CircleBodyComponent.create("physics", 27));
          this.add(ColliderComponent.create("collide", WiiTest.cModel));
@@ -76,12 +76,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
 
          this.setPosition(Point2D.create(25, 15));
       },
-
-      setSimulation: function(simulation) {
-         this.base(simulation);
-         this.getComponent("physics").setSimulation(simulation);
-      },
-
+		
       /**
        * Update the ball within the rendering context.  This draws
        * the shape to the context, after updating the transform of the
@@ -95,6 +90,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.base(renderContext, time);
          renderContext.popTransform();
       },
+
+		simulate: function() {
+			this.getComponent("physics").startSimulation();
+		},
 
       /**
        * Set the sprite to render with on the draw component.
@@ -113,6 +112,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
       getPosition: function() {
          return this.getComponent("physics").getPosition();
       },
+		
+		getRotation: function() {
+			return this.getComponent("physics").getRotation();
+		},
 
       /**
        * Get the render position of the ball
