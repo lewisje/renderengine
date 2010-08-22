@@ -472,7 +472,8 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 	filter: function(fn, thisp) {
 		var arr = EngineSupport.filter(this.getAll(), fn, thisp || this);
 		var c = Container.create();
-		c.addAll(arr);		
+		c.addAll(arr);
+		return c;		
 	},
 	
    /**
