@@ -152,9 +152,7 @@ Engine.initObject("WiiHost", "Object2D", function() {
                return;
             } else {
                // Create another ball
-               var b = WiiBall.create();
- 					b.setSimulation(WiiTest.simulation);
-              WiiTest.getRenderContext().add(b);
+					WiiTest.createBall();
             }
          }
       },

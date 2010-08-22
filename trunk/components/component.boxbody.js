@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * CircleBodyComponent
+ * BoxBodyComponent
  *
- * @fileoverview A physical circular body component for use in a {@link Simulation}.
+ * @fileoverview A physical rectangular body component for use in a {@link Simulation}.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -33,64 +33,67 @@
 
 // Includes
 Engine.include("/components/component.basebody.js");
-Engine.include("/physics/collision/shapes/b2CircleDef.js");
+Engine.include("/physics/collision/shapes/b2BoxDef.js");
 
-Engine.initObject("CircleBodyComponent", "BaseBodyComponent", function() {
+Engine.initObject("BoxBodyComponent", "BaseBodyComponent", function() {
 
 /**
- * @class An extension of the {@link BaseBodyComponent} which creates a circular
+ * @class An extension of the {@link BaseBodyComponent} which creates a rectangular
  * 		 physical body.  
  *
  * @param name {String} Name of the component
- * @param radius {Number} The radius of the circle
+ * @param extents {Point2D} The extents of the body
  *
  * @extends BaseBodyComponent
  * @constructor
- * @description A circular physical body component.
+ * @description A rectangular physical body component.
  */
-var CircleBodyComponent = BaseBodyComponent.extend(/** @scope CircleBodyComponent.prototype */{
+var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prototype */{
 
-	radius: 0,
+	extents: null,
 
 	/**
 	 * @private
 	 */
-	constructor: function(name, radius) {
-		this.base(name, new b2CircleDef());
-		this.radius = radius;
-		this.getShapeDef().radius = radius;
+	constructor: function(name, extents) {
+		this.base(name, new b2BoxDef());
+		this.extents = extents;
+		var e = extents.get();
+		this.getShapeDef().extents.set(e.x, e.y);
 	},
 	
 	/**
-	 * Set the radius of the circle's body.
+	 * Set the extents of the box's body.
 	 * 
-	 * @param radius {Number} The radius of the body
+	 * @param extents {Point2D} The extents of the body
 	 */
-	setRadius: function(radius) {
-		this.getShapeDef().radius = radius;
+	setExtents: function(extents) {
+		this.extents = extents;
+		var e = extents.get();
+		this.getShapeDef().extents.set(e.x, e.y);;
 	},
 	
 	/**
-	 * Get the radius of the circle's body.
-	 * @return {Number}
+	 * Get the extents of the box's body.
+	 * @return {Point2D}
 	 */
-	getRadius: function() {
-		return this.radius;
+	getExtents: function() {
+		return this.extents;
 	}
 
-}, { /** @scope CircleBodyComponent.prototype */
+}, { /** @scope BoxBodyComponent.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "CircleBodyComponent"
+    * @return {String} "BoxBodyComponent"
     */
    getClassName: function() {
-      return "CircleBodyComponent";
+      return "BoxBodyComponent";
    }
    
 });
 
-return CircleBodyComponent;
+return BoxBodyComponent;
 
 });
