@@ -47,6 +47,16 @@ Get Tomcat @
 http://tomcat.apache.org
 
 
+Using the Jibble Web Server for testing & development
+---------------------------------------------------------
+
+The distribution comes with the Jibble Web Server which is a very small Java web server.  It doesn't support request parameters, so it is a bit limited.  It will, however, give you a quick and easy way to test your game development.  See the file "run.bat" in the root folder.  You will need the JRE to use the web server.
+
+In the "run.bat" file, you will notice two arguments to run the server.  The first is the path, which you can leave at "." (the root folder) and the second is the port to run the server on (default: 8010).  After starting the server, you can go to your web browser and try:
+"http://localhost:8010/demos/spaceroids/index.html"
+
+The web server is running properly if you see the Asteroids demo start up.
+
 
 Supported Browsers
 -------------------------
