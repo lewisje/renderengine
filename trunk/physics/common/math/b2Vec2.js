@@ -142,7 +142,7 @@ Engine.initObject("b2Vec2", null, function() {
       IsValid: function()
       {
          return b2Math.b2IsValid(this.x) && b2Math.b2IsValid(this.y);
-      },
+      }
       
       
    }, {

@@ -323,7 +323,7 @@ Engine.initObject("b2Island", null, function() {
       AddJoint: function(joint) {
          //b2Settings.b2Assert(this.m_jointCount < this.m_jointCapacity);
          this.m_joints[this.m_jointCount++] = joint;
-      },
+      }
       
    }, {
       

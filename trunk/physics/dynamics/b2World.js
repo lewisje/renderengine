@@ -530,7 +530,7 @@ Engine.initObject("b2World", null, function() {
    }, {
       
       s_enablePositionCorrection: 1,
-      s_enableWarmStarting: 1,
+      s_enableWarmStarting: 1
       
    });
    
