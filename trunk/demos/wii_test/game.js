@@ -125,7 +125,14 @@ Engine.initObject("WiiTest", "Game", function(){
          this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-         this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+         
+         // Allow the user to override the context
+         if (EngineSupport.getStringParam("context", "canvas") == "dom") {
+            this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+         } else {
+            this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+         }
+         
          this.renderContext.setBackgroundColor("#FFFFFF");
          this.simulation = Simulation.create("simulation", this.fieldBox);
 
@@ -147,7 +154,7 @@ Engine.initObject("WiiTest", "Game", function(){
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
 
          // Add the first ball
-			this.createBall();
+         this.createBall();
          
          // Add the player object
          var player = WiiHost.create();
@@ -177,13 +184,13 @@ Engine.initObject("WiiTest", "Game", function(){
          rightBd.position.Set(this.fieldBox.get().w - 10, 100);
          this.simulation.addBody(rightBd);
       },
-		
-		createBall: function() {
+      
+      createBall: function() {
          var ball = WiiBall.create();
          ball.setSimulation(this.simulation);
          this.getRenderContext().add(ball);
-			ball.simulate();
-		},
+         ball.simulate();
+      },
       
       /**
        * Return a reference to the render context
