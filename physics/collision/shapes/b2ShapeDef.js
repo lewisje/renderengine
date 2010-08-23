@@ -107,9 +107,7 @@ Engine.initObject("b2ShapeDef", null, function () {
             massData.I = 0.0;
             break;
          }
-      },
-
-      
+      }
       
    });
 

@@ -40,7 +40,7 @@ Engine.initObject("b2CollisionFilter", null, function() {
 
          var collide = (shape1.m_maskBits & shape2.m_categoryBits) != 0 && (shape1.m_categoryBits & shape2.m_maskBits) != 0;
          return collide;
-      },
+      }
       
       
    }, {
@@ -49,8 +49,8 @@ Engine.initObject("b2CollisionFilter", null, function() {
       
    });
    
-	b2CollisionFilter.b2_defaultFilter = new b2CollisionFilter();
-	
+   b2CollisionFilter.b2_defaultFilter = new b2CollisionFilter();
+   
    return b2CollisionFilter;
 
 });

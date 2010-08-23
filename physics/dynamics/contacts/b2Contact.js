@@ -110,7 +110,7 @@ Engine.initObject("b2Contact", null, function() {
       },
 
       Evaluate: function() {
-      },
+      }
       
       
    }, {
