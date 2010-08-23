@@ -50,13 +50,14 @@ Engine.initObject("Simulation", "BaseObject", function() {
     * @constructor
     * @description Create a physical world for Box2dJS
     */
-   var Simulation = BaseObject.extend({
+   var Simulation = BaseObject.extend(/** @scope Simulation.prototype */{
 
       worldAABB: null,
       world: null,
       gravity: null,
       doSleep: true,
       worldBoundary: null,
+      integrations: 0,
 
       constructor: function(name, worldBoundary, gravity) {
          this.base(name);
@@ -68,6 +69,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
          this.worldAABB.minVertex.Set(-1000, -1000);
          this.worldAABB.maxVertex.Set(1000, 1000);
          this.doSleep = true;
+         this.integrations = Simulation.DEFAULT_INTEGRATIONS;
 
          var g = this.gravity.get();
          var grav = new b2Vec2(g.x, g.y);
@@ -91,7 +93,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
       },
       
       update: function(renderContext, time) {
-         this.world.Step(1/Engine.getFPS(), 10);   
+         this.world.Step(1/Engine.getFPS(), this.integrations);   
       },
       
       /**
@@ -145,13 +147,40 @@ Engine.initObject("Simulation", "BaseObject", function() {
        */
       removeJoint: function(b2jsJoint) {
          this.world.DestroyJoint(b2jsJoint);
-      }     
+      },
       
-   }, {
+      /**
+       * Set the number of integrations per frame.  A higher number will result
+       * in more accurate collisions, but will result in slower performance.
+       * 
+       * @param integrations {Number} The number of integrations per frame
+       */
+      setIntegrations: function(integrations) {
+         this.integrations = integrations || Simulation.DEFAULT_INTEGRATIONS;   
+      },
       
+      /**
+       * Get the number of integrations per frame.
+       * @return {Number}
+       */
+      getIntegrations: function() {
+         return this.integrations;   
+      }
+      
+   }, /** @scope Simulation.prototype */{
+      
+      /**
+       * Get the class name as a string.
+       * @return {String} "Simulation"
+       */
       getClassName: function() {
          return "Simulation";
-      }
+      },
+      
+      /**
+       * The default number of integrations per frame
+       */
+      DEFAULT_INTEGRATIONS: 10
       
    });
 

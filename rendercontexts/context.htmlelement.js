@@ -204,7 +204,6 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
          position: "absolute"
       });
       this.jQ().append(d);
-      return d;
    },
 
    /**
@@ -226,7 +225,6 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
          position: "absolute"
       });
       this.jQ().append(d);
-      return d;
    },
 
    /**
@@ -254,7 +252,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       // The reference object is a host object it
       // will give us a reference to the HTML element which we can then
       // just modify the displayed image for.
-      if (ref && (ref instanceof HostObject) && ref.jQ()) {
+      if (ref && ref.jQ()) {
          ref.jQ().css({
             top: this.cursorPos.y,
             left: this.cursorPos.x,
@@ -284,7 +282,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       // The reference object is a host object it
       // will give us a reference to the HTML element which we can then
       // just modify the displayed image for.
-      if (ref && (ref instanceof HostObject) && ref.jQ()) {
+      if (ref && ref.jQ()) {
          ref.jQ().css({
             top: rD.t,
             left: rD.l,
@@ -312,10 +310,11 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    drawText: function(point, text, ref) {
       this.base(point, text);
+
       // The reference object is a host object it
       // will give us a reference to the HTML element which we can then
-      // just modify the displayed image for.
-      if (ref && (ref instanceof HostObject) && ref.jQ()) {
+      // just modify the displayed text for.
+      if (ref && ref.jQ()) {
          ref.jQ().css({
             font: this.getNormalizedFont(),
             color: this.getFillStyle(),

@@ -91,8 +91,8 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * the surface from its parent container.
     */
    destroy: function() {
-		// Destroy all of the objects
-		this.cleanUp();
+      // Destroy all of the objects
+      this.cleanUp();
       this.base();
       this.surface = null;
    },
@@ -306,7 +306,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
          this.renderObject(objs.next(), time);
       }
 
-		objs.destroy();	
+      objs.destroy();   
 
       // Restore the world transform
       this.popTransform();
@@ -365,13 +365,10 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @static
     */
    sortFn: function(obj1, obj2) {
-      if (obj1 instanceof HostObject ||
-          obj2 instanceof HostObject)
-      {
-         return 0;
+      if (obj1.getZIndex && obj2.getZIndex) {
+         return obj1.getZIndex() - obj2.getZIndex();
       }
-
-      return obj1.getZIndex() - obj2.getZIndex();
+      return 0
    },
 
    /**
