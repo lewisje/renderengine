@@ -474,7 +474,6 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                "storage": (typeof Storage !== "undefined" ? {
                   "local" : (typeof localStorage !== "undefined"),
                   "session" : (typeof sessionStorage !== "undefined"),
-                  "global" : (typeof globalStorage !== "undefined"),
                   "database": (typeof indexedDB !== "undefined")
                } : null),
                "geo": (typeof navigator.geolocation !== "undefined")
@@ -485,8 +484,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
                "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
                "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1,
-					"viewWidth": window.innerWidth,
-					"viewHeight" : window.innerHeight
+               "viewWidth": window.innerWidth,
+               "viewHeight" : window.innerHeight
             });
          });
       }
