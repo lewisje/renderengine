@@ -30,6 +30,7 @@ These engines require you to pay a fee to use them.  Either a cost to get the en
 ==Information==
 The following is an expanding list of tutorials and articles which cover topics that may be of use when you are developing a game.  Some of these may even fix an issue you are having while developing your game with _The Render Engine_.
 
+  * [http://html5gamer.com/ HTML5 Gamer]
   * [http://metalab.at/wiki/JavaScript_game_development MetaLab]
   * [http://www.javascriptgaming.com/ JavaScript Gaming]
   * [http://www.irt.org/games/howto/ex003/index.htm Game Development in JavaScript]
