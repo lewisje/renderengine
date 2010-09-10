@@ -76,7 +76,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @return {Number} The radians value converted to degrees
     */
    radToDeg: function(radians) {
-      return ((radians * 180) * Math2D.INV_PI);
+      return (radians * 180 / Math2D.PI);
    },
 
    /**
@@ -208,8 +208,12 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       var r = rect.get();
       return Point2D.create(Math.floor(r.x + Math2.random() * r.w),
                             Math.floor(r.y + Math2.random() * r.h));
-   }
-
+   },
+	
+	ISOMETRIC_PROJECTION: 0, 
+	DIMETRIC_SIDE_PROJECTION: 1,
+	DIMETRIC_TOP_PROJECTION: 2
+	
 });
 
 return Math2D;
@@ -267,7 +271,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     */
    equals: function(point) {
 		this.upd();
-      return (this.x == point.x && this.y == point.y);
+		var p = point.get();
+      return (this.x == p.x && this.y == p.y);
    },
 
    /**
@@ -425,6 +430,33 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    dist: function(point) {
       return this._vec.distanceFrom(point._vec);
    },
+	
+	/**
+	 * Project this point from 2 dimensions to 3 dimensions, using one of three projection
+	 * types: {@link Math2D.ISOMETRIC_PROJECTION}  <i>(default)</i>, {@link Math2D.DIMETRIC_SIDE_PROJECTION}, or
+	 * {@link Math2D.DIMETRIC_TOP_PROJECTION}.
+	 * <p/>
+	 * Reference: http://www.compuphase.com/axometr.htm
+	 *
+	 * @param height {Number} The height of the ground.  We must use a particular height to
+	 * 		extrapolate our 3D coordinates from.  If the ground is considered level, this can remain zero.
+	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
+	 * @return {Point3D}
+	 */
+	project: function(height, projectionType) {
+		height = height || 0;
+		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
+		var pt = Point3D.create(0,0,0), j = this.get();
+		switch (projectionType) {
+			case Math2D.ISOMETRIC_PROJECTION:
+				pt.set(0.5 * j.x + j.y - height, -(0.5 * j.x) + j.y - height, height); break;
+			case Math2D.DIMETRIC_SIDE_PROJECTION:
+				pt.set(j.x + (2 * (j.y - height)), 4 * j.y - height, height); break;
+			case Math2D.DIMETRIC_TOP_PROJECTION:
+				pt.set(j.x - ((j.y - height) /2 ), 2 * (j.y - height), height); break;		
+		}
+		return pt;		
+	},
 
    /**
     * Returns a printable version of this object fixed to two decimal places.
@@ -454,6 +486,282 @@ return Point2D;
 
 });
 
+Engine.initObject("Point3D", "MathObject", function() {
+	
+/**
+ * @class A 3D point class with helpful methods for manipulation
+ *
+ * @param x {Point3D|Number} If this arg is a Point3D, its values will be
+ *                           copied into the new point.
+ * @param y {Number} The Y coordinate of the point.  Only required if X
+ *                   was a number.
+ * @param z {Number} The Z coordinate of the point.  Only required if X
+ *                   was a number.
+ * @constructor
+ * @description Create a new 3D point.
+ * @extends MathObject
+ */
+var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
+
+   _vec: null,
+
+   x: 0,
+   y: 0,
+	z: 0,
+
+   /**
+    * @private
+    */
+   constructor: function(x, y) {
+      this.base("Point3D");
+      this.set(x, y, z);
+   },
+
+   release: function() {
+      this.base();
+      this.x = 0;
+      this.y = 0;
+		this.z = 0;
+      this._vec.setElements([0,0,0]);
+   },
+
+   /**
+    * Private method used to update underlying object.
+    * @private
+    */
+   upd: function() {
+      this.x = this._vec.e(1); this.y = this._vec.e(2); this.z = this._vec.e(3);
+   },
+
+   /**
+    * Returns <tt>true</tt> if this point is equal to the specified point.
+    *
+    * @param point {Point3D} The point to compare to
+    * @return {Boolean} <tt>true</tt> if the two points are equal
+    */
+   equals: function(point) {
+		this.upd();
+		var p = point.get();
+      return (this.x == p.x && this.y == p.y && this.z == p.z);
+   },
+
+   /**
+    * Set the position of a 3D point.
+    *
+    * @param x {Point3D/Number} If this arg is a Point2D, its values will be
+    *                           copied into the new point.
+    * @param y {Number} The Y coordinate of the point.  Only required if X
+    *                   was a number.
+    * @param z {Number} The Z coordinate of the point.  Only required if X
+    * 						was a number.
+    */
+   set: function(x, y, z) {
+      if (Point3D.isInstance(x)) {
+         this._vec = x._vec.dup();
+      } else {
+         AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
+			AssertWarn((z != null), "Undefined Z value for point initialized to zero.");
+         this._vec = $V([x, y || 0, z || 0]);
+      }
+      this.upd();
+      return this;
+   },
+   
+   /**
+    * Get the elements of this point as an object with elements x, y, and z.
+    * @return {Object}
+    */
+   get: function() {
+      return { x: this._vec.e(1), y: this._vec.e(2), z: this._vec.e(3) };
+   },
+
+   /**
+    * Set the X coordinate.
+    *
+    * @param x {Number} The X coordinate
+    */
+   setX: function(x) {
+      this._vec.setElements([x, this._vec.e(2), this._vec.e(3)]);
+      this.upd();
+   },
+
+   /**
+    * Set the Y coordinate.
+    *
+    * @param y {Number} The Y coordinate
+    */
+   setY: function(y) {
+      this._vec.setElements([this._vec.e(1), y, this._vec.e(3)]);
+      this.upd();
+   },
+	
+   /**
+    * Set the Z coordinate.
+    *
+    * @param z {Number} The Z coordinate
+    */
+	setZ: function(z) {
+		this._vec.setElements([this._vec.e(1), this._vec.e(2), z])
+	},
+
+   /**
+    * A method that mutates this point by adding the point to it.
+    *
+    * @param point {Point3D} A point
+    * @return {Point3D} This point
+    */
+   add: function(point) {
+      this._vec = this._vec.add(point._vec);
+      this.upd();
+      return this;
+   },
+
+   /**
+    * A mutator method that adds the scalar value to each component of this point.
+    * @param scalar {Number} A number
+    * @return {Point3D} This point
+    */
+   addScalar: function(scalar) {
+      this._vec = this._vec.map(function(x) { return x + scalar; });
+      this.upd();
+      return this;
+   },
+
+   /**
+    * A mutator method that subtracts the specified point from this point.
+    * @param point {Point3D} a point
+    * @return {Point3D} This point
+    */
+   sub: function(point) {
+      this._vec = this._vec.subtract(point._vec);
+      this.upd();
+      return this;
+   },
+
+   /**
+    * A mutator method that multiplies the components of this point with another.
+    * @param point {Point3D} A point
+    * @return {Point3D} This point
+    */
+   convolve: function(point) {
+      this._vec = this._vec.map(function(x, i) { return x * (i == 1 ? point.x : (i == 2 ? point.y : point.z)); });
+      this.upd();
+      return this;
+   },
+
+   /**
+    * A mutator method that divides the components of this point by another.  The point 
+    * cannot contain zeros for its components.
+    * @param point {Point3D} A point
+    * @return {Point3D} This point
+    */
+   convolveInverse: function(point) {
+      Assert((point.x != 0 && point.y != 0), "Division by zero in Point.convolveInverse");
+      this._vec = this._vec.map(function(x, i) { return x / (i == 1 ? point.x : (i == 2 ? point.y : point.z)); });
+      this.upd();
+      return this;
+   },
+
+   /**
+    * A mutator method that multiplies the components of this point by a scalar value.
+    * @param scalar {Number} A number
+    * @return {Point3D} This point
+    */
+   mul: function(scalar) {
+      this._vec = this._vec.map(function(x) { return x * scalar; });
+      this.upd();
+      return this;
+   },
+
+   /**
+    * A mutator method that divides the components of this point by a scalar value.
+    * @param scalar {Number} A number - cannot be zero
+    * @return {Point3D} This point
+    */
+   div: function(scalar) {
+      Assert((scalar != 0), "Division by zero in Point.divScalar");
+
+      this._vec = this._vec.map(function(x) { return x / scalar; });
+      this.upd();
+      return this;
+   },
+
+   /**
+    * A mutator method that negates this point, inversing it's components.
+    * @return {Point2D} This point
+    */
+   neg: function() {
+      this._vec.setElements([ -this._vec.e(1), -this._vec.e(2), this._vec.e(3) ]);
+      this.upd();
+      return this;
+   },
+
+   /**
+    * Returns true if the point is the zero point.
+    * @return {Boolean} <tt>true</tt> if the point's elements are all zero.
+    */
+   isZero: function() {
+      return this._vec.eql(Vector.Zero);
+   },
+   
+   /**
+    * Returns the distance between this and another point.
+    * @param point {Point3D} The point to compare against
+    * @return {Number} The distance between the two points
+    */
+   dist: function(point) {
+      return this._vec.distanceFrom(point._vec);
+   },
+
+	/**
+	 * Project this point from 3 dimensions to 2 dimensions, using one of three projection
+	 * types: {@link Math2D.ISOMETRIC_PROJECTION} <i>(default)</i>, {@link Math2D.DIMETRIC_SIDE_PROJECTION}, or
+	 * {@link Math2D.DIMETRIC_TOP_PROJECTION}.
+	 * <p/>
+	 * Reference: http://www.compuphase.com/axometr.htm
+	 * 
+	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
+	 * @return {Point2D}
+	 */
+	project: function(projectionType) {
+		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
+		var pt = Point2D.create(0,0), j = this.get();
+		switch (projectionType) {
+			case Math2D.ISOMETRIC_PROJECTION:
+				pt.set(j.x - j.z, j.y + ((j.x + j.z) / 2)); break;
+			case Math2D.DIMETRIC_SIDE_PROJECTION:
+				pt.set(j.x + (j.z / 2), j.y + (j.z / 4)); break;
+			case Math2D.DIMETRIC_TOP_PROJECTION:
+				pt.set(j.x + (j.z / 4), j.y + (j.z / 2)); break;		
+		}
+		return pt;		
+	},
+
+   /**
+    * Returns a printable version of this object fixed to two decimal places.
+    * @return {String} Formatted as "x,y"
+    */
+   toString: function() {
+      return Number(this._vec.e(1)).toFixed(2) + "," + Number(this._vec.e(2)).toFixed(2) + "," + Number(this._vec.e(3)).toFixed(2);
+   }
+
+}, { /** @scope Point3D.prototype */
+
+   /**
+    * Return the classname of the this object
+    * @return {String} "Point3D"
+    */
+   getClassName: function() {
+      return "Point3D";
+   }
+});
+
+Point3D.ZERO = Point3D.create(0,0,0);
+	
+return Point3D;
+
+});
+
 Engine.initObject("Vector2D", "Point2D", function() {
 
 /**
@@ -475,6 +783,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    constructor: function(x, y) {
       this.base(x,y);
+		this.upd();
    },
 
    /**
@@ -499,7 +808,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
    /**
     * Get the dot product of this vector and another.
-    * @param vector {Vector} The Point to perform the operation against.
+    * @param vector {Vector2D} The Point to perform the operation against.
     * @return {Number} The dot product
     */
    dot: function(vector) {
@@ -522,7 +831,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     * point is being used to represent a vector, and that the supplied point
     * is also a vector.
     *
-    * @param vector {Vector} The vector to perform the angular determination against
+    * @param vector {Vector2D} The vector to perform the angular determination against
     * @return {Number} The angle between two vectors, in degrees
     */
    angleBetween: function(vector) {
@@ -541,6 +850,99 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 });
 
 return Vector2D;
+
+});
+
+Engine.initObject("Vector3D", "Point3D", function() {
+
+/**
+ * @class A 3D vector class with helpful manipulation methods.
+ * 
+ * @param x {Point3D|Number} If this arg is a Vector3D, its values will be
+ *                           copied into the new vector.  If a number,
+ *                           the X length of the vector.
+ * @param y {Number} The Y length of the vector.  Only required if X
+ *                   was a number.
+ * @param z {Number} The Z length of the vector.  Only required if X
+ *                   was a number.
+ * @constructor
+ * @description Create a new 3D Vector
+ * @extends Point3D
+ */
+var Vector3D = Point3D.extend(/** @scope Vector3D.prototype */{
+
+   /**
+    * @private
+    */
+   constructor: function(x, y, z) {
+      this.base(x,y,z);
+		this.upd();
+   },
+
+   /**
+    * A mutator method that normalizes this vector, returning a unit length vector.
+    * @return {Vector2D} This vector, normalized
+    * @see #len
+    */
+   normalize: function() {
+      this._vec = this._vec.toUnitVector();
+      this.upd();
+      return this;
+   },
+
+   /**
+    * Get the magnitude/length of this vector.
+    *
+    * @return {Number} A value representing the length (magnitude) of the vector.
+    */
+   len: function() {
+      return this._vec.modulus();
+   },
+
+   /**
+    * Get the dot product of this vector and another.
+    * @param vector {Vector3D} The Point to perform the operation against.
+    * @return {Number} The dot product
+    */
+   dot: function(vector) {
+      return this._vec.dot(vector._vec);
+   },
+
+   /**
+    * A mutator method that gets the cross product of this vector and another.
+    * @param vector {Vector3D} The vector to perform the operation against.
+    * @return {Vector3D} This vector 
+    */
+   cross: function(vector) {
+      this._vec = this._vec.cross(vector._vec);
+      this.upd();
+      return this;
+   },
+
+   /**
+    * Returns the angle (in degrees) between two vectors.  This assumes that the
+    * point is being used to represent a vector, and that the supplied point
+    * is also a vector.
+    *
+    * @param vector {Vector3D} The vector to perform the angular determination against
+    * @return {Number} The angle between two vectors, in degrees
+    */
+   angleBetween: function(vector) {
+      return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
+   }
+
+}, { /** @scope Vector3D.prototype */
+   
+   /**
+    * Return the classname of the this object
+    * @return {String} "Vector3D"
+    */
+   getClassName: function() {
+      return "Vector3D";
+   }
+});
+
+return Vector3D;
 
 });
 
