@@ -54,6 +54,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
    size: 1,
    font: null,
    style: null,
+	lineSpacing: 7,
 
    /**
     * @private
@@ -67,6 +68,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
       this.font = null;
       this.style = null;
       this.alignment = null;
+		this.lineSpacing = 7;
    },
 
    /**
@@ -82,6 +84,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
       this.font = null;
       this.style = null;
       this.alignment = null;
+		this.lineSpacing = 7;
    },
 
 	/**
@@ -207,7 +210,25 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
     */
    getColor: function() {
       return this.color;
-   }
+   },
+	
+	/**
+	 * Set the line spacing between lines of text in a multi-line text string.
+	 * Multi-line text is separated by the carriage return (0xA).
+	 * 
+	 * @param lineSpacing {Number} Line spacing (default: 7)
+	 */
+	setLineSpacing: function(lineSpacing) {
+		this.lineSpacing = lineSpacing;
+	},
+	
+	/**
+	 * Get the space between lines in multi-line text.
+	 * @return {Number}
+	 */
+	getLineSpacing: function() {
+		return this.lineSpacing;
+	}
 
 }, /** @scope AbstractTextRenderer.prototype */{
 

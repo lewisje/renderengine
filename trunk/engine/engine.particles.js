@@ -340,8 +340,20 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @private
     */
    sortParticles: function() {
-      this.particles.sort(function(a,b) {
-         return a && b ? (a.getTTL() - Engine.worldTime) - (b.getTTL() - Engine.worldTime) : !a ? 1 : !b ? -1 : 0;
+		var isChromium = EngineSupport.sysInfo().browser == "chrome";
+		if (isChromium) {
+			return;
+		}
+      
+		this.particles.sort(function(a,b) {
+			if (a && b) {
+				return a.life - b.life;
+			} else if (!a) {
+				return 1;
+			} else if (!b) {
+				return -1;
+			}
+         return 0;
       });
    },
 

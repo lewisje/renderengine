@@ -61,11 +61,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    // Global engine options
    options: {
-      debugMode: false,          // Global debug flag
-      localMode: false,          // Local run flag
       skipFrames: true,          // Skip missed frames
-      soundsEnabled: false,      // Sound engine enabled flag
-      billboards: true           // Use billboards to speed up rendering
+      billboards: true,          // Use billboards to speed up rendering
+      fastParticles: false			// Perform lifespan checks on particles before overriding
    },
 
    /*

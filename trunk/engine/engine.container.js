@@ -128,7 +128,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     */
    hasNext: function() {
 		var o = null;
-		if (!this.c.isDestroyed()) {
+		if (this.c && !this.c.isDestroyed()) {
 			o = this.p;
 			while (o != null && o.ptr != null && o.ptr.isDestroyed()) {
 				o = (this.r ? this.p.prev : this.p.next);
