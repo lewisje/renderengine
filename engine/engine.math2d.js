@@ -512,7 +512,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
    /**
     * @private
     */
-   constructor: function(x, y) {
+   constructor: function(x, y, z) {
       this.base("Point3D");
       this.set(x, y, z);
    },
