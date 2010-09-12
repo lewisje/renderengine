@@ -74,7 +74,10 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.sprites.push(WiiTest.spriteLoader.getSprite("redball", "blue"));
          this.setSprite(0);
 
+			this.getComponent("physics").setFriction(0.08);
+
          this.setPosition(Point2D.create(25, 15));
+			this.setOrigin(Point2D.create(30, 30));
       },
 		
       /**
