@@ -1290,12 +1290,13 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       if (!EngineSupport._sysInfo) {
          EngineSupport._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
+				           ($.browser.android ? "android" :
                        ($.browser.Wii ? "wii" : 
                        ($.browser.iPhone ? "iphone" :
                        ($.browser.safari ? "safari" : 
                        ($.browser.mozilla ? "mozilla" : 
                        ($.browser.opera ? "opera" : 
-                       ($.browser.msie ? "msie" : "unknown")))))),
+                       ($.browser.msie ? "msie" : "unknown"))))))),
             "version" : $.browser.version,
             "agent": navigator.userAgent,
             "platform": navigator.platform,
@@ -1354,7 +1355,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1269 $
+ * @version: $Revision: 1288 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2474,11 +2475,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
       msg += "supported browsers</a> for more information.";
       switch (sInfo.browser) {
+         case "iPhone":
+			case "android": 
          case "msie": Engine.options.billboards = false; 
                       return true;
          case "chrome":
          case "Wii":
-         case "iPhone":
          case "safari":
          case "mozilla":
          case "opera": return true;

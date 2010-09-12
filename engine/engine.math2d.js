@@ -441,7 +441,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 	 * @param height {Number} The height of the ground.  We must use a particular height to
 	 * 		extrapolate our 3D coordinates from.  If the ground is considered level, this can remain zero.
 	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
-	 * @return {Point3D}
+	 * @return {Point3D} This point, projected into 3 dimensions
 	 */
 	project: function(height, projectionType) {
 		height = height || 0;
@@ -721,7 +721,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 	 * Reference: http://www.compuphase.com/axometr.htm
 	 * 
 	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
-	 * @return {Point2D}
+	 * @return {Point2D} This point, projected into 2 dimensions
 	 */
 	project: function(projectionType) {
 		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;

@@ -59,7 +59,7 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
     * @private
     */
    constructor: function(name, priority, image) {
-      if (priority instanceof Image) {
+      if (Image.isInstance(priority)) {
          image = priority;
          priority = 0.1;
       }
@@ -122,7 +122,9 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
       }
 
       if (this.currentImage) {
+			this.transformOrigin(renderContext, true);
          renderContext.drawImage(this.bbox, this.currentImage.getImage(), null, this.getHostObject());
+			this.transformOrigin(renderContext, false);
       }
    }
 }, /** @scope ImageComponent.prototype */{ 

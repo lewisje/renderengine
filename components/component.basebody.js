@@ -33,6 +33,7 @@
  */
 
 // Includes
+Engine.include("/engine/engine.math2d.js");
 Engine.include("/components/component.transform2d.js");
 Engine.include("/physics/dynamics/b2BodyDef.js");
 
@@ -205,13 +206,16 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 * @return {Number}
 	 */
 	getRotation: function() {
-		return this.body.m_rotation;
+		var rC = this.getBody().GetRotationMatrix().col1;
+		var rV = Vector2D.create(rC.x, rC.y);
+		return rV.angleBetween(BaseBodyComponent.UP_VECTOR);
 	},
 	
 	/**
 	 * Apply a force to the body.  Forces are comprised of a force vector and
 	 * a position.  The force vector is the direction in which the force is
 	 * moving, while the position is where on the body the force is acting.
+	 * Forces act upon a body from world coordinates.
 	 * 
 	 * @param forceVector {Vector2D} The force vector
 	 * @param position {Point2D} The position where the force is acting upon the body
@@ -223,7 +227,89 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		var fv = new b2Vec2(f.x, f.y);
 		var dv = new b2Vec2(d.x, d.y);
 		this.getBody().ApplyForce(fv, dv);	
+	},
+	
+	/**
+	 * Apply an impulse to the body.  Impulses are comprised of a force vector and
+	 * a position.  The impulse vector is the direction of the impulse, while the position
+	 * is where on the body the impulse will be applied.
+	 * Impulses act upon a body locally, adjusting its velocity.
+	 * 
+	 * @param impulseVector {Vector2D} The impulse vectory
+	 * @param position {Point2D} the position where the impulse is originating from in the body
+	 */
+	applyImpulse: function(impulseVector, position) {
+		this.getBody().WakeUp();
+		var i = impulseVector.get();
+		var d = position.get();
+		var iv = new b2Vec2(i.x, i.y);
+		var dv = new b2Vec2(d.x, d.y);
+		this.getBody().ApplyImpulse(iv, dv);
+	},
+	
+	/**
+	 * Apply torque to the body.
+	 * 
+	 * @param torque {Number} The amount of torque to apply to the body
+	 */
+	applyTorque: function(torque) {
+		this.getBody().WakeUp();
+		this.getBody().ApplyTorque(torque);
+	},
+	
+	/**
+	 * Get the computed mass of the body.
+	 * @return {Number} The mass of the body
+	 */
+	getMass: function() {
+		return this.getBody().getMass();
+	},
+	
+	/**
+	 * Returns <code>true</code> if the body is static.  A body is static if it
+	 * isn't updated part of the simulation during contacts.
+	 * @return {Boolean}
+	 */
+	isStatic: function() {
+		return this.getBody().IsStatic();	
+	},
+	
+	/**
+	 * Returns <code>true</code> if the body is sleeping.  A body is sleeping if it
+	 * has settled to the point where no movement is being calculated.  If you want
+	 * to perform an action upon a body, other than applying force, torque, or impulses,
+	 * you must call {@link #wakeUp}.
+	 * @return {Boolean}
+	 */
+	isSleeping: function() {
+		return this.getBody().IsSleeping();	
+	},
+	
+	/**
+	 * Returns <code>true</code> if the body is frozen.  A frozen body can still be
+	 * collided with, but will not, itself, be updated.  Once a body is frozen, it cannot
+	 * be moved again.  See {@link #freeze}.
+	 * @return {Boolean}
+	 */
+	isFrozen: function() {
+		return this.getBody().IsFrozen();	
+	},
+	
+	/**
+	 * Wake up a body, adding it back into the collection of bodies being simulated.
+	 * Acting upon a body without first waking it up will do nothing.
+	 */
+	wakeUp: function() {
+		this.getBody().WakeUp();
+	},
+	
+	/**
+	 * Freeze a body, permanently taking it out of simulation, except for collisions.
+	 */
+	freeze: function() {
+		this.getBody().Freeze();	
 	}
+	
 	
 }, { /** @scope BaseBodyComponent.prototype */
 
@@ -249,7 +335,13 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	/**
 	 * The default friction of a body
 	 */
-	DEFAULT_FRICTION: 0
+	DEFAULT_FRICTION: 0,
+	
+	/**
+	 * A simple up (0, -1) vector to calculate rotation
+	 * @private
+	 */
+	UP_VECTOR: new Vector2D(0, -1)
    
 });
 
