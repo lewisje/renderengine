@@ -136,36 +136,44 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       var align = this.getTextAlignment();
       var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
       var kern = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing), 0);
+		var lineHeight = this.getSize() * 5;
+		var y = 0;
       //var space = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing) * 0.07, 0);
 
 
       // Vectorize the text
-      var pc = new Point2D(0,0);
+      var pc = new Point2D(0,y);
       while (lCount-- > 0)
       {
          var ltr = [];
-         var glyph = VectorText.charSet[text.charCodeAt(letter) - 32];
-         if (glyph.length == 0)
-         {
-            pc.add(kern);
-         }
-         else
-         {
-            for (var p = 0; p < glyph.length; p++)
-            {
-               if (glyph[p] != null)
-               {
-                  this.rText.push(new Point2D(glyph[p][0], glyph[p][1]).add(pc));
-               }
-               else
-               {
-                  this.rText.push(null);
-               }
-            }
-            this.rText.push(null);
-            pc.add(kern);
-         }
-
+			var chr = text.charCodeAt(letter);
+			if (chr == 10) {
+				// Support multi-line text
+				y += (this.getSize() * 10) + this.getLineSpacing();
+				pc.set(0, y);
+			} else {
+	         var glyph = VectorText.charSet[chr - 32];
+	         if (glyph.length == 0)
+	         {
+	            pc.add(kern);
+	         }
+	         else
+	         {
+	            for (var p = 0; p < glyph.length; p++)
+	            {
+	               if (glyph[p] != null)
+	               {
+	                  this.rText.push(new Point2D(glyph[p][0], glyph[p][1]).add(pc));
+	               }
+	               else
+	               {
+	                  this.rText.push(null);
+	               }
+	            }
+	            this.rText.push(null);
+	            pc.add(kern);
+	         }
+			}
          letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
       }
 

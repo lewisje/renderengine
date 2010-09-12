@@ -146,7 +146,7 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
       var hostBox = this.getHostObject().getBoundingBox().get();
 
       if (this.mode == Billboard2DComponent.REDRAW) {
-         // Provide a temporary context which is used to render the contents to
+         // Provide a temporary context which is used to render the contents into
          Assert((Billboard2DComponent.tempContext != null), "Billboard2DComponent temporary context is not defined!");
          
          // Clear the temporary context and render the associated component to it

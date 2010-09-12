@@ -326,8 +326,26 @@ var Engine = Engine.extend({
 
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
+		
+		// Load the default configuration for all browsers, then load one specific to the browser type
+		Engine.optionsLoaded = false;
+		jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/default.json", function(data) {
+			Engine.options = data;
+			Console.debug("Default engine options loaded");
+			
+			// Now load the ones specific to the browser
+			// Apparently, if the file is a 404 this will fail silently...
+			jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
+				if (status.indexOf("404") == -1) {
+					Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
+					Engine.options = jQuery.extend(Engine.options, bData);
+				}
+				Engine.optionsLoaded = true;	
+			})
+		});
+		
       Engine.gameLoadTimer = setInterval(function() {
-         if (window["DocumentContext"] != null) {
+         if (Engine.optionsLoaded && window["DocumentContext"] != null) {
 
             // Start the engine
             Engine.run();

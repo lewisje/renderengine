@@ -845,7 +845,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1263 $
+ * @version: $Revision: 1307 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1312,7 +1312,6 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                "storage": (typeof Storage !== "undefined" ? {
                   "local" : (typeof localStorage !== "undefined"),
                   "session" : (typeof sessionStorage !== "undefined"),
-                  "global" : (typeof globalStorage !== "undefined"),
                   "database": (typeof indexedDB !== "undefined")
                } : null),
                "geo": (typeof navigator.geolocation !== "undefined")
@@ -1323,8 +1322,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
                "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
                "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1,
-					"viewWidth": window.innerWidth,
-					"viewHeight" : window.innerHeight
+               "viewWidth": window.innerWidth,
+               "viewHeight" : window.innerHeight
             });
          });
       }
@@ -1909,7 +1908,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1269 $
+ * @version: $Revision: 1307 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1963,11 +1962,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    // Global engine options
    options: {
-      debugMode: false,          // Global debug flag
-      localMode: false,          // Local run flag
       skipFrames: true,          // Skip missed frames
-      soundsEnabled: false,      // Sound engine enabled flag
-      billboards: true           // Use billboards to speed up rendering
+      billboards: true,          // Use billboards to speed up rendering
+      fastParticles: false			// Perform lifespan checks on particles before overriding
    },
 
    /*
@@ -2879,8 +2876,26 @@ var Engine = Engine.extend({
 
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
+		
+		// Load the default configuration for all browsers, then load one specific to the browser type
+		Engine.optionsLoaded = false;
+		jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/default.json", function(data) {
+			Engine.options = data;
+			Console.debug("Default engine options loaded");
+			
+			// Now load the ones specific to the browser
+			// Apparently, if the file is a 404 this will fail silently...
+			jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
+				if (status.indexOf("404") == -1) {
+					Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
+					Engine.options = jQuery.extend(Engine.options, bData);
+				}
+				Engine.optionsLoaded = true;	
+			})
+		});
+		
       Engine.gameLoadTimer = setInterval(function() {
-         if (window["DocumentContext"] != null) {
+         if (Engine.optionsLoaded && window["DocumentContext"] != null) {
 
             // Start the engine
             Engine.run();

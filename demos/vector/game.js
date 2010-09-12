@@ -161,16 +161,15 @@ var Spaceroids = Game.extend({
       this.renderContext.add(copy);
 
       // Instructions
-      var inst = ["left/right arrows to turn","up arrow to thrust","Z to fire missile", "A to hyperjump"];
+      var instruct = "left/right arrows to turn\nup arrow to thrust\nZ to fire missile\nA to hyperjump";
       if (EngineSupport.checkBooleanParam("evolved")) {
-         inst.push("ENTER to detonate nuke");
+         instruct += "\nENTER to detonate nuke";
       }
-      for (var x = 0; x < inst.length; x++) {
-         inst[x] = TextRenderer.create(VectorText.create(), inst[x], 0.8);
-         inst[x].setColor("#00ff00");
-         inst[x].setPosition(Point2D.create(130, 485 + (x * 15)));
-         this.renderContext.add(inst[x]);
-      }
+		
+      var inst = TextRenderer.create(VectorText.create(), instruct, 0.8);
+      inst.setColor("#00ff00");
+      inst.setPosition(Point2D.create(130, 485));
+      this.renderContext.add(inst);
 
       var startText;
       if ($.browser.Wii) {
