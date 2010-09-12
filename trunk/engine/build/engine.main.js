@@ -573,11 +573,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
       msg += "supported browsers</a> for more information.";
       switch (sInfo.browser) {
+         case "iPhone":
+			case "android": 
          case "msie": Engine.options.billboards = false; 
                       return true;
          case "chrome":
          case "Wii":
-         case "iPhone":
          case "safari":
          case "mozilla":
          case "opera": return true;

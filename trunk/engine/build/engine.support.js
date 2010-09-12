@@ -453,12 +453,13 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       if (!EngineSupport._sysInfo) {
          EngineSupport._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
+				           ($.browser.android ? "android" :
                        ($.browser.Wii ? "wii" : 
                        ($.browser.iPhone ? "iphone" :
                        ($.browser.safari ? "safari" : 
                        ($.browser.mozilla ? "mozilla" : 
                        ($.browser.opera ? "opera" : 
-                       ($.browser.msie ? "msie" : "unknown")))))),
+                       ($.browser.msie ? "msie" : "unknown"))))))),
             "version" : $.browser.version,
             "agent": navigator.userAgent,
             "platform": navigator.platform,

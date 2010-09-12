@@ -164,6 +164,7 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
       
       // Render the billboard.  If the bounding box's origin is negative in
       // either X or Y, we'll need to move the transformation there before rendering the object
+		this.transformOrigin(renderContext, true);
       if (hostBox.x < 0 || hostBox.y < 0) {
          renderContext.pushTransform();
          renderContext.setPosition(this.getHostObject().getBoundingBox().getTopLeft());
@@ -172,6 +173,7 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
       if (hostBox.x < 0 || hostBox.y < 0) {
          renderContext.popTransform();
       }
+		this.transformOrigin(renderContext, false);
       
       // Debug the collision node
       if (Engine.getDebugMode())

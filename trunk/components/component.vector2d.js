@@ -236,6 +236,8 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
          renderContext.setFillStyle(this.fillStyle);
       }
 
+		this.transformOrigin(renderContext, true);
+
       // Render out the points
       if (this.closedManifold)
       {
@@ -250,6 +252,9 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       {
          renderContext.drawFilledPolygon(this.points);
       }
+
+		this.transformOrigin(renderContext, false);
+
    }
 }, /** @scope Vector2DComponent.prototype */{
    /**

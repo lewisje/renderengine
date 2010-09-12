@@ -88,6 +88,26 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
       return this.drawMode;
    },
 
+	/**
+	 * Adjust the local transformation to accommodate the origin.
+	 * 
+	 * @param renderContext {RenderContext} The render context
+	 * @param before {Boolean} <code>true</code> if the transform is occurring before rendering
+	 */
+	transformOrigin: function(renderContext, before) {
+		if (this.getHostObject().getOrigin().isZero()) {
+			return;
+		}
+		
+		if (before) {
+			renderContext.pushTransform();
+			var origin = Point2D.create(this.getHostObject().getOrigin());
+			renderContext.setPosition(origin.neg());
+		} else {
+			renderContext.popTransform();
+		}
+	},
+
    /**
     * Handles whether or not the component should draw to the
     * render context.

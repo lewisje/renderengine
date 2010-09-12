@@ -54,6 +54,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    bBox: null,
 	wBox: null,
 	lastPosition: null,
+	
+	origin: null,
 
    /**
     * @private
@@ -64,6 +66,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.bBox = Rectangle2D.create(0,0,1,1);
 		this.wBox = Rectangle2D.create(0,0,1,1);
       this.zIndex = 1;
+		this.origin = Point2D.create(0,0);
    },
 	
 	/**
@@ -85,6 +88,24 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       this.bBox = null;
 		this.lastPosition = null;
    },
+
+	/**
+	 * Set the render origin of the object.  The render origin is where the object will be
+	 * centered around when drawing position and rotation.
+	 *  
+	 * @param point {Point2D} The render origin (default: 0,0 - top left corner)
+	 */
+	setOrigin: function(point) {
+		this.origin = point;
+	},
+	
+	/**
+	 * Get the render origin of the object.
+	 * @return {Point2D}
+	 */
+	getOrigin: function() {
+		return this.origin;
+	},
 
    /**
     * Set the bounding box of this object

@@ -67,7 +67,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
          this.worldBoundary = worldBoundary;
          var wb = worldBoundary.get();
          this.worldAABB.minVertex.Set(-1000, -1000);
-         this.worldAABB.maxVertex.Set(1000, 1000);
+         this.worldAABB.maxVertex.Set(2000, 2000);
          this.doSleep = true;
          this.integrations = Simulation.DEFAULT_INTEGRATIONS;
 

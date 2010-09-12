@@ -165,7 +165,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     */
    getRenderRotation: function() {
       var wR = this.getHostObject().getRenderContext().getWorldRotation();
-      return wR + this.rotation;
+      return wR + this.getRotation();
    },
 
    /**
