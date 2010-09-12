@@ -122,7 +122,8 @@ Engine.initObject("WiiTest", "Game", function(){
        */
       run: function(){
          // Create the render context
-         this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
+         this.fieldWidth = EngineSupport.sysInfo().viewWidth;
+			this.fieldHeight = EngineSupport.sysInfo().viewHeight;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
          
@@ -135,6 +136,7 @@ Engine.initObject("WiiTest", "Game", function(){
          
          this.renderContext.setBackgroundColor("#FFFFFF");
          this.simulation = Simulation.create("simulation", this.fieldBox);
+			this.simulation.setIntegrations(3);
 
          this.setupWorld();
          
@@ -151,7 +153,7 @@ Engine.initObject("WiiTest", "Game", function(){
          Engine.getDefaultContext().add(this.renderContext);
 
          // Create the collision model with 5x5 divisions
-         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
+         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 10);
 
          // Add the first ball
          this.createBall();
@@ -163,8 +165,9 @@ Engine.initObject("WiiTest", "Game", function(){
       
       setupWorld: function() {
          var groundSd = new b2BoxDef();
-         groundSd.extents.Set(1000, 30);
+         groundSd.extents.Set(2000, 30);
          groundSd.restitution = 0.2;
+			groundSd.friction = 1.6;
          var groundBd = new b2BodyDef();
          groundBd.AddShape(groundSd);
          groundBd.position.Set(0, this.fieldBox.get().h);
