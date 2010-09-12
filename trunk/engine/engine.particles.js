@@ -340,8 +340,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @private
     */
    sortParticles: function() {
-		var isChromium = EngineSupport.sysInfo().browser == "chrome";
-		if (isChromium) {
+		if (Engine.options.fastParticles) {
 			return;
 		}
       
