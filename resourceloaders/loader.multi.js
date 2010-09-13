@@ -64,41 +64,49 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 			"bitmapfont": {
 				file: "loader.bitmapfont.js",
 				clazz: "BitmapFontLoader",
+				extension: ".font",
 				instance: null
 			},
 			"image": {
 				file: "loader.image.js",
 				clazz: "ImageLoader",
+				extension: "image,img",
 				instance: null
 			},
 			"level": {
 				file: "loader.level.js",
 				clazz: "LevelLoader",
+				extension: "level,lvl",
 				instance: null
 			},
 			"object": {
 				file: "loader.object.js",
 				clazz: "ObjectLoader",
+				extension: "json,js",
 				instance: null
 			},
 			"text": {
 				file: "loader.remotefile.js",
 				clazz: "RemoteFileLoader",
+				extension: "text,txt",
 				instance: null
 			},
 			"sound": {
 				file: "loader.sound.js",
 				clazz: "SoundLoader",
+				extension: "sound,snd",
 				instance: null
 			},
 			"sprite": {
 				file: "loader.sprite.js",
 				clazz: "SpriteLoader",
+				extension: "sprite,spr",
 				instance: null
 			},
 			"xml": {
 				file: "loader.xml.js",
 				clazz: "XMLLoader",
+				extension: "xml",
 				instance: null
 			} 			
 		};
@@ -114,12 +122,15 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 	 * 			loading a resource with the multiresource loader.
 	 * @param filename {String} The path where the resource loader class file is located.
 	 * @param className {String} The class name of the of the resource loader 
+	 * @param extension {String} A comma separated list of possible extensions which can
+	 *		be used to automatically determine the type of loader to use.
 	 */
-	registerLoader: function(type, filename, className) {
+	registerLoader: function(type, filename, className, extensions) {
 		AssertWarn((this.loaderMappings[type] == null), "Overriding loader mapped to '" + type + "' with '" + filename + "'");
 		this.loaderMappings[type] = {
 		  	file: filename,
 		  	clazz: className,
+		  	extension: extensions,
 			instance: null
 		};
 	},
@@ -170,6 +181,15 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 	},
 
 	/**
+	 * Determine if the argument is a path by checking for either the
+	 * forward slash, or the dot.
+	 * @private
+	 */
+	isPath: function(arg) {
+		return (arg.indexOf("/") != -1 || arg.indexOf(".") != -1);
+	},
+
+	/**
 	 * Load a resource with the registered loader type.  The arguments passed after the
 	 * loader type should match the required arguments for the <code>load()</code> method of the type of loader being used.
 	 * If the class isn't loaded yet, the request will be deferred until the class is available.
@@ -181,8 +201,24 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 		var args = arguments, argArray = [];
 		for (var a in arguments) {
 			argArray.push(arguments[a]);
-		}	
-		argArray.shift();
+		}
+		if (!this.isPath(argArray[0])) {
+			argArray.shift();
+		} else {
+			// Determine the loader type by file extension
+			loaderType = "object";
+			for (var lm in this.loaderMappings) {
+				var l = this.loaderMappings[l];
+				var exts = l.extension.split(",");
+				for (var e in exts) {
+					if (argArray[0].indexOf("." + exts[e]) != -1) {
+						loaderType = l;
+						break;
+					}
+				}
+			}
+				
+		}
 
 		var c = this.loaderMappings[loaderType].clazz;
 		if (!this.checkForClass(c)) {

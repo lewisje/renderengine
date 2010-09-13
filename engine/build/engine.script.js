@@ -103,6 +103,78 @@ var Engine = Engine.extend({
       Engine.runScriptQueue();
    },
 
+	/**
+	 * Low-level method to call jQuery to use AJAX to load
+	 * a file asynchronously.  If a failure (such as a 404) occurs,
+	 * it shouldn't fail silently.
+	 * 
+	 * @param path {String} The url to load
+	 * @param data {Object} Optional arguments to pass to server
+	 * @param callback {Function} The callback method
+	 * @private
+	 */
+	ajaxLoad: function(path, data, callback) {
+		// Use our own internal method to load a file with the JSON
+		// data.  This way, we don't fail silently when loading a file
+		// that doesn't exist.
+		if (typeof data == "function") {
+			callback = data;
+			data = null;
+		}
+		$.ajax({
+			url: path,
+			data: data,
+			complete: function(xhr, result) {
+				callback(xhr, result);
+			}
+		});
+	},
+	
+	/**
+	 * Load text from the specified path.
+	 *
+	 * @param path {String} The url to load
+	 * @param data {Object} Optional arguments to pass to server
+	 * @param callback {Function} The callback method which is passed the
+	 *		text and status code (a number) of the request.
+	 */	 
+	loadText: function(path, data, callback) {
+		Engine.ajaxLoad(path, data, function(xhr, result) {
+			callback(xhr.responseText, xhr.status);
+		});
+	},
+	
+	/**
+	 * Load text from the specified path and parse it as JSON.  We're doing
+	 * a little pre-parsing of the returned data so that the JSON can include
+	 * comments which is not spec.
+	 *
+	 * @param path {String} The url to load
+	 * @param data {Object} Optional arguments to pass to server
+	 * @param callback {Function} The callback method which is passed the
+	 *		JSON object and status code (a number) of the request.
+	 */	 
+	loadJSON: function(path, data, callback) {
+		Engine.ajaxLoad(path, data, function(xhr, result) {
+			function clean(txt) {
+				var outbound = txt.replace(/(".*".*|)(\/\/.*$)/gm, function(str,t,c) {
+					return t;
+				});
+				return outbound.replace(/\/\*(.|\n|\r)*?\*\//g, "");
+			}
+
+			var json = null;
+			try {
+				// Remove comments
+				var inbound = xhr.responseText;
+				if (inbound) {
+					json = EngineSupport.parseJSON(clean(inbound));
+				}
+			} catch (ex) {}
+			callback(json, xhr.status);
+		});
+	},
+
    /**
     * Internal method which runs the script queue to handle scripts and functions
     * which are queued to run sequentially.
@@ -327,22 +399,32 @@ var Engine = Engine.extend({
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
 		
-		// Load the default configuration for all browsers, then load one specific to the browser type
-		Engine.optionsLoaded = false;
-		jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/default.json", function(data) {
-			Engine.options = data;
-			Console.debug("Default engine options loaded");
-			
-			// Now load the ones specific to the browser
-			// Apparently, if the file is a 404 this will fail silently...
-			jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
-				if (status.indexOf("404") == -1) {
-					Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
-					Engine.options = jQuery.extend(Engine.options, bData);
-				}
-				Engine.optionsLoaded = true;	
-			})
-		});
+	// Load the default configuration for all browsers, then load one specific to the browser type
+	Engine.optionsLoaded = false;
+
+	// Load the options specific to the browser.  Whether they load, or not,
+	// the game will continue to load.
+	Engine.loadJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
+		if (status == 200) {
+			Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
+			Engine.setOptions(bData);
+		} else {
+			// Log an error (most likely a 404)
+			Console.log("Engine options for: " + EngineSupport.sysInfo().browser + " responded with " + status);
+		}
+		Engine.optionsLoaded = true;	
+	});
+	
+	/*
+	// Apparently, if the file is a 404 this will fail silently...
+	jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
+		if (status.indexOf("404") == -1) {
+			Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
+			Engine.setOptions(bData);
+		}
+		Engine.optionsLoaded = true;	
+	});
+	*/
 		
       Engine.gameLoadTimer = setInterval(function() {
          if (Engine.optionsLoaded && window["DocumentContext"] != null) {

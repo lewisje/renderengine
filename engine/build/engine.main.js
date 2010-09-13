@@ -59,12 +59,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    constructor: null,
 
-   // Global engine options
-   options: {
-      skipFrames: true,          // Skip missed frames
-      billboards: true,          // Use billboards to speed up rendering
-      fastParticles: false			// Perform lifespan checks on particles before overriding
+   // Default configuration options
+   defaultOptions: {
+      skipFrames: true,		// Skip missed frames
+      billboards: true,		// Use billboards to speed up rendering
+      fastParticles: false	// Perform lifespan checks on particles before overriding
    },
+
+   // Global engine options
+   options: {},
 
    /*
     * Engine objects
@@ -119,6 +122,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    //                                      ENGINE PROPERTIES
    //====================================================================================================
    //====================================================================================================
+
+   /**
+    * Set/override the engine options.
+    * @param opts {Object} Configuration options for the engine
+    */
+   setOptions: function(opts) {
+      Engine.options = $.extend(Engine.options, opts);
+   },
 
    /**
     * Set the debug mode of the engine.  Affects message ouput and
