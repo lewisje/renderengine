@@ -117,10 +117,6 @@ var Engine = Engine.extend({
 		// Use our own internal method to load a file with the JSON
 		// data.  This way, we don't fail silently when loading a file
 		// that doesn't exist.
-		if (typeof data == "function") {
-			callback = data;
-			data = null;
-		}
 		$.ajax({
 			url: path,
 			data: data,
