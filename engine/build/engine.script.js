@@ -117,13 +117,21 @@ var Engine = Engine.extend({
 		// Use our own internal method to load a file with the JSON
 		// data.  This way, we don't fail silently when loading a file
 		// that doesn't exist.
-		$.ajax({
-			url: path,
-			data: data,
-			complete: function(xhr, result) {
-				callback(xhr, result);
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", path, true);
+		xhr.onreadystatechange = function(evt) {
+			if (xhr.readyState == 4) {
+				callback(xhr, xhr.status);
 			}
-		});
+		};
+		var rData = null;
+		if (data) {
+			rData = "";
+			for (var i in data) {
+				rData += (rData.length == 0 ? "?" : "&") + i + "=" + encodeURIComponent(data[i]);
+			}
+		}
+		xhr.send(rData);
 	},
 	
 	/**
