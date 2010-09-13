@@ -2700,6 +2700,10 @@ var Engine = Engine.extend({
 	 *		text and status code (a number) of the request.
 	 */	 
 	loadText: function(path, data, callback) {
+		if (typeof data == "function") {
+			callback = data;
+			data = null;
+		}
 		Engine.ajaxLoad(path, data, function(xhr, result) {
 			callback(xhr.responseText, xhr.status);
 		});
@@ -2716,6 +2720,10 @@ var Engine = Engine.extend({
 	 *		JSON object and status code (a number) of the request.
 	 */	 
 	loadJSON: function(path, data, callback) {
+		if (typeof data == "function") {
+			callback = data;
+			data = null;
+		}
 		Engine.ajaxLoad(path, data, function(xhr, result) {
 			function clean(txt) {
 				var outbound = txt.replace(/(".*".*|)(\/\/.*$)/gm, function(str,t,c) {
