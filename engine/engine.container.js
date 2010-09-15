@@ -325,6 +325,37 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 		}
 	},
 
+	/**
+	 * Clone this container, returning a new container which points to all of the
+	 * objects in this container.
+	 * @return {Container} A new container with all of the objects from the current container
+	 */
+	clone: function() {
+		var c = Container.create();
+		c.addAll(this.getAll());
+		return c;
+	},
+	
+	/**
+	 * Concatenate a container or array to the end of this container, 
+	 * returning a new container with all of the elements.  The
+	 * array or container will be <i>deep copied</i> and appended to this
+	 * container.  While the actual pointers to the objects aren't deep copied,
+	 * one can be assured that modifying the array or container structure being
+	 * appended will not affect either container.
+	 *
+	 * @param arr {Container|Array} A container or array of objects
+	 * @return {Container} A new container with all objects from both
+	 */
+	concat: function(arr) {
+		if (Container.isInstance(arr)) {
+			arr = arr.getAll();
+		}
+		var c = this.clone();
+		c.addAll(arr);
+		return c;
+	},
+
    /**
     * Insert an object into the container at the given index. Asserts if the
     * index is out of bounds for the container.  The index must be greater than
@@ -775,6 +806,26 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
       // an underscore to prevent keyword collisions
       this.objHash["_" + String(key)] = obj;
       this.base(obj);
+   },
+   
+   /** @private */
+   addAll: function() {
+   	throw new Error("addAll() is unsupported in HashContainer");
+   },
+   
+   /** @private */
+   clone: function() {
+   	throw new Error("clone() is unsupported in HashContainer");
+   },
+   
+   /** @private */
+   concat: function() {
+   	throw new Error("concat() is unsupported in HashContainer");
+   },
+
+   /** @private */
+   reduce: function() {
+   	throw new Error("reduce() is unsupported in HashContainer");
    },
 
    /**
