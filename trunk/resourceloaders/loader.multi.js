@@ -64,49 +64,49 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 			"bitmapfont": {
 				file: "loader.bitmapfont.js",
 				clazz: "BitmapFontLoader",
-				extension: ".font",
+				extension: ".font,.fnt",
 				instance: null
 			},
 			"image": {
 				file: "loader.image.js",
 				clazz: "ImageLoader",
-				extension: "image,img",
+				extension: ".png,.jpg,.gif",
 				instance: null
 			},
 			"level": {
 				file: "loader.level.js",
 				clazz: "LevelLoader",
-				extension: "level,lvl",
+				extension: ".level,.lvl",
 				instance: null
 			},
 			"object": {
 				file: "loader.object.js",
 				clazz: "ObjectLoader",
-				extension: "json,js",
+				extension: ".json,.js,.ui",
 				instance: null
 			},
 			"text": {
 				file: "loader.remotefile.js",
 				clazz: "RemoteFileLoader",
-				extension: "text,txt",
+				extension: ".text,.txt",
 				instance: null
 			},
 			"sound": {
 				file: "loader.sound.js",
 				clazz: "SoundLoader",
-				extension: "sound,snd",
+				extension: ".mp3,.mp4,.wav,.ogg",
 				instance: null
 			},
 			"sprite": {
 				file: "loader.sprite.js",
 				clazz: "SpriteLoader",
-				extension: "sprite,spr",
+				extension: ".sprite,.spr",
 				instance: null
 			},
 			"xml": {
 				file: "loader.xml.js",
 				clazz: "XMLLoader",
-				extension: "xml",
+				extension: ".xml",
 				instance: null
 			} 			
 		};

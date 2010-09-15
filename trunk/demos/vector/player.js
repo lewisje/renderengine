@@ -38,6 +38,7 @@ Engine.include("/components/component.keyboardinput.js");
 Engine.include("/components/component.collider.js");
 Engine.include("/engine/engine.object2d.js");
 Engine.include("/engine/engine.timers.js");
+Engine.include("/engine/engine.container.js");
 
 Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
 
@@ -372,13 +373,13 @@ var SpaceroidsPlayer = Object2D.extend({
       var pCount = Spaceroids.evolved ? 40 : 8;
 
       // Make some particles
-      var p = [];
+      var p = Container.create();
       for (var x = 0; x < pCount; x++)
       {
          if (Spaceroids.evolved) {
-            p.push(TrailParticle.create(this.getPosition(), this.getRotation(), 45, "#ffffaa", 2000));
+            p.add(TrailParticle.create(this.getPosition(), this.getRotation(), 45, "#ffffaa", 2000));
          }
-         p.push(SimpleParticle.create(this.getPosition(), 3000));
+         p.add(SimpleParticle.create(this.getPosition(), 3000));
       }
       this.field.pEngine.addParticles(p);
 
@@ -472,10 +473,10 @@ var SpaceroidsPlayer = Object2D.extend({
 
       // Make some particles for the effect
       var t = MultiTimeout.create("particles", 3, 280, function(rep) {
-         var n = [];
+         var n = Container.create();
          for (var x = 0; x < 60; x++)
          {
-            n.push(TrailParticle.create(self.getPosition(), self.getRotation(), 350, SpaceroidsPlayer.nukeColors[rep], 1500));
+            n.add(TrailParticle.create(self.getPosition(), self.getRotation(), 350, SpaceroidsPlayer.nukeColors[rep], 1500));
          }
          Spaceroids.pEngine.addParticles(n);
       });

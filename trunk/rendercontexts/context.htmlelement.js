@@ -323,7 +323,21 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
             position: "absolute"
          }).text(text);
       }
-   }
+   },
+	
+	drawElement: function(point, ref) {
+		if (ref && ref.jQ()) {
+			if (ref.jQ().css("left") != this.cursorPos.x + point.x ||
+			 ref.jQ().css("top") != this.cursorPos.y + point.y) {
+				ref.jQ().css({
+	            left: this.cursorPos.x + point.x,
+	            top: this.cursorPos.y + point.y,
+	            position: "absolute",
+					display: "block"
+				});
+			 }
+		}
+	}
 
 }, /** @scope HTMLElementContext.prototype */{
 

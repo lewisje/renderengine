@@ -172,6 +172,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 
    _head: null,
 	_tail: null,
+	sz: 0,
 
    /**
     * @private
@@ -180,6 +181,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       this.base(containerName || "Container");
       this._head = null;
 		this._tail = null;
+		this.sz = null;
    },
 
    /**
@@ -189,6 +191,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       this.base();
       this._head = null;
 		this._tail = null;
+		this.sz = 0;
    },
 
    /**
@@ -208,12 +211,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Number} The number of objects in the container
     */
    size: function() {
-		var n = this._head, c = 0;
-		while (n != null) {
-			c++;
-			n = n.next;	
-		}
-      return c;
+      return this.sz;
    },
 
 	/**
@@ -234,10 +232,11 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 	 * Find the list node at the given index.  No bounds checking
 	 * is performed with this function.
 	 * @param idx {Number} The index where the item exists
+	 * @param offset {Object} The object to start at, "head" if null
 	 * @private
 	 */
-	_find: function(idx) {
-		var n = this._head, c = idx;
+	_find: function(idx, offset) {
+		var n = offset || this._head, c = idx;
 		while ( n != null && c-- > 0) {
 			n = n.next;
 		}
@@ -282,16 +281,47 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       if (obj.getId) {
          Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
       }
+		this.sz++;
    },
 	
 	/**
-	 * Add all of the objects in the array to this container.
+	 * Add all of the objects in the container or array to this container, at the end
+	 * of this container.  If "arr" is a container, the head of "arr" is joined to the
+	 * tail of this, resulting in a very fast operation.  Because this method, when
+	 * performed on a container, is just joining the two lists, no duplication of
+	 * elements from the container is performed.  As such, removing elements from the
+	 * new container will affect this container as well.
 	 * 
-	 * @param arr {Array} An array of objects
+	 * @param arr {Container|Array} A container or array of objects
 	 */
 	addAll: function(arr) {
-		for (var i in arr) {
-			this.add(arr[i]);
+		if (Container.isInstance(arr)) {
+			if (this._head == null && this._tail == null) {
+				// This container is empty
+				var nh = this._new(arr._head.ptr);
+				nh.next = arr._head.next;
+				var nt = this._new(arr._tail.ptr);
+				nt.prev = arr._tail.prev;
+				this._head = nh;
+				this._tail = nt;
+				this.sz = arr.size();
+			} else {
+				var nn = this._new(arr._head.ptr);
+				nn.prev = this._tail;
+				nn.next = arr._head.next;
+				
+				var nt = this._new(arr._tail.ptr);
+				nt.prev = arr._tail.prev;
+				
+				this._tail.next = nn;
+				this._tail = nt;
+				this.sz += arr.size();	
+			}
+		} else {
+			for (var i in arr) {
+				this.add(arr[i]);
+			}
+			this.sz += arr.length;
 		}
 	},
 
@@ -313,6 +343,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 		n.prev.next = n;
 		n.next = o;
 		o.prev = n;
+		this.sz++;
    },
    
    /**
@@ -358,27 +389,38 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * @return {Object} The object that was removed
     */
    remove: function(obj) {
-      if (obj.getId) {
-         Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
-      }
 		var o = this._peek(obj);
+		//AssertWarn(o != null, "Removing object from collection which is not in collection");
 		
 		if (o != null) {
-			if (o.next) {
-				o.next.prev = o.prev;
-			}
-			if (o.prev) {
-				o.prev.next = o.next;
+			if (o === this._head && o === this._tail) {
+				this.clear();
+				this.sz = 0;
+				return;	
 			}
 
 			if (o === this._head) {
 				this._head = o.next;
+				if (this._head == null) {
+					this.clear();
+					this.sz = 0;
+					return;
+				}
 			}
+			
 			if (o === this._tail) {
 				this._tail = o.prev;
 			}
-			
+
+			if (o.next) o.next.prev = o.prev;
+			if (o.prev) o.prev.next = o.next;
 			o.prev = o.next = null;
+			this.sz--;
+
+	      if (obj.getId) {
+	         Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
+	      }
+
 			return o.ptr;		
 		}
 		return null;
@@ -395,24 +437,69 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
 
 		var o = this._find(idx);
-		
-		o.next.prev = o.prev;
-		o.prev.next = o.next;
-		
 		if (o === this._head) {
 			this._head = o.next;
 		}
 		if (o === this.tail) {
 			this._tail = o.prev;
 		}
-		
+		if (o.next) o.next.prev = o.prev;
+		if (o.prev) o.prev.next = o.next;
 		o.prev = o.next = null;
 		var r = o.ptr;
 		
       Console.log("Removed ", r.getId(), "[", r, "] from ", this.getId(), "[", this, "]");
-
+		this.sz--;
       return r;
    },
+
+	/**
+	 * Reduce the container so that it's length is the specified length.  If <code>length</code>
+	 * is larger than the size of this container, no operation is performed.  Setting <code>length</code>
+	 * to zero is effectively the same as calling {@link #clear}.  Objects which would logically
+	 * fall after <code>length</code> are not automatically destroyed.
+	 * 
+	 * @param length {Number} The maximum number of elements
+	 * @return {Container} The subset of elements being removed
+	 */
+	reduce: function(length) {
+		var sz = this.size();
+		if (length >= sz) {
+			return Container.create();
+		}	
+		
+		var subset = this.subset(sz - length, sz);
+		if (length == 0) {
+			// Dump everything
+			this.clear();
+		} else {
+			var o = this._find(length - 1);
+			o.next = null;
+			this._tail = o;
+		}
+		this.sz = length;
+		return subset;		
+	},
+
+	/**
+	 * A new <code>Container</code> which is a subset of the current container
+	 * from the starting index (inclusive) to the ending index (exclusive).  Modifications
+	 * made to the objects in the subset will affect this container's objects.
+	 *  
+	 * @param start {Number} The starting index in the container
+	 * @param end {Number} The engine index in the container
+	 * @return {Container} A subset of the container.
+	 */
+	subset: function(start, end) {
+		var c = Container.create();
+		var s = this._find(start);
+		var e = this._find((end - start) - 1, s);
+		c._head = this._new(s.ptr);
+		c._head.next = s.next;
+		c._tail = this._new(e.ptr);
+		c._tail.prev = e.prev;
+		return c;
+	},
 
    /**
     * Get the object at the index specified. If the container has been
@@ -483,6 +570,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    clear: function() {
 		this._head = null;
 		this._tail = null;
+		this.sz = 0;
    },
 
    /**
@@ -491,7 +579,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    cleanUp: function() {
 		var a = this.getAll(), h = a.shift();
 		while ((h = a.shift()) != null) {
-			h.destroy();
+			if (h.destroy) {
+				h.destroy();
+			}
 		}
       this.clear();
    },
@@ -557,6 +647,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 			p = n;
 		}
 		this._tail = p;
+		this.sz = a.length;
    },
 
    /**
@@ -570,10 +661,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
          "Contains"  : [function() { return self.size(); },
                         null, false]
       });
-   },
-
-   toString: function() {
-      return this.constructor.getClassName();   
    },
 
    /**

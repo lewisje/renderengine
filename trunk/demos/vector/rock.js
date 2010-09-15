@@ -36,6 +36,7 @@ Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.collider.js");
 Engine.include("/engine/engine.object2d.js");
 Engine.include("/engine/engine.timers.js");
+Engine.include("/engine/engine.container.js");
 
 Engine.initObject("SpaceroidsRock", "Object2D", function() {
 
@@ -248,17 +249,17 @@ var SpaceroidsRock = Object2D.extend({
     */
    kill: function() {
       // Make some particles
-      var pCount = Spaceroids.evolved && !Spaceroids.isAttractMode ? 30 : 4;
+      var pCount = Spaceroids.evolved && !Spaceroids.isAttractMode ? 30 : 12;
 
       if (EngineSupport.sysInfo().browser == "chrome") {
          pCount = 80;
       }
 
-      var p = [];
+      var p = Container.create();
       for (var x = 0; x < pCount; x++)
       {
          var decel = Spaceroids.evolved ? Math2.random() * 0.04 : 0;
-         p.push(SimpleParticle.create(this.getPosition(), 2000, decel));
+         p.add(SimpleParticle.create(this.getPosition(), 2000, decel));
       }
       Spaceroids.pEngine.addParticles(p);
 

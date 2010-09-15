@@ -130,11 +130,15 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       });
    },
 
+	toString: function() {
+      return this.getId() + " [" + this.constructor.getClassName() + "]";   
+	},
+
    /**
     * Serialize the object to XML.
     * @return {String}
     */
-   toString: function(indent) {
+   toXML: function(indent) {
       indent = indent ? indent : "";
       var props = this.getProperties();
       var xml = indent + "<" + this.constructor.getClassName();
