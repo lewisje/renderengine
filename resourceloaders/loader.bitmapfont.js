@@ -71,10 +71,9 @@ var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype 
          var thisObj = this;
 
          // Get the file from the server
-         $.getScript(path + url, function(data) {
-            data = BitmapFontLoader.font;
-				Console.log("Acquired font info: ", data);
-            thisObj.load(name, null, data);
+			Engine.loadJSON(path + url, function(fontInfo) {
+				Console.log("Acquired font info: ", fontInfo);
+            thisObj.load(name, null, fontInfo);
          });
       }
       else

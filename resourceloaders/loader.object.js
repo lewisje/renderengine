@@ -69,11 +69,9 @@ var ObjectLoader = RemoteLoader.extend(/** @scope ObjectLoader.prototype */{
          var thisObj = this;
 
          // Get the file from the server
-         $.get(url, function(data) {
-            var objectInfo = EngineSupport.parseJSON(data);
-
+			Engine.loadJSON(url, function(data) {
             // 2nd pass - store the object
-            thisObj.load(name, null, objectInfo);
+            thisObj.load(name, null, data);
          });
       } else {
          // The object has been loaded and is ready for use
