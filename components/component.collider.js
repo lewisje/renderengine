@@ -120,42 +120,26 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
    /**
     * Update the collision model that this component was initialized with.
-    * Creates an object called <tt>ModelData</tt> on the host object which contains
-    * information relative to the collision model.  This data contains:
-    * <ul>
-    * <li>lastNode - The last node the object was reported within.
-    * </ul>
-    * This data is used by the collider components to determine where to test for
-    * collisions, and whether or not the PCL should be rebuilt.
+    * As objects move about the world, the objects will move to different
+    * areas (or nodes) within the collision model.  It is necessary to
+    * update this model frequently so collisions can be determined.
     */
    updateModel: function() {
-
-      // Get the model data for the object
       var obj = this.getHostObject();
-      if (!obj.ModelData) {
-         obj.ModelData = { lastNode: null };
-      }
+		this.getCollisionModel().addObject(obj, obj.getPosition());
+   },
 
-      if ( obj.ModelData.lastNode !==null && obj.ModelData.lastNode.getRect().containsPoint(obj.getPosition()) ) {
-         // The object is within the same node
-         return;
-      }
-
-      // Find the node that contains the object
-      var aNode = this.getCollisionModel().findNodePoint(obj.getPosition());
-      if (aNode != null) {
-         if (obj.ModelData.lastNode !==null && (obj.ModelData.lastNode.getIndex() != aNode.getIndex())) {
-            // If the last node the object was in isn't the same as the node its position is in,
-            // remove it from the old node and add it to the new node
-            obj.ModelData.lastNode.removeObject(obj);
-            aNode.addObject(obj);
-         } else if (obj.ModelData.lastNode === null) {
-            // If the last node isn't specified, make sure to add it to the node
-            aNode.addObject(obj);
-         }
-         
-         obj.ModelData.lastNode = aNode;
-      }
+	/**
+	 * Get the collision node the host object is within.
+	 * @return {SpatialNode}
+	 */
+   getSpatialNode: function() {
+   	var modelData = this.getHostObject()._COLLISION_MODEL_DATA;
+   	if (modelData && modelData.lastNode) {
+   		return modelData.lastNode;
+   	}
+   	
+   	return null;
    },
 
    /**

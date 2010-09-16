@@ -982,7 +982,7 @@ var RedBlackTree = BaseObject.extend({
 
 	constructor: function(name) {
 		this.base(name || "RBTree");
-		this.header = new RedBackNode(null);
+		this.header = new RedBlackNode(null);
 		this.header.left = this.header.right = nullRBNode;
 
 		this.nullNode = new RedBlackNode(null);

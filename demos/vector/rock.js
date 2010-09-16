@@ -93,10 +93,7 @@ var SpaceroidsRock = Object2D.extend({
     * in the last collision model node.
     */
    destroy: function() {
-      AssertWarn(this.ModelData.lastNode, "Rock not located in a node!");
-      if (this.ModelData.lastNode) {
-         this.ModelData.lastNode.removeObject(this);
-      }
+   	Spaceroids.collisionModel.removeObject(this);
       this.pBox.destroy();
       this.base();
    },
@@ -129,10 +126,10 @@ var SpaceroidsRock = Object2D.extend({
       renderContext.popTransform();
 
       // Debug the collision node
-      if (Engine.getDebugMode() && this.ModelData && this.ModelData.lastNode)
+      if (Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
       {
          renderContext.setLineStyle("blue");
-         renderContext.drawRectangle(this.ModelData.lastNode.rect);
+         renderContext.drawRectangle(this.getComponent("collider").getSpatialNode().getRect());
       }
    },
 

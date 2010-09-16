@@ -71,6 +71,17 @@ var GridNode = SpatialNode.extend(/** @scope GridNode.prototype */{
    },
 
    /**
+    * Returns true if the spatial node contains the point specified.
+    * @param point {Point2D} The point to check
+    * @return {Boolean}
+    */
+   contains: function(point) {
+   	return this.getRect().containsPoint(point);
+   }
+
+}, /** @scope SpatialNode.prototype */{ 
+
+   /**
     * Get the class name of this object
     *
     * @return {String} "GridNode"

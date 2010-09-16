@@ -86,8 +86,8 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     *
     * @param obj {BaseObject} The object to add to this node.
     */
-   addObject: function(objId) {
-      this.objects.add(objId);
+   addObject: function(obj) {
+      this.objects.add(obj);
    },
 
    /**
@@ -97,7 +97,17 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     */
    removeObject: function(obj) {
       this.objects.remove(obj);
-   }
+   },
+   
+   /**
+    * Returns true if the spatial node contains the point specified.
+    * @param point {Point2D} The point to check
+    * @return {Boolean}
+    */
+   contains: function(point) {
+   	return false;
+   },
+   
 }, /** @scope SpatialNode.prototype */{ 
 
    /**
@@ -193,6 +203,63 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
       this.root = root;
    },
 
+   /**
+    * [ABSTRACT] Find the node that contains the specified point.
+    *
+    * @param point {Point2D} The point to locate the node for
+    * @return {SpatialNode}
+    */
+   findNodePoint: function(point) {
+   	return null;
+   },
+   
+   /**
+    * Add an object to the node which corresponds to the position
+    * provided.  Adding an object at a specific point will remove it from whatever
+    * node it was last in.
+    *
+    * @param obj {BaseObject} The object to add to the collision model
+    * @param point {Point2D} The world position where the object is
+    */
+   addObject: function(obj, point) {
+   	// See if the object is already in a node and remove it
+   	var oldNode = obj._COLLISION_MODEL_DATA && obj._COLLISION_MODEL_DATA.lastNode ? obj._COLLISION_MODEL_DATA.lastNode : null;
+   	if (oldNode != null) {
+   		if (!oldNode.contains(point)) {
+   			// The node is no longer in the same node
+   			oldNode.removeObject(obj);
+   		} else {
+   			// The object hasn't left the node
+   			return;
+   		}
+   	}
+   	
+   	// Find the node by position and add the object to it
+   	var node = this.findNodePoint(point);
+   	if (node != null) {
+			node.addObject(obj);
+
+			// Update the collision data on the object
+			obj._COLLISION_MODEL_DATA = { 
+				lastNode: node 
+			};
+		}
+   },
+   
+   /**
+    * Remove an object from the collision model.  This is done so collisions are
+    * no longer checked against this object.
+    *
+    * @param obj {BaseObject} The object to remove
+    */
+   removeObject: function(obj) {
+		var oldNode = obj._COLLISION_MODEL_DATA && obj._COLLISION_MODEL_DATA.lastNode ? obj._COLLISION_MODEL_DATA.lastNode : null;
+		if (oldNode != null) {
+			oldNode.removeObject(obj);
+		}
+		obj._COLLISION_MODEL_DATA = null;
+   },
+   
    /**
     * Returns a potential collision list of objects that are contained
     * within the defined sub-space of the container.
