@@ -944,7 +944,7 @@ var RedBlackNode = Base.extend({
 		this.element = element;
 		this.left = left || null;
 		this.right = right || null;
-		this.color: 1;	// Starts BLACK
+		this.color = 1;	// Starts BLACK
 	}	
 }, {
 	BLACK: 1,
