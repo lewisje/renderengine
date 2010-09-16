@@ -101,9 +101,7 @@ var SpaceroidsPlayer = Object2D.extend({
    },
 
    destroy: function() {
-      if (this.ModelData && this.ModelData.lastNode) {
-         this.ModelData.lastNode.removeObject(this);
-      }
+   	Spaceroids.collisionModel.removeObject(this);
       this.tip.destroy();
       this.pBox.destroy();
       this.base();
@@ -164,10 +162,10 @@ var SpaceroidsPlayer = Object2D.extend({
       renderContext.popTransform();
 
       // Debug the collision node
-      if (Engine.getDebugMode() && this.ModelData && this.ModelData.lastNode)
+      if (Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
       {
          renderContext.setLineStyle("red");
-         renderContext.drawRectangle(this.ModelData.lastNode.rect);
+         renderContext.drawRectangle(this.getComponent("collider").getSpatialNode().getRect());
       }
 
       // Draw the remaining lives
@@ -334,9 +332,9 @@ var SpaceroidsPlayer = Object2D.extend({
     */
    respawn: function() {
       // Are there rocks in our area?
-      if (this.ModelData)
+      if (this.getComponent("collider").getSpatialNode())
       {
-         if (this.ModelData.lastNode.getObjects().length > 1)
+         if (this.getComponent("collider").getSpatialNode().getObjects().size() > 1)
          {
             var pl = this;
             OneShotTimeout.create("respawn", 250, function() { pl.respawn(); });
