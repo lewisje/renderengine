@@ -72,9 +72,9 @@ Engine.initObject("FontTest", "Game", function(){
          Engine.setFPS(this.engineFPS);
 			
 			FontTest.fontLoader = BitmapFontLoader.create();
-			FontTest.fontLoader.load("lucida", "lucida_sans_36.js");
-			FontTest.fontLoader.load("century", "century_gothic_36.js");
-			FontTest.fontLoader.load("times", "times_36.js");
+			FontTest.fontLoader.load("lucida", "lucida_sans_36.font");
+			FontTest.fontLoader.load("century", "century_gothic_36.font");
+			FontTest.fontLoader.load("times", "times_36.font");
 			
          // Don't start until all of the resources are loaded
          FontTest.loadTimeout = Timeout.create("wait", 250, FontTest.waitForResources);
