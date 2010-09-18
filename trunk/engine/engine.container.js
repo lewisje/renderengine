@@ -296,27 +296,10 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 	 */
 	addAll: function(arr) {
 		if (Container.isInstance(arr)) {
-			if (this._head == null && this._tail == null) {
-				// This container is empty
-				var nh = this._new(arr._head.ptr);
-				nh.next = arr._head.next;
-				var nt = this._new(arr._tail.ptr);
-				nt.prev = arr._tail.prev;
-				this._head = nh;
-				this._tail = nt;
-				this.sz = arr.size();
-			} else {
-				var nn = this._new(arr._head.ptr);
-				nn.prev = this._tail;
-				nn.next = arr._head.next;
-				
-				var nt = this._new(arr._tail.ptr);
-				nt.prev = arr._tail.prev;
-				
-				this._tail.next = nn;
-				this._tail = nt;
-				this.sz += arr.size();	
+			for (var i = arr.iterator(); i.hasNext(); ) {
+				this.add(i.next());
 			}
+			i.destroy();
 		} else {
 			for (var i in arr) {
 				this.add(arr[i]);

@@ -2733,7 +2733,8 @@ var Engine = Engine.extend({
 				var outbound = txt.replace(/(".*".*|)(\/\/.*$)/gm, function(str,t,c) {
 					return t;
 				});
-				return outbound.replace(/\/\*(.|\n|\r)*?\*\//g, "");
+				return outbound.replace(/[\n\r\t]*/g,"");
+				//return outbound; //.replace(/\/\*(.|\n|\r)*?\*\//g, "");
 			}
 
 			var json = null;
@@ -2741,7 +2742,8 @@ var Engine = Engine.extend({
 				// Remove comments
 				var inbound = xhr.responseText;
 				if (inbound) {
-					json = EngineSupport.parseJSON(clean(inbound));
+					var c = clean(inbound);
+					json = EngineSupport.parseJSON(c);
 				}
 			} catch (ex) {}
 			callback(json, xhr.status);

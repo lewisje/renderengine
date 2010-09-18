@@ -183,9 +183,9 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     */
    poolSize: 0,
    
-   /* pragma:DEBUG_START */
+   /* pragma:DEBUG_START 
    classPool: {},
-   /* pragma:DEBUG_END */
+    pragma:DEBUG_END */
 
    /**
     * Similar to a constructor, all pooled objects implement this method.
@@ -210,24 +210,24 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 				Console.error("Error constructing " + this.getClassName() + " from pool due to: " + pEx.message, pEx);
 			}
 
-         /* pragma:DEBUG_START */ 
+         /* pragma:DEBUG_START  
          PooledObject.classPool[this.getClassName()][1]++;
          PooledObject.classPool[this.getClassName()][2]--;
-         /* pragma:DEBUG_END */
+          pragma:DEBUG_END */
 
          return obj;
       } else {
          PooledObject.poolNew++;
          Engine.addMetric("poolNew", PooledObject.poolNew, false, "#");
          
-         /* pragma:DEBUG_START */
+         /* pragma:DEBUG_START 
          if (PooledObject.classPool[this.getClassName()]) {
             PooledObject.classPool[this.getClassName()][0]++;
          } else {
             // 0: new, 1: in use, 2: pooled
             PooledObject.classPool[this.getClassName()] = [1,0,0];
          }
-         /* pragma:DEBUG_END */
+         pragma:DEBUG_END */
          
 			try {
 	         // TODO: Any more than 15 arguments and construction will fail!
@@ -257,12 +257,12 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       PooledObject.poolSize++;
       PooledObject.objectPool[obj.constructor.getClassName()].push(obj);
 
-      /* pragma:DEBUG_START */ 
+      /* pragma:DEBUG_START 
       if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
          PooledObject.classPool[obj.constructor.getClassName()][1]--;
       }
       PooledObject.classPool[obj.constructor.getClassName()][2]++;
-      /* pragma:DEBUG_END */
+       pragma:DEBUG_END */
          
 
       Engine.addMetric("pooledObjects", PooledObject.poolSize, false, "#");

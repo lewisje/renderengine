@@ -79,7 +79,7 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
       this.billboard = $("<img src='' width='1' height='1'/>");
       this.mode = Billboard2DComponent.REDRAW;
       this.renderComponent = renderComponent;
-      
+		
       // All billboard components share the same temporary context
       if (Billboard2DComponent.tempContext == null) {
          // TODO: At some point it would be good to mimic the
@@ -169,7 +169,14 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
          renderContext.pushTransform();
          renderContext.setPosition(this.getHostObject().getBoundingBox().getTopLeft());
       }
-      renderContext.drawImage(Rectangle2D.create(0, 0, hostBox.w, hostBox.h), this.billboard[0]);  
+		try{
+	      renderContext.drawImage(Rectangle2D.create(0, 0, hostBox.w, hostBox.h), this.billboard[0]);
+		} catch (ex) {
+			// TODO: Find a better way to perform this operation since try/catch is SLOW
+			// It appears that Firefox might not have a full image rendered, so calling
+			// drawImage fails with a component exception.  So, to abate this possible issue,
+			// we try the call and catch the failure...	
+		}
       if (hostBox.x < 0 || hostBox.y < 0) {
          renderContext.popTransform();
       }

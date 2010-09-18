@@ -371,10 +371,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
          this.get2DContext().drawImage(image,
             s.x, s.y, s.w, s.h, d.x, d.y, d.w, d.h);
       } else {
-         try {
-            this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
-         }catch(ex) {
-         }
+         this.get2DContext().drawImage(image, d.x, d.y, d.w, d.h);
       }
       this.base(rect, image);
    },

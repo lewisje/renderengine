@@ -100,9 +100,12 @@ Base.extend = function(_instance, _static) {
    };
 	
 	klass.isInstance = function(obj) {
+		/*
 		return (typeof obj != "undefined" && obj !== null && 
 				  obj.constructor && obj.constructor.__ancestors &&
 				  obj.constructor.__ancestors[klass.getClassName()]);
+		*/
+		return obj instanceof klass;
 	};
    extend.call(klass, _static);
    // single instance

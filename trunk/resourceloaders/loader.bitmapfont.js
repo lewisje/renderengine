@@ -71,9 +71,13 @@ var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype 
          var thisObj = this;
 
          // Get the file from the server
-			Engine.loadJSON(path + url, function(fontInfo) {
-				Console.log("Acquired font info: ", fontInfo);
-            thisObj.load(name, null, fontInfo);
+			Engine.loadJSON(path + url, function(fontInfo, status) {
+				if (status == 200) {
+					Console.log("Acquired font info: ", fontInfo);
+	            thisObj.load(name, null, fontInfo);
+				} else {
+					Console.error("Error loading font for name '" + name + "', due to: " + status);
+				}
          });
       }
       else
