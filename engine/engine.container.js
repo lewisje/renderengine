@@ -282,6 +282,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
          Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
       }
 		this.sz++;
+		
+		// Return the list node that was added
+		return n;
    },
 	
 	/**
@@ -358,6 +361,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 		n.next = o;
 		o.prev = n;
 		this.sz++;
+		
+		// Return the list node that was inserted
+		return n;
    },
    
    /**
@@ -477,22 +483,21 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 	 * @return {Container} The subset of elements being removed
 	 */
 	reduce: function(length) {
-		var sz = this.size();
-		if (length >= sz) {
+		if (length > this.size()) {
 			return Container.create();
-		}	
-		
-		var subset = this.subset(sz - length, sz);
-		if (length == 0) {
-			// Dump everything
-			this.clear();
-		} else {
-			var o = this._find(length - 1);
-			o.next = null;
-			this._tail = o;
 		}
-		this.sz = length;
-		return subset;		
+		var a = this.getAll();
+		var sub = this.subset(length, a.length, a);
+		if (length == 0) {
+			return sub;
+		}
+
+		a.length = length;
+		this.clear();
+		for (var i in a) {
+			this.add(a[i]);
+		}
+		return sub;		
 	},
 
 	/**
@@ -504,15 +509,13 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 	 * @param end {Number} The engine index in the container
 	 * @return {Container} A subset of the container.
 	 */
-	subset: function(start, end) {
+	subset: function(start, end, b) {
+		var a = b || this.getAll();
 		var c = Container.create();
-		var s = this._find(start);
-		var e = this._find((end - start) - 1, s);
-		c._head = this._new(s.ptr);
-		c._head.next = s.next;
-		c._tail = this._new(e.ptr);
-		c._tail.prev = e.prev;
-		return c;
+		for (var i = start; i < end; i++) {
+			c.add(a[i]);
+		}
+		return c;			
 	},
 
    /**
