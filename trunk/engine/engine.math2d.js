@@ -245,6 +245,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     */
    constructor: function(x, y) {
       this.base("Point2D");
+		this._vec = $V([0,0]);
       this.set(x, y);
    },
 
@@ -263,6 +264,15 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       this.x = this._vec.e(1); this.y = this._vec.e(2);
    },
 
+	/**
+	 * Returns a simplified version of a Point2D.  The simplified version is
+	 * an array with two elements: X, Y.
+	 * @return {Array}
+	 */
+	simplify: function() {
+		return [this._vec.e(1), this._vec.e(2)];
+	},
+
    /**
     * Returns <tt>true</tt> if this point is equal to the specified point.
     *
@@ -270,25 +280,26 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the two points are equal
     */
    equals: function(point) {
-		this.upd();
-		var p = point.get();
-      return (this.x == p.x && this.y == p.y);
+		return this._vec.eql(point._vec);
    },
 
    /**
     * Set the position of a 2D point.
     *
-    * @param x {Point2D/Number} If this arg is a Point2D, its values will be
+    * @param x {Point2D|Number|Array} If this arg is a Point2D, its values will be
     *                           copied into the new point.
     * @param y {Number} The Y coordinate of the point.  Only required if X
     *                   was a number.
     */
    set: function(x, y) {
-      if (Point2D.isInstance(x)) {
+		if (x.length && x.splice && x.shift) {
+			// An array
+			this._vec.setElements([x[0],x[1]]);
+		} else if (Point2D.isInstance(x)) {
          this._vec = x._vec.dup();
       } else {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
-         this._vec = $V([x, y || 0]);
+         this._vec.setElements([x, y]);
       }
       this.upd();
       return this;
@@ -514,6 +525,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     */
    constructor: function(x, y, z) {
       this.base("Point3D");
+		this._vec = $V([0,0,0]);
       this.set(x, y, z);
    },
 
@@ -533,6 +545,15 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
       this.x = this._vec.e(1); this.y = this._vec.e(2); this.z = this._vec.e(3);
    },
 
+	/**
+	 * Returns a simplified version of a Point3D.  The simplified version is
+	 * an array with three elements: X, Y, Z.
+	 * @return {Array}
+	 */
+	simplify: function() {
+		return [this._vec.e(1), this._vec.e(2), this._vec.e(3)];
+	},
+
    /**
     * Returns <tt>true</tt> if this point is equal to the specified point.
     *
@@ -540,15 +561,13 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Boolean} <tt>true</tt> if the two points are equal
     */
    equals: function(point) {
-		this.upd();
-		var p = point.get();
-      return (this.x == p.x && this.y == p.y && this.z == p.z);
+		return this._vec.eql(point._vec);
    },
 
    /**
     * Set the position of a 3D point.
     *
-    * @param x {Point3D/Number} If this arg is a Point2D, its values will be
+    * @param x {Point3D|Number|Array} If this arg is a Point2D, its values will be
     *                           copied into the new point.
     * @param y {Number} The Y coordinate of the point.  Only required if X
     *                   was a number.
@@ -556,12 +575,15 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * 						was a number.
     */
    set: function(x, y, z) {
-      if (Point3D.isInstance(x)) {
+  		if (x.length && x.splice && x.shift) {
+			// An array
+			this._vec.setElements([x[0],x[1],x[2]]);
+		} else if (Point3D.isInstance(x)) {
          this._vec = x._vec.dup();
       } else {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
 			AssertWarn((z != null), "Undefined Z value for point initialized to zero.");
-         this._vec = $V([x, y || 0, z || 0]);
+         this._vec.setElements([x, y || 0, z || 0]);
       }
       this.upd();
       return this;

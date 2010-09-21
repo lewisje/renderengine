@@ -126,6 +126,14 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       // We only have uppercase letters
       text = String(text).toUpperCase();
       this.base(text);
+		
+		if (this.rText.length > 0) {
+			for (var r in this.rText) {
+				if (this.rText[r])
+					this.rText[r].destroy();
+			}
+		}
+		
       this.rText = [];
       var spacing = 11.5;
 
@@ -163,7 +171,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 	            {
 	               if (glyph[p] != null)
 	               {
-	                  this.rText.push(new Point2D(glyph[p][0], glyph[p][1]).add(pc));
+	                  this.rText.push(Point2D.create(glyph[p][0], glyph[p][1]).add(pc));
 	               }
 	               else
 	               {
@@ -176,7 +184,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 			}
          letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
       }
-
+		pc.destroy();
       this.calculateBoundingBox();
    },
 

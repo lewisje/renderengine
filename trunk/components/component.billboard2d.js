@@ -70,6 +70,8 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
    mode: null,
    
    renderComponent: null,
+	
+	hostRect: null,
 
    /**
     * @private
@@ -117,6 +119,7 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
 
    regenerate: function() {
       this.mode = Billboard2DComponent.REDRAW;
+		this.hostRect = null;
    },
 
    getComponent: function() {
@@ -140,48 +143,55 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
          return;
       }
       
-      Assert((Engine.options.billboards), "Billboards are disabled in the Engine");
-
-      // Get the host objects bounding box
-      var hostBox = this.getHostObject().getBoundingBox().get();
-
-      if (this.mode == Billboard2DComponent.REDRAW) {
-         // Provide a temporary context which is used to render the contents into
-         Assert((Billboard2DComponent.tempContext != null), "Billboard2DComponent temporary context is not defined!");
-         
-         // Clear the temporary context and render the associated component to it
-         Billboard2DComponent.tempContext.getElement().width = hostBox.w;
-         Billboard2DComponent.tempContext.getElement().height = hostBox.h;
-         Billboard2DComponent.tempContext.reset();
-         Billboard2DComponent.tempContext.setPosition(Point2D.create(Math.abs(hostBox.x), Math.abs(hostBox.y)));
-         this.renderComponent.execute(Billboard2DComponent.tempContext, time);
-         
-         // Extract the rendered image
-         this.billboard.attr("src", Billboard2DComponent.tempContext.getDataURL())
-            .attr("width", hostBox.w).attr("height", hostBox.h);
-         this.mode = Billboard2DComponent.NORMAL;
-      }
-      
-      // Render the billboard.  If the bounding box's origin is negative in
-      // either X or Y, we'll need to move the transformation there before rendering the object
-		this.transformOrigin(renderContext, true);
-      if (hostBox.x < 0 || hostBox.y < 0) {
-         renderContext.pushTransform();
-         renderContext.setPosition(this.getHostObject().getBoundingBox().getTopLeft());
-      }
-		try{
-	      renderContext.drawImage(Rectangle2D.create(0, 0, hostBox.w, hostBox.h), this.billboard[0]);
-		} catch (ex) {
+		if (Engine.options.hardwareAccel && Engine.options.billboards) {
+		  	// Get the host objects bounding box
+			var hostBox = this.getHostObject().getBoundingBox().get();
+			
+			if (this.mode == Billboard2DComponent.REDRAW) {
+				// Provide a temporary context which is used to render the contents into
+				Assert((Billboard2DComponent.tempContext != null), "Billboard2DComponent temporary context is not defined!");
+				
+				// Clear the temporary context and render the associated component to it
+				Billboard2DComponent.tempContext.getElement().width = hostBox.w;
+				Billboard2DComponent.tempContext.getElement().height = hostBox.h + 1;
+				Billboard2DComponent.tempContext.reset();
+				var p = Point2D.create(Math.abs(hostBox.x), Math.abs(hostBox.y) + 1);
+				Billboard2DComponent.tempContext.setPosition(p);
+				p.destroy();
+				this.renderComponent.execute(Billboard2DComponent.tempContext, time);
+				
+				// Extract the rendered image
+				this.billboard.attr("src", Billboard2DComponent.tempContext.getDataURL()).attr("width", hostBox.w).attr("height", hostBox.h + 1);
+				this.mode = Billboard2DComponent.NORMAL;
+			}
+			
+			// Render the billboard.  If the bounding box's origin is negative in
+			// either X or Y, we'll need to move the transformation there before rendering the object
+			this.transformOrigin(renderContext, true);
+			if (hostBox.x < 0 || hostBox.y < 0) {
+				renderContext.pushTransform();
+				renderContext.setPosition(this.getHostObject().getBoundingBox().getTopLeft());
+			}
+			if (!this.hostRect) {
+				this.hostRect = Rectangle2D.create(0, 0, hostBox.w, hostBox.h);
+			}
+			try {
+				renderContext.drawImage(this.hostRect, this.billboard[0]);
+			} 
+			catch (ex) {
 			// TODO: Find a better way to perform this operation since try/catch is SLOW
 			// It appears that Firefox might not have a full image rendered, so calling
 			// drawImage fails with a component exception.  So, to abate this possible issue,
 			// we try the call and catch the failure...	
+			}
+			if (hostBox.x < 0 || hostBox.y < 0) {
+				renderContext.popTransform();
+			}
+			this.transformOrigin(renderContext, false);
+		} else {
+			this.renderComponent.execute(renderContext, time);
 		}
-      if (hostBox.x < 0 || hostBox.y < 0) {
-         renderContext.popTransform();
-      }
-		this.transformOrigin(renderContext, false);
-      
+			
       // Debug the collision node
       if (Engine.getDebugMode())
       {

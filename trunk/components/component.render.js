@@ -103,6 +103,7 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
 			renderContext.pushTransform();
 			var origin = Point2D.create(this.getHostObject().getOrigin());
 			renderContext.setPosition(origin.neg());
+			origin.destroy();
 		} else {
 			renderContext.popTransform();
 		}

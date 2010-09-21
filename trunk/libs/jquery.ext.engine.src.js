@@ -33,6 +33,7 @@ var userAgent = navigator.userAgent.toLowerCase();
 
 $.extend(jQuery.browser, {
    chrome: /chrome/.test( userAgent ),
+	firefox: /firefox/.test( userAgent ),
    Wii: /nintendo wii/.test( userAgent ),
 	android: /android/.test( userAgent ) && /AppleWebKit/.test( userAgent ),
    iPhone: /iphone/.test( userAgent) && /safari/.test( userAgent ),
@@ -40,6 +41,16 @@ $.extend(jQuery.browser, {
 	WiiScreenWidth: 800,
 	WiiScreenHeight: 460
 });
+
+// Chrome version
+if (jQuery.browser.chrome) {
+	jQuery.browser.version = /chrome\/([\d\.]*)\b/.exec( userAgent )[1];
+}
+
+// Firefox version
+if (jQuery.browser.firefox) {
+	jQuery.browser.version = /firefox\/([\d\.]*)\b/.exec( userAgent )[1];
+}
 
 /* Addition of some selectors that jQuery doesn't provide:
  *

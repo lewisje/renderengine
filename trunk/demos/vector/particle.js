@@ -114,7 +114,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
    },
 
    // A simple reference point for the "up" vector
-   ref: new Point2D(0, -1)
+   ref: Point2D.create(0, -1)
 });
 
 return SimpleParticle;

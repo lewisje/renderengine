@@ -35,7 +35,7 @@
 Console.startup();
 
 // Start the engine
-Engine.setOptions(Engine.defaultOptions);
+Engine.options = $.extend({}, Engine.defaultOptions);
 Engine.startup();
 
 // Set up the engine using whatever query params were passed

@@ -53,7 +53,7 @@ Engine.initObject("MathObject", "PooledObject", function() {
 var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
 
    constructor: function(name) {
-      if (!MathObject.isTransient) {
+      if (!Engine.options.transientMathObject) {
          this.base(name);
       }
    },
@@ -64,7 +64,7 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * to be used again.
     */
    destroy: function() {
-      if (!MathObject.isTransient) {
+      if (!Engine.options.transientMathObject) {
          this.base();
       }
    }
@@ -83,7 +83,7 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     * @memberOf PooledObject
     */
    create: function() {
-      if (MathObject.isTransient) {
+      if (Engine.options.transientMathObject) {
          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
                          arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
                          arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
@@ -99,24 +99,9 @@ var MathObject = PooledObject.extend(/** @scope MathObject.prototype */{
     */
    getClassName: function() {
       return "MathObject";
-   },
-   
-   // Transient math objects aren't pooled
-   isTransient: false
-
+   }
+	
 });
-
-// On certain browsers, we want to let math objects die and not pool them
-switch (EngineSupport.sysInfo().browser) {
-   case "chrome" : MathObject.isTransient = true;
-                   break;
-	// Firefox 4
-   case "mozilla" : if (EngineSupport.sysInfo().version.indexOf("1.9") == 0) MathObject.isTransient = true;
-                   break;
-	// IE 9
-	case "msie" : if (EngineSupport.sysInfo().version == "9.0") MathObject.isTransient = true;
-						 break;
-}
 
 return MathObject;
 

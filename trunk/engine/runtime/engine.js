@@ -1250,6 +1250,24 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
+	checkOS: function() {
+		// Scrape the userAgent to get the OS
+		var uA = navigator.userAgent.toLowerCase();
+		OS = /windows nt 6\.0/.test (userAgent) ? "Windows Vista" :
+				/windows nt 6\.1/.test (userAgent) ? "Windows 7" :
+				/windows nt 5\.1/.test (userAgent) ? "Windows XP" :
+				/windows/.test(userAgent) ? "Windows" :
+				/android 1\./.test(userAgent) ? "Android 1.x" :
+				/android 2\./.test(userAgent) ? "Android 2.x" :
+				/android/.test(userAgent) ? "Android" :
+				/x11/.test(userAgent) ? "X11" :
+				/linux/.test(userAgent) ? "Linux" :
+				/Mac OS X/.test(userAgent) ? "Mac OS X" :
+				/macintosh/.test(userAgent) ? "Macintosh" :
+				"unknown"; 
+		return OS;
+	},
+
    /**
     * Gets an object that is a collation of a number of browser and
     * client settings.  You can use this information to tailor a game
@@ -1294,13 +1312,15 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                        ($.browser.Wii ? "wii" : 
                        ($.browser.iPhone ? "iphone" :
                        ($.browser.safari ? "safari" : 
-                       ($.browser.mozilla ? "mozilla" : 
+							  ($.browser.firefox ? "firefox" : 
+                       ($.browser.mozilla ? "mozilla" :
                        ($.browser.opera ? "opera" : 
-                       ($.browser.msie ? "msie" : "unknown"))))))),
+                       ($.browser.msie ? "msie" : "unknown")))))))),
             "version" : $.browser.version,
             "agent": navigator.userAgent,
             "platform": navigator.platform,
             "cpu": navigator.cpuClass || navigator.oscpu,
+				"OS": EngineSupport.checkOS(),
             "language": navigator.language,
             "online": navigator.onLine,
             "cookies": navigator.cookieEnabled,
@@ -1964,7 +1984,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    defaultOptions: {
       skipFrames: true,		// Skip missed frames
       billboards: true,		// Use billboards to speed up rendering
-      fastParticles: false	// Perform lifespan checks on particles before overriding
+      hardwareAccel: false,// Hardware acceleration is not available
+      pointAsArc: true,		// Draw points are arcs
+		transientMathObject: false		// MathObject is not transient (pooled)
    },
 
    // Global engine options
@@ -2029,7 +2051,45 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param opts {Object} Configuration options for the engine
     */
    setOptions: function(opts) {
-      Engine.options = $.extend(Engine.options, opts);
+		// Check for a "defaults" key
+		var configOpts;
+		if (opts.defaults) {
+			configOpts = opts.defaults;
+		}
+		
+		// See if the OS has a key
+		var osOpts, platformDefaults, versionDefaults, platformVersions;
+		if (opts["platforms"] && opts["platforms"][EngineSupport.sysInfo().OS]) {
+			// Yep, extract that one
+			osOpts = opts["platforms"][EngineSupport.sysInfo().OS];
+			
+			// Check for platform defaults
+			if (osOpts && osOpts["defaults"]) {
+				platformDefaults = osOpts["defaults"];
+			}
+		}
+		
+		// Check for general version specific options
+		if (opts["versions"]) {
+			for (var v in opts["versions"]) {
+				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+					// Add  the version options
+					versionDefaults = opts["versions"][v];
+				}
+			}
+		}
+		
+		// Finally, check the OS for version specific options
+		if (osOpts && osOpts["versions"]) {
+			for (var v in osOpts["versions"]) {
+				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+					// Add  the version options
+					platformVersions = osOpts["versions"][v];
+				}
+			}
+		}
+		
+      $.extend(Engine.options, configOpts, platformDefaults, versionDefaults, platformVersions);
    },
 
    /**
@@ -2491,6 +2551,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          case "Wii":
          case "safari":
          case "mozilla":
+         case "firefox":
          case "opera": return true;
          case "unknown": $(document).ready(function() {
                            Engine.shutdown();
@@ -2973,34 +3034,10 @@ var Engine = Engine.extend({
 
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
-		
-	// Load the default configuration for all browsers, then load one specific to the browser type
-	Engine.optionsLoaded = false;
-
-	// Load the options specific to the browser.  Whether they load, or not,
-	// the game will continue to load.
-	Engine.loadJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
-		if (status == 200) {
-			Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
-			Engine.setOptions(bData);
-		} else {
-			// Log an error (most likely a 404)
-			Console.log("Engine options for: " + EngineSupport.sysInfo().browser + " responded with " + status);
-		}
-		Engine.optionsLoaded = true;	
-	});
 	
-	/*
-	// Apparently, if the file is a 404 this will fail silently...
-	jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
-		if (status.indexOf("404") == -1) {
-			Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
-			Engine.setOptions(bData);
-		}
-		Engine.optionsLoaded = true;	
-	});
-	*/
-		
+		// Load engine options for browsers
+		Engine.loadEngineOptions();
+
       Engine.gameLoadTimer = setInterval(function() {
          if (Engine.optionsLoaded && window["DocumentContext"] != null) {
 
@@ -3035,6 +3072,27 @@ var Engine = Engine.extend({
          }
       }, 2);
    },
+
+	loadEngineOptions: function() {
+		
+		// Load the default configuration for all browsers, then load one specific to the browser type
+		Engine.optionsLoaded = false;
+	
+		// Load the options specific to the browser.  Whether they load, or not,
+		// the game will continue to load.
+		Engine.loadJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".config", function(bData, status) {
+			if (status == 200) {
+				Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
+				Engine.setOptions(bData);
+			} else {
+				// Log an error (most likely a 404)
+				Console.log("Engine options for: " + EngineSupport.sysInfo().browser + " responded with " + status);
+			}
+			
+			Engine.optionsLoaded = true;	
+		});
+		
+	},
 
    /**
     * Load a script relative to the engine path.  A simple helper method which calls
@@ -3272,7 +3330,7 @@ var Engine = Engine.extend({
          this.metricDisplay.appendTo($("body"));
       }
       
-      if (this.showMetricsWindow && this.lastMetricSample-- == 0)
+      if ((this.showMetricsWindow || this.showMetricsProfile) && this.lastMetricSample-- == 0)
       {
          // Add some metrics to assist the developer
          Engine.addMetric("FPS", this.getFPS(), false, "#");
@@ -3371,7 +3429,9 @@ var Engine = Engine.extend({
 
       for (var m in this.metrics)
       {
-         h += m + ": " + this.metrics[m].val + "<br/>";
+			if (this.showMetricsWindow) {
+	         h += m + ": " + this.metrics[m].val + "<br/>";
+			}
          if (this.showMetricsProfile) {
             switch (m) {
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
@@ -3380,8 +3440,10 @@ var Engine = Engine.extend({
             }
          }
       }
-      $(".items", this.metricDisplay).html(h);
-      if (this.showMetricsProfile) {
+		if (this.showMetricsWindow) {
+			$(".items", this.metricDisplay).html(h);
+		}
+	   if (this.showMetricsProfile) {
          ctx.restore();
          this.moveProfiler();
       }
@@ -3420,7 +3482,7 @@ var Engine = Engine.extend({
     */
    doMetrics: function() { 
       // Output any metrics
-      if (Engine.showMetricsWindow) {
+      if (Engine.showMetricsWindow || Engine.showMetricsProfile) {
          Engine.renderMetrics();
       } else if (!Engine.showMetricsWindow && Engine.metricDisplay) {
          Engine.metricDisplay.remove();
@@ -3477,7 +3539,7 @@ if (EngineSupport.checkBooleanParam("profile"))
 Console.startup();
 
 // Start the engine
-Engine.setOptions(Engine.defaultOptions);
+Engine.options = $.extend({}, Engine.defaultOptions);
 Engine.startup();
 
 // Set up the engine using whatever query params were passed

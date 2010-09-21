@@ -106,7 +106,7 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
     */
    contains: function(point) {
    	return false;
-   },
+   }
    
 }, /** @scope SpatialNode.prototype */{ 
 
