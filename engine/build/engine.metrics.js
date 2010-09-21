@@ -127,7 +127,7 @@ var Engine = Engine.extend({
          this.metricDisplay.appendTo($("body"));
       }
       
-      if (this.showMetricsWindow && this.lastMetricSample-- == 0)
+      if ((this.showMetricsWindow || this.showMetricsProfile) && this.lastMetricSample-- == 0)
       {
          // Add some metrics to assist the developer
          Engine.addMetric("FPS", this.getFPS(), false, "#");
@@ -226,7 +226,9 @@ var Engine = Engine.extend({
 
       for (var m in this.metrics)
       {
-         h += m + ": " + this.metrics[m].val + "<br/>";
+			if (this.showMetricsWindow) {
+	         h += m + ": " + this.metrics[m].val + "<br/>";
+			}
          if (this.showMetricsProfile) {
             switch (m) {
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
@@ -235,8 +237,10 @@ var Engine = Engine.extend({
             }
          }
       }
-      $(".items", this.metricDisplay).html(h);
-      if (this.showMetricsProfile) {
+		if (this.showMetricsWindow) {
+			$(".items", this.metricDisplay).html(h);
+		}
+	   if (this.showMetricsProfile) {
          ctx.restore();
          this.moveProfiler();
       }
@@ -275,7 +279,7 @@ var Engine = Engine.extend({
     */
    doMetrics: function() { 
       // Output any metrics
-      if (Engine.showMetricsWindow) {
+      if (Engine.showMetricsWindow || Engine.showMetricsProfile) {
          Engine.renderMetrics();
       } else if (!Engine.showMetricsWindow && Engine.metricDisplay) {
          Engine.metricDisplay.remove();

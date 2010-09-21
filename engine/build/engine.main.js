@@ -63,7 +63,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    defaultOptions: {
       skipFrames: true,		// Skip missed frames
       billboards: true,		// Use billboards to speed up rendering
-      fastParticles: false	// Perform lifespan checks on particles before overriding
+      hardwareAccel: false,// Hardware acceleration is not available
+      pointAsArc: true,		// Draw points are arcs
+		transientMathObject: false		// MathObject is not transient (pooled)
    },
 
    // Global engine options
@@ -128,7 +130,45 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param opts {Object} Configuration options for the engine
     */
    setOptions: function(opts) {
-      Engine.options = $.extend(Engine.options, opts);
+		// Check for a "defaults" key
+		var configOpts;
+		if (opts.defaults) {
+			configOpts = opts.defaults;
+		}
+		
+		// See if the OS has a key
+		var osOpts, platformDefaults, versionDefaults, platformVersions;
+		if (opts["platforms"] && opts["platforms"][EngineSupport.sysInfo().OS]) {
+			// Yep, extract that one
+			osOpts = opts["platforms"][EngineSupport.sysInfo().OS];
+			
+			// Check for platform defaults
+			if (osOpts && osOpts["defaults"]) {
+				platformDefaults = osOpts["defaults"];
+			}
+		}
+		
+		// Check for general version specific options
+		if (opts["versions"]) {
+			for (var v in opts["versions"]) {
+				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+					// Add  the version options
+					versionDefaults = opts["versions"][v];
+				}
+			}
+		}
+		
+		// Finally, check the OS for version specific options
+		if (osOpts && osOpts["versions"]) {
+			for (var v in osOpts["versions"]) {
+				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+					// Add  the version options
+					platformVersions = osOpts["versions"][v];
+				}
+			}
+		}
+		
+      $.extend(Engine.options, configOpts, platformDefaults, versionDefaults, platformVersions);
    },
 
    /**
@@ -590,6 +630,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          case "Wii":
          case "safari":
          case "mozilla":
+         case "firefox":
          case "opera": return true;
          case "unknown": $(document).ready(function() {
                            Engine.shutdown();

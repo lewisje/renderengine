@@ -283,7 +283,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    _arc: function(point, radiusX, startAngle, endAngle) {
       this.startPath();
       this.get2DContext().arc(point.x, point.y, radiusX, startAngle, endAngle, false);
-      this.endPath();
+      //this.endPath();
    },
 
    /**
@@ -326,7 +326,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.startPath();
       this.moveTo(point1);
       this.lineTo(point2);
-      this.endPath();
+      //this.endPath();
       this.strokePath();
       this.base(point1, point2);
    },
@@ -337,7 +337,12 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @param point {Point2D} The position to draw the point
     */
    drawPoint: function(point) {
-      this.get2DContext().fillRect(point.x, point.y, 1.5, 1.5);
+		if (Engine.options.pointAsArc) {
+	      this._arc(point, 1, 0, 360);
+			this.get2DContext().fill();
+		} else {
+	      this.get2DContext().fillRect(point.x, point.y, 1.5, 1.5);
+		}
       this.base(point);
    },
 

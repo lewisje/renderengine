@@ -412,34 +412,10 @@ var Engine = Engine.extend({
 
       // We'll wait for the Engine to be ready before we load the game
       var engine = this;
-		
-	// Load the default configuration for all browsers, then load one specific to the browser type
-	Engine.optionsLoaded = false;
-
-	// Load the options specific to the browser.  Whether they load, or not,
-	// the game will continue to load.
-	Engine.loadJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
-		if (status == 200) {
-			Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
-			Engine.setOptions(bData);
-		} else {
-			// Log an error (most likely a 404)
-			Console.log("Engine options for: " + EngineSupport.sysInfo().browser + " responded with " + status);
-		}
-		Engine.optionsLoaded = true;	
-	});
 	
-	/*
-	// Apparently, if the file is a 404 this will fail silently...
-	jQuery.getJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".json", function(bData, status) {
-		if (status.indexOf("404") == -1) {
-			Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
-			Engine.setOptions(bData);
-		}
-		Engine.optionsLoaded = true;	
-	});
-	*/
-		
+		// Load engine options for browsers
+		Engine.loadEngineOptions();
+
       Engine.gameLoadTimer = setInterval(function() {
          if (Engine.optionsLoaded && window["DocumentContext"] != null) {
 
@@ -474,6 +450,27 @@ var Engine = Engine.extend({
          }
       }, 2);
    },
+
+	loadEngineOptions: function() {
+		
+		// Load the default configuration for all browsers, then load one specific to the browser type
+		Engine.optionsLoaded = false;
+	
+		// Load the options specific to the browser.  Whether they load, or not,
+		// the game will continue to load.
+		Engine.loadJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".config", function(bData, status) {
+			if (status == 200) {
+				Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
+				Engine.setOptions(bData);
+			} else {
+				// Log an error (most likely a 404)
+				Console.log("Engine options for: " + EngineSupport.sysInfo().browser + " responded with " + status);
+			}
+			
+			Engine.optionsLoaded = true;	
+		});
+		
+	},
 
    /**
     * Load a script relative to the engine path.  A simple helper method which calls

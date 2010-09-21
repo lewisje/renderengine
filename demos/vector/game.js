@@ -161,10 +161,11 @@ var Spaceroids = Game.extend({
       this.renderContext.add(copy);
 
       // Instructions
-      var instruct = "left/right arrows to turn\nup arrow to thrust\nZ to fire missile\nA to hyperjump";
+      var instruct = "left/right arrows to turn\nup arrow to thrust\nZ to fire missile\nA to hyperjump\n";
       if (EngineSupport.checkBooleanParam("evolved")) {
-         instruct += "\nENTER to detonate nuke";
+         instruct += "ENTER to detonate nuke\n";
       }
+		instruct += EngineSupport.sysInfo().OS + " " + EngineSupport.sysInfo().browser + " " + EngineSupport.sysInfo().version;
 		
       var inst = TextRenderer.create(VectorText.create(), instruct, 0.8);
       inst.setColor("#00ff00");
@@ -172,17 +173,7 @@ var Spaceroids = Game.extend({
       this.renderContext.add(inst);
 
       var startText;
-      if ($.browser.Wii) {
-         // We'll prompt differently for the Wii
-         startText = "[ Press =A Button= to Start ]";
-
-         var wii = TextRenderer.create(VectorText.create(), "(Wii Detected)", 1);
-         wii.setColor("#ffffff");
-         wii.setPosition(Point2D.create(160, 470));
-         this.renderContext.add(wii);
-      } else {
-         startText = "[ Press =Enter= to Start ]";
-      }
+      startText = "[ Press =Enter= to Start ]";
 
       if (EngineSupport.checkBooleanParam("evolved")) {
          Spaceroids.evolved = true;
@@ -426,11 +417,6 @@ var Spaceroids = Game.extend({
     * the game to its running state.
     */
    setup: function() {
-      // Set the FPS of the game
-      if (EngineSupport.sysInfo().browser == "chrome") {
-         this.engineFPS = 35;
-      }
-      
       Engine.setFPS(this.engineFPS);
 
       // Create the 2D context

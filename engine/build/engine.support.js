@@ -413,6 +413,24 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
+	checkOS: function() {
+		// Scrape the userAgent to get the OS
+		var uA = navigator.userAgent.toLowerCase();
+		OS = /windows nt 6\.0/.test (userAgent) ? "Windows Vista" :
+				/windows nt 6\.1/.test (userAgent) ? "Windows 7" :
+				/windows nt 5\.1/.test (userAgent) ? "Windows XP" :
+				/windows/.test(userAgent) ? "Windows" :
+				/android 1\./.test(userAgent) ? "Android 1.x" :
+				/android 2\./.test(userAgent) ? "Android 2.x" :
+				/android/.test(userAgent) ? "Android" :
+				/x11/.test(userAgent) ? "X11" :
+				/linux/.test(userAgent) ? "Linux" :
+				/Mac OS X/.test(userAgent) ? "Mac OS X" :
+				/macintosh/.test(userAgent) ? "Macintosh" :
+				"unknown"; 
+		return OS;
+	},
+
    /**
     * Gets an object that is a collation of a number of browser and
     * client settings.  You can use this information to tailor a game
@@ -457,13 +475,15 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                        ($.browser.Wii ? "wii" : 
                        ($.browser.iPhone ? "iphone" :
                        ($.browser.safari ? "safari" : 
-                       ($.browser.mozilla ? "mozilla" : 
+							  ($.browser.firefox ? "firefox" : 
+                       ($.browser.mozilla ? "mozilla" :
                        ($.browser.opera ? "opera" : 
-                       ($.browser.msie ? "msie" : "unknown"))))))),
+                       ($.browser.msie ? "msie" : "unknown")))))))),
             "version" : $.browser.version,
             "agent": navigator.userAgent,
             "platform": navigator.platform,
             "cpu": navigator.cpuClass || navigator.oscpu,
+				"OS": EngineSupport.checkOS(),
             "language": navigator.language,
             "online": navigator.onLine,
             "cookies": navigator.cookieEnabled,
