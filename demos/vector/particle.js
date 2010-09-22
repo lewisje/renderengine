@@ -88,8 +88,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       }
       
       this.pos.add(this.vec);
-      //renderContext.setPosition(this.pos);
-
+ 
       var colr = "#fff";
       if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
          var s = time - this.getBirth();
@@ -166,7 +165,6 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
     */
    draw: function(renderContext, time) {
       this.pos.add(this.vec);
-      //renderContext.setPosition(this.pos);
       renderContext.setFillStyle(this.clr);
       renderContext.drawPoint(this.pos);
    }

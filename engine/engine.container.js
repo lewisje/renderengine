@@ -181,7 +181,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       this.base(containerName || "Container");
       this._head = null;
 		this._tail = null;
-		this.sz = null;
+		this.sz = 0;
    },
 
    /**
