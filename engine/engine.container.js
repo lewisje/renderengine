@@ -307,7 +307,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 			for (var i in arr) {
 				this.add(arr[i]);
 			}
-			this.sz += arr.length;
 		}
 	},
 
