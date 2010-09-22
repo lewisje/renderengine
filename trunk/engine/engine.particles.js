@@ -119,6 +119,8 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       return this.birth;
    },
 
+	
+
    /**
     * [ABSTRACT] Draw the particle
     * @param renderContext {RenderContext} The context to render the particle to
@@ -212,7 +214,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
 			particles = Container.create();
 			particles.addAll(oldP);
 		}
-		
+
       // If the new particles exceed the size of the engine's
       // maximum, truncate the remainder
       if (particles.size() > this.maximum) {
@@ -258,8 +260,12 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     */
    addParticle: function(particle) {
 		if (this.particles.size() < this.maximum) {
+         particle.init(this, this.lastTime);
 			this.particles.add(particle);
 			this.liveParticles = this.particles.size();
+		} else {
+			// nowhere to put it
+			particle.destroy();
 		}
    },
    
@@ -357,6 +363,7 @@ var ParticleEngine = BaseObject.extend(/** @scope ParticleEngine.prototype */{
     * @type Number
     */
    MAX_PARTICLES: 120
+
 });
 
 return ParticleEngine;

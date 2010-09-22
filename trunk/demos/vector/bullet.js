@@ -99,10 +99,7 @@ var SpaceroidsBullet = Object2D.extend({
     * in the last collision model node.
     */
    destroy: function() {
-      AssertWarn(this.ModelData.lastNode, "Bullet not located in a node!");
-      if (this.ModelData.lastNode) {
-         this.ModelData.lastNode.removeObject(this);
-      }
+   	Spaceroids.collisionModel.removeObject(this);
       this.base();
    },
 
