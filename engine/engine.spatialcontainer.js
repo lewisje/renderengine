@@ -74,11 +74,11 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
    },
 
    /**
-    * Get an array of objects within this node.
-    * @return {BaseObject[]} Objects in the node
+    * Get a Container which is all objects within this node.
+    * @return {Container} Objects in the node
     */
    getObjects: function() {
-      return this.objects.getAll();
+      return this.objects.clone();
    },
 
    /**
