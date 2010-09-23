@@ -88,7 +88,6 @@ var Spaceroids = Game.extend({
 
    level: 0,
 
-   evolved: false,
    titlePos: null,
    
    rec: false,
@@ -161,10 +160,7 @@ var Spaceroids = Game.extend({
       this.renderContext.add(copy);
 
       // Instructions
-      var instruct = "left/right arrows to turn\nup arrow to thrust\nZ to fire missile\nA to hyperjump\n";
-      if (EngineSupport.checkBooleanParam("evolved")) {
-         instruct += "ENTER to detonate nuke\n";
-      }
+      var instruct = "left/right arrows to turn\nup arrow to thrust\nZ to fire missile\nA to hyperjump\nENTER to detonate nuke\n";
 		instruct += EngineSupport.sysInfo().OS + " " + EngineSupport.sysInfo().browser + " " + EngineSupport.sysInfo().version;
 		
       var inst = TextRenderer.create(VectorText.create(), instruct, 0.8);
@@ -175,14 +171,10 @@ var Spaceroids = Game.extend({
       var startText;
       startText = "[ Press =Enter= to Start ]";
 
-      if (EngineSupport.checkBooleanParam("evolved")) {
-         Spaceroids.evolved = true;
-
-         var evolved = TextRenderer.create(VectorText.create(), "Evolution", 1);
-         evolved.setColor("#ff0000");
-         evolved.setPosition(Point2D.create(290, 120));
-         this.renderContext.add(evolved);
-      }
+		var evolved = TextRenderer.create(VectorText.create(), "Evolution", 1);
+		evolved.setColor("#ff0000");
+		evolved.setPosition(Point2D.create(290, 120));
+		this.renderContext.add(evolved);
 
       Spaceroids.start = TextRenderer.create(VectorText.create(), startText, 1);
       Spaceroids.start.setPosition(Point2D.create(96, 450));
@@ -271,10 +263,6 @@ var Spaceroids = Game.extend({
    },
 
    recordDemo: function() {
-      if (EngineSupport.checkBooleanParam("evolved")) {
-         Spaceroids.evolved = true;
-      }
-     
       Spaceroids.rec = true;
       Spaceroids.demoScript = {};
       Spaceroids.demoScript.seed = Math2.randomInt();
@@ -284,10 +272,6 @@ var Spaceroids = Game.extend({
    },
    
    playDemo: function() {
-      if (EngineSupport.checkBooleanParam("evolved")) {
-         Spaceroids.evolved = true;
-      }
-
       Spaceroids.play = true;
       var demoMode = Spaceroids.demoModes[0];
       Math2.seed(demoMode.seed);
@@ -352,6 +336,9 @@ var Spaceroids = Game.extend({
       });
    },
 
+	/**
+	 * Advance to next level
+	 */
    nextLevel: function() {
       Spaceroids.level++;
 
@@ -363,7 +350,9 @@ var Spaceroids = Game.extend({
       var pWidth = this.fieldWidth;
       var pHeight = this.fieldHeight;
       if (this.playerObj) {
-         this.playerObj.nukes = 1;
+     		// Max of 3 nukes
+         this.playerObj.nukes++;
+         this.playerObj.nukes = this.playerObj.nukes > 3 ? 3 : this.playerObj.nukes;
       }
 
       for (var a = 0; a < Spaceroids.level + 1; a++)
@@ -476,7 +465,7 @@ var Spaceroids = Game.extend({
     * Cause the playfield to flash
     */
    blinkScreen: function(color) {
-      if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
+      if (!Spaceroids.isAttractMode) {
          $(this.renderContext.getSurface()).css("background", color || "white");
          var surf = this.renderContext.getSurface();
          OneShotTimeout.create("blink", 100, function() {

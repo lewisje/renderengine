@@ -54,6 +54,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
    engine: null,
    birth: 0,
    dead: false,
+   pos: null,
 
    /**
     * @private
@@ -63,6 +64,15 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       this.life = lifetime;
       this.birth = 0;
       this.dead = false;
+      this.pos = Point2D.create(0,0);
+   },
+   
+   /**
+    * Destroy the particle
+    */
+   destroy: function() {
+   	this.pos.destroy();
+   	this.base();
    },
 
    /**
@@ -74,6 +84,7 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       this.engine = null;
       this.birth = 0;
       this.dead = true;
+      this.pos = null;
    },
 
    /**
@@ -89,13 +100,32 @@ var Particle = PooledObject.extend(/** @scope Particle.prototype */{
       this.dead = false;
    },
 
+	/**
+	 * Get the current position of the particle
+	 * @return {Point2D}
+	 */
+	getPosition: function() {
+		return this.pos;
+	},
+	
+	/**
+	 * Set the X and Y world coordinates of the particle
+	 * @param x {Number} X world coordinate
+	 * @param y {Number} Y world coordinate
+	 */
+	setPosition: function(x, y) {
+		this.pos.set(x,y);
+	},
+
    /**
     * Update the particle in the render context, calling its draw method.
     * @param renderContext {RenderContext} The context where the particle is drawn
     * @param time {Number} The world time, in milliseconds
     */
    update: function(renderContext, time) {
-      if (time < this.life) {
+      if (time < this.life &&
+      		renderContext.getViewport().containsPoint(this.getPosition())) {
+	   	// if the particle is still alive, and it isn't outside the viewport
          this.draw(renderContext, time);
          return true;
       } else {

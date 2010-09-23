@@ -71,11 +71,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.field = Spaceroids;
 
       // Add components to move and draw the player
-//      if (window.opera && opera.wiiremote) {
-//         this.add(WiimoteInputComponent.create("input"));
-//      } else {
-         this.add(KeyboardInputComponent.create("input"));
-//      }
+		this.add(KeyboardInputComponent.create("input"));
 
       if (Spaceroids.rec) {
          this.getComponent("input").startRecording();
@@ -95,7 +91,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.thrusting = false;
       this.getComponent("move").setCheckRestState(false);
       this.getComponent("move").setCheckLag(false);
-      this.nukes = 1;
+      this.nukes = 0;	// Have to earn your nukes
       this.nuking = false;
       this.pBox = Rectangle2D.create(0,0,1,1);
    },
@@ -146,12 +142,10 @@ var SpaceroidsPlayer = Object2D.extend({
          c_mover.setAcceleration(dir.mul(0.3));
 
          // Particle trail
-         if (Spaceroids.evolved) {
-            var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
-            var colr = SpaceroidsPlayer.trailColors[Math.floor(Math2.random() * 3)];
-            this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
-            inv.destroy();
-         }
+			var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
+			var colr = SpaceroidsPlayer.TRAIL_COLORS[Math.floor(Math2.random() * 3)];
+			this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
+			inv.destroy();
          dir.destroy();
       } else {
          c_mover.setAcceleration(Point2D.ZERO);
@@ -182,14 +176,18 @@ var SpaceroidsPlayer = Object2D.extend({
          dp.destroy();
       }
       
-      // If they have their nuke, draw that too
-      if (Spaceroids.evolved && this.nukes > 0) {
-         renderContext.pushTransform();
-         var dr = Rectangle2D.create(70, 35, 6, 6);
-         renderContext.drawRectangle(dr);
-         renderContext.popTransform();
-         dr.destroy();
-      }
+      // If they have their nukes, draw them too
+      if (this.nukes > 0) {
+			renderContext.pushTransform();
+			renderContext.setLineStyle("yellow");
+			var dr = Rectangle2D.create(70, 35, 6, 6);
+			for (var n = 0; n < this.nukes; n++) {
+				renderContext.drawRectangle(dr);
+				dr.offset(-8, 0);
+			}
+			renderContext.popTransform();
+			dr.destroy();
+		}
    },
 
    /**
@@ -368,15 +366,11 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
       this.field.soundLoader.get("thrust").stop();
 
-      var pCount = Spaceroids.evolved ? 40 : 8;
-
       // Make some particles
       var p = Container.create();
-      for (var x = 0; x < pCount; x++)
+      for (var x = 0; x < SpaceroidsPlayer.KILL_PARTICLES; x++)
       {
-         if (Spaceroids.evolved) {
-            p.add(TrailParticle.create(this.getPosition(), this.getRotation(), 45, "#ffffaa", 2000));
-         }
+			p.add(TrailParticle.create(this.getPosition(), this.getRotation(), 45, "#ffffaa", 2000));
          p.add(SimpleParticle.create(this.getPosition(), 3000));
       }
       this.field.pEngine.addParticles(p);
@@ -421,16 +415,11 @@ var SpaceroidsPlayer = Object2D.extend({
       this.hyperjump = true;
 
       var self = this;
-      if (Spaceroids.evolved) {
-         OneShotTrigger.create("hyper", 250, function() {
-            self.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
-         }, 10, function() {
-            self.setScale(self.getScale() - 0.09);
-         });
-      } else {
-         this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
-      }
-
+		OneShotTrigger.create("hyper", 250, function() {
+			self.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
+		}, 10, function() {
+			self.setScale(self.getScale() - 0.09);
+		});
 
       // Give it some time and move the player somewhere random
       OneShotTimeout.create("hyperspace", 800, function() {
@@ -474,7 +463,7 @@ var SpaceroidsPlayer = Object2D.extend({
          var n = Container.create();
          for (var x = 0; x < 60; x++)
          {
-            n.add(TrailParticle.create(self.getPosition(), self.getRotation(), 350, SpaceroidsPlayer.nukeColors[rep], 1500));
+            n.add(TrailParticle.create(self.getPosition(), self.getRotation(), 350, SpaceroidsPlayer.NUKE_COLORS[rep], 1500));
          }
          Spaceroids.pEngine.addParticles(n);
       });
@@ -529,9 +518,7 @@ var SpaceroidsPlayer = Object2D.extend({
             this.thrusting = true;
             break;
          case EventEngine.KEYCODE_ENTER:
-            if (Spaceroids.evolved) {
-               this.nuke();
-            }
+				this.nuke();
             break;
       }
       
@@ -619,9 +606,10 @@ var SpaceroidsPlayer = Object2D.extend({
     */
    thrust: [ [-1,  2], [0,  3], [ 1,  2] ],
 
-   trailColors: ["red", "orange", "yellow", "white", "lime"],
-   
-   nukeColors: ["#1111ff", "#8833ff", "#ffff00"]
+
+   TRAIL_COLORS: ["red", "orange", "yellow", "white", "lime"],
+   NUKE_COLORS: ["#1111ff", "#8833ff", "#ffff00"],
+   KILL_PARTICLES: 40
    
 });
 
