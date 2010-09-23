@@ -189,9 +189,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     */
    release: function() {
       this.base();
-      this._head = null;
-		this._tail = null;
-		this.sz = 0;
+      this.clear();
    },
 
    /**
@@ -200,7 +198,6 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * objects which are being used by a transient container.
     */
    destroy: function() {
-      this.clear();
       this.base();
    },
 
@@ -593,8 +590,9 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
     * Remove and destroy all objects from the container.
     */
    cleanUp: function() {
-		var a = this.getAll(), h = a.shift();
-		while ((h = a.shift()) != null) {
+		var a = this.getAll(), h;
+		while (a.length > 0) {
+			h = a.shift();
 			if (h.destroy) {
 				h.destroy();
 			}

@@ -80,6 +80,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       if (this.getRenderContext()) {
          this.getRenderContext().remove(this);
       }
+		this.cleanUp();
       this.base();
    },
 

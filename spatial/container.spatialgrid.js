@@ -239,7 +239,9 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       if (nodes.length > 0) {
          for (var n = 0; n < nodes.length; n++) {
             if (nodes[n]) {
-               pcl.addAll(nodes[n].getObjects());
+					var objs = nodes[n].getObjects();
+               pcl.addAll(objs);
+					objs.destroy();
             }
          }
       }

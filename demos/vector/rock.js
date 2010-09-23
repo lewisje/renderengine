@@ -62,11 +62,7 @@ var SpaceroidsRock = Object2D.extend({
 
       // Add components to move and draw the asteroid
       this.add(Mover2DComponent.create("move"));
-		if (Engine.options.hardwareAccel) {
-	      this.add(Billboard2DComponent.create("billboard", Vector2DComponent.create("draw")));
-		} else {
-	      this.add(Vector2DComponent.create("draw"));
-		}
+      this.add(Billboard2DComponent.create("billboard", Vector2DComponent.create("draw")));
       this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
 
       // Playfield bounding box for quick checks
@@ -191,7 +187,7 @@ var SpaceroidsRock = Object2D.extend({
     * available shapes.
     */
    setShape: function() {
-      var c_draw = Engine.options.hardwareAccel ? this.getComponent("billboard").getComponent() : this.getComponent("draw");
+      var c_draw = this.getComponent("billboard").getComponent();
 
       // Pick one of the three shapes
       var tmp = [];
@@ -211,9 +207,7 @@ var SpaceroidsRock = Object2D.extend({
       c_draw.setLineStyle("white");
       c_draw.setLineWidth(0.8);
 		
-		if (Engine.options.hardwareAccel) {
-			this.getComponent("billboard").regenerate();
-		}
+		this.getComponent("billboard").regenerate();
    },
 
    /**
