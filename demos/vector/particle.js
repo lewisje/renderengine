@@ -44,30 +44,28 @@ Engine.initObject("SimpleParticle", "Particle", function() {
  */
 var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
 
-   pos: null,
    vec: null,
    decel: 0,
 
    constructor: function(pos, ttl, decel) {
       this.base(ttl || 2000);
-      this.pos = Point2D.create(pos);
+      var p = pos.get();
+      this.setPosition(p.x, p.y);
 
       var a = Math.floor(Math2.random() * 360);
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, SimpleParticle.ref, a);
-      var vel = 1 + (Math2.random() * (Spaceroids.evolved ? 5 : 2));
+      var vel = 1 + (Math2.random() * 5);
       this.vec.mul(vel);
       this.decel = decel;
    },
 
    destroy: function() {
-      this.pos.destroy();
       this.vec.destroy();
       this.base();
    },
    
    release: function() {
       this.base();
-      this.pos = null;
       this.vec = null;
       this.decel = 0;
    },
@@ -87,10 +85,10 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
          invVel.destroy();
       }
       
-      this.pos.add(this.vec);
+      this.getPosition().add(this.vec);
  
       var colr = "#fff";
-      if (Spaceroids.evolved && !Spaceroids.isAttractMode) {
+      if (!Spaceroids.isAttractMode) {
          var s = time - this.getBirth();
          var e = this.getTTL() - this.getBirth();
          colr = 255 - Math.floor(255 * (s / e));
@@ -104,7 +102,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       }
 
       renderContext.setFillStyle(colr);
-      renderContext.drawPoint(this.pos);
+      renderContext.drawPoint(this.getPosition());
    }
 
 }, {
@@ -130,14 +128,14 @@ Engine.initObject("TrailParticle", "Particle", function() {
  */
 var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
 
-   pos: null,
    vec: null,
    clr: null,
 
    constructor: function(pos, rot, spread, color, ttl) {
       this.base(ttl || 2000);
       this.clr = color;
-      this.pos = Point2D.create(pos);
+      var p = pos.get();
+      this.setPosition(p.x, p.y);
       var a = rot + Math.floor((180 - (spread / 2)) + (Math2.random() * (spread * 2)));
       this.vec = Math2D.getDirectionVector(Point2D.ZERO, TrailParticle.ref, a);
       var vel = 1 + (Math2.random() * 2);
@@ -145,15 +143,17 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
    },
 
    destroy: function() {
-      this.pos.destroy();
       this.vec.destroy();
       this.base();
    },
 
    release: function() {
       this.base();
-      this.pos = null;
       this.vec = null;
+   },
+   
+   setColor: function(color) {
+   	this.clr = color;
    },
 
    /**
@@ -164,9 +164,9 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
     * @param time {Number} The engine time in milliseconds
     */
    draw: function(renderContext, time) {
-      this.pos.add(this.vec);
+      this.getPosition().add(this.vec);
       renderContext.setFillStyle(this.clr);
-      renderContext.drawPoint(this.pos);
+      renderContext.drawPoint(this.getPosition());
    }
 
 }, {
@@ -179,5 +179,41 @@ var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
 });
 
 return TrailParticle;
+
+});
+
+Engine.initObject("BulletParticle", "TrailParticle", function() {
+
+/**
+ * @class A simple particle
+ *
+ * @param pos {Point2D} The starting position of the particle.  A
+ *            velocity vector will be derived from this position.
+ */
+var BulletParticle = TrailParticle.extend(/** @scope BulletParticle.prototype */{
+
+   /**
+    * Called by the particle engine to draw the particle to the rendering
+    * context.
+    *
+    * @param renderContext {RenderContext} The rendering context
+    * @param time {Number} The engine time in milliseconds
+    */
+   draw: function(renderContext, time) {
+      var cb = 255, cg = 100;
+		cb -= Math.floor(Math2.random() * 50);
+		cg -= Math.floor(Math2.random() * 40);
+		var colr = "#88" + (cg.toString(16) + cb.toString(16));
+      this.setColor(colr);
+      this.base(renderContext, time);
+   }
+
+}, {
+   getClassName: function() {
+      return "BulletParticle";
+   }
+});
+
+	return BulletParticle;
 
 });

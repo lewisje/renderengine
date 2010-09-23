@@ -249,16 +249,12 @@ var SpaceroidsRock = Object2D.extend({
     */
    kill: function() {
       // Make some particles
-      var pCount = Spaceroids.evolved && !Spaceroids.isAttractMode ? 30 : 12;
-
-      if (EngineSupport.sysInfo().browser == "chrome") {
-         pCount = 50;
-      }
+      var pCount = Spaceroids.isAttractMode ? 25 : 10;
 
       var p = Container.create();
       for (var x = 0; x < pCount; x++)
       {
-         var decel = Spaceroids.evolved ? Math2.random() * 0.04 : 0;
+         var decel = Math2.random() * 0.04;
 			var r = Math.floor(Math2.random() * 500);
          p.add(SimpleParticle.create(this.getPosition(), 2000 + r, decel));
       }
