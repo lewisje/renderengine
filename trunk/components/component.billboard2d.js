@@ -93,6 +93,11 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
       }
    },
 
+	destroy: function() {
+		this.renderComponent.destroy();
+		this.base();
+	},
+
    /**
     * Releases the component back into the object pool. See {@link PooledObject#release}
     * for more information.
