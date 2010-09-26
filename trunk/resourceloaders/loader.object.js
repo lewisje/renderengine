@@ -65,7 +65,11 @@ var ObjectLoader = RemoteLoader.extend(/** @scope ObjectLoader.prototype */{
    load: function(name, url, obj) {
 
       if (url) {
-         Assert(url.indexOf("http") == -1, "Objects must be located relative to this server");
+         var loc = window.location;
+         if (url.indexOf(loc.protocol) != -1 && url.indexOf(loc.host) == -1) {
+            Assert(false, "Objects must be located on this server");
+         }
+
          var thisObj = this;
 
          // Get the file from the server
@@ -75,8 +79,8 @@ var ObjectLoader = RemoteLoader.extend(/** @scope ObjectLoader.prototype */{
          });
       } else {
          // The object has been loaded and is ready for use
-         this.setReady(true);
          this.base(name, obj);
+         this.setReady(name, true);
       }
    },
 
