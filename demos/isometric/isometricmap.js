@@ -171,11 +171,14 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 				this.objects.sort(function(a, b) {
 					return a.pos.get().y - b.pos.get().y;
 				});
-				var yOffs = ts.y * -5;
+				
+				var yOffs = ts.y * -3;
 				for (var o = 0; o < this.objects.length; o++) {
 					var obj = this.objects[o];
 					var xOffs = (ts.x * 7) - (ts.x * obj.pos.get().y);
 					var pt = Point3D.create(xOffs + (ts.x * obj.pos.get().x), yOffs + (ts.y * obj.pos.get().y), 0);
+					var info = this.tileset.getTileInfo(obj.tileset, obj.tile);
+					pt.sub(info.origin);
 					var ptp = pt.project();
 					var t = this.tileset.getTileImage(obj.tileset, obj.tile);
 					var tile = $(t).clone().css({

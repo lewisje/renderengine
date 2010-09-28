@@ -4,7 +4,7 @@
       <actions>
          <collision state="small" with="goomba,koopa,shell" direction="horizontal" do="killPlayer()"/>
          <collision state="large" with="goomba,koopa,shell" direction="horizontal" do="pauseEnemies(true); shrinkPlayer(); pauseEnemies(false)"/>
-         <collision with="goomba,koopa,shell" direction="vertical" do="killTarget()"/>
+         <collision with="goomba,koopa,shell" direction="vertical" do="killTarget(this)"/>
          <collision state="small" with="brick" do="bounceTarget(0,-1)"/>
          <collision state="large" with="brick" do="shatter(this); destroy()"/>
          <collision repeat="1" with="mushroomBlock" do="bounce(0,-1); spawn('mushroom',0,-32); changeState('block')"/>
