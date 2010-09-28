@@ -45,6 +45,8 @@ Engine.initObject("TileSets", "PooledObject", function() {
 		tiles: null,
 		tilesFile: null,
 		
+		tileInfos: null,
+		
 		ready: false,
 	
 		/**
@@ -56,6 +58,7 @@ Engine.initObject("TileSets", "PooledObject", function() {
 	      this.tileLoader = ObjectLoader.create();
 	      this.imageLoader = ImageLoader.create();
 			this.ready = false;
+			this.tileInfos = {};
 			
 			this.tileLoader.load("tiles", filename);
 			var self = this;
@@ -83,9 +86,20 @@ Engine.initObject("TileSets", "PooledObject", function() {
 			// Load the images within the tileset(s)
 			for (var tileset in this.tiles) {
 				var tSet = this.tiles[tileset];
+				this.tileInfos[tileset] = {};
+				var setInfo = this.tileInfos[tileset];
 				for (var t in tSet) {
 					var tileName = tileset + ":" + t;
-					this.imageLoader.load(tileName, path + "/" + tSet[t]);	
+
+					// Currently, info only contains the image and the origin but
+					// could potentially contain more information in the future
+					var img = tSet[t][0];
+					setInfo[t] = {
+						origin: Point3D.create(tSet[t][1][0], tSet[t][1][1], 0)
+					}
+					
+					// Load the image file
+					this.imageLoader.load(tileName, path + "/" + img);
 				} 	
 			}
 			
@@ -119,7 +133,16 @@ Engine.initObject("TileSets", "PooledObject", function() {
 		 */
 		getTileImage: function(tileset, name) {
 			return this.imageLoader.get(tileset + ":" + name);		
+		},
+		
+		/**
+		 * Get the tile info object for the specified tile
+		 * @return {Object}
+		 */
+		getTileInfo: function(tileset, name) {
+			return this.tileInfos[tileset][name];
 		}
+		
 	}, /** @scope TileSets.prototype */{
 		getClassName: function(){
 	  		return "TileSets";
