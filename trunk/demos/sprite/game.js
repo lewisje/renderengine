@@ -1,7 +1,7 @@
 
 /**
  * The Render Engine
- * Sprite test
+ * SpriteDemo
  *
  * Demonstration of using The Render Engine.
  *
@@ -45,12 +45,12 @@ Engine.include("/objects/object.collisionbox.js");
 
 Engine.include("/tools/level_editor/leveleditor.js");
 
-Engine.initObject("SuperMario", "Game", function() {
+Engine.initObject("SpriteDemo", "Game", function() {
 
 /**
  * @class The game.
  */
-var SuperMario = Game.extend({
+var SpriteDemo = Game.extend({
 
    constructor: null,
 
@@ -116,7 +116,7 @@ var SuperMario = Game.extend({
 
       // Load the sprites
       this.spriteLoader.load("smbtiles", this.getFilePath("resources/smbtiles.js"));
-      SuperMario.loadTimeout = Timeout.create("wait", 250, SuperMario.waitForResources);
+      SpriteDemo.loadTimeout = Timeout.create("wait", 250, SuperMario.waitForResources);
       this.waitForResources();
    },
 
@@ -126,12 +126,12 @@ var SuperMario = Game.extend({
     */
    waitForResources: function() {
       //Console.debug("checking");
-      if (SuperMario.spriteLoader.isReady("smbtiles") &&
-          SuperMario.levelLoader.isReady("level1") &&
-          SuperMario.soundLoader.isReady("bgm"))
+      if (SpriteDemo.spriteLoader.isReady("smbtiles") &&
+          SpriteDemo.levelLoader.isReady("level1") &&
+          SpriteDemo.soundLoader.isReady("bgm"))
       {
          this.destroy();
-         SuperMario.run();
+         SpriteDemo.run();
          return;
       }
       else
@@ -205,6 +205,6 @@ var SuperMario = Game.extend({
 
 });
 
-return SuperMario;
+return SpriteDemo;
 
 });

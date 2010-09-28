@@ -215,7 +215,7 @@ var Image = PooledObject.extend(/** @scope Image.prototype */{
    constructor: function(name, imageName, imageResource) {
       this.base(name || "Image");
 		this.image = imageResource.get(imageName);
-		var dims = imageResource.getDimensions();
+		var dims = imageResource.getDimensions(imageName);
       this.bbox = Rectangle2D.create(0, 0, dims.x, dims.y);
    },
 	
