@@ -1,0 +1,29 @@
+{
+	"ground": {
+		"grass": "grass.png",
+		"road_ns": "road_ns.png",
+		"road_ew": "road_ew.png",
+		"road_nw": "road_nw.png",
+		"road_ne": "road_ne.png",
+		"road_sw": "road_sw.png",
+		"road_se": "road_se.png",
+		"crossroad": "road_cross.png"
+	},
+	"buildings": {
+		"church": "Church 1-b.png",
+		"fountain": "Fountain 2, Small.png",
+		"hut": "Hut 1-a.png",
+		"keep": "Keep 1-a.png",
+		"gate": "Gate 1, Left.png",
+		"tower": "Tower, Old 1-a.png",
+		"townhouse1": "Town 2-b.png",
+		"townhouse2": "Town 3-c.png",
+		"townhouse3": "Town 6-a.png",
+		"villa": "Village 5-a.png"
+	},
+	"foliage": {
+		"oaktree": "Tree 2.png",
+		"mapletree": "Tree 4.png",
+		"deadtree": "Tree 6.png"  
+	}
+}
