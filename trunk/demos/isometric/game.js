@@ -108,11 +108,11 @@ var IsometricDemo = Game.extend({
       this.centerPoint = this.fieldBox.getCenter();
 
       this.renderContext = HTMLDivContext.create("bkg", this.fieldBox.get().w, this.fieldBox.get().h);
-      this.renderContext.jQ().css("overflow", "auto");
       Engine.getDefaultContext().add(this.renderContext);
 		
 		this.map.setTileSets(this.tileset);
-		this.renderContext.add(this.map);
+		Engine.getDefaultContext().add(this.map);
+		Engine.getDefaultContext().jQ().css("overflow", "auto");
    },
 
    play: function() {
