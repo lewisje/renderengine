@@ -81,7 +81,7 @@ var IsometricDemo = Game.extend({
       Engine.setFPS(this.engineFPS);
 
       this.tileset = TileSets.create("tiles", this.getFilePath("resources/tiles.json"));
-		this.map = IsometricMap.create("countryside", this.getFilePath("resources/map.json"), Point2D.create(80, 80));
+		this.map = IsometricMap.create("countryside", this.getFilePath("resources/map.json"), Point2D.create(85, 85));
 		var self = this;
 		Timeout.create("run", 250, function() {
 			if (self.tileset.isReady() &&

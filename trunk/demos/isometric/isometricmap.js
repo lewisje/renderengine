@@ -50,6 +50,8 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 		map: null,
 		rebuild: false,
 		tileset: null,
+		
+		layers: null,
 	
 		/**
 		 * @private 
@@ -63,12 +65,14 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 			this.tileSize = tileSize;
 			this.map = null;
 			this.rebuild = true;
+			this.layers = [];
 			
 			this.mapLoader.load(name, filename);
 			var self = this;
 	      Timeout.create("mapwait", 250, function() {
 				if (self.mapLoader.isReady()) {
 					this.destroy();
+					self.map = self.mapLoader.get(self.mapName);
 					self.ready = true;
 					return;
 				} else {
@@ -89,15 +93,20 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 			this.tileset = tileset;
 		},
 		
+		getWidth: function() {
+			return this.map.size[0];
+		},
+		
+		getHeight: function() {
+			return this.map.size[1];
+		},
+		
 		build: function() {
 			// Convert the map into a X by Y array which can be filled with more data as needed
 			this.terrain = [];
 			this.objects = [];
 			
 			// First, draw the filler
-			if (!this.map) {
-				this.map = this.mapLoader.get(this.mapName);
-			}
 			for (var x = 0; x < this.map.size[0]; x++) {
 				this.terrain[x + 1] = [];
 				for (var y = 0; y < this.map.size[1]; y++) {
@@ -109,12 +118,15 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 				}
 			}
 			
+			var mapOffsX = Math.floor(this.map.size[0] / 2);
+			var mapOffsY = Math.floor(this.map.size[1] / 2);
+			
 			// Now read out the terrain features and store them
 			var terr = this.map.terrain;
 			if (terr != null) {
 				for (var t in this.map.terrain.tiles) {
 					for (var l = 0; l < this.map.terrain.tiles[t][1].length; l++) {
-						this.terrain[this.map.terrain.tiles[t][1][l][0]][this.map.terrain.tiles[t][1][l][1]] = {
+						this.terrain[this.map.terrain.tiles[t][1][l][0] + mapOffsX][this.map.terrain.tiles[t][1][l][1] + mapOffsY] = {
 							dirty: true,
 							tileset: this.map.terrain.tileset,
 							tile: this.map.terrain.tiles[t][0]
@@ -123,6 +135,7 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 				}
 			}
 			
+			mapOffsX += 1;
 			// Finally, read out the object groups and store them
 			var objs = this.map.objects;
 			if (objs != null) {
@@ -131,7 +144,7 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 					for (var p in objGroup.props) {
 						for (var o = 0; o < objGroup.props[p][1].length; o++) {
 							this.objects.push({
-								pos: Point2D.create(objGroup.props[p][1][o][0], objGroup.props[p][1][o][1]),
+								pos: Point2D.create(objGroup.props[p][1][o][0] + mapOffsX, objGroup.props[p][1][o][1] + mapOffsY),
 								tileset: objGroup.tileset,
 								tile: objGroup.props[p][0], 
 								dirty: true
@@ -148,10 +161,32 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 			if (this.rebuild) {
 			 	this.build();
 			 	
+				if (this.layers[0] != null) {
+					this.layers[0].empty();
+					this.layers[1].empty();
+				} else {
+					this.layers[0] = $("<div id='terrain'>").css({
+						position: "absolute",
+						top: 0,
+						left: 0
+					});
+					this.layers[1] = $("<div id='objects'>").css({
+						position: "absolute",
+						top: 0,
+						left: 0
+					});
+					// Add the layers to the context
+					renderContext.jQ().append(this.layers[0]);
+					renderContext.jQ().append(this.layers[1]);
+				}
+				
+				var worldOffsX = Math.floor(this.map.size[0]);
+				var worldOffsY = -Math.floor(this.map.size[1]/2);
+				
 			 	// Render the changes to the context only
 				var ts = this.tileSize.get();
-				var xOffs = ts.x * 6;
-				var yOffs = ts.y * -3;
+				var xOffs = ts.x * worldOffsX;
+				var yOffs = ts.y * worldOffsY;
 				for (var y = 0; y < this.map.size[1]; y++) {
 					for (var x = 0; x < this.map.size[0]; x++) {
 						var pt = Point3D.create(xOffs + (ts.x * x), yOffs + (ts.y * y), 0);
@@ -162,7 +197,7 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 							top: ptp.get().y,
 							left: ptp.get().x
 						});
-						renderContext.jQ().append(tile);
+						this.layers[0].append(tile);
 					}
 					xOffs -= ts.x;
 				}
@@ -172,10 +207,10 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 					return a.pos.get().y - b.pos.get().y;
 				});
 				
-				var yOffs = ts.y * -3;
+				var yOffs = ts.y * worldOffsY;
 				for (var o = 0; o < this.objects.length; o++) {
 					var obj = this.objects[o];
-					var xOffs = (ts.x * 7) - (ts.x * obj.pos.get().y);
+					var xOffs = (ts.x * worldOffsX) - (ts.x * obj.pos.get().y);
 					var pt = Point3D.create(xOffs + (ts.x * obj.pos.get().x), yOffs + (ts.y * obj.pos.get().y), 0);
 					var info = this.tileset.getTileInfo(obj.tileset, obj.tile);
 					pt.sub(info.origin);
@@ -186,8 +221,14 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 						top: ptp.get().y,
 						left: ptp.get().x
 					});
-					renderContext.jQ().append(tile);
-				}				
+					this.layers[1].append(tile);
+				}
+
+				// Center the map
+				renderContext.jQ()
+					.scrollTop(renderContext.jQ()[0].scrollHeight / 2.2)
+					.scrollLeft(renderContext.jQ()[0].scrollWidth / 2.2);
+			
 			}
 		}
 
