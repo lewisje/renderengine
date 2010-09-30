@@ -39,7 +39,6 @@ My definition of load may not be the same as others, so let me try to summarize 
 Non-stable (non-release) versions of browsers are not supported.  Thus, browsers which are alpha, or even beta, are in the "Unsupported Browsers" table if they have been at least tested with the engine.  Due to the possibility that the browser may still change operation, supporting these browsers doesn't make sense.
 
 ||  *Browser*  ||  *Version*  ||  *Tested Platforms*  ||  *Support Level*  ||  *Reason*  ||
-|| [http://www.mozilla.com/en-US/firefox/4.0b1/whatsnew/ Mozilla Firefox] || 4.0b1 || Windows || *Fail* (_see notes_) || Beta ||
 || *Internet Explorer* || 6.0+ || Windows || *Fail* (_see notes_) || No canvas ||
 
 
