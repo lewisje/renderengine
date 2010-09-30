@@ -1,10 +1,4 @@
 #summary A quick synopsis of what I'm currently working on
 = Current Work =
 
-_07/30/2010_ I'm back at it... One thing that I'm trying to figure out is if using the Billboard2DComponent that I created speeds up non-native text rendering at all.  I'm ironing out the inner workings, but it's getting close to being testable.  I need to put together some tests which will isolate what I'm testing.  Something that jumps out at me immediately is that when rendering multiple lines of text, it's better to render one text billboard rather than one for each line.  This idea has got me thinking that maybe _all text_ needs to be put into a single billboard layer.  But, that would mean that each frame needs to render a full-frame image, for each engine frame.
-
-_07/23/2010_ *The Render Engine v1.0 has been tagged!*  I'm going to take a short break before I get back into it and start on the next major release.
-
-_07/21/2010_ Tonight I created a Billboard2DComponent which looks promising.  It is used with any render component to create a 2D billboard of the component's output and render that instead of always updating and drawing the actual rendered component.  This seems like it might be good for vector based objects such as the vector text renderer and the demo game Asteroids Evolution.  This isn't going to make it into v1.0, but it should follow shortly thereafter.  Speaking of which, barring any major bugs it looks like v1.0 will be out this Friday!
-
-_07/12/2010_ The bugs which appeared with FF4.0b1 go a lot deeper than I originally thought.  I am working to rectify the issue, but is has caused the examples to fail.  The issue stems from objects which are destroyed out-of-order.  If, for example, a component within a host object is destroyed and then the host object is destroyed which should clean up its components, the components will fail when being destroyed since they already has been destroyed.  It's a complicated issue and I hope to have a fix soon.
+For recent developer updates, please see [http://therenderengine.blogspot.com/ The Render Engine blog].
