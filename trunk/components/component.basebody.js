@@ -58,6 +58,8 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	shapeDef: null,
 	simulation: null,
 	body: null,
+	rotVec: null,
+	bodyPos: null,
 
    /**
     * @private
@@ -70,6 +72,8 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		this.shapeDef.density = BaseBodyComponent.DEFAULT_DENSITY;
 		this.shapeDef.friction = BaseBodyComponent.DEFAULT_FRICTION;
 		this.simulation = null;
+		this.rotVec = Vector2D.create(0,0);
+		this.bodyPos = Point2D.create(0,0);
 	},
 
 	/**
@@ -197,7 +201,8 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 * @return {Point2D}
 	 */
 	getPosition: function() {
-		return Point2D.create(this.body.m_position.x, this.body.m_position.y);	
+		this.bodyPos.set(this.body.m_position.x, this.body.m_position.y);
+		return this.bodyPos;	
 	},
 	
 	/**
@@ -207,8 +212,11 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 */
 	getRotation: function() {
 		var rC = this.getBody().GetRotationMatrix().col1;
-		var rV = Vector2D.create(rC.x, rC.y);
-		return rV.angleBetween(BaseBodyComponent.UP_VECTOR);
+		this.rotVec.set(rC.x, rC.y);
+		var cV = rC.x > 0 ? BaseBodyComponent.UP_VECTOR : BaseBodyComponent.DOWN_VECTOR;
+		var md = rC.x > 0 ? 0 : 180;
+		var ab = this.rotVec.angleBetween(cV) - md;
+		return ab;
 	},
 	
 	/**
@@ -341,7 +349,8 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 * A simple up (0, -1) vector to calculate rotation
 	 * @private
 	 */
-	UP_VECTOR: new Vector2D(0, -1)
+	UP_VECTOR: new Vector2D(0, -1),
+	DOWN_VECTOR: new Vector2D(0, 1)
    
 });
 
