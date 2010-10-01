@@ -86,7 +86,7 @@ Engine.initObject("WiiTest", "Game", function(){
          this.spriteLoader = SpriteLoader.create();
          
          // Load the sprites
-         this.spriteLoader.load("redball", this.getFilePath("resources/redball.js"));
+         this.spriteLoader.load("beachball", this.getFilePath("resources/beachball.js"));
          
          // Don't start until all of the resources are loaded
          WiiTest.loadTimeout = Timeout.create("wait", 250, WiiTest.waitForResources);
