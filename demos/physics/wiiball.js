@@ -65,7 +65,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
 
          // Add components to move, draw, and collide with the player
          this.add(SpriteComponent.create("draw"));
-         this.add(CircleBodyComponent.create("physics", 27));
+         this.add(CircleBodyComponent.create("physics", 30));
          this.add(ColliderComponent.create("collide", WiiTest.cModel));
          
          // The sprites
