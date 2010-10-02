@@ -112,7 +112,6 @@ var IsometricDemo = Game.extend({
 		
 		this.map.setTileSets(this.tileset);
 		Engine.getDefaultContext().add(this.map);
-		Engine.getDefaultContext().jQ().css("overflow", "auto");
    },
 
    play: function() {

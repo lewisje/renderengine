@@ -49,6 +49,8 @@ Engine.initObject("WiiHost", "Object2D", function() {
 
       // The ball the cursor is currently over or null
       overBall: null,
+		mouseDown: false,
+		clickBall: null,
 
       // Debugging
       cBox: null,
@@ -67,6 +69,8 @@ Engine.initObject("WiiHost", "Object2D", function() {
          
          // Initialize the currently selected ball to null
          this.overBall = null;
+			this.clickBall = null;
+			this.mouseDown = false;
       },
 
       /**
@@ -135,6 +139,9 @@ Engine.initObject("WiiHost", "Object2D", function() {
             // If controller zero, update the position
 				var p = Point2D.create(sx, sy);
             this.setPosition(p);
+				if (this.mouseDown && this.clickBall) {
+	            this.clickBall.clicked(p);
+				}
 				p.destroy();
          }
       },
@@ -147,14 +154,14 @@ Engine.initObject("WiiHost", "Object2D", function() {
        */
       onWiimoteButtonA: function(c, state) {
          if (c == 0 && state) {
-            if (this.overBall) {
-               this.overBall.clicked(this.getPosition());
-               return;
-            } else {
-               // Create another ball
-					WiiTest.createBall();
-            }
-         }
+				this.mouseDown = true;
+				if (this.overBall) {
+					this.clickBall = this.overBall;
+				}
+         } else if (c == 0 && !state) {
+				this.mouseDown = false;
+				this.clickBall = null;
+			}
       },
 
       /**

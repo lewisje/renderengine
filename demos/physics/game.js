@@ -155,8 +155,11 @@ Engine.initObject("WiiTest", "Game", function(){
          // Create the collision model with 5x5 divisions
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 10);
 
-         // Add the first ball
-         this.createBall();
+         // Add some balls to play around with
+			var self = this;
+			MultiTimeout.create("ballmaker", 8, 250, function() {
+	         self.createBall();
+			});
          
          // Add the player object
          var player = WiiHost.create();
@@ -190,9 +193,15 @@ Engine.initObject("WiiTest", "Game", function(){
       
       createBall: function() {
          var ball = WiiBall.create();
+			// Set a random location
+			var x = Math.floor(Math2.random() * 300);
+			var p = Point2D.create(x, 15);
+			ball.setPosition(p);
          ball.setSimulation(this.simulation);
          this.getRenderContext().add(ball);
          ball.simulate();
+         var v = 1000 + (Math2.random() * 5000);
+         ball.applyForce(Vector2D.create(v * 2000,10), p);
       },
       
       /**

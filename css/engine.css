@@ -6,7 +6,7 @@ body {
 }
 
 div.metrics {
-   position: absolute;
+   position: fixed;
    top: 10px;
    width: 200px;
    right: 10px;
@@ -64,7 +64,7 @@ div.metric-button.maximize {
 }
 
 canvas.engine-profile {
-   position: absolute;
+   position: fixed;
    bottom: 10px;
    width: 150px;
 	height: 100px;
