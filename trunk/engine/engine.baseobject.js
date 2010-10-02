@@ -162,7 +162,12 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * @param fn {Function} The function to trigger when the event fires
     */
    addEvent: function(ref, type, data, fn) {
-      if (this.getElement()) {
+		if (ref == null) {
+			// This is a global assignment to the document body.  Many listeners
+			// may collect data from the event handler.
+			Console.info("Global assignment of event '" + type + "'");
+			EventEngine.setHandler(document.body, type, data || fn, fn);
+		} else if (this.getElement()) {
          Console.info(ref.getName() + " attach event '" + type + "' to " + this.getName());
          EventEngine.setHandler(this.getElement(), type, data || fn, fn);
 
@@ -180,7 +185,7 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
     * @param type {String} The event type to remove
     */
    removeEvent: function(ref, type) {
-      if (this.getElement()) {
+		if (ref != null && this.getElement()) {
          // Find the handler to remove
          var fn = this.events[ref.getName() + "," + type];
          if (fn) {

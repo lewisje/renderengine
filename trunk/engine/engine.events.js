@@ -120,7 +120,7 @@ var EventEngine = Base.extend(/** @scope EventEngine.prototype */{
    /** No mouse button pressed. 
     * @type {Number}
     */
-   MOUSE_NO_BUTTON: 0,
+   MOUSE_NO_BUTTON: -1,
 
    /** Left mouse button.
     * @type {Number}

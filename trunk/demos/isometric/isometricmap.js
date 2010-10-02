@@ -4,6 +4,8 @@ Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.object.js");
 Engine.include("/engine/engine.timers.js");
 Engine.include("/engine/engine.math2d.js");
+Engine.include("/components/component.mouseinput.js");
+Engine.include("/engine/engine.events.js");
 
 
 Engine.initObject("IsometricMap", "BaseObject", function() {
@@ -52,6 +54,7 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 		tileset: null,
 		
 		layers: null,
+		mouseDown: false,
 	
 		/**
 		 * @private 
@@ -66,6 +69,10 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 			this.map = null;
 			this.rebuild = true;
 			this.layers = [];
+			this.mouseDown = false;
+			
+			// Assign the default mouse handlers
+			MouseInputComponent.assignMouseHandlers();
 			
 			this.mapLoader.load(name, filename);
 			var self = this;
@@ -101,65 +108,60 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 			return this.map.size[1];
 		},
 		
-		build: function() {
-			// Convert the map into a X by Y array which can be filled with more data as needed
-			this.terrain = [];
-			this.objects = [];
-			
-			// First, draw the filler
-			for (var x = 0; x < this.map.size[0]; x++) {
-				this.terrain[x + 1] = [];
-				for (var y = 0; y < this.map.size[1]; y++) {
-					this.terrain[x + 1][y + 1] = {
-						dirty: true,
-						tileset: this.map.fill[0],
-						tile: this.map.fill[1]
-					};
-				}
-			}
-			
-			var mapOffsX = Math.floor(this.map.size[0] / 2);
-			var mapOffsY = Math.floor(this.map.size[1] / 2);
-			
-			// Now read out the terrain features and store them
-			var terr = this.map.terrain;
-			if (terr != null) {
-				for (var t in this.map.terrain.tiles) {
-					for (var l = 0; l < this.map.terrain.tiles[t][1].length; l++) {
-						this.terrain[this.map.terrain.tiles[t][1][l][0] + mapOffsX][this.map.terrain.tiles[t][1][l][1] + mapOffsY] = {
+		build: function(renderContext, time) {
+			if (this.rebuild) {
+
+				// Convert the map into a X by Y array which can be filled with more data as needed
+				this.terrain = [];
+				this.objects = [];
+				
+				// First, draw the filler
+				for (var x = 0; x < this.map.size[0]; x++) {
+					this.terrain[x + 1] = [];
+					for (var y = 0; y < this.map.size[1]; y++) {
+						this.terrain[x + 1][y + 1] = {
 							dirty: true,
-							tileset: this.map.terrain.tileset,
-							tile: this.map.terrain.tiles[t][0]
+							tileset: this.map.fill[0],
+							tile: this.map.fill[1]
 						};
 					}
 				}
-			}
-			
-			mapOffsX += 1;
-			// Finally, read out the object groups and store them
-			var objs = this.map.objects;
-			if (objs != null) {
-				for (var g in objs) {
-					var objGroup = objs[g];
-					for (var p in objGroup.props) {
-						for (var o = 0; o < objGroup.props[p][1].length; o++) {
-							this.objects.push({
-								pos: Point2D.create(objGroup.props[p][1][o][0] + mapOffsX, objGroup.props[p][1][o][1] + mapOffsY),
-								tileset: objGroup.tileset,
-								tile: objGroup.props[p][0], 
-								dirty: true
-							});
+				
+				var mapOffsX = Math.floor(this.map.size[0] / 2);
+				var mapOffsY = Math.floor(this.map.size[1] / 2);
+				
+				// Now read out the terrain features and store them
+				var terr = this.map.terrain;
+				if (terr != null) {
+					for (var t in this.map.terrain.tiles) {
+						for (var l = 0; l < this.map.terrain.tiles[t][1].length; l++) {
+							this.terrain[this.map.terrain.tiles[t][1][l][0] + mapOffsX][this.map.terrain.tiles[t][1][l][1] + mapOffsY] = {
+								dirty: true,
+								tileset: this.map.terrain.tileset,
+								tile: this.map.terrain.tiles[t][0]
+							};
 						}
 					}
 				}
-			}
-			
-			this.rebuild = false;
-		},
-		
-		update: function(renderContext, time) {
-			if (this.rebuild) {
-			 	this.build();
+				
+				mapOffsX += 1;
+				// Finally, read out the object groups and store them
+				var objs = this.map.objects;
+				if (objs != null) {
+					for (var g in objs) {
+						var objGroup = objs[g];
+						for (var p in objGroup.props) {
+							for (var o = 0; o < objGroup.props[p][1].length; o++) {
+								this.objects.push({
+									pos: Point2D.create(objGroup.props[p][1][o][0] + mapOffsX, objGroup.props[p][1][o][1] + mapOffsY),
+									tileset: objGroup.tileset,
+									tile: objGroup.props[p][0], 
+									dirty: true
+								});
+							}
+						}
+					}
+				}
 			 	
 				if (this.layers[0] != null) {
 					this.layers[0].empty();
@@ -191,12 +193,14 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 					for (var x = 0; x < this.map.size[0]; x++) {
 						var pt = Point3D.create(xOffs + (ts.x * x), yOffs + (ts.y * y), 0);
 						var ptp = pt.project();
+						pt.destroy();
 						var t = this.tileset.getTileImage(this.terrain[x + 1][y + 1].tileset, this.terrain[x + 1][y + 1].tile);
 						var tile = $(t).clone().css({
 							position: "absolute",
 							top: ptp.get().y,
 							left: ptp.get().x
 						});
+						ptp.destroy();
 						this.layers[0].append(tile);
 					}
 					xOffs -= ts.x;
@@ -215,12 +219,14 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 					var info = this.tileset.getTileInfo(obj.tileset, obj.tile);
 					pt.sub(info.origin);
 					var ptp = pt.project();
+					pt.destroy();
 					var t = this.tileset.getTileImage(obj.tileset, obj.tile);
 					var tile = $(t).clone().css({
 						position: "absolute",
 						top: ptp.get().y,
 						left: ptp.get().x
 					});
+					ptp.destroy();
 					this.layers[1].append(tile);
 				}
 
@@ -229,6 +235,26 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 					.scrollTop(renderContext.jQ()[0].scrollHeight / 2.2)
 					.scrollLeft(renderContext.jQ()[0].scrollWidth / 2.2);
 			
+			}
+			
+			this.rebuild = false;
+		},
+		
+		update: function(renderContext, time) {
+			// This should only happen once
+			this.build(renderContext, time);
+			
+			// Check for mouse movement
+			var mInfo = renderContext.MouseInputComponent_mouseInfo;
+			if (!this.mouseDown && mInfo.button == EventEngine.MOUSE_LEFT_BUTTON) {
+				this.mouseDown = true;
+			} else if (this.mouseDown && mInfo.button == EventEngine.MOUSE_NO_BUTTON) {
+				this.mouseDown = false;
+			}
+			
+			if (this.mouseDown === true) {
+				// Check to see if the mouse has been moved
+	         Engine.addMetric("moveVec", mInfo.moveVec);
 			}
 		}
 

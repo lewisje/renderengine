@@ -54,6 +54,9 @@ Engine.initObject("WiiBall", "Object2D", function() {
       circle: null,
       
       upVec: null,
+		
+		size: 30,
+		scale: 1,
 
       // Debugging collision box and bounding box
       cBox: null,
@@ -62,10 +65,14 @@ Engine.initObject("WiiBall", "Object2D", function() {
       constructor: function() {
          this.base("WiiBall");
          this.sprite = null;
+			
+			this.size = 30;
+			this.scale = (Math2.random() * 1) + 0.8;
+			this.size *= this.scale;
 
          // Add components to move, draw, and collide with the player
          this.add(SpriteComponent.create("draw"));
-         this.add(CircleBodyComponent.create("physics", 30));
+         this.add(CircleBodyComponent.create("physics", this.size));
          this.add(ColliderComponent.create("collide", WiiTest.cModel));
          
          // The sprites
@@ -75,6 +82,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.setSprite(0);
 
 			this.getComponent("physics").setFriction(0.08);
+			this.getComponent("physics").setScale(this.scale);
 
          this.setPosition(Point2D.create(25, 15));
 			this.setOrigin(Point2D.create(30, 30));
@@ -119,7 +127,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
 		getRotation: function() {
 			return this.getComponent("physics").getRotation();
 		},
-
+		
       /**
        * Get the render position of the ball
        * @return {Point2D}
@@ -147,15 +155,21 @@ Engine.initObject("WiiBall", "Object2D", function() {
          this.getComponent("physics").setPosition(point);
       },
 
+		applyForce: function(amt, loc) {
+			this.getComponent("physics").applyForce(amt, loc);
+		},
+
       /**
        * If the ball was clicked on, make it bounce a random way.
        */
-      clicked: function() {
-         var xD = (Math2.random() * 100) < 50 ? -1 : 1;
-         var v = 1000 + (Math2.random() * 5000) * xD;
-         var p = this.getPosition().get();
-         this.getComponent("physics").applyForce(Vector2D.create(xD * 2000000,-25000000), Vector2D.create(p.x, p.y));
+      clicked: function(p) {
+			var force = Vector2D.create(p).sub(this.getPosition()).mul(20000);
+         this.applyForce(force, p);
       },
+		
+		released: function() {
+			
+		},
 
       /**
        * Determine if the ball was touched by the player and, if so,
