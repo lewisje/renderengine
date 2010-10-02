@@ -261,7 +261,7 @@ return Timeout;
 Engine.initObject("OneShotTimeout", "Timeout", function() {
 
 /**
- * @class An extension of {@link Timer} which is a one-shot timer that cannot 
+ * @class An extension of {@link Timeout} which is a one-shot timer that cannot 
  *        be restarted and will self-destroy after it completes its interval.  Within
  *        the callback, <tt>this</tt> refers to the <tt>Timer</tt> object itself.
  *
@@ -318,14 +318,14 @@ return OneShotTimeout;
 Engine.initObject("OneShotTrigger", "OneShotTimeout", function() {
 
 /**
- * @class An extension of {@link Timer} which is a one-shot timer that triggers a callback, 
+ * @class An extension of {@link OneShotTimeout} which is a one-shot timer that triggers a callback, 
  *        at regular intervals, until the timer has expired.  When the timer expires, the 
  *        trigger will automatically destroy itself.  Within the callbacks, <tt>this</tt>
  *        refers to the <tt>Timer</tt> object itself.
  *
  * @param name {String} The name of the timer
- * @param interval {Number} The interval for the timer, in milliseconds
- * @param callback {Function} The function to call when the interval is reached
+ * @param interval {Number} The full interval for the timer, in milliseconds
+ * @param callback {Function} The function to call when the full interval is reached
  * @param triggerInterval {Number} The interval between triggers, in milliseconds
  * @param triggerCallback {Function} The function to call for each trigger interval
  * @extends OneShotTimeout
@@ -364,7 +364,7 @@ return OneShotTrigger;
 Engine.initObject("MultiTimeout", "Timeout", function() {
 
 /**
- * @class An extension of {@link Timer} that will repeat the specified number of times before
+ * @class An extension of {@link Timeout} that will repeat the specified number of times before
  *        destroying itself.  The callback will be triggered with the
  *        repetition number as the only argument.  Within the callback, <tt>this</tt>
  *        refers to the <tt>Timer</tt> object itself.
@@ -383,7 +383,7 @@ var MultiTimeout = Timeout.extend(/** @scope MultiTimeout.prototype */{
 
       var cb = function() {
          var aC = arguments.callee;
-         if (aC.reps-- >= 0) {
+         if (aC.reps-- > 0) {
             aC.cbFn.call(this, aC.totalReps);
             aC.totalReps++;
             this.restart();
