@@ -165,6 +165,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
       clicked: function(p) {
 			var force = Vector2D.create(p).sub(this.getPosition()).mul(20000);
          this.applyForce(force, p);
+			force.destroy();
       },
 		
 		released: function() {

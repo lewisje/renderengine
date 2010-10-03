@@ -44,6 +44,7 @@ Engine.include("/physics/collision/shapes/b2BoxDef.js");
 // Load game objects
 Game.load("/wiihost.js");
 Game.load("/wiiball.js");
+Game.load("/wiicrate.js");
 
 Engine.initObject("WiiTest", "Game", function(){
 
@@ -87,6 +88,7 @@ Engine.initObject("WiiTest", "Game", function(){
          
          // Load the sprites
          this.spriteLoader.load("beachball", this.getFilePath("resources/beachball.js"));
+         this.spriteLoader.load("crate", this.getFilePath("resources/crate.js"));
          
          // Don't start until all of the resources are loaded
          WiiTest.loadTimeout = Timeout.create("wait", 250, WiiTest.waitForResources);
@@ -157,8 +159,12 @@ Engine.initObject("WiiTest", "Game", function(){
 
          // Add some balls to play around with
 			var self = this;
-			MultiTimeout.create("ballmaker", 8, 250, function() {
+			MultiTimeout.create("ballmaker", 6, 250, function() {
 	         self.createBall();
+			});
+
+			MultiTimeout.create("boxmaker", 6, 250, function() {
+	         self.createBox();
 			});
          
          // Add the player object
@@ -202,6 +208,19 @@ Engine.initObject("WiiTest", "Game", function(){
          ball.simulate();
          var v = 1000 + (Math2.random() * 5000);
          ball.applyForce(Vector2D.create(v * 2000,10), p);
+      },
+
+      createBox: function() {
+         var box = WiiCrate.create();
+			// Set a random location
+			var x = Math.floor(Math2.random() * 300);
+			var p = Point2D.create(x, 15);
+			box.setPosition(p);
+         box.setSimulation(this.simulation);
+         this.getRenderContext().add(box);
+         box.simulate();
+         var v = 1000 + (Math2.random() * 5000);
+         box.applyForce(Vector2D.create(v * 2000,10), p);
       },
       
       /**

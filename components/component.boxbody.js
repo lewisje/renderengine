@@ -42,7 +42,7 @@ Engine.initObject("BoxBodyComponent", "BaseBodyComponent", function() {
  * 		 physical body.  
  *
  * @param name {String} Name of the component
- * @param extents {Point2D} The extents of the body
+ * @param extents {Point2D} The extents of the body along X and Y
  *
  * @extends BaseBodyComponent
  * @constructor
@@ -59,18 +59,18 @@ var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prot
 		this.base(name, new b2BoxDef());
 		this.extents = extents;
 		var e = extents.get();
-		this.getShapeDef().extents.set(e.x, e.y);
+		this.getShapeDef().extents.Set(e.x, e.y);
 	},
 	
 	/**
 	 * Set the extents of the box's body.
 	 * 
-	 * @param extents {Point2D} The extents of the body
+	 * @param extents {Point2D} The extents of the body along X and Y
 	 */
 	setExtents: function(extents) {
 		this.extents = extents;
 		var e = extents.get();
-		this.getShapeDef().extents.set(e.x, e.y);;
+		this.getShapeDef().extents.Set(e.x, e.y);;
 	},
 	
 	/**

@@ -171,7 +171,7 @@ Engine.initObject("WiiHost", "Object2D", function() {
        * @see {ColliderComponent}
        */
       onCollide: function(obj) {
-         if (WiiBall.isInstance(obj) &&
+         if (WiiBall.isInstance(obj) || WiiCrate.isInstance(obj) &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
             this.overBall = obj;
             return ColliderComponent.STOP;
