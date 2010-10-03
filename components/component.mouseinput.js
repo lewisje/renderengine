@@ -169,6 +169,8 @@ Engine.initObject("MouseInputComponent", "InputComponent", function() {
 		 * <li><code>button</code> - {@link EventEngine#MOUSE_NO_BUTTON}, {@link EventEngine#MOUSE_LEFT_BUTTON},
 		 * {@link EventEngine#MOUSE_RIGHT_BUTTON}, or {@link EventEngine#MOUSE_MIDDLE_BUTTON}</li>
 		 * <li><code>lastOver</code> - {@link BaseObject} or <code>null</code></li>
+		 * <li><code>moveVec</code> - {@link Vector2D} which represents the direction and distance
+		 * of the mouse movement</li>
 		 * </ul>
 		 */
 		assignMouseHandlers: function() {
@@ -181,8 +183,10 @@ Engine.initObject("MouseInputComponent", "InputComponent", function() {
 	         ctx.MouseInputComponent_mouseInfo = {
 	            position: Point2D.create(0,0),
 	            lastPosition: Point2D.create(0,0),
+					downPosition: Point2D.create(0,0),
 	            button: EventEngine.MOUSE_NO_BUTTON,
 					moveVec: Vector2D.create(0,0),
+					dragVec: Vector2D.create(0,0),
 	            lastOver: null,
 					moveTimer: null
 	         };
@@ -197,6 +201,10 @@ Engine.initObject("MouseInputComponent", "InputComponent", function() {
 					mouseInfo.position.set(evt.pageX, evt.pageY);
 					mouseInfo.moveVec.set(mouseInfo.position);
 					mouseInfo.moveVec.sub(mouseInfo.lastPosition);
+					if (mouseInfo.button != EventEngine.MOUSE_NO_BUTTON) {
+						mouseInfo.dragVec.set(mouseInfo.downPosition);
+						mouseInfo.dragVec.sub(mouseInfo.position);
+					}
 					mouseInfo.moveTimer = Timeout.create("mouseMove", 33, function() {
 						mouseInfo.moveVec.set(0,0);				
 					});
@@ -205,12 +213,14 @@ Engine.initObject("MouseInputComponent", "InputComponent", function() {
 	         ctx.addEvent(null, "mousedown", function(evt) {
 	            var mouseInfo = Engine.getDefaultContext().MouseInputComponent_mouseInfo;
 	            mouseInfo.button = evt.which;
+					mouseInfo.downPosition.set(evt.pageX, evt.pageY);
 					evt.preventDefault();
 	         });
 	
 	         ctx.addEvent(null, "mouseup", function(evt) {
 	            var mouseInfo = Engine.getDefaultContext().MouseInputComponent_mouseInfo;
 	            mouseInfo.button = EventEngine.MOUSE_NO_BUTTON;
+					mouseInfo.dragVec.set(0,0);
 	         });
 	
 	      }
