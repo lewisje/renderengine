@@ -55,6 +55,7 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 		
 		layers: null,
 		mouseDown: false,
+		downScrollPos: null,
 	
 		/**
 		 * @private 
@@ -70,6 +71,7 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 			this.rebuild = true;
 			this.layers = [];
 			this.mouseDown = false;
+			this.downScrollPos = Point2D.create(0,0);
 			
 			// Assign the default mouse handlers
 			MouseInputComponent.assignMouseHandlers();
@@ -248,13 +250,17 @@ Engine.initObject("IsometricMap", "BaseObject", function() {
 			var mInfo = renderContext.MouseInputComponent_mouseInfo;
 			if (!this.mouseDown && mInfo.button == EventEngine.MOUSE_LEFT_BUTTON) {
 				this.mouseDown = true;
+				this.downScrollPos.set(renderContext.jQ().scrollLeft(),renderContext.jQ().scrollTop());
 			} else if (this.mouseDown && mInfo.button == EventEngine.MOUSE_NO_BUTTON) {
 				this.mouseDown = false;
 			}
 			
 			if (this.mouseDown === true) {
 				// Check to see if the mouse has been moved
-	         Engine.addMetric("moveVec", mInfo.moveVec);
+				var sVec = Vector2D.create(this.downScrollPos);
+				sVec.add(mInfo.dragVec);
+				renderContext.jQ().scrollLeft(sVec.get().x).scrollTop(sVec.get().y);
+				sVec.destroy();
 			}
 		}
 
