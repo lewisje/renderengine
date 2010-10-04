@@ -1,7 +1,6 @@
 
 /**
  * The Render Engine
- *
  * The player object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -37,24 +36,19 @@ Engine.include("/components/component.wiimoteinput.js");
 Engine.include("/components/component.transform2d.js");
 Engine.include("/engine/engine.object2d.js");
 
-Engine.initObject("WiiHost", "Object2D", function() {
+Engine.initObject("Player", "Object2D", function() {
 
    /**
-    * @class The block object.  Represents a block which is dropped from
-    *        the top of the playfield and is used to build a hand.  Each
-    *        block is one of 6 designs.  Each block is comprised of tiles
-    *        which are cards that make up a hand, including wild cards.
+    * @class The player object is a simple invisible box which surrounds the
+    *			 mouse pointer.  The bounding box is used to determine collisions
+    *			 between the mouse pointer and a physical toy.
     */
-   var WiiHost = Object2D.extend({
+   var Player = Object2D.extend({
 
-      // The ball the cursor is currently over or null
-      overBall: null,
+      // The toy the cursor is currently over or null
+      overToy: null,
 		mouseDown: false,
-		clickBall: null,
-
-      // Debugging
-      cBox: null,
-      wBox: null,
+		clickToy: null,
 
       constructor: function() {
          this.base("WiiHost");
@@ -62,14 +56,14 @@ Engine.initObject("WiiHost", "Object2D", function() {
          // Add components to move and collide the player
          this.add(WiimoteInputComponent.create("input"));
          this.add(Transform2DComponent.create("move"));
-         this.add(ColliderComponent.create("collide", WiiTest.getCModel()));
+         this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
          
          // The player bounding box
          this.setBoundingBox(Rectangle2D.create(0, 0, 20, 20));
          
          // Initialize the currently selected ball to null
-         this.overBall = null;
-			this.clickBall = null;
+         this.overToy = null;
+			this.clickToy = null;
 			this.mouseDown = false;
       },
 
@@ -87,7 +81,7 @@ Engine.initObject("WiiHost", "Object2D", function() {
          renderContext.popTransform();
 
          // Use the metrics to let us know if we're over a ball
-         Engine.addMetric("overBall", this.overBall != null ? "true" : "false");
+         Engine.addMetric("overToy", this.overToy != null ? this.overToy : "");
       },
 
       /**
@@ -139,8 +133,8 @@ Engine.initObject("WiiHost", "Object2D", function() {
             // If controller zero, update the position
 				var p = Point2D.create(sx, sy);
             this.setPosition(p);
-				if (this.mouseDown && this.clickBall) {
-	            this.clickBall.clicked(p);
+				if (this.mouseDown && this.clickToy) {
+	            this.clickToy.clicked(p);
 				}
 				p.destroy();
          }
@@ -155,12 +149,12 @@ Engine.initObject("WiiHost", "Object2D", function() {
       onWiimoteButtonA: function(c, state) {
          if (c == 0 && state) {
 				this.mouseDown = true;
-				if (this.overBall) {
-					this.clickBall = this.overBall;
+				if (this.overToy) {
+					this.clickToy = this.overToy;
 				}
          } else if (c == 0 && !state) {
 				this.mouseDown = false;
-				this.clickBall = null;
+				this.clickToy = null;
 			}
       },
 
@@ -171,13 +165,13 @@ Engine.initObject("WiiHost", "Object2D", function() {
        * @see {ColliderComponent}
        */
       onCollide: function(obj) {
-         if (WiiBall.isInstance(obj) || WiiCrate.isInstance(obj) &&
+         if (BeachBall.isInstance(obj) || Crate.isInstance(obj) &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
-            this.overBall = obj;
+            this.overToy = obj;
             return ColliderComponent.STOP;
          }
 
-         this.overBall = null;
+         this.overToy = null;
          return ColliderComponent.CONTINUE;
       }
 
@@ -185,13 +179,13 @@ Engine.initObject("WiiHost", "Object2D", function() {
 
       /**
        * Get the class name of this object
-       * @return {String} The string <tt>WiiHost</tt>
+       * @return {String} The string <tt>Player</tt>
        */
       getClassName: function() {
-         return "WiiHost";
+         return "Player";
       }
    });
 
-   return WiiHost;
+   return Player;
 
 });

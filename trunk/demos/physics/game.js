@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * Wii Testing
+ * Physics Demo
  *
  * A simple game of bouncing balls
  *
@@ -42,18 +42,19 @@ Engine.include("/physics/physics.simulation.js")
 Engine.include("/physics/collision/shapes/b2BoxDef.js");
 
 // Load game objects
-Game.load("/wiihost.js");
-Game.load("/wiiball.js");
-Game.load("/wiicrate.js");
+Game.load("/player.js");
+Game.load("/toy.js");
+Game.load("/beachball.js");
+Game.load("/crate.js");
 
-Engine.initObject("WiiTest", "Game", function(){
+Engine.initObject("PhysicsDemo", "Game", function(){
 
    /**
-    * @class Wii ball bounce game.  Press the A button over a ball
-    *        to make it bounce.  Press A when not over a ball to create
-    *        another ball.
+    * @class A physics demonstration to show off Box2D-JS integration.  Creates
+    *			 a set of "toys" and drops them into the simulation.  The "player"
+    *			 can drag objects around and watch them interact.
     */
-   var WiiTest = Game.extend({
+   var PhysicsDemo = Game.extend({
    
       constructor: null,
       
@@ -91,24 +92,16 @@ Engine.initObject("WiiTest", "Game", function(){
          this.spriteLoader.load("crate", this.getFilePath("resources/crate.js"));
          
          // Don't start until all of the resources are loaded
-         WiiTest.loadTimeout = Timeout.create("wait", 250, WiiTest.waitForResources);
-         this.waitForResources();
-      },
-      
-      /**
-       * Wait for resources to become available before starting the game
-       * @private
-       */
-      waitForResources: function(){
-         if (WiiTest.spriteLoader.isReady()) {
-               WiiTest.loadTimeout.destroy();
-               WiiTest.run();
-               return;
-         }
-         else {
-            // Continue waiting
-            WiiTest.loadTimeout.restart();
-         }
+         Timeout.create("wait", 250, function() {
+				if (PhysicsDemo.spriteLoader.isReady()) {
+						this.destroy();
+						PhysicsDemo.run();
+				}
+				else {
+					// Continue waiting
+					this.restart();
+				}
+         });
       },
       
       /**
@@ -129,19 +122,15 @@ Engine.initObject("WiiTest", "Game", function(){
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
          
-         // Allow the user to override the context
-         if (EngineSupport.getStringParam("context", "canvas") == "dom") {
-            this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
-         } else {
-            this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
-         }
-         
+			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
          this.renderContext.setBackgroundColor("#FFFFFF");
+
+			// Set up the physics simulation
          this.simulation = Simulation.create("simulation", this.fieldBox);
 			this.simulation.setIntegrations(3);
-
          this.setupWorld();
          
+         // Add the simulation to the scene graph
          this.renderContext.add(this.simulation);
 
          // Address the context element directly via jQuery
@@ -157,7 +146,7 @@ Engine.initObject("WiiTest", "Game", function(){
          // Create the collision model with 5x5 divisions
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 10);
 
-         // Add some balls to play around with
+         // Add some toys to play around with
 			var self = this;
 			MultiTimeout.create("ballmaker", 6, 250, function() {
 	         self.createBall();
@@ -168,10 +157,15 @@ Engine.initObject("WiiTest", "Game", function(){
 			});
          
          // Add the player object
-         var player = WiiHost.create();
+         var player = Player.create();
          this.getRenderContext().add(player);
       },
       
+      /**
+       * Set up the physical world.  Creates the bounds of the world by establishing
+       * walls an a floor.  The actual objects have no visual respresentation but they
+       * will exist in the simulation.
+       */
       setupWorld: function() {
          var groundSd = new b2BoxDef();
          groundSd.extents.Set(2000, 30);
@@ -186,7 +180,7 @@ Engine.initObject("WiiTest", "Game", function(){
          leftSd.extents.Set(20, this.fieldBox.get().h + 150);
          var leftBd = new b2BodyDef();
          leftBd.AddShape(leftSd);
-         leftBd.position.Set(-50, 100);
+         leftBd.position.Set(-10, 100);
          this.simulation.addBody(leftBd);
 
          var rightSd = new b2BoxDef();
@@ -197,8 +191,11 @@ Engine.initObject("WiiTest", "Game", function(){
          this.simulation.addBody(rightBd);
       },
       
+      /**
+       * Create a beachball toy
+       */
       createBall: function() {
-         var ball = WiiBall.create();
+         var ball = BeachBall.create();
 			// Set a random location
 			var x = Math.floor(Math2.random() * 300);
 			var p = Point2D.create(x, 15);
@@ -208,10 +205,14 @@ Engine.initObject("WiiTest", "Game", function(){
          ball.simulate();
          var v = 1000 + (Math2.random() * 5000);
          ball.applyForce(Vector2D.create(v * 2000,10), p);
+         p.destroy();
       },
 
+		/**
+		 * Create a wooden crate toy
+		 */
       createBox: function() {
-         var box = WiiCrate.create();
+         var box = Crate.create();
 			// Set a random location
 			var x = Math.floor(Math2.random() * 300);
 			var p = Point2D.create(x, 15);
@@ -221,6 +222,7 @@ Engine.initObject("WiiTest", "Game", function(){
          box.simulate();
          var v = 1000 + (Math2.random() * 5000);
          box.applyForce(Vector2D.create(v * 2000,10), p);
+         p.destroy();
       },
       
       /**
@@ -246,6 +248,6 @@ Engine.initObject("WiiTest", "Game", function(){
       
    });
    
-   return WiiTest;
+   return PhysicsDemo;
    
 });

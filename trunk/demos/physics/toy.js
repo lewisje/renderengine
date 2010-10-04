@@ -1,8 +1,7 @@
 
 /**
  * The Render Engine
- *
- * A bouncing ball
+ * A physically animated "toy"
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -32,12 +31,11 @@
  */
 
 // Load engine objects
-Engine.include("/components/component.circlebody.js");
 Engine.include("/components/component.sprite.js");
 Engine.include("/components/component.collider.js");
 Engine.include("/engine/engine.object2d.js");
 
-Engine.initObject("WiiBall", "Object2D", function() {
+Engine.initObject("Toy", "Object2D", function() {
 
    /**
     * @class The block object.  Represents a block which is dropped from
@@ -45,53 +43,48 @@ Engine.initObject("WiiBall", "Object2D", function() {
     *        block is one of 6 designs.  Each block is comprised of tiles
     *        which are cards that make up a hand, including wild cards.
     */
-   var WiiBall = Object2D.extend({
+   var Toy = Object2D.extend({
 
       sprites: null,
-
-      atRest: false,
-
-      circle: null,
-      
-      upVec: null,
-		
-		size: 30,
 		scale: 1,
 
-      // Debugging collision box and bounding box
-      cBox: null,
-      wBox: null,
-
-      constructor: function() {
-         this.base("WiiBall");
+      constructor: function(spriteResource, spriteName, spriteOverName) {
+         this.base("PhysicsToy");
          this.sprite = null;
-			
-			this.size = 30;
 			this.scale = (Math2.random() * 1) + 0.8;
-			this.size *= this.scale;
-
+			
          // Add components to move, draw, and collide with the player
          this.add(SpriteComponent.create("draw"));
-         this.add(CircleBodyComponent.create("physics", this.size));
-         this.add(ColliderComponent.create("collide", WiiTest.cModel));
+         this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
          
          // The sprites
          this.sprites = [];
-         this.sprites.push(WiiTest.spriteLoader.getSprite("beachball", "ball"));
-         this.sprites.push(WiiTest.spriteLoader.getSprite("beachball", "over"));
+         this.sprites.push(PhysicsDemo.spriteLoader.getSprite(spriteResource, spriteName));
+         this.sprites.push(PhysicsDemo.spriteLoader.getSprite(spriteResource, spriteOverName));
          this.setSprite(0);
 
-			this.getComponent("physics").setFriction(0.08);
+			// Create the physical body object
+			this.createPhysicalBody("physics", this.scale);
 			this.getComponent("physics").setScale(this.scale);
 
          this.setPosition(Point2D.create(25, 15));
 			this.setOrigin(Point2D.create(30, 30));
       },
+
+		/**
+		 * [ABSTRACT] Create the physical body component and assign it to the
+		 * toy.
+		 *
+		 * @param componentName {String} The name to assign to the component.
+		 * @param scale {Number} A scalar scaling value for the toy
+		 */
+		createPhysicalBody: function(componentName, scale) {
+		},
 		
       /**
-       * Update the ball within the rendering context.  This draws
+       * Update the toy within the rendering context.  This draws
        * the shape to the context, after updating the transform of the
-       * object.  Also handles debug boxes.
+       * object.
        *
        * @param renderContext {RenderContext} The rendering context
        * @param time {Number} The engine time in milliseconds
@@ -102,6 +95,9 @@ Engine.initObject("WiiBall", "Object2D", function() {
          renderContext.popTransform();
       },
 
+		/**
+		 * Start simulation of the physical object.
+		 */
 		simulate: function() {
 			this.getComponent("physics").startSimulation();
 		},
@@ -117,19 +113,31 @@ Engine.initObject("WiiBall", "Object2D", function() {
       },
 
       /**
-       * Get the position of the ball from the mover component.
+       * Get the position of the toy from the mover component.
        * @return {Point2D}
        */
       getPosition: function() {
          return this.getComponent("physics").getPosition();
       },
 		
+		/**
+		 * Get the rotation of the toy from the mover component.
+		 * @return {Number}
+		 */
 		getRotation: function() {
 			return this.getComponent("physics").getRotation();
 		},
 		
+		/**
+		 * Get the uniform scale of the toy from the mover component.
+		 * @return {Number}
+		 */
+		getScale: function() {
+			return this.getComponent("physics").getScale();
+		},
+		
       /**
-       * Get the render position of the ball
+       * Get the render position of the toy
        * @return {Point2D}
        */
       getRenderPosition: function() {
@@ -137,7 +145,7 @@ Engine.initObject("WiiBall", "Object2D", function() {
       },
       
       /**
-       * Get the box which surrounds the player in the world
+       * Get the box which surrounds the toy in the world
        * @return {Rectangle2D} The world bounding box
        */
       getWorldBox: function() {
@@ -148,19 +156,26 @@ Engine.initObject("WiiBall", "Object2D", function() {
       /**
        * Set, or initialize, the position of the mover component
        *
-       * @param point {Point2D} The position to draw the ball in the playfield
+       * @param point {Point2D} The position to draw the toy in the playfield
        */
       setPosition: function(point) {
          this.base(point);
          this.getComponent("physics").setPosition(point);
       },
 
+		/**
+		 * Apply a force to the physical body.
+		 *
+		 * @param amt {Vector2D} The force vector to apply to the toy.
+		 * @param loc {Point2D} The location at which the force is applied to the toy.
+		 */
 		applyForce: function(amt, loc) {
 			this.getComponent("physics").applyForce(amt, loc);
 		},
 
       /**
-       * If the ball was clicked on, make it bounce a random way.
+       * If the toy was clicked on, determine a force vector and apply it
+       * to the toy.
        */
       clicked: function(p) {
 			var force = Vector2D.create(p).sub(this.getPosition()).mul(20000);
@@ -168,16 +183,18 @@ Engine.initObject("WiiBall", "Object2D", function() {
 			force.destroy();
       },
 		
+		/**
+		 * Unused
+		 */
 		released: function() {
-			
 		},
 
       /**
-       * Determine if the ball was touched by the player and, if so,
+       * Determine if the toy was touched by the player and, if so,
        * change the sprite which represents it.
        */
       onCollide: function(obj) {
-         if (WiiHost.isInstance(obj) &&
+         if (Player.isInstance(obj) &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
             this.setSprite(1);
             return ColliderComponent.STOP;
@@ -191,13 +208,13 @@ Engine.initObject("WiiBall", "Object2D", function() {
 
       /**
        * Get the class name of this object
-       * @return {String} The string <tt>WiiBall</tt>
+       * @return {String} The string <tt>Toy</tt>
        */
       getClassName: function() {
-         return "WiiBall";
+         return "Toy";
       }
    });
 
-return WiiBall;
+return Toy;
 
 });
