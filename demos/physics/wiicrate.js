@@ -77,8 +77,8 @@ Engine.initObject("WiiCrate", "Object2D", function() {
          
          // The sprites
          this.sprites = [];
-         this.sprites.push(WiiTest.spriteLoader.getSprite("beachball", "ball"));
-         this.sprites.push(WiiTest.spriteLoader.getSprite("beachball", "over"));
+         this.sprites.push(WiiTest.spriteLoader.getSprite("crate", "crate"));
+         this.sprites.push(WiiTest.spriteLoader.getSprite("crate", "over"));
          this.setSprite(0);
 
 			this.getComponent("physics").setFriction(0.3);
