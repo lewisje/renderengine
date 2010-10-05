@@ -37,12 +37,20 @@ Engine.include("/engine/engine.math2d.js");
 Engine.initObject("Crate", "Toy", function() {
 
    /**
-    * @class A wooden crate toy.
+    * @class A wooden crate toy to play with.  Uses the box body to physically animate
+    *			 the toy object.
+    *
+    * @constructor
+    * @extends Toy
+    * @description Create a wooden crate toy
     */
-   var Crate = Toy.extend({
+   var Crate = Toy.extend(/** @scope Crate.prototype */{
 
 		extents: null,
 
+		/**
+		 * @private
+		 */
 		constructor: function() {
 			this.base("crate", "crate", "over");
 		},
@@ -64,7 +72,7 @@ Engine.initObject("Crate", "Toy", function() {
 			this.getComponent(componentName).setRestitution(0.25);
 		}
 
-   }, { // Static
+   }, /** @scope Crate.prototype */{ // Static
 
       /**
        * Get the class name of this object

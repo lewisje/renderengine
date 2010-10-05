@@ -38,22 +38,31 @@ Engine.include("/engine/engine.object2d.js");
 Engine.initObject("Toy", "Object2D", function() {
 
    /**
-    * @class The block object.  Represents a block which is dropped from
-    *        the top of the playfield and is used to build a hand.  Each
-    *        block is one of 6 designs.  Each block is comprised of tiles
-    *        which are cards that make up a hand, including wild cards.
+    * @class Base class for toys which can be added to the playfield.  Each toy
+    *			 which extends from this must implement {@link #createPhysicalBody}
+    *			 to generate the physical representation of the toy.
+    *
+    * @param spriteResource {String} The resource where the two sprites are found
+    * @param spriteName {String} The name of the sprite, in the resource, that represents the default toy image
+    * @param spriteOverName {String} The name of the sprite, in the resource, for when the mouse is over the toy
+    * @extends Object2D
+    * @description Base class for a physical toy object
+    * @constructor
     */
-   var Toy = Object2D.extend({
+   var Toy = Object2D.extend(/** @scope Toy.prototype */{
 
       sprites: null,
 		scale: 1,
 
+		/**
+		 * @private
+		 */
       constructor: function(spriteResource, spriteName, spriteOverName) {
          this.base("PhysicsToy");
          this.sprite = null;
 			this.scale = (Math2.random() * 1) + 0.8;
 			
-         // Add components to move, draw, and collide with the player
+         // Add components to draw and collide with the player
          this.add(SpriteComponent.create("draw"));
          this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
          
@@ -63,10 +72,11 @@ Engine.initObject("Toy", "Object2D", function() {
          this.sprites.push(PhysicsDemo.spriteLoader.getSprite(spriteResource, spriteOverName));
          this.setSprite(0);
 
-			// Create the physical body object
+			// Create the physical body object which will move the toy object
 			this.createPhysicalBody("physics", this.scale);
 			this.getComponent("physics").setScale(this.scale);
 
+			// Set the starting position and move the origin to the center of the toy
          this.setPosition(Point2D.create(25, 15));
 			this.setOrigin(Point2D.create(30, 30));
       },
@@ -75,7 +85,7 @@ Engine.initObject("Toy", "Object2D", function() {
 		 * [ABSTRACT] Create the physical body component and assign it to the
 		 * toy.
 		 *
-		 * @param componentName {String} The name to assign to the component.
+		 * @param componentName {String} The name assigned to the component by this class.
 		 * @param scale {Number} A scalar scaling value for the toy
 		 */
 		createPhysicalBody: function(componentName, scale) {
@@ -103,7 +113,7 @@ Engine.initObject("Toy", "Object2D", function() {
 		},
 
       /**
-       * Set the sprite to render with on the draw component.
+       * Set the sprite to use with the "draw" component.
        * @param spriteIdx {Number} The sprite index
        */
       setSprite: function(spriteIdx) {
@@ -113,7 +123,7 @@ Engine.initObject("Toy", "Object2D", function() {
       },
 
       /**
-       * Get the position of the toy from the mover component.
+       * Get the position of the toy from the "physics" component.
        * @return {Point2D}
        */
       getPosition: function() {
@@ -121,7 +131,7 @@ Engine.initObject("Toy", "Object2D", function() {
       },
 		
 		/**
-		 * Get the rotation of the toy from the mover component.
+		 * Get the rotation of the toy from the "physics" component.
 		 * @return {Number}
 		 */
 		getRotation: function() {
@@ -129,7 +139,7 @@ Engine.initObject("Toy", "Object2D", function() {
 		},
 		
 		/**
-		 * Get the uniform scale of the toy from the mover component.
+		 * Get the uniform scale of the toy from the "physics" component.
 		 * @return {Number}
 		 */
 		getScale: function() {
@@ -145,7 +155,7 @@ Engine.initObject("Toy", "Object2D", function() {
       },
       
       /**
-       * Get the box which surrounds the toy in the world
+       * Get the box which surrounds the toy in the world.
        * @return {Rectangle2D} The world bounding box
        */
       getWorldBox: function() {
@@ -154,7 +164,7 @@ Engine.initObject("Toy", "Object2D", function() {
       },
 
       /**
-       * Set, or initialize, the position of the mover component
+       * Set, or initialize, the position of the "physics" component
        *
        * @param point {Point2D} The position to draw the toy in the playfield
        */
@@ -166,7 +176,7 @@ Engine.initObject("Toy", "Object2D", function() {
 		/**
 		 * Apply a force to the physical body.
 		 *
-		 * @param amt {Vector2D} The force vector to apply to the toy.
+		 * @param amt {Vector2D} The force vector (direction of the force) to apply to the toy.
 		 * @param loc {Point2D} The location at which the force is applied to the toy.
 		 */
 		applyForce: function(amt, loc) {
@@ -175,7 +185,9 @@ Engine.initObject("Toy", "Object2D", function() {
 
       /**
        * If the toy was clicked on, determine a force vector and apply it
-       * to the toy.
+       * to the toy so it can be dragged around the playfield.
+       *
+       * @param p {Point2D} The position where the mouse currently resides
        */
       clicked: function(p) {
 			var force = Vector2D.create(p).sub(this.getPosition()).mul(20000);
@@ -184,7 +196,7 @@ Engine.initObject("Toy", "Object2D", function() {
       },
 		
 		/**
-		 * Unused
+		 * Currently unused
 		 */
 		released: function() {
 		},
@@ -204,7 +216,7 @@ Engine.initObject("Toy", "Object2D", function() {
          return ColliderComponent.CONTINUE;
       }
 
-   }, { // Static
+   }, /** @scope Toy.prototype */{ // Static
 
       /**
        * Get the class name of this object
