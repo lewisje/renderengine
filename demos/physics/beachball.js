@@ -36,15 +36,20 @@ Engine.include("/components/component.circlebody.js");
 Engine.initObject("BeachBall", "Toy", function() {
 
    /**
-    * @class The block object.  Represents a block which is dropped from
-    *        the top of the playfield and is used to build a hand.  Each
-    *        block is one of 6 designs.  Each block is comprised of tiles
-    *        which are cards that make up a hand, including wild cards.
+    * @class A beachball toy to play with.  Uses the circle body to physically animate
+    *			 the toy object.
+    *
+    * @constructor
+    * @extends Toy
+    * @description Create a beachball toy
     */
-   var BeachBall = Toy.extend({
+   var BeachBall = Toy.extend(/** @scope BeachBall.prototype */{
 
 		size: 30,
 
+		/**
+		 * @private
+		 */
 		constructor: function() {
 			this.base("beachball", "ball", "over");
 		},
@@ -61,12 +66,12 @@ Engine.initObject("BeachBall", "Toy", function() {
 			this.size *= scale;
 			this.add(CircleBodyComponent.create(componentName, this.size));
 			
-			// Set the friction and bounciness of the crate
+			// Set the friction and bounciness of the beachball
 			this.getComponent(componentName).setFriction(0.08);
 			this.getComponent(componentName).setRestitution(0.8);
 		}
 
-   }, { // Static
+   }, /** @scope BeachBall.prototype */{ // Static
 
       /**
        * Get the class name of this object

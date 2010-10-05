@@ -53,6 +53,8 @@ Engine.initObject("PhysicsDemo", "Game", function(){
     * @class A physics demonstration to show off Box2D-JS integration.  Creates
     *			 a set of "toys" and drops them into the simulation.  The "player"
     *			 can drag objects around and watch them interact.
+    *
+    * @extends Game
     */
    var PhysicsDemo = Game.extend({
    
@@ -75,6 +77,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       // The collision model
       cModel: null,
       
+      // The physical world simulation
       simulation: null,
       
       /**
@@ -114,14 +117,16 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       
       /**
        * Run the game
+       * @private
        */
       run: function(){
-         // Create the render context
+         // Set up the playfield dimensions
          this.fieldWidth = EngineSupport.sysInfo().viewWidth;
 			this.fieldHeight = EngineSupport.sysInfo().viewHeight;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
          
+         // Create the game context
 			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
          this.renderContext.setBackgroundColor("#FFFFFF");
 
@@ -130,7 +135,8 @@ Engine.initObject("PhysicsDemo", "Game", function(){
 			this.simulation.setIntegrations(3);
          this.setupWorld();
          
-         // Add the simulation to the scene graph
+         // Add the simulation to the scene graph so the physical
+         // world is stepped (updated) in sync with the rendering
          this.renderContext.add(this.simulation);
 
          // Address the context element directly via jQuery
@@ -141,19 +147,19 @@ Engine.initObject("PhysicsDemo", "Game", function(){
             right: 0,
             bottom: 0});
 
+			// Add the game context to the scene graph
          Engine.getDefaultContext().add(this.renderContext);
 
          // Create the collision model with 5x5 divisions
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 10);
 
          // Add some toys to play around with
-			var self = this;
 			MultiTimeout.create("ballmaker", 6, 250, function() {
-	         self.createBall();
+	         PhysicsDemo.createToy(BeachBall.create());
 			});
 
 			MultiTimeout.create("boxmaker", 6, 250, function() {
-	         self.createBox();
+	         PhysicsDemo.createToy(Crate.create());
 			});
          
          // Add the player object
@@ -163,8 +169,9 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       
       /**
        * Set up the physical world.  Creates the bounds of the world by establishing
-       * walls an a floor.  The actual objects have no visual respresentation but they
+       * walls and a floor.  The actual objects have no visual respresentation but they
        * will exist in the simulation.
+       * @private
        */
       setupWorld: function() {
       	var pos = Point2D.create(0,0), ext = Point2D.create(0,0);
@@ -192,41 +199,34 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       },
       
       /**
-       * Create a beachball toy
+       * Create a toy and apply a force to give it some random motion.
+       * @param toyObject {Toy} A toy object to add to the playfield and simulation
+       * @private
        */
-      createBall: function() {
-         var ball = BeachBall.create();
+      createToy: function(toyObject) {
 			// Set a random location
 			var x = Math.floor(Math2.random() * 300);
 			var p = Point2D.create(x, 15);
-			ball.setPosition(p);
-         ball.setSimulation(this.simulation);
-         this.getRenderContext().add(ball);
+			toyObject.setPosition(p);
+			
+			// The simulation is used to update the position and rotation
+			// of the physical body.  Whereas the render context is used to 
+			// represent (draw) the shape.
+         toyObject.setSimulation(this.simulation);
+         this.getRenderContext().add(toyObject);
+         
+         // Start the simulation of the object so we can apply a force
          ball.simulate();
-         var v = 1000 + (Math2.random() * 5000);
-         ball.applyForce(Vector2D.create(v * 2000,10), p);
-         p.destroy();
-      },
-
-		/**
-		 * Create a wooden crate toy
-		 */
-      createBox: function() {
-         var box = Crate.create();
-			// Set a random location
-			var x = Math.floor(Math2.random() * 300);
-			var p = Point2D.create(x, 15);
-			box.setPosition(p);
-         box.setSimulation(this.simulation);
-         this.getRenderContext().add(box);
-         box.simulate();
-         var v = 1000 + (Math2.random() * 5000);
-         box.applyForce(Vector2D.create(v * 2000,10), p);
+         var v = Vector2D.create((1000 + (Math2.random() * 5000) * 2000, 10);
+         toyObject.applyForce(Vector2D.create(v, p);
+         
+         v.destroy();
          p.destroy();
       },
       
       /**
        * Return a reference to the render context
+       * @return {RenderContext}
        */
       getRenderContext: function(){
          return this.renderContext;
@@ -234,6 +234,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       
       /**
        * Return a reference to the playfield box
+       * @return {Rectangle2D}
        */
       getFieldBox: function() {
          return this.fieldBox;
@@ -241,6 +242,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       
       /**
        * return a reference to the collision model
+       * @return {SpatialContainer}
        */
       getCModel: function() {
          return this.cModel;

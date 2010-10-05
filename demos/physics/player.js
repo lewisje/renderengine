@@ -41,27 +41,35 @@ Engine.initObject("Player", "Object2D", function() {
    /**
     * @class The player object is a simple invisible box which surrounds the
     *			 mouse pointer.  The bounding box is used to determine collisions
-    *			 between the mouse pointer and a physical toy.
+    *			 between the mouse pointer and a physical toy object.
+    *
+    * @extends Object2D
+    * @constructor
+    * @description Create the "player" object
     */
-   var Player = Object2D.extend({
+   var Player = Object2D.extend(/** @scope Player.prototype */{
 
       // The toy the cursor is currently over or null
       overToy: null,
 		mouseDown: false,
 		clickToy: null,
 
+		/**
+		 * @private
+		 */
       constructor: function() {
-         this.base("WiiHost");
+         this.base("Player");
 
-         // Add components to move and collide the player
+         // Add components to move and collide the player.  Movement is controlled
+         // with either the mouse, or with the Wii remote
          this.add(WiimoteInputComponent.create("input"));
          this.add(Transform2DComponent.create("move"));
          this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
          
-         // The player bounding box
+         // The player's bounding box
          this.setBoundingBox(Rectangle2D.create(0, 0, 20, 20));
          
-         // Initialize the currently selected ball to null
+         // Initialize the currently selected toy to null
          this.overToy = null;
 			this.clickToy = null;
 			this.mouseDown = false;
@@ -69,8 +77,7 @@ Engine.initObject("Player", "Object2D", function() {
 
       /**
        * Update the player within the rendering context.  The player doesn't actually have
-       * any shape, so this just update the position and collision model.  Debugging of
-       * the world box and collision node is rendered if debug mode is enabled.
+       * any shape, so this just update the position and collision model.
        *
        * @param renderContext {RenderContext} The rendering context
        * @param time {Number} The engine time in milliseconds
@@ -80,12 +87,12 @@ Engine.initObject("Player", "Object2D", function() {
          this.base(renderContext, time);
          renderContext.popTransform();
 
-         // Use the metrics to let us know if we're over a ball
+         // Use the metrics to let us know if we're over a toy object
          Engine.addMetric("overToy", this.overToy != null ? this.overToy : "");
       },
 
       /**
-       * Get the position of the player from the mover component.
+       * Get the position of the player from the "move" component.
        * @return {Point2D} The position of the cursor
        */
       getPosition: function() {
@@ -101,7 +108,7 @@ Engine.initObject("Player", "Object2D", function() {
       },
 
       /**
-       * Get the box which surrounds the player in the world
+       * Get the box which surrounds the player in the world.
        * @return {Rectangle2D} The world bounding box
        */
       getWorldBox: function() {
@@ -110,7 +117,7 @@ Engine.initObject("Player", "Object2D", function() {
       },
 
       /**
-       * Set, or initialize, the position of the mover component
+       * Set, or initialize, the position of the mover component.
        * @param point {Point2D} The position where the cursor is
        */
       setPosition: function(point) {
@@ -122,8 +129,9 @@ Engine.initObject("Player", "Object2D", function() {
       },
 
       /**
-       * Respond to the Wii remote position, or the cursor position when not
+       * Respond to the Wii remote position or the mouse position when not
        * using a Wii.
+       * 
        * @param c {Number} The controller number
        * @param sx {Number} The screen X position
        * @param sy {Number} The screen Y position
@@ -141,8 +149,9 @@ Engine.initObject("Player", "Object2D", function() {
       },
 
       /**
-       * Respond to the A button being pressed on the Wii remote, or a mouse
+       * Respond to the A button being pressed on the Wii remote, or any mouse
        * button being pressed or released.
+       *
        * @param c {Number} The controller number
        * @param state {Boolean} <tt>true</tt> if the button is pressed, <tt>false</tt> when released
        */
@@ -159,13 +168,14 @@ Engine.initObject("Player", "Object2D", function() {
       },
 
       /**
-       * Check for collision between a ball and the player.
+       * Check for collision between a toy object and the player.
+       *
        * @param obj {Object2D} The object being collided with
        * @return {Number} A status value
        * @see {ColliderComponent}
        */
       onCollide: function(obj) {
-         if (BeachBall.isInstance(obj) || Crate.isInstance(obj) &&
+         if (Toy.isInstance(obj) &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
             this.overToy = obj;
             return ColliderComponent.STOP;
@@ -175,7 +185,7 @@ Engine.initObject("Player", "Object2D", function() {
          return ColliderComponent.CONTINUE;
       }
 
-   }, { // Static
+   }, /** @scope Player.prototype */{ // Static
 
       /**
        * Get the class name of this object
