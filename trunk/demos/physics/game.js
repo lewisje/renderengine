@@ -154,11 +154,11 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 10);
 
          // Add some toys to play around with
-			MultiTimeout.create("ballmaker", 6, 250, function() {
+			MultiTimeout.create("ballmaker", 6, 150, function() {
 	         PhysicsDemo.createToy(BeachBall.create());
 			});
 
-			MultiTimeout.create("boxmaker", 6, 250, function() {
+			MultiTimeout.create("boxmaker", 8, 150, function() {
 	         PhysicsDemo.createToy(Crate.create());
 			});
          

@@ -68,7 +68,8 @@ Engine.initObject("BeachBall", "Toy", function() {
 			
 			// Set the friction and bounciness of the beachball
 			this.getComponent(componentName).setFriction(0.08);
-			this.getComponent(componentName).setRestitution(0.8);
+			this.getComponent(componentName).setRestitution(10);
+			this.getComponent(componentName).setDensity(0.3);
 		}
 
    }, /** @scope BeachBall.prototype */{ // Static
