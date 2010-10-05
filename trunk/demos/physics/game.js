@@ -174,7 +174,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       	ext.set(2000, 30);
       	this.simulation.addSimpleBoxBody(pos, ext, {
       		restitution: 0.2,
-      		friction: 1.6
+      		friction: 3.0
       	});
 			
 			// Left wall
@@ -183,7 +183,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
 			this.simulation.addSimpleBoxBody(pos, ext);
 
 			// Right wall
-			pos.set(this.fieldBox.get().w - 10, 100);
+			pos.set(this.fieldBox.get().w, 100);
 			ext.set(20, this.fieldBox.get().h + 150);
 			this.simulation.addSimpleBoxBody(pos, ext);
 			

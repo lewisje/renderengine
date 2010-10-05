@@ -62,7 +62,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
 
       constructor: function(name, worldBoundary, gravity) {
          this.base(name);
-         this.gravity = gravity || Vector2D.create(0, 450);
+         this.gravity = gravity || Vector2D.create(0, 650);
          this.worldAABB = new b2AABB();
          
          this.worldBoundary = worldBoundary;
@@ -170,11 +170,15 @@ Engine.initObject("Simulation", "BaseObject", function() {
       
       /**
        * Add a simple box body to the simulation.  The body doesn't have a visual
-       * representation, but exists in the simulation and can be interacted with
+       * representation, but exists in the simulation and can be interacted with. A
        *
        * @param pos {Point2D} The position where the body's top/left is located
        * @param extents {Point2D} The width and height of the body
-       * @param properties {Object} An object with up to three properties: "restitution", "friction", and "density"
+       * @param properties {Object} An object with up to three properties: <ul>
+       * 		<li>restitution - The bounciness of the body</li>
+       *			<li>friction - Friction against this body</li>
+       *			<li>density - The density of the object, defaults to zero (fixed in place)</li></ul>
+       *
        * @return {b2BodyDef} A Box2D-JS body definition object representing the box
        */
       addSimpleBoxBody: function(pos, extents, properties) {
@@ -187,7 +191,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
 			// Set the properties
          boxDef.restitution = properties.restitution || BaseBodyComponent.DEFAULT_RESTITUTION;
 			boxDef.friction = properties.friction || BaseBodyComponent.DEFAULT_FRICTION;
-			boxDef.density = properties.density || BaseBodyComponent.DEFAULT_DENSITY;
+			boxDef.density = properties.density || 0;
 
          var b2body = new b2BodyDef();
          b2body.AddShape(boxDef);
@@ -197,11 +201,15 @@ Engine.initObject("Simulation", "BaseObject", function() {
       
       /**
        * Add a simple circle body to the simulation.  The body doesn't have a visual
-       * representation, but exists in the simulation and can be interacted with
+       * representation, but exists in the simulation and can be interacted with.
        *
        * @param pos {Point2D} The position where the body's center is located
        * @param radius {Point2D} The radius of the circle body
-       * @param properties {Object} An object with up to three properties: "restitution", "friction", and "density"
+       * @param properties {Object} An object with up to three properties: <ul>
+       * 		<li>restitution - The bounciness of the body</li>
+       *			<li>friction - Friction against this body</li>
+       *			<li>density - The density of the object, defaults to zero (fixed in place)</li></ul>
+       *
        * @return {b2BodyDef} A Box2D-JS body definition object representing the circle
        */
       addSimpleCircleBody: function(pos, radius, properties) {
@@ -214,7 +222,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
 			// Set the properties
          circleDef.restitution = properties.restitution || BaseBodyComponent.DEFAULT_RESTITUTION;
 			circleDef.friction = properties.friction || BaseBodyComponent.DEFAULT_FRICTION;
-			circleDef.density = properties.density || BaseBodyComponent.DEFAULT_DENSITY;
+			circleDef.density = properties.density || 0;
 
          var b2body = new b2BodyDef();
          b2body.AddShape(circleDef);
