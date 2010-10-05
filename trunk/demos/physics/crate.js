@@ -5,8 +5,8 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 642 $
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
