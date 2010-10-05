@@ -167,28 +167,28 @@ Engine.initObject("PhysicsDemo", "Game", function(){
        * will exist in the simulation.
        */
       setupWorld: function() {
-         var groundSd = new b2BoxDef();
-         groundSd.extents.Set(2000, 30);
-         groundSd.restitution = 0.2;
-			groundSd.friction = 1.6;
-         var groundBd = new b2BodyDef();
-         groundBd.AddShape(groundSd);
-         groundBd.position.Set(0, this.fieldBox.get().h);
-         this.simulation.addBody(groundBd);
+      	var pos = Point2D.create(0,0), ext = Point2D.create(0,0);
+      	
+      	// Ground
+      	pos.set(0, this.fieldBox.get().h);
+      	ext.set(2000, 30);
+      	this.simulation.addSimpleBoxBody(pos, ext, {
+      		restitution: 0.2,
+      		friction: 1.6
+      	});
+			
+			// Left wall
+			pos.set(-10, 100);
+			ext.set(20, this.fieldBox.get().h + 150);
+			this.simulation.addSimpleBoxBody(pos, ext);
 
-         var leftSd = new b2BoxDef();
-         leftSd.extents.Set(20, this.fieldBox.get().h + 150);
-         var leftBd = new b2BodyDef();
-         leftBd.AddShape(leftSd);
-         leftBd.position.Set(-10, 100);
-         this.simulation.addBody(leftBd);
-
-         var rightSd = new b2BoxDef();
-         rightSd.extents.Set(20, this.fieldBox.get().h + 150);
-         var rightBd = new b2BodyDef();
-         rightBd.AddShape(rightSd);
-         rightBd.position.Set(this.fieldBox.get().w - 10, 100);
-         this.simulation.addBody(rightBd);
+			// Right wall
+			pos.set(this.fieldBox.get().w - 10, 100);
+			ext.set(20, this.fieldBox.get().h + 150);
+			this.simulation.addSimpleBoxBody(pos, ext);
+			
+			pos.destroy();
+			ext.destroy();
       },
       
       /**
