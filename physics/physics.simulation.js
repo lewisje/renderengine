@@ -170,7 +170,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
       
       /**
        * Add a simple box body to the simulation.  The body doesn't have a visual
-       * representation, but exists in the simulation and can be interacted with. A
+       * representation, but exists in the simulation and can be interacted with.
        *
        * @param pos {Point2D} The position where the body's top/left is located
        * @param extents {Point2D} The width and height of the body
