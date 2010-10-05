@@ -216,7 +216,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          this.getRenderContext().add(toyObject);
          
          // Start the simulation of the object so we can apply a force
-         ball.simulate();
+         toyObject.simulate();
          var v = Vector2D.create((1000 + (Math2.random() * 5000)) * 2000, 10);
          toyObject.applyForce(v, p);
          
