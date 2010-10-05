@@ -69,7 +69,8 @@ Engine.initObject("Crate", "Toy", function() {
 			
 			// Set the friction and bounciness of the crate
 			this.getComponent(componentName).setFriction(0.3);
-			this.getComponent(componentName).setRestitution(0.25);
+			this.getComponent(componentName).setRestitution(0);
+			this.getComponent(componentName).setDensity(2);
 		}
 
    }, /** @scope Crate.prototype */{ // Static
