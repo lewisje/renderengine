@@ -217,7 +217,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          
          // Start the simulation of the object so we can apply a force
          ball.simulate();
-         var v = Vector2D.create((1000 + (Math2.random() * 5000) * 2000, 10);
+         var v = Vector2D.create((1000 + (Math2.random() * 5000)) * 2000, 10);
          toyObject.applyForce(Vector2D.create(v, p);
          
          v.destroy();
