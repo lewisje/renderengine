@@ -33,6 +33,7 @@
 Engine.include("/physics/common/b2Settings.js");
 Engine.include("/physics/collision/b2AABB.js");
 Engine.include("/physics/dynamics/b2World.js");
+Engine.include("/components/component.basebody.js");
 
 Engine.initObject("Simulation", "BaseObject", function() {
 
@@ -109,22 +110,22 @@ Engine.initObject("Simulation", "BaseObject", function() {
        * Support method to add a body to the simulation.  The body must be one of the
        * box2d-js body types.  This method is intended to be used by {@link SimulationObject}.
        * 
-       * @param b2jsBody {b2Body} A box2d-js Body object
+       * @param b2jsBodyDef {b2BodyDef} A box2d-js Body definition object
        * @private
        */
-      addBody: function(b2jsBody) {
-         return this.world.CreateBody(b2jsBody);
+      addBody: function(b2jsBodyDef) {
+         return this.world.CreateBody(b2jsBodyDef);
       },
       
       /**
        * Support method to add a joint to the simulation.  The joint must be one of the
        * box2d-js joint types.  This method is intended to be used by {@link SimulationObject}.
        * 
-       * @param b2jsJoint {b2Joint} A box2d-js Joint object
+       * @param b2jsJointDef {b2JointDef} A box2d-js Joint definition object
        * @private
        */
-      addJoint: function(b2jsJoint) {
-         return this.world.CreateJoint(b2jsJoint);
+      addJoint: function(b2jsJointDef) {
+         return this.world.CreateJoint(b2jsJointDef);
       },
       
       /**
@@ -165,6 +166,60 @@ Engine.initObject("Simulation", "BaseObject", function() {
        */
       getIntegrations: function() {
          return this.integrations;   
+      },
+      
+      /**
+       * Add a simple box body to the simulation.  The body doesn't have a visual
+       * representation, but exists in the simulation and can be interacted with
+       *
+       * @param pos {Point2D} The position where the body's top/left is located
+       * @param extents {Point2D} The width and height of the body
+       * @param properties {Object} An object with up to three properties: "restitution", "friction", and "density"
+       * @return {b2BodyDef} A Box2D-JS body definition object representing the box
+       */
+      addSimpleBoxBody: function(pos, extents, properties) {
+         var e = extents.get(), p = pos.get();
+         properties = properties || {};
+         
+         var boxDef = new b2BoxDef();
+         boxDef.extents.Set(e.x, e.y);
+
+			// Set the properties
+         boxDef.restitution = properties.restitution || BaseBodyComponent.DEFAULT_RESTITUTION;
+			boxDef.friction = properties.friction || BaseBodyComponent.DEFAULT_FRICTION;
+			boxDef.density = properties.density || BaseBodyComponent.DEFAULT_DENSITY;
+
+         var b2body = new b2BodyDef();
+         b2body.AddShape(boxDef);
+         b2body.position.Set(p.x, p.y);
+         return this.addBody(b2body);
+      },
+      
+      /**
+       * Add a simple circle body to the simulation.  The body doesn't have a visual
+       * representation, but exists in the simulation and can be interacted with
+       *
+       * @param pos {Point2D} The position where the body's center is located
+       * @param radius {Point2D} The radius of the circle body
+       * @param properties {Object} An object with up to three properties: "restitution", "friction", and "density"
+       * @return {b2BodyDef} A Box2D-JS body definition object representing the circle
+       */
+      addSimpleCircleBody: function(pos, radius, properties) {
+         var p = pos.get();
+         properties = properties || {};
+         
+         var circleDef = new b2CircleDef();
+         circleDef.radius = radius;
+
+			// Set the properties
+         circleDef.restitution = properties.restitution || BaseBodyComponent.DEFAULT_RESTITUTION;
+			circleDef.friction = properties.friction || BaseBodyComponent.DEFAULT_FRICTION;
+			circleDef.density = properties.density || BaseBodyComponent.DEFAULT_DENSITY;
+
+         var b2body = new b2BodyDef();
+         b2body.AddShape(circleDef);
+         b2body.position.Set(p.x, p.y);
+         return this.addBody(b2body);
       }
       
    }, /** @scope Simulation.prototype */{
