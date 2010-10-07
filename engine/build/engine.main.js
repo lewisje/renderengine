@@ -115,6 +115,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    liveTime: 0,               // The "alive" time (worldTime-upTime)
+   
+   shutdownCallbacks: [],		// Methods to call when the engine is shutting down
 
    // Issue #18 - Intrinsic loading dialog
    loadingCSS: "<style type='text/css'>div.loadbox {width:325px;height:30px;padding:10px;font:10px Arial;border:1px outset gray;-moz-border-radius:10px;-webkit-border-radius:10px} #engine-load-progress { position:relative;border:1px inset gray;width:300px;height:5px} #engine-load-progress .bar {background:silver;}</style>",
@@ -505,6 +507,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.running = false;
    },
 
+	/**
+	 * Add a method to be called when the engine is being shutdown.  Use this
+	 * method to allow an object, which is not referenced to by the engine, to
+	 * perform cleanup actions.
+	 *
+	 * @param fn {Function} The callback function
+	 */
+	onShutdown: function(fn) {
+		if (Engine.shuttingDown === true) {
+			return;
+		}
+		
+		Engine.shutdownCallbacks.push(fn);
+	},
+
    /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
     * objects that have been created and added to the world.
@@ -534,6 +551,12 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       // Stop world timer
       window.clearTimeout(Engine.globalTimer);
+      
+      // Run through shutdown callbacks to allow objects not tracked by Engine
+      // to clean up references, etc.
+      while (Engine.shutdownCallbacks.length > 0) {
+      	Engine.shutdownCallbacks.shift()();
+      };
 
       if (this.metricDisplay)
       {
