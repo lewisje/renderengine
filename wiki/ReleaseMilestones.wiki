@@ -6,16 +6,29 @@ Maybe you're looking for FutureGoals?
 = Planned Release Features for v2.0 =
   # Internet Explorer 8 and earlier support with Flash Canvas
   # Touch input support
-  # Soundmanager 2 HTML5 support
-  # Sprite editor
-  # 2D game editor
-  # User interface manager
-    * Build interface 
+  # !SoundManager 2 HTML5 support
+  # New editors
+    * Sprite editor
+    * 2D game editor
+    * Particle effect editor
+  # User interfaces
+    * UI manager class 
+    * UI elements
   # New rendering contexts
     * SVG
     * Scrolling layerd/parallax background
     * Scrolling background
-  # Optimizations
+  # Starter Objects
+    * Actor2D
+    * CollisionBox2D
+  # New and updated components
+    * !CircleBodyComponent (physics)
+    * !BoxBodyComponent (physics)
+    * !PolyBodyComponent (physics)
+    * Billboard2DComponent
+    * !TouchInputComponent
+    * AStarAIComponent
+  # Platform optimizations
     * iPhone/iPod/iPad
     * Android devices
     * Nintendo Wii
@@ -23,8 +36,17 @@ Maybe you're looking for FutureGoals?
     * localStorage
     * DB Storage
   # Box2D-JS physics integration
+  # Tilemap support
   # Multi-player support using Socket.IO
+  # Billboards to take advantage of 2D graphics acceleration
+  # New and updated demos
+    * Asteroids Evolved - _updated_
+    * Physics demo - _updated_
+    * Isometric demo - NEW
+    * Touch input and UI demo - NEW
+    * Sprite game with editor - NEW
+    * Tilemapping demo - NEW
 
 = Release Goals and Milestones =
 
-The following list is a set of goals to be reached for the intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
+The following list is a set of goals to be reached for each intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
