@@ -5,7 +5,6 @@ Maybe you're looking for FutureGoals?
 
 = Planned Release Features for v2.0 =
   # Internet Explorer 8 and earlier support with Flash Canvas
-  # Touch input support
   # !SoundManager 2 HTML5 support
   # New editors
     * Sprite editor
