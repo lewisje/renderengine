@@ -335,12 +335,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
-      
       if(this.shuttingDown === true) {
+      	Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
       	obj.destroy();
       	return;
       };
+
+      Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
 
       this.idRef++;
       var objId = obj.getName() + this.idRef;
@@ -365,7 +366,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       var objId = obj.getId();
       if(this.gameObjects[objId] == null) {
-      	Console.warn("Engine reference to obj '" + obj + "' has already been cleaned up!";
+      	Console.warn("Engine reference to '" + obj + "' has already been cleaned up - orphaned reference not destroyed properly");
       	return;
       }
 
