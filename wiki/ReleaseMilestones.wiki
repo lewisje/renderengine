@@ -15,8 +15,7 @@ Maybe you're looking for FutureGoals?
     * UI elements
   # New rendering contexts
     * SVG
-    * Scrolling layered/parallax background
-    * Scrolling background
+    * Scrolling/layered/parallax background
   # Starter Objects
     * Actor2D
     * CollisionBox2D
