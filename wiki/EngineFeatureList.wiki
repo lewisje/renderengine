@@ -14,8 +14,8 @@ If you're looking for what is currently supported/available in The Render Engine
     * Safari 3.0+
     * Opera 9.5+
     * Chrome 1.0+
-  # 2D Vector-based example game ([http://renderengine.googlecode.com/svn/trunk/demos/spaceroids/index.html?evolved=true Asteroids Evolution])
-  # 2D Sprite-based example game ([http://renderengine.googlecode.com/svn/trunk/demos/wii_test/index.html?metrics=true Bounce the Ball])
+  # 2D Vector-based example game ([http://renderengine.googlecode.com/svn/tags/v1.0/demos/spaceroids/index.html?evolved=true Asteroids Evolution])
+  # 2D Sprite-based example game ([http://renderengine.googlecode.com/svn/tags/v1.0/demos/wii_test/index.html?metrics=true Bounce the Ball])
   # Rendering contexts (RenderContext)
     * 2D Canvas
     * 2D DOM
