@@ -112,6 +112,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
        * any objects, remove event handlers, destroy the rendering context, etc.
        */
       teardown: function(){
+         this.fieldBox.destroy();
          this.renderContext.destroy();
       },
       
@@ -124,7 +125,6 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          this.fieldWidth = EngineSupport.sysInfo().viewWidth;
 			this.fieldHeight = EngineSupport.sysInfo().viewHeight;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
-         this.centerPoint = this.fieldBox.getCenter();
          
          // Create the game context
 			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
@@ -136,10 +136,10 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          this.setupWorld();
          
          // Add the simulation to the scene graph so the physical
-         // world is stepped (updated) in sync with the rendering
+         // world is stepped (updated) in sync with each frame generated
          this.renderContext.add(this.simulation);
 
-         // Address the context element directly via jQuery
+         // Draw an outline around the context
          this.renderContext.jQ().css({
             border: "1px solid red",
             left: 0,
@@ -150,8 +150,8 @@ Engine.initObject("PhysicsDemo", "Game", function(){
 			// Add the game context to the scene graph
          Engine.getDefaultContext().add(this.renderContext);
 
-         // Create the collision model with 5x5 divisions
-         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 10);
+         // Create the collision model with 8x8 divisions
+         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);
 
          // Add some toys to play around with
 			MultiTimeout.create("ballmaker", 6, 150, function() {
@@ -170,7 +170,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       /**
        * Set up the physical world.  Creates the bounds of the world by establishing
        * walls and a floor.  The actual objects have no visual respresentation but they
-       * will exist in the simulation.
+       * will exist in the simulation and prevent the toys from leaving the playfield.
        * @private
        */
       setupWorld: function() {
@@ -194,6 +194,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
 			ext.set(20, this.fieldBox.get().h + 150);
 			this.simulation.addSimpleBoxBody(pos, ext);
 			
+         // Clean up temporary objects
 			pos.destroy();
 			ext.destroy();
       },
@@ -220,12 +221,13 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          var v = Vector2D.create((1000 + (Math2.random() * 5000)) * 2000, 10);
          toyObject.applyForce(v, p);
          
+         // Clean up temporary objects
          v.destroy();
          p.destroy();
       },
       
       /**
-       * Return a reference to the render context
+       * Returns a reference to the render context
        * @return {RenderContext}
        */
       getRenderContext: function(){
@@ -233,7 +235,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       },
       
       /**
-       * Return a reference to the playfield box
+       * Returns a reference to the playfield box
        * @return {Rectangle2D}
        */
       getFieldBox: function() {
@@ -241,7 +243,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       },
       
       /**
-       * return a reference to the collision model
+       * Returns a reference to the collision model
        * @return {SpatialContainer}
        */
       getCModel: function() {

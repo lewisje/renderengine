@@ -335,8 +335,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      Assert((this.shuttingDown === false), "Creating an object when the engine is shutting down!", obj);
       Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
+      
+      if(this.shuttingDown === true) {
+      	obj.destroy();
+      	return;
+      };
+
       this.idRef++;
       var objId = obj.getName() + this.idRef;
       this.gameObjects[objId] = obj;
@@ -353,9 +358,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    destroy: function(obj) {
-      Assert((obj != null), "Trying to destroy non-existent object!", obj);
+   	if (obj == null) {
+   		Console.warn("NULL reference passed to Engine.destroy()!  Ignored.");
+   		return;
+   	}
+
       var objId = obj.getId();
-      Assert((this.gameObjects[objId] != null), "Attempt to destroy missing object!", this.gameObjects[objId]);
+      if(this.gameObjects[objId] == null) {
+      	Console.warn("Engine reference to obj '" + obj + "' has already been cleaned up!";
+      	return;
+      }
+
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
       this.gameObjects[objId] = null;
       delete this.gameObjects[objId];
