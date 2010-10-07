@@ -223,6 +223,12 @@ Engine.initObject("MouseInputComponent", "InputComponent", function() {
 					mouseInfo.dragVec.set(0,0);
 	         });
 	
+				// Clean up the events when the Engine is shutting down
+				Engine.onShutdown(function() {
+					ctx.removeEvent(null, "mousemove");
+					ctx.removeEvent(null, "mousedown");
+					ctx.removeEvent(null, "mouseup");
+				});
 	      }
 		}
 	});
