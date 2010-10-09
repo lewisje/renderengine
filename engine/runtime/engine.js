@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.0
- * date: Jul 23, 2010
+ * version: v2.0.0.1a
+ * date: Oct 9, 2010
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -1928,7 +1928,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1363 $
+ * @version: $Revision: 1364 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1976,7 +1976,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.0",
+   version: "v2.0.0.1a",
 
    constructor: null,
 
