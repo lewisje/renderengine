@@ -71,8 +71,6 @@ var SpriteDemo = Game.extend({
    levelLoader: null,
 
    level: null,
-   
-   nextZ: 1,
 
    /**
     * Handle the keypress which starts the game
@@ -116,28 +114,18 @@ var SpriteDemo = Game.extend({
 
       // Load the sprites
       this.spriteLoader.load("smbtiles", this.getFilePath("resources/smbtiles.js"));
-      SpriteDemo.loadTimeout = Timeout.create("wait", 250, SuperMario.waitForResources);
-      this.waitForResources();
-   },
-
-   /**
-    * Wait for resources to become available before starting the game
-    * @private
-    */
-   waitForResources: function() {
-      //Console.debug("checking");
-      if (SpriteDemo.spriteLoader.isReady("smbtiles") &&
-          SpriteDemo.levelLoader.isReady("level1") &&
-          SpriteDemo.soundLoader.isReady("bgm"))
-      {
-         this.destroy();
-         SpriteDemo.run();
-         return;
-      }
-      else
-      {
-         this.restart();
-      }
+      
+		// Wait for resources to load
+		Timeout.create("wait", 250, function() {
+			if (SpriteDemo.spriteLoader.isReady() && 
+				 SpriteDemo.levelLoader.isReady() && 
+				 SpriteDemo.soundLoader.isReady()) {
+				 	this.destroy();
+					SpriteDemo.run();
+			} else {
+				this.restart();
+			}
+		});
    },
 
    /**
@@ -149,8 +137,6 @@ var SpriteDemo = Game.extend({
    },
 
    run: function() {
-      $("#loading").remove();
-
       // Create the 2D context
       this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();

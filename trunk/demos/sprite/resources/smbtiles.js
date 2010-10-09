@@ -1,10 +1,10 @@
 {
    // Frame (f): left, top, frameWidth, frameHeight
    // Animation (a): left, top, frameWidth, frameHeight, frameCount, speedMS, loop/toggle
-   bitmapImage: "smbtiles.png",
-   bitmapWidth: 320,
-   bitmapHeight: 320,
-   sprites: {
+   "bitmapImage": "smbtiles.png",
+   "bitmapWidth": 320,
+   "bitmapHeight": 320,
+   "sprites": {
       "mario_stand": {
          "f" : [0, 0, 32, 32]
       },

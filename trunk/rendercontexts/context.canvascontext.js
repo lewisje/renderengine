@@ -358,6 +358,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       var d = f.getDims();
       this.get2DContext().drawImage(sprite.getSourceImage(), tl.x, tl.y, d.x, d.y, 0, 0, d.x, d.y);
       this.base(sprite, time);
+		f.destroy();
    },
 
    /**

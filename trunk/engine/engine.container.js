@@ -96,7 +96,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * iterating over them.  You cannot call this method after you have called {@link #next}.
     */
    reverse: function() {
-      Assert(this.p === this.c.head, "Cannot reverse Iterator after calling next()");
+      Assert(this.p === this.c._head, "Cannot reverse Iterator after calling next()");
       this.r = true;
 		this.p = this.c._tail;
    },
@@ -688,14 +688,15 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
       for (var p in props) {
          // If the value should be serialized, call it's getter
          if (props[p][2]) {
-            xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
+            xml += " " + p.toLowerCase() + "=\"" + props[p][0]().toString() + "\"";
          }
       }
       xml += ">\n";
 
       // Dump children
-      for (var o in this.getAll()) {
-         xml += this.objects[o].toString(indent + "   ");
+		var all = this.getAll();
+      for (var o in all) {
+         xml += all[o].toXML(indent + "  ");
       }
 
       // Closing tag
