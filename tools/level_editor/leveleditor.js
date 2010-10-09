@@ -34,6 +34,9 @@ Engine.include("/resourceloaders/loader.sound.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/resourceloaders/loader.level.js");
 
+Engine.include("/objects/object.spriteactor.js");
+Engine.include("/objects/object.collisionbox.js");
+
 Engine.initObject("LevelEditor", null, function() {
 
 /**
@@ -53,8 +56,13 @@ var LevelEditor = Base.extend({
       level: null
    },
    gameRenderContext: null,
+   nextZ: 1,
 
    constructor: null,
+	
+	getName: function() {
+		return "LevelEditor";
+	},
 
    /**
     * Read the <tt>Game</tt> which is being edited to get the
@@ -92,7 +100,7 @@ var LevelEditor = Base.extend({
     * @return {Game} The game being edited
     */
    getGame: function() {
-      return game;
+      return this.game;
    },
 
    getAllSprites: function() {
@@ -107,10 +115,10 @@ var LevelEditor = Base.extend({
          for (var r in resources) {
             
             // Get all of the sprites
-            var sprites = resources[r].getSpriteNames(resources[r]);
+            var sprites = loader.getSpriteNames(resources[r]);
             for (var s in sprites) {
                allSprites.push({
-                  lookup: l + ":" + r + ":" + s,
+                  lookup: l + ":" + resources[r] + ":" + sprites[s],
                   sprite: resources[r] + ": " + sprites[s]
                });
             }
@@ -132,7 +140,6 @@ var LevelEditor = Base.extend({
    edit: function(game) {
       // Render the editor controls
       var tbar = $("<div class='toolbar'/>");
-      var self = this;
       
       // Set the Game object which is being edited
       this.setGame(game);
@@ -146,31 +153,32 @@ var LevelEditor = Base.extend({
       });
       tbar.append(s);
       tbar.append($("<input type='button' value='Add' class='tool'/>").click(function() {
-         self.createActor($("#actor option:selected").val());
+         LevelEditor.createActor($("#actor option:selected").val());
       }));
 
       // Remove actor
       tbar.append($("<input type='button' value='Delete' class='tool'/>").click(function() {
-         self.deleteObject();
+         LevelEditor.deleteObject();
       }));
 
       // Update grid size
       tbar.append($("<span class='tool'>Grid Size:</span>"));
       tbar.append($("<input class='tool' type='text' size='3' value='16'/>").change(function() {
          if (!isNaN($(this).val())) {
-            self.gridSize = $(this).val();
+            LevelEditor.gridSize = $(this).val();
          } else {
-            $(this).val(self.gridSize);
+            $(this).val(LevelEditor.gridSize);
          }
       }));
 
       // Create collision rect
       tbar.append($("<input type='button' value='Collision Box' class='tool'/>").click(function() {
-         self.createCollisionBox();
+         LevelEditor.createCollisionBox();
       }));
 
       // We need a scrollbar to move the world
-      var sb = $("<div style='height: 20px; width: " + SpriteTest.fieldWidth + "px; overflow-x: auto;'><div style='width: " +
+		var viewWidth = game.getRenderContext().getViewport().get().w;
+      var sb = $("<div style='height: 25px; width: " + viewWidth + "px; overflow-x: auto;'><div style='width: " +
          game.getLevel().getFrame().get().w + "px; border: 1px dashed'></div></div>").bind("scroll", function() {
             game.getRenderContext().setHorizontalScroll(this.scrollLeft);
       });
@@ -183,33 +191,41 @@ var LevelEditor = Base.extend({
       // Add an event handler to the context
       var ctx = game.getRenderContext();
       ctx.addEvent(this, "mousedown", function(evt) {
-         self.selectObject(evt.pageX, evt.pageY);
-         self.mouseDown = true;
+         LevelEditor.selectObject(evt.pageX, evt.pageY);
+         LevelEditor.mouseDown = true;
       });
 
       ctx.addEvent(this, "mouseup", function() {
-         self.mouseDown = false;
-         self.createPropertiesTable(self.currentSelectedObject);
+         LevelEditor.mouseDown = false;
+         LevelEditor.createPropertiesTable(LevelEditor.currentSelectedObject);
       });
 
       ctx.addEvent(this, "mousemove", function(evt) {
-         if (self.mouseDown) {
-            self.moveSelected(evt.pageX, evt.pageY);
+         if (LevelEditor.mouseDown) {
+            LevelEditor.moveSelected(evt.pageX, evt.pageY);
          }
       });
    },
 
    createActor: function(actorName) {
-      var ctx = this.getRenderContext();
+      var ctx = this.getGame().getRenderContext();
       var actor = SpriteActor.create();
-      actor.setSprite(this.getGame().spriteLoader.getSprite("smbtiles", actorName));
+		
+		// Determine the loader, sheet, and sprite
+		var spriteIdent = actorName.split(":");
+		var loader = this.loaders.sprite[spriteIdent[0]];
+		var sprite = loader.getSprite(spriteIdent[1], spriteIdent[2]);
+      actor.setSprite(sprite);
 
       // Adjust for scroll
       var s = ctx.getHorizontalScroll();
-      var pT = Point2D.create(game.centerPoint.x + s, game.centerPoint.y);
-
+		
+		var vPort = this.getGame().getRenderContext().getViewport().get();
+		var hCenter = Math.floor(vPort.w / 2), vCenter = Math.floor(vPort.h / 2); 
+      var pT = Point2D.create(hCenter + s, vCenter);
       actor.setPosition(pT);
-      actor.setZIndex(SpriteTest.nextZ++);
+      actor.setZIndex(LevelEditor.nextZ++);
+		
       ctx.add(actor);
       this.setSelected(actor);
    },
@@ -233,7 +249,7 @@ var LevelEditor = Base.extend({
       this.deselectObject();
 
       // Adjust for scroll
-      var ctx = game.getRenderContext();
+      var ctx = this.getGame().getRenderContext();
       //x += ctx.getHorizontalScroll();
 
       // Check to see if this object falls on top of an object
@@ -265,14 +281,14 @@ var LevelEditor = Base.extend({
    deleteObject: function(obj) {
       if (obj == null) {
          if (this.currentSelectedObject) {
-            SpriteTest.getRenderContext().remove(SpriteTestEditor.currentSelectedObject);
-            SpriteTestEditor.currentSelectedObject = null;
+            this.getGame().getRenderContext().remove(LevelEditor.currentSelectedObject);
+            LevelEditor.currentSelectedObject = null;
          }
       } else {
-         SpriteTest.getRenderContext().remove(obj);
+         this.getGame().getRenderContext().remove(obj);
       }
-      SpriteTestEditor.createPropertiesTable(null);
-      SpriteTestEditor.updateLevelData();
+      LevelEditor.createPropertiesTable(null);
+      LevelEditor.updateLevelData();
    },
 
    setSelected: function(obj) {
@@ -285,10 +301,12 @@ var LevelEditor = Base.extend({
 
    moveSelected: function(x, y) {
       // Adjust for scroll
-      x += SpriteTest.renderContext.getHorizontalScroll();
+      x += this.getGame().getRenderContext().getHorizontalScroll();
+
+		var viewWidth = this.getGame().getRenderContext().getViewport().get().w;
 
       if (this.currentSelectedObject) {
-         var grid = SpriteTest.fieldWidth / this.gridSize;
+         var grid = viewWidth / this.gridSize;
          x = x - x % this.gridSize;
          y = y - y % this.gridSize;
          this.currentSelectedObject.setPosition(Point2D.create(x, y));
@@ -335,9 +353,9 @@ var LevelEditor = Base.extend({
 
    updateLevelData: function() {
       var level = "<?xml version='1.0' encoding='UTF-8'?>\n";
-      level += "<level resource='" + SpriteTest.getLevel().getName() + "'>\n";
+      level += "<level resource='" + this.getGame().getLevel().getName() + "'>\n";
 
-      level += SpriteTest.renderContext.toString("   ");
+      level += this.getGame().getRenderContext().toXML("  ");
 
       level += "</level>";
       $("#levelData").remove();

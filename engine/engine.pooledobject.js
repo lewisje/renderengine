@@ -145,7 +145,7 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       for (var p in props) {
          // If the value should be serialized, call it's getter
          if (props[p][2]) {
-            xml += " " + p + "=\"" + props[p][0]().toString() + "\"";
+            xml += " " + p.toLowerCase() + "=\"" + props[p][0]().toString() + "\"";
          }
       }
 

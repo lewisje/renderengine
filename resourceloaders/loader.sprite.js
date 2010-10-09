@@ -308,7 +308,7 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
     */
    getFrame: function(time) {
       if (!this.isAnimation()) {
-         return this.frame;
+         return Rectangle2D.create(this.frame);
       } else {
          var f = Rectangle2D.create(this.frame);
          var fn;
