@@ -40,28 +40,38 @@ Engine.initObject("SpriteLoader", "ImageLoader", function() {
 
 /**
  * @class Loads sprites and makes them available to the system.  Sprites are
- *        defined by an external resource that consist of the follwing definition.
- *        The definition file must include the source bitmap, the width and height
- *        of the bitmap, and a section that defines each sprite.
+ *        defined by an external JSON resource file.  A sprite definition file 
+ *        is a JSON file which can support single-line comments.  The format 
+ *        describes the image which contains the bitmap, the size of the bitmap,
+ *        the version of the file, and the sprites.  Sprites can be either single
+ *        frames or animations.  Animations are expected to be sequentially organized
+ *        in the bitmap from left to right.  Each frame of an animation must be the exact
+ *        same dimensions.
  *        <p/>
- *        Sprites can either be single frames, or animations:
+ *        A frame is simply defined by the upper left corner of the sprite and the
+ *        width and height of the frame.  For an animation, the first four arguments are
+ *        the same as a frame, followed by the frame count, the millisecond delay between
+ *        frames, and the type of animation (either "loop" or "toggle").  A looped animation
+ *        will play all frames, indicated by the frame count, and then start again from the
+ *        beginning of the animation.  A toggled animation will play from the first to
+ *        the last frame, then play from the last to the first, and then repeat.  The
+ *        first and last frame will not be repeated in a toggled animation.  Thus, if
+ *        the frames are A, B, C, D, then the toggle will play as A, B, C, D, C, B, A, B...
  * <pre>
  * {
- *    // Frame (f): left, top, frameWidth, frameHeight
- *    // Animation (a): left, top, frameWidth, frameHeight, frameCount, speedMS, loop/toggle
- *    bitmapImage: "bitmapFile.ext",
- *    bitmapWidth: 320,
- *    bitmapHeight: 320,
- *    sprites: {
- *        "stand": {
- *           "f" : [0, 0, 32, 32]
- *        },
- *        "walk": {
- *           "a" : [32, 0, 32, 32, 3, 150, "loop"]
- *        }
+ *    // Sprite definition file v2
+ *    "bitmapImage": "bitmapFile.ext",
+ *    "bitmapSize": [320, 320],
+ *    "version": 2
+ *    "sprites": {
+ *        "stand": [0, 0, 32, 32],
+ *        "walk": [32, 0, 32, 32, 3, 150, "loop"]
  *    }
  * }
  * </pre>
+ *        <i>Note:</i> The new file structure is a bit more compact, and is indicated with
+ *        the "version" key in the file, set to the value 2.  Version 1 will is deprecated
+ *        and will not be supported in a future release of The Render Engine.
  *
  * @constructor
  * @param name {String=SpriteLoader} The name of the resource loader
