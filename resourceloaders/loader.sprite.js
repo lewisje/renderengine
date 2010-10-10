@@ -110,7 +110,11 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
          Console.info("Loading sprite: " + name + " @ " + info.bitmapImage);
 
          // Load the sprite image file
-         this.base(name, info.bitmapImage, info.bitmapWidth, info.bitmapHeight);
+			if (!info.version || info.version == 1) {
+	         this.base(name, info.bitmapImage, info.bitmapWidth, info.bitmapHeight);
+			} else if (info.version == 2) {
+	         this.base(name, info.bitmapImage, info.bitmapSize[0], info.bitmapSize[1]);
+			}
 
          // Store the sprite info
          this.sprites[name] = info;
@@ -158,7 +162,8 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
     * @return {Sprite} A {@link Sprite} instance
     */
    getSprite: function(resource, sprite) {
-      return Sprite.create(sprite, this.get(resource).info.sprites[sprite], this.get(resource));
+		var info = this.get(resource).info;
+      return Sprite.create(sprite, info.sprites[sprite], this.get(resource), info.version || 1);
    },
 
    /**
@@ -236,11 +241,22 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
    /**
     * @private
     */
-   constructor: function(name, spriteObj, spriteResource) {
+   constructor: function(name, spriteObj, spriteResource, fileVersion) {
       this.base(name);
-      this.type = (spriteObj["a"] ? Sprite.TYPE_ANIMATION : Sprite.TYPE_SINGLE);
+		
+		if (fileVersion == 1) {
+	  		this.type = (spriteObj["a"] ? Sprite.TYPE_ANIMATION : Sprite.TYPE_SINGLE);
+		} else if (fileVersion == 2) {
+			this.type = (spriteObj.length == 4 ? Sprite.TYPE_SINGLE : Sprite.TYPE_ANIMATION);
+		}
 
-      var s = (this.type == Sprite.TYPE_ANIMATION ? spriteObj["a"] : spriteObj["f"]);
+      var s;
+		if (fileVersion == 1) {
+			s = (this.type == Sprite.TYPE_ANIMATION ? spriteObj["a"] : spriteObj["f"]);
+		} else if (fileVersion == 2) {
+			s = spriteObj;
+		}
+		
       if (this.type == Sprite.TYPE_ANIMATION) {
          this.mode = (s[Sprite.INDEX_TYPE] == "loop" ? Sprite.MODE_LOOP : Sprite.MODE_TOGGLE);
          this.count = s[Sprite.INDEX_COUNT];
@@ -251,6 +267,15 @@ var Sprite = PooledObject.extend(/** @scope Sprite.prototype */{
       this.frame = Rectangle2D.create(s[Sprite.INDEX_LEFT], s[Sprite.INDEX_TOP], s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
       this.bbox = Rectangle2D.create(0, 0, s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
    },
+
+	/**
+	 * @private
+	 */
+	destroy: function() {
+		this.bbox.destroy();
+		this.frame.destroy();
+		this.base();
+	},
 
    /**
     * @private
