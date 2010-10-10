@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * CircleBodyComponent
+ * BaseBodyComponent
  *
  * @fileoverview The base component type for all physical bodies which can be used
  * 				  in a {@link Simulation}.
@@ -60,6 +60,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	body: null,
 	rotVec: null,
 	bodyPos: null,
+	renderComponent: null,
 
    /**
     * @private
@@ -74,6 +75,14 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		this.simulation = null;
 		this.rotVec = Vector2D.create(0,0);
 		this.bodyPos = Point2D.create(0,0);
+	},
+
+	destroy: function() {
+		if (this.renderComponent != null) {
+			this.renderComponent.destroy();
+		}
+		
+		this.base();
 	},
 
 	/**
@@ -97,6 +106,28 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 			this.simulation.removeBody(this.getBody());			
 			this.simulation = null;
 		}
+	},
+	
+	/**
+	 * Set the associated render component for this body.  This is typically used by the
+	 * {@link PhysicsActor} to link a body to a renderer so that each body can have an
+	 * associated renderer applied.
+	 * 
+	 * @param renderComponent {RenderComponent} The render component to associate with this body
+	 */
+	setRenderComponent: function(renderComponent) {
+		this.renderComponent = renderComponent;
+		if (renderComponent != null) {
+			this.renderComponent.setHostObject(this.getHostObject());
+		}
+	},
+	
+	/**
+	 * Get the associated render component for this body.
+	 * @return {RenderComponent} or <code>null</code>
+	 */
+	getRenderComponent: function() {
+		return this.renderComponent;
 	},
 	
 	/**
