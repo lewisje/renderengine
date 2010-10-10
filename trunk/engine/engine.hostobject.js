@@ -62,7 +62,6 @@ Engine.initObject("HostObject", "HashContainer", function() {
 var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    renderContext: null,
-	simulation: null,
 
    /**
     * Release the object back into the object pool.
@@ -103,25 +102,6 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    getRenderContext: function() {
       return this.renderContext;
    },
-
-	/**
-	 * Set the <code>Simulation</code> this object participates within.  When a <code>HostObject</code> 
-	 * is part of a running <code>Simulation</code>, you must set the simulation so the physics components
-	 * can be properly added to the Box2D world.
-	 * 
-	 * @param simulation {Simulation} The simulation this object is within
-	 */
-	setSimulation: function(simulation) {
-		this.simulation = simulation;
-	},
-	
-	/**
-	 * Get the <code>Simulation</code> this object participates within.
-	 * @return {Simulation}
-	 */
-	getSimulation: function() {
-		return this.simulation;	
-	},
 
    /**
     * Update this object within the render context, at the specified timeslice.

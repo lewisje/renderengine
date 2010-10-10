@@ -33,9 +33,9 @@
 // Load engine objects
 Engine.include("/components/component.sprite.js");
 Engine.include("/components/component.collider.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/objects/object.physicsactor.js");
 
-Engine.initObject("Toy", "Object2D", function() {
+Engine.initObject("Toy", "PhysicsActor", function() {
 
    /**
     * @class Base class for toys which can be added to the playfield.  Each toy
@@ -45,11 +45,11 @@ Engine.initObject("Toy", "Object2D", function() {
     * @param spriteResource {String} The resource where the two sprites are found
     * @param spriteName {String} The name of the sprite, in the resource, that represents the default toy image
     * @param spriteOverName {String} The name of the sprite, in the resource, for when the mouse is over the toy
-    * @extends Object2D
+    * @extends PhysicsActor
     * @description Base class for a physical toy object
     * @constructor
     */
-   var Toy = Object2D.extend(/** @scope Toy.prototype */{
+   var Toy = PhysicsActor.extend(/** @scope Toy.prototype */{
 
       sprites: null,
 		scale: 1,
@@ -63,18 +63,18 @@ Engine.initObject("Toy", "Object2D", function() {
 			this.scale = (Math2.random() * 1) + 0.8;
 			
          // Add components to draw and collide with the player
-         this.add(SpriteComponent.create("draw"));
          this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
          
+			// Create the physical body object which will move the toy object
+			this.createPhysicalBody("physics", this.scale);
+			this.getComponent("physics").setScale(this.scale);
+			this.getComponent("physics").setRenderComponent(SpriteComponent.create("draw"));
+
          // The sprites
          this.sprites = [];
          this.sprites.push(PhysicsDemo.spriteLoader.getSprite(spriteResource, spriteName));
          this.sprites.push(PhysicsDemo.spriteLoader.getSprite(spriteResource, spriteOverName));
          this.setSprite(0);
-
-			// Create the physical body object which will move the toy object
-			this.createPhysicalBody("physics", this.scale);
-			this.getComponent("physics").setScale(this.scale);
 
 			// Set the starting position and move the origin to the center of the toy
          this.setPosition(Point2D.create(25, 15));
@@ -119,7 +119,7 @@ Engine.initObject("Toy", "Object2D", function() {
       setSprite: function(spriteIdx) {
          var sprite = this.sprites[spriteIdx];
          this.setBoundingBox(sprite.getBoundingBox());
-         this.getComponent("draw").setSprite(sprite);
+         this.getComponent("physics").getRenderComponent().setSprite(sprite);
       },
 
       /**
