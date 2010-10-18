@@ -1,0 +1,783 @@
+<project name="The Render Engine" default="dist" basedir=".">
+   <property file="build.properties"/>
+ 
+   <property name="app.name" value="renderengine"/>
+   <property name="app.version" value=""/>
+	<property name="version.name" value=""/>
+   <property name="build.date" value=""/>
+   <property name="dist.home" value="${basedir}/dist_${app.version}"/>
+   <property name="engine.src" value="${basedir}/engine/build"  />
+   <property name="make.dir" value="${basedir}/make"/>
+   <property name="compressor.jar" value="${make.dir}/yuicompressor-2.4.2.jar"/>
+   <property name="compiler.jar" value="${make.dir}/compiler.jar"/>
+  
+   <!-- Locations of distribution files -->
+   <property name="min.home" value="${dist.home}/min-js"/>
+   <property name="full.home" value="${dist.home}/full"/>
+   <property name="zip.home" value="${dist.home}/min-gzip-js"/>
+
+	<!-- Demos and tools won't be copied unless specified in build.properties -->
+	<property name="demo.set" value="NO_COPY"/>
+	<property name="tool.set" value="NO_COPY"/>
+	<property name="font.set" value="NO_COPY"/>
+	<property name="test.set" value="NO_COPY"/>
+	<property name="exclude.set" value="NO_COPY"/>
+
+	<!-- Which compression option to use (either "engine.compress" or "engine.compile")
+	     The second option uses the Google Closure Compiler. -->
+	<property name="compress.option" value="engine.compress"/>
+
+	<!-- Dump the system date (this is for Windows) -->
+	<exec executable="cmd.exe" outputproperty="build.date" >  
+		<arg line="/c"/>
+		<arg line="date.exe"/>
+		<arg line="/T"/>  
+	</exec>
+	<!--
+	<propertyregex property="build.date" input="${builddate.out}" select="\1">  
+		<regexp pattern="\w+ ((\d+\/?){3})"/>  
+	</propertyregex>
+	-->
+
+<!--
+	<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${make.dir}/ant-googlecode-0.0.2.jar" name="gcupload"/>
+-->
+  
+   <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
+   <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
+   <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
+   <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
+   <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
+
+
+	<target name="dist.finish" description="Cleanup tasks to perform after building the distribution">
+      <delete quiet="true" includeemptydirs="true" dir="${dist.home}/engine"/>
+      <delete quiet="true" includeemptydirs="true" dir="${full.home}/temp"/>
+      <delete quiet="true" includeemptydirs="true" dir="${min.home}/temp"/>
+      <delete quiet="true" includeemptydirs="true" dir="${zip.home}/temp"/>
+	</target>
+
+
+	<target name="upload" description="Upload a single file to the GoogleCode site">
+		<gcupload 
+		        projectname="renderengine" 
+		        filename="${upload.file}" 
+		        targetfilename="${upload.targetFile}"
+		        summary="${upload.targetDescription}"
+		        labels="Featured,${upload.targetLabel},OpSys-All" />
+	</target>
+
+	<target name="dist.upload" description="Upload the distribution to the GoogleCode site">
+		<!-- Full -->
+		<antcall target="upload">
+			<param name="upload.file" value="${dist.home}/${app.name}_${app.version}.zip"/>
+			<param name="upload.targetFile" value="renderengine_${app.version}.zip"/>
+			<param name="upload.targetDescription" value="The Render Engine - ${app.version} (full)"/>
+			<param name="upload.targetLabels" value="Type-Source"/>
+		</antcall>
+
+		<!-- Compiled -->
+		<antcall target="upload">
+			<param name="upload.file" value="${dist.home}/${app.name}_${app.version}-min.zip"/>
+			<param name="upload.targetFile" value="renderengine_${app.version}-min.zip"/>
+			<param name="upload.targetDescription" value="The Render Engine - ${app.version} (compressed)"/>
+			<param name="upload.targetLabels" value="Type-SourceMin"/>
+		</antcall>
+
+		<!-- GZipped -->
+		<antcall target="upload">
+			<param name="upload.file" value="${dist.home}/${app.name}_${app.version}-min-gzip.zip"/>
+			<param name="upload.targetFile" value="renderengine_${app.version}-min-gzip.zip"/>
+			<param name="upload.targetDescription" value="The Render Engine - ${app.version} (gzipped)"/>
+			<param name="upload.targetLabels" value="Type-SourceMin"/>
+		</antcall>
+		
+	</target>
+
+   <!-- =========================== ENGINE BUILD TARGETS ========================== -->
+	<target name="engine.build" description="Main engine build, concatenates source files and replaces some tags">
+		<echo message="Building ${engine.file}" />
+		<concat destfile="${engine.file}">
+			<fileset dir="${make.dir}" includes="intro.js" />
+			<fileset dir="${engine.src}" includes="engine.console.js" />
+			<fileset dir="${engine.src}" includes="engine.math2.js" />
+			<fileset dir="${engine.src}" includes="engine.support.js" />
+			<fileset dir="${engine.src}" includes="engine.linker.js" />
+			<fileset dir="${engine.src}" includes="engine.main.js" />
+			<fileset dir="${engine.src}" includes="engine.script.js" />
+			<fileset dir="${engine.src}" includes="engine.metrics.js" />
+			<fileset dir="${engine.src}" includes="engine.init.js" />
+		</concat>
+		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@ENGINE_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
+		<echo message="${engine.file} built." />
+	</target>
+  
+	<target name="engine.runtime" description="Build a single file compilation of the engine for testing">
+		<!-- Build the single-engine distribution -->
+		<antcall target="engine.build">
+			<param name="engine.file" value="${basedir}/engine/runtime/engine.js"/>
+		</antcall>
+	</target>
+
+	<!-- Strip out Console.log, Console.debug, and Console.info messages.  We'll leave in 
+		  Console.warn and Console.error for obvious reasons. -->
+	<target name="engine.nodebug.full" depends="engine.full" description="Build a version of the engine with all debug messages removed">
+		
+		<!-- LOGS -->
+		<replaceregexp match="Console.log\(.*?\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- DEBUGS -->
+		<replaceregexp match="Console.debug\(.*?\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- INFOS -->
+		<replaceregexp match="Console.info\(.*?\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
+		<!-- ENGINE METRICS -->
+		<replaceregexp match="Engine.addMetric\(.*?\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+		
+		<replaceregexp match="Engine.removeMetric\(.*?\);" replace="" flags="g" byline="true">
+			<fileset dir="${full.home}">
+				<include name="**/*.js"/>
+			</fileset>
+		</replaceregexp>
+
+	</target>
+
+   <!-- =============================== ENGINE CLEAN ========================== -->
+   <target name="engine.clean" description="Prepares for creation of distribution">
+     
+      <!-- Remove the target directory of the build -->
+      <delete quiet="true" includeemptydirs="true">
+         <fileset dir="${dist.home}" includes="**/*"/>
+      </delete>
+  
+      <!-- Create the distribution home directory -->
+      <mkdir dir="${dist.home}"/>
+
+		<!-- Build the engine runtime -->
+		<antcall target="engine.build">
+			<param name="engine.file" value="${dist.home}/engine/runtime/engine.js"/>
+		</antcall>
+  
+   </target>
+  
+ 
+   <!-- ============================= ENGINE ZIP ============================ -->
+   <target name="engine.zip" depends="engine.min,engine.full" description="Create and zip the engine distributions">
+      <zip basedir="${min.home}" destfile="${dist.home}/${app.name}_${app.version}-min.zip"/>
+      <zip basedir="${full.home}" destfile="${dist.home}/${app.name}_${app.version}.zip"/>
+      <zip basedir="${zip.home}" destfile="${dist.home}/${app.name}_${app.version}-min-gzip.zip"/>
+   </target>
+  
+  
+   <!-- ======================== DIRECTORY STRUCTURE FOR DIST ========================= -->
+   <target name="makedirs" description="Create the directory structure">
+ 
+      <mkdir dir="${build.home}"/>
+ 
+      <mkdir dir="${build.home}/temp"/>
+ 
+      <mkdir dir="${build.home}/engine"/>
+      <mkdir dir="${build.home}/engine/runtime"/>
+      <mkdir dir="${build.home}/components"/>
+      <mkdir dir="${build.home}/rendercontexts"/>
+      <mkdir dir="${build.home}/rendercontexts/support"/>
+      <mkdir dir="${build.home}/resourceloaders"/>
+      <mkdir dir="${build.home}/spatial"/>
+      <mkdir dir="${build.home}/textrender"/>
+      <mkdir dir="${build.home}/css"/>
+      <mkdir dir="${build.home}/fonts"/>
+      <mkdir dir="${build.home}/libs"/>
+      <mkdir dir="${build.home}/demos"/>
+      <mkdir dir="${build.home}/tools"/>
+      <mkdir dir="${build.home}/tutorials"/>
+      <mkdir dir="${build.home}/setup"/>
+      <mkdir dir="${build.home}/test"/>
+           
+   </target>
+ 
+ 
+   <!-- ======================== COPY UNCOMPRESSED & PRECOMPRESSED FILES ========================= -->
+   <target name="basecopy" description="Copy the uncompressed files">
+ 
+      <!-- Copy the engine CSS -->     
+      <copy todir="${build.home}/css">
+         <fileset dir="${basedir}/css">
+            <include name="*.css"/>
+            <include name="*.png"/>
+            <include name="*.jpg"/>
+            <include name="*.gif"/>
+            <exclude name="**/Thumbs.db"/>
+         </fileset>
+      </copy>
+  
+      <!-- Copy the font description files and images -->     
+      <copy todir="${build.home}/fonts">
+         <fileset dir="${basedir}/fonts" includes="${font.set}">
+         	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the tests -->     
+      <copy todir="${build.home}/test">
+         <fileset dir="${basedir}/test" includes="${test.set}">
+         	<exclude name="**/.svn"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the tutorials -->     
+      <copy todir="${build.home}/tutorials">
+         <fileset dir="${basedir}/tutorials" includes="**">
+         	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
+         </fileset>
+      </copy>
+ 
+      <!-- Copy the server setup files -->     
+      <copy todir="${build.home}/setup">
+         <fileset dir="${basedir}/setup">
+            <include name="**/*.*"/>
+            <exclude name="**/.svn"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the supporting libraries -->     
+      <copy todir="${build.home}/libs">
+         <fileset dir="${basedir}/libs">
+            <include name="AC_OETags.js"/>
+            <include name="base.js"/>
+            <include name="json2.js"/>
+            <include name="jquery.js"/>
+            <include name="jquery.ext.engine.js"/>
+            <include name="soundmanager2.js"/>
+            <include name="soundmanager2.swf"/>
+            <include name="soundmanager2_flash9.swf"/>
+            <include name="sylvester.js"/>
+         </fileset>
+      </copy>
+           
+   </target>
+ 
+ 
+   <!-- ======================= COPY DEMOS & TOOLS =============================== -->
+   <target name="copydemos" description="Copy demonstrations and tools">
+
+      <!-- Copy the demonstrations -->
+      <copy todir="${build.home}/demos">
+         <fileset dir="${basedir}/demos" includes="${demo.set}">
+         	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
+         </fileset>
+      </copy>
+ 
+      <!-- Copy the tools -->
+      <copy todir="${build.home}/tools">
+         <fileset dir="${basedir}/tools" includes="${tool.set}">
+         	<exclude name="**/.svn"/>
+            <exclude name="**/Thumbs.db"/>
+         </fileset>
+      </copy>
+  
+   </target>  
+
+   <!-- ======================= COPY LICENSES & DOCS =============================== -->
+	<target name="licenses" description="Copy licenses and docs">
+		
+      <!-- Copy the license and readme files -->
+      <copy todir="${build.home}">
+         <fileset file="${basedir}/MIT_LICENSE.txt"/>
+         <fileset file="${basedir}/README.txt"/>
+      </copy>
+		
+		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${build.home}/README.txt" />
+		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${build.home}/README.txt" />
+		
+	</target>  
+  
+   <!-- ======================= ENGINE FULL SOURCE DISTIBUTION ========================= -->
+   <target name="engine.full" description="Create the full source distribution of the engine">
+ 
+      <!-- ### START ### Pre-compilation tasks -->
+      <antcall target="makedirs">
+         <param name="build.home" value="${full.home}"/>
+      </antcall>
+ 
+      <antcall target="basecopy">
+         <param name="build.home" value="${full.home}"/>
+         <param name="source.flag" value=".src"/>
+      </antcall>
+ 
+      <antcall target="copydemos">
+         <param name="build.home" value="${full.home}"/>
+      </antcall>
+
+      <antcall target="licenses">
+         <param name="build.home" value="${full.home}"/>
+      </antcall>
+   
+      <!-- ### FINISH ### Pre-compilation tasks -->
+ 
+      <!-- Copy the engine files -->     
+      <copy todir="${full.home}/engine/runtime">
+         <fileset dir="${dist.home}/engine/runtime">
+            <include name="engine.js"/>
+         </fileset>
+      </copy>
+
+      <copy todir="${full.home}/engine">
+         <fileset dir="${basedir}/engine">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+ 
+      <!-- Copy the object components -->     
+      <copy todir="${full.home}/components">
+         <fileset dir="${basedir}/components">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+ 
+      <!-- Copy the render contexts -->     
+      <copy todir="${full.home}/rendercontexts">
+         <fileset dir="${basedir}/rendercontexts">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+ 
+      <!-- Copy the resource loaders -->     
+      <copy todir="${full.home}/resourceloaders">
+         <fileset dir="${basedir}/resourceloaders">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+ 
+      <!-- Copy the collision models -->     
+      <copy todir="${full.home}/spatial">
+         <fileset dir="${basedir}/spatial">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the text rendering -->     
+      <copy todir="${full.home}/textrender">
+         <fileset dir="${basedir}/textrender">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+
+ 		<!-- Exclude any specified files -->
+		<delete quiet="true">
+			<fileset dir="${full.home}" includes="${exclude.set}"/>
+		</delete>
+ 
+   </target>
+
+   <!-- ================== ENGINE MINIFIED/COMPRESSED DISTRIBUTION ===================== -->
+  
+  	<target name="min.nodebug" description="Remove debug, log, and info messages">
+
+		<!-- LOGS -->
+		<replaceregexp match="Console.log\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
+		<!-- DEBUGS -->
+		<replaceregexp match="Console.debug\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
+		<!-- INFOS -->
+		<replaceregexp match="Console.info\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
+		<!-- ENGINE METRICS -->
+		<replaceregexp match="Engine.addMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="Engine.removeMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+
+  	</target>
+
+	<target name="engine.compile" description="Use the Google Closure Compiler to compress the code">
+		
+      <copy todir="${min.home}/temp">
+         <fileset dir="${basedir}">
+            <include name="${input.file}"/>
+         </fileset>
+      </copy>
+
+		<antcall target="min.nodebug">
+			<param name="input.file" value="${min.home}/temp/${input.file}"/>
+		</antcall>
+
+		<java jar="${compiler.jar}" fork="true" failonerror="true"
+			jvm="${compiler.jvm}">
+		   <arg line="--js ${min.home}/temp/${input.file} --js_output_file ${min.home}/${input.file}"/>
+		</java>
+
+      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
+	</target>
+  
+	<target name="engine.compress" description="Use the Yahoo!UI Compressor to compress the code">
+
+      <copy todir="${min.home}/temp">
+         <fileset dir="${basedir}">
+            <include name="${input.file}"/>
+         </fileset>
+      </copy>
+
+		<antcall target="min.nodebug">
+			<param name="input.file" value="${min.home}/temp/${input.file}"/>
+		</antcall>
+	
+      <java classname="com.yahoo.platform.yui.compressor.YUICompressor">
+         <arg line="--nomunge --disable-optimizations --preserve-semi --line-break 200 -o ${min.home}/${input.file} ${min.home}/temp/${input.file}"/>
+         <classpath>
+            <pathelement path="${compressor.jar}"/>
+         </classpath>
+      </java>
+	
+      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
+	</target>
+
+   <target name="engine.min" description="Create the minified/compressed distribution of the engine">
+  
+      <!-- ### START ### Pre-compilation tasks -->
+      
+      <!-- MINIMIZED -->
+      <antcall target="makedirs">
+         <param name="build.home" value="${min.home}"/>
+      </antcall>
+
+      <antcall target="basecopy">
+         <param name="build.home" value="${min.home}"/>
+         <param name="source.flag" value=""/>
+      </antcall>
+ 
+      <antcall target="copydemos">
+         <param name="build.home" value="${min.home}"/>
+      </antcall>
+
+      <antcall target="licenses">
+         <param name="build.home" value="${min.home}"/>
+      </antcall>
+
+      <!-- GZIPPED -->
+      <antcall target="makedirs">
+         <param name="build.home" value="${zip.home}"/>
+      </antcall>
+
+      <antcall target="basecopy">
+         <param name="build.home" value="${zip.home}"/>
+         <param name="source.flag" value=""/>
+      </antcall>
+ 
+      <antcall target="copydemos">
+         <param name="build.home" value="${zip.home}"/>
+      </antcall>
+
+      <antcall target="licenses">
+         <param name="build.home" value="${zip.home}"/>
+      </antcall>
+   	   	
+      <!-- ### FINISH ### Pre-compilation tasks -->
+ 
+ 
+      <!-- Compress and copy the engine files -->
+      <echo message="Compressing engine..."/>
+
+		<antcall target="${compress.option}">
+			<param name="basedir" value="${dist.home}"/>
+			<param name="input.file" value="engine/runtime/engine.js"/>
+		</antcall>
+
+		<concat destfile="${dist.home}/engine/engine.js">
+			<fileset dir="${make.dir}" includes="intro.js" />
+			<fileset dir="${min.home}/engine/runtime" includes="engine.js" />
+		</concat>
+		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
+		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
+		<replaceregexp match="@ENGINE_VERSION" replace="${build.version}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
+
+      <copy todir="${min.home}/engine/runtime">
+         <fileset dir="${dist.home}/engine">
+            <include name="engine.js"/>
+         </fileset>
+      </copy>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.baseobject.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.container.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.events.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.fnv1hash.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.game.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.hostobject.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.math2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.mathobject.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.object2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.particles.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.pooledobject.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.rendercontext.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.resourceloader.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.spatialcontainer.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="engine/engine.timers.js"/>
+		</antcall>
+
+ 
+      <!-- Compress and copy the object components -->     
+      <echo message="Compressing components..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.base.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.billboard2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.boxcollider.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.circlecollider.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.collider.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.host.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.image.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.input.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.keyboardinput.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.logic.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.mouseinput.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.mover2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.notifier.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.render.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.sprite.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.transform2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.vector2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.wiimoteinput.js"/>
+		</antcall>
+ 
+ 
+      <!-- Compress and copy the render contexts -->     
+      <echo message="Compressing rendercontexts..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.canvascontext.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.documentcontext.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.htmldivcontext.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.htmlelement.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.render2d.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.scrollingbackground.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.layeredcontext.js"/>
+		</antcall>
+<!--
+		<antcall target="${compress.option}">
+			<param name="input.file" value="rendercontexts/context.svgcontext.js"/>
+		</antcall>
+-->
+
+ 
+      <!-- Compress and copy the resource loaders -->     
+      <echo message="Compressing resourceloaders..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.bitmapfont.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.image.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.level.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.object.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.remote.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.remotefile.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.sound.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.sprite.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="resourceloaders/loader.xml.js"/>
+		</antcall>
+ 
+ 
+      <!-- Copy the collision models -->     
+      <echo message="Compressing spatial..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="spatial/container.quadtree.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="spatial/container.spatialgrid.js"/>
+		</antcall>
+ 
+ 
+      <!-- Copy the text rendering -->     
+      <echo message="Compressing textrender..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="textrender/text.abstractrender.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="textrender/text.bitmap.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="textrender/text.context.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="textrender/text.renderer.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="textrender/text.vector.js"/>
+		</antcall>
+ 
+ 		<!-- Exclude any specified files -->
+		<delete quiet="true">
+			<fileset dir="${min.home}" includes="${exclude.set}"/>
+		</delete>
+
+ 		<!-- Exclude any specified files -->
+		<delete quiet="true">
+         <fileset dir="${zip.home}" includes="${exclude.set}"/>
+		</delete>
+  
+   </target>
+  
+</project>
+
+
