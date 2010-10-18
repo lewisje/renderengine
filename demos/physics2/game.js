@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * Physics Demo
+ * Physics Demo 2
  *
- * A simple game of bouncing balls
+ * Demonstration of more complex physical objects
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -33,7 +33,6 @@
 
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
@@ -43,20 +42,18 @@ Engine.include("/physics/collision/shapes/b2BoxDef.js");
 
 // Load game objects
 Game.load("/player.js");
-Game.load("/toy.js");
-Game.load("/beachball.js");
-Game.load("/crate.js");
+Game.load("/ragdoll.js");
 
-Engine.initObject("PhysicsDemo", "Game", function(){
+Engine.initObject("PhysicsDemo2", "Game", function(){
 
    /**
-    * @class A physics demonstration to show off Box2D-JS integration.  Creates
-    *			 a set of "toys" and drops them into the simulation.  The "player"
-    *			 can drag objects around and watch them interact.
+    * @class Another physics demonstration.  This demo shows how to
+    * create more complex physical objects using joints to create a
+    * ragdoll which can be tossed about the playfield.
     *
     * @extends Game
     */
-   var PhysicsDemo = Game.extend({
+   var PhysicsDemo2 = Game.extend({
    
       constructor: null,
       
@@ -91,8 +88,7 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          this.spriteLoader = SpriteLoader.create();
          
          // Load the sprites
-         this.spriteLoader.load("beachball", this.getFilePath("resources/beachball.js"));
-         this.spriteLoader.load("crate", this.getFilePath("resources/crate.js"));
+         this.spriteLoader.load("ragdoll", this.getFilePath("resources/ragdoll.sprite"));
          
          // Don't start until all of the resources are loaded
          Timeout.create("wait", 250, function() {
@@ -153,14 +149,8 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          // Create the collision model with 8x8 divisions
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);
 
-         // Add some toys to play around with
-			MultiTimeout.create("ballmaker", 6, 150, function() {
-	         PhysicsDemo.createToy(BeachBall.create());
-			});
-
-			MultiTimeout.create("boxmaker", 8, 150, function() {
-	         PhysicsDemo.createToy(Crate.create());
-			});
+         // Add the ragdoll object
+			this.renderContext.add(Ragdoll.create());
          
          // Add the player object
          var player = Player.create();
@@ -200,39 +190,6 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       },
       
       /**
-       * Create a toy and apply a force to give it some random motion.
-       * @param toyObject {Toy} A toy object to add to the playfield and simulation
-       * @private
-       */
-      createToy: function(toyObject) {
-			// Before we create a toy, check the engine load.  If it's close to 100%
-			// just return.  We want this demo to stay interactive.
-			if (Engine.getEngineLoad() > 0.8) {
-				return;
-			}
-			
-			// Set a random location
-			var x = Math.floor(Math2.random() * 300);
-			var p = Point2D.create(x, 15);
-			toyObject.setPosition(p);
-			
-			// The simulation is used to update the position and rotation
-			// of the physical body.  Whereas the render context is used to 
-			// represent (draw) the shape.
-         toyObject.setSimulation(this.simulation);
-         this.getRenderContext().add(toyObject);
-         
-         // Start the simulation of the object so we can apply a force
-         toyObject.simulate();
-         var v = Vector2D.create((1000 + (Math2.random() * 5000)) * 2000, 10);
-         toyObject.applyForce(v, p);
-         
-         // Clean up temporary objects
-         v.destroy();
-         p.destroy();
-      },
-      
-      /**
        * Returns a reference to the render context
        * @return {RenderContext}
        */
@@ -258,6 +215,6 @@ Engine.initObject("PhysicsDemo", "Game", function(){
       
    });
    
-   return PhysicsDemo;
+   return PhysicsDemo2;
    
 });

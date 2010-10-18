@@ -56,7 +56,7 @@ Engine.initObject("SpriteLoader", "ImageLoader", function() {
  *        beginning of the animation.  A toggled animation will play from the first to
  *        the last frame, then play from the last to the first, and then repeat.  The
  *        first and last frame will not be repeated in a toggled animation.  Thus, if
- *        the frames are A, B, C, D, then the toggle will play as A, B, C, D, C, B, A, B...
+ *        the frames are A, B, C, then the toggle will play as A, B, C, B, A, B...
  * <pre>
  * {
  *    // Sprite definition file v2
