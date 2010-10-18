@@ -37,11 +37,19 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 
 	/**
 	 * @class A <tt>PhysicsActor</tt> is an actor object within a game represented by
-	 * 		 a collection of physical bodies and joints.  Each body can have an associated
-	 * 		 renderer to represent it in the scene.  A physics actor is used within a
+	 * 		 a collection of components which can include physical bodies and joints.
+	 * 		 Unlike {@link Object2D}, a <code>PhysicsActor</code> can associate each physical
+	 * 		 body with a {@link RenderComponent}.  When the physical body is updated, the
+	 * 		 render component is updated with it.  That way, a physics actor can be comprised
+	 * 		 of multiple bodies, each with their own renderer allowing for a complex object
+	 * 		 such as a ragdoll with many parts and joints.  A physics actor is used within a
 	 * 		 {@link Simulation}.
+	 * 		 <p/>
+	 * 		 A <code>PhysicsActor</code> can act just like an {@link Object2D}, but it is the
+	 * 		 only object which can be added to a {@link Simulation}.  Without being added to a
+	 * 		 {@link Simulation}, none of the physical bodies will be updated. 
 	 * 
-	 * @param name {String} The name of the object
+	 * @param name {String} The name of the actor object
 	 * @extends Object2D
 	 * @constructor
 	 * @description Create a physics actor
