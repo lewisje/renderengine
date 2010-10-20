@@ -705,31 +705,42 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       if (Engine.shuttingDown) {
          return;
       }
-      
-      var nextFrame = Engine.fpsClock;
 
-      // Update the world
-      if (Engine.running && Engine.getDefaultContext() != null) {
-         Engine.vObj = 0;
+		/* pragma:DEBUG_START */
+		try {
+			Profiler.enter("Engine.engineTimer()");
+		/* pragma:DEBUG_END */
 
-         // Render a frame
-         Engine.worldTime = new Date().getTime();
-         Engine.getDefaultContext().update(null, Engine.worldTime);
-         Engine.frameTime = new Date().getTime() - Engine.worldTime;
-         Engine.liveTime = Engine.worldTime - Engine.upTime;
+			var nextFrame = Engine.fpsClock;
 
-         // Determine when the next frame should draw
-         // If we've gone over the allotted time, wait until the next available frame
-         var f = nextFrame - Engine.frameTime;
-         nextFrame = (Engine.skipFrames ? (f > 0 ? f : nextFrame) : Engine.fpsClock);
-         Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
+			// Update the world
+			if (Engine.running && Engine.getDefaultContext() != null) {
+				Engine.vObj = 0;
 
-         // Update the metrics display
-         Engine.doMetrics();
-      }
+				// Render a frame
+				Engine.worldTime = new Date().getTime();
+				Engine.getDefaultContext().update(null, Engine.worldTime);
+				Engine.frameTime = new Date().getTime() - Engine.worldTime;
+				Engine.liveTime = Engine.worldTime - Engine.upTime;
 
-      // When the process is done, start all over again
-      Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, nextFrame);
+				// Determine when the next frame should draw
+				// If we've gone over the allotted time, wait until the next available frame
+				var f = nextFrame - Engine.frameTime;
+				nextFrame = (Engine.skipFrames ? (f > 0 ? f : nextFrame) : Engine.fpsClock);
+				Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
+
+				// Update the metrics display
+				Engine.doMetrics();
+			}
+
+			// When the process is done, start all over again
+			Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, nextFrame);
+
+		/* pragma:DEBUG_START */
+		} finally {
+			Profiler.exit();
+		}
+		/* pragma:DEBUG_END */
    }
 
  }, { // Interface
