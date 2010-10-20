@@ -543,7 +543,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
       else if (typeof console != "undefined" && jQuery.browser.msie) {
          this.consoleRef = new MSIEConsoleRef();
       }
-      else if (jQuery.browser.safari) {
+      else if (jQuery.browser.chrome || jQuery.browser.safari) {
          this.consoleRef = new SafariConsoleRef();
       }
       else if (jQuery.browser.opera) {
