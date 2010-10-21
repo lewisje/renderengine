@@ -36,8 +36,8 @@
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1271 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1380 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -762,8 +762,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author$
- * @version: $Revision$
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1380 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2089,7 +2089,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1364 $
+ * @version: $Revision: 1380 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -3646,6 +3646,7 @@ var Engine = Engine.extend({
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
                case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
                case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
+               case "poolLoad" : this.drawProfilePoint("#d0d0ff", this.metrics[m].act); break;
             }
          }
       }
