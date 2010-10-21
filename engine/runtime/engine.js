@@ -3417,8 +3417,8 @@ var Engine = Engine.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 1325 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1381 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3646,7 +3646,7 @@ var Engine = Engine.extend({
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
                case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
                case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
-               case "poolLoad" : this.drawProfilePoint("#d0d0ff", this.metrics[m].act); break;
+               case "poolLoad" : this.drawProfilePoint("#a0a0ff", this.metrics[m].act); break;
             }
          }
       }
