@@ -265,6 +265,7 @@ var LevelEditor = Base.extend({
             break;
          }
       }
+      pt.destroy();
    },
 
    deselectObject: function(obj) {
@@ -282,10 +283,12 @@ var LevelEditor = Base.extend({
       if (obj == null) {
          if (this.currentSelectedObject) {
             this.getGame().getRenderContext().remove(LevelEditor.currentSelectedObject);
+            LevelEditor.currentSelectedObject.destroy();
             LevelEditor.currentSelectedObject = null;
          }
       } else {
          this.getGame().getRenderContext().remove(obj);
+         obj.destroy();
       }
       LevelEditor.createPropertiesTable(null);
       LevelEditor.updateLevelData();
@@ -309,7 +312,9 @@ var LevelEditor = Base.extend({
          var grid = viewWidth / this.gridSize;
          x = x - x % this.gridSize;
          y = y - y % this.gridSize;
-         this.currentSelectedObject.setPosition(Point2D.create(x, y));
+         var pt = Point2D.create(x, y);
+         this.currentSelectedObject.setPosition(pt);
+         pt.destroy();
       }
    },
 
