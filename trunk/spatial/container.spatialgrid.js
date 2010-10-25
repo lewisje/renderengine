@@ -99,9 +99,20 @@ return GridNode;
 Engine.initObject("SpatialGrid", "SpatialContainer", function() {
 
 /**
- * @class A structure which divides a finite space up into a more
- *        coarse grid to assist in quickly finding objects within that
- *        space.
+ * @class A structure which divides a finite space up into a coarse grid to 
+ * 		 perform "broad phase" collision determinations within the space.  
+ * 		 After the PCL (potential collision list) is built, a "narrow phase" 
+ * 		 collision model would need to be employed to determine accurate collision 
+ * 		 response.  Using AABB overlapping for simple true/false determinations is
+ * 		 one method.  Another method would be to use something like GJK to determine
+ * 		 by how much two objects' convex hulls are overlapped.
+ * 		 <p/>
+ * 		 A spatial grid is defined by the size of the space and the number of
+ * 		 divisions within that space.  A smaller PCL will result from a larger
+ * 		 number of divisions, but the amount of data required to store the cells
+ * 		 also increases.  Also, larger numbers of divisions means that as objects
+ * 		 move, the determination of which cell the object is within increases as 
+ * 		 well.
  *
  * @constructor
  * @description Create an instance of a spatial grid model
@@ -193,22 +204,30 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * @private
     */
    getNode: function(x, y) {
+		// Normalize X and Y within the bounds of the grid
+		x = x < 0 ? 0 : (x > this.divisions - 1 ? this.divisions - 1 : x);
+		y = y < 0 ? 0 : (y > this.divisions - 1 ? this.divisions - 1 : y);
       return this.getRoot()[x + (y * this.divisions)];
    },
 
    /**
     * Get the list of objects with respect to the point given.  Objects will
-    * be returned from the cross that makes up the grid node containing
-    * the point, and the four adjacent points.  For example, if you had a
-    * 3x3 grid with the object in the center node, the nodes marked with
-    * asterisks below would be included in the result set:
+    * be returned from the nodes that make up the grid node containing
+    * the point, and the following adjacent nodes:
+    * <ul>
+    * <li><b>Good Accuracy</b> - Just the node containing the point (G)</li>
+    * <li><b>Best Accuracy</b> - The four polar nodes around the center (G, B)</li>
+    * <li><b>High Accuracy</b> - The eight nodes around the center (G, B, H)</li>
+    * </ul>
+    * For example, if you had a 3x3 grid with the object in the center node, the nodes 
+    * marked below would be included in the result set:
     * <pre>
     *  +---+---+---+
-    *  |   | * |   |
+    *  | H | B | H |
     *  +---+---+---+
-    *  | * | * | * |
+    *  | B | G | B |
     *  +---+---+---+
-    *  |   | * |   |
+    *  | H | B | H |
     *  +---+---+---+
     * </pre>
     *
@@ -225,25 +244,34 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       var y = Math.floor(point.y * this.yLocator);
 
       // build the node set
-      var nodes = [];
+      var nodes = [], n;
+		
+		// Start with GOOD_ACCURACY
       nodes.push(this.getNode(x, y));
      
       // if our borders cross the margin, we can drop up to two nodes
       if (this.accuracy == SpatialGrid.BEST_ACCURACY) {
-         if (x > 0) { nodes.push(this.getNode(x - 1, y)); }
-         if (x < this.divisions) { nodes.push(this.getNode(x + 1, y)); }
-         if (y > 0) { nodes.push(this.getNode(x, y - 1)); }
-         if (y < this.divisions) { nodes.push(this.getNode(x, y + 1)); }
+         if (x > 0) { n = this.getNode(x - 1, y); if (n.getCount() != 0) nodes.push(n); }
+         if (x < this.divisions) { n = this.getNode(x + 1, y); if (n.getCount() != 0) nodes.push(n); }
+         if (y > 0) { n = this.getNode(x, y - 1); if (n.getCount() != 0) nodes.push(n); }
+         if (y < this.divisions) { n = this.getNode(x, y + 1); if (n.getCount() != 0) nodes.push(n); }
       }
+		
+		// For highest number of checks, we'll include all eight surrounding nodes
+		if (this.accuracy == SpatialGrid.HIGH_ACCURACY) {
+			if (x > 0 && y > 0) { n = this.getNode(x - 1, y - 1); if (n.getCount() != 0) nodes.push(n); }
+			if (x < this.divisions && y < this.divisions) { n = this.getNode(x + 1, y + 1); if (n.getCount() != 0) nodes.push(n); }
+			if (x > 0 && y < this.divisions) { n = this.getNode(x - 1, y + 1); if (n.getCount() != 0) nodes.push(n); }
+			if (x < this.divisions && y > 0) { n = this.getNode(x + 1, y - 1); if (n.getCount() != 0) nodes.push(n); }
+		}
 
-      if (nodes.length > 0) {
-         for (var n = 0; n < nodes.length; n++) {
-            if (nodes[n]) {
-					var objs = nodes[n].getObjects();
-               pcl.addAll(objs);
-					objs.destroy();
-            }
-         }
+      for (var d = 0; d < nodes.length; d++) {
+			if (!nodes[d]) {
+				debugger;
+			}
+			var objs = nodes[d].getObjects();
+         pcl.addAll(objs);
+			objs.destroy();
       }
       return pcl;
    },
@@ -282,7 +310,14 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * being tested resides, and in the four surrounding polar nodes.
     * @type {Number}
     */
-   BEST_ACCURACY: 1
+   BEST_ACCURACY: 1,
+	
+   /**
+    * Collision checks are performed in the node where the object
+    * being tested resides, and in the eight surrounding nodes.
+    * @type {Number}
+    */
+	HIGH_ACCURACY: 2
 });
 
 return SpatialGrid;

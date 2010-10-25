@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.0
- * date: Jul 23, 2010
+ * version: v2.0.0.1a
+ * date: Oct 9, 2010
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -2137,7 +2137,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.0",
+   version: "v2.0.0.1a",
 
    constructor: null,
 
@@ -2429,7 +2429,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       this.idRef++;
       var objId = obj.getName() + this.idRef;
-      this.gameObjects[objId] = obj;
       Console.log("CREATED Object ", objId, "[", obj, "]");
       this.livingObjects++;
 
@@ -2449,14 +2448,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    	}
 
       var objId = obj.getId();
-      if(this.gameObjects[objId] == null) {
-      	Console.warn("Engine reference to '" + obj + "' has already been cleaned up - orphaned reference not destroyed properly");
-      	return;
-      }
-
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
-      this.gameObjects[objId] = null;
-      delete this.gameObjects[objId];
       this.livingObjects--;
    },
    
@@ -2486,9 +2478,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param id {String} The global Id of the object to locate
     * @return {PooledObject} The object
     * @memberOf Engine
+    * @deprecated This method no longer returns an object
     */
    getObject: function(id) {
-      return this.gameObjects[id];
+      return null;
    },
 
    //====================================================================================================
@@ -3418,7 +3411,7 @@ var Engine = Engine.extend({
  * @author: Brett Fattori (brettf@renderengine.com)
  *
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1381 $
+ * @version: $Revision: 1382 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 

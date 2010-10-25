@@ -347,7 +347,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
       this.idRef++;
       var objId = obj.getName() + this.idRef;
-      this.gameObjects[objId] = obj;
       Console.log("CREATED Object ", objId, "[", obj, "]");
       this.livingObjects++;
 
@@ -367,14 +366,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    	}
 
       var objId = obj.getId();
-      if(this.gameObjects[objId] == null) {
-      	Console.warn("Engine reference to '" + obj + "' has already been cleaned up - orphaned reference not destroyed properly");
-      	return;
-      }
-
       Console.log("DESTROYED Object ", objId, "[", obj, "]");
-      this.gameObjects[objId] = null;
-      delete this.gameObjects[objId];
       this.livingObjects--;
    },
    
@@ -404,9 +396,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param id {String} The global Id of the object to locate
     * @return {PooledObject} The object
     * @memberOf Engine
+    * @deprecated This method no longer returns an object
     */
    getObject: function(id) {
-      return this.gameObjects[id];
+      return null;
    },
 
    //====================================================================================================

@@ -84,12 +84,12 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
     * to be used again.
     */
    destroy: function() {
+      // Clean up the engine reference to this object
+      Engine.destroy(this);
+
 		this._destroyed = true;
       PooledObject.returnToPool(this);
       Engine.addMetric("poolLoad", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "#%");
-
-      // Clean up the engine reference to this object
-      Engine.destroy(this);
 
       // Reset any variables on the object after putting
       // it back in the pool.
