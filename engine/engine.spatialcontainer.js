@@ -80,6 +80,14 @@ var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
    getObjects: function() {
       return this.objects.clone();
    },
+	
+	/**
+	 * Get the count of objects within the node.
+	 * @return {Number}
+	 */
+	getCount: function() {
+		return this.objects.size();
+	},
 
    /**
     * Add an object to this node.
