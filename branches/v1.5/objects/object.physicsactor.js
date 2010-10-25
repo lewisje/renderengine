@@ -111,16 +111,16 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	    *
 	    * @param component {BaseComponent} A component to add to the host.  If the component is a
 	    * 	{@link BaseBodyComponent} then the render component must be specified.
-	    * @param [renderer] {RenderComponent} The render component if the component is a
+	    * @param [renderComponent] {RenderComponent} The render component if the component is a
 	    * 	{@link BaseBodyComponent}
 	    */
-		add: function(component, renderer) {
+		add: function(component, renderComponent) {
 			if (BaseBodyComponent.isInstance(component)) {
 				// Assure that there's a renderer for the body and then link the two
-				Assert(renderer == null || RenderComponent.isInstance(renderer), "Adding non-render component to body component");
+				Assert(renderComponent == null || RenderComponent.isInstance(renderComponent), "Adding non-render component to body component");
 				
 				// Link the two so that when the body (transform) occurs, the renderer does its thing
-				component.setRenderComponent(renderer);
+				component.setRenderComponent(renderComponent);
 			}	
 
 			// Add the component
