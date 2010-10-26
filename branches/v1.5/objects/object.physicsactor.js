@@ -30,8 +30,14 @@
  *
  */
 
+Engine.include("/components/component.circlebody.js");
+Engine.include("/components/component.boxbody.js");
+Engine.include("/components/component.distancejoint.js");
+Engine.include("/components/component.revolutejoint.js");
+
 Engine.include("/engine/engine.math2d.js");
 Engine.include("/engine/engine.object2d.js");
+Engine.include("/resourceloaders/loader.object.js");
 
 Engine.initObject("PhysicsActor", "Object2D", function() {
 
@@ -153,7 +159,11 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	
 			// Special case so we can skip the super class (HostObject)
 	      HashContainer.prototype.update.call(this, renderContext, time);
-	   }
+	   },
+		
+		resolved: function() {
+			PhysicsActor.actorLoader = ObjectLoader.create("ActorLoader");
+		}
 	
 	}, /** @scope PhysicsActor.prototype */{ // Static
 	
@@ -164,7 +174,126 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	    */
 	   getClassName: function() {
 	      return "PhysicsActor";
-	   }
+	   },
+		
+		/**
+		 * Resource loader for physics actor objects
+		 * @private
+		 */
+		actorLoader: null,
+		
+		/**
+		 * Helper method to load a physics object file which describes the objects
+		 * and joints which comprise the object.  The format consists of "parts"
+		 * which define the types of physical object ("circle", "box") and other
+		 * parameters required by each part.  Additionally, the format will load
+		 * joints which are used to link the parts together.
+		 * <p/>
+		 * The actor object is loaded asynchronously which means it isn't immediately
+		 * available.  You get a reference to the object by calling {@link PhysicsActor#get}.
+		 * 
+		 * @param name {String} The unique reference name of the actor object 
+	    * @param url {String} The URL where the resource is located
+		 */
+		load: function(name, url) {
+			PhysicsActor.actorLoader.load(name, url);
+		},
+		
+		/**
+		 * Determine the ready state of a physics actor loaded with {@link PhysicsActor#load}.
+		 * 
+		 * @param name {String} The unique reference name of the actor object
+		 * @return {Boolean} <code>true</code> if the object is ready for use
+		 */
+		isReady: function(name) {
+			return PhysicsActor.actorLoader.isReady(name);
+		},
+		
+		/**
+		 * Get a unique instance of the actor defined by the reference name provided.
+		 * You can call the <code>get()</code> method multiple times to retrieve new instances
+		 * of the object.
+		 * 
+		 * @param name {String} The unique reference name of the actor object
+		 * @param [objName] {String} The name to assign to the instance when created
+		 * @return {PhysicsActor} A new instance of the actor defined by "name"
+		 */
+		get: function(name, objName) {
+			var toP2d = function(arr) {
+				return Point2D.create(arr[0], arr[1]);
+			};
+			
+			var def = PhysicsActor.actorLoader.get(name), 
+				 actor = PhysicsActor.create(objName), jointParts = [];
+			
+			// Loop through the parts and build each component
+			for (var p in def.parts) {
+				var part = def.parts[p], bc;
+				if (part.type == "circle") {
+					bc = CircleBodyComponent.create(part.name, part.radius);
+				} else {
+					var ext = toP2d(part.extents);
+					bc = BoxBodyComponent.create(part.name, ext);
+					ext.destroy();
+				}
+				
+				// Add the component to the actor.  We'll let the developer set the renderer
+				// for each body component.
+				actor.add(bc);
+				
+				// Position the parts relative to each other, in world coordinates.  The origin is
+				// at the center of the world.
+				var pt = toP2d(part.position);
+				bc.setPosition(pt);
+				pt.destroy();
+				
+				// Is there a joint defined?  Defer it until later when all the parts are loaded
+				// This way we don't have to worry about invalid body references
+				if (part.joint) {
+					jointParts.push(part);
+				}
+			}
+			
+			// Now that all the parts are created and in position, link them together with
+			// any joints that were deferred until now
+			for (var j in jointParts) {
+				var part = jointParts[j], jc,
+					 fromPart = (part.joint.linkFrom ? part.joint.linkFrom : part.name),
+					 toPart = (part.joint.linkTo ? part.joint.linkTo : part.name),
+					 jointName = fromPart + "_" + toPart;
+				
+				if (part.joint.type == "distance") {
+					var originFrom = actor.getComponent(fromPart).getPosition(),
+						 originTo = actor.getComponent(toPart).getPosition();
+
+					jc = DistanceJoint.create(jointName,
+													  actor.getComponent(fromPart),
+													  actor.getComponent(toPart),
+													  originFrom,
+													  originTo);
+				} else {
+					var offset = toP2d(part.joint.offset);
+					offset.add(actor.getComponent(part.name).getPosition());
+					
+					jc = RevoluteJoint.create(jointName,
+													  actor.getComponent(fromPart),
+													  actor.getComponent(toPart),
+													  offset);
+												
+					var upLim = part.joint.maxLim,
+						 lowLim = part.joint.minLim;													  
+					jc.setUpperLimitAngle(upLim ? upLim : 359);
+					jc.setLowerLimitAngle(lowLim ? lowLim : 0);
+					offset.destroy();
+				}
+				
+				// Add the joint to the actor
+				actor.add(jc);
+			}
+		
+			// Done, give them their actor
+			return actor;
+		}
 	});
 	
 	return PhysicsActor;

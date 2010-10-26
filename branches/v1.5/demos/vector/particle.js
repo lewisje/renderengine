@@ -46,6 +46,7 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
 
    vec: null,
    decel: 0,
+	invVel: null,
 
    constructor: function(pos, ttl, decel) {
       this.base(ttl || 2000);
@@ -57,16 +58,19 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       var vel = 1 + (Math2.random() * 5);
       this.vec.mul(vel);
       this.decel = decel;
+		this.invVel = Vector2D.create(0,0);
    },
 
    destroy: function() {
       this.vec.destroy();
+		this.invVel.destroy();
       this.base();
    },
    
    release: function() {
       this.base();
       this.vec = null;
+		this.invVel = null;
       this.decel = 0;
    },
 
@@ -79,10 +83,9 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
     */
    draw: function(renderContext, time) {
       if (this.decel > 0 && this.vec.len() > 0) {
-         var invVel = Vector2D.create(this.vec).neg();
-         invVel.mul(this.decel);
-         this.vec.add(invVel);
-         invVel.destroy();
+         this.invVel.set(this.vec).neg();
+         this.invVel.mul(this.decel);
+         this.vec.add(this.invVel);
       }
       
       this.getPosition().add(this.vec);

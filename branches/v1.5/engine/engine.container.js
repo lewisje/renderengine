@@ -107,19 +107,31 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * @throws {Error} An error if called when no more elements are available
     */
    next: function() {
-		var o = this.p.ptr;
-		while (this.p != null && this.p.ptr.isDestroyed()) {
-			// Skip destroyed objects
-			this.p = (this.r ? this.p.prev : this.p.next);
-			o = this.p.ptr; 
-		}
+   
+		/* pragma:DEBUG_START */
+		try {
+			Profiler.enter("Iterator.next()");
+		/* pragma:DEBUG_END */
+   
+			var o = this.p.ptr;
+			while (this.p != null && this.p.ptr.isDestroyed()) {
+				// Skip destroyed objects
+				this.p = (this.r ? this.p.prev : this.p.next);
+				o = this.p.ptr; 
+			}
 
-		this.p = (this.r ? this.p.prev : this.p.next);
-		if (o != null) {
-         return o;
-      } else {
-	      throw new Error("Index out of range");
+			this.p = (this.r ? this.p.prev : this.p.next);
+			if (o != null) {
+				return o;
+			} else {
+				throw new Error("Index out of range");
+			}
+
+		/* pragma:DEBUG_START */
+		} finally {
+			Profiler.exit();
 		}
+		/* pragma:DEBUG_END */
    },
 
    /**
@@ -131,7 +143,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 		if (this.c && !this.c.isDestroyed()) {
 			o = this.p;
 			while (o != null && o.ptr != null && o.ptr.isDestroyed()) {
-				o = (this.r ? this.p.prev : this.p.next);
+				o = (this.r ? o.prev : o.next);
 			}
 		}
       return o != null;

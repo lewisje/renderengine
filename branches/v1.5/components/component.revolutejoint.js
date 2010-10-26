@@ -187,7 +187,7 @@ var RevoluteJointComponent = BaseJointComponent.extend(/** @scope RevoluteJointC
 	},
 	
 	/**
-	 * During simulation, get the reaction torque.  Outsize of simulation, the
+	 * During simulation, get the reaction torque.  Outside of simulation, the
 	 * torque is zero.
 	 * @return {Number}
 	 */
