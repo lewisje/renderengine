@@ -61,6 +61,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @private
     */
    constructor: function(name, width, height) {
+   	// Make sure the browser supports the canvas and 2D context!
+   	Assert((EngineSupport.sysInfo().support.canvas.defined &&
+   			  EngineSupport.sysInfo().support.canvas.contexts.ctx2D), "Browser does not support Canvas. Cannot construct CanvasContext!");
+      
       Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
 
       this.setWidth(width);
@@ -78,7 +82,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    afterAdd: function(parent) {
-      if (typeof FlashCanvas != "undefined") {
+      // For FlashCanvas, check for emulation
+      if (EngineSupport.sysInfo().support.canvas.emulated) {
          FlashCanvas.setOptions({
             disableContextMenu: false,
             turbo: true,
