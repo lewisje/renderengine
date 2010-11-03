@@ -209,6 +209,15 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
       return n;
    },
 
+	/**
+	 * Exports an object which contains references to all of the resources
+	 * which have been loaded by this resource loader.  This method is optional
+	 * and may not be implemented directly by the loader.
+	 */
+	exportAll: function() {
+		return {};
+	},
+
    /**
     * The name of the resource this loader will get.
     * @return {String} The string "default"

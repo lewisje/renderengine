@@ -70,7 +70,7 @@ var DistanceJointComponent = BaseJointComponent.extend(/** @scope DistanceJointC
 
 		this.base(name || "DistanceJoint", body1, body2, jointDef);	
 	}
-	
+		
 }, { /** @scope DistanceJointComponent.prototype */
 
    /**

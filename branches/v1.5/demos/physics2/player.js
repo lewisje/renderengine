@@ -64,7 +64,7 @@ Engine.initObject("Player", "Object2D", function() {
          // with either the mouse, or with the Wii remote
          this.add(WiimoteInputComponent.create("input"));
          this.add(Transform2DComponent.create("move"));
-         this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
+         this.add(ColliderComponent.create("collide", PhysicsDemo2.cModel));
          
          // The player's bounding box
          this.setBoundingBox(Rectangle2D.create(0, 0, 20, 20));

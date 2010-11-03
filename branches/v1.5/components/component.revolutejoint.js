@@ -54,12 +54,17 @@ Engine.initObject("RevoluteJointComponent", "BaseJointComponent", function() {
  */
 var RevoluteJointComponent = BaseJointComponent.extend(/** @scope RevoluteJointComponent.prototype */{
 
+	anchor: null,
+
    /**
     * @private
     */
 	constructor: function(name, body1, body2, anchor) {
 		var jointDef = new b2RevoluteJointDef();
-
+		
+		this.anchor = Point2D.create(anchor);
+		
+		anchor.add(body1.getPosition()).add(body1.getLocalOrigin());
 		var a = anchor.get();
 		jointDef.anchorPoint.Set(a.x, a.y);
 		this.base(name || "RevoluteJoint", body1, body2, jointDef);	

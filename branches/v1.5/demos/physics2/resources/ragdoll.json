@@ -1,60 +1,141 @@
 {
+	"restitution": 0,				// Applied, globally, to all parts
+	"friction": 1.2,					// Same...
+	"root": "torso",
 	"parts": [
 		{
 			"name": "head",
 			"type": "circle",
-			"radius": 62,				// Radius of circle body
-			"position": [0,-109],	// Relative to object's world center point
+			"radius": 31,				// Radius of circle body
+			"position": [210,0],		// In world coordinates
 			"joint": {
 				"type": "revolute",
-				"linkFrom": "body",	// First object in joint linkage will be "body"
-				"offset": [0,64],		// Relative to object "head"
-				"minLim": -45,
-				"maxLim": 45
+				"linkFrom": "torso",	// First object in joint linkage will be "torso"
+				"anchor": [0,-50],	// Relative to the position of the "torso"
+				"minLim": -20,
+				"maxLim": 20
 			}
 		},
 		{
-			"name": "body",
+			"name": "torso",
 			"type": "box",
 			"extents": [69,94],		// Extents (size) of box body
-			"position": [0,-47],		// Relative to object's world center point
-			"joint": {
-				"type": "revolute",
-				"linkTo": "pelvis",	// First object in joint linkage will be "body"
-				"offset": [0,48],		// Relative to object "body"
-				"minLim": -10,
-				"maxLim": 10
-			}
+			"position": [200,58]		
 		},
 		{
 			"name": "pelvis",
 			"type": "box",
 			"extents": [67,37],
-			"position": [0,49]
+			"position": [202,148],
+			"joint": {
+				"type": "revolute",
+				"linkFrom": "torso",
+				"anchor": [0,47],
+				"minLim": -20,
+				"maxLim": 20
+			}
 		},
 		{
 			"name": "leftupperarm",
 			"type": "box",
 			"extents": [49,24],
-			"position": [-83,-47],
+			"position": [160,63],
 			"joint": {
 				"type": "revolute",
-				"linkFrom": "body",	// First object in joint linkage will be "body"
-				"offset": [50,0],		// Relative to object "leftupperarm"
-				"minLim": -90,
-				"maxLim": 90
+				"linkTo": "torso",
+				"anchor": [24,0],
+				"minLim": -50,
+				"maxLim": 50
+			}
+		},
+		{
+			"name": "leftlowerarm",
+			"type": "box",
+			"extents": [40,20],
+			"position": [125,63],
+			"joint": {
+				"type": "revolute",
+				"linkFrom": "leftupperarm",
+				"anchor": [-25,0],
+				"minLim": -70,
+				"maxLim": 0
 			}
 		},
 		{
 			"name": "rightupperarm",
 			"type": "box",
 			"extents": [49,24],
-			"position": [36,-47],
+			"position": [262,63],
 			"joint": {
 				"type": "revolute",
-				"linkFrom": "body",	// First object in joint linkage will be "body"
-				"offset": [-3,0],		// Relative to object "rightupperarm"
+				"linkTo": "torso",
+				"anchor": [-27,0],
 				"minLim": -90,
+				"maxLim": 120
+			}
+		},
+		{
+			"name": "rightlowerarm",
+			"type": "box",
+			"extents": [40,20],
+			"position": [303,63],
+			"joint": {
+				"type": "revolute",
+				"linkFrom": "rightupperarm",
+				"anchor": [25,0],
+				"minLim": 0,
+				"maxLim": 50
+			}
+		},
+		{
+			"name": "leftupperleg",
+			"type": "box",
+			"extents": [29,70],
+			"position": [205,175],
+			"joint": {
+				"type": "revolute",
+				"linkTo": "pelvis",
+				"anchor": [0,-35],
+				"minLim": 0,
+				"maxLim": 280
+			}
+		},
+		{
+			"name": "leftlowerleg",
+			"type": "box",
+			"extents": [20,52],
+			"position": [207,242],
+			"joint": {
+				"type": "revolute",
+				"linkTo": "leftupperleg",
+				"anchor": [0,-21],
+				"minLim": 0,
+				"maxLim": 180
+			}
+		},
+		{
+			"name": "rightupperleg",
+			"type": "box",
+			"extents": [29,70],
+			"position": [240,172],
+			"joint": {
+				"type": "revolute",
+				"linkFrom": "pelvis",
+				"anchor": [28,17],
+				"minLim": -90,
+				"maxLim": 120
+			}
+		},
+		{
+			"name": "rightlowerleg",
+			"type": "box",
+			"extents": [20,52],
+			"position": [243,242],
+			"joint": {
+				"type": "revolute",
+				"linkTo": "rightupperleg",
+				"anchor": [0,-21],
+				"minLim": 20,
 				"maxLim": 90
 			}
 		}

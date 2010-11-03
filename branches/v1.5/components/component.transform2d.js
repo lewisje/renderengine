@@ -207,8 +207,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    execute: function(renderContext, time) {
       renderContext.setPosition(this.getRenderPosition());
       renderContext.setRotation(this.getRenderRotation());
-      var s = this.getRenderScale();
-      renderContext.setScale(s);
+      renderContext.setScale(this.getRenderScale());
    }
 }, /** @scope Transform2DComponent.prototype */{
    /**

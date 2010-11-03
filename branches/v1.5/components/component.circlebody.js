@@ -59,6 +59,7 @@ var CircleBodyComponent = BaseBodyComponent.extend(/** @scope CircleBodyComponen
 		this.base(name, new b2CircleDef());
 		this.radius = radius;
 		this.getShapeDef().radius = radius;
+		this.setLocalOrigin(radius, radius);
 	},
 	
 	/**
@@ -77,6 +78,22 @@ var CircleBodyComponent = BaseBodyComponent.extend(/** @scope CircleBodyComponen
 	getRadius: function() {
 		return this.radius;
 	}
+
+	/* pragma:DEBUG_START */
+	/**
+	 * Adds shape debugging
+	 * @private
+	 */	
+	,execute: function(renderContext, time) {
+		this.base(renderContext, time);
+		if (Engine.getDebugMode()) {
+			renderContext.pushTransform();
+			renderContext.setLineStyle("blue");
+			renderContext.drawArc(this.getLocalOrigin(), this.getRadius(), 0, 360);
+			renderContext.popTransform();
+		}	
+	}
+	/* pragma:DEBUG_END */
 
 }, { /** @scope CircleBodyComponent.prototype */
 

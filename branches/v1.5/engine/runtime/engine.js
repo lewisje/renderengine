@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v2.0.0.1a
- * date: Oct 9, 2010
+ * version: v1.5
+ * date: Oct 18, 2010
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -36,8 +36,8 @@
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1388 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -558,12 +558,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
    DEBUGLEVEL_NONE:       -1,
 
    /** @private */
-   verbosity: this.DEBUGLEVEL_NONE,
+   verbosity: null,
 
    /**
     * Starts up the console.
     */
    startup: function() {
+		Console.verbosity = this.DEBUGLEVEL_ERRORS;
+		
       if (EngineSupport.checkBooleanParam("debug") && (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          this.consoleRef = new HTMLConsoleRef();
       }
@@ -677,7 +679,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Output an error message.  These messages will only show when <tt>DEBUGLEVEL_ERRORS</tt> is the level.
+    * Output an error message.  These messages always appear unless the debug level is explicitly
+    * set to <tt>DEBUGLEVEL_NONE</tt>.
     * You can pass as many parameters as you want to this method.  The parameters will be combined into
     * one message to output to the console.
     */
@@ -762,8 +765,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1388 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1005,8 +1008,8 @@ Math2.seed();
  *               to manipulate arrays, parse JSON, and handle query parameters.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1325 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1392 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1411,6 +1414,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
+	/**
+	 * Determine the OS platform from the user agent string, if possible
+	 * @private
+    * @memberOf EngineSupport
+	 */
 	checkOS: function() {
 		// Scrape the userAgent to get the OS
 		var uA = navigator.userAgent.toLowerCase();
@@ -1459,6 +1467,18 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *       <li>database - indexedDB storage is supported</li>
     *       </ul>
     *    </li>
+    *    <li>canvas:
+    *       <ul><li>emulated - Canvas support emulated by FlashCanvas</li>
+    *       <li>defined - Canvas is either native or emulated</li>
+    *       <li>text - Supports text</li>
+    *       <li>textMetrics - Supports text measurement</li>
+    *			<li>contexts:
+    *      		<ul><li>ctx2D - Supports 2D</li>
+    *				<li>ctxGL - Supports webGL</li>
+    *				</ul>
+    *			</li>
+    *       </ul>
+    *    </li>
     *    </ul>
     * </li>
     * </ul>
@@ -1467,6 +1487,42 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    sysInfo: function() {
       if (!EngineSupport._sysInfo) {
+      	
+      	// Determine if the browser supports Canvas
+      	var canvasSupport = {
+      		emulated: false,
+      		defined: false,
+      		text: false,
+      		textMetrics: false,
+      		contexts: {
+      			ctx2D: false,
+      			ctxGL: false
+      		}
+      	};
+      	if (document.createElement) {
+      		// Standards browsers
+      		var canvas = document.createElement("canvas");
+      		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
+      			canvasSupport.defined = true;
+	      		var c2d = canvas.getContext("2d");
+	      		if (typeof c2d != "undefined") {
+	      			canvasSupport.contexts.ctx2D = true;
+	      			
+						// Does it support native text
+						canvasSupport.text = (typeof c2d.fillText == "function");
+						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
+					}
+	      		
+					try {
+		      		var webGL = canvas.getContext("glcanvas");
+		      		if (typeof webGL != "undefined") {
+		      			canvasSupport.contexts.ctxGL = true;
+		      		}
+					} catch (ex) { /* no webgl */ }
+	      	}
+      	}
+      	      
+      	// Build support object
          EngineSupport._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
 				           ($.browser.android ? "android" :
@@ -1495,16 +1551,18 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                   "session" : (typeof sessionStorage !== "undefined"),
                   "database": (typeof indexedDB !== "undefined")
                } : null),
-               "geo": (typeof navigator.geolocation !== "undefined")
+               "geo": (typeof navigator.geolocation !== "undefined"),
+               "canvas" : canvasSupport
             }
          };
+         
          $(document).ready(function() {
             // When the document is ready, we'll go ahead and get the width and height added in
             EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
-               "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
-               "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1,
-               "viewWidth": window.innerWidth,
-               "viewHeight" : window.innerHeight
+               "width": $(window).width(),
+               "height": $(window).height(),
+               "viewWidth": $(document).width(),
+               "viewHeight" : $(document).height()
             });
          });
       }
@@ -2088,8 +2146,8 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1388 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2137,7 +2195,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v2.0.0.1a",
+   version: "v1.5",
 
    constructor: null,
 
@@ -3410,8 +3468,8 @@ var Engine = Engine.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1382 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1388 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 

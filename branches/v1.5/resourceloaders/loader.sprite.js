@@ -191,6 +191,15 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
       return s;
    },
 
+	exportAll: function(resource) {
+		var o = this.base();
+		var sprites = this.getSpriteNames(resource);
+		for (var i in sprites) {
+			o[sprites[i]] = this.getSprite(resource, sprites[i]);
+		}
+		return o;
+	},
+
    /**
     * The name of the resource this loader will get.
     * @returns {String} The string "sprite"

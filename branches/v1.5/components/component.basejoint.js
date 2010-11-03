@@ -57,6 +57,8 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 	simulation: null,
 	collideBodies: false,
 	joint: null,
+	body1: null,
+	body2: null,
 
    /**
     * @private
@@ -69,8 +71,9 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 
 		this.jointDef = jointDef;
 		this.simulation = null;
-		this.jointDef.body1 = body1;
-		this.jointDef.body2 = body2;
+		this.body1 = body1;
+		this.body2 = body2;
+		this.collideBodies = false;
 	},
 
 	/**
@@ -80,7 +83,10 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 	startSimulation: function() {
 		if (!this.simulation) {
 			this.simulation = this.getHostObject().getSimulation();
+			this.getJointDef().body1 = this.body1.getBody();
+			this.getJointDef().body2 = this.body2.getBody();
 			this.getJointDef().collideConnected = this.getCollideBodies();
+
 			this.joint = this.simulation.addJoint(this.getJointDef());
 		}
 	},
@@ -114,19 +120,19 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 	},
 
 	/**
-	 * Get the Box2d body object which corresponds to body 1 of the joint.
-	 * @return {b2Body}
+	 * Get the component which corresponds to body 1 of the joint.
+	 * @return {BaseBodyComponent}
 	 */
 	getBody1: function() {
-		return this.getJointDef().body1;
+		return this.body1;
 	},
 
 	/**
-	 * Get the Box2d body object which corresponds to body 2 of the joint.
-	 * @return {b2Body}
+	 * Get the component which corresponds to body 2 of the joint.
+	 * @return {BaseBodyComponent}
 	 */
 	getBody2: function() {
-		return this.getJointDef().body2;
+		return this.body2;
 	},
 	
 	/**
@@ -149,6 +155,37 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 	setCollideBodies: function(state) {
 		this.collideBodies = state;		
 	}
+	
+	/* pragma:DEBUG_START */
+	/**
+	 * Adds joint debugging
+	 * @private
+	 */	
+	,execute: function(renderContext, time) {
+		this.base(renderContext, time);
+		/*
+		if (Engine.getDebugMode()) {
+			renderContext.pushTransform();
+			renderContext.setLineStyle("red");
+			var b1p = Point2D.create(this.getBody1().getPosition());
+			var b2p = Point2D.create(this.getBody2().getPosition());
+			b1p.add(this.getBody1().getLocalOrigin());
+			b2p.add(this.getBody2().getLocalOrigin());
+			renderContext.drawLine(b1p, b2p);
+			b1p.destroy();
+			b2p.destroy();
+			// Draw the rotational limitations
+			var a = Point2D.create(this.anchor);
+			a.add(this.getBody1().getPosition());
+			a.add(this.getBody1().getLocalOrigin());
+			renderContext.setFillStyle("green");
+			renderContext.drawFilledArc(a, 8, 0, 360);
+			a.destroy();
+			renderContext.popTransform();
+		}	
+		*/
+	}
+	/* pragma:DEBUG_END */
 	
 }, { /** @scope BaseJointComponent.prototype */
 

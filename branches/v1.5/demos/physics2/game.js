@@ -37,12 +37,13 @@ Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
 Engine.include("/physics/physics.simulation.js")
+Engine.include("/objects/object.physicsactor.js")
+Engine.include("/components/component.sprite.js")
 
 Engine.include("/physics/collision/shapes/b2BoxDef.js");
 
 // Load game objects
 Game.load("/player.js");
-Game.load("/ragdoll.js");
 
 Engine.initObject("PhysicsDemo2", "Game", function(){
 
@@ -70,7 +71,7 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
 
       // Sprite resource loader
       spriteLoader: null,
-      
+     
       // The collision model
       cModel: null,
       
@@ -89,12 +90,14 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
          
          // Load the sprites
          this.spriteLoader.load("ragdoll", this.getFilePath("resources/ragdoll.sprite"));
-         
+         PhysicsActor.load("ragdoll", this.getFilePath("resources/ragdoll.json"));
+			
          // Don't start until all of the resources are loaded
          Timeout.create("wait", 250, function() {
-				if (PhysicsDemo.spriteLoader.isReady()) {
+				if (PhysicsDemo2.spriteLoader.isReady() &&
+					 PhysicsActor.isReady()) {
 						this.destroy();
-						PhysicsDemo.run();
+						PhysicsDemo2.run();
 				}
 				else {
 					// Continue waiting
@@ -150,13 +153,34 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);
 
          // Add the ragdoll object
-			this.renderContext.add(Ragdoll.create());
+			var ragdoll = this.createRagdoll(PhysicsActor.get("ragdoll"));
+			//ragdoll.setPosition(Point2D.create(500, 10));
+         ragdoll.setSimulation(this.simulation);
+			this.renderContext.add(ragdoll);
+			ragdoll.simulate();
          
          // Add the player object
          var player = Player.create();
          this.getRenderContext().add(player);
       },
       
+		createRagdoll: function(actor) {
+			// Load the sprites	
+			var sprites = PhysicsDemo2.spriteLoader.exportAll("ragdoll");
+			
+			// Associate the sprites with the actor's physics components
+			var components = actor.getObjects(function(el) {
+				return (el instanceof BaseBodyComponent);
+			});			
+			
+			for (var c in components) {
+				var component = components[c];
+				component.setRenderComponent(SpriteComponent.create(component.getName(), sprites[component.getName().toLowerCase()]));
+			}
+
+			return actor;
+		},
+		
       /**
        * Set up the physical world.  Creates the bounds of the world by establishing
        * walls and a floor.  The actual objects have no visual respresentation but they

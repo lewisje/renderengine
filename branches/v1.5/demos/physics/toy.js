@@ -78,7 +78,7 @@ Engine.initObject("Toy", "PhysicsActor", function() {
 
 			// Set the starting position and move the origin to the center of the toy
          this.setPosition(Point2D.create(25, 15));
-			this.setOrigin(Point2D.create(30, 30));
+			this.getComponent("physics").setLocalOrigin(Point2D.create(30, 30));
       },
 
 		/**
@@ -104,13 +104,6 @@ Engine.initObject("Toy", "PhysicsActor", function() {
          this.base(renderContext, time);
          renderContext.popTransform();
       },
-
-		/**
-		 * Start simulation of the physical object.
-		 */
-		simulate: function() {
-			this.getComponent("physics").startSimulation();
-		},
 
       /**
        * Set the sprite to use with the "draw" component.

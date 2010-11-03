@@ -527,12 +527,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
    DEBUGLEVEL_NONE:       -1,
 
    /** @private */
-   verbosity: this.DEBUGLEVEL_NONE,
+   verbosity: null,
 
    /**
     * Starts up the console.
     */
    startup: function() {
+		Console.verbosity = this.DEBUGLEVEL_ERRORS;
+		
       if (EngineSupport.checkBooleanParam("debug") && (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          this.consoleRef = new HTMLConsoleRef();
       }
@@ -646,7 +648,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Output an error message.  These messages will only show when <tt>DEBUGLEVEL_ERRORS</tt> is the level.
+    * Output an error message.  These messages always appear unless the debug level is explicitly
+    * set to <tt>DEBUGLEVEL_NONE</tt>.
     * You can pass as many parameters as you want to this method.  The parameters will be combined into
     * one message to output to the console.
     */

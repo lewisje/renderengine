@@ -501,7 +501,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       	if (document.createElement) {
       		// Standards browsers
       		var canvas = document.createElement("canvas");
-      		if (typeof canvas != "undefined") {
+      		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
       			canvasSupport.defined = true;
 	      		var c2d = canvas.getContext("2d");
 	      		if (typeof c2d != "undefined") {
@@ -512,21 +512,15 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
 					}
 	      		
-	      		var webGL = canvas.getContext("glcanvas");
-	      		if (typeof webGL != "undefined") {
-	      			canvasSupport.contexts.ctxGL = true;
-	      		}
+					try {
+		      		var webGL = canvas.getContext("glcanvas");
+		      		if (typeof webGL != "undefined") {
+		      			canvasSupport.contexts.ctxGL = true;
+		      		}
+					} catch (ex) { /* no webgl */ }
 	      	}
       	}
-      	
-			if (typeof FlashCanvas != "undefined") {
-				// Emulation of canvas provided by FlashCanvas
-      		canvasSupport.emulated = true;
-      		canvasSupport.defined = true;
-      		canvasSupport.contexts.ctx2D = true;
-      		canvasSupport.text = true;
-      	}
-      
+      	      
       	// Build support object
          EngineSupport._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
@@ -564,10 +558,10 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          $(document).ready(function() {
             // When the document is ready, we'll go ahead and get the width and height added in
             EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
-               "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
-               "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1,
-               "viewWidth": window.innerWidth,
-               "viewHeight" : window.innerHeight
+               "width": $(window).width(),
+               "height": $(window).height(),
+               "viewWidth": $(document).width(),
+               "viewHeight" : $(document).height()
             });
          });
       }

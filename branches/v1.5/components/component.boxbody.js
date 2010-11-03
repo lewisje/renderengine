@@ -57,9 +57,20 @@ var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prot
 	 */
 	constructor: function(name, extents) {
 		this.base(name, new b2BoxDef());
-		this.extents = extents;
+		this.extents = Point2D.create(extents);
 		var e = extents.get();
 		this.getShapeDef().extents.Set(e.x, e.y);
+		this.setLocalOrigin(Math.floor(e.x / 2), Math.floor(e.y / 2));
+	},
+	
+	destroy: function() {
+		this.extents.destroy();
+		this.base();
+	},
+	
+	release: function() {
+		this.extents = null;
+		this.base();
 	},
 	
 	/**
@@ -80,6 +91,28 @@ var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prot
 	getExtents: function() {
 		return this.extents;
 	}
+	
+	/* pragma:DEBUG_START */
+	/**
+	 * Adds shape debugging
+	 * @private
+	 */	
+	,execute: function(renderContext, time) {
+		this.base(renderContext, time);
+		if (Engine.getDebugMode()) {
+			renderContext.pushTransform();
+			renderContext.setLineStyle("blue");
+			var hx = this.extents.get().x / 2;
+			var hy = this.extents.get().y / 2;
+			var rect = Rectangle2D.create(-hx, -hy, hx * 2, hy * 2);
+			rect.offset(this.getLocalOrigin());
+			renderContext.drawRectangle(rect);
+			rect.destroy();
+			renderContext.popTransform();
+		}	
+	}
+	/* pragma:DEBUG_END */
+	
 
 }, { /** @scope BoxBodyComponent.prototype */
 

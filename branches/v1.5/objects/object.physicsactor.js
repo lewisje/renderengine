@@ -63,12 +63,14 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	var PhysicsActor = Object2D.extend(/** @scope PhysicsActor.prototype */{
 
 		simulation: null,
+		rootBody: null,
 
 		/**
 		 * @private
 		 */
 		constructor: function(name) {
 			this.base(name || "PhysicsActor");
+			this.rootBody = null;
 		},
 
 	   /**
@@ -82,6 +84,34 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	      }
 	      this.base();
 	   },
+		
+		setRootBody: function(body) {
+			Assert(BaseBodyComponent.isInstance(body), "Root body is not a BaseBodyComponent");
+			this.rootBody = body;
+		},
+		
+		getRootBody: function() {
+			return this.rootBody;
+		},
+		
+		setPosition: function(x, y) {
+			var pt = Point2D.create(x,y);
+			var pos = Point2D.create(this.rootBody.getPosition());
+			pt.sub(pos);
+			
+			var bodies = this.getObjects(function(el) {
+				return (el instanceof BaseBodyComponent);
+			});			
+			
+			for (var b in bodies) {
+		 		var bPos = bodies[b].getPosition();
+				bPos.add(pt);
+				bodies[b].setPosition(bPos);
+		 	}
+			
+			pt.destroy();
+			pos.destroy();
+		},
 		
 		/**
 		 * Set the <code>Simulation</code> this actor participates within.  When a <code>PhysicsActor</code> 
@@ -100,6 +130,29 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		 */
 		getSimulation: function() {
 			return this.simulation;	
+		},
+
+		/**
+		 * Start simulation of the physical components.
+		 */
+		simulate: function() {
+			// Start simulation on bodies first
+			var bodies = this.getObjects(function(el) {
+				return (el instanceof BaseBodyComponent);
+			});			
+			
+			for (var b in bodies) {
+		 		bodies[b].startSimulation();
+		 	}
+			
+			// Follow up with simulation of joints
+			var joints = this.getObjects(function(el) {
+				return (el instanceof BaseJointComponent);
+			});			
+			
+			for (var j in joints) {
+		 		joints[j].startSimulation();
+		 	}
 		},
 		
 	   /**
@@ -146,12 +199,18 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	
 	      while (components.hasNext()) {
 				var nextComponent = components.next();
+				var isPhysicsComponent = BaseBodyComponent.isInstance(nextComponent);
+				if (isPhysicsComponent) {
+					renderContext.pushTransform();
+				}
 				nextComponent.execute(renderContext, time);
-				if (BaseBodyComponent.isInstance(nextComponent) && 
-						nextComponent.getRenderComponent() != null) {
+				if (isPhysicsComponent && nextComponent.getRenderComponent() != null) {
 					// Make sure to execute the render component immediately following
 					// the body component.
 					nextComponent.getRenderComponent().execute(renderContext, time);
+				}
+				if (isPhysicsComponent) {
+					renderContext.popTransform();
 				}
 	      }
 	
@@ -161,10 +220,10 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	      HashContainer.prototype.update.call(this, renderContext, time);
 	   },
 		
-		resolved: function() {
-			PhysicsActor.actorLoader = ObjectLoader.create("ActorLoader");
+		dummy: function() {
+			var q = ObjectLoader.create("dummy");
 		}
-	
+		
 	}, /** @scope PhysicsActor.prototype */{ // Static
 	
 	   /**
@@ -181,6 +240,10 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		 * @private
 		 */
 		actorLoader: null,
+
+		resolved: function() {
+			PhysicsActor.actorLoader = ObjectLoader.create("ActorLoader");
+		},
 		
 		/**
 		 * Helper method to load a physics object file which describes the objects
@@ -225,6 +288,7 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 			
 			var def = PhysicsActor.actorLoader.get(name), 
 				 actor = PhysicsActor.create(objName), jointParts = [];
+			var props = {"friction":"setFriction","restitution":"setRestitution","density":"setDensity"};
 			
 			// Loop through the parts and build each component
 			for (var p in def.parts) {
@@ -235,6 +299,18 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 					var ext = toP2d(part.extents);
 					bc = BoxBodyComponent.create(part.name, ext);
 					ext.destroy();
+				}
+				
+				// Set friction, restitution, or density properties.  Both
+				// defaults and per-part
+				for (var p in props) {
+					if (def[p]) {
+						bc[props[p]](def[p]);
+					}
+					
+					if (part[p]) {
+						bc[props[p]](part[p]);
+					}
 				}
 				
 				// Add the component to the actor.  We'll let the developer set the renderer
@@ -266,29 +342,44 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 					var originFrom = actor.getComponent(fromPart).getPosition(),
 						 originTo = actor.getComponent(toPart).getPosition();
 
-					jc = DistanceJoint.create(jointName,
+					jc = DistanceJointComponent.create(jointName,
 													  actor.getComponent(fromPart),
 													  actor.getComponent(toPart),
 													  originFrom,
 													  originTo);
 				} else {
-					var offset = toP2d(part.joint.offset);
-					offset.add(actor.getComponent(part.name).getPosition());
-					
-					jc = RevoluteJoint.create(jointName,
+					var anchor = toP2d(part.joint.anchor);
+
+					jc = RevoluteJointComponent.create(jointName,
 													  actor.getComponent(fromPart),
 													  actor.getComponent(toPart),
-													  offset);
-												
+													  anchor);
+					
+					// Joint rotational limits							
 					var upLim = part.joint.maxLim,
 						 lowLim = part.joint.minLim;													  
 					jc.setUpperLimitAngle(upLim ? upLim : 359);
 					jc.setLowerLimitAngle(lowLim ? lowLim : 0);
-					offset.destroy();
+					
+					// Motor torque and speed
+					if (part.joint.motorTorque) {
+						jc.setMotorTorque(part.joint.motorTorque);
+					}
+					
+					if (part.joint.motorSpeed) {
+						jc.setMotorSpeed(part.joint.motorSpeed);
+					}
+					
+					anchor.destroy();
 				}
 				
 				// Add the joint to the actor
 				actor.add(jc);
+			}
+			
+			Assert(actor.getComponent(def.root) != null, "'root' of actor definition is not a valid part");
+			if (def.root) {
+				actor.setRootBody(actor.getComponent(def.root));
 			}
 		
 			// Done, give them their actor

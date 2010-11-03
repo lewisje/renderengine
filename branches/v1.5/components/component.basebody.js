@@ -61,6 +61,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	rotVec: null,
 	bodyPos: null,
 	renderComponent: null,
+	origin: null,
 
    /**
     * @private
@@ -75,6 +76,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		this.simulation = null;
 		this.rotVec = Vector2D.create(0,0);
 		this.bodyPos = Point2D.create(0,0);
+		this.origin = Point2D.create(0,0);
 	},
 
 	destroy: function() {
@@ -82,7 +84,20 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 			this.renderComponent.destroy();
 		}
 		
+		this.rotVec.destroy();
+		this.bodyPos.destroy();
+		this.origin.destroy();
+		
 		this.base();
+	},
+	
+	release: function() {
+		this.base();
+
+		this.rotVec = null;
+		this.bodyPos = null;
+		this.origin = null;
+		
 	},
 
 	/**
@@ -128,6 +143,14 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 */
 	getRenderComponent: function() {
 		return this.renderComponent;
+	},
+	
+	setLocalOrigin: function(x, y) {
+		this.origin.set(x, y);
+	},
+	
+	getLocalOrigin: function() {
+		return this.origin;
 	},
 	
 	/**
@@ -232,7 +255,11 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 * @return {Point2D}
 	 */
 	getPosition: function() {
-		this.bodyPos.set(this.body.m_position.x, this.body.m_position.y);
+		if (this.simulation) {
+			this.bodyPos.set(this.body.m_position.x, this.body.m_position.y);
+		} else {
+			this.bodyPos.set(this.getBodyDef().position.x, this.getBodyDef().position.y);
+		}
 		return this.bodyPos;	
 	},
 	
@@ -247,7 +274,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		var cV = rC.x > 0 ? BaseBodyComponent.UP_VECTOR : BaseBodyComponent.DOWN_VECTOR;
 		var md = rC.x > 0 ? 0 : 180;
 		var ab = this.rotVec.angleBetween(cV) - md;
-		return ab;
+		return ab - 90;
 	},
 	
 	/**
