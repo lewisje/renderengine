@@ -2,6 +2,7 @@
 	"restitution": 0,				// Applied, globally, to all parts
 	"friction": 1.2,					// Same...
 	"root": "torso",
+	"scale": 0.8,
 	"parts": [
 		{
 			"name": "head",
@@ -11,132 +12,136 @@
 			"joint": {
 				"type": "revolute",
 				"linkFrom": "torso",	// First object in joint linkage will be "torso"
-				"anchor": [0,-50],	// Relative to the position of the "torso"
-				"minLim": -20,
-				"maxLim": 20
+				"anchor": [0,-60],	// Relative to the position of the "torso"
+				"minLim": -10,
+				"maxLim": 10
 			}
 		},
 		{
 			"name": "torso",
 			"type": "box",
 			"extents": [69,94],		// Extents (size) of box body
-			"position": [200,58]		
+			"position": [200,70]		
 		},
 		{
 			"name": "pelvis",
 			"type": "box",
 			"extents": [67,37],
-			"position": [202,148],
+			"position": [202,132],
 			"joint": {
 				"type": "revolute",
 				"linkFrom": "torso",
-				"anchor": [0,47],
-				"minLim": -20,
-				"maxLim": 20
+				"anchor": [-10,30],
+				"minLim": -10,
+				"maxLim": 10
 			}
 		},
 		{
 			"name": "leftupperarm",
 			"type": "box",
 			"extents": [49,24],
-			"position": [160,63],
+			"position": [153,43],
 			"joint": {
 				"type": "revolute",
 				"linkTo": "torso",
-				"anchor": [24,0],
-				"minLim": -50,
-				"maxLim": 50
+				"anchor": [-15,-10],
+				"minLim": -80,
+				"maxLim": 80,
+				"motorTorque": 1000,
+				"motorSpeed": 0
 			}
 		},
 		{
 			"name": "leftlowerarm",
 			"type": "box",
 			"extents": [40,20],
-			"position": [125,63],
+			"position": [113,43],
 			"joint": {
 				"type": "revolute",
 				"linkFrom": "leftupperarm",
-				"anchor": [-25,0],
-				"minLim": -70,
-				"maxLim": 0
+				"anchor": [-40,-10],
+				"minLim": 0,
+				"maxLim": 30
 			}
 		},
 		{
 			"name": "rightupperarm",
 			"type": "box",
 			"extents": [49,24],
-			"position": [262,63],
+			"position": [252,43],
 			"joint": {
 				"type": "revolute",
 				"linkTo": "torso",
-				"anchor": [-27,0],
-				"minLim": -90,
-				"maxLim": 120
+				"anchor": [-49,-10],
+				"minLim": -80,
+				"maxLim": 80,
+				"motorTorque": 1000,
+				"motorSpeed": 0
 			}
 		},
 		{
 			"name": "rightlowerarm",
 			"type": "box",
 			"extents": [40,20],
-			"position": [303,63],
+			"position": [290,43],
 			"joint": {
 				"type": "revolute",
 				"linkFrom": "rightupperarm",
-				"anchor": [25,0],
-				"minLim": 0,
-				"maxLim": 50
+				"anchor": [-10,-10],
+				"minLim": -30,
+				"maxLim": 0
 			}
 		},
 		{
 			"name": "leftupperleg",
 			"type": "box",
 			"extents": [29,70],
-			"position": [205,175],
+			"position": [185,180],
 			"joint": {
 				"type": "revolute",
 				"linkTo": "pelvis",
-				"anchor": [0,-35],
-				"minLim": 0,
-				"maxLim": 280
+				"anchor": [20,-70],
+				"minLim": -50,
+				"maxLim": 50
 			}
 		},
 		{
 			"name": "leftlowerleg",
 			"type": "box",
 			"extents": [20,52],
-			"position": [207,242],
+			"position": [185,242],
 			"joint": {
 				"type": "revolute",
 				"linkTo": "leftupperleg",
 				"anchor": [0,-21],
-				"minLim": 0,
-				"maxLim": 180
+				"minLim": -2,
+				"maxLim": 2
 			}
 		},
 		{
 			"name": "rightupperleg",
 			"type": "box",
 			"extents": [29,70],
-			"position": [240,172],
+			"position": [220,180],
 			"joint": {
 				"type": "revolute",
 				"linkFrom": "pelvis",
-				"anchor": [28,17],
-				"minLim": -90,
-				"maxLim": 120
+				"anchor": [-20,-60],
+				"minLim": -10,
+				"maxLim": 50
 			}
 		},
 		{
 			"name": "rightlowerleg",
 			"type": "box",
 			"extents": [20,52],
-			"position": [243,242],
+			"position": [220,242],
 			"joint": {
 				"type": "revolute",
 				"linkTo": "rightupperleg",
 				"anchor": [0,-21],
-				"minLim": 20,
-				"maxLim": 90
+				"minLim": -2,
+				"maxLim": 2
 			}
 		}
 	]

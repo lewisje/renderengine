@@ -163,27 +163,23 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 	 */	
 	,execute: function(renderContext, time) {
 		this.base(renderContext, time);
-		/*
 		if (Engine.getDebugMode()) {
 			renderContext.pushTransform();
 			renderContext.setLineStyle("red");
 			var b1p = Point2D.create(this.getBody1().getPosition());
 			var b2p = Point2D.create(this.getBody2().getPosition());
-			b1p.add(this.getBody1().getLocalOrigin());
-			b2p.add(this.getBody2().getLocalOrigin());
 			renderContext.drawLine(b1p, b2p);
 			b1p.destroy();
 			b2p.destroy();
-			// Draw the rotational limitations
+			
+			// Draw the anchor point
 			var a = Point2D.create(this.anchor);
 			a.add(this.getBody1().getPosition());
-			a.add(this.getBody1().getLocalOrigin());
 			renderContext.setFillStyle("green");
 			renderContext.drawFilledArc(a, 8, 0, 360);
 			a.destroy();
 			renderContext.popTransform();
 		}	
-		*/
 	}
 	/* pragma:DEBUG_END */
 	

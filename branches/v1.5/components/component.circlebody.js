@@ -89,7 +89,8 @@ var CircleBodyComponent = BaseBodyComponent.extend(/** @scope CircleBodyComponen
 		if (Engine.getDebugMode()) {
 			renderContext.pushTransform();
 			renderContext.setLineStyle("blue");
-			renderContext.drawArc(this.getLocalOrigin(), this.getRadius(), 0, 360);
+			renderContext.setScale(1/this.getScale());
+			renderContext.drawArc(Point2D.ZERO, this.getRadius(), 0, 360);
 			renderContext.popTransform();
 		}	
 	}
