@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1388 $
+ * @version: $Revision: 1394 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1008,8 +1008,8 @@ Math2.seed();
  *               to manipulate arrays, parse JSON, and handle query parameters.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1392 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1394 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -3695,7 +3695,7 @@ var Engine = Engine.extend({
          if (this.showMetricsProfile) {
             switch (m) {
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
-               case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
+               //case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
                case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
                case "poolLoad" : this.drawProfilePoint("#a0a0ff", this.metrics[m].act); break;
             }
