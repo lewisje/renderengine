@@ -172,12 +172,13 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 			b1p.destroy();
 			b2p.destroy();
 			
-			// Draw the anchor point
+			/*// Draw the anchor point
 			var a = Point2D.create(this.anchor);
 			a.add(this.getBody1().getPosition());
 			renderContext.setFillStyle("green");
 			renderContext.drawFilledArc(a, 8, 0, 360);
 			a.destroy();
+			*/
 			renderContext.popTransform();
 		}	
 	}
