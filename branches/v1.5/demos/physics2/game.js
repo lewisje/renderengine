@@ -39,6 +39,8 @@ Engine.include("/engine/engine.timers.js");
 Engine.include("/physics/physics.simulation.js")
 Engine.include("/objects/object.physicsactor.js")
 Engine.include("/components/component.sprite.js")
+Engine.include("/components/component.collider.js");
+
 
 Engine.include("/physics/collision/shapes/b2BoxDef.js");
 
@@ -154,7 +156,7 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
 
          // Add the ragdoll object
 			var ragdoll = this.createRagdoll(PhysicsActor.get("ragdoll"));
-			//ragdoll.setPosition(Point2D.create(500, 10));
+			ragdoll.setPosition(Point2D.create(500, 150));
          ragdoll.setSimulation(this.simulation);
 			this.renderContext.add(ragdoll);
 			ragdoll.simulate();
@@ -167,17 +169,19 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
 		createRagdoll: function(actor) {
 			// Load the sprites	
 			var sprites = PhysicsDemo2.spriteLoader.exportAll("ragdoll");
+
+         // Add components to draw and collide with the player
+         actor.add(ColliderComponent.create("collide", PhysicsDemo2.cModel));
 			
 			// Associate the sprites with the actor's physics components
-			var components = actor.getObjects(function(el) {
-				return (el instanceof BaseBodyComponent);
-			});			
+			var components = actor.getRigidBodies();			
 			
 			for (var c in components) {
 				var component = components[c];
 				component.setRenderComponent(SpriteComponent.create(component.getName(), sprites[component.getName().toLowerCase()]));
 			}
 
+      	actor.setBoundingBox(actor.getRootBody().getRenderComponent().getSprite().getBoundingBox());
 			return actor;
 		},
 		

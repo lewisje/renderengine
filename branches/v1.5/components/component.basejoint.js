@@ -73,6 +73,7 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 		this.simulation = null;
 		this.body1 = body1;
 		this.body2 = body2;
+		
 		this.collideBodies = false;
 	},
 
@@ -101,6 +102,10 @@ var BaseJointComponent = LogicComponent.extend(/** @scope BaseJointComponent.pro
 			this.simulation.removeJoint(this.getJoint());			
 			this.simulation = null;
 		}
+	},
+	
+	getSimulation: function() {
+		return this.simulation;
 	},
 	
 	/**

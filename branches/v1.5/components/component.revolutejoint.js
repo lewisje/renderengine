@@ -63,11 +63,26 @@ var RevoluteJointComponent = BaseJointComponent.extend(/** @scope RevoluteJointC
 		var jointDef = new b2RevoluteJointDef();
 		
 		this.anchor = Point2D.create(anchor);
-		
-		anchor.add(body1.getPosition()).add(body1.getLocalOrigin());
-		var a = anchor.get();
-		jointDef.anchorPoint.Set(a.x, a.y);
 		this.base(name || "RevoluteJoint", body1, body2, jointDef);	
+	},
+
+	/**
+	 * When simulation starts offset the anchor point by the position of rigid body 1 (the "from" body).
+	 * @private
+	 */
+	startSimulation: function() {
+		if (!this.getSimulation()) {
+			
+			var jA = Point2D.create(this.anchor);
+			jA.add(this.getBody1().getPosition());
+			jA.add(this.getBody1().getLocalOrigin());
+			var a = jA.get();
+	
+			this.getJointDef().anchorPoint.Set(a.x, a.y);
+			jA.destroy();
+		}		
+		
+		this.base();
 	},
 	
 	/**

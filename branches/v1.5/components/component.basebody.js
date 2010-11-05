@@ -97,7 +97,6 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		this.rotVec = null;
 		this.bodyPos = null;
 		this.origin = null;
-		
 	},
 
 	/**
@@ -122,7 +121,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 			this.simulation = null;
 		}
 	},
-	
+
 	/**
 	 * Set the associated render component for this body.  This is typically used by the
 	 * {@link PhysicsActor} to link a body to a renderer so that each body can have an
@@ -145,10 +144,22 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		return this.renderComponent;
 	},
 	
+	/**
+	 * Set the origin of the rigid body.  By default, the origin is the top left corner of
+	 * the bounding box for the body.  Most times the origin should be set to the center
+	 * of the body.
+	 * 
+	 * @param x {Number|Point2D} The X coordinate or a <tt>Point2D</tt>
+	 * @param y {Number} The Y coordinate or <tt>null</tt> if X is a <tt>Point2D</tt>
+	 */
 	setLocalOrigin: function(x, y) {
 		this.origin.set(x, y);
 	},
 	
+	/**
+	 * Get the local origin of the body.
+	 * @return {Point2D}
+	 */
 	getLocalOrigin: function() {
 		return this.origin;
 	},

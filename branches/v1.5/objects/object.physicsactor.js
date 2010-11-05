@@ -43,16 +43,16 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 
 	/**
 	 * @class A <tt>PhysicsActor</tt> is an actor object within a game represented by
-	 * 		 a collection of components which can include physical bodies and joints.
-	 * 		 Unlike {@link Object2D}, a <code>PhysicsActor</code> can associate each physical
-	 * 		 body with a {@link RenderComponent}.  When the physical body is updated, the
+	 * 		 a collection of components which can include rigid bodies and joints.
+	 * 		 Unlike {@link Object2D}, a <code>PhysicsActor</code> can associate each rigid
+	 * 		 body with its own {@link RenderComponent}.  When the rigid body is updated, the
 	 * 		 render component is updated with it.  That way, a physics actor can be comprised
 	 * 		 of multiple bodies, each with their own renderer allowing for a complex object
 	 * 		 such as a ragdoll with many parts and joints.  A physics actor is used within a
 	 * 		 {@link Simulation}.
 	 * 		 <p/>
-	 * 		 A <code>PhysicsActor</code> can act just like an {@link Object2D}, but it is the
-	 * 		 only object which can be added to a {@link Simulation}.  Without being added to a
+	 * 		 A <code>PhysicsActor</code> acts just like an {@link Object2D}, but it is special
+	 * 		 in that it's rigid bodies are animated via a {@link Simulation}.  Without being added to a
 	 * 		 {@link Simulation}, none of the physical bodies will be updated. 
 	 * 
 	 * @param name {String} The name of the actor object
@@ -88,6 +88,10 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	      this.base();
 	   },
 		
+		/**
+		 * Get the collection of rigid body components within the actor.
+		 * @return {Array}
+		 */
 		getRigidBodies: function() {
 			if (!this.rigidBodies) {
 				this.rigidBodies = this.getObjects(function(el) {
@@ -97,6 +101,10 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 			return this.rigidBodies;
 		},
 		
+		/**
+		 * Get the collection of joint components within the actor.
+		 * @return {Array}
+		 */
 		getJoints: function() {
 			if (!this.joints) {
 				this.joints = this.getObjects(function(el) {
@@ -106,11 +114,26 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 			return this.joints;			
 		},
 		
+		/**
+		 * Set the rigid body component which is considered to be the root
+		 * body.  When setting the position of a <tt>PhysicsActor</tt>, all positions
+		 * are calculated relative to where the root body was originally set.
+		 * <p/>
+		 * It is not necessary to set the root body if there is only one rigid body
+		 * in the actor.
+		 * 
+		 * @param body {BaseBodyComponent} The body to assign as the root
+		 */
 		setRootBody: function(body) {
 			Assert(BaseBodyComponent.isInstance(body), "Root body is not a BaseBodyComponent");
 			this.rootBody = body;
 		},
 		
+		/**
+		 * Get the root body of the <tt>PhysicsActor</tt>.  If no root object has been assigned,
+		 * the first rigid body component will be used.
+		 * @return {BaseBodyComponent}
+		 */
 		getRootBody: function() {
 			if (!this.rootBody) {
 				// Get all of the bodies and select the first to be the root 
@@ -119,6 +142,13 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 			return this.rootBody;
 		},
 		
+		/**
+		 * Set the position of the actor.  If the actor is comprised of multiple rigid bodies,
+		 * the position will be set for all rigid bodies and joints, relative to the root body.
+		 * 
+		 * @param x {Number|Point2D} The X position, or a <tt>Point2D</tt>
+		 * @param y {Number} The Y position, or <tt>null</tt> if X is a <tt>Point2D</tt>
+		 */
 		setPosition: function(x, y) {
 			var pt = Point2D.create(x,y);
 			var pos = Point2D.create(this.getRootBody().getPosition());
@@ -130,6 +160,11 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 				bPos.add(pt);
 				bodies[b].setPosition(bPos);
 		 	}
+			
+			var joints = this.getJoints();
+			for (var j in joints) {
+				var jPos = joints[j];
+			}
 			
 			pt.destroy();
 			pos.destroy();
@@ -319,8 +354,7 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		
 		/**
 		 * Get a unique instance of the actor defined by the reference name provided.
-		 * You can call the <code>get()</code> method multiple times to retrieve new instances
-		 * of the object.
+		 * You can call this method multiple times to retrieve new instances of the object.
 		 * 
 		 * @param name {String} The unique reference name of the actor object
 		 * @param [objName] {String} The name to assign to the instance when created
@@ -392,26 +426,14 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 					 jointName = fromPart + "_" + toPart;
 				
 				if (part.joint.type == "distance") {
-					var originFrom = Point2D.create(actor.getComponent(fromPart).getPosition()),
-						 originTo = Point2D.create(actor.getComponent(toPart).getPosition());
-
 					jc = DistanceJointComponent.create(jointName,
 													  actor.getComponent(fromPart),
-													  actor.getComponent(toPart),
-													  originFrom,
-													  originTo);
-													  
-						originFrom.destroy();
-						originTo.destroy();
+													  actor.getComponent(toPart));
 				} else {
-					//var center = Point2D.create(actor.getComponent(fromPart).getPosition());
-					//center.add(actor.getComponent(fromPart).getLocalOrigin());
-					
 					var anchor = toP2d(part.joint.anchor);
 					if (def.scale) {
 						anchor.mul(def.scale);
 					}
-					//anchor.add(center);
 
 					jc = RevoluteJointComponent.create(jointName,
 													  actor.getComponent(fromPart),
