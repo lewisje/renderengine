@@ -754,8 +754,9 @@ Engine.initObject("HashContainer", "Container", function() {
 /**
  * @class A hash container is a logical collection of objects.  A hash container
  *        is a container with a backing object for faster lookups.  Objects within
- *        the container must have unique names. When a container is destroyed, all
- *        objects within the container are destroyed with it.
+ *        the container must have unique names. When the container is destroyed, none of the
+ *        objects within the container are destroyed with it.  Call {@link #cleanUp} to 
+ *        destroy all of the objects in the container.
  *
  * @param containerName {String} The name of the container. Default: Container
  * @extends Container
@@ -976,6 +977,7 @@ Engine.initObject("RedBlackTree", "BaseObject", function() {
  * @extends BaseObject
  * @constructor
  * @description Create a red-black tree object.
+ * @private
  */
 var RedBlackTree = BaseObject.extend({
 

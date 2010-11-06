@@ -40,7 +40,9 @@ Engine.initObject("ResourceLoader", "BaseObject", function() {
  * @class  A resource loader is a generalized interface used by all resource
  *         loaders.  It is designed to provide a common set of routines for
  *         loading resources (fonts, images, game data, etc...) from some
- *         location.
+ *         location.  Additionally, objects are cached by this base class,
+ *         although some classes make use of other methods to enhance the
+ *         caching, such as the {@link ImageLoader} class.
  *
  * @param [name=ResourceLoader] {String} The name of the resource loader.
  * @constructor

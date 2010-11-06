@@ -43,6 +43,9 @@ Engine.initObject("Simulation", "BaseObject", function() {
     *        which supports the physical structures provided by Box2dJS.  You
     *        will need to create a <tt>Simulation</tt> before you can utilize
     *        physics in a game.
+    *        <p/>
+    *        See either "/demos/physics/" or "/demos/physics2" for examples
+    *        of utilizing the <tt>Simulation</tt> object with rigid body components.
     *         
     * @param name {String} The name of the object
     * @param worldBoundary {Rectangle2D} The physical world boundary

@@ -40,7 +40,7 @@ Engine.include("/physics/dynamics/b2BodyDef.js");
 Engine.initObject("BaseBodyComponent", "Transform2DComponent", function() {
 
 /**
- * @class The base physical body component which initializes physical bodies
+ * @class The base rigid body component which initializes rigid bodies
  * 		 for use in a {@link Simulation}.  
  *
  * @param name {String} Name of the component

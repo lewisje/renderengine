@@ -42,7 +42,7 @@ Engine.initObject("TextRenderer", "Object2D", function() {
 /**
  * @class A 2d text rendering object.  The object hosts the given text
  *        renderer, and a way to position and size the text.  It is up
- *        to the rendered provided to present the text within the render
+ *        to the renderer provided to present the text within the render
  *        context.
  *
  * @constructor

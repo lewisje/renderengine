@@ -45,16 +45,13 @@ Engine.initObject("DistanceJointComponent", "BaseJointComponent", function() {
  * @param name {String} Name of the component
  * @param body1 {BaseBodyComponent} The first body for the joint
  * @param body2 {BaseBodyComponent} The second body for the joint
- * @param anchor1 {Point2D} A point, in world coordinates relative to the first 
- * 	body, to use as the joint's first anchor point
- * @param anchor2 {Point2D} A point, in world coordinates relative to the second 
- * 	body, to use as the joint's second anchor point
  *
  * @extends BaseJointComponent
  * @constructor
  * @description Creates a distance joint between two physical bodies.  The distance can
  * 				 be softened by adjusting the frequency and the damping ratio of the joint.
- * 				 Rotation is not limited by this joint.
+ * 				 Rotation is not limited by this joint.  The anchors for the joint are the
+ * 				 rigid body center's.
  */
 var DistanceJointComponent = BaseJointComponent.extend(/** @scope DistanceJointComponent.prototype */{
 

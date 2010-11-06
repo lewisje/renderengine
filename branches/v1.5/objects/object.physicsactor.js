@@ -373,6 +373,9 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		 * <p/>
 		 * The actor object is loaded asynchronously which means it isn't immediately
 		 * available.  You get a reference to the object by calling {@link PhysicsActor#get}.
+		 * <p/>
+		 * An example <tt>PhysicsActor</tt> file can be found in the "/demos/physics2/"
+		 * demo game.
 		 * 
 		 * @param name {String} The unique reference name of the actor object 
 	    * @param url {String} The URL where the resource is located
