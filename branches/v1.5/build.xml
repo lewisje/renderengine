@@ -205,6 +205,17 @@
       <mkdir dir="${build.home}/css"/>
       <mkdir dir="${build.home}/fonts"/>
       <mkdir dir="${build.home}/libs"/>
+      <mkdir dir="${build.home}/objects"/>
+
+		<!-- Box2d Physics Engine -->
+      <mkdir dir="${build.home}/physics"/>
+      <mkdir dir="${build.home}/physics/collision"/>
+      <mkdir dir="${build.home}/physics/collision/shapes"/>
+      <mkdir dir="${build.home}/physics/common"/>
+      <mkdir dir="${build.home}/physics/common/math"/>
+      <mkdir dir="${build.home}/physics/dynamics"/>
+      <mkdir dir="${build.home}/physics/dynamics/contacts"/>
+      <mkdir dir="${build.home}/physics/dynamics/joints"/>
    </target>
 
    <target name="makedirs2" description="Create the directories for tools, tests, tutorials">
@@ -260,6 +271,11 @@
 			<fileset dir="${basedir}/engine/configs">
 				<include name="*.config"/>
 			</fileset>
+		</copy>
+
+  		<!-- Copy the simple webserver launcher -->
+  		<copy todir="${build.home}">
+  			<fileset file="${basedir}/run.bat"/>
 		</copy>
            
    </target>
@@ -400,6 +416,20 @@
       <!-- Copy the text rendering -->     
       <copy todir="${full.home}/textrender">
          <fileset dir="${basedir}/textrender">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the Box2d physics engine -->     
+      <copy todir="${full.home}/physics">
+         <fileset dir="${basedir}/physics">
+            <include name="**/*.js"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the starter objects -->     
+      <copy todir="${full.home}/objects">
+         <fileset dir="${basedir}/objects">
             <include name="*.js"/>
          </fileset>
       </copy>
@@ -778,7 +808,278 @@
 		<antcall target="${compress.option}">
 			<param name="input.file" value="textrender/text.vector.js"/>
 		</antcall>
+
+      <!-- Copy the starter objects -->     
+      <echo message="Compressing objects..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="objects/objects.physicsactor.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="objects/objects.spriteactor.js"/>
+		</antcall>
+
+      <!-- Copy the box2d physics engine -->     
+      <echo message="Compressing Box2d physics engine..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/physics.simulation.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2AABB.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Bound.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2BoundValues.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2BroadPhase.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2BufferedPair.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Collision.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2ContactID.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2ContactPoint.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Distance.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Manifold.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2OBB.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Pair.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2PairCallback.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2PairManager.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Proxy.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/ClipVertex.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Features.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2BoxDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2CircleDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2CircleShape.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2MassData.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2PolyDef.js"/>
+		</antcall>
  
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2PolyShape.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2Shape.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2ShapeDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/b2Settings.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/math/b2Mat22.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/math/b2Math.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/math/b2Vec2.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2Body.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2BodyDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2CollisionFilter.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2ContactManager.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2Island.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2TimeStep.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2World.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2WorldListener.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2CircleContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2Conservative.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2Contact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactConstraint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactNode.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactRegister.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactSolver.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2NullContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2PolyAndCircleContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2PolyContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2DistanceJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2DistanceJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2GearJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2GearJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2Jacobian.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2Joint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2JointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2JointNode.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2MouseJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2MouseJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PrismaticJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PrismaticJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PulleyJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PulleyJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2RevoluteJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2RevoluteJointDef.js"/>
+		</antcall>
+
+
  		<!-- Exclude any specified files -->
 		<delete quiet="true">
 			<fileset dir="${min.home}" includes="${exclude.set}"/>
