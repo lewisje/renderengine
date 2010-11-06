@@ -52,7 +52,9 @@ Engine.initObject("DistanceJointComponent", "BaseJointComponent", function() {
  *
  * @extends BaseJointComponent
  * @constructor
- * @description Creates a distance joint between two physical bodies.
+ * @description Creates a distance joint between two physical bodies.  The distance can
+ * 				 be softened by adjusting the frequency and the damping ratio of the joint.
+ * 				 Rotation is not limited by this joint.
  */
 var DistanceJointComponent = BaseJointComponent.extend(/** @scope DistanceJointComponent.prototype */{
 

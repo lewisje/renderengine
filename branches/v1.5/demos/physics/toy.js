@@ -100,48 +100,7 @@ Engine.initObject("Toy", "PhysicsActor", function() {
          this.setBoundingBox(sprite.getBoundingBox());
          this.getComponent("physics").getRenderComponent().setSprite(sprite);
       },
-
-      /**
-       * Get the position of the toy from the "physics" component.
-       * @return {Point2D}
-       */
-      getPosition: function() {
-         return this.getComponent("physics").getPosition();
-      },
 		
-		/**
-		 * Get the rotation of the toy from the "physics" component.
-		 * @return {Number}
-		 */
-		getRotation: function() {
-			return this.getComponent("physics").getRotation();
-		},
-		
-		/**
-		 * Get the uniform scale of the toy from the "physics" component.
-		 * @return {Number}
-		 */
-		getScale: function() {
-			return this.getComponent("physics").getScale();
-		},
-		
-      /**
-       * Get the render position of the toy
-       * @return {Point2D}
-       */
-      getRenderPosition: function() {
-         return this.getPosition();
-      },
-      
-      /**
-       * Get the box which surrounds the toy in the world.
-       * @return {Rectangle2D} The world bounding box
-       */
-      getWorldBox: function() {
-         var bBox = this.base();
-         return bBox.offset(-10, -10);
-      },
-
       /**
        * Set, or initialize, the position of the "physics" component
        *

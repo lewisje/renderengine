@@ -69,16 +69,17 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
    c: null,
 	p: null,
 	r: false,
+	logicalNext: null,
 
    /**
     * @private
     */
    constructor: function(container) {
       this.base("Iterator");
-      this.idx = 0;
       this.c = container;
 		this.p = container._head;
 		this.r = false;
+		this.logicalNext = null;
    },
 
    /**
@@ -89,6 +90,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       this.c = null;
 		this.p = null;
 		this.r = false;
+		this.logicalNext = null;
    },
 
    /**
@@ -112,15 +114,21 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 		try {
 			Profiler.enter("Iterator.next()");
 		/* pragma:DEBUG_END */
-   
-			var o = this.p.ptr;
-			while (this.p != null && this.p.ptr.isDestroyed()) {
-				// Skip destroyed objects
-				this.p = (this.r ? this.p.prev : this.p.next);
-				o = this.p.ptr; 
+
+			if (this.c.isDestroyed()) {
+				throw new Error("Invalid iterator over destroyed container!");
 			}
 
+			// Get the next and move the pointer
+			var o = this.p.ptr;
 			this.p = (this.r ? this.p.prev : this.p.next);
+
+			while (o != null && o.isDestroyed()) {
+				// See about the next in line
+				o = this.p ? this.p.ptr : null;
+				this.p = (o && this.r ? this.p.prev : this.p.next);
+			}
+
 			if (o != null) {
 				return o;
 			} else {
@@ -140,9 +148,11 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     */
    hasNext: function() {
 		var o = null;
+		// If the container hasn't been destroyed
 		if (this.c && !this.c.isDestroyed()) {
-			o = this.p;
+			var o = this.p;
 			while (o != null && o.ptr != null && o.ptr.isDestroyed()) {
+				// Skip destroyed objects
 				o = (this.r ? o.prev : o.next);
 			}
 		}

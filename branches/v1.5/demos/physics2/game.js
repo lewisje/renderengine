@@ -2,7 +2,8 @@
  * The Render Engine
  * Physics Demo 2
  *
- * Demonstration of more complex physical objects
+ * Demonstration of loading and using a jointed set of rigid bodies in the
+ * form of a "ragdoll".
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -154,18 +155,25 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
          // Create the collision model with 8x8 divisions
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);
 
-         // Add the ragdoll object
-			var ragdoll = this.createRagdoll(PhysicsActor.get("ragdoll"));
-			ragdoll.setPosition(Point2D.create(500, 150));
-         ragdoll.setSimulation(this.simulation);
-			this.renderContext.add(ragdoll);
-			ragdoll.simulate();
+         // Add a few ragdoll objects
+			for (var dolls = 0; dolls < 3; dolls++) {
+				var ragdoll = this.createRagdoll(PhysicsActor.get("ragdoll"));
+				var xPos = (Math2.random() * 800);
+				ragdoll.setPosition(Point2D.create(xPos, 150));
+	         ragdoll.setSimulation(this.simulation);
+				this.renderContext.add(ragdoll);
+				ragdoll.simulate();
+			}
          
          // Add the player object
          var player = Player.create();
          this.getRenderContext().add(player);
       },
       
+		/**
+		 * Create a ragdoll object by associating the sprites with the actor that was loaded.
+		 * @param actor {PhysicsActor} The physics actor object
+		 */
 		createRagdoll: function(actor) {
 			// Load the sprites	
 			var sprites = PhysicsDemo2.spriteLoader.exportAll("ragdoll");
@@ -175,13 +183,12 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
 			
 			// Associate the sprites with the actor's physics components
 			var components = actor.getRigidBodies();			
-			
 			for (var c in components) {
 				var component = components[c];
 				component.setRenderComponent(SpriteComponent.create(component.getName(), sprites[component.getName().toLowerCase()]));
 			}
 
-      	actor.setBoundingBox(actor.getRootBody().getRenderComponent().getSprite().getBoundingBox());
+      	actor.setBoundingBox(actor.getRootBody().getBoundingBox());
 			return actor;
 		},
 		

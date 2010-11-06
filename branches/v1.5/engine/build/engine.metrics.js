@@ -143,7 +143,8 @@ var Engine = Engine.extend({
          this.lastMetricSample = this.metricSampleRate;
       }
       
-      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie") {
+      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie" &&
+			 parseFloat(EngineSupport.sysInfo().version) < 9) {
          // Profiler not supported in IE
          this.showMetricsProfile = false;
       }

@@ -14,7 +14,6 @@
    <!-- Locations of distribution files -->
    <property name="min.home" value="${dist.home}/min-js"/>
    <property name="full.home" value="${dist.home}/full"/>
-   <property name="zip.home" value="${dist.home}/min-gzip-js"/>
 
 	<!-- Demos and tools won't be copied unless specified in build.properties -->
 	<property name="demo.set" value="NO_COPY"/>
@@ -44,7 +43,7 @@
 -->
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
-   <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
+   <target name="dist" depends="engine.clean,engine.dist,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
    <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
    <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
@@ -54,7 +53,6 @@
       <delete quiet="true" includeemptydirs="true" dir="${dist.home}/engine"/>
       <delete quiet="true" includeemptydirs="true" dir="${full.home}/temp"/>
       <delete quiet="true" includeemptydirs="true" dir="${min.home}/temp"/>
-      <delete quiet="true" includeemptydirs="true" dir="${zip.home}/temp"/>
 	</target>
 
 
@@ -182,10 +180,9 @@
   
  
    <!-- ============================= ENGINE ZIP ============================ -->
-   <target name="engine.zip" depends="engine.min,engine.full" description="Create and zip the engine distributions">
+   <target name="engine.dist" depends="engine.min,engine.full" description="Create and zip the engine distributions">
       <zip basedir="${min.home}" destfile="${dist.home}/${app.name}_${app.version}-min.zip"/>
       <zip basedir="${full.home}" destfile="${dist.home}/${app.name}_${app.version}.zip"/>
-      <zip basedir="${zip.home}" destfile="${dist.home}/${app.name}_${app.version}-min-gzip.zip"/>
    </target>
   
   
@@ -197,6 +194,7 @@
       <mkdir dir="${build.home}/temp"/>
  
       <mkdir dir="${build.home}/engine"/>
+      <mkdir dir="${build.home}/engine/configs"/>
       <mkdir dir="${build.home}/engine/runtime"/>
       <mkdir dir="${build.home}/components"/>
       <mkdir dir="${build.home}/rendercontexts"/>
@@ -244,6 +242,9 @@
          <fileset dir="${basedir}/libs">
             <include name="AC_OETags.js"/>
             <include name="base.js"/>
+            <include name="flash10canvas.swf"/>
+            <include name="flash9canvas.swf"/>
+            <include name="flashcanvas.js"/>
             <include name="json2.js"/>
             <include name="jquery.js"/>
             <include name="jquery.ext.engine.js"/>
@@ -253,6 +254,13 @@
             <include name="sylvester.js"/>
          </fileset>
       </copy>
+		
+		<!-- Copy the browser specific configurations -->
+		<copy todir="${build.home}/engine/configs">
+			<fileset dir="${basedir}/engine/configs">
+				<include name="*.config"/>
+			</fileset>
+		</copy>
            
    </target>
  
@@ -421,7 +429,7 @@
 		<replaceregexp match="Engine.removeMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- PRAGMA DEBUG BLOCKS -->
-		<replaceregexp match="\/\* pragma debug [START] \*\/.*?\/\* pragma debug [END] \*\/" replace="" flags="gm" file="${input.file}"/>
+		<replaceregexp match="\/\* pragma:DEBUG_START \*\/(.|\n)*?\/\* pragma:DEBUG_END \*\/" replace="" flags="gm" file="${input.file}"/>
 	
   	</target>
 
@@ -441,8 +449,6 @@
 			jvm="${compiler.jvm}">
 		   <arg line="--js ${min.home}/temp/${input.file} --js_output_file ${min.home}/${input.file}"/>
 		</java>
-
-      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
 	</target>
   
 	<target name="engine.compress" description="Use the Yahoo!UI Compressor to compress the code">
@@ -464,7 +470,6 @@
          </classpath>
       </java>
 	
-      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
 	</target>
 
    <target name="engine.min" description="Create the minified/compressed distribution of the engine">
@@ -483,20 +488,6 @@
  
       <antcall target="licenses">
          <param name="build.home" value="${min.home}"/>
-      </antcall>
-
-      <!-- GZIPPED -->
-      <antcall target="makedirs">
-         <param name="build.home" value="${zip.home}"/>
-      </antcall>
-
-      <antcall target="basecopy">
-         <param name="build.home" value="${zip.home}"/>
-         <param name="source.flag" value=""/>
-      </antcall>
- 
-      <antcall target="licenses">
-         <param name="build.home" value="${zip.home}"/>
       </antcall>
    	   	
       <!-- ### FINISH ### Pre-compilation tasks -->
@@ -553,7 +544,7 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
-			<param name="input.file" value="engine/engine.mathobject.js"/>
+			<param name="input.file" value="engine/engine.mathprimitives.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -665,7 +656,7 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
-			<param name="input.file" value="components/component.revolutekjoint.js"/>
+			<param name="input.file" value="components/component.revolutejoint.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -715,15 +706,6 @@
 		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.scrollingbackground.js"/>
 		</antcall>
-
-<!--
-		<antcall target="${compress.option}">
-			<param name="input.file" value="rendercontexts/context.layeredcontext.js"/>
-		</antcall>
-		<antcall target="${compress.option}">
-			<param name="input.file" value="rendercontexts/context.svgcontext.js"/>
-		</antcall>
--->
 
  
       <!-- Compress and copy the resource loaders -->     
@@ -802,11 +784,6 @@
 			<fileset dir="${min.home}" includes="${exclude.set}"/>
 		</delete>
 
- 		<!-- Exclude any specified files -->
-		<delete quiet="true">
-         <fileset dir="${zip.home}" includes="${exclude.set}"/>
-		</delete>
-  
    </target>
   
 </project>

@@ -7,6 +7,6 @@ The physics demo shows how to use the integrated Box2D-JS physics engine to run 
 * Mouse input
 * Nintendo Wii remote input
 * Physics simulation
-* Object physics components
+* Rigid body components
 * Box to box collision detection
 * Spatial grid collision model

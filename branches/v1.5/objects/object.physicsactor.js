@@ -66,6 +66,7 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		rootBody: null,
 		rigidBodies: null,
 		joints: null,
+		rPos: null,
 
 		/**
 		 * @private
@@ -74,6 +75,7 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 			this.base(name || "PhysicsActor");
 			this.rootBody = null;
 			this.rigidBodies = null;
+			this.rPos = Point2D.create(0,0);
 		},
 
 	   /**
@@ -83,8 +85,12 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	   destroy: function() {
 	      if (this.simulation) {
 				// Remove bodies and joints from the simulation
-	         
+	         var bodies = this.getRigidBodies();
+				for (var b in bodies) {
+					this.simulation.removeBody(bodies[b].getBody());
+				}
 	      }
+			this.rPos.destroy();
 	      this.base();
 	   },
 		
@@ -140,6 +146,39 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 				this.rootBody = this.getRigidBodies()[0];
 			}
 			return this.rootBody;
+		},
+
+      /**
+       * Get the position of the actor from the root body component.
+       * @return {Point2D}
+       */
+      getPosition: function() {
+         return this.getRootBody().getPosition();
+      },
+		
+      /**
+       * Get the render position of the actor
+       * @return {Point2D}
+       */
+      getRenderPosition: function() {
+         this.rPos.set(this.getPosition());
+			return this.rPos;
+      },
+
+		/**
+		 * Get the rotation of the toy from the "physics" component.
+		 * @return {Number}
+		 */
+		getRotation: function() {
+			return this.getRootBody().getRotation();
+		},
+		
+		/**
+		 * Get the uniform scale of the toy from the "physics" component.
+		 * @return {Number}
+		 */
+		getScale: function() {
+			return this.getRootBody().getScale();
 		},
 		
 		/**
@@ -293,11 +332,11 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 	   },
 		
 		/**
-		 * This function only serves to make sure that ObjectLoader exists
-		 * for the static methods below.
 		 * @private
 		 */
 		__noop: function() {
+			// This function only serves to make sure that ObjectLoader exists
+			// for the static methods below.
 			var q = ObjectLoader.create("dummy");
 		}
 		
@@ -337,6 +376,7 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		 * 
 		 * @param name {String} The unique reference name of the actor object 
 	    * @param url {String} The URL where the resource is located
+	    * @static
 		 */
 		load: function(name, url) {
 			PhysicsActor.actorLoader.load(name, url);
@@ -347,6 +387,7 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		 * 
 		 * @param name {String} The unique reference name of the actor object
 		 * @return {Boolean} <code>true</code> if the object is ready for use
+		 * @static
 		 */
 		isReady: function(name) {
 			return PhysicsActor.actorLoader.isReady(name);
@@ -359,14 +400,48 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 		 * @param name {String} The unique reference name of the actor object
 		 * @param [objName] {String} The name to assign to the instance when created
 		 * @return {PhysicsActor} A new instance of the actor defined by "name"
+		 * @static
 		 */
 		get: function(name, objName) {
 			var toP2d = function(arr) {
 				return Point2D.create(arr[0], arr[1]);
 			};
 			
+			var getRelativePosition = function(aV, obj) {
+				if ($.isArray(aV) && aV.length == 2) {
+					// An absolute position
+					return toP2d(aV);
+				} else {
+					// If the array has 3 values, the third is a relative position string
+					// and the first two are an offset from that point.  Otherwise, we assume
+					// the value is only the position string
+					var rel = ($.isArray(aV) && aV.length == 3 ? aV[2] : aV);
+					var offs = ($.isArray(aV) && aV.length == 3 ? toP2d(aV) : Point2D.create(0, 0));
+					var rPos = Point2D.create(0,0);
+					
+					// Calculate the anchor, relative to the position of the object provided
+					var bb = obj.getBoundingBox().offset(obj.getPosition());
+					var c = obj.getCenter().get();
+					var r = bb.get();
+					switch (rel.toLowerCase()) {
+						case "center": rPos.set(obj.getCenter()); break;
+						case "topleft": rPos.set(r.x, r.y); break;
+						case "topright": rPos.set(r.x + r.w, r.y); break;
+						case "bottomleft": rPos.set(r.x, r.y + r.h); break;
+						case "bottomright": rPos.set(r.x + r.w, r.y + r.h); break;
+						case "topcenter": rPos.set(c.x, r.y); break;
+						case "bottomcenter": rPos.set(c.x, r.y + r.h); break;
+						case "leftmiddle": rPos.set(r.x, c.y); break;
+						case "rightmiddle": rPos.set(r.x + r.h, c.y); break;
+					}
+					
+					// Perform the offset
+					return rPos.add(offs);
+				}
+			}
+			
 			var def = PhysicsActor.actorLoader.get(name), 
-				 actor = PhysicsActor.create(objName), jointParts = [];
+				 actor = PhysicsActor.create(objName), jointParts = [], relParts = [];
 			var props = {"friction":"setFriction","restitution":"setRestitution","density":"setDensity"};
 			
 			// Loop through the parts and build each component
@@ -400,15 +475,22 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 				// for each body component.
 				actor.add(bc);
 				
-				// Position the parts relative to each other, in world coordinates.  The origin is
-				// at the center of the world.
-				var pt = toP2d(part.position);
-				if (def.scale) {
-					bc.setScale(def.scale);
-					pt.mul(def.scale);
+				// Position the parts relative to each other, in world coordinates with the
+				// origin at the top left corner of the world
+				if ($.isArray(part.position) && part.position.length == 2) {
+					// Set the position of the part in absolute coordinates
+					var pt = toP2d(part.position);
+					if (def.scale) {
+						bc.setScale(def.scale);
+						pt.mul(def.scale);
+					}
+					bc.setPosition(pt);
+					pt.destroy();
+				} else if (part.relativeTo) {
+					// The position is either a string or a 3 element array.  In either case
+					// the value contains a relative positioning string and possibly an offset
+					relParts.push(part);
 				}
-				bc.setPosition(pt);
-				pt.destroy();
 				
 				// Is there a joint defined?  Defer it until later when all the parts are loaded
 				// This way we don't have to worry about invalid body references
@@ -417,8 +499,24 @@ Engine.initObject("PhysicsActor", "Object2D", function() {
 				}
 			}
 			
-			// Now that all the parts are created and in position, link them together with
-			// any joints that were deferred until now
+			// Now that all the parts are created we need to perform 2 final steps
+			// 1) Position any parts that are relative to others 
+			for (var rp in relParts) {
+				// Get the component it is relative to and calculate it's position
+				part = relParts[rp];
+				var relTo = actor.getComponent(part.relativeTo);
+				var rPos = part.position;
+				var pos = getRelativePosition(rPos, relTo);
+				bc = actor.getComponent(part.name);
+				if (def.scale) {
+					bc.setScale(def.scale);
+					pos.mul(def.scale);
+				}					
+				bc.setPosition(pos);
+				pos.destroy();
+			}
+
+			// 2) link the parts with any joints that were deferred until now
 			for (var j in jointParts) {
 				var part = jointParts[j], jc,
 					 fromPart = (part.joint.linkFrom ? part.joint.linkFrom : part.name),

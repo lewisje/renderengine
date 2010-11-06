@@ -39,14 +39,14 @@ Engine.initObject("CircleBodyComponent", "BaseBodyComponent", function() {
 
 /**
  * @class An extension of the {@link BaseBodyComponent} which creates a circular
- * 		 physical body.  
+ * 		 rigid body.  
  *
  * @param name {String} Name of the component
  * @param radius {Number} The radius of the circle
  *
  * @extends BaseBodyComponent
  * @constructor
- * @description A circular physical body component.
+ * @description A circular rigid body component.
  */
 var CircleBodyComponent = BaseBodyComponent.extend(/** @scope CircleBodyComponent.prototype */{
 
@@ -63,7 +63,16 @@ var CircleBodyComponent = BaseBodyComponent.extend(/** @scope CircleBodyComponen
 	},
 	
 	/**
-	 * Set the radius of the circle's body.
+	 * @private
+	 */
+	release: function() {
+		this.base();
+		this.radius = 0;
+	},
+	
+	/**
+	 * Set the radius of the circle's body.  Calling this method after
+	 * simulation has started on the body has no effect.
 	 * 
 	 * @param radius {Number} The radius of the body
 	 */
@@ -77,6 +86,17 @@ var CircleBodyComponent = BaseBodyComponent.extend(/** @scope CircleBodyComponen
 	 */
 	getRadius: function() {
 		return this.radius;
+	},
+
+	/**
+	 * Get a box which bounds the body.
+	 * @return {Rectangle2D}
+	 */
+	getBoundingBox: function() {
+		var box = this.base();
+		var r = this.getRadius();
+		box.set(0, 0, r * 2, r * 2);
+		return box;
 	}
 
 	/* pragma:DEBUG_START */

@@ -165,6 +165,22 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	},
 	
 	/**
+	 * Get the center of the body.
+	 * @return {Point2D}
+	 */
+	getCenter: function() {
+		return Point2D.create(this.getPosition()).add(this.getLocalOrigin());
+	},
+	
+	/**
+	 * [ABSTRACT] Get a box which bounds the body.
+	 * @return {Rectangle2D}
+	 */
+	getBoundingBox: function() {
+		return Rectangle2D.create(0,0,1,1);
+	},
+	
+	/**
 	 * Get the Box2d shape definition object.
 	 * @return {b2ShapeDef}
 	 */

@@ -39,14 +39,14 @@ Engine.initObject("BoxBodyComponent", "BaseBodyComponent", function() {
 
 /**
  * @class An extension of the {@link BaseBodyComponent} which creates a rectangular
- * 		 physical body.  
+ * 		 rigid body.  
  *
  * @param name {String} Name of the component
  * @param extents {Point2D} The full extents of the body along X and Y
  *
  * @extends BaseBodyComponent
  * @constructor
- * @description A rectangular physical body component.
+ * @description A rectangular rigid body component.
  */
 var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prototype */{
 
@@ -63,18 +63,37 @@ var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prot
 		this.setLocalOrigin(e.x / 2, e.y / 2);
 	},
 	
+	/**
+	 * @private
+	 */
 	destroy: function() {
 		this.extents.destroy();
 		this.base();
 	},
 	
+	/**
+	 * @private
+	 */
 	release: function() {
 		this.extents = null;
 		this.base();
 	},
 	
 	/**
-	 * Set the extents of the box's body.
+	 * Get a box which bounds the body, local to the body.
+	 * @return {Rectangle2D}
+	 */
+	getBoundingBox: function() {
+		var box = this.base();
+		var p = this.getPosition().get();
+		var e = this.getExtents().get();
+		box.set(0, 0, e.x, e.y);
+		return box;
+	},
+	
+	/**
+	 * Set the extents of the box's body.  Calling this method after the
+	 * simulation of the body has started has no effect.
 	 * 
 	 * @param extents {Point2D} The extents of the body along X and Y
 	 */
