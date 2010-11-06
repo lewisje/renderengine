@@ -1,0 +1,814 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: Sound</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class Sound</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<b>Sound</b></pre>
+   <hr>
+   Class <b>Sound</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="PooledObject.html">PooledObject</a>.<br/>
+
+<p>
+Represents a sound object that is abstracted from the sound system.       In the current case, sound is loaded via SoundManager2 which is implemented       with a flash bridge.  If the sound system does not initialize, for whatever       reason, you can still call the sound's methods.</p>
+
+
+
+<br/><i>Defined in <a href="loader.sound.src.html">loader.sound.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#Sound">Sound</a></b>(name, soundObj)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Destroy the sound object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets the class name of this object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getDuration">getDuration</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the length of the sound, in milliseconds.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getLastPosition">getLastPosition</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the position of the sound, in milliseconds, from the start of the sound.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getPan">getPan</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the pan of the sound, with -100 being full left and 100 being full right.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getReadyState">getReadyState</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getSizeBytes">getSizeBytes</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the total size, in bytes, of the sound.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getVolume">getVolume</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the volume the sound is playing at.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isPaused">isPaused</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if the sound is currently paused.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#mute">mute</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mute the sound (set its volume to zero).
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#pause">pause</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If the sound is playing, pause the sound.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#play">play</a></b>(volume) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Play the sound.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#resume">resume</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If the sound is paused, it will resume playing the sound.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setPan">setPan</a></b>(pan) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the pan of the sound, with -100 being full left and 100 being full right.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setPosition">setPosition</a></b>(millisecondOffset) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the sound offset in milliseconds.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setVolume">setVolume</a></b>(volume) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the volume of the sound to an integer between 0 (muted) and 100 (full volume).
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#stop">stop</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If the sound is playing, stop the sound and reset it to the beginning.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#unmute">unmute</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Unmute the sound (reset its volume to what it was before muting).
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#release">release</a>,
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#toXML">toXML</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="Sound"> </a>
+<h3>Sound</h3>
+
+   <pre><b>Sound</b>(name, soundObj)</pre>
+   <ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the sound 
+      </ul>
+      
+      <ul>
+         <code>[<i>SMSound</i>]&nbsp;soundObj</code> - A sound object returned from SoundManager2 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="destroy"> </a> <h3>destroy</h3>
+      <pre><b>destroy</b>()</pre> 
+   <ul>
+      Destroy the sound object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Gets the class name of this object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string "Sound" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getDuration"> </a> <h3>getDuration</h3>
+      <pre>Number&nbsp;<b>getDuration</b>()</pre> 
+   <ul>
+      Get the length of the sound, in milliseconds.  If the sound hasn't fully loaded,it will be the number of milliseconds currently loaded.  Due to the nature ofVariable Bitrate (VBR) sounds, this number may be inaccurate.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The length of the sound, in milliseconds 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getLastPosition"> </a> <h3>getLastPosition</h3>
+      <pre>Number&nbsp;<b>getLastPosition</b>()</pre> 
+   <ul>
+      Get the position of the sound, in milliseconds, from the start of the sound.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The millisecond offset into the sound 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getPan"> </a> <h3>getPan</h3>
+      <pre>Number&nbsp;<b>getPan</b>()</pre> 
+   <ul>
+      Get the pan of the sound, with -100 being full left and 100 being full right.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>An integer between -100 and 100 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getReadyState"> </a> <h3>getReadyState</h3>
+      <pre><b>getReadyState</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getSizeBytes"> </a> <h3>getSizeBytes</h3>
+      <pre>Number&nbsp;<b>getSizeBytes</b>()</pre> 
+   <ul>
+      Get the total size, in bytes, of the sound.  If the sound engine is notinitialized, returns 0.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The size of the sound, in bytes 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getVolume"> </a> <h3>getVolume</h3>
+      <pre>Number&nbsp;<b>getVolume</b>()</pre> 
+   <ul>
+      Get the volume the sound is playing at.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>An integer between 0 and 100 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isPaused"> </a> <h3>isPaused</h3>
+      <pre>Boolean&nbsp;<b>isPaused</b>()</pre> 
+   <ul>
+      Returns <tt>true</tt> if the sound is currently paused.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the sound is paused 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="mute"> </a> <h3>mute</h3>
+      <pre><b>mute</b>()</pre> 
+   <ul>
+      Mute the sound (set its volume to zero).
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="pause"> </a> <h3>pause</h3>
+      <pre><b>pause</b>()</pre> 
+   <ul>
+      If the sound is playing, pause the sound.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="play"> </a> <h3>play</h3>
+      <pre><b>play</b>(volume)</pre> 
+   <ul>
+      Play the sound.  If the volume is specified, it will set volume of thesound before playing.  If the sound was paused, it will be resumed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;volume </code> - <i>[optional]</i> An integer between 0 (muted) and 100 (full volume) 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="resume"> </a> <h3>resume</h3>
+      <pre><b>resume</b>()</pre> 
+   <ul>
+      If the sound is paused, it will resume playing the sound.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setPan"> </a> <h3>setPan</h3>
+      <pre><b>setPan</b>(pan)</pre> 
+   <ul>
+      Set the pan of the sound, with -100 being full left and 100 being full right.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;pan </code> - An integer between -100 and 100, with 0 being center. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setPosition"> </a> <h3>setPosition</h3>
+      <pre><b>setPosition</b>(millisecondOffset)</pre> 
+   <ul>
+      Set the sound offset in milliseconds.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;millisecondOffset </code> - The offset into the sound to play from 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setVolume"> </a> <h3>setVolume</h3>
+      <pre><b>setVolume</b>(volume)</pre> 
+   <ul>
+      Set the volume of the sound to an integer between 0 (muted) and 100 (full volume).
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;volume </code> - The volume of the sound 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="stop"> </a> <h3>stop</h3>
+      <pre><b>stop</b>()</pre> 
+   <ul>
+      If the sound is playing, stop the sound and reset it to the beginning.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="unmute"> </a> <h3>unmute</h3>
+      <pre><b>unmute</b>()</pre> 
+   <ul>
+      Unmute the sound (reset its volume to what it was before muting).
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:59 GMT-0400 (EDT)</div>
+</body>
+</html>

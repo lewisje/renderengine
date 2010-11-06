@@ -1,0 +1,653 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: HashContainer</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class HashContainer</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='Container.html' target='main'>Container</a>
+            |
+            +--<b>HashContainer</b></pre>
+   <hr>
+   Class <b>HashContainer</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="Container.html">Container</a>.<br/>
+
+<p>
+A hash container is a logical collection of objects.  A hash container       is a container with a backing object for faster lookups.  Objects within       the container must have unique names. When the container is destroyed, none of the       objects within the container are destroyed with it.  Call <a href='#cleanUp'>cleanUp</a> to        destroy all of the objects in the container.</p>
+
+
+
+<br/><i>Defined in <a href="engine.container.src.html">engine.container.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#HashContainer">HashContainer</a></b>(containerName)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Create a hashed container object.
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#add">add</a></b>(key, obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add an object to the container.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#cleanUp">cleanUp</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cleans up the references to the objects (destroys them) withinthe container.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#clear">clear</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove all objects from the container.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#get">get</a></b>(idx) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; If a number is provided, the request will be passed to thebase object, otherwise a name is assumed and the hash willbe retrieved.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isInHash">isInHash</a></b>(name) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if the object name is already inthe hash.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Release the object back into the object pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#remove">remove</a></b>(obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove an object from the container.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#removeAtIndex">removeAtIndex</a></b>(idx) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove an object from the container at the specified index.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#removeHash">removeHash</a></b>(name) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove the object with the given key name from the container.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Container.html">Container</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Container.html#destroy">destroy</a>,
+            
+               <a href="Container.html#size">size</a>,
+            
+               <a href="Container.html#addAll">addAll</a>,
+            
+               <a href="Container.html#clone">clone</a>,
+            
+               <a href="Container.html#concat">concat</a>,
+            
+               <a href="Container.html#insert">insert</a>,
+            
+               <a href="Container.html#replace">replace</a>,
+            
+               <a href="Container.html#replaceAt">replaceAt</a>,
+            
+               <a href="Container.html#reduce">reduce</a>,
+            
+               <a href="Container.html#subset">subset</a>,
+            
+               <a href="Container.html#getAll">getAll</a>,
+            
+               <a href="Container.html#forEach">forEach</a>,
+            
+               <a href="Container.html#filter">filter</a>,
+            
+               <a href="Container.html#getObjects">getObjects</a>,
+            
+               <a href="Container.html#sort">sort</a>,
+            
+               <a href="Container.html#getProperties">getProperties</a>,
+            
+               <a href="Container.html#toXML">toXML</a>,
+            
+               <a href="Container.html#iterator">iterator</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="HashContainer"> </a>
+<h3>HashContainer</h3>
+
+   <pre><b>HashContainer</b>(containerName)</pre>
+   <ul>
+      Create a hashed container object.
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;containerName</code> - The name of the container. Default: Container 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="add"> </a> <h3>add</h3>
+      <pre><b>add</b>(key, obj)</pre> 
+   <ul>
+      Add an object to the container.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;key </code> - The name of the object to store.  Names must be unique                     or the object with that name will be overwritten. 
+      </ul>
+      <ul>
+         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object to add to the container. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="cleanUp"> </a> <h3>cleanUp</h3>
+      <pre><b>cleanUp</b>()</pre> 
+   <ul>
+      Cleans up the references to the objects (destroys them) withinthe container.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="clear"> </a> <h3>clear</h3>
+      <pre><b>clear</b>()</pre> 
+   <ul>
+      Remove all objects from the container.  None of the objects aredestroyed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="get"> </a> <h3>get</h3>
+      <pre>Object&nbsp;<b>get</b>(idx)</pre> 
+   <ul>
+      If a number is provided, the request will be passed to thebase object, otherwise a name is assumed and the hash willbe retrieved.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number|String</i>]&nbsp;idx </code> - The index or hash of the object to get 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>"HashContainer" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isInHash"> </a> <h3>isInHash</h3>
+      <pre>Boolean&nbsp;<b>isInHash</b>(name)</pre> 
+   <ul>
+      Returns <tt>true</tt> if the object name is already inthe hash.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;name </code> - The name of the hash to check 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      Release the object back into the object pool.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="remove"> </a> <h3>remove</h3>
+      <pre><b>remove</b>(obj)</pre> 
+   <ul>
+      Remove an object from the container.  The object isnot destroyed when it is removed from the container.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object to remove from the container. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="removeAtIndex"> </a> <h3>removeAtIndex</h3>
+      <pre>Object&nbsp;<b>removeAtIndex</b>(idx)</pre> 
+   <ul>
+      Remove an object from the container at the specified index.The object is not destroyed when it is removed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;idx </code> - An index between zero and the size of the container minus 1. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The object removed from the container. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="removeHash"> </a> <h3>removeHash</h3>
+      <pre>Object&nbsp;<b>removeHash</b>(name)</pre> 
+   <ul>
+      Remove the object with the given key name from the container.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;name </code> - The object to remove 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>The object removed 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:59 GMT-0400 (EDT)</div>
+</body>
+</html>

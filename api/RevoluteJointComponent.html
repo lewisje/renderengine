@@ -1,0 +1,726 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: RevoluteJointComponent</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class RevoluteJointComponent</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='BaseComponent.html' target='main'>BaseComponent</a>
+            |
+            +--<a href='LogicComponent.html' target='main'>LogicComponent</a>
+               |
+               +--<a href='BaseJointComponent.html' target='main'>BaseJointComponent</a>
+                  |
+                  +--<b>RevoluteJointComponent</b></pre>
+   <hr>
+   Class <b>RevoluteJointComponent</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="BaseJointComponent.html">BaseJointComponent</a>.<br/>
+
+<p>
+A revolute joint which allows two bodies to revolve around a common		 anchor point in a <a href='Simulation.html'>Simulation</a>.</p>
+
+
+
+<br/><i>Defined in <a href="component.revolutejoint.src.html">component.revolutejoint.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#RevoluteJointComponent">RevoluteJointComponent</a></b>(name, body1, body2, anchor)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Creates a revolute joint between two physical bodies.
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getJointAngle">getJointAngle</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; During simulation, this returns the current angle of the jointin degrees.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getLowerLimitAngle">getLowerLimitAngle</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the lower limiting angle, in degrees, through which the joint can rotate.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getMotorSpeed">getMotorSpeed</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the speed of the motor.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getMotorTorque">getMotorTorque</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the torque which will be applied when the joint is used as a motor.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getReactionForce">getReactionForce</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; During simulation, get the reaction force vector of the joint.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getReactionTorque">getReactionTorque</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; During simulation, get the reaction torque.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getUpperLimitAngle">getUpperLimitAngle</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the upper limiting angle, in degrees, through which the joint can rotate.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setLowerLimitAngle">setLowerLimitAngle</a></b>(angle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the upper limiting angle through which the joint can rotate.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setMotorSpeed">setMotorSpeed</a></b>(speed) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the speed of the motor applied to the joint.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setMotorTorque">setMotorTorque</a></b>(torque) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the torque which is applied via the motor, or to resist forces applied to it.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setUpperLimitAngle">setUpperLimitAngle</a></b>(angle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the upper limiting angle through which the joint can rotate.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseJointComponent.html">BaseJointComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseJointComponent.html#startSimulation">startSimulation</a>,
+            
+               <a href="BaseJointComponent.html#stopSimulation">stopSimulation</a>,
+            
+               <a href="BaseJointComponent.html#getSimulation">getSimulation</a>,
+            
+               <a href="BaseJointComponent.html#getJointDef">getJointDef</a>,
+            
+               <a href="BaseJointComponent.html#getJoint">getJoint</a>,
+            
+               <a href="BaseJointComponent.html#getBody1">getBody1</a>,
+            
+               <a href="BaseJointComponent.html#getBody2">getBody2</a>,
+            
+               <a href="BaseJointComponent.html#getCollideBodies">getCollideBodies</a>,
+            
+               <a href="BaseJointComponent.html#setCollideBodies">setCollideBodies</a>,
+            
+               <a href="BaseJointComponent.html#execute">execute</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="LogicComponent.html">LogicComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="LogicComponent.html#getClassName">getClassName</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#toXML">toXML</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseComponent.html#release">release</a>,
+            
+               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
+            
+               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
+            
+               <a href="BaseComponent.html#getType">getType</a>,
+            
+               <a href="BaseComponent.html#setPriority">setPriority</a>,
+            
+               <a href="BaseComponent.html#getPriority">getPriority</a>,
+            
+               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="RevoluteJointComponent"> </a>
+<h3>RevoluteJointComponent</h3>
+
+   <pre><b>RevoluteJointComponent</b>(name, body1, body2, anchor)</pre>
+   <ul>
+      Creates a revolute joint between two physical bodies.
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - Name of the component 
+      </ul>
+      
+      <ul>
+         <code>[<i>BaseBodyComponent</i>]&nbsp;body1</code> - The first body for the joint 
+      </ul>
+      
+      <ul>
+         <code>[<i>BaseBodyComponent</i>]&nbsp;body2</code> - The second body for the joint 
+      </ul>
+      
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;anchor</code> - A point, in world coordinates relative to the two 	bodies, to use as the joint's anchor point 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="getJointAngle"> </a> <h3>getJointAngle</h3>
+      <pre>Number&nbsp;<b>getJointAngle</b>()</pre> 
+   <ul>
+      During simulation, this returns the current angle of the jointin degrees.  Outside of simulation it will always return zero.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getLowerLimitAngle"> </a> <h3>getLowerLimitAngle</h3>
+      <pre>Number&nbsp;<b>getLowerLimitAngle</b>()</pre> 
+   <ul>
+      Get the lower limiting angle, in degrees, through which the joint can rotate.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getMotorSpeed"> </a> <h3>getMotorSpeed</h3>
+      <pre>Number&nbsp;<b>getMotorSpeed</b>()</pre> 
+   <ul>
+      Get the speed of the motor.  During simulation, the value returned is thejoint's speed, not the speed set for the motor.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getMotorTorque"> </a> <h3>getMotorTorque</h3>
+      <pre>Number&nbsp;<b>getMotorTorque</b>()</pre> 
+   <ul>
+      Get the torque which will be applied when the joint is used as a motor.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getReactionForce"> </a> <h3>getReactionForce</h3>
+      <pre>Vector2D&nbsp;<b>getReactionForce</b>()</pre> 
+   <ul>
+      During simulation, get the reaction force vector of the joint.  Outsideof simulation, the vector will be zero.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getReactionTorque"> </a> <h3>getReactionTorque</h3>
+      <pre>Number&nbsp;<b>getReactionTorque</b>()</pre> 
+   <ul>
+      During simulation, get the reaction torque.  Outside of simulation, thetorque is zero.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getUpperLimitAngle"> </a> <h3>getUpperLimitAngle</h3>
+      <pre>Number&nbsp;<b>getUpperLimitAngle</b>()</pre> 
+   <ul>
+      Get the upper limiting angle, in degrees, through which the joint can rotate.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setLowerLimitAngle"> </a> <h3>setLowerLimitAngle</h3>
+      <pre><b>setLowerLimitAngle</b>(angle)</pre> 
+   <ul>
+      Set the upper limiting angle through which the joint can rotate.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;angle </code> - An angle in degrees 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setMotorSpeed"> </a> <h3>setMotorSpeed</h3>
+      <pre><b>setMotorSpeed</b>(speed)</pre> 
+   <ul>
+      Set the speed of the motor applied to the joint.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;speed </code> - The speed of the motor 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setMotorTorque"> </a> <h3>setMotorTorque</h3>
+      <pre><b>setMotorTorque</b>(torque)</pre> 
+   <ul>
+      Set the torque which is applied via the motor, or to resist forces applied to it.  You canuse this value to simulate joint friction by setting the motor speed to zeroand applying a small amount of torque.  During simulation, the torque is applied directlyto the joint.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;torque </code> - The amount of torque to apply 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setUpperLimitAngle"> </a> <h3>setUpperLimitAngle</h3>
+      <pre><b>setUpperLimitAngle</b>(angle)</pre> 
+   <ul>
+      Set the upper limiting angle through which the joint can rotate.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;angle </code> - An angle in degrees 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:57 GMT-0400 (EDT)</div>
+</body>
+</html>

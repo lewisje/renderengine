@@ -1,0 +1,636 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: Simulation</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class Simulation</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<b>Simulation</b></pre>
+   <hr>
+   Class <b>Simulation</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="BaseObject.html">BaseObject</a>.<br/>
+
+<p>
+A representation of a physical world.  This object is used to       introduce Box2dJS physics into your game by creating a world       which supports the physical structures provided by Box2dJS.  You       will need to create a <tt>Simulation</tt> before you can utilize       physics in a game.       <p/>       See either "/demos/physics/" or "/demos/physics2" for examples       of utilizing the <tt>Simulation</tt> object with rigid body components.</p>
+
+
+
+<br/><i>Defined in <a href="physics.simulation.src.html">physics.simulation.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>object</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DEFAULT_INTEGRATIONS">DEFAULT_INTEGRATIONS</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The default number of integrations per frame
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#Simulation">Simulation</a></b>(name, worldBoundary, gravity)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Create a physical world for Box2dJS
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;b2BodyDef
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#addSimpleBoxBody">addSimpleBoxBody</a></b>(pos, extents, properties) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a simple box body to the simulation.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;b2BodyDef
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#addSimpleCircleBody">addSimpleCircleBody</a></b>(pos, radius, properties) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a simple circle body to the simulation.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#constructor">constructor</a></b>(name, worldBoundary, gravity) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#destroy">destroy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name as a string.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getIntegrations">getIntegrations</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the number of integrations per frame.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setIntegrations">setIntegrations</a></b>(integrations) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the number of integrations per frame.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#update">update</a></b>(renderContext, time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#toXML">toXML</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="DEFAULT_INTEGRATIONS">
+   <!-- -->
+   </a> <h3>DEFAULT_INTEGRATIONS</h3>
+      <pre>object <b>DEFAULT_INTEGRATIONS</b></pre> 
+   <ul>
+      The default number of integrations per frame
+      
+   </ul>
+   <hr>
+
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="Simulation"> </a>
+<h3>Simulation</h3>
+
+   <pre><b>Simulation</b>(name, worldBoundary, gravity)</pre>
+   <ul>
+      Create a physical world for Box2dJS
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the object 
+      </ul>
+      
+      <ul>
+         <code>[<i>Rectangle2D</i>]&nbsp;worldBoundary</code> - The physical world boundary 
+      </ul>
+      
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;gravity</code> - The world's gravity vector. default: [0, 650] 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="addSimpleBoxBody"> </a> <h3>addSimpleBoxBody</h3>
+      <pre>b2BodyDef&nbsp;<b>addSimpleBoxBody</b>(pos, extents, properties)</pre> 
+   <ul>
+      Add a simple box body to the simulation.  The body doesn't have a visualrepresentation, but exists in the simulation and can be interacted with.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;pos </code> - The position where the body's top/left is located 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;extents </code> - The width and height of the body 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;properties </code> - An object with up to three properties: <ul>		<li>restitution - The bounciness of the body</li>			<li>friction - Friction against this body</li>			<li>density - The density of the object, defaults to zero (fixed in place)</li></ul> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>b2BodyDef</i>&nbsp;</code>A Box2D-JS body definition object representing the box 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="addSimpleCircleBody"> </a> <h3>addSimpleCircleBody</h3>
+      <pre>b2BodyDef&nbsp;<b>addSimpleCircleBody</b>(pos, radius, properties)</pre> 
+   <ul>
+      Add a simple circle body to the simulation.  The body doesn't have a visualrepresentation, but exists in the simulation and can be interacted with.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;pos </code> - The position where the body's center is located 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;radius </code> - The radius of the circle body 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;properties </code> - An object with up to three properties: <ul>		<li>restitution - The bounciness of the body</li>			<li>friction - Friction against this body</li>			<li>density - The density of the object, defaults to zero (fixed in place)</li></ul> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>b2BodyDef</i>&nbsp;</code>A Box2D-JS body definition object representing the circle 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="constructor"> </a> <h3>constructor</h3>
+      <pre><b>constructor</b>(name, worldBoundary, gravity)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>name </code> 
+      </ul>
+      <ul>
+         <code>worldBoundary </code> 
+      </ul>
+      <ul>
+         <code>gravity </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="destroy"> </a> <h3>destroy</h3>
+      <pre><b>destroy</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name as a string.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>"Simulation" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getIntegrations"> </a> <h3>getIntegrations</h3>
+      <pre>Number&nbsp;<b>getIntegrations</b>()</pre> 
+   <ul>
+      Get the number of integrations per frame.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setIntegrations"> </a> <h3>setIntegrations</h3>
+      <pre><b>setIntegrations</b>(integrations)</pre> 
+   <ul>
+      Set the number of integrations per frame.  A higher number will resultin more accurate collisions, but will result in slower performance.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;integrations </code> - The number of integrations per frame 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="update"> </a> <h3>update</h3>
+      <pre><b>update</b>(renderContext, time)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>renderContext </code> 
+      </ul>
+      <ul>
+         <code>time </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:57 GMT-0400 (EDT)</div>
+</body>
+</html>

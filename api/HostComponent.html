@@ -1,0 +1,508 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: HostComponent</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class HostComponent</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='BaseComponent.html' target='main'>BaseComponent</a>
+            |
+            +--<a href='LogicComponent.html' target='main'>LogicComponent</a>
+               |
+               +--<b>HostComponent</b></pre>
+   <hr>
+   Class <b>HostComponent</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="LogicComponent.html">LogicComponent</a>.<br/>
+
+<p>
+A component that can execute host objects.  Allows embedding       of multiple objects into one object.  This is logically       a method to embed further <a href='HostObject.html'>HostObjects</a> within       an existing <tt>HostObject</tt>.</p>
+
+
+
+<br/><i>Defined in <a href="component.host.src.html">component.host.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#HostComponent">HostComponent</a></b>(name, priority)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Creates a <tt>HostComponent</tt> which can contain <a href='HostObject.html'>HostObjects</a>.
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#add">add</a></b>(name, obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Add a <a href='HostObject.html'>HostObject</a> to the component to be processed whenthis component is executed.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#execute">execute</a></b>(renderContext, time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update each of the host objects within this component.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;HostObject
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#get">get</a></b>(name) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Retrieve the <a href='HostObject.html'>HostObject</a> that is associated with thegiven name from the component.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the component back into the object pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;HostObject
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#remove">remove</a></b>(obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove the host object from the component.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
+            
+               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
+            
+               <a href="BaseComponent.html#getType">getType</a>,
+            
+               <a href="BaseComponent.html#setPriority">setPriority</a>,
+            
+               <a href="BaseComponent.html#getPriority">getPriority</a>,
+            
+               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#toXML">toXML</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="HostComponent"> </a>
+<h3>HostComponent</h3>
+
+   <pre><b>HostComponent</b>(name, priority)</pre>
+   <ul>
+      Creates a <tt>HostComponent</tt> which can contain <a href='HostObject.html'>HostObjects</a>.             This allows a component to embed other hosts within it.  Each time the             component is executed, each host will be given a chance to update as well.
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the component 
+      </ul>
+      
+      <ul>
+         <code>[<i>Number</i>]&nbsp;priority</code> - The priority of this component 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="add"> </a> <h3>add</h3>
+      <pre><b>add</b>(name, obj)</pre> 
+   <ul>
+      Add a <a href='HostObject.html'>HostObject</a> to the component to be processed whenthis component is executed.  Objects will be updated in the order inwhich they are added.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;name </code> - A unique name to refer to the object by 
+      </ul>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;obj </code> - The host object reference 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="execute"> </a> <h3>execute</h3>
+      <pre><b>execute</b>(renderContext, time)</pre> 
+   <ul>
+      Update each of the host objects within this component.  The orderin which hosts are updated is equivalent to the order in whichthe objects were added.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>RenderContext</i>]&nbsp;renderContext </code> - The rendering context 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;time </code> - The engine time in milliseconds 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="get"> </a> <h3>get</h3>
+      <pre>HostObject&nbsp;<b>get</b>(name)</pre> 
+   <ul>
+      Retrieve the <a href='HostObject.html'>HostObject</a> that is associated with thegiven name from the component.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;name </code> - The unique name of the object 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>HostObject</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>"HostComponent" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      Releases the component back into the object pool.  See <a href='PooledObject.html#release'>PooledObject.release</a>for more information.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="remove"> </a> <h3>remove</h3>
+      <pre>HostObject&nbsp;<b>remove</b>(obj)</pre> 
+   <ul>
+      Remove the host object from the component.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>HostObject</i>]&nbsp;obj </code> - The host object reference 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>HostObject</i>&nbsp;</code>The object which was removed 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:58 GMT-0400 (EDT)</div>
+</body>
+</html>

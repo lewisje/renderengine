@@ -1,0 +1,631 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: SpatialGrid</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class SpatialGrid</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='SpatialContainer.html' target='main'>SpatialContainer</a>
+            |
+            +--<b>SpatialGrid</b></pre>
+   <hr>
+   Class <b>SpatialGrid</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="SpatialContainer.html">SpatialContainer</a>.<br/>
+
+<p>
+A structure which divides a finite space up into a coarse grid to 		 perform "broad phase" collision determinations within the space.  		 After the PCL (potential collision list) is built, a "narrow phase" 		 collision model would need to be employed to determine accurate collision 		 response.  Using AABB overlapping for simple true/false determinations is		 one method.  Another method would be to use something like GJK to determine		 by how much two objects' convex hulls are overlapped.		 <p/>		 A spatial grid is defined by the size of the space and the number of		 divisions within that space.  A smaller PCL will result from a larger		 number of divisions, but the amount of data required to store the cells		 also increases.  Also, larger numbers of divisions means that as objects		 move, the determination of which cell the object is within increases as 		 well.</p>
+
+
+
+<br/><i>Defined in <a href="container.spatialgrid.src.html">container.spatialgrid.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#BEST_ACCURACY">BEST_ACCURACY</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collision checks are performed in the node where the objectbeing tested resides, and in the four surrounding polar nodes.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#GOOD_ACCURACY">GOOD_ACCURACY</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collision checks are limited to the exact node where theobject being tested resides.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#HIGH_ACCURACY">HIGH_ACCURACY</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Collision checks are performed in the node where the objectbeing tested resides, and in the eight surrounding nodes.
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#SpatialGrid">SpatialGrid</a></b>(width, height, divisions)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Create an instance of a spatial grid model
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;SpatialNode
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#findNodePoint">findNodePoint</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Find the node that contains the specified point.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getAccuracy">getAccuracy</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the accuracy level of collision checks.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Container
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getObjects">getObjects</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns all objects within every node of the spatial grid.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Container
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getPCL">getPCL</a></b>(point) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the list of objects with respect to the point given.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the object back into the object pool.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setAccuracy">setAccuracy</a></b>(accuracy) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the accuracy of the collision checks to either <a href='SpatialGrid.html#GOOD_ACCURACY'>SpatialGrid.GOOD_ACCURACY</a> or<a href='SpatialGrid.html#BEST_ACCURACY'>SpatialGrid.BEST_ACCURACY</a>.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="SpatialContainer.html">SpatialContainer</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="SpatialContainer.html#getWidth">getWidth</a>,
+            
+               <a href="SpatialContainer.html#getHeight">getHeight</a>,
+            
+               <a href="SpatialContainer.html#getRoot">getRoot</a>,
+            
+               <a href="SpatialContainer.html#setRoot">setRoot</a>,
+            
+               <a href="SpatialContainer.html#addObject">addObject</a>,
+            
+               <a href="SpatialContainer.html#removeObject">removeObject</a>,
+            
+               <a href="SpatialContainer.html#getObjectsOfType">getObjectsOfType</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#toXML">toXML</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="BEST_ACCURACY">
+   <!-- -->
+   </a> <h3>BEST_ACCURACY</h3>
+      <pre>Number <b>BEST_ACCURACY</b></pre> 
+   <ul>
+      Collision checks are performed in the node where the objectbeing tested resides, and in the four surrounding polar nodes.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="GOOD_ACCURACY">
+   <!-- -->
+   </a> <h3>GOOD_ACCURACY</h3>
+      <pre>Number <b>GOOD_ACCURACY</b></pre> 
+   <ul>
+      Collision checks are limited to the exact node where theobject being tested resides.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="HIGH_ACCURACY">
+   <!-- -->
+   </a> <h3>HIGH_ACCURACY</h3>
+      <pre>Number <b>HIGH_ACCURACY</b></pre> 
+   <ul>
+      Collision checks are performed in the node where the objectbeing tested resides, and in the eight surrounding nodes.
+      
+   </ul>
+   <hr>
+
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="SpatialGrid"> </a>
+<h3>SpatialGrid</h3>
+
+   <pre><b>SpatialGrid</b>(width, height, divisions)</pre>
+   <ul>
+      Create an instance of a spatial grid model
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>Number</i>]&nbsp;width</code> - The width of the area 
+      </ul>
+      
+      <ul>
+         <code>[<i>Number</i>]&nbsp;height</code> - The height of the area 
+      </ul>
+      
+      <ul>
+         <code>[<i>Number</i>]&nbsp;divisions</code> - The number of divisions along both axis 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="findNodePoint"> </a> <h3>findNodePoint</h3>
+      <pre>SpatialNode&nbsp;<b>findNodePoint</b>(point)</pre> 
+   <ul>
+      Find the node that contains the specified point.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to locate the node for 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>SpatialNode</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getAccuracy"> </a> <h3>getAccuracy</h3>
+      <pre>Number&nbsp;<b>getAccuracy</b>()</pre> 
+   <ul>
+      Get the accuracy level of collision checks.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The accuracy level 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>"SpatialGrid" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getObjects"> </a> <h3>getObjects</h3>
+      <pre>Container&nbsp;<b>getObjects</b>()</pre> 
+   <ul>
+      Returns all objects within every node of the spatial grid.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Container</i>&nbsp;</code>A container with all objects in the spatial grid 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getPCL"> </a> <h3>getPCL</h3>
+      <pre>Container&nbsp;<b>getPCL</b>(point)</pre> 
+   <ul>
+      Get the list of objects with respect to the point given.  Objects willbe returned from the nodes that make up the grid node containingthe point, and the following adjacent nodes:<ul><li><b>Good Accuracy</b> - Just the node containing the point (G)</li><li><b>Best Accuracy</b> - The four polar nodes around the center (G, B)</li><li><b>High Accuracy</b> - The eight nodes around the center (G, B, H)</li></ul>For example, if you had a 3x3 grid with the object in the center node, the nodes marked below would be included in the result set:<pre> +---+---+---+ | H | B | H | +---+---+---+ | B | G | B | +---+---+---+ | H | B | H | +---+---+---+</pre>
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to begin the search at. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Container</i>&nbsp;</code>A container of objects found that could be collision targets 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      Releases the object back into the object pool.  See <a href='PooledObject.html#release'>PooledObject.release</a>for more information.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setAccuracy"> </a> <h3>setAccuracy</h3>
+      <pre><b>setAccuracy</b>(accuracy)</pre> 
+   <ul>
+      Set the accuracy of the collision checks to either <a href='SpatialGrid.html#GOOD_ACCURACY'>SpatialGrid.GOOD_ACCURACY</a> or<a href='SpatialGrid.html#BEST_ACCURACY'>SpatialGrid.BEST_ACCURACY</a>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;accuracy </code> - The level of accuracy during PCL generation 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:58 GMT-0400 (EDT)</div>
+</body>
+</html>

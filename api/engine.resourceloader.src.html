@@ -1,0 +1,320 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>engine.resourceloader.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>engine.resourceloader.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+The base class for all resource loaders.  It has the functionality              for managing a local cache of loaded objects.
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="ResourceLoader.html" target="main">ResourceLoader</a>
+         </td>
+         <td>
+            
+A resource loader is a generalized interface used by all resource        loaders.
+         </td>
+      </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * ResourceLoader
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * @fileoverview The base class for all resource loaders.  It has the functionality
+<span class='linenumber'>  6</span>  *               for managing a local cache of loaded objects.
+<span class='linenumber'>  7</span>  *
+<span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'>  9</span>  * @author: $Author: bfattori $
+<span class='linenumber'> 10</span>  * @version: $Revision: 1394 $
+<span class='linenumber'> 11</span>  *
+<span class='linenumber'> 12</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 13</span>  *
+<span class='linenumber'> 14</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 15</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 16</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 17</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 18</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 19</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 20</span>  *
+<span class='linenumber'> 21</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 22</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 23</span>  *
+<span class='linenumber'> 24</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 25</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 26</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 27</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 28</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 29</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 30</span>  * THE SOFTWARE.
+<span class='linenumber'> 31</span>  *
+<span class='linenumber'> 32</span>  */</span><span class="WHIT">
+<span class='linenumber'> 33</span> 
+<span class='linenumber'> 34</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 35</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.baseobject.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 36</span> 
+<span class='linenumber'> 37</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"ResourceLoader"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"BaseObject"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 38</span> 
+<span class='linenumber'> 39</span> </span><span class="COMM">/**
+<span class='linenumber'> 40</span>  * @class  A resource loader is a generalized interface used by all resource
+<span class='linenumber'> 41</span>  *         loaders.  It is designed to provide a common set of routines for
+<span class='linenumber'> 42</span>  *         loading resources (fonts, images, game data, etc...) from some
+<span class='linenumber'> 43</span>  *         location.  Additionally, objects are cached by this base class,
+<span class='linenumber'> 44</span>  *         although some classes make use of other methods to enhance the
+<span class='linenumber'> 45</span>  *         caching, such as the {@link ImageLoader} class.
+<span class='linenumber'> 46</span>  *
+<span class='linenumber'> 47</span>  * @param [name=ResourceLoader] {String} The name of the resource loader.
+<span class='linenumber'> 48</span>  * @constructor
+<span class='linenumber'> 49</span>  * @extends BaseObject
+<span class='linenumber'> 50</span>  * @description Create a resource loader
+<span class='linenumber'> 51</span>  */</span><span class="WHIT">
+<span class='linenumber'> 52</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ResourceLoader</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">BaseObject.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope ResourceLoader.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 53</span> 
+<span class='linenumber'> 54</span> </span><span class="WHIT">   </span><span class="NAME">cache</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 55</span> 
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="NAME">length</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 57</span> 
+<span class='linenumber'> 58</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 59</span>     * @private
+<span class='linenumber'> 60</span>     */</span><span class="WHIT">
+<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"ResourceLoader"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">      </span><span class="NAME">this.cache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 64</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 65</span> 
+<span class='linenumber'> 66</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 67</span>     * @private
+<span class='linenumber'> 68</span>     */</span><span class="WHIT">
+<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 70</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">      </span><span class="NAME">this.cache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 72</span> </span><span class="WHIT">      </span><span class="NAME">this.length</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 73</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 74</span> 
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 76</span>     * @private
+<span class='linenumber'> 77</span>     */</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span><span class="WHIT">      </span><span class="NAME">this.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 80</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 82</span> 
+<span class='linenumber'> 83</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 84</span>     * Load an object via this resource loader, and add it to the cache.
+<span class='linenumber'> 85</span>     *
+<span class='linenumber'> 86</span>     * @param name {String} The name to refer to the loaded object
+<span class='linenumber'> 87</span>     * @param data {Object} The data to store in the cache
+<span class='linenumber'> 88</span>     * @param isReady {Boolean} A flag that states whether or not a resource
+<span class='linenumber'> 89</span>     *                          is ready to use.
+<span class='linenumber'> 90</span>     */</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">   </span><span class="NAME">load</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isReady</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 92</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ready</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">isReady</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 93</span> </span><span class="WHIT">      </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT">      </span><span class="NAME">this.length</span><span class="PUNC">++</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">      </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="STRN">"Loading "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">this.getResourceType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">": "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 97</span> 
+<span class='linenumber'> 98</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 99</span>     * Set the "ready" state of the resource.  When a resource has been completely
+<span class='linenumber'>100</span>     * loaded, set the resource "ready" state to &lt;tt>true&lt;/tt> to allow objects
+<span class='linenumber'>101</span>     * waiting for those resources to utilize them.
+<span class='linenumber'>102</span>     *
+<span class='linenumber'>103</span>     * @param name {String} The name of the resource
+<span class='linenumber'>104</span>     * @param isReady {Boolean} &lt;tt>true&lt;/tt> to set the resource to "ready for use"
+<span class='linenumber'>105</span>     */</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">   </span><span class="NAME">setReady</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">isReady</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>107</span> </span><span class="WHIT">      </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">isReady</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">isReady</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">isReady</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">         </span><span class="NAME">Console.log</span><span class="PUNC">(</span><span class="NAME">this.getResourceType</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">" "</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">" ready..."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>110</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>111</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>112</span> 
+<span class='linenumber'>113</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>114</span>     * Check to see if a named resource is "ready for use".
+<span class='linenumber'>115</span>     * @param name {String} The name of the resource to check ready status for,
+<span class='linenumber'>116</span>     *             or &lt;tt>null&lt;/tt> for all resources in loader.
+<span class='linenumber'>117</span>     * @return {Boolean} &lt;tt>true&lt;/tt> if the resource is loaded and ready to use
+<span class='linenumber'>118</span>     */</span><span class="WHIT">
+<span class='linenumber'>119</span> </span><span class="WHIT">   </span><span class="NAME">isReady</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>120</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>121</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">isReady</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>122</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>123</span> </span><span class="WHIT">         </span><span class="COMM">// Check the status of all loader elements</span><span class="WHIT">
+<span class='linenumber'>124</span> </span><span class="WHIT">         </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rList</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getResources</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>125</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">rList.length</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>126</span> </span><span class="WHIT">            </span><span class="COMM">// Early out, no resources to load</span><span class="WHIT">
+<span class='linenumber'>127</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>128</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>129</span> </span><span class="WHIT">         </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">rList</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.isReady</span><span class="PUNC">(</span><span class="NAME">rList</span><span class="PUNC">[</span><span class="NAME">r</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">               </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>132</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>133</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>134</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>135</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>137</span> 
+<span class='linenumber'>138</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>139</span>     * Unload an object from this resource loader.  Removes the object
+<span class='linenumber'>140</span>     * from the cache.
+<span class='linenumber'>141</span>     *
+<span class='linenumber'>142</span>     * @param name {String} The name of the object to remove
+<span class='linenumber'>143</span>     */</span><span class="WHIT">
+<span class='linenumber'>144</span> </span><span class="WHIT">   </span><span class="NAME">unload</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>145</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">data.destroy</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>146</span> </span><span class="WHIT">         </span><span class="COMM">// Make sure that cached objects have a chance to clean up</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">         </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">data.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>148</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>149</span> 
+<span class='linenumber'>150</span> </span><span class="WHIT">      </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">      </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="WHIT">      </span><span class="NAME">this.length</span><span class="PUNC">--</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>153</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>154</span> 
+<span class='linenumber'>155</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>156</span>     * Get the object with the specified name from the cache.
+<span class='linenumber'>157</span>     *
+<span class='linenumber'>158</span>     * @param name {String} The name of the object to retrieve
+<span class='linenumber'>159</span>     * @return {Object} The object stored within the cache
+<span class='linenumber'>160</span>     */</span><span class="WHIT">
+<span class='linenumber'>161</span> </span><span class="WHIT">   </span><span class="NAME">get</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>162</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>163</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">data</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>166</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>167</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>168</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>169</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>170</span>     * Set the data associated with the name.  The ready state is set
+<span class='linenumber'>171</span>     * to &lt;tt>false&lt;/tt>, so it will be up to the developer to call
+<span class='linenumber'>172</span>     * {@link #setReady} on the object if the object is truly ready for use.
+<span class='linenumber'>173</span>     * @param name {String} The name of the cache record
+<span class='linenumber'>174</span>     * @param data {Object} Data to store
+<span class='linenumber'>175</span>     */</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">   </span><span class="NAME">set</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>177</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ready</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>178</span> </span><span class="WHIT">      </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">obj</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>179</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>180</span> 
+<span class='linenumber'>181</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>182</span>     * Returns the cache.  You should not manipulate the cache directly.
+<span class='linenumber'>183</span>     * instead, call methods to update the cache.
+<span class='linenumber'>184</span>     * @return {Object} The cache
+<span class='linenumber'>185</span>     */</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">   </span><span class="NAME">getCachedObjects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>187</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.cache</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>188</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>189</span> 
+<span class='linenumber'>190</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>191</span>     * Clear the objects contained in the cache.
+<span class='linenumber'>192</span>     */</span><span class="WHIT">
+<span class='linenumber'>193</span> </span><span class="WHIT">   </span><span class="NAME">clear</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>194</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">o</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">this.cache</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>195</span> </span><span class="WHIT">         </span><span class="NAME">this.cache</span><span class="PUNC">[</span><span class="NAME">o</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>196</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>197</span> 
+<span class='linenumber'>198</span> </span><span class="WHIT">      </span><span class="NAME">this.cache</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>199</span> </span><span class="WHIT">      </span><span class="NAME">this.length</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>200</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>201</span> 
+<span class='linenumber'>202</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>203</span>     * Get the names of all the resources available in this resource loader.
+<span class='linenumber'>204</span>     * @return {Array} An array of resource names
+<span class='linenumber'>205</span>     */</span><span class="WHIT">
+<span class='linenumber'>206</span> </span><span class="WHIT">   </span><span class="NAME">getResources</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>207</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>208</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">this.cache</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>209</span> </span><span class="WHIT">         </span><span class="NAME">n.push</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>211</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>212</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>213</span> 
+<span class='linenumber'>214</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>215</span> 	 * Exports an object which contains references to all of the resources
+<span class='linenumber'>216</span> 	 * which have been loaded by this resource loader.  This method is optional
+<span class='linenumber'>217</span> 	 * and may not be implemented directly by the loader.
+<span class='linenumber'>218</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>219</span> </span><span class="WHIT">	</span><span class="NAME">exportAll</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>220</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>221</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>222</span> 
+<span class='linenumber'>223</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>224</span>     * The name of the resource this loader will get.
+<span class='linenumber'>225</span>     * @return {String} The string "default"
+<span class='linenumber'>226</span>     */</span><span class="WHIT">
+<span class='linenumber'>227</span> </span><span class="WHIT">   </span><span class="NAME">getResourceType</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>228</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"default"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>229</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>230</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope ResourceLoader.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
+<span class='linenumber'>231</span> 
+<span class='linenumber'>232</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>233</span>     * Get the class name of this object
+<span class='linenumber'>234</span>     * @return {String} "ResourceLoader"
+<span class='linenumber'>235</span>     */</span><span class="WHIT">
+<span class='linenumber'>236</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>237</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"ResourceLoader"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>238</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>239</span> 
+<span class='linenumber'>240</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>241</span> 
+<span class='linenumber'>242</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ResourceLoader</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>243</span> 
+<span class='linenumber'>244</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>245</span> </span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:54 GMT-0400 (EDT)</div>
+</body>
+</html>

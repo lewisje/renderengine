@@ -1,0 +1,410 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>container.spatialgrid.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>container.spatialgrid.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+A simple collision model which divides a finite space up into               a coarse grid to assist in quickly finding objects within that              space.
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="GridNode.html" target="main">GridNode</a>
+         </td>
+         <td>
+            
+A single node within a SpatialGrid.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="SpatialGrid.html" target="main">SpatialGrid</a>
+         </td>
+         <td>
+            
+A structure which divides a finite space up into a coarse grid to 		 perform "broad phase" collision determinations within the space.
+         </td>
+      </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * SpatialGrid
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * @fileoverview A simple collision model which divides a finite space up into 
+<span class='linenumber'>  6</span>  *               a coarse grid to assist in quickly finding objects within that
+<span class='linenumber'>  7</span>  *               space.
+<span class='linenumber'>  8</span>  *
+<span class='linenumber'>  9</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 10</span>  *
+<span class='linenumber'> 11</span>  * @author: $Author: bfattori $
+<span class='linenumber'> 12</span>  * @version: $Revision: 1388 $
+<span class='linenumber'> 13</span>  *
+<span class='linenumber'> 14</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 15</span>  *
+<span class='linenumber'> 16</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 17</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 18</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 19</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 20</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 21</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 22</span>  *
+<span class='linenumber'> 23</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 24</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 25</span>  *
+<span class='linenumber'> 26</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 27</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 28</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 29</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 30</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 31</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 32</span>  * THE SOFTWARE.
+<span class='linenumber'> 33</span>  *
+<span class='linenumber'> 34</span>  */</span><span class="WHIT">
+<span class='linenumber'> 35</span> 
+<span class='linenumber'> 36</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 37</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.spatialcontainer.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 38</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/engine/engine.math2d.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 39</span> 
+<span class='linenumber'> 40</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"GridNode"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"SpatialNode"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 41</span> 
+<span class='linenumber'> 42</span> </span><span class="COMM">/**
+<span class='linenumber'> 43</span>  * @class A single node within a SpatialGrid.  When the collision model is
+<span class='linenumber'> 44</span>  *        updated, the nodes within the grid will be updated to reflect the
+<span class='linenumber'> 45</span>  *        objects within them.  A node defines a single rectangle within the
+<span class='linenumber'> 46</span>  *        entire {@link SpatialGrid}
+<span class='linenumber'> 47</span>  *
+<span class='linenumber'> 48</span>  * @extends SpatialNode
+<span class='linenumber'> 49</span>  * @constructor
+<span class='linenumber'> 50</span>  * @description Create an instance of a SpatialNode for use within a {@link SpatialGrid}
+<span class='linenumber'> 51</span>  * @param rect {Rectangle2D} The rectangle which defines this node.
+<span class='linenumber'> 52</span>  */</span><span class="WHIT">
+<span class='linenumber'> 53</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">GridNode</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">SpatialNode.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope GridNode.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 54</span> 
+<span class='linenumber'> 55</span> </span><span class="WHIT">   </span><span class="NAME">rect</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 56</span> 
+<span class='linenumber'> 57</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 58</span>     * @private
+<span class='linenumber'> 59</span>     */</span><span class="WHIT">
+<span class='linenumber'> 60</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 61</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 62</span> </span><span class="WHIT">      </span><span class="NAME">this.rect</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">rect</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 63</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 64</span> 
+<span class='linenumber'> 65</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 66</span>     * Get the rectangle which defines this node.
+<span class='linenumber'> 67</span>     * @return {Rectangle2D}
+<span class='linenumber'> 68</span>     */</span><span class="WHIT">
+<span class='linenumber'> 69</span> </span><span class="WHIT">   </span><span class="NAME">getRect</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 70</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.rect</span><span class="WHIT">
+<span class='linenumber'> 71</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 72</span> 
+<span class='linenumber'> 73</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 74</span>     * Returns true if the spatial node contains the point specified.
+<span class='linenumber'> 75</span>     * @param point {Point2D} The point to check
+<span class='linenumber'> 76</span>     * @return {Boolean}
+<span class='linenumber'> 77</span>     */</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="NAME">contains</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span><span class="WHIT">   	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getRect</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">containsPoint</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 80</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 81</span> 
+<span class='linenumber'> 82</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope SpatialNode.prototype */</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="WHIT">
+<span class='linenumber'> 83</span> 
+<span class='linenumber'> 84</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 85</span>     * Get the class name of this object
+<span class='linenumber'> 86</span>     *
+<span class='linenumber'> 87</span>     * @return {String} "GridNode"
+<span class='linenumber'> 88</span>     */</span><span class="WHIT">
+<span class='linenumber'> 89</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"GridNode"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 92</span> 
+<span class='linenumber'> 93</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 94</span> 
+<span class='linenumber'> 95</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">GridNode</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 96</span> 
+<span class='linenumber'> 97</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 98</span> 
+<span class='linenumber'> 99</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"SpatialGrid"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"SpatialContainer"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>100</span> 
+<span class='linenumber'>101</span> </span><span class="COMM">/**
+<span class='linenumber'>102</span>  * @class A structure which divides a finite space up into a coarse grid to 
+<span class='linenumber'>103</span>  * 		 perform "broad phase" collision determinations within the space.  
+<span class='linenumber'>104</span>  * 		 After the PCL (potential collision list) is built, a "narrow phase" 
+<span class='linenumber'>105</span>  * 		 collision model would need to be employed to determine accurate collision 
+<span class='linenumber'>106</span>  * 		 response.  Using AABB overlapping for simple true/false determinations is
+<span class='linenumber'>107</span>  * 		 one method.  Another method would be to use something like GJK to determine
+<span class='linenumber'>108</span>  * 		 by how much two objects' convex hulls are overlapped.
+<span class='linenumber'>109</span>  * 		 &lt;p/>
+<span class='linenumber'>110</span>  * 		 A spatial grid is defined by the size of the space and the number of
+<span class='linenumber'>111</span>  * 		 divisions within that space.  A smaller PCL will result from a larger
+<span class='linenumber'>112</span>  * 		 number of divisions, but the amount of data required to store the cells
+<span class='linenumber'>113</span>  * 		 also increases.  Also, larger numbers of divisions means that as objects
+<span class='linenumber'>114</span>  * 		 move, the determination of which cell the object is within increases as 
+<span class='linenumber'>115</span>  * 		 well.
+<span class='linenumber'>116</span>  *
+<span class='linenumber'>117</span>  * @constructor
+<span class='linenumber'>118</span>  * @description Create an instance of a spatial grid model
+<span class='linenumber'>119</span>  * @param width {Number} The width of the area
+<span class='linenumber'>120</span>  * @param height {Number} The height of the area
+<span class='linenumber'>121</span>  * @param divisions {Number} The number of divisions along both axis
+<span class='linenumber'>122</span>  * @extends SpatialContainer
+<span class='linenumber'>123</span>  */</span><span class="WHIT">
+<span class='linenumber'>124</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">SpatialGrid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">SpatialContainer.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope SpatialGrid.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>125</span> 
+<span class='linenumber'>126</span> </span><span class="WHIT">   </span><span class="NAME">divisions</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>127</span> 
+<span class='linenumber'>128</span> </span><span class="WHIT">   </span><span class="NAME">xLocator</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>129</span> </span><span class="WHIT">   </span><span class="NAME">yLocator</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>130</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>131</span> </span><span class="WHIT">   </span><span class="NAME">accuracy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>132</span> 
+<span class='linenumber'>133</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>134</span>     * @private
+<span class='linenumber'>135</span>     */</span><span class="WHIT">
+<span class='linenumber'>136</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">divisions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="STRN">"SpatialGrid"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>138</span> 
+<span class='linenumber'>139</span> </span><span class="WHIT">      </span><span class="COMM">// Divide the space up into a grid</span><span class="WHIT">
+<span class='linenumber'>140</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">gX</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">width</span><span class="WHIT"> </span><span class="REGX">/ divisions);
+<span class='linenumber'>141</span>       var gY = Math.floor(height /</span><span class="WHIT"> </span><span class="NAME">divisions</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>142</span> </span><span class="WHIT">      </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">divisions</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>143</span> </span><span class="WHIT">      </span><span class="NAME">this.xLocator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="REGX">/ gX;
+<span class='linenumber'>144</span>       this.yLocator = 1 /</span><span class="WHIT"> </span><span class="NAME">gY</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>145</span> 
+<span class='linenumber'>146</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">grid</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>147</span> </span><span class="WHIT">      </span><span class="NAME">this.setRoot</span><span class="PUNC">(</span><span class="NAME">grid</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>148</span> 
+<span class='linenumber'>149</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>150</span> </span><span class="WHIT">      </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>151</span> </span><span class="WHIT">         </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT">
+<span class='linenumber'>152</span> </span><span class="WHIT">         </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>153</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rect</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Rectangle2D</span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">gX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">gY</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">gY</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>154</span> </span><span class="WHIT">            </span><span class="NAME">grid</span><span class="PUNC">[</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">GridNode</span><span class="PUNC">(</span><span class="NAME">rect</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>155</span> </span><span class="WHIT">         </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>156</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>157</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>158</span> 
+<span class='linenumber'>159</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>160</span>     * Releases the object back into the object pool.  See {@link PooledObject#release}
+<span class='linenumber'>161</span>     * for more information.
+<span class='linenumber'>162</span>     */</span><span class="WHIT">
+<span class='linenumber'>163</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>164</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>165</span> </span><span class="WHIT">      </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>166</span> </span><span class="WHIT">      </span><span class="NAME">this.xLocator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>167</span> </span><span class="WHIT">      </span><span class="NAME">this.yLocator</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>168</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>169</span> 
+<span class='linenumber'>170</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>171</span>     * Set the accuracy of the collision checks to either {@link SpatialGrid#GOOD_ACCURACY} or
+<span class='linenumber'>172</span>     * {@link SpatialGrid#BEST_ACCURACY}.
+<span class='linenumber'>173</span>     * 
+<span class='linenumber'>174</span>     * @param accuracy {Number} The level of accuracy during PCL generation
+<span class='linenumber'>175</span>     */</span><span class="WHIT">
+<span class='linenumber'>176</span> </span><span class="WHIT">   </span><span class="NAME">setAccuracy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">accuracy</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>177</span> </span><span class="WHIT">      </span><span class="NAME">this.accuracy</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">accuracy</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">SpatialGrid.BEST_ACCURACY</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">accuracy</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">SpatialGrid.GOOD_ACCURACY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="WHIT">
+<span class='linenumber'>178</span> </span><span class="WHIT">         </span><span class="NAME">SpatialGrid.BEST_ACCURACY</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">accuracy</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>179</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>180</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>181</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>182</span>     * Get the accuracy level of collision checks.
+<span class='linenumber'>183</span>     * @return {Number} The accuracy level
+<span class='linenumber'>184</span>     */</span><span class="WHIT">
+<span class='linenumber'>185</span> </span><span class="WHIT">   </span><span class="NAME">getAccuracy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>186</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.accuracy</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>187</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>188</span> 
+<span class='linenumber'>189</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>190</span>     * Find the node that contains the specified point.
+<span class='linenumber'>191</span>     *
+<span class='linenumber'>192</span>     * @param point {Point2D} The point to locate the node for
+<span class='linenumber'>193</span>     * @return {SpatialNode}
+<span class='linenumber'>194</span>     */</span><span class="WHIT">
+<span class='linenumber'>195</span> </span><span class="WHIT">   </span><span class="NAME">findNodePoint</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>196</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getRoot</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">point.x</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">this.xLocator</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">point.y</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">this.yLocator</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>197</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>198</span> 
+<span class='linenumber'>199</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>200</span>     * Get the node within the grid.
+<span class='linenumber'>201</span>     * @param x {Number} The virtual X coordinate in our grid
+<span class='linenumber'>202</span>     * @param y {Number} The virtual Y coordinate in our grid
+<span class='linenumber'>203</span>     * @return {Number}
+<span class='linenumber'>204</span>     * @private
+<span class='linenumber'>205</span>     */</span><span class="WHIT">
+<span class='linenumber'>206</span> </span><span class="WHIT">   </span><span class="NAME">getNode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>207</span> </span><span class="WHIT">		</span><span class="COMM">// Normalize X and Y within the bounds of the grid</span><span class="WHIT">
+<span class='linenumber'>208</span> </span><span class="WHIT">		</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>209</span> </span><span class="WHIT">		</span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>210</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.getRoot</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">)</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>211</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>212</span> 
+<span class='linenumber'>213</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>214</span>     * Get the list of objects with respect to the point given.  Objects will
+<span class='linenumber'>215</span>     * be returned from the nodes that make up the grid node containing
+<span class='linenumber'>216</span>     * the point, and the following adjacent nodes:
+<span class='linenumber'>217</span>     * &lt;ul>
+<span class='linenumber'>218</span>     * &lt;li>&lt;b>Good Accuracy&lt;/b> - Just the node containing the point (G)&lt;/li>
+<span class='linenumber'>219</span>     * &lt;li>&lt;b>Best Accuracy&lt;/b> - The four polar nodes around the center (G, B)&lt;/li>
+<span class='linenumber'>220</span>     * &lt;li>&lt;b>High Accuracy&lt;/b> - The eight nodes around the center (G, B, H)&lt;/li>
+<span class='linenumber'>221</span>     * &lt;/ul>
+<span class='linenumber'>222</span>     * For example, if you had a 3x3 grid with the object in the center node, the nodes 
+<span class='linenumber'>223</span>     * marked below would be included in the result set:
+<span class='linenumber'>224</span>     * &lt;pre>
+<span class='linenumber'>225</span>     *  +---+---+---+
+<span class='linenumber'>226</span>     *  | H | B | H |
+<span class='linenumber'>227</span>     *  +---+---+---+
+<span class='linenumber'>228</span>     *  | B | G | B |
+<span class='linenumber'>229</span>     *  +---+---+---+
+<span class='linenumber'>230</span>     *  | H | B | H |
+<span class='linenumber'>231</span>     *  +---+---+---+
+<span class='linenumber'>232</span>     * &lt;/pre>
+<span class='linenumber'>233</span>     *
+<span class='linenumber'>234</span>     * @param point {Point2D} The point to begin the search at.
+<span class='linenumber'>235</span>     * @return {Container} A container of objects found that could be collision targets
+<span class='linenumber'>236</span>     */</span><span class="WHIT">
+<span class='linenumber'>237</span> </span><span class="WHIT">   </span><span class="NAME">getPCL</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>238</span> 
+<span class='linenumber'>239</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">pcl</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">point</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>240</span> </span><span class="WHIT">		</span><span class="NAME">pcl.clear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>241</span> 
+<span class='linenumber'>242</span> </span><span class="WHIT">      </span><span class="COMM">// The origin node</span><span class="WHIT">
+<span class='linenumber'>243</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">point.x</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">this.xLocator</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>244</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">point.y</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">this.yLocator</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>245</span> 
+<span class='linenumber'>246</span> </span><span class="WHIT">      </span><span class="COMM">// build the node set</span><span class="WHIT">
+<span class='linenumber'>247</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">nodes</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">n</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>248</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='linenumber'>249</span> </span><span class="WHIT">		</span><span class="COMM">// Start with GOOD_ACCURACY</span><span class="WHIT">
+<span class='linenumber'>250</span> </span><span class="WHIT">      </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>251</span> </span><span class="WHIT">     </span><span class="WHIT">
+<span class='linenumber'>252</span> </span><span class="WHIT">      </span><span class="COMM">// if our borders cross the margin, we can drop up to two nodes</span><span class="WHIT">
+<span class='linenumber'>253</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.accuracy</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">SpatialGrid.BEST_ACCURACY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>254</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>255</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>256</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>257</span> </span><span class="WHIT">         </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>258</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>259</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='linenumber'>260</span> </span><span class="WHIT">		</span><span class="COMM">// For highest number of checks, we'll include all eight surrounding nodes</span><span class="WHIT">
+<span class='linenumber'>261</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.accuracy</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NAME">SpatialGrid.HIGH_ACCURACY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>262</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>263</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>264</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>265</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">this.divisions</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="NAME">n</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getNode</span><span class="PUNC">(</span><span class="NAME">x</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n.getCount</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">nodes.push</span><span class="PUNC">(</span><span class="NAME">n</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>266</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>267</span> 
+<span class='linenumber'>268</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">d</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">nodes.length</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">d</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>269</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">nodes</span><span class="PUNC">[</span><span class="NAME">d</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>270</span> </span><span class="WHIT">				</span><span class="NAME">debugger</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>271</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>272</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">objs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">nodes</span><span class="PUNC">[</span><span class="NAME">d</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>273</span> </span><span class="WHIT">         </span><span class="NAME">pcl.addAll</span><span class="PUNC">(</span><span class="NAME">objs</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>274</span> </span><span class="WHIT">			</span><span class="NAME">objs.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>275</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>276</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">pcl</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>277</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>278</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>279</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>280</span>     * Returns all objects within every node of the spatial grid.
+<span class='linenumber'>281</span>     * @return {Container} A container with all objects in the spatial grid
+<span class='linenumber'>282</span>     */</span><span class="WHIT">
+<span class='linenumber'>283</span> </span><span class="WHIT">   </span><span class="NAME">getObjects</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>284</span> </span><span class="WHIT">      </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">objs</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>285</span> </span><span class="WHIT">      </span><span class="NAME">EngineSupport.forEach</span><span class="PUNC">(</span><span class="NAME">this.getRoot</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">node</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>286</span> </span><span class="WHIT">         </span><span class="NAME">objs.addAll</span><span class="PUNC">(</span><span class="NAME">node.getObjects</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>287</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>288</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">objs</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>289</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>290</span> 
+<span class='linenumber'>291</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="COMM">/** @scope SpatialGrid.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>292</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>293</span>     * Get the class name of this object
+<span class='linenumber'>294</span>     *
+<span class='linenumber'>295</span>     * @return {String} "SpatialGrid"
+<span class='linenumber'>296</span>     */</span><span class="WHIT">
+<span class='linenumber'>297</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>298</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"SpatialGrid"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>299</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>300</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>301</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>302</span>     * Collision checks are limited to the exact node where the
+<span class='linenumber'>303</span>     * object being tested resides.
+<span class='linenumber'>304</span>     * @type {Number}
+<span class='linenumber'>305</span>     */</span><span class="WHIT">
+<span class='linenumber'>306</span> </span><span class="WHIT">   </span><span class="NAME">GOOD_ACCURACY</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>307</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>308</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>309</span>     * Collision checks are performed in the node where the object
+<span class='linenumber'>310</span>     * being tested resides, and in the four surrounding polar nodes.
+<span class='linenumber'>311</span>     * @type {Number}
+<span class='linenumber'>312</span>     */</span><span class="WHIT">
+<span class='linenumber'>313</span> </span><span class="WHIT">   </span><span class="NAME">BEST_ACCURACY</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>314</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>315</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>316</span>     * Collision checks are performed in the node where the object
+<span class='linenumber'>317</span>     * being tested resides, and in the eight surrounding nodes.
+<span class='linenumber'>318</span>     * @type {Number}
+<span class='linenumber'>319</span>     */</span><span class="WHIT">
+<span class='linenumber'>320</span> </span><span class="WHIT">	</span><span class="NAME">HIGH_ACCURACY</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT">
+<span class='linenumber'>321</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>322</span> 
+<span class='linenumber'>323</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">SpatialGrid</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>324</span> 
+<span class='linenumber'>325</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:56 GMT-0400 (EDT)</div>
+</body>
+</html>

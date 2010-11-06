@@ -1,0 +1,166 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>component.boxcollider.js</title>
+   <link rel=stylesheet href="default.css" type="text/css" media=screen>
+   <meta name="generator" content="JsDoc Toolkit 1.0">
+   <style>
+      body {
+         font-size: 10pt;
+         font-family: Helvetica, Arial, san-serif;
+      }
+
+      .TableHeadingColor { font-size: 18pt; font-weight: bold; background: #CCCCFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+      .jsdoc_copy
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: left;
+         font-style: italic;
+      }
+   </style>
+</head>
+<body>
+<div style="text-align: center;">
+   <h1>component.boxcollider.js</h1>
+</div>
+<br/>
+<h4>Summary</h4>
+A collision component which determines collisions via              bounding box comparisons.
+
+<br/>
+<hr>
+<table border="1" width="100%" cellpadding="2">
+   <tr>
+      <td colspan="2" class="TableHeadingColor">Class Summary</td>
+   </tr>
+   
+      <tr class="TableRowColor">
+         <td>
+            <a href="BoxColliderComponent.html" target="main">BoxColliderComponent</a>
+         </td>
+         <td>
+            
+An extension of the {@link ColliderComponent} which will check the       object's bounding boxes for semi-precise collision.
+         </td>
+      </tr>
+   
+</table>
+<br/>
+<hr>
+<style>
+         .KEYW {color: #933;}
+         .COMM {color: #bbb; font-style: italic;}
+         .NUMB {color: #393;}
+         .STRN {color: #393;}
+         .REGX {color: #339;}
+         .linenumber {border-right: 1px dotted #666; color: #666; font-style: normal;}
+         </style><pre><span class='linenumber'>  1</span> <span class="COMM">/**
+<span class='linenumber'>  2</span>  * The Render Engine
+<span class='linenumber'>  3</span>  * BoxColliderComponent
+<span class='linenumber'>  4</span>  *
+<span class='linenumber'>  5</span>  * @fileoverview A collision component which determines collisions via
+<span class='linenumber'>  6</span>  *               bounding box comparisons.
+<span class='linenumber'>  7</span>  *
+<span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'>  9</span>  *
+<span class='linenumber'> 10</span>  * @author: $Author: bfattori $
+<span class='linenumber'> 11</span>  * @version: $Revision: 1216 $
+<span class='linenumber'> 12</span>  *
+<span class='linenumber'> 13</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+<span class='linenumber'> 14</span>  *
+<span class='linenumber'> 15</span>  * Permission is hereby granted, free of charge, to any person obtaining a copy
+<span class='linenumber'> 16</span>  * of this software and associated documentation files (the "Software"), to deal
+<span class='linenumber'> 17</span>  * in the Software without restriction, including without limitation the rights
+<span class='linenumber'> 18</span>  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<span class='linenumber'> 19</span>  * copies of the Software, and to permit persons to whom the Software is
+<span class='linenumber'> 20</span>  * furnished to do so, subject to the following conditions:
+<span class='linenumber'> 21</span>  *
+<span class='linenumber'> 22</span>  * The above copyright notice and this permission notice shall be included in
+<span class='linenumber'> 23</span>  * all copies or substantial portions of the Software.
+<span class='linenumber'> 24</span>  *
+<span class='linenumber'> 25</span>  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<span class='linenumber'> 26</span>  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<span class='linenumber'> 27</span>  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<span class='linenumber'> 28</span>  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<span class='linenumber'> 29</span>  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<span class='linenumber'> 30</span>  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<span class='linenumber'> 31</span>  * THE SOFTWARE.
+<span class='linenumber'> 32</span>  *
+<span class='linenumber'> 33</span>  */</span><span class="WHIT">
+<span class='linenumber'> 34</span> 
+<span class='linenumber'> 35</span> </span><span class="COMM">// Includes</span><span class="WHIT">
+<span class='linenumber'> 36</span> </span><span class="NAME">Engine.include</span><span class="PUNC">(</span><span class="STRN">"/components/component.collider.js"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 37</span> 
+<span class='linenumber'> 38</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"BoxColliderComponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"ColliderComponent"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 39</span> 
+<span class='linenumber'> 40</span> </span><span class="COMM">/**
+<span class='linenumber'> 41</span>  * @class An extension of the {@link ColliderComponent} which will check the
+<span class='linenumber'> 42</span>  *        object's bounding boxes for semi-precise collision.
+<span class='linenumber'> 43</span>  *
+<span class='linenumber'> 44</span>  * @param name {String} Name of the component
+<span class='linenumber'> 45</span>  * @param collisionModel {SpatialCollection} The collision model
+<span class='linenumber'> 46</span>  * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
+<span class='linenumber'> 47</span>  *
+<span class='linenumber'> 48</span>  * @extends ColliderComponent
+<span class='linenumber'> 49</span>  * @constructor
+<span class='linenumber'> 50</span>  * @description Creates a collider component for box-box collision testing.  Each object
+<span class='linenumber'> 51</span>  *              must implement the {@link Object2D#getWorldBox} method and return a
+<span class='linenumber'> 52</span>  *              world-oriented bounding box.
+<span class='linenumber'> 53</span>  */</span><span class="WHIT">
+<span class='linenumber'> 54</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">BoxColliderComponent</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">ColliderComponent.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope BoxColliderComponent.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 55</span> 
+<span class='linenumber'> 56</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 57</span>     * Call the host object's &lt;tt>onCollide()&lt;/tt> method, passing the time of the collision
+<span class='linenumber'> 58</span>     * and the potential collision object.  The return value should either tell the collision
+<span class='linenumber'> 59</span>     * tests to continue, or to stop.
+<span class='linenumber'> 60</span>     * &lt;p/>
+<span class='linenumber'> 61</span>     * A world bounding box collision must occur to trigger the &lt;tt>onCollide()&lt;/tt> method.
+<span class='linenumber'> 62</span>     *
+<span class='linenumber'> 63</span>     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
+<span class='linenumber'> 64</span>     * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+<span class='linenumber'> 65</span>     * @return {Number} A status indicating whether to continue checking, or to stop
+<span class='linenumber'> 66</span>     */</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">   </span><span class="NAME">testCollision</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">time</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">collisionObj</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getWorldBox</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">collisionObj.getWorldBox</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='linenumber'> 69</span> </span><span class="WHIT">          </span><span class="NAME">this.getHostObject</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">getWorldBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">isIntersecting</span><span class="PUNC">(</span><span class="NAME">collisionObj.getWorldBox</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 70</span> 
+<span class='linenumber'> 71</span> </span><span class="WHIT">         </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">collisionObj</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">time</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 72</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 73</span> </span><span class="WHIT">      </span><span class="WHIT">
+<span class='linenumber'> 74</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">ColliderComponent.CONTINUE</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 76</span> 
+<span class='linenumber'> 77</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">/** @scope BoxColliderComponent.prototype */</span><span class="WHIT">
+<span class='linenumber'> 78</span> 
+<span class='linenumber'> 79</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 80</span>     * Get the class name of this object
+<span class='linenumber'> 81</span>     * @return {String} "BoxColliderComponent"
+<span class='linenumber'> 82</span>     */</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"BoxColliderComponent"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 86</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'> 87</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 88</span> 
+<span class='linenumber'> 89</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">BoxColliderComponent</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 90</span> 
+<span class='linenumber'> 91</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre>
+<hr>
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:47 GMT-0400 (EDT)</div>
+</body>
+</html>

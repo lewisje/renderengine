@@ -1,0 +1,908 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: EngineSupport</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Static Class EngineSupport</h2>
+
+
+<p>
+A static class with support methods the engine or games can use.         Many of the methods can be used to manipulate arrays.  Additional       methods are provided to access query parameters, and generate and/or        read JSON.</p>
+
+
+
+<br/><i>Defined in <a href="engine.support.src.html">engine.support.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#arrayRemove">arrayRemove</a></b>(array, obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove an element from an array.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#checkBooleanParam">checkBooleanParam</a></b>(paramName) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Check for a query parameter and to see if it evaluates to one of the following:<tt>true</tt>, <tt>1</tt>, <tt>yes</tt>, or <tt>y</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#checkNumericParam">checkNumericParam</a></b>(paramName, val) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Check for a query parameter and to see if it evaluates to the specified number.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#checkStringParam">checkStringParam</a></b>(paramName, val) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Check for a query parameter and to see if it evaluates to the specified value.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#cleanSource">cleanSource</a></b>(inString) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cleans up incoming source by stripping single-line comments,multi-line comments, blank lines, new lines, and trims lines.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#evalJSON">evalJSON</a></b>(jsonString) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; This method does a direct <tt>eval()</tt> on the JSON object andshould be avoided since it allows for XSS and other security issues.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#fillArray">fillArray</a></b>(arr, size, value) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fill the specified array with <tt>size</tt> elementseach with the value "<tt>value</tt>".
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#filter">filter</a></b>(array, fn, thisp) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Calls a provided callback function once for each element inan array, and constructs a new array of all the values for whichcallback returns a <tt>true</tt> value.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#forEach">forEach</a></b>(array, fn, thisp) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Executes a callback for each element within an array.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getNumericParam">getNumericParam</a></b>(paramName, defaultVal) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a numeric query parameter, or the default specified if the parameterdoesn't exist.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getPath">getPath</a></b>(url) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the path from a fully qualified URL, not including the trailingslash character.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Object
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getQueryParams">getQueryParams</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the query parameters from the window location object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getStringParam">getStringParam</a></b>(paramName, defaultVal) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a string query parameter, or the default specified if the parameterdoesn't exist.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#indexOf">indexOf</a></b>(array, obj, from) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the index of an element in the specified array.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isEmpty">isEmpty</a></b>(str) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if the string, after trimming, is eitherempty or is null.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#parseJSON">parseJSON</a></b>(jsonString) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#quoteString">quoteString</a></b>(text) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Return a string, enclosed in quotes.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#sysInfo">sysInfo</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gets an object that is a collation of a number of browser andclient settings.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#toJSON">toJSON</a></b>(object) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns specified object as a JavaScript Object Notation (JSON) string.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#whenReady">whenReady</a></b>(obj, fn) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; When the object is no longer <tt>undefined</tt>, the function willbe executed.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="arrayRemove"> </a> <h3>arrayRemove</h3>
+      <pre><b>arrayRemove</b>(array, obj)</pre> 
+   <ul>
+      Remove an element from an array.  This method modifies the arraydirectly.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Array</i>]&nbsp;array </code> - The array to modify 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - The object to remove 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="checkBooleanParam"> </a> <h3>checkBooleanParam</h3>
+      <pre>Boolean&nbsp;<b>checkBooleanParam</b>(paramName)</pre> 
+   <ul>
+      Check for a query parameter and to see if it evaluates to one of the following:<tt>true</tt>, <tt>1</tt>, <tt>yes</tt>, or <tt>y</tt>.  If so, returns <tt>true</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The query parameter name 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the query parameter exists and is one of the specified values. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="checkNumericParam"> </a> <h3>checkNumericParam</h3>
+      <pre>Boolean&nbsp;<b>checkNumericParam</b>(paramName, val)</pre> 
+   <ul>
+      Check for a query parameter and to see if it evaluates to the specified number.If so, returns <tt>true</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The query parameter name 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;val </code> - The number to check for 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the query parameter exists and is the value specified 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="checkStringParam"> </a> <h3>checkStringParam</h3>
+      <pre>Boolean&nbsp;<b>checkStringParam</b>(paramName, val)</pre> 
+   <ul>
+      Check for a query parameter and to see if it evaluates to the specified value.If so, returns <tt>true</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The query parameter name 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;val </code> - The value to check for 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the query parameter exists and is the value specified 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="cleanSource"> </a> <h3>cleanSource</h3>
+      <pre><b>cleanSource</b>(inString)</pre> 
+   <ul>
+      Cleans up incoming source by stripping single-line comments,multi-line comments, blank lines, new lines, and trims lines.In other words, this is a simplification of minification./(([\"'])(\\\2|.*:\/\/|[^\/\n\r])*\2)|(//.*$)/gm
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;inString </code> - The source to clean 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="evalJSON"> </a> <h3>evalJSON</h3>
+      <pre><b>evalJSON</b>(jsonString)</pre> 
+   <ul>
+      This method does a direct <tt>eval()</tt> on the JSON object andshould be avoided since it allows for XSS and other security issues.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>jsonString </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="fillArray"> </a> <h3>fillArray</h3>
+      <pre><b>fillArray</b>(arr, size, value)</pre> 
+   <ul>
+      Fill the specified array with <tt>size</tt> elementseach with the value "<tt>value</tt>".  Modifies the providedarray directly.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Array</i>]&nbsp;arr </code> - The array to fill 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;size </code> - The size of the array to fill 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;value </code> - The value to put at each index 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="filter"> </a> <h3>filter</h3>
+      <pre><b>filter</b>(array, fn, thisp)</pre> 
+   <ul>
+      Calls a provided callback function once for each element inan array, and constructs a new array of all the values for whichcallback returns a <tt>true</tt> value. callback is invoked onlyfor indexes of the array which have assigned values; it is not invokedfor indexes which have been deleted or which have never been assignedvalues. Array elements which do not pass the callback test are simplyskipped, and are not included in the new array.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Array</i>]&nbsp;array </code> - The array to filter. 
+      </ul>
+      <ul>
+         <code>[<i>Function</i>]&nbsp;fn </code> - The callback to invoke.  It will be passed three                     arguments: The element value, the index of the element,                     and the array being traversed. 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;thisp </code> - Used as <tt>this</tt> for each invocation of the                      callback. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="forEach"> </a> <h3>forEach</h3>
+      <pre><b>forEach</b>(array, fn, thisp)</pre> 
+   <ul>
+      Executes a callback for each element within an array.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Array</i>]&nbsp;array </code> - The array to operate on 
+      </ul>
+      <ul>
+         <code>[<i>Function</i>]&nbsp;fn </code> - The function to apply to each element.  It will be passed three                     arguments: The element value, the index of the element,                     and the array being traversed. 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;thisp </code> - An optional "this" pointer to use in the callback 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getNumericParam"> </a> <h3>getNumericParam</h3>
+      <pre>Number&nbsp;<b>getNumericParam</b>(paramName, defaultVal)</pre> 
+   <ul>
+      Get a numeric query parameter, or the default specified if the parameterdoesn't exist.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The name of the parameter 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;defaultVal </code> - The number to return if the parameter doesn't exist 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>The value 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getPath"> </a> <h3>getPath</h3>
+      <pre>String&nbsp;<b>getPath</b>(url)</pre> 
+   <ul>
+      Get the path from a fully qualified URL, not including the trailingslash character.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;url </code> - The URL 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The path 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getQueryParams"> </a> <h3>getQueryParams</h3>
+      <pre>Object&nbsp;<b>getQueryParams</b>()</pre> 
+   <ul>
+      Get the query parameters from the window location object.  Theobject returned will contain a key/value pair for each argumentfound.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Object</i>&nbsp;</code>A generic <tt>Object</tt> with a key and value for each query argument. 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getStringParam"> </a> <h3>getStringParam</h3>
+      <pre>String&nbsp;<b>getStringParam</b>(paramName, defaultVal)</pre> 
+   <ul>
+      Get a string query parameter, or the default specified if the parameterdoesn't exist.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;paramName </code> - The name of the parameter 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;defaultVal </code> - The string to return if the parameter doesn't exist 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The value 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="indexOf"> </a> <h3>indexOf</h3>
+      <pre><b>indexOf</b>(array, obj, from)</pre> 
+   <ul>
+      Get the index of an element in the specified array.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Array</i>]&nbsp;array </code> - The array to scan 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - The object to find 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;from </code> - The index to start at, defaults to zero. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isEmpty"> </a> <h3>isEmpty</h3>
+      <pre>Boolean&nbsp;<b>isEmpty</b>(str)</pre> 
+   <ul>
+      Returns <tt>true</tt> if the string, after trimming, is eitherempty or is null.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;str </code> - The string to test 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the string is empty or <tt>null</tt> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="parseJSON"> </a> <h3>parseJSON</h3>
+      <pre>&nbsp;<b>parseJSON</b>(jsonString)</pre> 
+   <ul>
+      Parses specified JavaScript Object Notation (JSON) string back into its corresponding object.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>jsonString </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code>Object 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="quoteString"> </a> <h3>quoteString</h3>
+      <pre>String&nbsp;<b>quoteString</b>(text)</pre> 
+   <ul>
+      Return a string, enclosed in quotes.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;text </code> - The string to quote 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>The string in quotes 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="sysInfo"> </a> <h3>sysInfo</h3>
+      <pre>&nbsp;<b>sysInfo</b>()</pre> 
+   <ul>
+      Gets an object that is a collation of a number of browser andclient settings.  You can use this information to tailor a gameto the environment it is running within.<ul><li>browser - A string indicating the browser type (safari, mozilla, opera, msie)</li><li>version - The browser version</li><li>agent - The user agent</li><li>platform - The platform the browser is running on</li><li>cpu - The CPU on the machine the browser is running on</li><li>language - The browser's language</li><li>online - If the browser is running in online mode</li><li>cookies - If the browser supports cookies</li><li>fullscreen - If the browser is running in fullscreen mode</li><li>width - The browser's viewable width</li><li>height - The browser's viewable height</li><li>viewWidth - The innerWidth of the viewport</li><li>viewHeight - The innerHeight of the viewport</li><li>support:   <ul><li>xhr - Browser supports XMLHttpRequest object</li>   <li>geo - navigator.geolocation is supported</li>   <li>threads - Browser supports Worker threads</li>   <li>sockets - Browser supports WebSocket object</li>   <li>storage:      <ul><li>local - localStorage object is supported</li>      <li>session - sessionStorage object is supported</li>      <li>global - gloablStorage object is supported</li>      <li>database - indexedDB storage is supported</li>      </ul>   </li>   <li>canvas:      <ul><li>emulated - Canvas support emulated by FlashCanvas</li>      <li>defined - Canvas is either native or emulated</li>      <li>text - Supports text</li>      <li>textMetrics - Supports text measurement</li>			<li>contexts:     		<ul><li>ctx2D - Supports 2D</li>				<li>ctxGL - Supports webGL</li>				</ul>			</li>      </ul>   </li>   </ul></li></ul>
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code>An object with system information 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="toJSON"> </a> <h3>toJSON</h3>
+      <pre>&nbsp;<b>toJSON</b>(object)</pre> 
+   <ul>
+      Returns specified object as a JavaScript Object Notation (JSON) string.Code to handle "undefined" type was delibrately not implemented, being that it is not part of JSON."undefined" type is casted to "null".
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;object </code> - Must not be undefined or contain undefined types and variables. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code></code>String 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="whenReady"> </a> <h3>whenReady</h3>
+      <pre><b>whenReady</b>(obj, fn)</pre> 
+   <ul>
+      When the object is no longer <tt>undefined</tt>, the function willbe executed.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;obj </code> - The object to wait for 
+      </ul>
+      <ul>
+         <code>[<i>Function</i>]&nbsp;fn </code> - The function to execute when the object is ready 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:58 GMT-0400 (EDT)</div>
+</body>
+</html>

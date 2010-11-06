@@ -1,0 +1,534 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: BoxBodyComponent</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class BoxBodyComponent</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='BaseComponent.html' target='main'>BaseComponent</a>
+            |
+            +--<a href='Transform2DComponent.html' target='main'>Transform2DComponent</a>
+               |
+               +--<a href='BaseBodyComponent.html' target='main'>BaseBodyComponent</a>
+                  |
+                  +--<b>BoxBodyComponent</b></pre>
+   <hr>
+   Class <b>BoxBodyComponent</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="BaseBodyComponent.html">BaseBodyComponent</a>.<br/>
+
+<p>
+An extension of the <a href='BaseBodyComponent.html'>BaseBodyComponent</a> which creates a rectangular		 rigid body.</p>
+
+
+
+<br/><i>Defined in <a href="component.boxbody.src.html">component.boxbody.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#BoxBodyComponent">BoxBodyComponent</a></b>(name, extents)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        A rectangular rigid body component.
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#execute">execute</a></b>(renderContext, time) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; undocumented
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Rectangle2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getBoundingBox">getBoundingBox</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a box which bounds the body, local to the body.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Point2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getExtents">getExtents</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the extents of the box's body.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setExtents">setExtents</a></b>(extents) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the extents of the box's body.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#toXML">toXML</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="Transform2DComponent.html">Transform2DComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="Transform2DComponent.html#getRenderPosition">getRenderPosition</a>,
+            
+               <a href="Transform2DComponent.html#setLastPosition">setLastPosition</a>,
+            
+               <a href="Transform2DComponent.html#getLastPosition">getLastPosition</a>,
+            
+               <a href="Transform2DComponent.html#getLastRenderPosition">getLastRenderPosition</a>,
+            
+               <a href="Transform2DComponent.html#setRotation">setRotation</a>,
+            
+               <a href="Transform2DComponent.html#getRenderRotation">getRenderRotation</a>,
+            
+               <a href="Transform2DComponent.html#setScale">setScale</a>,
+            
+               <a href="Transform2DComponent.html#getScale">getScale</a>,
+            
+               <a href="Transform2DComponent.html#getRenderScale">getRenderScale</a>,
+            
+               <a href="Transform2DComponent.html#getClassName">getClassName</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
+            
+               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
+            
+               <a href="BaseComponent.html#getType">getType</a>,
+            
+               <a href="BaseComponent.html#setPriority">setPriority</a>,
+            
+               <a href="BaseComponent.html#getPriority">getPriority</a>,
+            
+               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseBodyComponent.html">BaseBodyComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseBodyComponent.html#destroy">destroy</a>,
+            
+               <a href="BaseBodyComponent.html#release">release</a>,
+            
+               <a href="BaseBodyComponent.html#startSimulation">startSimulation</a>,
+            
+               <a href="BaseBodyComponent.html#stopSimulation">stopSimulation</a>,
+            
+               <a href="BaseBodyComponent.html#setRenderComponent">setRenderComponent</a>,
+            
+               <a href="BaseBodyComponent.html#getRenderComponent">getRenderComponent</a>,
+            
+               <a href="BaseBodyComponent.html#setLocalOrigin">setLocalOrigin</a>,
+            
+               <a href="BaseBodyComponent.html#getLocalOrigin">getLocalOrigin</a>,
+            
+               <a href="BaseBodyComponent.html#getCenter">getCenter</a>,
+            
+               <a href="BaseBodyComponent.html#getShapeDef">getShapeDef</a>,
+            
+               <a href="BaseBodyComponent.html#getBodyDef">getBodyDef</a>,
+            
+               <a href="BaseBodyComponent.html#getBody">getBody</a>,
+            
+               <a href="BaseBodyComponent.html#setRestitution">setRestitution</a>,
+            
+               <a href="BaseBodyComponent.html#getRestitution">getRestitution</a>,
+            
+               <a href="BaseBodyComponent.html#setDensity">setDensity</a>,
+            
+               <a href="BaseBodyComponent.html#getDensity">getDensity</a>,
+            
+               <a href="BaseBodyComponent.html#setFriction">setFriction</a>,
+            
+               <a href="BaseBodyComponent.html#getFriction">getFriction</a>,
+            
+               <a href="BaseBodyComponent.html#setPosition">setPosition</a>,
+            
+               <a href="BaseBodyComponent.html#getPosition">getPosition</a>,
+            
+               <a href="BaseBodyComponent.html#getRotation">getRotation</a>,
+            
+               <a href="BaseBodyComponent.html#applyForce">applyForce</a>,
+            
+               <a href="BaseBodyComponent.html#applyImpulse">applyImpulse</a>,
+            
+               <a href="BaseBodyComponent.html#applyTorque">applyTorque</a>,
+            
+               <a href="BaseBodyComponent.html#getMass">getMass</a>,
+            
+               <a href="BaseBodyComponent.html#isStatic">isStatic</a>,
+            
+               <a href="BaseBodyComponent.html#isSleeping">isSleeping</a>,
+            
+               <a href="BaseBodyComponent.html#isFrozen">isFrozen</a>,
+            
+               <a href="BaseBodyComponent.html#wakeUp">wakeUp</a>,
+            
+               <a href="BaseBodyComponent.html#freeze">freeze</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="BoxBodyComponent"> </a>
+<h3>BoxBodyComponent</h3>
+
+   <pre><b>BoxBodyComponent</b>(name, extents)</pre>
+   <ul>
+      A rectangular rigid body component.
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - Name of the component 
+      </ul>
+      
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;extents</code> - The full extents of the body along X and Y 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="execute"> </a> <h3>execute</h3>
+      <pre><b>execute</b>(renderContext, time)</pre> 
+   <ul>
+      undocumented
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>renderContext </code> 
+      </ul>
+      <ul>
+         <code>time </code> 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getBoundingBox"> </a> <h3>getBoundingBox</h3>
+      <pre>Rectangle2D&nbsp;<b>getBoundingBox</b>()</pre> 
+   <ul>
+      Get a box which bounds the body, local to the body.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Rectangle2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getExtents"> </a> <h3>getExtents</h3>
+      <pre>Point2D&nbsp;<b>getExtents</b>()</pre> 
+   <ul>
+      Get the extents of the box's body.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Point2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setExtents"> </a> <h3>setExtents</h3>
+      <pre><b>setExtents</b>(extents)</pre> 
+   <ul>
+      Set the extents of the box's body.  Calling this method after thesimulation of the body has started has no effect.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;extents </code> - The extents of the body along X and Y 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:58 GMT-0400 (EDT)</div>
+</body>
+</html>

@@ -1,0 +1,756 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <title>JsDoc: WiimoteInputComponent</title>
+   <style type="text/css">
+      body { background-color: #FFFFFF; }
+      .TableHeadingColor { background: #CCCCFF; }
+      .TableSubHeadingColor { background: #EEEEFF; }
+      .TableRowColor { background: #FFFFFF; }
+      
+      .FrameTitleFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameHeadingFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .FrameItemFont
+      {
+         font-size: 10pts;
+         font-family: Helvetica, Arial, san-serif;
+      }
+      
+      .NavBar
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         background-color: #FFFFFF;
+      }
+      
+      .jsdoc_ctime
+      {
+         font-family: Arial, Helvetica, sans-serif;
+         font-size: 9pt;
+         text-align: right;
+      }
+   </style>
+</head>
+
+<body>
+
+<table style="width: 100%">
+<tr>
+<td class="NavBar" valign="top"><font size="-2">SUMMARY:&nbsp;<a href="#field_summary">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_summary">CONSTR</a>&nbsp;|&nbsp;<a href="#method_summary">METHOD</a></font></td>
+<td class="NavBar" valign="top"><font size="-2">DETAIL:&nbsp;<a href="#field_detail">FIELD</a>&nbsp;|&nbsp;<a href="#constructor_detail">CONSTR</a>&nbsp;|&nbsp;<a href="#method_detail">METHOD</a></font></td>
+</tr>
+</table>
+
+<hr>
+
+<h2>Class WiimoteInputComponent</h2>
+
+   <!-- ============ CLASS INHERITANCE BEGIN ========== -->
+
+   <pre>Object
+   |
+   +--<a href='PooledObject.html' target='main'>PooledObject</a>
+      |
+      +--<a href='BaseObject.html' target='main'>BaseObject</a>
+         |
+         +--<a href='BaseComponent.html' target='main'>BaseComponent</a>
+            |
+            +--<a href='InputComponent.html' target='main'>InputComponent</a>
+               |
+               +--<a href='KeyboardInputComponent.html' target='main'>KeyboardInputComponent</a>
+                  |
+                  +--<b>WiimoteInputComponent</b></pre>
+   <hr>
+   Class <b>WiimoteInputComponent</b><br/>
+   <!-- ============ CLASS INHERITANCE END ========== -->
+
+
+
+   Extends <a href="KeyboardInputComponent.html">KeyboardInputComponent</a>.<br/>
+
+<p>
+A component which responds to the Wiimote (in the Opera browser)is notifies its host object by calling a number of methods.  The host objectshould implement any of the following methods to receive the corresponding events.<br/>The next few events are fired on the host object, if they exist, whenthe corresponding button is pressed and released.  All methods take threearguments: the controller number, a boolean indicating <tt>true</tt>if the button has been pressed or <tt>false</tt> when released, andthe event object that caused the method to be invoked.<br/><ul><li><tt>onWiimoteLeft()</tt> - Direction pad left</li><li><tt>onWiimoteRight()</tt> - Direction pad right</li><li><tt>onWiimoteUp()</tt> - Direction pad up</li><li><tt>onWiimoteDown()</tt> - Direction pad down</li><li><tt>onWiimotePlus()</tt> - Plus button pressed/released</li><li><tt>onWiimoteMinus()</tt> - Minus button pressed/released</li><li><tt>onWiimoteButton1()</tt> - Button 1 pressed/released</li><li><tt>onWiimoteButton2()</tt> - Button 2 pressed/released</li><li><tt>onWiimoteButtonA()</tt> - Button A pressed/released</li><li><tt>onWiimoteButtonB()</tt> - Button B pressed/released</li><li><tt>onWiimoteButtonC()</tt> - Button C pressed/released</li><li><tt>onWiimoteButtonZ()</tt> - Button Z pressed/released</li></ul><br/><br/>The following events are status events and take differentarguments:<ul><li><tt>onWiimoteEnabled()</tt> - Enabled/disabled status (controller, state)</li><li><tt>onWiimoteValidity()</tt> - Validity of data transfer (controller, validity)</li><li><tt>onWiimoteDistance()</tt> - Distance from screen in meters (controller, dist)</li><li><tt>onWiimotePosition()</tt> - X/Y position (controller, x, y)</li><li><tt>onWiimoteRoll()</tt> - X-axis roll in radians (controller, roll)</li><li><tt>onWiimoteOffscreen()</tt> - Triggered <i>instead of</i> onWiimotePosition if the                         remote isn't pointing at the screen.</li></ul></p>
+
+
+
+<br/><i>Defined in <a href="component.wiimoteinput.src.html">component.wiimoteinput.js</a></i>
+
+<hr>
+
+<!-- =========== FIELD SUMMARY =========== -->
+
+<a name="field_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Field Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DATA_EXTREMELY_POOR">DATA_EXTREMELY_POOR</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For second argument to <tt>onWiimoteValidity()</tt>: the data is extremely poor (garbage)
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DATA_GOOD">DATA_GOOD</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For second argument to <tt>onWiimoteValidity()</tt>: the data is good
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DATA_INVALID">DATA_INVALID</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For second argument to <tt>onWiimoteValidity()</tt>: the Wiimote isn't pointing at the screen
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DATA_POOR">DATA_POOR</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For second argument to <tt>onWiimoteValidity()</tt>: the data is poor
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#DATA_VERY_POOR">DATA_VERY_POOR</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;For second argument to <tt>onWiimoteValidity()</tt>: the data is very poor (unreliable)
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_1">KEYCODE_1</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "1"
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_2">KEYCODE_2</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "2"
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_A">KEYCODE_A</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "A"
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_B">KEYCODE_B</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "B"
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_C">KEYCODE_C</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "C"
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_DOWN">KEYCODE_DOWN</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for dpad down
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_LEFT">KEYCODE_LEFT</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for dpad left
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_MINUS">KEYCODE_MINUS</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "-"
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_PLUS">KEYCODE_PLUS</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "+"
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_RIGHT">KEYCODE_RIGHT</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for dpad right
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_UP">KEYCODE_UP</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for dpad up
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#KEYCODE_Z">KEYCODE_Z</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Keycode for button "Z"
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+<!-- =========== END FIELD SUMMARY =========== -->
+
+
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+<a name="constructor_summary"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+<tr bgcolor="#CCCCFF" class="TableHeadingColor">
+   <td colspan=2><font size="+2"><b>Constructor Summary</b></font></td>
+</tr>
+
+   <tr bgcolor="white" class="TableRowColor">
+      <td>
+   
+      <code>
+      <b><a href="#WiimoteInputComponent">WiimoteInputComponent</a></b>(name, priority)
+      </code>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Create a Wii remote input component.
+        </td>
+   </tr>
+
+</table>
+&nbsp;
+<!-- ======== END CONSTRUCTOR SUMMARY ======== -->
+
+
+<!-- ========== METHOD SUMMARY =========== -->
+
+<a name="method_summary"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=2>
+         <font size="+2"> <b>Method Summary</b></font>
+      </td>
+   </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getClassName">getClassName</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the class name of this object
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#release">release</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Releases the component back into the object pool.
+ 
+         </td>
+      </tr>
+   
+</table>
+&nbsp;
+
+
+<!-- ========== EVENT SUMMARY =========== -->
+
+
+
+
+<!-- ========== INHERITED METHODS SUMMARY =========== -->
+
+   <table border="1" cellpadding="3" cellspacing="0" width="100%">
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseObject.html">BaseObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseObject.html#destroy">destroy</a>,
+            
+               <a href="BaseObject.html#setElement">setElement</a>,
+            
+               <a href="BaseObject.html#getElement">getElement</a>,
+            
+               <a href="BaseObject.html#jQ">jQ</a>,
+            
+               <a href="BaseObject.html#update">update</a>,
+            
+               <a href="BaseObject.html#addEvent">addEvent</a>,
+            
+               <a href="BaseObject.html#removeEvent">removeEvent</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="BaseComponent.html">BaseComponent</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="BaseComponent.html#setHostObject">setHostObject</a>,
+            
+               <a href="BaseComponent.html#getHostObject">getHostObject</a>,
+            
+               <a href="BaseComponent.html#getType">getType</a>,
+            
+               <a href="BaseComponent.html#setPriority">setPriority</a>,
+            
+               <a href="BaseComponent.html#getPriority">getPriority</a>,
+            
+               <a href="BaseComponent.html#execute">execute</a>,
+            
+               <a href="BaseComponent.html#getTypeString">getTypeString</a>,
+            
+         </code></td>
+      </tr>
+      
+      <tr bgcolor="#EEEEFF" class="TableSubHeadingColor">
+         <td>
+            <b>Methods inherited from class <a href="PooledObject.html">PooledObject</a></b>
+         </td>
+      </tr>
+      <tr bgcolor="#FFFFFF" class="TableRowColor">
+         <td><code>
+            
+               <a href="PooledObject.html#getId">getId</a>,
+            
+               <a href="PooledObject.html#getName">getName</a>,
+            
+               <a href="PooledObject.html#getProperties">getProperties</a>,
+            
+               <a href="PooledObject.html#toString">toString</a>,
+            
+               <a href="PooledObject.html#toXML">toXML</a>,
+            
+               <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#create">create</a>,
+            
+         </code></td>
+      </tr>
+      
+   </table>
+   <br/>
+
+<br/>
+
+<!-- ========== END INHERITED METHODS SUMMARY =========== -->
+
+<!-- ============ FIELD DETAIL START ========= -->
+
+<a name="field_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Field Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <!-- One single method detail entry -->
+   <a name="DATA_EXTREMELY_POOR">
+   <!-- -->
+   </a> <h3>DATA_EXTREMELY_POOR</h3>
+      <pre>Number <b>DATA_EXTREMELY_POOR</b></pre> 
+   <ul>
+      For second argument to <tt>onWiimoteValidity()</tt>: the data is extremely poor (garbage)
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DATA_GOOD">
+   <!-- -->
+   </a> <h3>DATA_GOOD</h3>
+      <pre>Number <b>DATA_GOOD</b></pre> 
+   <ul>
+      For second argument to <tt>onWiimoteValidity()</tt>: the data is good
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DATA_INVALID">
+   <!-- -->
+   </a> <h3>DATA_INVALID</h3>
+      <pre>Number <b>DATA_INVALID</b></pre> 
+   <ul>
+      For second argument to <tt>onWiimoteValidity()</tt>: the Wiimote isn't pointing at the screen
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DATA_POOR">
+   <!-- -->
+   </a> <h3>DATA_POOR</h3>
+      <pre>Number <b>DATA_POOR</b></pre> 
+   <ul>
+      For second argument to <tt>onWiimoteValidity()</tt>: the data is poor
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="DATA_VERY_POOR">
+   <!-- -->
+   </a> <h3>DATA_VERY_POOR</h3>
+      <pre>Number <b>DATA_VERY_POOR</b></pre> 
+   <ul>
+      For second argument to <tt>onWiimoteValidity()</tt>: the data is very poor (unreliable)
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_1">
+   <!-- -->
+   </a> <h3>KEYCODE_1</h3>
+      <pre>Number <b>KEYCODE_1</b></pre> 
+   <ul>
+      Keycode for button "1"
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_2">
+   <!-- -->
+   </a> <h3>KEYCODE_2</h3>
+      <pre>Number <b>KEYCODE_2</b></pre> 
+   <ul>
+      Keycode for button "2"
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_A">
+   <!-- -->
+   </a> <h3>KEYCODE_A</h3>
+      <pre>Number <b>KEYCODE_A</b></pre> 
+   <ul>
+      Keycode for button "A"
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_B">
+   <!-- -->
+   </a> <h3>KEYCODE_B</h3>
+      <pre>Number <b>KEYCODE_B</b></pre> 
+   <ul>
+      Keycode for button "B"
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_C">
+   <!-- -->
+   </a> <h3>KEYCODE_C</h3>
+      <pre>Number <b>KEYCODE_C</b></pre> 
+   <ul>
+      Keycode for button "C"
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_DOWN">
+   <!-- -->
+   </a> <h3>KEYCODE_DOWN</h3>
+      <pre>Number <b>KEYCODE_DOWN</b></pre> 
+   <ul>
+      Keycode for dpad down
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_LEFT">
+   <!-- -->
+   </a> <h3>KEYCODE_LEFT</h3>
+      <pre>Number <b>KEYCODE_LEFT</b></pre> 
+   <ul>
+      Keycode for dpad left
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_MINUS">
+   <!-- -->
+   </a> <h3>KEYCODE_MINUS</h3>
+      <pre>Number <b>KEYCODE_MINUS</b></pre> 
+   <ul>
+      Keycode for button "-"
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_PLUS">
+   <!-- -->
+   </a> <h3>KEYCODE_PLUS</h3>
+      <pre>Number <b>KEYCODE_PLUS</b></pre> 
+   <ul>
+      Keycode for button "+"
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_RIGHT">
+   <!-- -->
+   </a> <h3>KEYCODE_RIGHT</h3>
+      <pre>Number <b>KEYCODE_RIGHT</b></pre> 
+   <ul>
+      Keycode for dpad right
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_UP">
+   <!-- -->
+   </a> <h3>KEYCODE_UP</h3>
+      <pre>Number <b>KEYCODE_UP</b></pre> 
+   <ul>
+      Keycode for dpad up
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="KEYCODE_Z">
+   <!-- -->
+   </a> <h3>KEYCODE_Z</h3>
+      <pre>Number <b>KEYCODE_Z</b></pre> 
+   <ul>
+      Keycode for button "Z"
+      
+   </ul>
+   <hr>
+
+
+<!-- ============ FIELD DETAIL END ========== -->
+
+
+<!-- ========= CONSTRUCTOR DETAIL START ======== -->
+<a name="constructor_detail"> </a>
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+      <font size="+2"><b>Constructor Detail</b></font>
+      </td>
+   </tr>
+
+</table>
+
+<a name="WiimoteInputComponent"> </a>
+<h3>WiimoteInputComponent</h3>
+
+   <pre><b>WiimoteInputComponent</b>(name, priority)</pre>
+   <ul>
+      Create a Wii remote input component.
+   </ul>
+   
+   <!-- PARAMETERS START -->
+   
+   <ul>
+      <b>Parameters:</b>
+      
+      <ul>
+         <code>[<i>String</i>]&nbsp;name</code> - The name of the component 
+      </ul>
+      
+      <ul>
+         <code>[<i>Number</i>]&nbsp;priority</code> - The priority of the component 
+      </ul>
+      
+   </ul>
+   
+   <!-- PARAMETERS END -->
+
+<hr/>
+<!-- END ADDITIONAL ATTRIBUTES  -->
+<!-- ========= CONSTRUCTOR DETAIL END ======== -->
+
+
+<!-- ============ METHOD DETAIL START ======= -->
+
+<a name="method_detail"> </a> 
+<table border="1" cellpadding="3" cellspacing="0" width="100%">
+   <tr bgcolor="#CCCCFF" class="TableHeadingColor">
+      <td colspan=1>
+         <font size="+2"> <b>Method Detail</b></font> 
+      </td>
+   </tr>
+</table>
+
+
+   <a name="getClassName"> </a> <h3>getClassName</h3>
+      <pre>String&nbsp;<b>getClassName</b>()</pre> 
+   <ul>
+      Get the class name of this object
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code>"WiimoteInputComponent" 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="release"> </a> <h3>release</h3>
+      <pre><b>release</b>()</pre> 
+   <ul>
+      Releases the component back into the object pool. See <a href='PooledObject.html#release'>PooledObject.release</a>for more information.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+
+<!-- ============ METHOD DETAIL END ========== -->
+
+<!-- ============ EVENT DETAIL START ======= -->
+
+
+
+<!-- ============ EVENT DETAIL END ========== -->
+
+   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sat Nov 06 2010 19:38:58 GMT-0400 (EDT)</div>
+</body>
+</html>
