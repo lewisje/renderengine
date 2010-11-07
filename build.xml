@@ -14,7 +14,6 @@
    <!-- Locations of distribution files -->
    <property name="min.home" value="${dist.home}/min-js"/>
    <property name="full.home" value="${dist.home}/full"/>
-   <property name="zip.home" value="${dist.home}/min-gzip-js"/>
 
 	<!-- Demos and tools won't be copied unless specified in build.properties -->
 	<property name="demo.set" value="NO_COPY"/>
@@ -44,7 +43,7 @@
 -->
   
    <!-- ======================== ENGINE DISTRIBUTION TARGETS ======================= -->
-   <target name="dist" depends="engine.clean,engine.zip,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
+   <target name="dist" depends="engine.clean,engine.dist,dist.finish" description="Creates the full and compressed distribution zip files for The Render Engine"/>
    <target name="engine.make.min" depends="engine.clean,engine.min" description="Creates the compressed distribution directory for The Render Engine"/>
    <target name="engine.make.full" depends="engine.clean,engine.full" description="Creates the full distribution directory for The Render Engine"/>
    <target name="engine.make.all" depends="engine.clean,engine.full,engine.min" description="Creates the full and compressed distribution directories for The Render Engine"/>
@@ -54,7 +53,6 @@
       <delete quiet="true" includeemptydirs="true" dir="${dist.home}/engine"/>
       <delete quiet="true" includeemptydirs="true" dir="${full.home}/temp"/>
       <delete quiet="true" includeemptydirs="true" dir="${min.home}/temp"/>
-      <delete quiet="true" includeemptydirs="true" dir="${zip.home}/temp"/>
 	</target>
 
 
@@ -182,10 +180,9 @@
   
  
    <!-- ============================= ENGINE ZIP ============================ -->
-   <target name="engine.zip" depends="engine.min,engine.full" description="Create and zip the engine distributions">
+   <target name="engine.dist" depends="engine.min,engine.full" description="Create and zip the engine distributions">
       <zip basedir="${min.home}" destfile="${dist.home}/${app.name}_${app.version}-min.zip"/>
       <zip basedir="${full.home}" destfile="${dist.home}/${app.name}_${app.version}.zip"/>
-      <zip basedir="${zip.home}" destfile="${dist.home}/${app.name}_${app.version}-min-gzip.zip"/>
    </target>
   
   
@@ -197,6 +194,7 @@
       <mkdir dir="${build.home}/temp"/>
  
       <mkdir dir="${build.home}/engine"/>
+      <mkdir dir="${build.home}/engine/configs"/>
       <mkdir dir="${build.home}/engine/runtime"/>
       <mkdir dir="${build.home}/components"/>
       <mkdir dir="${build.home}/rendercontexts"/>
@@ -207,14 +205,26 @@
       <mkdir dir="${build.home}/css"/>
       <mkdir dir="${build.home}/fonts"/>
       <mkdir dir="${build.home}/libs"/>
+      <mkdir dir="${build.home}/objects"/>
+
+		<!-- Box2d Physics Engine -->
+      <mkdir dir="${build.home}/physics"/>
+      <mkdir dir="${build.home}/physics/collision"/>
+      <mkdir dir="${build.home}/physics/collision/shapes"/>
+      <mkdir dir="${build.home}/physics/common"/>
+      <mkdir dir="${build.home}/physics/common/math"/>
+      <mkdir dir="${build.home}/physics/dynamics"/>
+      <mkdir dir="${build.home}/physics/dynamics/contacts"/>
+      <mkdir dir="${build.home}/physics/dynamics/joints"/>
+   </target>
+
+   <target name="makedirs2" description="Create the directories for tools, tests, tutorials">
       <mkdir dir="${build.home}/demos"/>
       <mkdir dir="${build.home}/tools"/>
       <mkdir dir="${build.home}/tutorials"/>
       <mkdir dir="${build.home}/setup"/>
       <mkdir dir="${build.home}/test"/>
-           
-   </target>
- 
+	</target>   	 
  
    <!-- ======================== COPY UNCOMPRESSED & PRECOMPRESSED FILES ========================= -->
    <target name="basecopy" description="Copy the uncompressed files">
@@ -238,6 +248,39 @@
          </fileset>
       </copy>
 
+      <!-- Copy the supporting libraries -->     
+      <copy todir="${build.home}/libs">
+         <fileset dir="${basedir}/libs">
+            <include name="AC_OETags.js"/>
+            <include name="base.js"/>
+            <include name="flash10canvas.swf"/>
+            <include name="flash9canvas.swf"/>
+            <include name="flashcanvas.js"/>
+            <include name="json2.js"/>
+            <include name="jquery.js"/>
+            <include name="jquery.ext.engine.js"/>
+            <include name="soundmanager2.js"/>
+            <include name="soundmanager2.swf"/>
+            <include name="soundmanager2_flash9.swf"/>
+            <include name="sylvester.js"/>
+         </fileset>
+      </copy>
+		
+		<!-- Copy the browser specific configurations -->
+		<copy todir="${build.home}/engine/configs">
+			<fileset dir="${basedir}/engine/configs">
+				<include name="*.config"/>
+			</fileset>
+		</copy>
+
+  		<!-- Copy the simple webserver launcher -->
+  		<copy todir="${build.home}">
+  			<fileset file="${basedir}/run.bat"/>
+		</copy>
+           
+   </target>
+ 
+ 	<target name="basecopy2" description="Copy tutorials, setup, and tests">
       <!-- Copy the tests -->     
       <copy todir="${build.home}/test">
          <fileset dir="${basedir}/test" includes="${test.set}">
@@ -260,24 +303,7 @@
             <exclude name="**/.svn"/>
          </fileset>
       </copy>
-
-      <!-- Copy the supporting libraries -->     
-      <copy todir="${build.home}/libs">
-         <fileset dir="${basedir}/libs">
-            <include name="AC_OETags.js"/>
-            <include name="base.js"/>
-            <include name="json2.js"/>
-            <include name="jquery.js"/>
-            <include name="jquery.ext.engine.js"/>
-            <include name="soundmanager2.js"/>
-            <include name="soundmanager2.swf"/>
-            <include name="soundmanager2_flash9.swf"/>
-            <include name="sylvester.js"/>
-         </fileset>
-      </copy>
-           
-   </target>
- 
+	</target>
  
    <!-- ======================= COPY DEMOS & TOOLS =============================== -->
    <target name="copydemos" description="Copy demonstrations and tools">
@@ -321,8 +347,17 @@
       <antcall target="makedirs">
          <param name="build.home" value="${full.home}"/>
       </antcall>
+
+      <antcall target="makedirs2">
+         <param name="build.home" value="${full.home}"/>
+      </antcall>
  
       <antcall target="basecopy">
+         <param name="build.home" value="${full.home}"/>
+         <param name="source.flag" value=".src"/>
+      </antcall>
+
+      <antcall target="basecopy2">
          <param name="build.home" value="${full.home}"/>
          <param name="source.flag" value=".src"/>
       </antcall>
@@ -385,6 +420,20 @@
          </fileset>
       </copy>
 
+      <!-- Copy the Box2d physics engine -->     
+      <copy todir="${full.home}/physics">
+         <fileset dir="${basedir}/physics">
+            <include name="**/*.js"/>
+         </fileset>
+      </copy>
+
+      <!-- Copy the starter objects -->     
+      <copy todir="${full.home}/objects">
+         <fileset dir="${basedir}/objects">
+            <include name="*.js"/>
+         </fileset>
+      </copy>
+
  		<!-- Exclude any specified files -->
 		<delete quiet="true">
 			<fileset dir="${full.home}" includes="${exclude.set}"/>
@@ -409,6 +458,9 @@
 		<replaceregexp match="Engine.addMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 		<replaceregexp match="Engine.removeMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
+		<!-- PRAGMA DEBUG BLOCKS -->
+		<replaceregexp match="\/\* pragma:DEBUG_START \*\/(.|\n)*?\/\* pragma:DEBUG_END \*\/" replace="" flags="gm" file="${input.file}"/>
+	
   	</target>
 
 	<target name="engine.compile" description="Use the Google Closure Compiler to compress the code">
@@ -427,8 +479,6 @@
 			jvm="${compiler.jvm}">
 		   <arg line="--js ${min.home}/temp/${input.file} --js_output_file ${min.home}/${input.file}"/>
 		</java>
-
-      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
 	</target>
   
 	<target name="engine.compress" description="Use the Yahoo!UI Compressor to compress the code">
@@ -450,7 +500,6 @@
          </classpath>
       </java>
 	
-      <gzip src="${min.home}/${input.file}" destfile="${zip.home}/${input.file}"/>
 	</target>
 
    <target name="engine.min" description="Create the minified/compressed distribution of the engine">
@@ -467,30 +516,8 @@
          <param name="source.flag" value=""/>
       </antcall>
  
-      <antcall target="copydemos">
-         <param name="build.home" value="${min.home}"/>
-      </antcall>
-
       <antcall target="licenses">
          <param name="build.home" value="${min.home}"/>
-      </antcall>
-
-      <!-- GZIPPED -->
-      <antcall target="makedirs">
-         <param name="build.home" value="${zip.home}"/>
-      </antcall>
-
-      <antcall target="basecopy">
-         <param name="build.home" value="${zip.home}"/>
-         <param name="source.flag" value=""/>
-      </antcall>
- 
-      <antcall target="copydemos">
-         <param name="build.home" value="${zip.home}"/>
-      </antcall>
-
-      <antcall target="licenses">
-         <param name="build.home" value="${zip.home}"/>
       </antcall>
    	   	
       <!-- ### FINISH ### Pre-compilation tasks -->
@@ -547,7 +574,7 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
-			<param name="input.file" value="engine/engine.mathobject.js"/>
+			<param name="input.file" value="engine/engine.mathprimitives.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -587,11 +614,27 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.basebody.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.basejoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.billboard2d.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.boxbody.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.boxcollider.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.circlebody.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -600,6 +643,10 @@
 
 		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.collider.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.distancejoint.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -639,7 +686,15 @@
 		</antcall>
 
 		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.revolutejoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
 			<param name="input.file" value="components/component.sprite.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="components/component.touchinput.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
@@ -681,15 +736,6 @@
 		<antcall target="${compress.option}">
 			<param name="input.file" value="rendercontexts/context.scrollingbackground.js"/>
 		</antcall>
-
-		<antcall target="${compress.option}">
-			<param name="input.file" value="rendercontexts/context.layeredcontext.js"/>
-		</antcall>
-<!--
-		<antcall target="${compress.option}">
-			<param name="input.file" value="rendercontexts/context.svgcontext.js"/>
-		</antcall>
--->
 
  
       <!-- Compress and copy the resource loaders -->     
@@ -736,10 +782,6 @@
       <echo message="Compressing spatial..."/>
 
 		<antcall target="${compress.option}">
-			<param name="input.file" value="spatial/container.quadtree.js"/>
-		</antcall>
-
-		<antcall target="${compress.option}">
 			<param name="input.file" value="spatial/container.spatialgrid.js"/>
 		</antcall>
  
@@ -766,17 +808,283 @@
 		<antcall target="${compress.option}">
 			<param name="input.file" value="textrender/text.vector.js"/>
 		</antcall>
+
+      <!-- Copy the starter objects -->     
+      <echo message="Compressing objects..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="objects/object.physicsactor.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="objects/object.spriteactor.js"/>
+		</antcall>
+
+      <!-- Copy the box2d physics engine -->     
+      <echo message="Compressing Box2d physics engine..."/>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/physics.simulation.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2AABB.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Bound.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2BoundValues.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2BroadPhase.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2BufferedPair.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Collision.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2ContactID.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2ContactPoint.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Distance.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Manifold.js"/>
+		</antcall>
+		
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2OBB.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Pair.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2PairCallback.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2PairManager.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/b2Proxy.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/ClipVertex.js"/>
+		</antcall>
+	
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/Features.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2BoxDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2CircleDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2CircleShape.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2MassData.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2PolyDef.js"/>
+		</antcall>
  
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2PolyShape.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2Shape.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/collision/shapes/b2ShapeDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/b2Settings.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/math/b2Mat22.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/math/b2Math.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/common/math/b2Vec2.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2Body.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2BodyDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2CollisionFilter.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2ContactManager.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2Island.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2TimeStep.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2World.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/b2WorldListener.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2CircleContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2Conservative.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2Contact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactConstraint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactNode.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactRegister.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2ContactSolver.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2NullContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2PolyAndCircleContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/contacts/b2PolyContact.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2DistanceJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2DistanceJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2GearJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2GearJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2Jacobian.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2Joint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2JointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2JointNode.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2MouseJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2MouseJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PrismaticJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PrismaticJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PulleyJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2PulleyJointDef.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2RevoluteJoint.js"/>
+		</antcall>
+
+		<antcall target="${compress.option}">
+			<param name="input.file" value="physics/dynamics/joints/b2RevoluteJointDef.js"/>
+		</antcall>
+
+
  		<!-- Exclude any specified files -->
 		<delete quiet="true">
 			<fileset dir="${min.home}" includes="${exclude.set}"/>
 		</delete>
 
- 		<!-- Exclude any specified files -->
-		<delete quiet="true">
-         <fileset dir="${zip.home}" includes="${exclude.set}"/>
-		</delete>
-  
    </target>
   
 </project>

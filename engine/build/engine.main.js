@@ -153,7 +153,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Check for general version specific options
 		if (opts["versions"]) {
 			for (var v in opts["versions"]) {
-				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					versionDefaults = opts["versions"][v];
 				}
@@ -163,7 +163,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Finally, check the OS for version specific options
 		if (osOpts && osOpts["versions"]) {
 			for (var v in osOpts["versions"]) {
-				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					platformVersions = osOpts["versions"][v];
 				}

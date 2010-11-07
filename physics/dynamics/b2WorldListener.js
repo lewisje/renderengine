@@ -42,7 +42,7 @@ Engine.initObject("b2WorldListener", null, function() {
       NotifyBoundaryViolated: function(body) {
          //NOT_USED(body);
          return b2WorldListener.b2_freezeBody;
-      },
+      }
       
    
    }, {

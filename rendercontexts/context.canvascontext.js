@@ -33,6 +33,7 @@
 
 // Includes
 Engine.include("/engine/engine.math2d.js");
+Engine.include("/libs/AC_OETags.js");
 Engine.include("/rendercontexts/context.render2d.js");
 
 Engine.initObject("CanvasContext", "RenderContext2D", function() {
@@ -61,6 +62,10 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     * @private
     */
    constructor: function(name, width, height) {
+   	// Make sure the browser supports the canvas and 2D context!
+   	Assert((EngineSupport.sysInfo().support.canvas.defined &&
+   			  EngineSupport.sysInfo().support.canvas.contexts.ctx2D), "Browser does not support Canvas. Cannot construct CanvasContext!");
+      
       Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
 
       this.setWidth(width);
@@ -78,7 +83,8 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    afterAdd: function(parent) {
-      if (typeof FlashCanvas != "undefined") {
+      // For FlashCanvas, check for emulation
+      if (EngineSupport.sysInfo().support.canvas.emulated) {
          FlashCanvas.setOptions({
             disableContextMenu: false,
             turbo: true,
@@ -566,6 +572,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.get2DContext().arcTo(point1.x, point1.y, point2.x, point2.y, radius);
       this.base(point1, point2, radius);
    }
+	
 }, {
    /**
     * Get the class name of this object
@@ -574,7 +581,52 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
     */
    getClassName: function() {
       return "CanvasContext";
-   }
+   },
+	
+	resolved: function() {
+		if (!EngineSupport.sysInfo().support.canvas.defined) {
+			// Is Flash available?
+			var flashVer = 0;
+			if (GetSwfVer() != null) {
+		 		// Detect the version of flash available.  If 10 or higher, use 10
+				if (DetectFlashVer(10, 0, 0)) {
+					flashVer = 10;
+				} else {
+					flashVer = 9;
+				}
+			}
+
+			if (flashVer == 0) {
+				// Flash not available
+				Console.warn("Flash not detected by CanvasContext")
+				return;
+			}
+			
+			// Try to load the FlashCanvas
+			Console.debug("-- Loading FlashCanvas")
+			Engine.include("/libs/flashcanvas.js");
+		
+			CanvasContext.flashRetries = 0;
+			CanvasContext.loadFlashTimer = setTimeout(function() {
+				if (typeof FlashCanvas != "undefined") {
+					// Emulation of canvas provided by FlashCanvas
+					var sInfo = EngineSupport.sysInfo();
+	      		sInfo.support.canvas.emulated = true;
+	      		sInfo.support.canvas.defined = true;
+	      		sInfo.support.canvas.contexts.ctx2D = true;
+	      		sInfo.support.canvas.text = true;
+					
+					CanvasContext.flashRetries = 0;
+					CanvasContext.loadFlashTimer = null;
+					Console.warn("FlashCanvas loaded successfully");
+	      	} else if (CanvasContext.flashRetries++ < 20) {
+					// Try up to 20 times (10 seconds)
+					setTimeout(arguments.callee, 500);
+				}
+			}, 500);
+		}	
+	}
+	
 });
 
 return CanvasContext;

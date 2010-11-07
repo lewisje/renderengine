@@ -40,7 +40,9 @@ Engine.initObject("RenderContext", "Container", function() {
 /**
  * @class A base rendering context.  Game objects are rendered to a context
  * during engine runtime.  A render context is a container of all of the objects
- * added to it so that each object is given the chance to render.
+ * added to it so that each object is given the chance to render.  A render context
+ * is logically a scene graph.  While each context can have multiple contexts associated
+ * with it, the root of the scene graph is always located at {@link Engine#getDefaultContext}.
  *
  * @param contextName {String} The name of this context.  Default: RenderContext
  * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.

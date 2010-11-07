@@ -616,7 +616,11 @@ Engine.initObject("b2PulleyJoint", "b2Joint", function() {
 		
 	}, {
 		
-		b2_minPulleyLength: b2Settings.b2_lengthUnitsPerMeter
+		resolved: function() {
+	      b2PulleyJoint.b2_minPulleyLength = b2Settings.b2_lengthUnitsPerMeter;
+		},
+		
+		b2_minPulleyLength: null
 		
 	});
 

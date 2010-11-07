@@ -143,7 +143,8 @@ var Engine = Engine.extend({
          this.lastMetricSample = this.metricSampleRate;
       }
       
-      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie") {
+      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie" &&
+			 parseFloat(EngineSupport.sysInfo().version) < 9) {
          // Profiler not supported in IE
          this.showMetricsProfile = false;
       }
@@ -232,7 +233,7 @@ var Engine = Engine.extend({
          if (this.showMetricsProfile) {
             switch (m) {
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
-               case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
+               //case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
                case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
                case "poolLoad" : this.drawProfilePoint("#a0a0ff", this.metrics[m].act); break;
             }
