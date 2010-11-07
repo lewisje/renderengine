@@ -892,7 +892,7 @@
 		</antcall>
 	
 		<antcall target="${compress.option}">
-			<param name="input.file" value="physics/collision/b2Features.js"/>
+			<param name="input.file" value="physics/collision/Features.js"/>
 		</antcall>
 
 		<antcall target="${compress.option}">
