@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.5
- * date: Oct 18, 2010
+ * version: v1.5.1
+ * date: Nov 7, 2010
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -766,7 +766,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1388 $
+ * @version: $Revision: 1402 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -800,7 +800,7 @@ function now() {
 
 /**
  * @class A static JavaScript implementation of a simple profiler.
- * @constructor
+ * @static
  */
 var Profiler = {
 	profileStack: [],
@@ -811,6 +811,7 @@ var Profiler = {
 
 /**
  * Start the profiler.
+ * @memberOf Profiler
  */
 Profiler.start = function() {
 	Profiler.resetProfiles();
@@ -819,6 +820,7 @@ Profiler.start = function() {
 
 /**
  * Stop the profiler, dumping whatever was being profiled.
+ * @memberOf Profiler
  */
 Profiler.stop = function() {
 	Profiler.dump();
@@ -828,6 +830,7 @@ Profiler.stop = function() {
 /**
  * Add a profile monitor to the stack of running profiles.
  * @param prof {String} The name of the profile
+ * @memberOf Profiler
  */
 Profiler.enter = function(prof) {
 	if (!Profiler.running) { return; }
@@ -856,6 +859,7 @@ Profiler.enter = function(prof) {
  * you properly balance your profile stack.  Too many "exit" calls
  * will result in a stack underflow. Missing calls to "exit" will
  * result in a stack overflow.
+ * @memberOf Profiler
  */
 Profiler.exit = function() {
 	if (!Profiler.running) { return; }
@@ -879,6 +883,7 @@ Profiler.exit = function() {
 
 /**
  * Reset any currently running profiles and clear the stack.
+ * @memberOf Profiler
  */
 Profiler.resetProfiles = function() {
 	Profiler.profileStack = [];
@@ -889,6 +894,7 @@ Profiler.resetProfiles = function() {
 /**
  * Dump the profiles that are currently in the stack to a debug window.
  * The profile stack will be cleared after the dump.
+ * @memberOf Profiler
  */
 Profiler.dump = function() {
 	if (!Profiler.running) { return; }
@@ -1499,7 +1505,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       			ctxGL: false
       		}
       	};
-      	if (document.createElement) {
+      	if (document.addEventListener) {
       		// Standards browsers
       		var canvas = document.createElement("canvas");
       		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
@@ -1521,6 +1527,15 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 					} catch (ex) { /* no webgl */ }
 	      	}
       	}
+			
+			if (typeof FlashCanvas != "undefined") {
+				// If FlashCanvas is loaded, setup for emulation
+      		canvasSupport.emulated = true;
+      		canvasSupport.defined = true;
+      		canvasSupport.contexts.ctx2D = true;
+      		canvasSupport.text = true;
+				canvasSupport.textMetrics = true;
+			}
       	      
       	// Build support object
          EngineSupport._sysInfo = {
@@ -2147,7 +2162,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1388 $
+ * @version: $Revision: 1400 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2195,7 +2210,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.5",
+   version: "v1.5.1",
 
    constructor: null,
 
@@ -3469,7 +3484,7 @@ var Engine = Engine.extend({
  * @author: Brett Fattori (brettf@renderengine.com)
  *
  * @author: $Author: bfattori $
- * @version: $Revision: 1398 $
+ * @version: $Revision: 1400 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 

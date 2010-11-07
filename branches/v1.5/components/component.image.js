@@ -44,7 +44,7 @@ Engine.initObject("ImageComponent", "RenderComponent", function() {
  *
  * @param name {String} The name of the component
  * @param [priority=0.1] {Number} The render priority
- * @param image {Image} The image resource from the loader
+ * @param image {Image} The image object, acquired with {@link ImageLoader#getImage}.
  * @extends RenderComponent
  * @constructor
  * @description Creates a component which renders images from an {@link ImageLoader}.

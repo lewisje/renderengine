@@ -498,7 +498,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       			ctxGL: false
       		}
       	};
-      	if (document.createElement) {
+      	if (document.addEventListener) {
       		// Standards browsers
       		var canvas = document.createElement("canvas");
       		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
@@ -520,6 +520,15 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 					} catch (ex) { /* no webgl */ }
 	      	}
       	}
+			
+			if (typeof FlashCanvas != "undefined") {
+				// If FlashCanvas is loaded, setup for emulation
+      		canvasSupport.emulated = true;
+      		canvasSupport.defined = true;
+      		canvasSupport.contexts.ctx2D = true;
+      		canvasSupport.text = true;
+				canvasSupport.textMetrics = true;
+			}
       	      
       	// Build support object
          EngineSupport._sysInfo = {

@@ -70,7 +70,7 @@ Engine.initObject("Tutorial5", "Game", function(){
          Engine.setFPS(this.engineFPS);
          
          this.fontLoader = BitmapFontLoader.create();
-         this.fontLoader.load("century", "century_gothic_36.js");
+         this.fontLoader.load("century", "century_gothic_36.font");
          
          // Don't start until all of the resources are loaded
          var self = this;
