@@ -1085,6 +1085,11 @@
 			<fileset dir="${min.home}" includes="${exclude.set}"/>
 		</delete>
 
+		<!-- Don't include webserver run script -->
+		<delete quiet="true">
+			<fileset dir="${min.home}" includes="run.bat"/>
+		</delete>
+
    </target>
   
 </project>
