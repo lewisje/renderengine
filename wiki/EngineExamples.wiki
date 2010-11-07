@@ -9,7 +9,7 @@ The Render Engine is a [EngineFeatureList fully featured] engine which can be us
 
 This example is a clone of Asteroids by Atari.  There are two modes in which the game runs.  The first is a clone of the original, mostly complete, with sounds and vector rendering.  It's not meant to be a complete game, but more how to make the engine work.  
 
-   * [http://renderengine.googlecode.com/svn/tags/v1.0/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids Evolution]
+   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/demos/spaceroids/index.html?metrics=true&evolved=true Asteroids Evolution]
 
 ==Ball Physics, Sprites, and the Wii==
 
@@ -21,12 +21,12 @@ The next game, if it can be called that, is a test I put together to get the eng
 
 The following is a quick test I put together to test text rendering with the three supported renderers.  If your browser doesn't support natively rendering fonts to the canvas, you'll only see the first two (Vector and Bitmap).  In most cases, the bitmap fonts are a decent alternative to rendering text to the canvas.
 
-   * [http://renderengine.googlecode.com/svn/tags/v1.0/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
+   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
 
 ==The Bitmap Font Editor==
 
 Another tool that will be provided with the engine will dissect a bitmap image of a font for use with the canvas context.  It analyzes a bitmap for breaks between the characters, and generates a font definition.  The editor allows the user to create, adjust, and remove dividers.  For information about using the tool, see the page for the FontEditor.
-   * [http://renderengine.googlecode.com/svn/tags/v1.0/tools/font_editor/index.html?metrics=true Font Editor alpha]
+   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/tools/font_editor/index.html?metrics=true Font Editor alpha]
 
 ==!PistolSlut by Mary Rose Cook==
 
