@@ -27,10 +27,6 @@ The following is a quick test I put together to test text rendering with the thr
 
    * [http://renderengine.googlecode.com/svn/tags/v1.5.1/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
 
-==The Bitmap Font Editor==
-
-Another tool that will be provided with the engine will dissect a bitmap image of a font for use with the canvas context.  It analyzes a bitmap for breaks between the characters, and generates a font definition.  The editor allows the user to create, adjust, and remove dividers.  For information about using the tool, see the page for the FontEditor.
-   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/tools/font_editor/index.html?metrics=true Font Editor alpha]
 
 ==!PistolSlut by Mary Rose Cook==
 
