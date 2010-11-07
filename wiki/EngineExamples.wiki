@@ -9,17 +9,17 @@ The Render Engine is a [EngineFeatureList fully featured] engine which can be us
 
 This example is a clone of Asteroids by Atari.  There are two modes in which the game runs.  The first is a clone of the original, mostly complete, with sounds and vector rendering.  It's not meant to be a complete game, but more how to make the engine work.  
 
-   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/demos/vector/index.html?metrics=true&evolved=true Asteroids Evolution]
+   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/demos/vector/index.html?metrics=true&profile=true Asteroids Evolution]
 
 ==Box2D Physics Integration==
 
 We've added support for the Box2D physics engine.  This example demonstrates the physics components, sprite rendering, and even has Wii remote support.
 
-   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/demos/physics/index.html?metrics=true Physics Demo]
+   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/demos/physics/index.html?metrics=true&profile=true Physics Demo]
 
 The physics include complex objects comprised of rigid bodies and joints as well.
 
-   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/demos/physics2/index.html?metrics=true Ragdoll Demo]
+   * [http://renderengine.googlecode.com/svn/tags/v1.5.1/demos/physics2/index.html?metrics=true&profile=true Ragdoll Demo]
 
 ==Text Rendering Capabilities==
 
