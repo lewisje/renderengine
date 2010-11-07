@@ -5,7 +5,7 @@ The Render Engine @BUILD_VERSION [@BUILD_DATE]
 
 The Render Engine is an open source game engine written entirely in Javascript.  The intent of this engine is to provide you, the developer, with the tools necessary to create your own game without needing to first design and write an engine.  The engine has all of the capabilities to load and execute scripts which contain game objects, render contexts, and so forth.  The Render Engine is a starting point, written using a clean OO framework, from which you can extend and expand into whatever you desire.
 
-The engine includes a demonstration using vector-based graphics.  A simple Asteroids clone with player, asteroid, and bullet objects which demonstrates the component system.  It also uses the spatial grid collision system, and shows how to work with that.  An "evolved" mode is available (set the URL parameter "evolved=true") to demonstrate the particle system.
+The engine includes a demonstration using vector-based graphics.  A simple Asteroids clone with player, asteroid, and bullet objects which demonstrates the component system.  It also uses the spatial grid collision system, and shows how to work with that.
 
 Visit our project page for the latest release, examples, and tutorials @
 http://www.renderengine.com
@@ -36,6 +36,18 @@ http://tortoisesvn.tigris.org/
 
 
 
+Testing your Installation with the Jibble Web Server
+---------------------------------------------------------
+
+The distribution comes with the Jibble Web Server which is a very small Java web server.  It doesn't support request parameters, so it is a bit limited.  It will, however, give you a quick and easy way to test your game development.  See the file "run.bat" in the root folder.  You will need the JRE to use the web server.
+
+In the "run.bat" file, you will notice two arguments to run the server.  The first is the path, which you can leave at "." (the root folder) and the second is the port to run the server on (default: 8010).  After starting the server, you can go to your web browser and try:
+"http://localhost:8010/demos/vector/index.html"
+
+The web server is running properly if you see the Asteroids demo start up.
+
+
+
 Setting up a Tomcat server for testing & development
 --------------------------------------------------------
 
@@ -47,55 +59,10 @@ Get Tomcat @
 http://tomcat.apache.org
 
 
-Using the Jibble Web Server for testing & development
----------------------------------------------------------
-
-The distribution comes with the Jibble Web Server which is a very small Java web server.  It doesn't support request parameters, so it is a bit limited.  It will, however, give you a quick and easy way to test your game development.  See the file "run.bat" in the root folder.  You will need the JRE to use the web server.
-
-In the "run.bat" file, you will notice two arguments to run the server.  The first is the path, which you can leave at "." (the root folder) and the second is the port to run the server on (default: 8010).  After starting the server, you can go to your web browser and try:
-"http://localhost:8010/demos/spaceroids/index.html"
-
-The web server is running properly if you see the Asteroids demo start up.
-
-
 Supported Browsers
 -------------------------
 
-The following list is taken from the wiki page @ http://code.google.com/p/renderengine/wiki/SupportedBrowsers
-
-
-This is a list of browsers that I have tested the engine and examples in. As more browsers are tested and pass, I will add them to this list.
-
-Browser           Version         Tested Platforms        Support Level
---------          --------        -----------------       --------------
-Chrome            3.0+            Windows                 Near Perfect
-Firefox           3.5+            Windows, Mac            Perfect
-Safari            3.0+            Windows, Mac, iPhone    Great - Win/Mac, Ok - iPhone
-Opera             9.5+            Windows                 Great
-Opera             9.5+            Wii                     Ok - Needs optimization
-
-Chrome            1.0,2.0         Windows                 Great
-Firefox           3.0             Windows                 Great
-Firefox           1.5,2.0         Windows                 Good
-Internet Explorer 6.0+            Windows                 Fail
-
-
-Levels of support:
-
-  * Perfect - All features working as expected
-  * Great - Fully functional with minor issues
-  * Good - Baseline, functioning
-  * Ok - Runs, missing features or poor performance
-  * Poor - Most features not working
-  * Fail - Engine not working on this browser
-
-
-Internet Explorer Support
----------------------------------
-
-For those who are using Internet Explorer, and prefer to keep their browser intact, that would like to enjoy The Render Engine and what it has to offer should consider downloading the following plug-in for Internet Explorer:
-
-http://code.google.com/chrome/chromeframe/
+Please see the wiki page @ http://code.google.com/p/renderengine/wiki/SupportedBrowsers
 
 
 Notes:

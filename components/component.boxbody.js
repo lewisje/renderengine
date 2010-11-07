@@ -39,14 +39,14 @@ Engine.initObject("BoxBodyComponent", "BaseBodyComponent", function() {
 
 /**
  * @class An extension of the {@link BaseBodyComponent} which creates a rectangular
- * 		 physical body.  
+ * 		 rigid body.  
  *
  * @param name {String} Name of the component
- * @param extents {Point2D} The extents of the body along X and Y
+ * @param extents {Point2D} The full extents of the body along X and Y
  *
  * @extends BaseBodyComponent
  * @constructor
- * @description A rectangular physical body component.
+ * @description A rectangular rigid body component.
  */
 var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prototype */{
 
@@ -57,20 +57,50 @@ var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prot
 	 */
 	constructor: function(name, extents) {
 		this.base(name, new b2BoxDef());
-		this.extents = extents;
-		var e = extents.get();
-		this.getShapeDef().extents.Set(e.x, e.y);
+		this.extents = Point2D.create(extents);
+		var e = this.extents.get();
+		this.getShapeDef().extents.Set(e.x / 2, e.y / 2);
+		this.setLocalOrigin(e.x / 2, e.y / 2);
 	},
 	
 	/**
-	 * Set the extents of the box's body.
+	 * @private
+	 */
+	destroy: function() {
+		this.extents.destroy();
+		this.base();
+	},
+	
+	/**
+	 * @private
+	 */
+	release: function() {
+		this.extents = null;
+		this.base();
+	},
+	
+	/**
+	 * Get a box which bounds the body, local to the body.
+	 * @return {Rectangle2D}
+	 */
+	getBoundingBox: function() {
+		var box = this.base();
+		var p = this.getPosition().get();
+		var e = this.getExtents().get();
+		box.set(0, 0, e.x, e.y);
+		return box;
+	},
+	
+	/**
+	 * Set the extents of the box's body.  Calling this method after the
+	 * simulation of the body has started has no effect.
 	 * 
 	 * @param extents {Point2D} The extents of the body along X and Y
 	 */
 	setExtents: function(extents) {
 		this.extents = extents;
 		var e = extents.get();
-		this.getShapeDef().extents.Set(e.x, e.y);;
+		this.getShapeDef().extents.Set(e.x / 2, e.y / 2);
 	},
 	
 	/**
@@ -80,6 +110,30 @@ var BoxBodyComponent = BaseBodyComponent.extend(/** @scope BoxBodyComponent.prot
 	getExtents: function() {
 		return this.extents;
 	}
+	
+	/* pragma:DEBUG_START */
+	/**
+	 * Adds shape debugging
+	 * @private
+	 */	
+	,execute: function(renderContext, time) {
+		this.base(renderContext, time);
+		if (Engine.getDebugMode()) {
+			renderContext.pushTransform();
+			renderContext.setLineStyle("blue");
+			var ext = Point2D.create(this.extents);
+			//ext.mul(this.getScale());
+			var hx = ext.get().x / 2;
+			var hy = ext.get().y / 2;
+			var rect = Rectangle2D.create(-hx, -hy, hx * 2, hy * 2);
+			renderContext.setScale(1/this.getScale());
+			renderContext.drawRectangle(rect);
+			rect.destroy();
+			renderContext.popTransform();
+		}	
+	}
+	/* pragma:DEBUG_END */
+	
 
 }, { /** @scope BoxBodyComponent.prototype */
 

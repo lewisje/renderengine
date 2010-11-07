@@ -34,7 +34,7 @@ Engine.initObject("Game", null, function() {
 
 /**
  * @class The game object represents an instance of a game.  It is
- * the controlling entity for all of a game and is responsible
+ * the controlling entity for the game constructs and is responsible
  * for setup and teardown of the game.  All games must extend from this class
  * to be executed by the engine.
  */
@@ -45,7 +45,7 @@ var Game = Base.extend(/** @scope Game.prototype */{
    constructor: null,
 
    /**
-    * Initialize the game.  This method will be called automatically by the
+    * [ABSTRACT] Initialize the game.  This method will be called automatically by the
     * engine when all dependencies for the game have been resolved.
     * @memberOf Game
     */
@@ -53,7 +53,7 @@ var Game = Base.extend(/** @scope Game.prototype */{
    },
 
    /**
-    * Shut down the game.  This method will be called if the engine is shut down
+    * [ABSTRACT] Shut down the game.  This method will be called if the engine is shut down
     * giving a game time to clean up before it is destroyed.
     * @memberOf Game
     */

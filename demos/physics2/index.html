@@ -1,5 +1,5 @@
 <!-- ChromeFrame Support -->
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta http-equiv="X-UA-Compatible" content="IE=9;chrome=1">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <!--
@@ -7,7 +7,7 @@
     * The Render Engine
     * Demo: Physics 2
     *
-    * Demonstration of complex physical objects.
+    * Demonstration of ragdoll made up of multiple rigid bodies.
     *
     *
     * @author: Brett Fattori (brettf@renderengine.com)
@@ -42,9 +42,15 @@
    <head>
       <title>The Render Engine - Physics Demo 2</title>
 
-      <!-- Mobile WebKit View Definition -->
+      <!-- Mobile WebKit View Definition
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0 maximum-scale=1.0; user-scalable=0;"/>
-
+		 -->
+		
+		<!-- FlashCanvas for older IE -->
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="../../libs/flashcanvas.js"></script>
+		<![endif]-->
+		 
       <!-- Supporting Libraries -->
       <script type="text/javascript" src="../../libs/base.js"></script>
       <script type="text/javascript" src="../../libs/jquery.js"></script>
@@ -68,7 +74,7 @@
       <script type="text/javascript">
       	$(document).ready(function() {
 			// Load the game script
-			Engine.loadGame('game.js','PhysicsDemo2','Complex Physics Demo');
+			Engine.loadGame('game.js','PhysicsDemo2','Ragdoll Physics Demo');
 		});
       </script>
    </body>

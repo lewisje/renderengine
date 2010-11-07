@@ -12,7 +12,9 @@ Engine.initObject("Tutorial4", "Game", function(){
 
    /**
     * @class Tutorial Four.  Load sounds and bitmaps from the server
-    *        with the resource loader.
+    *        with the resource loader.  This tutorial does not work with
+    *        Internet Explorer less than version 9 since FlashCanvas and
+    *        SoundManager2 cannot load simultaneously.
     */
    var Tutorial4 = Game.extend({
 
@@ -71,25 +73,16 @@ Engine.initObject("Tutorial4", "Game", function(){
          // Wait until the image and sounds are loaded before proceeding
          var self = this;
          this.loadTimeout = Timeout.create("wait", 250, function() {
-            self.waitForResources();
+	         if (Tutorial4.imageLoader.isReady() && Tutorial4.soundLoader.isReady()) {
+	               this.destroy();
+	               Tutorial4.run();
+	               return;
+	         }
+	         else {
+	            // Continue waiting
+	            this.restart();
+	         }
          });
-         this.waitForResources();
-      },
-
-      /**
-       * Wait for resources to become available before starting the game
-       * @private
-       */
-      waitForResources: function(){
-         if (this.imageLoader.isReady() && this.soundLoader.isReady()) {
-               this.loadTimeout.destroy();
-               this.run();
-               return;
-         }
-         else {
-            // Continue waiting
-            this.loadTimeout.restart();
-         }
       },
 
       /**

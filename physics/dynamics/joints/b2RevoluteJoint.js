@@ -44,7 +44,7 @@ Engine.initObject("b2RevoluteJoint", "b2Joint", function() {
 	// Cdot = w2 - w1
 	// J = [0 0 -1 0 0 1]
 	// K = invI1 + invI2
-	var b2RevoluteJoint = b2Joint.extent({
+	var b2RevoluteJoint = b2Joint.extend({
 
 		// internal vars
 		K: null,
@@ -496,7 +496,11 @@ Engine.initObject("b2RevoluteJoint", "b2Joint", function() {
 			
 	}, {
 
-		tImpulse: new b2Vec2()
+		resolved: function() {
+	      b2RevoluteJoint.tImpulse = new b2Vec2();
+		},
+
+		tImpulse: null
 		
 	});
 	

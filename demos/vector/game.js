@@ -417,7 +417,7 @@ var Spaceroids = Game.extend({
       this.renderContext.setBackgroundColor("#000000");
 
       // We'll need something to detect collisions
-      this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 7);
+      this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
       this.collisionModel.setAccuracy(SpatialGrid.BEST_ACCURACY);
 
       // Prepare for keyboard input to start the game

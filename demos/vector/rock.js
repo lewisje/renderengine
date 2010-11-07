@@ -127,7 +127,7 @@ var SpaceroidsRock = Object2D.extend({
       renderContext.popTransform();
 
       // Debug the collision node
-      if (Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
+      if (!this.isDestroyed() && Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
       {
          renderContext.setLineStyle("blue");
          renderContext.drawRectangle(this.getComponent("collider").getSpatialNode().getRect());
