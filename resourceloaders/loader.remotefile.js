@@ -46,6 +46,7 @@ Engine.initObject("RemoteFileLoader", "ResourceLoader", function() {
  * @constructor
  * @param [name=RemoteFileLoader] {String} The name of the resource loader
  * @extends ResourceLoader
+ * @private
  */
 var RemoteFileLoader = ResourceLoader.extend(/** @scope RemoteFileLoader.prototype */{
 

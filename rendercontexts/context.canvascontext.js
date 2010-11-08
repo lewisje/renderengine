@@ -52,15 +52,17 @@ Engine.initObject("CanvasContext", "RenderContext2D", function() {
 var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */{
 
    context2D: null,
-
    worldRect: null,
-
    mouseHandler: false,
 
    /**
     * @private
     */
    constructor: function(name, width, height) {
+   	// Make sure the browser supports the canvas and 2D context!
+   	Assert((EngineSupport.sysInfo().support.canvas.defined &&
+   			  EngineSupport.sysInfo().support.canvas.contexts.ctx2D), "Browser does not support Canvas. Cannot construct CanvasContext!");
+      
       Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
 
       this.setWidth(width);
@@ -78,13 +80,15 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    },
 
    afterAdd: function(parent) {
-      if (typeof FlashCanvas != "undefined") {
+      // For FlashCanvas, check for emulation
+      if (EngineSupport.sysInfo().support.canvas.emulated) {
          FlashCanvas.setOptions({
             disableContextMenu: false,
             turbo: true,
             delay: 1
          });
          FlashCanvas.initElement(this.getSurface());
+			Console.info("FlashCanvas initialized for ", this.toString());
       }
    },
 
@@ -566,6 +570,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.get2DContext().arcTo(point1.x, point1.y, point2.x, point2.y, radius);
       this.base(point1, point2, radius);
    }
+	
 }, {
    /**
     * Get the class name of this object
@@ -575,6 +580,7 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    getClassName: function() {
       return "CanvasContext";
    }
+		
 });
 
 return CanvasContext;

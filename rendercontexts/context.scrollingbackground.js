@@ -41,9 +41,9 @@ Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.initObject("ScrollingBackground", "CanvasContext", function() {
 
 /**
- * @class A scrolling background render context with an associated
- *        collision map.  The render context loads a level which defines
- *        the image that will be displayed within a rendering context.
+ * @class A scrolling background render context.  The render context loads 
+ * 		 a level which defines the image that will be displayed within the context
+ * 		 as its background.
  *
  * @constructor
  * @param name {String} The name of the object

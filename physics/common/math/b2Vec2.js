@@ -148,7 +148,7 @@ Engine.initObject("b2Vec2", null, function() {
    }, {
       
       Make: function(x, y) {
-         return new b2Vec(x, y);
+         return new b2Vec2(x, y);
       }
    });
 

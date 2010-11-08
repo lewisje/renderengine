@@ -2,7 +2,8 @@
  * The Render Engine
  * Physics Demo 2
  *
- * Demonstration of more complex physical objects
+ * Demonstration of loading and using a jointed set of rigid bodies in the
+ * form of a "ragdoll".
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -37,12 +38,15 @@ Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/engine/engine.timers.js");
 Engine.include("/physics/physics.simulation.js")
+Engine.include("/objects/object.physicsactor.js")
+Engine.include("/components/component.sprite.js")
+Engine.include("/components/component.collider.js");
+
 
 Engine.include("/physics/collision/shapes/b2BoxDef.js");
 
 // Load game objects
 Game.load("/player.js");
-Game.load("/ragdoll.js");
 
 Engine.initObject("PhysicsDemo2", "Game", function(){
 
@@ -70,7 +74,7 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
 
       // Sprite resource loader
       spriteLoader: null,
-      
+     
       // The collision model
       cModel: null,
       
@@ -89,12 +93,14 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
          
          // Load the sprites
          this.spriteLoader.load("ragdoll", this.getFilePath("resources/ragdoll.sprite"));
-         
+         PhysicsActor.load("ragdoll", this.getFilePath("resources/ragdoll.json"));
+			
          // Don't start until all of the resources are loaded
          Timeout.create("wait", 250, function() {
-				if (PhysicsDemo.spriteLoader.isReady()) {
+				if (PhysicsDemo2.spriteLoader.isReady() &&
+					 PhysicsActor.isReady()) {
 						this.destroy();
-						PhysicsDemo.run();
+						PhysicsDemo2.run();
 				}
 				else {
 					// Continue waiting
@@ -149,14 +155,43 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
          // Create the collision model with 8x8 divisions
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);
 
-         // Add the ragdoll object
-			this.renderContext.add(Ragdoll.create());
+         // Add a few ragdoll objects
+			for (var dolls = 0; dolls < 3; dolls++) {
+				var ragdoll = this.createRagdoll(PhysicsActor.get("ragdoll"));
+				var xPos = (Math2.random() * 800);
+				ragdoll.setPosition(Point2D.create(xPos, 150));
+	         ragdoll.setSimulation(this.simulation);
+				this.renderContext.add(ragdoll);
+				ragdoll.simulate();
+			}
          
          // Add the player object
          var player = Player.create();
          this.getRenderContext().add(player);
       },
       
+		/**
+		 * Create a ragdoll object by associating the sprites with the actor that was loaded.
+		 * @param actor {PhysicsActor} The physics actor object
+		 */
+		createRagdoll: function(actor) {
+			// Load the sprites	
+			var sprites = PhysicsDemo2.spriteLoader.exportAll("ragdoll");
+
+         // Add components to draw and collide with the player
+         actor.add(ColliderComponent.create("collide", PhysicsDemo2.cModel));
+			
+			// Associate the sprites with the actor's physics components
+			var components = actor.getRigidBodies();			
+			for (var c in components) {
+				var component = components[c];
+				component.setRenderComponent(SpriteComponent.create(component.getName(), sprites[component.getName().toLowerCase()]));
+			}
+
+      	actor.setBoundingBox(actor.getRootBody().getBoundingBox());
+			return actor;
+		},
+		
       /**
        * Set up the physical world.  Creates the bounds of the world by establishing
        * walls and a floor.  The actual objects have no visual respresentation but they

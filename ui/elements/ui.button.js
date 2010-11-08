@@ -56,6 +56,7 @@ var UIButtonElement = UIImageElement.extend(/** @scope UIButtonElement.prototype
    constructor: function(name, horizontalAlign, verticalAlign) {
       this.base(name, horizontalAlign, verticalAlign);
       this.text = null;
+		this.setElement($("<input type='button' name='" + this.getId() + "'/>"));
    },
 
    /**
@@ -69,20 +70,9 @@ var UIButtonElement = UIImageElement.extend(/** @scope UIButtonElement.prototype
    
    setText: function(text) {
       this.text = text;
-   },
-   
-   /**
-    * Draw the UI element in the UI.
-    * @param renderContext {RenderContext} The render context to draw the user interface element into
-    * @param time {Number} The engine time
-    */
-   draw: function(renderContext, time) {
-      if (!this.base(renderContext, time)) {
-         return false;
-      }
-      this.base(renderContext, time);
+		this.jQ().attr("value", text);
    }
-
+	
 }, /** @scope UIButtonElement.prototype */{
 
    /**

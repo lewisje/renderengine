@@ -31,8 +31,8 @@
  */
 
 // Includes
-Engine.include("/resourceloaders/loader.remotefile.js");
 Engine.include("/resourceloaders/loader.multi.js");
+Engine.include("/resourceloaders/loader.object.js");
 Engine.include("/objects/object.ui.js");
 Engine.include("/engine/engine.timers.js");
 
@@ -56,6 +56,7 @@ var UIManager = Base.extend(/** @scope UIManager.prototype */{
 	multiLoader: null,
 	fileLoader: null,
 	gameObject: null,
+	uiSet: null,
 	
 	/**
 	 * @private
@@ -90,19 +91,23 @@ var UIManager = Base.extend(/** @scope UIManager.prototype */{
 	loadUI: function(name, uiFile) {
 		Assert((UIManager.getGame() != null), "Cannot load a UI without associated Game object reference!");
 		
-		if (!UIManager.fileLoader) {
-			UIManager.fileLoader = RemoteFileLoader.create("UIFileLoader");
-		}	
+		if (UIManager.multiLoader == null) {
+			UIManager.multiLoader = MultiResourceLoader.create("UIMultiLoader");
+		}
 		
 		// Load user interface files synchronously so we know they exist
 		// without having to check for them to be ready
-		UIManager.fileLoader.load(name, uiFile, "text", true);
+		UIManager.multiLoader.load(name, uiFile);
 		
 		// Parse the file into a UIObject
 		var uiObject = UIObject.create(name);
 		UIManager.parseUI(UIManager.fileLoader.getData(name), uiObject);
 		
 		return uiObject;
+	},
+	
+	preParse: function() {
+		
 	},
 	
 	/**
@@ -123,7 +128,7 @@ var UIManager = Base.extend(/** @scope UIManager.prototype */{
 				UIManager.multiLoader = MultiResourceLoader.create("UIMultiLoader");
 			}
 			
-			// Use the multiresource loader to load the required UI resources
+			// Use the multi-resource loader to load the required UI resources
 			var mload = UIManager.multiLoader;
 			for (var r in ui.resources) {
 				var res = ui.resources[r];
@@ -166,6 +171,7 @@ var UIManager = Base.extend(/** @scope UIManager.prototype */{
 
 		var ui = uiDescriptor.UserInterface;
 		var mload = UIManager.multiLoader;
+		var elementOrigins = {};
 		
 		// Handle the elements of the user interface
 		var uiTypes = ["UIImage", "UITextBox", "UIButton", "UICheckBox",
@@ -186,10 +192,39 @@ var UIManager = Base.extend(/** @scope UIManager.prototype */{
 				 alignment = element.alignment, hAlign = BaseUIElement.ALIGN_LEFT,
 				 vAlign = BaseUIElement.VALIGN_TOP;
 				 
+			var alignments = {
+				"ALIGN_LEFT": BaseUIElement.ALIGN_LEFT,
+				"ALIGN_CENTER": BaseUIElement.ALIGN_CENTER,
+				"ALIGN_RIGHT": BaseUIElement.ALIGN_RIGHT,
+				"ALIGN_TOP": BaseUIElement.VALIGN_TOP,
+				"ALIGN_MIDDLE": BaseUIElement.VALIGN_MIDDLE,
+				"ALIGN_BOTTOM": BaseUIElement.VALIGN_BOTTOM
+			}	 
+				 
 			// Handle the alignment, if defined
 			if (alignment != null) {
-				hAlign = BaseUIElement[alignment[0]];
-				vAlign = BaseUIElement[alignment[1]];	
+				hAlign = BaseUIElement[typeof alignment[0] == "number" ? BaseUIElement.ALIGN_LEFT : alignment[0] == "default" ? BaseUIElement.ALIGN_LEFT : alignments[alignment[0]]];
+				vAlign = BaseUIElement[typeof alignment[0] == "number" ? BaseUIElement.VALIGN_TOP : alignment[1] == "default" ? BaseUIElement.VALIGN_TOP : alignments[alignment[1]]];	
+			}
+			
+			Assert(element.position != null, "Position for UI element is not specified!");
+			
+			// Calculate the position of the element, unless it is absolute
+			var pos = newPos = element.position;
+			var relativeTo = element.relativeTo, rel = null;
+			if (typeof pos[0] == "number" && typeof pos[1] == "number") {
+				if (relativeTo) {
+					// The element is absolutely positioned, relative to another element
+					Assert(elementOrigins[relativeTo], "Relative UI element is not defined!");
+					rel = elementOrigins[relativeTo];
+					newPos = [rel[0] + pos[0], rel[1] + pos[1]];
+					elementOrigins[element.name] = newPos;
+				}
+			} else if (typeof pos[0] == "string" || typeof pos[1] == "string") {
+				// One, or both, of the positions is a percentage
+				Assert((relativeTo == null), "Cannot use percentages when relatively positioned to another UI element");
+				
+					
 			}
 			 
 			switch (eType) {

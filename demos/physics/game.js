@@ -91,8 +91,8 @@ Engine.initObject("PhysicsDemo", "Game", function(){
          this.spriteLoader = SpriteLoader.create();
          
          // Load the sprites
-         this.spriteLoader.load("beachball", this.getFilePath("resources/beachball.js"));
-         this.spriteLoader.load("crate", this.getFilePath("resources/crate.js"));
+         this.spriteLoader.load("beachball", this.getFilePath("resources/beachball.sprite"));
+         this.spriteLoader.load("crate", this.getFilePath("resources/crate.sprite"));
          
          // Don't start until all of the resources are loaded
          Timeout.create("wait", 250, function() {

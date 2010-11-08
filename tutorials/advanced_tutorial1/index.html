@@ -1,12 +1,16 @@
+<!-- ChromeFrame Support -->
+<meta http-equiv="X-UA-Compatible" content="IE=9;chrome=1"/>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
              "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html>
    <head>
-      <title>My First Game</title>
+      <title>Advanced Tutorial 1</title>
 
-		<!-- ChromeFrame Support -->
-		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<!-- FlashCanvas for older IE -->
+		<!--[if lt IE 9]>
+		<script type="text/javascript" src="../../libs/flashcanvas.js"></script>
+		<![endif]-->
 
       <!-- Load the supporting libraries -->
       <script type="text/javascript" src="../../libs/base.js"></script>
@@ -17,30 +21,13 @@
       <!-- Load the main engine script -->
       <script type="text/javascript" src="../../engine/runtime/engine.js"></script>
 
-      <style type="text/css">
-         #loading {
-            padding-left: 20px;
-         }
-
-         #engine-load-progress {
-            position: relative;
-            border: 1px solid;
-            width: 300px;
-            height: 10px;
-         }
-
-         #engine-load-progress .bar {
-            background: blue;
-         }
-      </style>
    </head>
    <body>
-      <span id="loading">Loading My First Game...
-         <div id="engine-load-progress"></div>
-      </span>
       <script type="text/javascript">
-         // Load the game script
-         Engine.loadGame('game.js','MyFirstGame');
+      	$(document).ready(function() {
+	      	// Load the game script
+	         Engine.loadGame('game.js','MyFirstGame', 'Advanced Tutorial 1: The HostComponent');
+			});
       </script>
    </body>
 </html>

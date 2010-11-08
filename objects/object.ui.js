@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * Object2D
+ * UI
  *
  * @fileoverview An extension of the <tt>HostObject</tt> which is specifically geared
  *               towards 2d game development.
@@ -33,6 +33,7 @@
 
 // Includes
 Engine.include("/rendercontexts/context.htmldivcontext.js");
+Engine.include("/engine/engine.container.js");
 
 // UI Element types
 Engine.include("/ui/elements/ui.base.js");
@@ -42,7 +43,7 @@ Engine.include("/ui/elements/ui.image.js");
 Engine.include("/ui/elements/ui.input.js");
 Engine.include("/ui/elements/ui.textbox.js");
 
-Engine.initObject("UIObject", "HTMLDivContext", function() {
+Engine.initObject("UI", "HTMLDivContext", function() {
 
 /**
  * @class A user interface object.  Draws a user interface which a user
@@ -50,66 +51,60 @@ Engine.initObject("UIObject", "HTMLDivContext", function() {
  * 		 file.
  * 
  * @param name {String} The name of the user interface
- * @extends HTMLDivContext
  * @constructor
+ * @extends HTMLDivContext
  * @description Create a user interface
  */
-var UIObject = HTMLDivContext.extend(/** @scope UIObject.prototype */{
+var UI = HTMLDivContext.extend(/** @scope UI.prototype */{
 
 	visible: null,
+	rendered: false,
 
    /**
     * @private
     */
-   constructor: function(name) {
-      this.base(name);
+   constructor: function(name, top, left, width, height) {
+		top = top || 0;
+		left = left || 0;
+		width = width || EngineSupport.sysInfo().viewWidth;
+		height = height || EngineSupport.sysInfo().viewHeight;
+		this.base(name, width, height);
 		this.visible = false;
+		this.rendered = false;
+		this.getSurface().css({
+			top: top,
+			left: left,
+			display: "none"
+		});
    },
 	
 	/**
 	 * Destroy the object.
 	 */
 	destroy: function() {
-		this.base();
+		this.elements.cleanUp();
+		this.elements.destroy();
 	},
-
-   /**
-    * Release the object back into the pool.
-    */
-   release: function() {
-      this.base();
-		this.visible = null;
-   },
 
 	isVisible: function() {
 		return this.visible;
 	},
 	
-	setVisible: function(visible) {
-		this.visible = visible;
-	},
-
 	add: function(uiElement) {
-      Assert((BaseUIElement.isInstance(uiElement)), "Invalid element type added to UIObject");
-      Assert(!this.isInHash(uiElement.getName()), "Objects must have a unique name within the UI");
-
-      this.base(uiElement.getName(), uiElement);
+      Assert((BaseUIElement.isInstance(uiElement)), "Invalid element type added to UI");
       uiElement.setUI(this);
+		this.base(uiElement);
 	},
-
-   /**
-    * When editing objects, this method returns an object which
-    * contains the properties with their getter and setter methods.
-    * @return {Object} The properties object
-    */
-   getProperties: function() {
-      var self = this;
-      var prop = this.base(self);
-      return $.extend(prop, {
-         "visible"       : [function() { return self.isVisible(); },
-                            function(i){   self.setVisible(i); }, true],
-      });
-   },
+	
+	show: function() {
+		this.visible = true;
+		this.getSurface().css("display", "block");
+	},
+	
+	hide: function() {
+		this.visible = false;
+		this.getSurface().css("display", "none");	
+	},
 	
    /**
     * Draw the UI objects within the render context.
@@ -118,29 +113,20 @@ var UIObject = HTMLDivContext.extend(/** @scope UIObject.prototype */{
     * @param time {Number} The global time within the engine.
     */
    update: function(renderContext, time) {
-
-		if (!this.isVisible()) {
-			// If the UI isn't visible, don't draw its elements
-			return;
-		}
-
       // Draw the UI objects
-      var uiObjects = this.getObjects();
-
-      for (var ui = this.iterator(); ui.hasNext(); ) {
-			uiObject = ui.next();
-         uiObject.draw(renderContext, time);
+      for (var ui = this.elements.iterator(); ui.hasNext(); ) {
+         ui.next().update(renderContext, time);
       }
    }
 
-}, /** @scope UIObject.prototype */{
+}, /** @scope UI.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "UIObject"
+    * @return {String} "UI"
     */
    getClassName: function() {
-      return "UIObject";
+      return "UI";
    }
 	
 });
