@@ -52,7 +52,7 @@ Engine.initObject("Toy", "PhysicsActor", function() {
    var Toy = PhysicsActor.extend(/** @scope Toy.prototype */{
 
       sprites: null,
-		scale: 1,
+		renderScale: 1,
 
 		/**
 		 * @private
@@ -60,14 +60,14 @@ Engine.initObject("Toy", "PhysicsActor", function() {
       constructor: function(spriteResource, spriteName, spriteOverName) {
          this.base("PhysicsToy");
          this.sprite = null;
-			this.scale = (Math2.random() * 1) + 0.8;
+			this.renderScale = (Math2.random() * 1) + 0.8;
 			
          // Add components to draw and collide with the player
          this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
          
 			// Create the physical body object which will move the toy object
-			this.createPhysicalBody("physics", this.scale);
-			this.getComponent("physics").setScale(this.scale);
+			this.createPhysicalBody("physics", this.renderScale);
+			this.getComponent("physics").setScale(this.renderScale);
 			this.getComponent("physics").setRenderComponent(SpriteComponent.create("draw"));
 
          // The sprites
@@ -76,9 +76,8 @@ Engine.initObject("Toy", "PhysicsActor", function() {
          this.sprites.push(PhysicsDemo.spriteLoader.getSprite(spriteResource, spriteOverName));
          this.setSprite(0);
 
-			// Set the starting position and move the origin to the center of the toy
+			// Set the starting position of the toy
          this.setPosition(Point2D.create(25, 15));
-			this.setOrigin(Point2D.create(30, 30));
       },
 
 		/**
@@ -91,26 +90,6 @@ Engine.initObject("Toy", "PhysicsActor", function() {
 		createPhysicalBody: function(componentName, scale) {
 		},
 		
-      /**
-       * Update the toy within the rendering context.  This draws
-       * the shape to the context, after updating the transform of the
-       * object.
-       *
-       * @param renderContext {RenderContext} The rendering context
-       * @param time {Number} The engine time in milliseconds
-       */
-      update: function(renderContext, time) {
-         renderContext.pushTransform();
-         this.base(renderContext, time);
-         renderContext.popTransform();
-      },
-
-		/**
-		 * Start simulation of the physical object.
-		 */
-		simulate: function() {
-			this.getComponent("physics").startSimulation();
-		},
 
       /**
        * Set the sprite to use with the "draw" component.
@@ -121,48 +100,7 @@ Engine.initObject("Toy", "PhysicsActor", function() {
          this.setBoundingBox(sprite.getBoundingBox());
          this.getComponent("physics").getRenderComponent().setSprite(sprite);
       },
-
-      /**
-       * Get the position of the toy from the "physics" component.
-       * @return {Point2D}
-       */
-      getPosition: function() {
-         return this.getComponent("physics").getPosition();
-      },
 		
-		/**
-		 * Get the rotation of the toy from the "physics" component.
-		 * @return {Number}
-		 */
-		getRotation: function() {
-			return this.getComponent("physics").getRotation();
-		},
-		
-		/**
-		 * Get the uniform scale of the toy from the "physics" component.
-		 * @return {Number}
-		 */
-		getScale: function() {
-			return this.getComponent("physics").getScale();
-		},
-		
-      /**
-       * Get the render position of the toy
-       * @return {Point2D}
-       */
-      getRenderPosition: function() {
-         return this.getPosition();
-      },
-      
-      /**
-       * Get the box which surrounds the toy in the world.
-       * @return {Rectangle2D} The world bounding box
-       */
-      getWorldBox: function() {
-         var bBox = this.base();
-         return bBox.offset(-10, -10);
-      },
-
       /**
        * Set, or initialize, the position of the "physics" component
        *

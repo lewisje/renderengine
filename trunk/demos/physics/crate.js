@@ -46,7 +46,7 @@ Engine.initObject("Crate", "Toy", function() {
     */
    var Crate = Toy.extend(/** @scope Crate.prototype */{
 
-		extents: null,
+		boxSize: null,
 
 		/**
 		 * @private
@@ -63,9 +63,9 @@ Engine.initObject("Crate", "Toy", function() {
 		 * @param scale {Number} A scalar scaling value for the toy
 		 */
 		createPhysicalBody: function(componentName, scale) {
-			this.extents = Point2D.create(30, 30);
-			this.extents.mul(scale);
-			this.add(BoxBodyComponent.create(componentName, this.extents));
+			this.boxSize = Point2D.create(60, 60);
+			this.boxSize.mul(scale);
+			this.add(BoxBodyComponent.create(componentName, this.boxSize));
 			
 			// Set the friction and bounciness of the crate
 			this.getComponent(componentName).setFriction(0.3);

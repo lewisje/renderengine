@@ -70,7 +70,7 @@ Engine.initObject("SpriteLoader", "ImageLoader", function() {
  * }
  * </pre>
  *        <i>Note:</i> The new file structure is a bit more compact, and is indicated with
- *        the "version" key in the file, set to the value 2.  Version 1 will is deprecated
+ *        the "version" key in the file, set to the value 2.  Version 1 will be deprecated
  *        and will not be supported in a future release of The Render Engine.
  *
  * @constructor
@@ -190,6 +190,15 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
       }
       return s;
    },
+
+	exportAll: function(resource) {
+		var o = this.base();
+		var sprites = this.getSpriteNames(resource);
+		for (var i in sprites) {
+			o[sprites[i]] = this.getSprite(resource, sprites[i]);
+		}
+		return o;
+	},
 
    /**
     * The name of the resource this loader will get.

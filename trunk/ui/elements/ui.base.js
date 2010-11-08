@@ -31,7 +31,9 @@
  */
 
 // Includes
+Engine.include("/engine/engine.math2d.js");
 Engine.include("/engine/engine.object2d.js");
+Engine.include("/components/component.transform2d.js");
 
 Engine.initObject("BaseUIElement", "Object2D", function() {
 
@@ -39,44 +41,37 @@ Engine.initObject("BaseUIElement", "Object2D", function() {
  * @class All UI components extend from this object class.
  *
  *
- * @extends Object2D
  * @constructor
  * @description Create a new instance of a UI element, setting the name and
  * 				 optionally where to position the element relative to it's position.
  * @param name {String} The name of the element
  * @param [horizontalAlign] {Number} One of the horizontal alignment constants
  * @param [verticalAlign] {Number} One of the vertical alignment constants
+ * @extends Object2D
  */
-var BaseUIElement = Object2D.extend(/** @scope BaseUIElement.prototype */{
+var BaseUIElement = Base.extend(/** @scope BaseUIElement.prototype */{
 
 	layout: null,
-	
 	relativeTo: null,
-	
 	ui: null,
+	name: null,
+	rendered: false,
 
    /**
     * @private 
     */
    constructor: function(name, horizontalAlign, verticalAlign) {
-      this.base(name || "UIElement");
+		this.base(name);
+		this.name = name;
 		this.layout = {
 			horizontal: horizontalAlign || BaseUIElement.ALIGN_LEFT,
 			vertical: verticalAlign || BaseUIElement.VALIGN_TOP
 		}
 		this.relativeTo = null;
 		this.ui = null;
-   },
-
-   /**
-    * Releases the object back into the object pool.  See {@link PooledObject#release}
-    * for more information.
-    */
-   release: function() {
-      this.base();
-		this.layout = null;
-		this.relativeTo = null;
-		this.ui = null;
+		this.rendered = false;
+		
+		this.add(Transform2DComponent.create("position"));
    },
 	
 	/**
@@ -156,14 +151,22 @@ var BaseUIElement = Object2D.extend(/** @scope BaseUIElement.prototype */{
 		return this.relativeTo;
 	},
 	
+	setPosition: function(point) {
+		this.getComponent("position").setPosition(point);
+	},
+	
+	getPosition: function() {
+		return this.getComponent("position").getPosition();
+	},
+	
 	/**
 	 * Draw the UI element in the UI.
 	 * @param renderContext {RenderContext} The render context to draw the user interface element into
 	 * @param time {Number} The engine time
 	 * @return {Boolean} <tt>true</tt> if the element should draw
 	 */
-	draw: function(renderContext, time) {
-		// ABSTRACT
+	update: function(renderContext, time) {
+		this.base(renderContext, time);
 	}
 
 }, /** @scope BaseUIElement.prototype */{

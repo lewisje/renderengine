@@ -40,7 +40,7 @@ Engine.include("/physics/dynamics/b2BodyDef.js");
 Engine.initObject("BaseBodyComponent", "Transform2DComponent", function() {
 
 /**
- * @class The base physical body component which initializes physical bodies
+ * @class The base rigid body component which initializes rigid bodies
  * 		 for use in a {@link Simulation}.  
  *
  * @param name {String} Name of the component
@@ -61,6 +61,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	rotVec: null,
 	bodyPos: null,
 	renderComponent: null,
+	origin: null,
 
    /**
     * @private
@@ -75,6 +76,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		this.simulation = null;
 		this.rotVec = Vector2D.create(0,0);
 		this.bodyPos = Point2D.create(0,0);
+		this.origin = Point2D.create(0,0);
 	},
 
 	destroy: function() {
@@ -82,7 +84,19 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 			this.renderComponent.destroy();
 		}
 		
+		this.rotVec.destroy();
+		this.bodyPos.destroy();
+		this.origin.destroy();
+		
 		this.base();
+	},
+	
+	release: function() {
+		this.base();
+
+		this.rotVec = null;
+		this.bodyPos = null;
+		this.origin = null;
 	},
 
 	/**
@@ -107,7 +121,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 			this.simulation = null;
 		}
 	},
-	
+
 	/**
 	 * Set the associated render component for this body.  This is typically used by the
 	 * {@link PhysicsActor} to link a body to a renderer so that each body can have an
@@ -128,6 +142,42 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 */
 	getRenderComponent: function() {
 		return this.renderComponent;
+	},
+	
+	/**
+	 * Set the origin of the rigid body.  By default, the origin is the top left corner of
+	 * the bounding box for the body.  Most times the origin should be set to the center
+	 * of the body.
+	 * 
+	 * @param x {Number|Point2D} The X coordinate or a <tt>Point2D</tt>
+	 * @param y {Number} The Y coordinate or <tt>null</tt> if X is a <tt>Point2D</tt>
+	 */
+	setLocalOrigin: function(x, y) {
+		this.origin.set(x, y);
+	},
+	
+	/**
+	 * Get the local origin of the body.
+	 * @return {Point2D}
+	 */
+	getLocalOrigin: function() {
+		return this.origin;
+	},
+	
+	/**
+	 * Get the center of the body.
+	 * @return {Point2D}
+	 */
+	getCenter: function() {
+		return Point2D.create(this.getPosition()).add(this.getLocalOrigin());
+	},
+	
+	/**
+	 * [ABSTRACT] Get a box which bounds the body.
+	 * @return {Rectangle2D}
+	 */
+	getBoundingBox: function() {
+		return Rectangle2D.create(0,0,1,1);
 	},
 	
 	/**
@@ -232,7 +282,11 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 	 * @return {Point2D}
 	 */
 	getPosition: function() {
-		this.bodyPos.set(this.body.m_position.x, this.body.m_position.y);
+		if (this.simulation) {
+			this.bodyPos.set(this.body.m_position.x, this.body.m_position.y);
+		} else {
+			this.bodyPos.set(this.getBodyDef().position.x, this.getBodyDef().position.y);
+		}
 		return this.bodyPos;	
 	},
 	
@@ -247,7 +301,7 @@ var BaseBodyComponent = Transform2DComponent.extend(/** @scope BaseBodyComponent
 		var cV = rC.x > 0 ? BaseBodyComponent.UP_VECTOR : BaseBodyComponent.DOWN_VECTOR;
 		var md = rC.x > 0 ? 0 : 180;
 		var ab = this.rotVec.angleBetween(cV) - md;
-		return ab;
+		return ab - 90;
 	},
 	
 	/**

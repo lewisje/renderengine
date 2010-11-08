@@ -336,8 +336,6 @@ Engine.initObject("b2Collision", null, function() {
          tClip.id.features.incidentVertex = vertex22;
       },
       
-      b2CollidePolyTempVec: new b2Vec2(),
-      
       b2CollidePoly: function(manifold, polyA, polyB, conservative) {
          manifold.pointCount = 0;
 
@@ -703,7 +701,14 @@ Engine.initObject("b2Collision", null, function() {
             return false;
 
          return true;
-      }
+      },
+
+		resolved: function() {
+			b2Collision.b2CollidePolyTempVec = new b2Vec2();
+		},
+		
+      b2CollidePolyTempVec: null
+		
 
    });
    

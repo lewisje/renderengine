@@ -32,6 +32,8 @@
 
 // Includes
 Engine.include("/ui/elements/ui.base.js");
+Engine.include("/components/component.sprite.js");
+Engine.include("/components/component.image.js");
 
 Engine.initObject("UIImageElement", "BaseUIElement", function() {
 
@@ -77,9 +79,9 @@ var UIImageElement = BaseUIElement.extend(/** @scope UIImageElement.prototype */
       this.image = image;
       this.isSprite = false;
       if (this.renderComponent != null) {
-         this.removeHash("Image");
+         this.removeHash("image");
       }
-      this.renderComponent = ImageComponent.create("Image", image);
+      this.renderComponent = ImageComponent.create("image", image);
       this.add(this.renderComponent);
    },
    
@@ -87,24 +89,12 @@ var UIImageElement = BaseUIElement.extend(/** @scope UIImageElement.prototype */
       this.image = sprite; 
       this.isSprite = true;
       if (this.renderComponent != null) {
-         this.removeHash("Image");
+         this.removeHash("image");
       }
-      this.renderComponent = SpriteComponent.create("Image", sprite);
+      this.renderComponent = SpriteComponent.create("image", sprite);
       this.add(this.renderComponent);
-   },
-   
-   /**
-    * Draw the UI element in the UI.
-    * @param renderContext {RenderContext} The render context to draw the user interface element into
-    * @param time {Number} The engine time
-    */
-   draw: function(renderContext, time) {
-      if (!this.base(renderContext, time)) {
-         return false;
-      }
-      this.base(renderContext, time);
    }
-
+	
 }, /** @scope UIImageElement.prototype */{
 
    /**

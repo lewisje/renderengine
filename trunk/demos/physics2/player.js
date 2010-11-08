@@ -64,7 +64,7 @@ Engine.initObject("Player", "Object2D", function() {
          // with either the mouse, or with the Wii remote
          this.add(WiimoteInputComponent.create("input"));
          this.add(Transform2DComponent.create("move"));
-         this.add(ColliderComponent.create("collide", PhysicsDemo.cModel));
+         this.add(ColliderComponent.create("collide", PhysicsDemo2.cModel));
          
          // The player's bounding box
          this.setBoundingBox(Rectangle2D.create(0, 0, 20, 20));
@@ -142,7 +142,9 @@ Engine.initObject("Player", "Object2D", function() {
 				var p = Point2D.create(sx, sy);
             this.setPosition(p);
 				if (this.mouseDown && this.clickToy) {
-	            this.clickToy.clicked(p);
+					var force = Vector2D.create(p).sub(this.clickToy.getRootBody().getPosition()).mul(30000);
+					this.clickToy.getRootBody().applyForce(force, p);
+					force.destroy();
 				}
 				p.destroy();
          }
@@ -175,7 +177,7 @@ Engine.initObject("Player", "Object2D", function() {
        * @see {ColliderComponent}
        */
       onCollide: function(obj) {
-         if (Toy.isInstance(obj) &&
+         if (PhysicsActor.isInstance(obj) &&
              (this.getWorldBox().isIntersecting(obj.getWorldBox()))) {
             this.overToy = obj;
             return ColliderComponent.STOP;

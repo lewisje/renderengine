@@ -45,32 +45,82 @@ Engine.initObject("DistanceJointComponent", "BaseJointComponent", function() {
  * @param name {String} Name of the component
  * @param body1 {BaseBodyComponent} The first body for the joint
  * @param body2 {BaseBodyComponent} The second body for the joint
- * @param anchor1 {Point2D} A point, in world coordinates relative to the first 
- * 	body, to use as the joint's first anchor point
- * @param anchor2 {Point2D} A point, in world coordinates relative to the second 
- * 	body, to use as the joint's second anchor point
  *
  * @extends BaseJointComponent
  * @constructor
- * @description Creates a distance joint between two physical bodies.
+ * @description Creates a distance joint between two physical bodies.  The distance can
+ * 				 be softened by adjusting the frequency and the damping ratio of the joint.
+ * 				 Rotation is not limited by this joint.  The anchors for the joint are the
+ * 				 rigid body center's.
  */
 var DistanceJointComponent = BaseJointComponent.extend(/** @scope DistanceJointComponent.prototype */{
 
    /**
     * @private
     */
-	constructor: function(name, body1, body2, anchor1, anchor2) {
+	constructor: function(name, body1, body2) {
 		var jointDef = new b2DistanceJointDef();
-
-		var a1 = anchor1.get();
-		var a2 = anchor2.get();
-
-		jointDef.anchorPoint1.Set(a1.x, a1.y);
-		jointDef.anchorPoint2.Set(a2.x, a2.y);
-
 		this.base(name || "DistanceJoint", body1, body2, jointDef);	
-	}
+	},
 	
+	/**
+	 * When simulation starts set the anchor points to the position of each rigid body.
+	 * @private
+	 */
+	startSimulation: function() {
+		if (!this.getSimulation()) {
+			var a1 = Point2D.create(this.getBody1().getPosition());
+			var a2 = Point2D.create(this.getBody2().getPosition());
+			a1.add(this.getBody1().getLocalOrigin());
+			a2.add(this.getBody2().getLocalOrigin());
+	
+			this.getJointDef().anchorPoint1.Set(a1.get().x, a1.get().y);
+			this.getJointDef().anchorPoint2.Set(a2.get().x, a2.get().y);
+			a1.destroy();
+			a2.destroy();
+		}
+		
+		this.base();
+	},
+	
+	/**
+	 * Set the frequency which is used to determine joint softness.  According to 
+	 * Box2d documentation the frequency should be less than half of the time step
+	 * used for the simulation.  In the engine, the frequency of the time step is
+	 * the frame rate.
+	 * 
+	 * @param hz {Number} The frequency in Hertz.
+	 */
+	setFrequency: function(hz) {
+		this.getJointDef().frequencyHz = hz;
+	},
+	
+	/**
+	 * Get the frequency from the joint definition.
+	 * @return {Number}
+	 */
+	getFrequency: function() {
+		return this.getJointDef().frequencyHz;
+	},
+	
+	/**
+	 * Set the damping ratio which is used to determine joint softness.  The value
+	 * should be between 0.0 and 1.0, with 1.0 being extremely rigid.
+	 * 
+	 * @param dampingRatio {Number} A value between 0.0 and 1.0
+	 */
+	setDampingRatio: function(dampingRatio) {
+		this.getJointDef().dampingRatio = dampingRatio;
+	},
+	
+	/**
+	 * Get the damping ratio from the joint definition.
+	 * @return {Number}
+	 */
+	getDampingRatio: function() {
+		return this.getJointDef().dampingRatio;
+	}
+		
 }, { /** @scope DistanceJointComponent.prototype */
 
    /**

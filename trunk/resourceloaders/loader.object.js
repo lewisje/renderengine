@@ -37,7 +37,9 @@ Engine.include("/resourceloaders/loader.remote.js");
 Engine.initObject("ObjectLoader", "RemoteLoader", function() {
 
 /**
- * @class Loads JSON objects from a specified URL.
+ * @class Loads JSON objects from a specified URL.  The object uses a sligtly modified
+ * 		 format which allows for single-line comments in the object definition.  The
+ * 		 object must follow the rest of the JSON spec, with key names in quotes.
  *
  * @constructor
  * @param name {String=ObjectLoader} The name of the resource loader

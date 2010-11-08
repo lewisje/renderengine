@@ -17,7 +17,7 @@ Engine.initObject("PianoKeys", "Object2D", function() {
          // Add the component which handles keyboard input
          this.add(KeyboardInputComponent.create("input"));
          this.add(Transform2DComponent.create("move"));
-         this.add(ImageComponent.create("draw", Tutorial4.imageLoader, "keys"));
+         this.add(ImageComponent.create("draw", Tutorial4.imageLoader.getImage("keys")));
 
          // Position the object
          this.getComponent("move").setPosition(Point2D.create(20, 25));

@@ -36,18 +36,15 @@ Engine.initObject("PooledObject", null, function() {
 
 /**
  * @class Pooled objects are created as needed, and reused from a static pool
- *        of all objects, organized by class.  When an object is created, if one 
+ *        of all objects, organized by classname.  When an object is created, if one 
  *        is not available in the pool, a new object is created.  When the object 
  *        is destroyed, it is returned to the pool so it can be used again.  This has the
- *        effect of minimizing the requirement of garbage collection, reducing
+ *        effect of minimizing the requirement for garbage collection, reducing
  *        cycles needed to clean up dead objects.
  *
- * @param name {String} The name of the object from which the Id will be generated.
+ * @param name {String} The name of the object within the engine.
  * @constructor
- * @description Create an instance of this object, assigning a name to it.  An
- *              object reference will be maintained by the {@link Engine} class,
- *              which gives the object final responsibility for making sure the
- *              object can be destroyed.
+ * @description Create an instance of this object, assigning a global identifies to it.
  */
 var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 
@@ -153,6 +150,17 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
       return xml;
    },
 	
+	/**
+	 * Returns <tt>true</tt> if the object has been destroyed.  For objects which are
+	 * being updated by containers, this method is used to determine if the object should
+	 * be updated.  It is important to check this method if you are outside the normal
+	 * bounds of updating an object.  For example, if an object is drawing its bounding
+	 * box using it's collision component, the component may have been destroyed along
+	 * with the object, by another object.  Checking to see if the object is destroyed
+	 * before calling such method would prevent an exception being thrown when trying
+	 * to access the component which was destroyed as well.
+	 * @return {Boolean}
+	 */
 	isDestroyed: function() {
 		return this._destroyed;
 	}
