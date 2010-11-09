@@ -9,7 +9,7 @@
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -251,34 +251,12 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       // Find all variables explicitly defined
       var def = obj.toString();
       var vTable = [];
-
-		debugger;
-
-		// Remove JS objects because they can be misleading
-		def = def.replace(/\{(.|\n)*?\}/g,"");
-
-		// Look for variables that have assignments or are within a set (group 2)
-      var vQ = new RegExp("(var\\s*([\\$_\\w\\.]*)\\s*((=|in)+[^,\\n]*))","g");
-      while ((m = vQ.exec(def)) != null) {
-      	vTable.push(m[2]);
+      var nR = "([\\$_\\w\\.]*)";
+      var vR = new RegExp("(var\\s*" + nR + "\\s*)","g");
+      var m;
+      while ((m = vR.exec(def)) != null) {
+         vTable.push(m[2]); 
       }
-
-		// Next, replace those with "var "
-		def = def.replace(vQ, "var ");
-		
-		// Get the remainder and split at commas, these are remaining variables
-		var vF = new RegExp("var(.*)\\b","g");
-      while ((m = vF.exec(def)) != null) {
-			var p = m[1].split(",");
-			for (var o in p) {
-				// Trim them up and store them
-				var vv = p[o].trim();
-				if (vv != "") {
-					vTable.push(vv); 
-				}
-      	}
-      }
-
       return vTable;
    },
 
@@ -293,9 +271,9 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       var nR = "([\\$_\\w\\.]*)";
       var nwR = new RegExp("(new\\s+" + nR + ")","g");
       var ctR = new RegExp("(" + nR + "\\.create\\()","g");
-      var fcR = new RegExp("(" + nR + "\\()", "g");
-      var inR = new RegExp("(" + nR + ".isInstance\\()", "g");
-      var instR = new RegExp("(instanceof\\s+"+ nR + ")", "g");
+      var fcR = new RegExp("(" + nR + ".isInstance\\()", "g");
+      var inR = new RegExp("(" + nR + "\\()", "g");
+      //var inR = new RegExp("(instanceof\\s+"+ nR + ")", "g");
       var m;
 
       // "new"-ing objects
@@ -323,21 +301,23 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       }
 
       // "isInstance" method dependencies
-      while ((m = inR.exec(def)) != null) {
+      while ((m = fcR.exec(def)) != null) {
          if (m[2].indexOf(".") != -1) {
             var k = m[2].split(".")[0];
             if (EngineSupport.indexOf(dTable, k) == -1) {
-               dTable.push(k);
+               EngineSupport.arrayRemove(dTable, k);
             }
          }
       }
 
       // "instanceof" checks
-      while ((m = instR.exec(def)) != null) {
+      /*
+      while ((m = inR.exec(def)) != null) {
          if (EngineSupport.indexOf(dTable, m[2]) == -1) {
-				dTable.push(m[2]);
+            dTable.push(m[2]);
          }
       }
+      */
       return dTable;
    },
 
@@ -361,75 +341,54 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    },
    
    /**
-    * Finds all of the dependencies within an object class.  When looking at a class we'll
-    * find functions which take arguments, call other object's methods, create new instances
-    * of objects, and so forth.  Anything that cannot be determined as class- or function-local
-    * will be determined to be a dependency of the class.
+    * Finds all of the dependencies within an object class.
     * @private
     */
    findAllDependencies: function(objectName, obj) {
-      var defs, k;
+      var defs;
       var fTable = {};
       Console.warn("Process: " + objectName);
 
       try {
-      	// Evaluate the function.  If it succeeds, it's because the class that it extends
-      	// already exists (such as in the case where it extends a root JS object such as Array,
-      	// or the class was previously loaded and has initialized)
-         k = obj();
+         var k = obj();
       } catch (ex) {
-      	// When the function cannot execute, it's because the class extends a non-existent class.
-         // To resolve the issue, we replace the parent class with a known class and evaluate it.
-         // We'll use the Base class since it was loaded before any of our classes.  Replace the
-         //	"	var MyClass = UnknownClass.extend(" with "return Base.extend("...
+         // The class probably extends a non-existent class. Replace the parent
+         // class with a known class and evaluate as a dummy class
          var extRE = new RegExp("(var\\s*)?([\\$_\\w\\.]*?)\\s*=\\s*([\\$_\\w\\.]*?)\\.extend\\(");
          var classDef = obj.toString();
-         var nm = null, pnm = null;
-         classDef = classDef.replace(extRE, function(str, varDef, classname, parentClassname, offs, s) {
+         var nm = null;
+         classDef = classDef.replace(extRE, function(str, varDef, classname, parent, offs, s) {
             nm = classname;
-            pnm = parentClassname;
             return "return Base.extend(";
          });
-         
-         // We'll try to evaluate it again, however it might fail again due to a field definition
-         // which refers to an unknown class, such as "   fieldName: new UnknownClass(),"
          try {
             k = eval("(" + classDef.replace("return " + nm + ";", "") + ")();");
          } catch (inEx) {
-            Console.error("Cannot parse class '" + nm + "' (probably due to instance field referencing undefined class)");
+            Console.error("Cannot parse class '" + nm + "'");
          }
       }
 
       var kInstance = null;
       if ($.isFunction(k)) {
-         // If, after executing the function, the class is an instance (type Function), 
-         // get it's class prototype object (type Object)
+         // If the class is an instance, get it's class object
          kInstance = k;
          k = k.prototype;
       }
 
-      // We can now parse the classes within the class, extracting variables that match known
-      // patterns for class method calling or object instantiation
+      // Find the internal functions
       for (var f in k) {
          var def = k[f];
-
-			// If the object is an instance class and we're looking at its constructor method, and the
-			// instance has its own constructor (not inherited from its super class) we want to make sure
-			// to parse it along with all the other class functions
          if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
+            // If it's an instance, we're looking at the constructor, and the
+            // instance has its own constructor (not inherited)
             def = kInstance;
          }
-         
-         // We want to make sure that what we're looking at is a function and that it is implemented
-         // on this class rather than it's super class (or an ancestor)
          if ($.isFunction(def) && k.hasOwnProperty(f)) {
             def = def.toString();
             var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\s)*)","g");
             var m = fR.exec(def);
             if (m) {
-               // Remove strings, then comments (they will only confuse the parser) and they
-               // are essentially useless.  At some point we may add some hinting comments, but
-               // for now we'll just drop them.
+               // Remove strings, then comments
                var fdef = m[2].replace(/(["|']).*?\1/g, "");
                fdef = fdef.replace(/\/\/.*\r\n/g, "");
                fdef = fdef.replace("\/\*(.|\s)*?\*\/", "");
@@ -437,13 +396,9 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
                // Process anonymous function arguments
                var anonArgs = Linker.findAnonArgs(objectName, fdef);
 
-               // Process the function, looking at the arguments to the function and
-               // the dependencies within the function.  Anything declared as a function
-               // argument is considered as "resolved" within the function
+               // Process each function
                fTable[f] = { vars: Linker.findVars(objectName, fdef),
                              deps: Linker.findDependencies(objectName, fdef) };
-               
-               // Filter out objects which are defined by the system as keywords
                fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
                   return (e != "" && e != "this" && e != "arguments");
                });
@@ -457,7 +412,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
                   }
                }
 
-               // Combine local args with the anonymous function args
+               // Combine args with the anonymous function args
                for (var a in anonArgs) {
                   if (EngineSupport.indexOf(vs, anonArgs[a]) == -1) {
                      vs.push(anonArgs[a]);
@@ -470,7 +425,6 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
       // This is useful for debugging dependency problems...
       Console.log("DepTable: ", objectName, fTable);
 
-		// Return an array of any dependencies which can't be immediately resolved
       return Linker.procDeps(objectName, fTable);
    },
 
