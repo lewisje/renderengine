@@ -19,6 +19,7 @@ These engines are _free_ for your use.  They require no licensing fee, and are n
   * [http://jsge.athlabs.com/ JSGE]
   * [http://www.ambiera.com/copperlicht/index.html Copperlicht 3D Engine]
   * [http://tommysmind.com/ GameJS]
+  * [https://github.com/lostdecade/diggy Diggy]
 
 
 ==For a Fee==
