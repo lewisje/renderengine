@@ -25,7 +25,7 @@ These engines are _free_ for your use.  They require no licensing fee, and are n
 ==For a Fee==
 These engines require you to pay a fee to use them.  Either a cost to get the engine, or a cost to host your game on their servers.  This doesn't mean they are any less important, or that you shouldn't consider them.  They may have benefits that the free engines will not have.  These are in no particular order:
   
-  * [http://www.dextrose.com/en/projects/aves-engine AVES Engine]
+  * AVES Engine (defunct)
   * [http://www.effectgames.com/effect/ Effect Games]
 
 ==Information==
