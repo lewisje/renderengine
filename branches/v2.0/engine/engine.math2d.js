@@ -389,6 +389,98 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		return minkDiff;	
 	},
 	
+   /**
+    * Helper method to determine if one circle will collide with another circle
+    * based on its direction of movement.  The circle's centers should be in
+    * world coordinates.
+    * 
+    * @param circle {Circle2D} The first circle
+    * @param velocity {Vector2D} The first circle's velocity vector
+    * @param targetCircle {Circle2D} The second circle
+    * @return {Vector2D} The vector which keeps the two circles from overlapping, 
+    * 	or <tt>null</tt> if they cannot overlap.
+    */
+   circleCircleCollision: function(circle, velocity, targetCircle) {
+      
+      // Early out test
+      var dist = targetCircle.getCenter().dist(circle.getCenter());
+      var sumRad = targetCircle.getRadius() + circle.getRadius();
+      dist -= sumRad;
+      if (velocity.len() < dist) {
+         // No collision possible
+         return null;
+      }
+
+      var norm = Vector2D.create(velocity).normalize();
+
+      // Find C, the vector from the center of the moving
+      // circle A to the center of B
+      var c = Vector2D.create(targetCircle.getCenter().sub(circle.getCenter()));
+      var dot = norm.dot(c);
+
+      // Another early escape: Make sure that A is moving
+      // towards B! If the dot product between the movevec and
+      // B.center - A.center is less that or equal to 0,
+      // A isn't isn't moving towards B
+      if (dot <= 0) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      var lenC = c.len();
+      var f = (lenC * lenC) - (dot * dot);
+
+      // Escape test: if the closest that A will get to B
+      // is more than the sum of their radii, there's no
+      // way they are going collide
+      var sumRad2 = sumRad * sumRad;
+      if (f >= sumRad2) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      // We now have F and sumRadii, two sides of a right triangle.
+      // Use these to find the third side, sqrt(T)
+      var t = sumRad2 - f;
+
+      // If there is no such right triangle with sides length of
+      // sumRadii and sqrt(f), T will probably be less than 0.
+      // Better to check now than perform a square root of a
+      // negative number.
+      if (t < 0) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      // Therefore the distance the circle has to travel along
+      // movevec is D - sqrt(T)
+      var distance = dot - Math.sqrt(t);
+
+      // Get the magnitude of the movement vector
+      var mag = velocity.len();
+
+      // Finally, make sure that the distance A has to move
+      // to touch B is not greater than the magnitude of the
+      // movement vector.
+      if (mag < distance) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      // Set the length of the vector which causes the circles 
+      // to just touch
+      var moveVec = Vector2D.create(norm.mul(distance));
+		norm.destroy();
+		c.destroy();
+      
+      return moveVec;         
+   },
+	
+	
 	ISOMETRIC_PROJECTION: 0, 
 	DIMETRIC_SIDE_PROJECTION: 1,
 	DIMETRIC_TOP_PROJECTION: 2
