@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v2.0.0.1a
- * date: Oct 9, 2010
+ * version: v2.0.0.2
+ * date: 11/8/2010
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -36,8 +36,8 @@
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1418 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -558,12 +558,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
    DEBUGLEVEL_NONE:       -1,
 
    /** @private */
-   verbosity: this.DEBUGLEVEL_NONE,
+   verbosity: null,
 
    /**
     * Starts up the console.
     */
    startup: function() {
+		Console.verbosity = this.DEBUGLEVEL_ERRORS;
+		
       if (EngineSupport.checkBooleanParam("debug") && (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          this.consoleRef = new HTMLConsoleRef();
       }
@@ -677,7 +679,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Output an error message.  These messages will only show when <tt>DEBUGLEVEL_ERRORS</tt> is the level.
+    * Output an error message.  These messages always appear unless the debug level is explicitly
+    * set to <tt>DEBUGLEVEL_NONE</tt>.
     * You can pass as many parameters as you want to this method.  The parameters will be combined into
     * one message to output to the console.
     */
@@ -762,8 +765,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1418 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -797,7 +800,7 @@ function now() {
 
 /**
  * @class A static JavaScript implementation of a simple profiler.
- * @constructor
+ * @static
  */
 var Profiler = {
 	profileStack: [],
@@ -808,6 +811,7 @@ var Profiler = {
 
 /**
  * Start the profiler.
+ * @memberOf Profiler
  */
 Profiler.start = function() {
 	Profiler.resetProfiles();
@@ -816,6 +820,7 @@ Profiler.start = function() {
 
 /**
  * Stop the profiler, dumping whatever was being profiled.
+ * @memberOf Profiler
  */
 Profiler.stop = function() {
 	Profiler.dump();
@@ -825,6 +830,7 @@ Profiler.stop = function() {
 /**
  * Add a profile monitor to the stack of running profiles.
  * @param prof {String} The name of the profile
+ * @memberOf Profiler
  */
 Profiler.enter = function(prof) {
 	if (!Profiler.running) { return; }
@@ -853,6 +859,7 @@ Profiler.enter = function(prof) {
  * you properly balance your profile stack.  Too many "exit" calls
  * will result in a stack underflow. Missing calls to "exit" will
  * result in a stack overflow.
+ * @memberOf Profiler
  */
 Profiler.exit = function() {
 	if (!Profiler.running) { return; }
@@ -876,6 +883,7 @@ Profiler.exit = function() {
 
 /**
  * Reset any currently running profiles and clear the stack.
+ * @memberOf Profiler
  */
 Profiler.resetProfiles = function() {
 	Profiler.profileStack = [];
@@ -886,6 +894,7 @@ Profiler.resetProfiles = function() {
 /**
  * Dump the profiles that are currently in the stack to a debug window.
  * The profile stack will be cleared after the dump.
+ * @memberOf Profiler
  */
 Profiler.dump = function() {
 	if (!Profiler.running) { return; }
@@ -925,7 +934,7 @@ Profiler.dump = function() {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1216 $
+ * @version: $Revision: 1418 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1006,7 +1015,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1325 $
+ * @version: $Revision: 1418 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1411,6 +1420,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
+	/**
+	 * Determine the OS platform from the user agent string, if possible
+	 * @private
+    * @memberOf EngineSupport
+	 */
 	checkOS: function() {
 		// Scrape the userAgent to get the OS
 		var uA = navigator.userAgent.toLowerCase();
@@ -1459,6 +1473,18 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *       <li>database - indexedDB storage is supported</li>
     *       </ul>
     *    </li>
+    *    <li>canvas:
+    *       <ul><li>emulated - Canvas support emulated by FlashCanvas</li>
+    *       <li>defined - Canvas is either native or emulated</li>
+    *       <li>text - Supports text</li>
+    *       <li>textMetrics - Supports text measurement</li>
+    *			<li>contexts:
+    *      		<ul><li>ctx2D - Supports 2D</li>
+    *				<li>ctxGL - Supports webGL</li>
+    *				</ul>
+    *			</li>
+    *       </ul>
+    *    </li>
     *    </ul>
     * </li>
     * </ul>
@@ -1467,6 +1493,51 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    sysInfo: function() {
       if (!EngineSupport._sysInfo) {
+      	
+      	// Determine if the browser supports Canvas
+      	var canvasSupport = {
+      		emulated: false,
+      		defined: false,
+      		text: false,
+      		textMetrics: false,
+      		contexts: {
+      			ctx2D: false,
+      			ctxGL: false
+      		}
+      	};
+      	if (document.addEventListener) {
+      		// Standards browsers
+      		var canvas = document.createElement("canvas");
+      		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
+      			canvasSupport.defined = true;
+	      		var c2d = canvas.getContext("2d");
+	      		if (typeof c2d != "undefined") {
+	      			canvasSupport.contexts.ctx2D = true;
+	      			
+						// Does it support native text
+						canvasSupport.text = (typeof c2d.fillText == "function");
+						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
+					}
+	      		
+					try {
+		      		var webGL = canvas.getContext("glcanvas");
+		      		if (typeof webGL != "undefined") {
+		      			canvasSupport.contexts.ctxGL = true;
+		      		}
+					} catch (ex) { /* no webgl */ }
+	      	}
+      	}
+			
+			if (typeof FlashCanvas != "undefined") {
+				// If FlashCanvas is loaded, setup for emulation
+      		canvasSupport.emulated = true;
+      		canvasSupport.defined = true;
+      		canvasSupport.contexts.ctx2D = true;
+      		canvasSupport.text = true;
+				canvasSupport.textMetrics = true;
+			}
+      	      
+      	// Build support object
          EngineSupport._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
 				           ($.browser.android ? "android" :
@@ -1495,16 +1566,18 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                   "session" : (typeof sessionStorage !== "undefined"),
                   "database": (typeof indexedDB !== "undefined")
                } : null),
-               "geo": (typeof navigator.geolocation !== "undefined")
+               "geo": (typeof navigator.geolocation !== "undefined"),
+               "canvas" : canvasSupport
             }
          };
+         
          $(document).ready(function() {
             // When the document is ready, we'll go ahead and get the width and height added in
             EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
-               "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
-               "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1,
-               "viewWidth": window.innerWidth,
-               "viewHeight" : window.innerHeight
+               "width": $(window).width(),
+               "height": $(window).height(),
+               "viewWidth": $(document).width(),
+               "viewHeight" : $(document).height()
             });
          });
       }
@@ -1535,9 +1608,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1288 $
+ * @version: $Revision: 1426 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -2088,8 +2161,8 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1418 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2137,7 +2210,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v2.0.0.1a",
+   version: "v2.0.0.2",
 
    constructor: null,
 
@@ -2235,7 +2308,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Check for general version specific options
 		if (opts["versions"]) {
 			for (var v in opts["versions"]) {
-				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					versionDefaults = opts["versions"][v];
 				}
@@ -2245,7 +2318,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Finally, check the OS for version specific options
 		if (osOpts && osOpts["versions"]) {
 			for (var v in osOpts["versions"]) {
-				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					platformVersions = osOpts["versions"][v];
 				}
@@ -3410,8 +3483,8 @@ var Engine = Engine.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1382 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1418 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3548,7 +3621,8 @@ var Engine = Engine.extend({
          this.lastMetricSample = this.metricSampleRate;
       }
       
-      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie") {
+      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie" &&
+			 parseFloat(EngineSupport.sysInfo().version) < 9) {
          // Profiler not supported in IE
          this.showMetricsProfile = false;
       }
@@ -3637,7 +3711,7 @@ var Engine = Engine.extend({
          if (this.showMetricsProfile) {
             switch (m) {
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
-               case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
+               //case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
                case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
                case "poolLoad" : this.drawProfilePoint("#a0a0ff", this.metrics[m].act); break;
             }
@@ -3714,7 +3788,7 @@ if (EngineSupport.checkBooleanParam("profile"))
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1325 $
+ * @version: $Revision: 1418 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
