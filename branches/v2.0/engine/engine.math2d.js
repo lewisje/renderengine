@@ -2,8 +2,7 @@
  * The Render Engine
  * Math
  *
- * @fileoverview A 2D math library with static methods, plus objects to represent 
- *               points, rectangles and circles.
+ * @fileoverview A static 2D math library with several helper methods.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -32,6 +31,23 @@
  */
 
 Engine.include("/engine/engine.mathprimitives.js");
+
+/**
+ * Bin object used by convex hull method.
+ * @private
+ */
+var Bin = Base.extend({
+	B: null,
+	constructor: function(size) {
+		this.B = [];
+		for (var i = 0; i < size; i++) {
+			this.B.push({
+				min: 0,
+				max: 0
+			});
+		}
+	}
+});
 
 Engine.initObject("Math2D", null, function() {
 
@@ -210,6 +226,20 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    },
 	
 	/**
+	 * Tests if a point is Left|On|Right of an infinite line defined by
+	 * two endpoints.
+	 *
+	 * @param endPoint0 {Point2D} A point on the line
+	 * @param endPoint1 {Point2D} A second point on the line
+	 * @param testPoint {Point2D} The point to test
+	 * @return {Number} &lt;0 (to left), 0 (on), &gt;0 (to right)
+	 */
+	isPointOnLine: function(endPoint0, endPoint1, testPoint) {
+		var p0 = point0.get(), p1 = point1.get(), p2 = point2.get(); 
+		return (p1.x - p0.x)*(p2.y - p0.y) - (p2.x - p0.x)*(p1.y - p0.y);
+	},
+	
+	/**
 	 * Calculate an approximate 2D convex hull for the given array of points.
 	 * <p/>
 	 * Copyright 2001, softSurfer (www.softsurfer.com)
@@ -225,25 +255,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * 	approximate hull of the given points
 	 */ 
 	convexHull: function(points, k) {
-		// Tests if a point is Left|On|Right of an infinite line.
-		function isLeft(point0, point1, point2) {
-			var p0 = point0.get(), p1 = point1.get(), p2 = point2.get(); 
-			return (p1.x - p0.x)*(p2.y - p0.y) - (p2.x - p0.x)*(p1.y - p0.y);
-		}
-		
-		var Bin = Base.extend({
-			B: null,
-			constructor: function(size) {
-				this.B = [];
-				for (var i = 0; i < size; i++) {
-					this.B.push({
-						min: 0,
-						max: 0
-					});
-				}
-			}
-		});
-		
+	
 		var NONE = -1;
 		var minmin=0, minmax=0,
 			 maxmin=0, maxmax=0,
@@ -301,7 +313,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 				continue;
 			
 			// check if a lower or upper point
-			if (isLeft(points[minmin], points[maxmin], cPP) < 0) {  // below lower line
+			if (Math2D.isPointOnLine(points[minmin], points[maxmin], cPP) < 0) {  // below lower line
 				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
 				if (bin.B[b].min == NONE)       // no min point in this range
 					bin.B[b].min = i;           // first min
@@ -310,7 +322,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 				continue;
 			}
 			
-			if (isLeft(points[minmax], points[maxmax], cPP) > 0) {  // above upper line
+			if (Math2D.isPointOnLine(points[minmax], points[maxmax], cPP) > 0) {  // above upper line
 				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
 				if (bin.B[b].max == NONE)       // no max point in this range
 					bin.B[b].max = i;           // first max
@@ -332,7 +344,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
 			while (top > 0) {        // there are at least 2 points on the stack
 				// test if current point is left of the line at the stack top
-				if (isLeft(hull[top-1], hull[top], cPP) > 0)
+				if (Math2D.isPointOnLine(hull[top-1], hull[top], cPP) > 0)
 					break;         // cP is a new hull vertex
 				else
 					top--;         // pop top point off stack
@@ -354,7 +366,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 			
 			while (top > bot) {      // at least 2 points on the upper stack
 				// test if current point is left of the line at the stack top
-				if (isLeft(hull[top-1], hull[top], cPP) > 0)
+				if (Math2D.isPointOnLine(hull[top-1], hull[top], cPP) > 0)
 					break;         // current point is a new hull vertex
 				else
 					top--;         // pop top point off stack
@@ -382,7 +394,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		for (var a in hullA) {
 			for (var b in hullB) {
 				var ha = hullA[a].get(), hb = hullB[b].get(),
-					 pt = Point2D.create(hb.x - ha.x, hb.y - ha.y);
+				pt = Point2D.create(hb.x - ha.x, hb.y - ha.y);
 				minkDiff[cP++] = pt;	
 			}
 		}
@@ -490,3 +502,4 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 return Math2D;
 
 });
+
