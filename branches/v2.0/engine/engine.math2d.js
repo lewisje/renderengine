@@ -490,12 +490,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		c.destroy();
       
       return moveVec;         
-   },
-	
-	
-	ISOMETRIC_PROJECTION: 0, 
-	DIMETRIC_SIDE_PROJECTION: 1,
-	DIMETRIC_TOP_PROJECTION: 2
+   }
 	
 });
 

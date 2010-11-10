@@ -31,6 +31,32 @@
  *
  */
 
+/**
+ * @object Axonometric projection types
+ */
+var ProjectionType = {
+	/**
+	 * Isometric projection
+	 * @memberOf ProjectionType
+	 * @type {Number}
+	 */
+	ISOMETRIC_PROJECTION: 0, 
+
+	/**
+	 * Dimetric side projection
+	 * @memberOf ProjectionType
+	 * @type {Number}
+	 */
+	DIMETRIC_SIDE_PROJECTION: 1,
+
+	/**
+	 * Dimetric top projection
+	 * @memberOf ProjectionType
+	 * @type {Number}
+	 */
+	DIMETRIC_TOP_PROJECTION: 2
+};
+
 Engine.initObject("MathObject", "PooledObject", function() {
 
 /**
@@ -329,26 +355,26 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 	
 	/**
 	 * Project this point from 2 dimensions to 3 dimensions, using one of three projection
-	 * types: {@link Math2D.ISOMETRIC_PROJECTION}  <i>(default)</i>, {@link Math2D.DIMETRIC_SIDE_PROJECTION}, or
-	 * {@link Math2D.DIMETRIC_TOP_PROJECTION}.
+	 * types: {@link ProjectionType#ISOMETRIC_PROJECTION}  <i>(default)</i>, 
+	 * {@link ProjectionType#DIMETRIC_SIDE_PROJECTION}, or {@link ProjectionType#DIMETRIC_TOP_PROJECTION}.
 	 * <p/>
 	 * Reference: http://www.compuphase.com/axometr.htm
 	 *
 	 * @param height {Number} The height of the ground.  We must use a particular height to
 	 * 		extrapolate our 3D coordinates from.  If the ground is considered level, this can remain zero.
-	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
+	 * @param projectionType {Number} One of the three projection types in {@link ProjectionType}
 	 * @return {Point3D} This point, projected into 3 dimensions
 	 */
 	project: function(height, projectionType) {
 		height = height || 0;
-		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
+		projectionType = projectionType || ProjectionType.ISOMETRIC_PROJECTION;
 		var pt = Point3D.create(0,0,0), j = this.get();
 		switch (projectionType) {
-			case Math2D.ISOMETRIC_PROJECTION:
+			case ProjectionType.ISOMETRIC_PROJECTION:
 				pt.set(0.5 * j.x + j.y - height, -(0.5 * j.x) + j.y - height, height); break;
-			case Math2D.DIMETRIC_SIDE_PROJECTION:
+			case ProjectionType.DIMETRIC_SIDE_PROJECTION:
 				pt.set(j.x + (2 * (j.y - height)), 4 * j.y - height, height); break;
-			case Math2D.DIMETRIC_TOP_PROJECTION:
+			case ProjectionType.DIMETRIC_TOP_PROJECTION:
 				pt.set(j.x - ((j.y - height) /2 ), 2 * (j.y - height), height); break;		
 		}
 		return pt;		
@@ -622,23 +648,23 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 
 	/**
 	 * Project this point from 3 dimensions to 2 dimensions, using one of three projection
-	 * types: {@link Math2D.ISOMETRIC_PROJECTION} <i>(default)</i>, {@link Math2D.DIMETRIC_SIDE_PROJECTION}, or
-	 * {@link Math2D.DIMETRIC_TOP_PROJECTION}.
+	 * types: {@link ProjectionType#ISOMETRIC_PROJECTION} <i>(default)</i>, 
+	 * {@link ProjectionType#DIMETRIC_SIDE_PROJECTION}, or {@link ProjectionType#DIMETRIC_TOP_PROJECTION}.
 	 * <p/>
 	 * Reference: http://www.compuphase.com/axometr.htm
 	 * 
-	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
+	 * @param projectionType {Number} One of the three projection types in {@link ProjectionType}
 	 * @return {Point2D} This point, projected into 2 dimensions
 	 */
 	project: function(projectionType) {
-		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
+		projectionType = projectionType || ProjectionType.ISOMETRIC_PROJECTION;
 		var pt = Point2D.create(0,0), j = this.get();
 		switch (projectionType) {
-			case Math2D.ISOMETRIC_PROJECTION:
+			case ProjectionType.ISOMETRIC_PROJECTION:
 				pt.set(j.x - j.z, j.y + ((j.x + j.z) / 2)); break;
-			case Math2D.DIMETRIC_SIDE_PROJECTION:
+			case ProjectionType.DIMETRIC_SIDE_PROJECTION:
 				pt.set(j.x + (j.z / 2), j.y + (j.z / 4)); break;
-			case Math2D.DIMETRIC_TOP_PROJECTION:
+			case ProjectionType.DIMETRIC_TOP_PROJECTION:
 				pt.set(j.x + (j.z / 4), j.y + (j.z / 2)); break;		
 		}
 		return pt;		
