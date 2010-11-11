@@ -73,6 +73,42 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	random: function() {
 		// returns in range [0,1]
 		return this.randomInt() / (this.m - 1);
+	},
+	
+	/**
+	 * Parse a binary string into a number.
+	 * 
+	 * @param bin {String} Binary string to parse
+	 * @return {Number}
+	 */
+	parseBin: function(bin) {
+		if (!isNaN(bin)) {
+			return parseInt(bin, 2);
+		}
+	},
+	
+	/**
+	 * Converts a number to a hexidecimal string, prefixed by "0x".
+	 *
+	 * @param num {Number} The number to convert
+	 * @return {String}
+	 */
+	toHex: function(num) {
+		if (!isNaN(num)) {
+			return ("0x" + num.toString(16));
+		}
+	},
+	
+	/**
+	 * Converts a number to a binary string.
+	 *
+	 * @param num {Number} The number to convert
+	 * @return {String}
+	 */
+	toBinary: function(num) {
+		if (!isNaN(num)) {
+			return num.toString(2);
+		}
 	}
 });
 
