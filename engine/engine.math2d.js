@@ -51,10 +51,16 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @const
     */
    PI: 3.14159,
+   
+   /**
+    * An approximation of PI*2 for speedier calculations. (6.28318)
+    * @type {Number}
+    * @const
+    */
+   TWO_PI: 6.28318, 
 
    /**
-    * An approximation of the inverse of PI so we can
-    * avoid divisions. (0.31831)
+    * An approximation of the inverse of PI. (0.31831)
     * @type {Number}
     * @const
     */
@@ -208,6 +214,20 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       return Point2D.create(Math.floor(r.x + Math2.random() * r.w),
                             Math.floor(r.y + Math2.random() * r.h));
    },
+	
+	/**
+	 * Returns <tt>true</tt> if the <tt>point</tt> lies on the line defined by
+	 * <tt>anchor</tt> in the direction of the normalized <tt>vector</tt>.
+	 *
+	 * @param point {Point2D} The point to test
+	 * @param anchor {Point2D} The anchor of the line
+	 * @param vector {Vector2D} The normalized direction vector for the line
+	 * @return {Boolean}
+	 */
+	isPointOnLine: function(point, anchor, vector) {
+		var l = Line.create(anchor._vec, vector._vec);
+		return l.contains(point._vec);
+	},
 	
 	/**
 	 * Calculate an approximate 2D convex hull for the given array of points.

@@ -282,7 +282,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    mul: function(scalar) {
-      this._vec = this._vec.map(function(x) { return x * scalar; });
+      this._vec = this._vec.x(scalar);
       this.upd();
       return this;
    },
@@ -295,7 +295,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    div: function(scalar) {
       Assert((scalar != 0), "Division by zero in Point.divScalar");
 
-      this._vec = this._vec.map(function(x) { return x / scalar; });
+      this._vec = this._vec.x(1 / scalar);
       this.upd();
       return this;
    },
@@ -315,7 +315,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the point's elements are both zero.
     */
    isZero: function() {
-      return this._vec.eql(Vector.Zero);
+      return this._vec.eql(Vector.Zero(2));
    },
    
    /**
@@ -743,6 +743,82 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    angleBetween: function(vector) {
       return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
+   },
+   
+   /**
+    * Returns <tt>true</tt> if this vector is parallel to <tt>vector</tt>.
+    * @param vector {Vector2D} The vector to compare against
+    * @return {Boolean}
+    */
+   isParallelTo: function(vector) {
+   	return this._vec.isParallelTo(vector._vec);
+   },
+   
+   /**
+    * Returns <tt>true</tt> if this vector is anti-parallel to <tt>vector</tt>.
+    * @param vector {Vector2D} The vector to compare against
+    * @return {Boolean}
+    */
+   isAntiparallelTo: function(vector) {
+   	return this._vec.isAntiparallelTo(vector._vec);
+   },
+   
+   /**
+    * Returns <tt>true</tt> if this vector is perpendicular to <tt>vector</tt>.
+    * @param vector {Vector2D} The vector to compare against
+    * @return {Boolean}
+    */
+   isPerpendicularTo: function(vector) {
+   	return this._vec.isPependicularTo(vector._vec);
+   },
+   
+   /**
+    * Mutator method that modifies the vector rotated <tt>angle</tt> degrees about
+    * the vector defined by <tt>axis</tt>.
+    *
+    * @param angle {Number} The rotation angle in degrees
+    * @param axis {Vector2D} The axis to rotate about
+    * @return {Vector2D} This vector
+    */
+   rotate: function(angle, axis) {
+   	this._vec = this._vec.rotate(Math2D.degToRad(angle), axis);
+      this.upd();
+   	return this;
+   },
+   
+   /**
+    * Project this vector onto <tt>vector</tt>.
+    *
+    * @param vector {Vector2D} The vector to project onto
+    * @return {Vector2D}
+    */
+   projectOnto: function(vector) {
+   	var proj = Vector2D.create(0,0);
+   	var t = this.get();
+   	var v = vector.get();
+   	var dp = this.dot(vector);
+   	proj.set( (dp / (v.x * v.x + v.y * v.y)) * v.x,
+   				 (dp / (v.x * v.x + v.y * v.y)) * v.y);
+   	return proj;
+   },
+   
+   /**
+    * Get the right-hand normal of this vector.  The left-hand
+    * normal would simply be <tt>this.rightNormal().neg()</tt>.
+    * @return {Vector2D}
+    */
+   rightNormal: function() {
+   	var t = this.get();
+   	var norm = Vector2D.create(-t.y, t.x);
+   },
+   
+   /**
+    * Get the per-product of this vector and <tt>vector</tt>.
+    * @param vector {Vector2D} The other vector
+    * @return {Number}
+    */
+   perProduct: function(vector) {
+   	return this.dot(vector.rightNormal());
    }
 
 }, { /** @scope Vector2D.prototype */
