@@ -62,13 +62,15 @@ var BoxColliderComponent = ColliderComponent.extend(/** @scope BoxColliderCompon
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
     * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+    * @param hostMask {Number} The collision mask for the host object
+    * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
-   testCollision: function(time, collisionObj) {
+   testCollision: function(time, collisionObj, hostMask, targetMask) {
       if (this.getHostObject().getWorldBox && collisionObj.getWorldBox &&
           this.getHostObject().getWorldBox().isIntersecting(collisionObj.getWorldBox())) {
 
-         return this.base(collisionObj, time);
+         return this.base(time, collisionObj, hostMask, targetMask);
       }
       
       return ColliderComponent.CONTINUE;
