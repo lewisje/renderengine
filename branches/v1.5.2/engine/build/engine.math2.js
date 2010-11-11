@@ -58,7 +58,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	},
 	
 	/**
-	 * Get a random integer from the pseduo random number generator.
+	 * Returns a random integer between 0 and 4,294,967,296.
 	 * @return {Number} An integer between 0 and 2^32
 	 */
 	randomInt: function() {
@@ -67,12 +67,26 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	},
 	
 	/**
-	 * Get a random float between 0 (inclusive) and 1 (exclusive)
+	 * Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
 	 * @return {Number} A number between 0 and 1
 	 */
 	random: function() {
 		// returns in range [0,1]
 		return this.randomInt() / (this.m - 1);
+	},
+	
+	/**
+	 * Return a random value within the <tt>low</tt> to <tt>hight</tt> range,
+	 * optionally as an integer value only.
+	 *
+	 * @param low {Number} The low part of the range
+	 * @param high {Number} The high part of the range
+	 * @param int {Boolean} Return whole values only
+	 * @return {Number}
+	 */
+	randomRange: function(low, high, int) {
+		var v = low + (this.random() * high);
+		return (int ? Math.floor(v) : v;
 	},
 	
 	/**
