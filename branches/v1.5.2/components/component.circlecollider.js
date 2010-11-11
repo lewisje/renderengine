@@ -64,100 +64,46 @@ var CircleColliderComponent = ColliderComponent.extend(/** @scope CircleCollider
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
     * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+    * @param hostMask {Number} The collision mask for the host object
+    * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
-   testCollision: function(time, collisionObj) {
+   testCollision: function(time, collisionObj, hostMask, targetMask) {
       
       var host = this.getHostObject();
-      
-      // Check for the required methods and see if a collision will occur
-      if (host.getCircle && collisionObj.getCircle && host.getVelocity &&
-          this.isPotentialCollision(collisionObj)) {
-
-         return this.base(collisionObj, time);
+      var hCircle = Circle2D.create(0,0,1);
+		var oCircle = Circle2D.create(0,0,1);
+		var wBox, r;
+		
+		// Check for easy methods
+		if (host.getCircle) {
+			hCircle.set(host.getCircle());
+		} else {
+			// Approximate a circle with the world box
+			wBox = host.getWorldBox ? host.getWorldBox() : null;
+			if (wBox == null) return ColliderComponent.CONTINUE;
+			r = wBox.get();
+			hCircle.set(wBox.getCenter(), r.w > r.h ? r.w / 2 : r.h / 2); 
+		}
+		
+		if (collisionObj.getCircle) {
+			oCircle.set(collisionObj.getCircle());
+		} else {
+			// Approximate a circle with the world box
+			wBox = collisionObj.getWorldBox ? collisionObj.getWorldBox() : null;
+			if (wBox == null) return ColliderComponent.CONTINUE;
+			r = wBox.get();
+			oCircle.set(wBox.getCenter(), r.w > r.h ? r.w / 2 : r.h / 2); 
+		}
+		
+      // See if a collision will occur
+      if (hCircle.isIntersecting(oCircle)) {
+         return this.base(time, collisionObj, hostMask, targetMask);
       }
       
       return ColliderComponent.CONTINUE;
-   },
-   
-   /**
-    * Check for a potential collision between the host object's circle and the
-    * collision object's circle.  Returns <tt>true</tt> if a collision will occur.
-    * @private
-    */
-   isPotentialCollision: function(collisionObj) {
-      
-      var host = this.getHostObject();
-      
-      // Early out test
-      var dist = collisionObj.getCircle().getCenter().dist(host.getCircle().getCenter());
-      var sumRad = collisionObj.getCircle().getRadius() + host.getCircle().getRadius();
-      dist -= sumRad;
-      if (host.getVelocity().len() < dist) {
-         // No collision possible
-         return false;
-      }
-
-      var norm = Vector2D.create(host.getVelocity()).normalize();
-
-      // Find C, the vector from the center of the moving
-      // circle A to the center of B
-      var c = Vector2D.create(collisionObj.getCircle().getCenter().sub(host.getCircle().getCenter()));
-      var dot = norm.dot(c);
-
-      // Another early escape: Make sure that A is moving
-      // towards B! If the dot product between the movevec and
-      // B.center - A.center is less that or equal to 0,
-      // A isn't isn't moving towards B
-      if (dot <= 0) {
-        return false;
-      }
-
-      var lenC = c.len();
-      var f = (lenC * lenC) - (dot * dot);
-
-      // Escape test: if the closest that A will get to B
-      // is more than the sum of their radii, there's no
-      // way they are going collide
-      var sumRad2 = sumRad * sumRad;
-      if (f >= sumRad2) {
-        return false;
-      }
-
-      // We now have F and sumRadii, two sides of a right triangle.
-      // Use these to find the third side, sqrt(T)
-      var t = sumRad2 - f;
-
-      // If there is no such right triangle with sides length of
-      // sumRadii and sqrt(f), T will probably be less than 0.
-      // Better to check now than perform a square root of a
-      // negative number.
-      if (t < 0) {
-        return false;
-      }
-
-      // Therefore the distance the circle has to travel along
-      // movevec is D - sqrt(T)
-      var distance = dot - Math.sqrt(t);
-
-      // Get the magnitude of the movement vector
-      var mag = host.getVelocity().len();
-
-      // Finally, make sure that the distance A has to move
-      // to touch B is not greater than the magnitude of the
-      // movement vector.
-      if (mag < distance) {
-        return false;
-      }
-
-      // Set the length of the movevec so that the circles will just
-      // touch
-      //var moveVec = host.getVelocity().normalize();
-      //movevec = moveVec.mul(distance);
-
-      return true;         
    }
-
+	
 }, { /** @scope CircleColliderComponent.prototype */
 
    /**
