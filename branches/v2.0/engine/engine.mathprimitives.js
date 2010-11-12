@@ -31,32 +31,6 @@
  *
  */
 
-/**
- * @object Axonometric projection types
- */
-var ProjectionType = {
-	/**
-	 * Isometric projection
-	 * @memberOf ProjectionType
-	 * @type {Number}
-	 */
-	ISOMETRIC_PROJECTION: 0, 
-
-	/**
-	 * Dimetric side projection
-	 * @memberOf ProjectionType
-	 * @type {Number}
-	 */
-	DIMETRIC_SIDE_PROJECTION: 1,
-
-	/**
-	 * Dimetric top projection
-	 * @memberOf ProjectionType
-	 * @type {Number}
-	 */
-	DIMETRIC_TOP_PROJECTION: 2
-};
-
 Engine.initObject("MathObject", "PooledObject", function() {
 
 /**
@@ -308,7 +282,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    mul: function(scalar) {
-      this._vec = this._vec.map(function(x) { return x * scalar; });
+      this._vec = this._vec.x(scalar);
       this.upd();
       return this;
    },
@@ -321,7 +295,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    div: function(scalar) {
       Assert((scalar != 0), "Division by zero in Point.divScalar");
 
-      this._vec = this._vec.map(function(x) { return x / scalar; });
+      this._vec = this._vec.x(1 / scalar);
       this.upd();
       return this;
    },
@@ -341,7 +315,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the point's elements are both zero.
     */
    isZero: function() {
-      return this._vec.eql(Vector.Zero);
+      return this._vec.eql(Vector.Zero(2));
    },
    
    /**
@@ -355,26 +329,26 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 	
 	/**
 	 * Project this point from 2 dimensions to 3 dimensions, using one of three projection
-	 * types: {@link ProjectionType#ISOMETRIC_PROJECTION}  <i>(default)</i>, 
-	 * {@link ProjectionType#DIMETRIC_SIDE_PROJECTION}, or {@link ProjectionType#DIMETRIC_TOP_PROJECTION}.
+	 * types: {@link Math2D.ISOMETRIC_PROJECTION}  <i>(default)</i>, {@link Math2D.DIMETRIC_SIDE_PROJECTION}, or
+	 * {@link Math2D.DIMETRIC_TOP_PROJECTION}.
 	 * <p/>
 	 * Reference: http://www.compuphase.com/axometr.htm
 	 *
 	 * @param height {Number} The height of the ground.  We must use a particular height to
 	 * 		extrapolate our 3D coordinates from.  If the ground is considered level, this can remain zero.
-	 * @param projectionType {Number} One of the three projection types in {@link ProjectionType}
+	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
 	 * @return {Point3D} This point, projected into 3 dimensions
 	 */
 	project: function(height, projectionType) {
 		height = height || 0;
-		projectionType = projectionType || ProjectionType.ISOMETRIC_PROJECTION;
+		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
 		var pt = Point3D.create(0,0,0), j = this.get();
 		switch (projectionType) {
-			case ProjectionType.ISOMETRIC_PROJECTION:
+			case Math2D.ISOMETRIC_PROJECTION:
 				pt.set(0.5 * j.x + j.y - height, -(0.5 * j.x) + j.y - height, height); break;
-			case ProjectionType.DIMETRIC_SIDE_PROJECTION:
+			case Math2D.DIMETRIC_SIDE_PROJECTION:
 				pt.set(j.x + (2 * (j.y - height)), 4 * j.y - height, height); break;
-			case ProjectionType.DIMETRIC_TOP_PROJECTION:
+			case Math2D.DIMETRIC_TOP_PROJECTION:
 				pt.set(j.x - ((j.y - height) /2 ), 2 * (j.y - height), height); break;		
 		}
 		return pt;		
@@ -648,23 +622,23 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 
 	/**
 	 * Project this point from 3 dimensions to 2 dimensions, using one of three projection
-	 * types: {@link ProjectionType#ISOMETRIC_PROJECTION} <i>(default)</i>, 
-	 * {@link ProjectionType#DIMETRIC_SIDE_PROJECTION}, or {@link ProjectionType#DIMETRIC_TOP_PROJECTION}.
+	 * types: {@link Math2D.ISOMETRIC_PROJECTION} <i>(default)</i>, {@link Math2D.DIMETRIC_SIDE_PROJECTION}, or
+	 * {@link Math2D.DIMETRIC_TOP_PROJECTION}.
 	 * <p/>
 	 * Reference: http://www.compuphase.com/axometr.htm
 	 * 
-	 * @param projectionType {Number} One of the three projection types in {@link ProjectionType}
+	 * @param projectionType {Number} One of the three projection types in {@link Math2D}
 	 * @return {Point2D} This point, projected into 2 dimensions
 	 */
 	project: function(projectionType) {
-		projectionType = projectionType || ProjectionType.ISOMETRIC_PROJECTION;
+		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
 		var pt = Point2D.create(0,0), j = this.get();
 		switch (projectionType) {
-			case ProjectionType.ISOMETRIC_PROJECTION:
+			case Math2D.ISOMETRIC_PROJECTION:
 				pt.set(j.x - j.z, j.y + ((j.x + j.z) / 2)); break;
-			case ProjectionType.DIMETRIC_SIDE_PROJECTION:
+			case Math2D.DIMETRIC_SIDE_PROJECTION:
 				pt.set(j.x + (j.z / 2), j.y + (j.z / 4)); break;
-			case ProjectionType.DIMETRIC_TOP_PROJECTION:
+			case Math2D.DIMETRIC_TOP_PROJECTION:
 				pt.set(j.x + (j.z / 4), j.y + (j.z / 2)); break;		
 		}
 		return pt;		
@@ -769,6 +743,82 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    angleBetween: function(vector) {
       return Math2D.radToDeg(this._vec.angleFrom(vector._vec));
+   },
+   
+   /**
+    * Returns <tt>true</tt> if this vector is parallel to <tt>vector</tt>.
+    * @param vector {Vector2D} The vector to compare against
+    * @return {Boolean}
+    */
+   isParallelTo: function(vector) {
+   	return this._vec.isParallelTo(vector._vec);
+   },
+   
+   /**
+    * Returns <tt>true</tt> if this vector is anti-parallel to <tt>vector</tt>.
+    * @param vector {Vector2D} The vector to compare against
+    * @return {Boolean}
+    */
+   isAntiparallelTo: function(vector) {
+   	return this._vec.isAntiparallelTo(vector._vec);
+   },
+   
+   /**
+    * Returns <tt>true</tt> if this vector is perpendicular to <tt>vector</tt>.
+    * @param vector {Vector2D} The vector to compare against
+    * @return {Boolean}
+    */
+   isPerpendicularTo: function(vector) {
+   	return this._vec.isPependicularTo(vector._vec);
+   },
+   
+   /**
+    * Mutator method that modifies the vector rotated <tt>angle</tt> degrees about
+    * the vector defined by <tt>axis</tt>.
+    *
+    * @param angle {Number} The rotation angle in degrees
+    * @param axis {Vector2D} The axis to rotate about
+    * @return {Vector2D} This vector
+    */
+   rotate: function(angle, axis) {
+   	this._vec = this._vec.rotate(Math2D.degToRad(angle), axis);
+      this.upd();
+   	return this;
+   },
+   
+   /**
+    * Project this vector onto <tt>vector</tt>.
+    *
+    * @param vector {Vector2D} The vector to project onto
+    * @return {Vector2D}
+    */
+   projectOnto: function(vector) {
+   	var proj = Vector2D.create(0,0);
+   	var t = this.get();
+   	var v = vector.get();
+   	var dp = this.dot(vector);
+   	proj.set( (dp / (v.x * v.x + v.y * v.y)) * v.x,
+   				 (dp / (v.x * v.x + v.y * v.y)) * v.y);
+   	return proj;
+   },
+   
+   /**
+    * Get the right-hand normal of this vector.  The left-hand
+    * normal would simply be <tt>this.rightNormal().neg()</tt>.
+    * @return {Vector2D}
+    */
+   rightNormal: function() {
+   	var t = this.get();
+   	var norm = Vector2D.create(-t.y, t.x);
+   },
+   
+   /**
+    * Get the per-product of this vector and <tt>vector</tt>.
+    * @param vector {Vector2D} The other vector
+    * @return {Number}
+    */
+   perProduct: function(vector) {
+   	return this.dot(vector.rightNormal());
    }
 
 }, { /** @scope Vector2D.prototype */
@@ -1070,9 +1120,9 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       var r1 = this.get();
       var r2 = rect.get();
       return !(r1.r < r2.x ||
-				   r1.x > r2.r ||
-               r1.b < r2.y ||
-               r1.y > r2.b);
+               r1.x > r2.r ||
+               r1.y > r2.b ||
+               r1.b < r2.y);
    },
 
    /**

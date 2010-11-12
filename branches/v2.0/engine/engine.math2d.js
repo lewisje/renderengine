@@ -67,10 +67,16 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @const
     */
    PI: 3.14159,
+   
+   /**
+    * An approximation of PI*2 for speedier calculations. (6.28318)
+    * @type {Number}
+    * @const
+    */
+   TWO_PI: 6.28318, 
 
    /**
-    * An approximation of the inverse of PI so we can
-    * avoid divisions. (0.31831)
+    * An approximation of the inverse of PI. (0.31831)
     * @type {Number}
     * @const
     */
@@ -224,7 +230,22 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       return Point2D.create(Math.floor(r.x + Math2.random() * r.w),
                             Math.floor(r.y + Math2.random() * r.h));
    },
+
+	/**
+	 * Returns <tt>true</tt> if the <tt>point</tt> lies on the line defined by
+	 * <tt>anchor</tt> in the direction of the normalized <tt>vector</tt>.
+	 *
+	 * @param point {Point2D} The point to test
+	 * @param anchor {Point2D} The anchor of the line
+	 * @param vector {Vector2D} The normalized direction vector for the line
+	 * @return {Boolean}
+	 */
+	isPointOnLine: function(point, anchor, vector) {
+		var l = Line.create(anchor._vec, vector._vec);
+		return l.contains(point._vec);
+	},
 	
+
 	/**
 	 * Tests if a point is Left|On|Right of an infinite line defined by
 	 * two endpoints.
@@ -234,11 +255,11 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * @param testPoint {Point2D} The point to test
 	 * @return {Number} &lt;0 (to left), 0 (on), &gt;0 (to right)
 	 */
-	isPointOnLine: function(endPoint0, endPoint1, testPoint) {
+	pointLeftOfLine: function(endPoint0, endPoint1, testPoint) {
 		var p0 = point0.get(), p1 = point1.get(), p2 = point2.get(); 
 		return (p1.x - p0.x)*(p2.y - p0.y) - (p2.x - p0.x)*(p1.y - p0.y);
 	},
-	
+
 	/**
 	 * Calculate an approximate 2D convex hull for the given array of points.
 	 * <p/>
@@ -313,7 +334,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 				continue;
 			
 			// check if a lower or upper point
-			if (Math2D.isPointOnLine(points[minmin], points[maxmin], cPP) < 0) {  // below lower line
+			if (Math2D.pointLeftOfLine(points[minmin], points[maxmin], cPP) < 0) {  // below lower line
 				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
 				if (bin.B[b].min == NONE)       // no min point in this range
 					bin.B[b].min = i;           // first min
@@ -322,7 +343,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 				continue;
 			}
 			
-			if (Math2D.isPointOnLine(points[minmax], points[maxmax], cPP) > 0) {  // above upper line
+			if (Math2D.pointLeftOfLine(points[minmax], points[maxmax], cPP) > 0) {  // above upper line
 				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
 				if (bin.B[b].max == NONE)       // no max point in this range
 					bin.B[b].max = i;           // first max
@@ -344,7 +365,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
 			while (top > 0) {        // there are at least 2 points on the stack
 				// test if current point is left of the line at the stack top
-				if (Math2D.isPointOnLine(hull[top-1], hull[top], cPP) > 0)
+				if (Math2D.pointLeftOfLine(hull[top-1], hull[top], cPP) > 0)
 					break;         // cP is a new hull vertex
 				else
 					top--;         // pop top point off stack
@@ -366,7 +387,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 			
 			while (top > bot) {      // at least 2 points on the upper stack
 				// test if current point is left of the line at the stack top
-				if (Math2D.isPointOnLine(hull[top-1], hull[top], cPP) > 0)
+				if (Math2D.pointLeftOfLine(hull[top-1], hull[top], cPP) > 0)
 					break;         // current point is a new hull vertex
 				else
 					top--;         // pop top point off stack
