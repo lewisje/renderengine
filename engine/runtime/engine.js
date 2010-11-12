@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.5.1
- * date: Nov 7, 2010
+ * version: ${build.version}
+ * date: 
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -933,8 +933,8 @@ Profiler.dump = function() {
  * 				  pseudo random numbers.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1216 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1437 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -985,7 +985,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	},
 	
 	/**
-	 * Get a random integer from the pseduo random number generator.
+	 * Returns a random integer between 0 and 4,294,967,296.
 	 * @return {Number} An integer between 0 and 2^32
 	 */
 	randomInt: function() {
@@ -994,12 +994,62 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	},
 	
 	/**
-	 * Get a random float between 0 (inclusive) and 1 (exclusive)
+	 * Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
 	 * @return {Number} A number between 0 and 1
 	 */
 	random: function() {
 		// returns in range [0,1]
 		return this.randomInt() / (this.m - 1);
+	},
+	
+	/**
+	 * Return a random value within the <tt>low</tt> to <tt>hight</tt> range,
+	 * optionally as an integer value only.
+	 *
+	 * @param low {Number} The low part of the range
+	 * @param high {Number} The high part of the range
+	 * @param [whole] {Boolean} Return whole values only
+	 * @return {Number}
+	 */
+	randomRange: function(low, high, whole) {
+		var v = low + (this.random() * high);
+		return (whole ? Math.floor(v) : v);
+	},
+	
+	/**
+	 * Parse a binary string into a number.
+	 * 
+	 * @param bin {String} Binary string to parse
+	 * @return {Number}
+	 */
+	parseBin: function(bin) {
+		if (!isNaN(bin)) {
+			return parseInt(bin, 2);
+		}
+	},
+	
+	/**
+	 * Converts a number to a hexidecimal string, prefixed by "0x".
+	 *
+	 * @param num {Number} The number to convert
+	 * @return {String}
+	 */
+	toHex: function(num) {
+		if (!isNaN(num)) {
+			return ("0x" + num.toString(16));
+		}
+	},
+	
+	/**
+	 * Converts a number to a binary string.
+	 *
+	 * @param num {Number} The number to convert
+	 * @return {String}
+	 */
+	toBinary: function(num) {
+		if (!isNaN(num)) {
+			return num.toString(2);
+		}
 	}
 });
 
@@ -1015,7 +1065,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1394 $
+ * @version: $Revision: 1408 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1608,9 +1658,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1288 $
+ * @version: $Revision: 1425 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -2210,7 +2260,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.5.1",
+   version: "${build.version}",
 
    constructor: null,
 

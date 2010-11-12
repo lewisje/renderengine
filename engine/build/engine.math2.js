@@ -81,12 +81,12 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 *
 	 * @param low {Number} The low part of the range
 	 * @param high {Number} The high part of the range
-	 * @param int {Boolean} Return whole values only
+	 * @param [whole] {Boolean} Return whole values only
 	 * @return {Number}
 	 */
-	randomRange: function(low, high, int) {
+	randomRange: function(low, high, whole) {
 		var v = low + (this.random() * high);
-		return (int ? Math.floor(v) : v;
+		return (whole ? Math.floor(v) : v);
 	},
 	
 	/**
