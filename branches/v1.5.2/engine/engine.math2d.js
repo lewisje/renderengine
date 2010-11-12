@@ -2,8 +2,7 @@
  * The Render Engine
  * Math
  *
- * @fileoverview A 2D math library with static methods, plus objects to represent 
- *               points, rectangles and circles.
+ * @fileoverview A static 2D math library with several helper methods.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -32,6 +31,23 @@
  */
 
 Engine.include("/engine/engine.mathprimitives.js");
+
+/**
+ * Bin object used by convex hull method.
+ * @private
+ */
+var Bin = Base.extend({
+	B: null,
+	constructor: function(size) {
+		this.B = [];
+		for (var i = 0; i < size; i++) {
+			this.B.push({
+				min: 0,
+				max: 0
+			});
+		}
+	}
+});
 
 Engine.initObject("Math2D", null, function() {
 
@@ -214,7 +230,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
       return Point2D.create(Math.floor(r.x + Math2.random() * r.w),
                             Math.floor(r.y + Math2.random() * r.h));
    },
-	
+
 	/**
 	 * Returns <tt>true</tt> if the <tt>point</tt> lies on the line defined by
 	 * <tt>anchor</tt> in the direction of the normalized <tt>vector</tt>.
@@ -224,11 +240,25 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * @param vector {Vector2D} The normalized direction vector for the line
 	 * @return {Boolean}
 	 */
-	isPointOnLine: function(point, anchor, vector) {
+	isPointOnLine2: function(point, anchor, vector) {
 		var l = Line.create(anchor._vec, vector._vec);
 		return l.contains(point._vec);
 	},
 	
+	/**
+	 * Tests if a point is Left|On|Right of an infinite line defined by
+	 * two endpoints.
+	 *
+	 * @param endPoint0 {Point2D} A point on the line
+	 * @param endPoint1 {Point2D} A second point on the line
+	 * @param testPoint {Point2D} The point to test
+	 * @return {Number} &lt;0 (to left), 0 (on), &gt;0 (to right)
+	 */
+	pointLeftOfLine: function(endPoint0, endPoint1, testPoint) {
+		var p0 = point0.get(), p1 = point1.get(), p2 = point2.get(); 
+		return (p1.x - p0.x)*(p2.y - p0.y) - (p2.x - p0.x)*(p1.y - p0.y);
+	},
+
 	/**
 	 * Calculate an approximate 2D convex hull for the given array of points.
 	 * <p/>
@@ -245,25 +275,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * 	approximate hull of the given points
 	 */ 
 	convexHull: function(points, k) {
-		// Tests if a point is Left|On|Right of an infinite line.
-		function isLeft(point0, point1, point2) {
-			var p0 = point0.get(), p1 = point1.get(), p2 = point2.get(); 
-			return (p1.x - p0.x)*(p2.y - p0.y) - (p2.x - p0.x)*(p1.y - p0.y);
-		}
-		
-		var Bin = Base.extend({
-			B: null,
-			constructor: function(size) {
-				this.B = [];
-				for (var i = 0; i < size; i++) {
-					this.B.push({
-						min: 0,
-						max: 0
-					});
-				}
-			}
-		});
-		
+	
 		var NONE = -1;
 		var minmin=0, minmax=0,
 			 maxmin=0, maxmax=0,
@@ -321,7 +333,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 				continue;
 			
 			// check if a lower or upper point
-			if (isLeft(points[minmin], points[maxmin], cPP) < 0) {  // below lower line
+			if (Math2D.pointLeftOfLine(points[minmin], points[maxmin], cPP) < 0) {  // below lower line
 				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
 				if (bin.B[b].min == NONE)       // no min point in this range
 					bin.B[b].min = i;           // first min
@@ -330,7 +342,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 				continue;
 			}
 			
-			if (isLeft(points[minmax], points[maxmax], cPP) > 0) {  // above upper line
+			if (Math2D.pointLeftOfLine(points[minmax], points[maxmax], cPP) > 0) {  // above upper line
 				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
 				if (bin.B[b].max == NONE)       // no max point in this range
 					bin.B[b].max = i;           // first max
@@ -352,7 +364,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 
 			while (top > 0) {        // there are at least 2 points on the stack
 				// test if current point is left of the line at the stack top
-				if (isLeft(hull[top-1], hull[top], cPP) > 0)
+				if (Math2D.pointLeftOfLine(hull[top-1], hull[top], cPP) > 0)
 					break;         // cP is a new hull vertex
 				else
 					top--;         // pop top point off stack
@@ -374,7 +386,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 			
 			while (top > bot) {      // at least 2 points on the upper stack
 				// test if current point is left of the line at the stack top
-				if (isLeft(hull[top-1], hull[top], cPP) > 0)
+				if (Math2D.pointLeftOfLine(hull[top-1], hull[top], cPP) > 0)
 					break;         // current point is a new hull vertex
 				else
 					top--;         // pop top point off stack
@@ -409,9 +421,96 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		return minkDiff;	
 	},
 	
-	ISOMETRIC_PROJECTION: 0, 
-	DIMETRIC_SIDE_PROJECTION: 1,
-	DIMETRIC_TOP_PROJECTION: 2
+   /**
+    * Helper method to determine if one circle will collide with another circle
+    * based on its direction of movement.  The circle's centers should be in
+    * world coordinates.
+    * 
+    * @param circle {Circle2D} The first circle
+    * @param velocity {Vector2D} The first circle's velocity vector
+    * @param targetCircle {Circle2D} The second circle
+    * @return {Vector2D} The vector which keeps the two circles from overlapping, 
+    * 	or <tt>null</tt> if they cannot overlap.
+    */
+   circleCircleCollision: function(circle, velocity, targetCircle) {
+      
+      // Early out test
+      var dist = targetCircle.getCenter().dist(circle.getCenter());
+      var sumRad = targetCircle.getRadius() + circle.getRadius();
+      dist -= sumRad;
+      if (velocity.len() < dist) {
+         // No collision possible
+         return null;
+      }
+
+      var norm = Vector2D.create(velocity).normalize();
+
+      // Find C, the vector from the center of the moving
+      // circle A to the center of B
+      var c = Vector2D.create(targetCircle.getCenter().sub(circle.getCenter()));
+      var dot = norm.dot(c);
+
+      // Another early escape: Make sure that A is moving
+      // towards B! If the dot product between the movevec and
+      // B.center - A.center is less that or equal to 0,
+      // A isn't isn't moving towards B
+      if (dot <= 0) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      var lenC = c.len();
+      var f = (lenC * lenC) - (dot * dot);
+
+      // Escape test: if the closest that A will get to B
+      // is more than the sum of their radii, there's no
+      // way they are going collide
+      var sumRad2 = sumRad * sumRad;
+      if (f >= sumRad2) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      // We now have F and sumRadii, two sides of a right triangle.
+      // Use these to find the third side, sqrt(T)
+      var t = sumRad2 - f;
+
+      // If there is no such right triangle with sides length of
+      // sumRadii and sqrt(f), T will probably be less than 0.
+      // Better to check now than perform a square root of a
+      // negative number.
+      if (t < 0) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      // Therefore the distance the circle has to travel along
+      // movevec is D - sqrt(T)
+      var distance = dot - Math.sqrt(t);
+
+      // Get the magnitude of the movement vector
+      var mag = velocity.len();
+
+      // Finally, make sure that the distance A has to move
+      // to touch B is not greater than the magnitude of the
+      // movement vector.
+      if (mag < distance) {
+      	norm.destroy();
+      	c.destroy();
+      	return null;
+      }
+
+      // Set the length of the vector which causes the circles 
+      // to just touch
+      var moveVec = Vector2D.create(norm.mul(distance));
+		norm.destroy();
+		c.destroy();
+      
+      return moveVec;         
+   }
 	
 });
 
