@@ -41,6 +41,7 @@ Maybe you're looking for FutureGoals?
     * Android devices
     * Nintendo Wii
   # Browser local storage
+    * Cookie storage
     * localStorage
     * DB Storage
   # Tilemap support
