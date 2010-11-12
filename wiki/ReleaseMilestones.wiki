@@ -22,14 +22,14 @@ Maybe you're looking for FutureGoals?
     * GJKColliderComponent
     * SATColliderComponent
   # New sound abstraction layer
-    * SoundSystem
+    * !SoundSystem
       * !SoundManager 2 upgrade
       * HTML5Audio (lightweight)
   # New rendering contexts
     * SVG
     * Scrolling/layered/parallax background
   # Starter Objects
-    * SpriteActor class
+    * !SpriteActor class
   # New components
     * AStarAIComponent
   # New physics components
