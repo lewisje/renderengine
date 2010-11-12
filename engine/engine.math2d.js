@@ -240,7 +240,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * @param vector {Vector2D} The normalized direction vector for the line
 	 * @return {Boolean}
 	 */
-	isPointOnLine2: function(point, anchor, vector) {
+	isPointOnLine: function(point, anchor, vector) {
 		var l = Line.create(anchor._vec, vector._vec);
 		return l.contains(point._vec);
 	},
