@@ -4,32 +4,36 @@ See the ArchivedReleases page for past release information.
 Maybe you're looking for FutureGoals?
 
 = Planned Release Features for v2.0 =
-  # Internet Explorer 8 and earlier support with !FlashCanvas
-  # !SoundManager 2 HTML5 support
   # New editors
     * Sprite editor
     * 2D game editor
     * Particle effect editor
   # User interfaces
-    * UI manager class 
+    * UIManager class 
     * UI elements
+      * UIButtonElement
+      * UIImageElement
+      * UITextElement
+      * UIInputElement
+      * UICheckboxElement
+  # New broad-phase collision model
+    * SpatialBSPTree
+  # New narrow-phase collision components
+    * GJKColliderComponent
+    * SATColliderComponent
+  # New sound abstraction layer
+    * SoundSystem
+      * !SoundManager 2 upgrade
+      * HTML5Audio (lightweight)
   # New rendering contexts
     * SVG
     * Scrolling/layered/parallax background
   # Starter Objects
-    * Actor2D
-    * CollisionBox2D
-    * PhysicsActor2D
-  # New and updated components
-    * Billboard2DComponent
-    * !TouchInputComponent
+    * SpriteActor class
+  # New components
     * AStarAIComponent
   # New physics components
-    * !CircleBodyComponent
-    * !BoxBodyComponent
     * !PolyBodyComponent
-    * !RevoluteJointComponent
-    * !DistanceJointComponent
     * !GearJointComponent
     * !PulleyJointComponent
   # Platform optimizations
@@ -39,17 +43,11 @@ Maybe you're looking for FutureGoals?
   # Browser local storage
     * localStorage
     * DB Storage
-  # Box2D-JS rigid-body integration
-    * Simulation
   # Tilemap support
     * Orthogonal
     * Isometric
   # Multi-player support using Socket.IO
-  # Billboards to take advantage of 2D graphics acceleration
-  # New and updated demos
-    * Asteroids Evolved - _updated_
-    * Physics demo - _updated_
-    * Ragdoll demo - NEW
+  # New demos
     * Isometric demo - NEW
     * Touch input and UI demo - NEW
     * Sprite demo with editor - NEW
