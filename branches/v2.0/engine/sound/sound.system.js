@@ -55,6 +55,9 @@ Engine.initObject("SoundSystem", null, function() {
 			this.loadingSounds = {};
 		},
 		
+		shutdown: function() {
+		},
+		
 		isReady: function() {
 			return this.ready;
 		},
@@ -77,15 +80,65 @@ Engine.initObject("SoundSystem", null, function() {
 		
 		loadSound: function(resourceLoader, name, url) {
 			if (!this.ready) {
-				this.queuedSounds.push({ sLoader: resourceLoader, sName: name, sUrl: url);
+				this.queuedSounds.push({
+					sLoader: resourceLoader,
+					sName: name,
+					sUrl: url
+				});
 			} else {
 				this.retrieveSound(resourceLoader, name, url);
 			}
 		},
-		
+
 		retrieveSound: function(resourceLoader, name, url) {
+		},
+		
+		destroySound: function(sound) {
+		},
+		
+		playSound: function(sound) {
+		},
+
+		stopSound: function(sound) {
+		},
+
+		pauseSound: function(sound) {
+		},
+
+		resumeSound: function(sound) {
+		},
+
+		muteSound: function(sound) {
+		},
+
+		unmuteSound: function(sound) {
+		},
+
+		setSoundVolume: function(sound, volume) {
+		},
+
+		setSoundPan: function(sound, pan) {
+		},
+		
+		setSoundPosition: function(sound, millisecondOffset) {
+		},
+
+		getSoundPosition: function(sound) {
+	      return 0;
+		},
+		
+		getSoundSize: function(sound) {
+			return 0;
+		},
+
+		getSoundDuration: function(sound) {
+			return 0;
+		},
+		
+		getSoundReadyState: function(sound) {
+			return false;
 		}
-	
+			
 	});
 	
 	return SoundSystem;
@@ -109,15 +162,19 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
    paused: false,
    pan: -1,
    muted: false,
+	soundObj: null,
+	soundSyste: null,
 
    /**
     * @private
     */
-   constructor: function(name) {
+   constructor: function(soundSystem, soundObj) {
       this.volume = 50;
       this.paused = false;
       this.pan = 0;
       this.muted = false;
+		this.soundObj = soundObj;
+		this.soundSystem = soundSystem;
       return this.base(name);
    },
 
@@ -125,6 +182,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     * Destroy the sound object
     */
    destroy: function() {
+		this.soundSystem.destroySound(this.sound);
       this.base();
    },
 
@@ -137,6 +195,8 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
       this.pan = -1;
       this.paused = false;
       this.muted = false;
+		this.soundObj = null;
+		this.soundSystem = null;
    },
 
    /**
@@ -154,6 +214,8 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
       if (volume && volume != this.getVolume()) {
          this.setVolume(volume);
       }
+		
+		this.soundSystem.playSound(this.soundObj);
    },
 
    /**
@@ -161,12 +223,14 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     */
    stop: function() {
       this.paused = false;
+		this.soundSystem.stopSound(this.soundObj);
    },
 
    /**
     * If the sound is playing, pause the sound.
     */
    pause: function() {
+		this.soundSystem.pauseSound(this.soundObj);
       this.paused = true;
    },
 
@@ -183,12 +247,14 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     */
    resume: function() {
       this.paused = false;
+		this.soundSystem.resumeSound(this.soundObj);
    },
 
    /**
     * Mute the sound (set its volume to zero).
     */
    mute: function() {
+		this.soundSystem.muteSound(this.soundObj);
       this.muted = true;
    },
 
@@ -199,6 +265,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
       if (!this.muted) {
          return;
       }
+		this.soundSystem.unmuteSound(this.soundObj);
       this.muted = false;
    },
 
@@ -215,6 +282,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
       // clamp it
       volume = (volume < 0 ? 0 : volume > 100 ? 100 : volume);
       this.volume = volume;
+		this.soundSystem.setSoundVolume(this.soundObj, volume);
    },
 
    /**
@@ -232,6 +300,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     */
    setPan: function(pan) {
       this.pan = pan;
+		this.soundSystem.setSoundPan(this.soundObj, pan);
    },
 
    /**
@@ -249,6 +318,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     */
    setPosition: function(millisecondOffset) {
       this.position = millisecondOffset;
+		this.soundSystem.setSoundPosition(this.soundObj, millisecondOffset);
    },
 
    /**
@@ -256,7 +326,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     * @return {Number} The millisecond offset into the sound
     */
    getLastPosition: function() {
-      return this.position;
+      return this.soundSystem.getSoundPosition(this.soundObj);
    },
 
    /**
@@ -265,7 +335,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     * @return {Number} The size of the sound, in bytes
     */
    getSizeBytes: function() {
-   	return 0;
+   	return this.soundSystem.getSoundSize(this.soundObj);
    },
 
    /**
@@ -275,11 +345,11 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
     * @return {Number} The length of the sound, in milliseconds
     */
    getDuration: function() {
-      return 0;
+      return this.soundSystem.getSoundDuration(this.soundObj);
    },
 
    getReadyState: function() {
-      return 0;
+      return this.soundSystem.getSoundReadyState(this.soundObj);
    }
 
 }, /** @scope Sound.prototype */{
