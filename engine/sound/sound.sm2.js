@@ -1,9 +1,8 @@
 /**
  * The Render Engine
- * SoundSystem
+ * SoundSystemSM2
  *
- * @fileoverview An abstraction class for the engine sound system.  Pluggable
- *               architecture for linking in different sound managers.
+ * @fileoverview The SoundManager 2 sound system.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
@@ -33,20 +32,16 @@
 
 Engine.include("/libs/soundmanager2.js");
 Engine.include("/libs/AC_OETags.js");
-Engine.include("/engine/engine.timers.js");
-Engine.include("/engine/engine.pooledobject.js");
 
-Engine.initObject("SM2", "SoundSystem", function() {
+Engine.initObject("SoundSystemSM2", "SoundSystem", function() {
 
    /**
-    * @class Sound system abstraction class for pluggable sound architecture.  The <tt>
-    *        SoundSystem</tt> class is used to separate the sound manager from the resource
-    *        loader and sound objects.
+    * @class Initializes the SoundManager2 sound system.
     *
     * @constructor
     * @extends SoundSystem
     */
-   var SM2 = SoundSystem.extend(/** @scope SM2.prototype */{
+   var SoundSystemSM2 = SoundSystem.extend(/** @scope SoundSystemSM2.prototype */{
 
 		init: false,
 		soundManager: null,
@@ -77,13 +72,13 @@ Engine.initObject("SM2", "SoundSystem", function() {
 					var self = this;
 
 					this.soundManager.onload = function() {
-						Engine.soundsEnabled = true;
+						self.init = true;
 						Console.warn("SoundManager loaded successfully");
 						self.makeReady();
 					};
 
 					this.soundManager.onerror = function() {
-						Engine.soundsEnabled = false;
+						self.init = false;
 						Console.warn("SoundManager not loaded");
 					};
 
@@ -95,186 +90,116 @@ Engine.initObject("SM2", "SoundSystem", function() {
 
 				} else {
 					// Flash not installed
-					Engine.soundsEnabled = false;
+					this.init = false;
 				}
 
 			} else {
-				Engine.soundsEnabled = false;
+				// SoundManager isn't defined
+				this.init = false;
 			}
 		},
       
+		shutdown: function() {
+			this.soundManager.destruct();			
+		},
+		
       retrieveSound: function(resourceLoader, name, url) {
-      }
+         // Only MP3 files are supported
+         Assert(url.indexOf(".mp3") > 0, "Only MP3 sound format is supported!");
+
+			if (!this.init) {
+				return Sound.create(this, null);
+			}
+
+         // Create the sound object
+         var sound = this.soundManager.createSound({
+            "id": name,
+            "url": url,
+            "autoPlay": false,
+            "autoLoad": true,
+            "volume": 50
+         });
+         var soundObj = Sound.create(this, sound);
+
+
+      },
+		
+		destroySound: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+			sound.unload();
+		},
+		
+		playSound: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+	   	sound.play();
+		},
+
+		stopSound: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+			sound.stop();
+		},
+
+		pauseSound: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+			sound.pause();
+		},
+
+		resumeSound: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+			sound.resume();
+		},
+
+		muteSound: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+			sound.mute();
+		},
+
+		unmuteSound: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+         sound.unmute();
+		},
+
+		setSoundVolume: function(sound, volume) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+         sound.setVolume(volume);
+		},
+
+		setSoundPan: function(sound, pan) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+			sound.setPan(pan);
+		},
+		
+		setSoundPosition: function(sound, millisecondOffset) {
+			if (!(this.init || this.getReadyState(sound))) { return; }
+			sound.setPosition(millisecondOffset);
+		},
+		
+		getSoundPosition: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return 0; }
+	      return sound.position;
+		},
+		
+		getSoundSize: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return 0; }
+	      return sound.bytesTotal;
+		},
+
+		getSoundDuration: function(sound) {
+			if (!(this.init || this.getReadyState(sound))) { return 0; }
+	      return sound.duration;
+		},
+		
+		getSoundReadyState: function(sound) {
+			if (!this.init) { return true; }
+	      return (sound.readyState == SoundSystemSM2.LOAD_SUCCESS);
+		}
    
-   });
+   }, {
+		LOAD_LOADING: 1,
+		LOAD_ERROR: 2,
+		LOAD_SUCCESS: 3
+	});
    
-   return SoundSystem;
+   return SoundSystemSM2;
    
-});
-
-Engine.initObject("Sound", "PooledObject", function() {
-
-/**
- * @class Represents a sound object that is abstracted from the sound system.
- *        If the sound system does not initialize, for whatever reason, you can 
- *        still call a sound's methods.
- *
- * @constructor
- * @param name {String} The name of the sound
- * @extends PooledObject
- */
-var SM2Sound = Sound.extend(/** @scope SM2Sound.prototype */{
-
-	smSound: null;
-
-   /**
-    * @private
-    */
-   constructor: function(name, smSound) {
-   	this.smSound = smSound;
-      return this.base(name);
-   },
-
-   /**
-    * Destroy the sound object
-    */
-   destroy: function() {
-      this.smSound.unload();
-      this.base();
-   },
-
-   /**
-    * @private
-    */
-   release: function() {
-      this.base();
-      this.smSound = null;
-   },
-
-   /**
-    * Play the sound.  If the volume is specified, it will set volume of the
-    * sound before playing.  If the sound was paused, it will be resumed.
-    *
-    * @param volume {Number} <i>[optional]</i> An integer between 0 (muted) and 100 (full volume)
-    */
-   play: function(volume) {
-   	this.base();
-   	this.smSound.play();
-   },
-
-   /**
-    * If the sound is playing, stop the sound and reset it to the beginning.
-    */
-   stop: function() {
-		this.smSound.stop();
-      this.base();
-   },
-
-   /**
-    * If the sound is playing, pause the sound.
-    */
-   pause: function() {
-		this.smSound.pause();
-      this.base();
-   },
-
-   /**
-    * If the sound is paused, it will resume playing the sound.
-    */
-   resume: function() {
-      this.base();
-		this.smSound.resume();
-   },
-
-   /**
-    * Mute the sound (set its volume to zero).
-    */
-   mute: function() {
-      this.base();
-		this.smSound.mute();
-   },
-
-   /**
-    * Unmute the sound (reset its volume to what it was before muting).
-    */
-   unmute: function() {
-      if (this.base()) {
-         this.smSound.unmute();
-      }
-   },
-
-   /**
-    * Set the volume of the sound to an integer between 0 (muted) and 100 (full volume).
-    *
-    * @param volume {Number} The volume of the sound
-    */
-   setVolume: function(volume) {
-      if (this.base(volume)) {
-         this.smSound.setVolume(volume);
-      }
-   },
-
-   /**
-    * Set the pan of the sound, with -100 being full left and 100 being full right.
-    *
-    * @param pan {Number} An integer between -100 and 100, with 0 being center.
-    */
-   setPan: function(pan) {
-      this.base(pan);
-		this.smSound.setPan(pan);
-   },
-
-   /**
-    * Set the sound offset in milliseconds.
-    *
-    * @param millisecondOffset {Number} The offset into the sound to play from
-    */
-   setPosition: function(millisecondOffset) {
-   	this.base(millisecondOffset);
-		this.smSound.setPosition(millisecondOffset);
-   },
-
-   /**
-    * Get the position of the sound, in milliseconds, from the start of the sound.
-    * @return {Number} The millisecond offset into the sound
-    */
-   getLastPosition: function() {
-      return this.smSound.position;
-   },
-
-   /**
-    * Get the total size, in bytes, of the sound.  If the sound engine is not
-    * initialized, returns 0.
-    * @return {Number} The size of the sound, in bytes
-    */
-   getSizeBytes: function() {
-      return this.smSound.bytesTotal;
-   },
-
-   /**
-    * Get the length of the sound, in milliseconds.  If the sound hasn't fully loaded,
-    * it will be the number of milliseconds currently loaded.  Due to the nature of
-    * Variable Bitrate (VBR) sounds, this number may be inaccurate.
-    * @return {Number} The length of the sound, in milliseconds
-    */
-   getDuration: function() {
-      return this.smSound.duration;
-   },
-
-   getReadyState: function() {
-      return this.smSound.readyState;
-   }
-
-}, /** @scope Sound.prototype */{
-   /**
-    * Gets the class name of this object.
-    * @return {String} The string "SM2Sound"
-    */
-   getClassName: function() {
-      return "SM2Sound";
-   }
-});
-
-return SM2Sound;
-
 });
