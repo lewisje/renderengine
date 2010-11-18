@@ -758,7 +758,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    SCRIPT_LOADED: true,
 
    /**
-    * Include a script file.
+    * Include a script file.  This is the method used to load additional
+    * script files, relative to the engine's location.
+<pre>
+	Engine.include("/rendercontexts/context.canvascontext.js");
+</pre>
     *
     * @param scriptURL {String} The URL of the script file
     * @memberOf Engine
@@ -805,7 +809,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 	loadJSON: null,
 
    /**
-    * Put a callback into the script queue so that when a
+    * Insert a callback into the script load queue so that when a
     * certain number of files has been loaded, we can call
     * a method.  Allows for functionality to start with
     * incremental loading.
@@ -899,21 +903,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    toggleMetrics: null,
 
    /**
-    * Show the metrics window
+    * Show the metrics window.
     * @memberOf Engine
     * @function
     */
    showMetrics: null,
    
    /**
-    * Show a graph of the engine profile
+    * Show the engine performance graph.
     * @memberOf Engine
     * @function
     */
    showProfile: null,
 
    /**
-    * Hide the metrics window
+    * Hide the metrics window.
     * @memberOf Engine
     * @function
     */
