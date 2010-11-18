@@ -47,11 +47,10 @@ Engine.initObject("CircleColliderComponent", "CircleColliderComponent", function
  *
  * @extends ColliderComponent
  * @constructor
- * @description For this component to function, a movement vector must be available on the 
- *        host object by implementing the {@link Object2D#getVelocity} method which returns 
- *        a {@link Vector2D} instance.  Additionally the host object and collision object 
- *        must implement the {@link Object2D#getCircle} method which returns a 
- *        {@link Circle2D} instance.
+ * @description Creates a collider component for circle-circle collision testing.  Each object
+ *              must implement either the {@link Object2D#getWorldBox} or
+ *              {@link Object2D#getCircle} method and return a world-oriented bounding box or
+ *              circle, respectively.
  */
 var CircleColliderComponent = ColliderComponent.extend(/** @scope CircleColliderComponent.prototype */{
 
