@@ -53,10 +53,37 @@ Engine.initObject("BoxColliderComponent", "ColliderComponent", function() {
  */
 var BoxColliderComponent = ColliderComponent.extend(/** @scope BoxColliderComponent.prototype */{
 
+	hasMethod: false,
+
    /**
-    * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision
-    * and the potential collision object.  The return value should either tell the collision
-    * tests to continue, or to stop.
+    * Releases the component back into the pool for reuse.  See {@link PooledObject#release}
+    * for more information.
+    */
+   release: function() {
+      this.base();
+		this.hasMethod = false;		
+	},
+
+	/**
+    * Establishes the link between this component and its host object.
+    * When you assign components to a host object, it will call this method
+    * so that each component can refer to its host object, the same way
+    * a host object can refer to a component with {@link HostObject#getComponent}.
+    *
+    * @param hostObject {HostObject} The object which hosts this component
+	 */
+	setHostObject: function(hostObj) {
+		this.base(hostObj);
+		this.hasMethod = (hostObj.getWorldBox != undefined);
+		/* pragma:DEBUG_START */
+		AssertWarn(this.hasMethod, "Object " + hostObj.toString() + " does not have getWorldBox() method");
+		/* pragma:DEBUG_END */
+	},
+
+   /**
+    * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,
+    * the potential collision object, and the host and target masks.  The return value should 
+    * either tell the collision tests to continue or stop.
     * <p/>
     * A world bounding box collision must occur to trigger the <tt>onCollide()</tt> method.
     *
@@ -67,7 +94,7 @@ var BoxColliderComponent = ColliderComponent.extend(/** @scope BoxColliderCompon
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-      if (this.getHostObject().getWorldBox && collisionObj.getWorldBox &&
+      if (this.hasMethod && collisionObj.getWorldBox &&
           this.getHostObject().getWorldBox().isIntersecting(collisionObj.getWorldBox())) {
 
          return this.base(time, collisionObj, hostMask, targetMask);
