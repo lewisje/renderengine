@@ -169,6 +169,48 @@ A 2D vector class with helpful manipulation methods.</p>
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
             <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isAntiparallelTo">isAntiparallelTo</a></b>(vector) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if this vector is anti-parallel to <tt>vector</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isParallelTo">isParallelTo</a></b>(vector) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if this vector is parallel to <tt>vector</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#isPerpendicularTo">isPerpendicularTo</a></b>(vector) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if this vector is perpendicular to <tt>vector</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
             &nbsp;Number
             </code></font> 
          </td>
@@ -190,6 +232,62 @@ A 2D vector class with helpful manipulation methods.</p>
             <code> <b> <a href="#normalize">normalize</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A mutator method that normalizes this vector, returning a unit length vector.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#perProduct">perProduct</a></b>(vector) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the per-product of this vector and <tt>vector</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#projectOnto">projectOnto</a></b>(vector) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Project this vector onto <tt>vector</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#rightNormal">rightNormal</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the right-hand normal of this vector.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#rotate">rotate</a></b>(angle, axis) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Mutator method that modifies the vector rotated <tt>angle</tt> degrees aboutthe vector defined by <tt>axis</tt>.
  
          </td>
       </tr>
@@ -239,6 +337,12 @@ A 2D vector class with helpful manipulation methods.</p>
                <a href="PooledObject.html#toXML">toXML</a>,
             
                <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#getObjectDataModel">getObjectDataModel</a>,
+            
+               <a href="PooledObject.html#setObjectDataModel">setObjectDataModel</a>,
+            
+               <a href="PooledObject.html#clearObjectDataModel">clearObjectDataModel</a>,
             
                <a href="PooledObject.html#create">create</a>,
             
@@ -439,6 +543,84 @@ A 2D vector class with helpful manipulation methods.</p>
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="isAntiparallelTo"> </a> <h3>isAntiparallelTo</h3>
+      <pre>Boolean&nbsp;<b>isAntiparallelTo</b>(vector)</pre> 
+   <ul>
+      Returns <tt>true</tt> if this vector is anti-parallel to <tt>vector</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;vector </code> - The vector to compare against 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isParallelTo"> </a> <h3>isParallelTo</h3>
+      <pre>Boolean&nbsp;<b>isParallelTo</b>(vector)</pre> 
+   <ul>
+      Returns <tt>true</tt> if this vector is parallel to <tt>vector</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;vector </code> - The vector to compare against 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isPerpendicularTo"> </a> <h3>isPerpendicularTo</h3>
+      <pre>Boolean&nbsp;<b>isPerpendicularTo</b>(vector)</pre> 
+   <ul>
+      Returns <tt>true</tt> if this vector is perpendicular to <tt>vector</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;vector </code> - The vector to compare against 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="len"> </a> <h3>len</h3>
       <pre>Number&nbsp;<b>len</b>()</pre> 
    <ul>
@@ -481,6 +663,108 @@ A 2D vector class with helpful manipulation methods.</p>
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="perProduct"> </a> <h3>perProduct</h3>
+      <pre>Number&nbsp;<b>perProduct</b>(vector)</pre> 
+   <ul>
+      Get the per-product of this vector and <tt>vector</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;vector </code> - The other vector 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="projectOnto"> </a> <h3>projectOnto</h3>
+      <pre>Vector2D&nbsp;<b>projectOnto</b>(vector)</pre> 
+   <ul>
+      Project this vector onto <tt>vector</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;vector </code> - The vector to project onto 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="rightNormal"> </a> <h3>rightNormal</h3>
+      <pre>Vector2D&nbsp;<b>rightNormal</b>()</pre> 
+   <ul>
+      Get the right-hand normal of this vector.  The left-handnormal would simply be <tt>this.rightNormal().neg()</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="rotate"> </a> <h3>rotate</h3>
+      <pre>Vector2D&nbsp;<b>rotate</b>(angle, axis)</pre> 
+   <ul>
+      Mutator method that modifies the vector rotated <tt>angle</tt> degrees aboutthe vector defined by <tt>axis</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;angle </code> - The rotation angle in degrees 
+      </ul>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;axis </code> - The axis to rotate about 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>This vector 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -490,8 +774,8 @@ A 2D vector class with helpful manipulation methods.</p>
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:40 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:42 GMT-0500 (EST)</div>
 </body>
 </html>

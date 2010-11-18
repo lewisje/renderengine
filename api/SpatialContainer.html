@@ -136,6 +136,18 @@ An abstract class to represent spatial containers.  Spatial containers       co
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#clearObjectSpatialData">clearObjectSpatialData</a></b>(obj) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Clear all of the spatial container model data.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;SpatialNode
             </code></font> 
@@ -206,6 +218,18 @@ An abstract class to represent spatial containers.  Spatial containers       co
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getObjectSpatialData">getObjectSpatialData</a></b>(obj, key) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the spatial model data for the object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;Container
             </code></font> 
@@ -254,6 +278,18 @@ An abstract class to represent spatial containers.  Spatial containers       co
             <code> <b> <a href="#removeObject">removeObject</a></b>(obj) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove an object from the collision model.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setObjectSpatialData">setObjectSpatialData</a></b>(obj, key, value) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set a key, within the object's spatial data model, to a specific value.
  
          </td>
       </tr>
@@ -329,6 +365,12 @@ An abstract class to represent spatial containers.  Spatial containers       co
                <a href="PooledObject.html#toXML">toXML</a>,
             
                <a href="PooledObject.html#isDestroyed">isDestroyed</a>,
+            
+               <a href="PooledObject.html#getObjectDataModel">getObjectDataModel</a>,
+            
+               <a href="PooledObject.html#setObjectDataModel">setObjectDataModel</a>,
+            
+               <a href="PooledObject.html#clearObjectDataModel">clearObjectDataModel</a>,
             
                <a href="PooledObject.html#create">create</a>,
             
@@ -418,6 +460,27 @@ An abstract class to represent spatial containers.  Spatial containers       co
       </ul>
       <ul>
          <code>[<i>Point2D</i>]&nbsp;point </code> - The world position where the object is 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="clearObjectSpatialData"> </a> <h3>clearObjectSpatialData</h3>
+      <pre><b>clearObjectSpatialData</b>(obj)</pre> 
+   <ul>
+      Clear all of the spatial container model data.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object which has the data model 
       </ul>
    </ul>
    
@@ -543,6 +606,30 @@ An abstract class to represent spatial containers.  Spatial containers       co
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getObjectSpatialData"> </a> <h3>getObjectSpatialData</h3>
+      <pre><b>getObjectSpatialData</b>(obj, key)</pre> 
+   <ul>
+      Get the spatial model data for the object.  If <tt>key</tt> is provided, only thedata for <tt>key</tt> will be returned.  If the data has not yet been assigned,an empty object will be created to contain the data.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object which has the data 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;key </code> - Optional key which contains the data, or <tt>null</tt> for the	entire data model. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getPCL"> </a> <h3>getPCL</h3>
       <pre>Container&nbsp;<b>getPCL</b>(point)</pre> 
    <ul>
@@ -632,6 +719,33 @@ An abstract class to represent spatial containers.  Spatial containers       co
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="setObjectSpatialData"> </a> <h3>setObjectSpatialData</h3>
+      <pre><b>setObjectSpatialData</b>(obj, key, value)</pre> 
+   <ul>
+      Set a key, within the object's spatial data model, to a specific value.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>BaseObject</i>]&nbsp;obj </code> - The object to receive the data 
+      </ul>
+      <ul>
+         <code>[<i>String</i>]&nbsp;key </code> - The key to set the data for 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;value </code> - The value to assign to the key 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="setRoot"> </a> <h3>setRoot</h3>
       <pre><b>setRoot</b>(root)</pre> 
    <ul>
@@ -662,8 +776,8 @@ An abstract class to represent spatial containers.  Spatial containers       co
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:40 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:43 GMT-0500 (EST)</div>
 </body>
 </html>

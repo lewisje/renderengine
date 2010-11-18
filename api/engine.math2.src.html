@@ -75,7 +75,7 @@ A static class which provides methods for generating random integers		 and floa
 <span class='linenumber'>  7</span>  *
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 10</span>  * @version: $Revision: 1216 $
+<span class='linenumber'> 10</span>  * @version: $Revision: 1442 $
 <span class='linenumber'> 11</span>  *
 <span class='linenumber'> 12</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 13</span>  *
@@ -126,7 +126,7 @@ A static class which provides methods for generating random integers		 and floa
 <span class='linenumber'> 58</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 59</span> </span><span class="WHIT">	</span><span class="WHIT">
 <span class='linenumber'> 60</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'> 61</span> 	 * Get a random integer from the pseduo random number generator.
+<span class='linenumber'> 61</span> 	 * Returns a random integer between 0 and 4,294,967,296.
 <span class='linenumber'> 62</span> 	 * @return {Number} An integer between 0 and 2^32
 <span class='linenumber'> 63</span> 	 */</span><span class="WHIT">
 <span class='linenumber'> 64</span> </span><span class="WHIT">	</span><span class="NAME">randomInt</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -135,20 +135,70 @@ A static class which provides methods for generating random integers		 and floa
 <span class='linenumber'> 67</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 68</span> </span><span class="WHIT">	</span><span class="WHIT">
 <span class='linenumber'> 69</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'> 70</span> 	 * Get a random float between 0 (inclusive) and 1 (exclusive)
+<span class='linenumber'> 70</span> 	 * Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
 <span class='linenumber'> 71</span> 	 * @return {Number} A number between 0 and 1
 <span class='linenumber'> 72</span> 	 */</span><span class="WHIT">
 <span class='linenumber'> 73</span> </span><span class="WHIT">	</span><span class="NAME">random</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'> 74</span> </span><span class="WHIT">		</span><span class="COMM">// returns in range [0,1]</span><span class="WHIT">
 <span class='linenumber'> 75</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.randomInt</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="REGX">/ (this.m - 1);
-<span class='linenumber'> 76</span> 	}
-<span class='linenumber'> 77</span> });
-<span class='linenumber'> 78</span> 
-<span class='linenumber'> 79</span> /</span><span class="TOKN"></span></pre>
+<span class='linenumber'> 76</span> 	},
+<span class='linenumber'> 77</span> 	
+<span class='linenumber'> 78</span> 	/</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'> 79</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Return</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">random</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="NAME">within</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="NAME">tt</span><span class="PUNC">></span><span class="NAME">low</span><span class="PUNC">&lt;</span><span class="REGX">/tt> to &lt;tt>hight&lt;/</span><span class="NAME">tt</span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">range</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 80</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">optionally</span><span class="WHIT"> </span><span class="NAME">as</span><span class="WHIT"> </span><span class="NAME">an</span><span class="WHIT"> </span><span class="NAME">integer</span><span class="WHIT"> </span><span class="NAME">value</span><span class="WHIT"> </span><span class="NAME">only.</span><span class="WHIT">
+<span class='linenumber'> 81</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'> 82</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">low</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Number</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">low</span><span class="WHIT"> </span><span class="NAME">part</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">range</span><span class="WHIT">
+<span class='linenumber'> 83</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">high</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Number</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">high</span><span class="WHIT"> </span><span class="NAME">part</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">range</span><span class="WHIT">
+<span class='linenumber'> 84</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="NAME">whole</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Boolean</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">Return</span><span class="WHIT"> </span><span class="NAME">whole</span><span class="WHIT"> </span><span class="NAME">values</span><span class="WHIT"> </span><span class="NAME">only</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Number</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 86</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'> 87</span> 	randomRange: function(low, high, whole) {
+<span class='linenumber'> 88</span> 		var v = low + (this.random() * high);
+<span class='linenumber'> 89</span> 		return (whole ? Math.floor(v) : v);
+<span class='linenumber'> 90</span> 	},
+<span class='linenumber'> 91</span> 	
+<span class='linenumber'> 92</span> 	/</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'> 93</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Parse</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">binary</span><span class="WHIT"> </span><span class="NAME">string</span><span class="WHIT"> </span><span class="NAME">into</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">number.</span><span class="WHIT">
+<span class='linenumber'> 94</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="WHIT">
+<span class='linenumber'> 95</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">bin</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">Binary</span><span class="WHIT"> </span><span class="NAME">string</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">parse</span><span class="WHIT">
+<span class='linenumber'> 96</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Number</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'> 97</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'> 98</span> 	parseBin: function(bin) {
+<span class='linenumber'> 99</span> 		if (!isNaN(bin)) {
+<span class='linenumber'>100</span> 			return parseInt(bin, 2);
+<span class='linenumber'>101</span> 		}
+<span class='linenumber'>102</span> 	},
+<span class='linenumber'>103</span> 	
+<span class='linenumber'>104</span> 	/</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>105</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Converts</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">number</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">hexidecimal</span><span class="WHIT"> </span><span class="NAME">string</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">prefixed</span><span class="WHIT"> </span><span class="NAME">by</span><span class="WHIT"> </span><span class="STRN">"0x"</span><span class="PUNC">.</span><span class="WHIT">
+<span class='linenumber'>106</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>107</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">num</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Number</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">number</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">convert</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>110</span> 	toHex: function(num) {
+<span class='linenumber'>111</span> 		if (!isNaN(num)) {
+<span class='linenumber'>112</span> 			return ("0x" + num.toString(16));
+<span class='linenumber'>113</span> 		}
+<span class='linenumber'>114</span> 	},
+<span class='linenumber'>115</span> 	
+<span class='linenumber'>116</span> 	/</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>117</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Converts</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">number</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">binary</span><span class="WHIT"> </span><span class="NAME">string.</span><span class="WHIT">
+<span class='linenumber'>118</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>119</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">num</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Number</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">number</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">convert</span><span class="WHIT">
+<span class='linenumber'>120</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>121</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>122</span> 	toBinary: function(num) {
+<span class='linenumber'>123</span> 		if (!isNaN(num)) {
+<span class='linenumber'>124</span> 			return num.toString(2);
+<span class='linenumber'>125</span> 		}
+<span class='linenumber'>126</span> 	}
+<span class='linenumber'>127</span> });
+<span class='linenumber'>128</span> 
+<span class='linenumber'>129</span> /</span><span class="TOKN"></span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:33 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:35 GMT-0500 (EST)</div>
 </body>
 </html>

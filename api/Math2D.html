@@ -84,7 +84,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
          <td>
             <code><b><a href="#INV_PI">INV_PI</a></b></code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An approximation of the inverse of PI so we canavoid divisions.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An approximation of the inverse of PI.
          </td>
       </tr>
    
@@ -96,6 +96,17 @@ A static class with methods and fields that are helpfulwhen dealing with two di
             <code><b><a href="#PI">PI</a></b></code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An approximation of PI for speedier calculations.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
+            <code><b><a href="#TWO_PI">TWO_PI</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;An approximation of PI*2 for speedier calculations.
          </td>
       </tr>
    
@@ -140,6 +151,20 @@ A static class with methods and fields that are helpfulwhen dealing with two di
             <code> <b> <a href="#boxPointCollision">boxPointCollision</a></b>(box, point) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Perform point to AAB collision, returning <code>true</code>if a collision occurs.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Vector2D
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#circleCircleCollision">circleCircleCollision</a></b>(circle, velocity, targetCircle) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Helper method to determine if one circle will collide with another circlebased on its direction of movement.
  
          </td>
       </tr>
@@ -193,6 +218,20 @@ A static class with methods and fields that are helpfulwhen dealing with two di
             </code></font> 
          </td>
          <td>
+            <code> <b> <a href="#isPointOnLine">isPointOnLine</a></b>(point, anchor, vector) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns <tt>true</tt> if the <tt>point</tt> lies on the line defined by<tt>anchor</tt> in the direction of the normalized <tt>vector</tt>.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Boolean
+            </code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#lineBoxCollision">lineBoxCollision</a></b>(p1, p2, rect) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Test to see if a line intersects a Rectangle.
@@ -224,6 +263,20 @@ A static class with methods and fields that are helpfulwhen dealing with two di
             <code> <b> <a href="#minkDiff">minkDiff</a></b>(hullA, hullB) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Determine the Minkowski Difference of two convex hulls.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#pointLeftOfLine">pointLeftOfLine</a></b>(endPoint0, endPoint1, testPoint) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Tests if a point is Left|On|Right of an infinite line defined bytwo endpoints.
  
          </td>
       </tr>
@@ -289,7 +342,7 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    </a> <h3>INV_PI</h3>
       <pre>Number <b>INV_PI</b></pre> 
    <ul>
-      An approximation of the inverse of PI so we canavoid divisions. (0.31831)
+      An approximation of the inverse of PI. (0.31831)
       
    </ul>
    <hr>
@@ -301,6 +354,17 @@ A static class with methods and fields that are helpfulwhen dealing with two di
       <pre>Number <b>PI</b></pre> 
    <ul>
       An approximation of PI for speedier calculations.  (3.14159)
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
+   <a name="TWO_PI">
+   <!-- -->
+   </a> <h3>TWO_PI</h3>
+      <pre>Number <b>TWO_PI</b></pre> 
+   <ul>
+      An approximation of PI*2 for speedier calculations. (6.28318)
       
    </ul>
    <hr>
@@ -374,6 +438,38 @@ A static class with methods and fields that are helpfulwhen dealing with two di
       <b>Returns:</b>
       <ul>
          <code><i>Boolean</i>&nbsp;</code><tt>true</tt> if the point is within the rectangle 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="circleCircleCollision"> </a> <h3>circleCircleCollision</h3>
+      <pre>Vector2D&nbsp;<b>circleCircleCollision</b>(circle, velocity, targetCircle)</pre> 
+   <ul>
+      Helper method to determine if one circle will collide with another circlebased on its direction of movement.  The circle's centers should be inworld coordinates.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Circle2D</i>]&nbsp;circle </code> - The first circle 
+      </ul>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;velocity </code> - The first circle's velocity vector 
+      </ul>
+      <ul>
+         <code>[<i>Circle2D</i>]&nbsp;targetCircle </code> - The second circle 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Vector2D</i>&nbsp;</code>The vector which keeps the two circles from overlapping, 	or <tt>null</tt> if they cannot overlap. 
       </ul>
    </ul>
    
@@ -461,6 +557,38 @@ A static class with methods and fields that are helpfulwhen dealing with two di
       <b>Returns:</b>
       <ul>
          <code><i>Vector2D</i>&nbsp;</code>The direction vector 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="isPointOnLine"> </a> <h3>isPointOnLine</h3>
+      <pre>Boolean&nbsp;<b>isPointOnLine</b>(point, anchor, vector)</pre> 
+   <ul>
+      Returns <tt>true</tt> if the <tt>point</tt> lies on the line defined by<tt>anchor</tt> in the direction of the normalized <tt>vector</tt>.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;point </code> - The point to test 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;anchor </code> - The anchor of the line 
+      </ul>
+      <ul>
+         <code>[<i>Vector2D</i>]&nbsp;vector </code> - The normalized direction vector for the line 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Boolean</i>&nbsp;</code> 
       </ul>
    </ul>
    
@@ -563,6 +691,38 @@ A static class with methods and fields that are helpfulwhen dealing with two di
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="pointLeftOfLine"> </a> <h3>pointLeftOfLine</h3>
+      <pre>Number&nbsp;<b>pointLeftOfLine</b>(endPoint0, endPoint1, testPoint)</pre> 
+   <ul>
+      Tests if a point is Left|On|Right of an infinite line defined bytwo endpoints.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;endPoint0 </code> - A point on the line 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;endPoint1 </code> - A second point on the line 
+      </ul>
+      <ul>
+         <code>[<i>Point2D</i>]&nbsp;testPoint </code> - The point to test 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code>&lt;0 (to left), 0 (on), &gt;0 (to right) 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="radToDeg"> </a> <h3>radToDeg</h3>
       <pre>Number&nbsp;<b>radToDeg</b>(radians)</pre> 
    <ul>
@@ -624,8 +784,8 @@ A static class with methods and fields that are helpfulwhen dealing with two di
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:39 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:42 GMT-0500 (EST)</div>
 </body>
 </html>

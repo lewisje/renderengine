@@ -75,7 +75,7 @@ The main engine class which is responsible for keeping the world up to date.
 <span class='linenumber'>  7</span>  *
 <span class='linenumber'>  8</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  9</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 10</span>  * @version: $Revision: 1400 $
+<span class='linenumber'> 10</span>  * @version: $Revision: 1449 $
 <span class='linenumber'> 11</span>  *
 <span class='linenumber'> 12</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 13</span>  *
@@ -802,13 +802,241 @@ The main engine class which is responsible for keeping the world up to date.
 <span class='linenumber'>734</span> 			Profiler.exit();
 <span class='linenumber'>735</span> 		}
 <span class='linenumber'>736</span> 		/</span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">pragma</span><span class="PUNC">:</span><span class="NAME">DEBUG_END</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="REGX">/
-<span class='linenumber'>737</span>    }
-<span class='linenumber'>738</span> 
-<span class='linenumber'>739</span>  }, { /</span><span class="TOKN"></span></pre>
+<span class='linenumber'>737</span>    },
+<span class='linenumber'>738</span> 	
+<span class='linenumber'>739</span> 	/</span><span class="REGX">/ ======================================================
+<span class='linenumber'>740</span> 	/</span><span class="REGX">/ Declarations here only for documentation purposes
+<span class='linenumber'>741</span> 	/</span><span class="REGX">/ See engine.script.js
+<span class='linenumber'>742</span> 	/</span><span class="REGX">/ ======================================================
+<span class='linenumber'>743</span> 	
+<span class='linenumber'>744</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>745</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Status</span><span class="WHIT"> </span><span class="NAME">message</span><span class="WHIT"> </span><span class="NAME">when</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">script</span><span class="WHIT"> </span><span class="NAME">is</span><span class="WHIT"> </span><span class="NAME">not</span><span class="WHIT"> </span><span class="NAME">found</span><span class="WHIT">
+<span class='linenumber'>746</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">type</span><span class="WHIT"> </span><span class="NAME">Boolean</span><span class="WHIT">
+<span class='linenumber'>747</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">memberOf</span><span class="WHIT"> </span><span class="NAME">Engine</span><span class="WHIT">
+<span class='linenumber'>748</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">field</span><span class="WHIT">
+<span class='linenumber'>749</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>750</span>    SCRIPT_NOT_FOUND: false,
+<span class='linenumber'>751</span>    
+<span class='linenumber'>752</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>753</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Status</span><span class="WHIT"> </span><span class="NAME">message</span><span class="WHIT"> </span><span class="NAME">when</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">script</span><span class="WHIT"> </span><span class="NAME">is</span><span class="WHIT"> </span><span class="NAME">successfully</span><span class="WHIT"> </span><span class="NAME">loaded</span><span class="WHIT">
+<span class='linenumber'>754</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">type</span><span class="WHIT"> </span><span class="NAME">Boolean</span><span class="WHIT">
+<span class='linenumber'>755</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">memberOf</span><span class="WHIT"> </span><span class="NAME">Engine</span><span class="WHIT">
+<span class='linenumber'>756</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">field</span><span class="WHIT">
+<span class='linenumber'>757</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>758</span>    SCRIPT_LOADED: true,
+<span class='linenumber'>759</span> 
+<span class='linenumber'>760</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>761</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Include</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">script</span><span class="WHIT"> </span><span class="NAME">file.</span><span class="WHIT">  </span><span class="NAME">This</span><span class="WHIT"> </span><span class="NAME">is</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">method</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">load</span><span class="WHIT"> </span><span class="NAME">additional</span><span class="WHIT">
+<span class='linenumber'>762</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">script</span><span class="WHIT"> </span><span class="NAME">files</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">relative</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">engine</span><span class="STRN">'s location.
+<span class='linenumber'>763</span> &lt;pre>
+<span class='linenumber'>764</span> 	Engine.include("/rendercontexts/context.canvascontext.js");
+<span class='linenumber'>765</span> &lt;/pre>
+<span class='linenumber'>766</span>     *
+<span class='linenumber'>767</span>     * @param scriptURL {String} The URL of the script file
+<span class='linenumber'>768</span>     * @memberOf Engine
+<span class='linenumber'>769</span>     * @function
+<span class='linenumber'>770</span>     */
+<span class='linenumber'>771</span>    include: null,
+<span class='linenumber'>772</span> 
+<span class='linenumber'>773</span>    /**
+<span class='linenumber'>774</span>     * Queue a script to load from the server and append it to
+<span class='linenumber'>775</span>     * the head element of the browser.  Script names are
+<span class='linenumber'>776</span>     * cached so they will not be loaded again.  Each script in the
+<span class='linenumber'>777</span>     * queue is processed synchronously.
+<span class='linenumber'>778</span>     *
+<span class='linenumber'>779</span>     * @param scriptPath {String} The URL of a script to load.
+<span class='linenumber'>780</span>     * @memberOf Engine
+<span class='linenumber'>781</span>     * @function
+<span class='linenumber'>782</span>     */
+<span class='linenumber'>783</span>    loadScript: null,
+<span class='linenumber'>784</span> 
+<span class='linenumber'>785</span> 	/**
+<span class='linenumber'>786</span> 	 * Load text from the specified path.
+<span class='linenumber'>787</span> 	 *
+<span class='linenumber'>788</span> 	 * @param path {String} The url to load
+<span class='linenumber'>789</span> 	 * @param data {Object} Optional arguments to pass to server
+<span class='linenumber'>790</span> 	 * @param callback {Function} The callback method which is passed the
+<span class='linenumber'>791</span> 	 *		text and status code (a number) of the request.
+<span class='linenumber'>792</span> 	 * @memberOf Engine
+<span class='linenumber'>793</span>     * @function
+<span class='linenumber'>794</span> 	 */	 
+<span class='linenumber'>795</span> 	loadText: null,
+<span class='linenumber'>796</span> 	
+<span class='linenumber'>797</span> 	/**
+<span class='linenumber'>798</span> 	 * Load text from the specified path and parse it as JSON.  We'</span><span class="NAME">re</span><span class="WHIT"> </span><span class="NAME">doing</span><span class="WHIT">
+<span class='linenumber'>799</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">little</span><span class="WHIT"> </span><span class="NAME">pre</span><span class="PUNC">-</span><span class="NAME">parsing</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">returned</span><span class="WHIT"> </span><span class="NAME">data</span><span class="WHIT"> </span><span class="NAME">so</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">JSON</span><span class="WHIT"> </span><span class="NAME">can</span><span class="WHIT"> </span><span class="NAME">include</span><span class="WHIT">
+<span class='linenumber'>800</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">comments</span><span class="WHIT"> </span><span class="NAME">which</span><span class="WHIT"> </span><span class="NAME">is</span><span class="WHIT"> </span><span class="NAME">not</span><span class="WHIT"> </span><span class="NAME">spec.</span><span class="WHIT">
+<span class='linenumber'>801</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>802</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">path</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">url</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">load</span><span class="WHIT">
+<span class='linenumber'>803</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">data</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Object</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">Optional</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">pass</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">server</span><span class="WHIT">
+<span class='linenumber'>804</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Function</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="NAME">method</span><span class="WHIT"> </span><span class="NAME">which</span><span class="WHIT"> </span><span class="NAME">is</span><span class="WHIT"> </span><span class="NAME">passed</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT">
+<span class='linenumber'>805</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="WHIT">		</span><span class="NAME">JSON</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">and</span><span class="WHIT"> </span><span class="NAME">status</span><span class="WHIT"> </span><span class="NAME">code</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">number</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">request.</span><span class="WHIT">
+<span class='linenumber'>806</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">memberOf</span><span class="WHIT"> </span><span class="NAME">Engine</span><span class="WHIT">
+<span class='linenumber'>807</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">function</span><span class="WHIT">
+<span class='linenumber'>808</span> </span><span class="WHIT">	 </span><span class="PUNC">*</span><span class="REGX">/	 
+<span class='linenumber'>809</span> 	loadJSON: null,
+<span class='linenumber'>810</span> 
+<span class='linenumber'>811</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>812</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Insert</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="NAME">into</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">script</span><span class="WHIT"> </span><span class="NAME">load</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="NAME">so</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="NAME">when</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT">
+<span class='linenumber'>813</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">certain</span><span class="WHIT"> </span><span class="NAME">number</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">files</span><span class="WHIT"> </span><span class="NAME">has</span><span class="WHIT"> </span><span class="NAME">been</span><span class="WHIT"> </span><span class="NAME">loaded</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">we</span><span class="WHIT"> </span><span class="NAME">can</span><span class="WHIT"> </span><span class="NAME">call</span><span class="WHIT">
+<span class='linenumber'>814</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">method.</span><span class="WHIT">  </span><span class="NAME">Allows</span><span class="WHIT"> </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="NAME">functionality</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">start</span><span class="WHIT"> </span><span class="KEYW">with</span><span class="WHIT">
+<span class='linenumber'>815</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">incremental</span><span class="WHIT"> </span><span class="NAME">loading.</span><span class="WHIT">
+<span class='linenumber'>816</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>817</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">cb</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Function</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">A</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">execute</span><span class="WHIT">
+<span class='linenumber'>818</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">memberOf</span><span class="WHIT"> </span><span class="NAME">Engine</span><span class="WHIT">
+<span class='linenumber'>819</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">function</span><span class="WHIT">
+<span class='linenumber'>820</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>821</span>    setQueueCallback: null,
+<span class='linenumber'>822</span> 
+<span class='linenumber'>823</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>824</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">You</span><span class="WHIT"> </span><span class="NAME">can</span><span class="WHIT"> </span><span class="NAME">pause</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="NAME">from</span><span class="WHIT"> </span><span class="NAME">a</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">then</span><span class="WHIT">
+<span class='linenumber'>825</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">unpause</span><span class="WHIT"> </span><span class="NAME">it</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="KEYW">continue</span><span class="WHIT"> </span><span class="NAME">processing</span><span class="WHIT"> </span><span class="NAME">queued</span><span class="WHIT"> </span><span class="NAME">scripts.</span><span class="WHIT">  </span><span class="NAME">This</span><span class="WHIT"> </span><span class="NAME">will</span><span class="WHIT">
+<span class='linenumber'>826</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">allow</span><span class="WHIT"> </span><span class="NAME">you</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">wait</span><span class="WHIT"> </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="NAME">an</span><span class="WHIT"> </span><span class="NAME">event</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">occur</span><span class="WHIT"> </span><span class="NAME">before</span><span class="WHIT"> </span><span class="NAME">continuing</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT">
+<span class='linenumber'>827</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">load</span><span class="WHIT"> </span><span class="NAME">scripts.</span><span class="WHIT">
+<span class='linenumber'>828</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>829</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="NAME">param</span><span class="WHIT"> </span><span class="NAME">state</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Boolean</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="NAME">tt</span><span class="PUNC">></span><span class="KEYW">true</span><span class="PUNC">&lt;</span><span class="REGX">/tt> to put the queue processor
+<span class='linenumber'>830</span>     *                        in a paused state.
+<span class='linenumber'>831</span>     * @memberOf Engine
+<span class='linenumber'>832</span>     * @function
+<span class='linenumber'>833</span>     */</span><span class="WHIT">
+<span class='linenumber'>834</span> </span><span class="WHIT">   </span><span class="NAME">pauseQueue</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>835</span> 
+<span class='linenumber'>836</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>837</span>     * Loads a game's script.  This will wait until the specified
+<span class='linenumber'>838</span>     * &lt;tt>gameObjectName&lt;/tt> is available before running it.  Doing so will
+<span class='linenumber'>839</span>     * ensure that all dependencies have been resolved before starting a game.
+<span class='linenumber'>840</span>     * Also creates the default rendering context for the engine.
+<span class='linenumber'>841</span>     * &lt;p/>
+<span class='linenumber'>842</span>     * All games should execute this method to start their processing, rather than
+<span class='linenumber'>843</span>     * using the script loading mechanism for engine or game scripts.  This is used
+<span class='linenumber'>844</span>     * for the main game script only.  Normally it would appear in the game's "index" file.
+<span class='linenumber'>845</span>     * &lt;pre>
+<span class='linenumber'>846</span>     *  &lt;script type="text/javascript"&gt;
+<span class='linenumber'>847</span>     *     // Load the game script
+<span class='linenumber'>848</span>     *     Engine.loadGame('game.js','Spaceroids');
+<span class='linenumber'>849</span>     *  &lt;/script&gt;
+<span class='linenumber'>850</span>     * &lt;/pre>
+<span class='linenumber'>851</span>     *
+<span class='linenumber'>852</span>     * @param gameSource {String} The URL of the game script.
+<span class='linenumber'>853</span>     * @param gameObjectName {String} The string name of the game object to execute.  When
+<span class='linenumber'>854</span>     *                       the framework if ready, the &lt;tt>startup()&lt;/tt> method of this
+<span class='linenumber'>855</span>     *                       object will be called.
+<span class='linenumber'>856</span>     * @param [gameDisplayName] {String} An optional string to display in the loading dialog
+<span class='linenumber'>857</span>     * @memberOf Engine
+<span class='linenumber'>858</span>     * @function
+<span class='linenumber'>859</span>     */</span><span class="WHIT">
+<span class='linenumber'>860</span> </span><span class="WHIT">   </span><span class="NAME">loadGame</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>861</span> 
+<span class='linenumber'>862</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>863</span>     * Load a script relative to the engine path.  A simple helper method which calls
+<span class='linenumber'>864</span>     * {@link #loadScript} and prepends the engine path to the supplied script source.
+<span class='linenumber'>865</span>     *
+<span class='linenumber'>866</span>     * @param scriptSource {String} A URL to load that is relative to the engine path.
+<span class='linenumber'>867</span>     * @memberOf Engine
+<span class='linenumber'>868</span>     * @function
+<span class='linenumber'>869</span>     */</span><span class="WHIT">
+<span class='linenumber'>870</span> </span><span class="WHIT">   </span><span class="NAME">load</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>871</span> 
+<span class='linenumber'>872</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>873</span>     * Load a stylesheet and append it to the document.  Allows for
+<span class='linenumber'>874</span>     * scripts to specify additional stylesheets that can be loaded
+<span class='linenumber'>875</span>     * as needed.  Additionally, you can use thise method to inject
+<span class='linenumber'>876</span>     * the engine path into the css being loaded.  Using the variable
+<span class='linenumber'>877</span>     * &lt;tt>$&lt;enginePath&gt;&lt;/tt>, you can load css relative to the
+<span class='linenumber'>878</span>     * engine's path.  For example:
+<span class='linenumber'>879</span>     * &lt;pre>
+<span class='linenumber'>880</span>     *    .foo {
+<span class='linenumber'>881</span>     *       background: url('$&lt;enginePath&gt;/myGame/images/bar.png') no-repeat 50% 50%;
+<span class='linenumber'>882</span>     *    }
+<span class='linenumber'>883</span>     * &lt;/pre>
+<span class='linenumber'>884</span>     *
+<span class='linenumber'>885</span>     * @param stylesheetPath {String} Path to the stylesheet, relative to
+<span class='linenumber'>886</span>     *                                the engine path.
+<span class='linenumber'>887</span>     * @memberOf Engine
+<span class='linenumber'>888</span>     * @function
+<span class='linenumber'>889</span>     */</span><span class="WHIT">
+<span class='linenumber'>890</span> </span><span class="WHIT">   </span><span class="NAME">loadStylesheet</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>891</span> 
+<span class='linenumber'>892</span> </span><span class="WHIT">	</span><span class="COMM">// ======================================================</span><span class="WHIT">
+<span class='linenumber'>893</span> </span><span class="WHIT">	</span><span class="COMM">// Declarations here only for documentation purposes</span><span class="WHIT">
+<span class='linenumber'>894</span> </span><span class="WHIT">	</span><span class="COMM">// See engine.metrics.js</span><span class="WHIT">
+<span class='linenumber'>895</span> </span><span class="WHIT">	</span><span class="COMM">// ======================================================</span><span class="WHIT">
+<span class='linenumber'>896</span> 
+<span class='linenumber'>897</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>898</span>     * Toggle the display of the metrics window.  Any metrics
+<span class='linenumber'>899</span>     * that are being tracked will be reported in this window.
+<span class='linenumber'>900</span>     * @memberOf Engine
+<span class='linenumber'>901</span>     * @function
+<span class='linenumber'>902</span>     */</span><span class="WHIT">
+<span class='linenumber'>903</span> </span><span class="WHIT">   </span><span class="NAME">toggleMetrics</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>904</span> 
+<span class='linenumber'>905</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>906</span>     * Show the metrics window.
+<span class='linenumber'>907</span>     * @memberOf Engine
+<span class='linenumber'>908</span>     * @function
+<span class='linenumber'>909</span>     */</span><span class="WHIT">
+<span class='linenumber'>910</span> </span><span class="WHIT">   </span><span class="NAME">showMetrics</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>911</span> </span><span class="WHIT">   </span><span class="WHIT">
+<span class='linenumber'>912</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>913</span>     * Show the engine performance graph.
+<span class='linenumber'>914</span>     * @memberOf Engine
+<span class='linenumber'>915</span>     * @function
+<span class='linenumber'>916</span>     */</span><span class="WHIT">
+<span class='linenumber'>917</span> </span><span class="WHIT">   </span><span class="NAME">showProfile</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>918</span> 
+<span class='linenumber'>919</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>920</span>     * Hide the metrics window.
+<span class='linenumber'>921</span>     * @memberOf Engine
+<span class='linenumber'>922</span>     * @function
+<span class='linenumber'>923</span>     */</span><span class="WHIT">
+<span class='linenumber'>924</span> </span><span class="WHIT">   </span><span class="NAME">hideMetrics</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>925</span> 
+<span class='linenumber'>926</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>927</span>     * Set the interval at which metrics are sampled by the system.
+<span class='linenumber'>928</span>     * The default is for metrics to be calculated every 10 engine frames.
+<span class='linenumber'>929</span>     *
+<span class='linenumber'>930</span>     * @param sampleRate {Number} The number of ticks between samples
+<span class='linenumber'>931</span>     * @memberOf Engine
+<span class='linenumber'>932</span>     * @function
+<span class='linenumber'>933</span>     */</span><span class="WHIT">
+<span class='linenumber'>934</span> </span><span class="WHIT">   </span><span class="NAME">setMetricSampleRate</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>935</span> 
+<span class='linenumber'>936</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>937</span>     * Add a metric to the game engine that can be displayed
+<span class='linenumber'>938</span>     * while it is running.  If smoothing is selected, a 3 point
+<span class='linenumber'>939</span>     * running average will be used to smooth out jitters in the
+<span class='linenumber'>940</span>     * value that is shown.  For the &lt;tt>fmt&lt;/tt> argument,
+<span class='linenumber'>941</span>     * you can provide a string which contains the pound sign "#"
+<span class='linenumber'>942</span>     * that will be used to determine where the calculated value will
+<span class='linenumber'>943</span>     * occur in the formatted string.
+<span class='linenumber'>944</span>     *
+<span class='linenumber'>945</span>     * @param metricName {String} The name of the metric to track
+<span class='linenumber'>946</span>     * @param value {String/Number} The value of the metric.
+<span class='linenumber'>947</span>     * @param smoothing {Boolean} &lt;tt>true&lt;/tt> to use 3 point average smoothing
+<span class='linenumber'>948</span>     * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
+<span class='linenumber'>949</span>     * @memberOf Engine
+<span class='linenumber'>950</span>     * @function
+<span class='linenumber'>951</span>     */</span><span class="WHIT">
+<span class='linenumber'>952</span> </span><span class="WHIT">   </span><span class="NAME">addMetric</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>953</span> 
+<span class='linenumber'>954</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>955</span>     * Remove a metric from the display
+<span class='linenumber'>956</span>     *
+<span class='linenumber'>957</span>     * @param metricName {String} The name of the metric to remove
+<span class='linenumber'>958</span>     * @memberOf Engine
+<span class='linenumber'>959</span>     * @function
+<span class='linenumber'>960</span>     */</span><span class="WHIT">
+<span class='linenumber'>961</span> </span><span class="WHIT">   </span><span class="NAME">removeMetric</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT">
+<span class='linenumber'>962</span> 
+<span class='linenumber'>963</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT"> </span><span class="COMM">// Interface</span><span class="WHIT">
+<span class='linenumber'>964</span> </span><span class="WHIT">   </span><span class="NAME">globalTimer</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT">
+<span class='linenumber'>965</span> </span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>966</span> 
+<span class='linenumber'>967</span> </span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:33 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:35 GMT-0500 (EST)</div>
 </body>
 </html>

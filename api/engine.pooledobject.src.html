@@ -76,7 +76,7 @@ Pooled objects are created as needed, and reused from a static pool       of al
 <span class='linenumber'>  8</span>  *
 <span class='linenumber'>  9</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 10</span>  * @author: $Author: bfattori $
-<span class='linenumber'> 11</span>  * @version: $Revision: 1400 $
+<span class='linenumber'> 11</span>  * @version: $Revision: 1438 $
 <span class='linenumber'> 12</span>  *
 <span class='linenumber'> 13</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 14</span>  *
@@ -123,239 +123,282 @@ Pooled objects are created as needed, and reused from a static pool       of al
 <span class='linenumber'> 55</span> </span><span class="WHIT">   </span><span class="NAME">name</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">,</span><span class="WHIT">
 <span class='linenumber'> 56</span> </span><span class="WHIT">	</span><span class="WHIT">
 <span class='linenumber'> 57</span> </span><span class="WHIT">	</span><span class="NAME">_destroyed</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 58</span> 
-<span class='linenumber'> 59</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 60</span>     * @private
-<span class='linenumber'> 61</span>     */</span><span class="WHIT">
-<span class='linenumber'> 62</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 63</span> </span><span class="WHIT">		</span><span class="NAME">this._destroyed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 64</span> </span><span class="WHIT">      </span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 65</span> </span><span class="WHIT">      </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Engine.create</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 66</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 67</span> 
-<span class='linenumber'> 68</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 69</span>     * When a pooled object is destroyed, its &lt;tt>release()&lt;/tt> method will be called
-<span class='linenumber'> 70</span>     * so it has a chance to can clean up instance variables before being put back into 
-<span class='linenumber'> 71</span>     * the pool for reuse. The variables should be returned to an "uninitialized" state.
-<span class='linenumber'> 72</span>     */</span><span class="WHIT">
-<span class='linenumber'> 73</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 74</span> </span><span class="WHIT">      </span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 75</span> </span><span class="WHIT">      </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 76</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'> 77</span> 
-<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'> 79</span>     * Destroy this object instance (remove it from the Engine).  The object's release
-<span class='linenumber'> 80</span>     * method is called after destruction so it will be returned to the pool of objects 
-<span class='linenumber'> 81</span>     * to be used again.
-<span class='linenumber'> 82</span>     */</span><span class="WHIT">
-<span class='linenumber'> 83</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'> 84</span> </span><span class="WHIT">      </span><span class="COMM">// Clean up the engine reference to this object</span><span class="WHIT">
-<span class='linenumber'> 85</span> </span><span class="WHIT">      </span><span class="NAME">Engine.destroy</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 86</span> 
-<span class='linenumber'> 87</span> </span><span class="WHIT">		</span><span class="NAME">this._destroyed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 88</span> </span><span class="WHIT">      </span><span class="NAME">PooledObject.returnToPool</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'> 89</span> </span><span class="WHIT">      </span><span class="NAME">Engine.addMetric</span><span class="PUNC">(</span><span class="STRN">"poolLoad"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">PooledObject.poolSize</span><span class="WHIT"> </span><span class="REGX">/ PooledObject.poolNew) * 100), false, "#%");
-<span class='linenumber'> 90</span> 
-<span class='linenumber'> 91</span>       /</span><span class="REGX">/ Reset any variables on the object after putting
-<span class='linenumber'> 92</span>       /</span><span class="REGX">/ it back in the pool.
-<span class='linenumber'> 93</span>       this.release();
-<span class='linenumber'> 94</span>    },
-<span class='linenumber'> 95</span> 
-<span class='linenumber'> 96</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
-<span class='linenumber'> 97</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Get</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">managed</span><span class="WHIT"> </span><span class="NAME">Id</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">within</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">Engine.</span><span class="WHIT">
-<span class='linenumber'> 98</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
-<span class='linenumber'> 99</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>100</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
-<span class='linenumber'>101</span>    getId: function() {
-<span class='linenumber'>102</span>       return this.id;
-<span class='linenumber'>103</span>    },
-<span class='linenumber'>104</span> 
-<span class='linenumber'>105</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
-<span class='linenumber'>106</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Get</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">original</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">was</span><span class="WHIT"> </span><span class="NAME">created</span><span class="WHIT"> </span><span class="NAME">with.</span><span class="WHIT">
-<span class='linenumber'>107</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
-<span class='linenumber'>108</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT"> </span><span class="NAME">when</span><span class="WHIT"> </span><span class="NAME">creating</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT">
-<span class='linenumber'>109</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
-<span class='linenumber'>110</span>    getName: function() {
-<span class='linenumber'>111</span>       return this.name;
-<span class='linenumber'>112</span>    },
-<span class='linenumber'>113</span> 
-<span class='linenumber'>114</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
-<span class='linenumber'>115</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Returns</span><span class="WHIT"> </span><span class="NAME">an</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="NAME">assigns</span><span class="WHIT"> </span><span class="NAME">getter</span><span class="WHIT"> </span><span class="NAME">and</span><span class="WHIT"> </span><span class="NAME">setter</span><span class="WHIT"> </span><span class="NAME">methods</span><span class="WHIT">
-<span class='linenumber'>116</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="NAME">exposed</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">an</span><span class="WHIT"> </span><span class="NAME">object.</span><span class="WHIT">
-<span class='linenumber'>117</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Object</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">An</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">which</span><span class="WHIT"> </span><span class="NAME">contains</span><span class="WHIT"> </span><span class="NAME">getter</span><span class="WHIT"> </span><span class="NAME">and</span><span class="WHIT"> </span><span class="NAME">setter</span><span class="WHIT"> </span><span class="NAME">methods.</span><span class="WHIT">
-<span class='linenumber'>118</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
-<span class='linenumber'>119</span>    getProperties: function() {
-<span class='linenumber'>120</span>       var self = this;
-<span class='linenumber'>121</span>       var prop = {};
-<span class='linenumber'>122</span>       return $.extend(prop, {
-<span class='linenumber'>123</span>          "Id"     : [function() { return self.getId(); },
-<span class='linenumber'>124</span>                            null, false],
-<span class='linenumber'>125</span>          "Name"   : [function() { return self.getName(); },
-<span class='linenumber'>126</span>                            function(i) { self.setName(i); }, true]
-<span class='linenumber'>127</span>       });
-<span class='linenumber'>128</span>    },
-<span class='linenumber'>129</span> 
-<span class='linenumber'>130</span> 	toString: function() {
-<span class='linenumber'>131</span>       return this.getId() + " [" + this.constructor.getClassName() + "]";   
-<span class='linenumber'>132</span> 	},
-<span class='linenumber'>133</span> 
-<span class='linenumber'>134</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
-<span class='linenumber'>135</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Serialize</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">XML.</span><span class="WHIT">
-<span class='linenumber'>136</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT">
-<span class='linenumber'>137</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
-<span class='linenumber'>138</span>    toXML: function(indent) {
-<span class='linenumber'>139</span>       indent = indent ? indent : "";
-<span class='linenumber'>140</span>       var props = this.getProperties();
-<span class='linenumber'>141</span>       var xml = indent + "&lt;" + this.constructor.getClassName();
-<span class='linenumber'>142</span>       for (var p in props) {
-<span class='linenumber'>143</span>          /</span><span class="REGX">/ If the value should be serialized, call it's getter
-<span class='linenumber'>144</span>          if (props[p][2]) {
-<span class='linenumber'>145</span>             xml += " " + p.toLowerCase() + "=\"" + props[p][0]().toString() + "\"";
-<span class='linenumber'>146</span>          }
-<span class='linenumber'>147</span>       }
-<span class='linenumber'>148</span> 
-<span class='linenumber'>149</span>       xml += "/</span><span class="PUNC">></span><span class="TOKN">\</span><span class="NAME">n</span><span class="STRN">";
-<span class='linenumber'>150</span>       return xml;
-<span class='linenumber'>151</span>    },
-<span class='linenumber'>152</span> 	
-<span class='linenumber'>153</span> 	/**
-<span class='linenumber'>154</span> 	 * Returns &lt;tt>true&lt;/tt> if the object has been destroyed.  For objects which are
-<span class='linenumber'>155</span> 	 * being updated by containers, this method is used to determine if the object should
-<span class='linenumber'>156</span> 	 * be updated.  It is important to check this method if you are outside the normal
-<span class='linenumber'>157</span> 	 * bounds of updating an object.  For example, if an object is drawing its bounding
-<span class='linenumber'>158</span> 	 * box using it's collision component, the component may have been destroyed along
-<span class='linenumber'>159</span> 	 * with the object, by another object.  Checking to see if the object is destroyed
-<span class='linenumber'>160</span> 	 * before calling such method would prevent an exception being thrown when trying
-<span class='linenumber'>161</span> 	 * to access the component which was destroyed as well.
-<span class='linenumber'>162</span> 	 * @return {Boolean}
-<span class='linenumber'>163</span> 	 */
-<span class='linenumber'>164</span> 	isDestroyed: function() {
-<span class='linenumber'>165</span> 		return this._destroyed;
-<span class='linenumber'>166</span> 	}
-<span class='linenumber'>167</span> 	
-<span class='linenumber'>168</span> }, /** @scope PooledObject.prototype **/{
-<span class='linenumber'>169</span> 
-<span class='linenumber'>170</span>    /**
-<span class='linenumber'>171</span>     * &lt;tt>true&lt;/tt> for all objects within the engine.
-<span class='linenumber'>172</span>     * @type {Boolean}
-<span class='linenumber'>173</span>     */
-<span class='linenumber'>174</span>    isRenderEngineObject: true,
-<span class='linenumber'>175</span> 
-<span class='linenumber'>176</span>    /**
-<span class='linenumber'>177</span>     * &lt;tt>true&lt;/tt> for all objects that are pooled.
-<span class='linenumber'>178</span>     * @type {Boolean}
-<span class='linenumber'>179</span>     */
-<span class='linenumber'>180</span>    isPooledObject: true,
-<span class='linenumber'>181</span> 
-<span class='linenumber'>182</span>    /**
-<span class='linenumber'>183</span>     * Number of new objects put into the pool
-<span class='linenumber'>184</span>     * @type {Number}
-<span class='linenumber'>185</span>     */
-<span class='linenumber'>186</span>    poolNew: 0,
-<span class='linenumber'>187</span> 
-<span class='linenumber'>188</span>    /**
-<span class='linenumber'>189</span>     * Total number of objects in the pool
-<span class='linenumber'>190</span>     * @type {Number}
-<span class='linenumber'>191</span>     */
-<span class='linenumber'>192</span>    poolSize: 0,
-<span class='linenumber'>193</span>    
-<span class='linenumber'>194</span>    /* pragma:DEBUG_START */
-<span class='linenumber'>195</span>    classPool: {},
-<span class='linenumber'>196</span>    /* pragma:DEBUG_END */
-<span class='linenumber'>197</span> 
-<span class='linenumber'>198</span>    /**
-<span class='linenumber'>199</span>     * Similar to a constructor, all pooled objects implement this method.
-<span class='linenumber'>200</span>     * The &lt;tt>create()&lt;/tt> method will either create a new instance, if no object of the object's
-<span class='linenumber'>201</span>     * class exists within the pool, or will reuse an existing pooled instance of
-<span class='linenumber'>202</span>     * the object.  Either way, the constructor for the object instance is called so that
-<span class='linenumber'>203</span>     * instance creation can be maintained in the constructor.
-<span class='linenumber'>204</span>     * &lt;p/>
-<span class='linenumber'>205</span>     * Usage: &lt;tt>var obj = [ObjectClass].create(arg1, arg2, arg3...);&lt;/tt>
-<span class='linenumber'>206</span>     *
-<span class='linenumber'>207</span>     * @memberOf PooledObject
-<span class='linenumber'>208</span>     */
-<span class='linenumber'>209</span>    create: function() {
-<span class='linenumber'>210</span>       // Check the pool for the object type
-<span class='linenumber'>211</span>       if (PooledObject.objectPool[this.getClassName()] && PooledObject.objectPool[this.getClassName()].length != 0) {
-<span class='linenumber'>212</span>          PooledObject.poolSize--;
-<span class='linenumber'>213</span>          Engine.addMetric("</span><span class="NAME">poolLoad</span><span class="STRN">", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "</span><span class="TOKN">#</span><span class="PUNC">%</span><span class="STRN">");
-<span class='linenumber'>214</span>          var obj = PooledObject.objectPool[this.getClassName()].shift();
-<span class='linenumber'>215</span>          obj.constructor.apply(obj, arguments);
-<span class='linenumber'>216</span> 
-<span class='linenumber'>217</span>          /* pragma:DEBUG_START */ 
-<span class='linenumber'>218</span>          PooledObject.classPool[this.getClassName()][1]++;
-<span class='linenumber'>219</span>          PooledObject.classPool[this.getClassName()][2]--;
-<span class='linenumber'>220</span>          /* pragma:DEBUG_END */
-<span class='linenumber'>221</span> 
-<span class='linenumber'>222</span>          return obj;
-<span class='linenumber'>223</span>       } else {
-<span class='linenumber'>224</span>          PooledObject.poolNew++;
-<span class='linenumber'>225</span>          Engine.addMetric("</span><span class="NAME">poolNew</span><span class="STRN">", PooledObject.poolNew, false, "</span><span class="TOKN">#</span><span class="STRN">");
-<span class='linenumber'>226</span>          
-<span class='linenumber'>227</span>          /* pragma:DEBUG_START */
-<span class='linenumber'>228</span>          if (PooledObject.classPool[this.getClassName()]) {
-<span class='linenumber'>229</span>             PooledObject.classPool[this.getClassName()][0]++;
-<span class='linenumber'>230</span>          } else {
-<span class='linenumber'>231</span>             // 0: new, 1: in use, 2: pooled
-<span class='linenumber'>232</span>             PooledObject.classPool[this.getClassName()] = [1,0,0];
-<span class='linenumber'>233</span>          }
-<span class='linenumber'>234</span>          /* pragma:DEBUG_END */
-<span class='linenumber'>235</span>          
-<span class='linenumber'>236</span>          // TODO: Any more than 15 arguments and construction will fail!
-<span class='linenumber'>237</span>          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
-<span class='linenumber'>238</span>                          arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
-<span class='linenumber'>239</span>                          arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
-<span class='linenumber'>240</span>       }
-<span class='linenumber'>241</span>    },
-<span class='linenumber'>242</span> 
-<span class='linenumber'>243</span>    /**
-<span class='linenumber'>244</span>     * During object destruction, it needs to return itself to the
-<span class='linenumber'>245</span>     * pool so it can be used again.  Instead of creating new instances
-<span class='linenumber'>246</span>     * of each object, we utilize a pooled object so we don't need the
-<span class='linenumber'>247</span>     * garbage collector to be invoked for removed objects.
-<span class='linenumber'>248</span>     * @private
-<span class='linenumber'>249</span>     */
-<span class='linenumber'>250</span>    returnToPool: function(obj) {
-<span class='linenumber'>251</span>       // If there is no pool for objects of this type, create one
-<span class='linenumber'>252</span>       if (!PooledObject.objectPool[obj.constructor.getClassName()]) {
-<span class='linenumber'>253</span>          PooledObject.objectPool[obj.constructor.getClassName()] = [];
-<span class='linenumber'>254</span>       }
-<span class='linenumber'>255</span> 
-<span class='linenumber'>256</span>       // Push this object into the pool
-<span class='linenumber'>257</span>       PooledObject.poolSize++;
-<span class='linenumber'>258</span>       PooledObject.objectPool[obj.constructor.getClassName()].push(obj);
-<span class='linenumber'>259</span> 
-<span class='linenumber'>260</span>       /* pragma:DEBUG_START */
-<span class='linenumber'>261</span>       if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
-<span class='linenumber'>262</span>          PooledObject.classPool[obj.constructor.getClassName()][1]--;
-<span class='linenumber'>263</span>       }
-<span class='linenumber'>264</span>       PooledObject.classPool[obj.constructor.getClassName()][2]++;
-<span class='linenumber'>265</span>       /* pragma:DEBUG_END */
-<span class='linenumber'>266</span>          
-<span class='linenumber'>267</span> 
-<span class='linenumber'>268</span>       Engine.addMetric("</span><span class="NAME">pooledObjects</span><span class="STRN">", PooledObject.poolSize, false, "</span><span class="TOKN">#</span><span class="STRN">");
-<span class='linenumber'>269</span>    },
-<span class='linenumber'>270</span> 
-<span class='linenumber'>271</span>    /**
-<span class='linenumber'>272</span>     * The pool of all objects, stored by class name.
-<span class='linenumber'>273</span>     * @type {Object}
-<span class='linenumber'>274</span>     */
-<span class='linenumber'>275</span>    objectPool: {},
-<span class='linenumber'>276</span> 
-<span class='linenumber'>277</span>    /**
-<span class='linenumber'>278</span>     * Get the class name of this object
-<span class='linenumber'>279</span>     *
-<span class='linenumber'>280</span>     * @return {String} "</span><span class="NAME">PooledObject</span><span class="STRN">"
-<span class='linenumber'>281</span>     */
-<span class='linenumber'>282</span>    getClassName: function() {
-<span class='linenumber'>283</span>       if (!this.hasOwnProperty("</span><span class="NAME">getClassName</span><span class="STRN">")) {
-<span class='linenumber'>284</span>          Console.warn("</span><span class="NAME">Object</span><span class="WHIT"> </span><span class="NAME">is</span><span class="WHIT"> </span><span class="NAME">missing</span><span class="WHIT"> </span><span class="NAME">getClassName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="STRN">");
-<span class='linenumber'>285</span>       }
-<span class='linenumber'>286</span>       return "</span><span class="NAME">PooledObject</span><span class="TOKN"></span></pre>
+<span class='linenumber'> 58</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'> 59</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'> 60</span> 
+<span class='linenumber'> 61</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 62</span>     * @private
+<span class='linenumber'> 63</span>     */</span><span class="WHIT">
+<span class='linenumber'> 64</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 65</span> </span><span class="WHIT">		</span><span class="NAME">this._destroyed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 66</span> </span><span class="WHIT">      </span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 67</span> </span><span class="WHIT">      </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Engine.create</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 68</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 69</span> 
+<span class='linenumber'> 70</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 71</span>     * When a pooled object is destroyed, its &lt;tt>release()&lt;/tt> method will be called
+<span class='linenumber'> 72</span>     * so it has a chance to can clean up instance variables before being put back into 
+<span class='linenumber'> 73</span>     * the pool for reuse. The variables should be returned to an "uninitialized" state.
+<span class='linenumber'> 74</span>     */</span><span class="WHIT">
+<span class='linenumber'> 75</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 76</span> </span><span class="WHIT">      </span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">""</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 77</span> </span><span class="WHIT">      </span><span class="NAME">this.id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 78</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'> 79</span> 
+<span class='linenumber'> 80</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'> 81</span>     * Destroy this object instance (remove it from the Engine).  The object's release
+<span class='linenumber'> 82</span>     * method is called after destruction so it will be returned to the pool of objects 
+<span class='linenumber'> 83</span>     * to be used again.
+<span class='linenumber'> 84</span>     */</span><span class="WHIT">
+<span class='linenumber'> 85</span> </span><span class="WHIT">   </span><span class="NAME">destroy</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'> 86</span> </span><span class="WHIT">      </span><span class="COMM">// Clean up the engine reference to this object</span><span class="WHIT">
+<span class='linenumber'> 87</span> </span><span class="WHIT">      </span><span class="NAME">Engine.destroy</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 88</span> 
+<span class='linenumber'> 89</span> </span><span class="WHIT">		</span><span class="NAME">this._destroyed</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 90</span> </span><span class="WHIT">      </span><span class="NAME">PooledObject.returnToPool</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'> 91</span> </span><span class="WHIT">      </span><span class="NAME">Engine.addMetric</span><span class="PUNC">(</span><span class="STRN">"poolLoad"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="PUNC">(</span><span class="NAME">PooledObject.poolSize</span><span class="WHIT"> </span><span class="REGX">/ PooledObject.poolNew) * 100), false, "#%");
+<span class='linenumber'> 92</span> 
+<span class='linenumber'> 93</span>       /</span><span class="REGX">/ Reset any variables on the object after putting
+<span class='linenumber'> 94</span>       /</span><span class="REGX">/ it back in the pool.
+<span class='linenumber'> 95</span>       this.release();
+<span class='linenumber'> 96</span>    },
+<span class='linenumber'> 97</span> 
+<span class='linenumber'> 98</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'> 99</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Get</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">managed</span><span class="WHIT"> </span><span class="NAME">Id</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">within</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">Engine.</span><span class="WHIT">
+<span class='linenumber'>100</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>101</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>102</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>103</span>    getId: function() {
+<span class='linenumber'>104</span>       return this.id;
+<span class='linenumber'>105</span>    },
+<span class='linenumber'>106</span> 
+<span class='linenumber'>107</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>108</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Get</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">original</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">was</span><span class="WHIT"> </span><span class="NAME">created</span><span class="WHIT"> </span><span class="NAME">with.</span><span class="WHIT">
+<span class='linenumber'>109</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>110</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">The</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT"> </span><span class="NAME">when</span><span class="WHIT"> </span><span class="NAME">creating</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT">
+<span class='linenumber'>111</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>112</span>    getName: function() {
+<span class='linenumber'>113</span>       return this.name;
+<span class='linenumber'>114</span>    },
+<span class='linenumber'>115</span> 
+<span class='linenumber'>116</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>117</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Returns</span><span class="WHIT"> </span><span class="NAME">an</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">that</span><span class="WHIT"> </span><span class="NAME">assigns</span><span class="WHIT"> </span><span class="NAME">getter</span><span class="WHIT"> </span><span class="NAME">and</span><span class="WHIT"> </span><span class="NAME">setter</span><span class="WHIT"> </span><span class="NAME">methods</span><span class="WHIT">
+<span class='linenumber'>118</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="NAME">exposed</span><span class="WHIT"> </span><span class="NAME">properties</span><span class="WHIT"> </span><span class="NAME">of</span><span class="WHIT"> </span><span class="NAME">an</span><span class="WHIT"> </span><span class="NAME">object.</span><span class="WHIT">
+<span class='linenumber'>119</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">Object</span><span class="PUNC">}</span><span class="WHIT"> </span><span class="NAME">An</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">which</span><span class="WHIT"> </span><span class="NAME">contains</span><span class="WHIT"> </span><span class="NAME">getter</span><span class="WHIT"> </span><span class="NAME">and</span><span class="WHIT"> </span><span class="NAME">setter</span><span class="WHIT"> </span><span class="NAME">methods.</span><span class="WHIT">
+<span class='linenumber'>120</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>121</span>    getProperties: function() {
+<span class='linenumber'>122</span>       var self = this;
+<span class='linenumber'>123</span>       var prop = {};
+<span class='linenumber'>124</span>       return $.extend(prop, {
+<span class='linenumber'>125</span>          "Id"     : [function() { return self.getId(); },
+<span class='linenumber'>126</span>                            null, false],
+<span class='linenumber'>127</span>          "Name"   : [function() { return self.getName(); },
+<span class='linenumber'>128</span>                            function(i) { self.setName(i); }, true]
+<span class='linenumber'>129</span>       });
+<span class='linenumber'>130</span>    },
+<span class='linenumber'>131</span> 
+<span class='linenumber'>132</span> 	toString: function() {
+<span class='linenumber'>133</span>       return this.getId() + " [" + this.constructor.getClassName() + "]";   
+<span class='linenumber'>134</span> 	},
+<span class='linenumber'>135</span> 
+<span class='linenumber'>136</span>    /</span><span class="PUNC">*</span><span class="PUNC">*</span><span class="WHIT">
+<span class='linenumber'>137</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">Serialize</span><span class="WHIT"> </span><span class="NAME">the</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="NAME">to</span><span class="WHIT"> </span><span class="NAME">XML.</span><span class="WHIT">
+<span class='linenumber'>138</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="TOKN">@</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">String</span><span class="PUNC">}</span><span class="WHIT">
+<span class='linenumber'>139</span> </span><span class="WHIT">    </span><span class="PUNC">*</span><span class="REGX">/
+<span class='linenumber'>140</span>    toXML: function(indent) {
+<span class='linenumber'>141</span>       indent = indent ? indent : "";
+<span class='linenumber'>142</span>       var props = this.getProperties();
+<span class='linenumber'>143</span>       var xml = indent + "&lt;" + this.constructor.getClassName();
+<span class='linenumber'>144</span>       for (var p in props) {
+<span class='linenumber'>145</span>          /</span><span class="REGX">/ If the value should be serialized, call it's getter
+<span class='linenumber'>146</span>          if (props[p][2]) {
+<span class='linenumber'>147</span>             xml += " " + p.toLowerCase() + "=\"" + props[p][0]().toString() + "\"";
+<span class='linenumber'>148</span>          }
+<span class='linenumber'>149</span>       }
+<span class='linenumber'>150</span> 
+<span class='linenumber'>151</span>       xml += "/</span><span class="PUNC">></span><span class="TOKN">\</span><span class="NAME">n</span><span class="STRN">";
+<span class='linenumber'>152</span>       return xml;
+<span class='linenumber'>153</span>    },
+<span class='linenumber'>154</span> 	
+<span class='linenumber'>155</span> 	/**
+<span class='linenumber'>156</span> 	 * Returns &lt;tt>true&lt;/tt> if the object has been destroyed.  For objects which are
+<span class='linenumber'>157</span> 	 * being updated by containers, this method is used to determine if the object should
+<span class='linenumber'>158</span> 	 * be updated.  It is important to check this method if you are outside the normal
+<span class='linenumber'>159</span> 	 * bounds of updating an object.  For example, if an object is drawing its bounding
+<span class='linenumber'>160</span> 	 * box using it's collision component, the component may have been destroyed along
+<span class='linenumber'>161</span> 	 * with the object, by another object.  Checking to see if the object is destroyed
+<span class='linenumber'>162</span> 	 * before calling such method would prevent an exception being thrown when trying
+<span class='linenumber'>163</span> 	 * to access the component which was destroyed as well.
+<span class='linenumber'>164</span> 	 * @return {Boolean}
+<span class='linenumber'>165</span> 	 */
+<span class='linenumber'>166</span> 	isDestroyed: function() {
+<span class='linenumber'>167</span> 		return this._destroyed;
+<span class='linenumber'>168</span> 	},
+<span class='linenumber'>169</span> 	
+<span class='linenumber'>170</span> 	/**
+<span class='linenumber'>171</span> 	 * Get the model data associated with an object.  If &lt;tt>key&lt;/tt> is provided, only the
+<span class='linenumber'>172</span> 	 * data for &lt;tt>key&lt;/tt> will be returned.  If the data has not yet been assigned,
+<span class='linenumber'>173</span> 	 * an empty object will be created to contain the data.
+<span class='linenumber'>174</span> 	 * 
+<span class='linenumber'>175</span> 	 * @param [key] {String} Optional key which contains the data, or &lt;tt>null&lt;/tt> for the
+<span class='linenumber'>176</span> 	 * 	entire data model. 
+<span class='linenumber'>177</span> 	 */
+<span class='linenumber'>178</span> 	getObjectDataModel: function(key) {
+<span class='linenumber'>179</span> 		var mData = this[PooledObject.DATA_MODEL];
+<span class='linenumber'>180</span> 		if (mData == null) {
+<span class='linenumber'>181</span> 			this[PooledObject.DATA_MODEL] = {};
+<span class='linenumber'>182</span> 			mData = this[PooledObject.DATA_MODEL];
+<span class='linenumber'>183</span> 		}
+<span class='linenumber'>184</span> 		return key ? mData[key] : mData;
+<span class='linenumber'>185</span> 	},
+<span class='linenumber'>186</span> 	
+<span class='linenumber'>187</span> 	/**
+<span class='linenumber'>188</span> 	 * Set a key, within the object's data model, to a specific value.
+<span class='linenumber'>189</span> 	 * 
+<span class='linenumber'>190</span> 	 * @param key {String} The key to set the data for
+<span class='linenumber'>191</span> 	 * @param value {Object} The value to assign to the key
+<span class='linenumber'>192</span> 	 */
+<span class='linenumber'>193</span> 	setObjectDataModel: function(key, value) {
+<span class='linenumber'>194</span> 		var mData = this.getObjectDataModel();
+<span class='linenumber'>195</span> 		mData[key] = value;
+<span class='linenumber'>196</span> 	},
+<span class='linenumber'>197</span> 	
+<span class='linenumber'>198</span> 	/**
+<span class='linenumber'>199</span> 	 * Clear all of the spatial container model data.
+<span class='linenumber'>200</span> 	 */
+<span class='linenumber'>201</span> 	clearObjectDataModel: function() {
+<span class='linenumber'>202</span> 		this[PooledObject.DATA_MODEL] = null;
+<span class='linenumber'>203</span> 	}
+<span class='linenumber'>204</span> 	
+<span class='linenumber'>205</span> }, /** @scope PooledObject.prototype **/{
+<span class='linenumber'>206</span> 
+<span class='linenumber'>207</span>    /**
+<span class='linenumber'>208</span>     * &lt;tt>true&lt;/tt> for all objects within the engine.
+<span class='linenumber'>209</span>     * @type {Boolean}
+<span class='linenumber'>210</span>     */
+<span class='linenumber'>211</span>    isRenderEngineObject: true,
+<span class='linenumber'>212</span> 
+<span class='linenumber'>213</span>    /**
+<span class='linenumber'>214</span>     * &lt;tt>true&lt;/tt> for all objects that are pooled.
+<span class='linenumber'>215</span>     * @type {Boolean}
+<span class='linenumber'>216</span>     */
+<span class='linenumber'>217</span>    isPooledObject: true,
+<span class='linenumber'>218</span> 
+<span class='linenumber'>219</span>    /**
+<span class='linenumber'>220</span>     * Number of new objects put into the pool
+<span class='linenumber'>221</span>     * @type {Number}
+<span class='linenumber'>222</span>     */
+<span class='linenumber'>223</span>    poolNew: 0,
+<span class='linenumber'>224</span> 
+<span class='linenumber'>225</span>    /**
+<span class='linenumber'>226</span>     * Total number of objects in the pool
+<span class='linenumber'>227</span>     * @type {Number}
+<span class='linenumber'>228</span>     */
+<span class='linenumber'>229</span>    poolSize: 0,
+<span class='linenumber'>230</span>    
+<span class='linenumber'>231</span>    /* pragma:DEBUG_START */
+<span class='linenumber'>232</span>    classPool: {},
+<span class='linenumber'>233</span>    /* pragma:DEBUG_END */
+<span class='linenumber'>234</span> 
+<span class='linenumber'>235</span>    /**
+<span class='linenumber'>236</span>     * Similar to a constructor, all pooled objects implement this method.
+<span class='linenumber'>237</span>     * The &lt;tt>create()&lt;/tt> method will either create a new instance, if no object of the object's
+<span class='linenumber'>238</span>     * class exists within the pool, or will reuse an existing pooled instance of
+<span class='linenumber'>239</span>     * the object.  Either way, the constructor for the object instance is called so that
+<span class='linenumber'>240</span>     * instance creation can be maintained in the constructor.
+<span class='linenumber'>241</span>     * &lt;p/>
+<span class='linenumber'>242</span>     * Usage: &lt;tt>var obj = [ObjectClass].create(arg1, arg2, arg3...);&lt;/tt>
+<span class='linenumber'>243</span>     *
+<span class='linenumber'>244</span>     * @memberOf PooledObject
+<span class='linenumber'>245</span>     */
+<span class='linenumber'>246</span>    create: function() {
+<span class='linenumber'>247</span>       // Check the pool for the object type
+<span class='linenumber'>248</span>       if (PooledObject.objectPool[this.getClassName()] && PooledObject.objectPool[this.getClassName()].length != 0) {
+<span class='linenumber'>249</span>          PooledObject.poolSize--;
+<span class='linenumber'>250</span>          Engine.addMetric("</span><span class="NAME">poolLoad</span><span class="STRN">", Math.floor((PooledObject.poolSize / PooledObject.poolNew) * 100), false, "</span><span class="TOKN">#</span><span class="PUNC">%</span><span class="STRN">");
+<span class='linenumber'>251</span>          var obj = PooledObject.objectPool[this.getClassName()].shift();
+<span class='linenumber'>252</span>          obj.constructor.apply(obj, arguments);
+<span class='linenumber'>253</span> 
+<span class='linenumber'>254</span>          /* pragma:DEBUG_START */ 
+<span class='linenumber'>255</span>          PooledObject.classPool[this.getClassName()][1]++;
+<span class='linenumber'>256</span>          PooledObject.classPool[this.getClassName()][2]--;
+<span class='linenumber'>257</span>          /* pragma:DEBUG_END */
+<span class='linenumber'>258</span> 
+<span class='linenumber'>259</span>          return obj;
+<span class='linenumber'>260</span>       } else {
+<span class='linenumber'>261</span>          PooledObject.poolNew++;
+<span class='linenumber'>262</span>          Engine.addMetric("</span><span class="NAME">poolNew</span><span class="STRN">", PooledObject.poolNew, false, "</span><span class="TOKN">#</span><span class="STRN">");
+<span class='linenumber'>263</span>          
+<span class='linenumber'>264</span>          /* pragma:DEBUG_START */
+<span class='linenumber'>265</span>          if (PooledObject.classPool[this.getClassName()]) {
+<span class='linenumber'>266</span>             PooledObject.classPool[this.getClassName()][0]++;
+<span class='linenumber'>267</span>          } else {
+<span class='linenumber'>268</span>             // 0: new, 1: in use, 2: pooled
+<span class='linenumber'>269</span>             PooledObject.classPool[this.getClassName()] = [1,0,0];
+<span class='linenumber'>270</span>          }
+<span class='linenumber'>271</span>          /* pragma:DEBUG_END */
+<span class='linenumber'>272</span>          
+<span class='linenumber'>273</span>          // TODO: Any more than 15 arguments and construction will fail!
+<span class='linenumber'>274</span>          return new this(arguments[0],arguments[1],arguments[2],arguments[3],arguments[4],
+<span class='linenumber'>275</span>                          arguments[5],arguments[6],arguments[7],arguments[8],arguments[9],
+<span class='linenumber'>276</span>                          arguments[10],arguments[11],arguments[12],arguments[13],arguments[14]);
+<span class='linenumber'>277</span>       }
+<span class='linenumber'>278</span>    },
+<span class='linenumber'>279</span> 
+<span class='linenumber'>280</span>    /**
+<span class='linenumber'>281</span>     * During object destruction, it needs to return itself to the
+<span class='linenumber'>282</span>     * pool so it can be used again.  Instead of creating new instances
+<span class='linenumber'>283</span>     * of each object, we utilize a pooled object so we don't need the
+<span class='linenumber'>284</span>     * garbage collector to be invoked for removed objects.
+<span class='linenumber'>285</span>     * @private
+<span class='linenumber'>286</span>     */
+<span class='linenumber'>287</span>    returnToPool: function(obj) {
+<span class='linenumber'>288</span>       // If there is no pool for objects of this type, create one
+<span class='linenumber'>289</span>       if (!PooledObject.objectPool[obj.constructor.getClassName()]) {
+<span class='linenumber'>290</span>          PooledObject.objectPool[obj.constructor.getClassName()] = [];
+<span class='linenumber'>291</span>       }
+<span class='linenumber'>292</span> 
+<span class='linenumber'>293</span>       // Push this object into the pool
+<span class='linenumber'>294</span>       PooledObject.poolSize++;
+<span class='linenumber'>295</span>       PooledObject.objectPool[obj.constructor.getClassName()].push(obj);
+<span class='linenumber'>296</span> 
+<span class='linenumber'>297</span>       /* pragma:DEBUG_START */
+<span class='linenumber'>298</span>       if (PooledObject.classPool[obj.constructor.getClassName()][1] != 0) {
+<span class='linenumber'>299</span>          PooledObject.classPool[obj.constructor.getClassName()][1]--;
+<span class='linenumber'>300</span>       }
+<span class='linenumber'>301</span>       PooledObject.classPool[obj.constructor.getClassName()][2]++;
+<span class='linenumber'>302</span>       /* pragma:DEBUG_END */
+<span class='linenumber'>303</span>          
+<span class='linenumber'>304</span> 
+<span class='linenumber'>305</span>       Engine.addMetric("</span><span class="NAME">pooledObjects</span><span class="STRN">", PooledObject.poolSize, false, "</span><span class="TOKN">#</span><span class="STRN">");
+<span class='linenumber'>306</span>    },
+<span class='linenumber'>307</span> 
+<span class='linenumber'>308</span>    /**
+<span class='linenumber'>309</span>     * The pool of all objects, stored by class name.
+<span class='linenumber'>310</span>     * @type {Object}
+<span class='linenumber'>311</span>     */
+<span class='linenumber'>312</span>    objectPool: {},
+<span class='linenumber'>313</span> 
+<span class='linenumber'>314</span>    /**
+<span class='linenumber'>315</span>     * Get the class name of this object
+<span class='linenumber'>316</span>     *
+<span class='linenumber'>317</span>     * @return {String} "</span><span class="NAME">PooledObject</span><span class="STRN">"
+<span class='linenumber'>318</span>     */
+<span class='linenumber'>319</span>    getClassName: function() {
+<span class='linenumber'>320</span>       if (!this.hasOwnProperty("</span><span class="NAME">getClassName</span><span class="STRN">")) {
+<span class='linenumber'>321</span>          Console.warn("</span><span class="NAME">Object</span><span class="WHIT"> </span><span class="NAME">is</span><span class="WHIT"> </span><span class="NAME">missing</span><span class="WHIT"> </span><span class="NAME">getClassName</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="STRN">");
+<span class='linenumber'>322</span>       }
+<span class='linenumber'>323</span>       return "</span><span class="NAME">PooledObject</span><span class="STRN">";
+<span class='linenumber'>324</span>    },
+<span class='linenumber'>325</span> 	
+<span class='linenumber'>326</span> 	/**
+<span class='linenumber'>327</span> 	 * @private
+<span class='linenumber'>328</span> 	 */
+<span class='linenumber'>329</span> 	DATA_MODEL: "</span><span class="NAME">$$OBJECT_DATA_MODEL</span><span class="TOKN"></span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:36 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:38 GMT-0500 (EST)</div>
 </body>
 </html>

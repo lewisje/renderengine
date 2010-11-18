@@ -48,6 +48,16 @@ A resource loader for images.
    
       <tr class="TableRowColor">
          <td>
+            <a href="Image.html" target="main">Image</a>
+         </td>
+         <td>
+            
+A wrapper class for images.
+         </td>
+      </tr>
+   
+      <tr class="TableRowColor">
+         <td>
             <a href="ImageLoader.html" target="main">ImageLoader</a>
          </td>
          <td>
@@ -74,7 +84,7 @@ Loads images and stores the reference to those images.
 <span class='linenumber'>  6</span>  *
 <span class='linenumber'>  7</span>  * @author: Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'>  8</span>  * @author: $Author: bfattori $
-<span class='linenumber'>  9</span>  * @version: $Revision: 1408 $
+<span class='linenumber'>  9</span>  * @version: $Revision: 1449 $
 <span class='linenumber'> 10</span>  *
 <span class='linenumber'> 11</span>  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
 <span class='linenumber'> 12</span>  *
@@ -273,66 +283,77 @@ Loads images and stores the reference to those images.
 <span class='linenumber'>205</span> 
 <span class='linenumber'>206</span> </span><span class="NAME">Engine.initObject</span><span class="PUNC">(</span><span class="STRN">"Image"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">"PooledObject"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='linenumber'>207</span> 
-<span class='linenumber'>208</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Image</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PooledObject.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Image.prototype */</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>209</span> 
-<span class='linenumber'>210</span> </span><span class="WHIT">	</span><span class="NAME">image</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>211</span> 
-<span class='linenumber'>212</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>213</span>     * @private
-<span class='linenumber'>214</span>     */</span><span class="WHIT">
-<span class='linenumber'>215</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">imageName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">imageLoader</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>216</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Image"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>217</span> </span><span class="WHIT">		</span><span class="NAME">this.image</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">imageLoader.get</span><span class="PUNC">(</span><span class="NAME">imageName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>218</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dims</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">imageLoader.getDimensions</span><span class="PUNC">(</span><span class="NAME">imageName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>219</span> </span><span class="WHIT">      </span><span class="NAME">this.bbox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Rectangle2D.create</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dims.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dims.y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>220</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>221</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>222</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>223</span>     * @private
-<span class='linenumber'>224</span>     */</span><span class="WHIT">
-<span class='linenumber'>225</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>226</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>227</span> </span><span class="WHIT">      </span><span class="NAME">this.image</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>228</span> </span><span class="WHIT">      </span><span class="NAME">this.bbox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>229</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>230</span> 
-<span class='linenumber'>231</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>232</span>     * Get the bounding box for the image.
-<span class='linenumber'>233</span>     * @return {Rectangle2D} The bounding box which contains the entire image
-<span class='linenumber'>234</span>     */</span><span class="WHIT">
-<span class='linenumber'>235</span> </span><span class="WHIT">   </span><span class="NAME">getBoundingBox</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>236</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.bbox</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>237</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='linenumber'>238</span> 
-<span class='linenumber'>239</span> </span><span class="WHIT">	</span><span class="COMM">/**
-<span class='linenumber'>240</span> 	 * Get the HTML image object which contains the image.
-<span class='linenumber'>241</span> 	 * @return {HTMLImage}
-<span class='linenumber'>242</span> 	 */</span><span class="WHIT">
-<span class='linenumber'>243</span> </span><span class="WHIT">	</span><span class="NAME">getImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>244</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.image</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>245</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">		</span><span class="WHIT">
-<span class='linenumber'>246</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>247</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>248</span> 
-<span class='linenumber'>249</span> </span><span class="WHIT">   </span><span class="COMM">/**
-<span class='linenumber'>250</span>     * Gets the class name of this object.
-<span class='linenumber'>251</span>     * @return {String} The string "Image"
-<span class='linenumber'>252</span>     */</span><span class="WHIT">
-<span class='linenumber'>253</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='linenumber'>254</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Image"</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>255</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>256</span> </span><span class="WHIT">	</span><span class="WHIT">
-<span class='linenumber'>257</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>258</span> 
-<span class='linenumber'>259</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Image</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>260</span> 
-<span class='linenumber'>261</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='linenumber'>262</span> 
-<span class='linenumber'>263</span> </span></pre>
+<span class='linenumber'>208</span> </span><span class="COMM">/**
+<span class='linenumber'>209</span>  * @class A wrapper class for images.  Images contain a reference to their resource
+<span class='linenumber'>210</span>  * 		 loader and the bitmap dimensions for the image.  Additionally, the dimensions
+<span class='linenumber'>211</span>  * 		 are used to determine the bounding box around the image.
+<span class='linenumber'>212</span>  *
+<span class='linenumber'>213</span>  * @constructor
+<span class='linenumber'>214</span>  * @param name {String} The name of the image object
+<span class='linenumber'>215</span>  * @param imageName {String} The name of the image container in the resource loader
+<span class='linenumber'>216</span>  * @param imageLoader {ImageLoader} The resource loader used to load the image
+<span class='linenumber'>217</span>  * @extends PooledObject
+<span class='linenumber'>218</span>  */</span><span class="WHIT">
+<span class='linenumber'>219</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Image</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PooledObject.extend</span><span class="PUNC">(</span><span class="COMM">/** @scope Image.prototype */</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>220</span> 
+<span class='linenumber'>221</span> </span><span class="WHIT">	</span><span class="NAME">image</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>222</span> 
+<span class='linenumber'>223</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>224</span>     * @private
+<span class='linenumber'>225</span>     */</span><span class="WHIT">
+<span class='linenumber'>226</span> </span><span class="WHIT">   </span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">imageName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">imageLoader</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>227</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Image"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>228</span> </span><span class="WHIT">		</span><span class="NAME">this.image</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">imageLoader.get</span><span class="PUNC">(</span><span class="NAME">imageName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>229</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dims</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">imageLoader.getDimensions</span><span class="PUNC">(</span><span class="NAME">imageName</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>230</span> </span><span class="WHIT">      </span><span class="NAME">this.bbox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Rectangle2D.create</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dims.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dims.y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>231</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>232</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>233</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>234</span>     * @private
+<span class='linenumber'>235</span>     */</span><span class="WHIT">
+<span class='linenumber'>236</span> </span><span class="WHIT">   </span><span class="NAME">release</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>237</span> </span><span class="WHIT">      </span><span class="NAME">this.base</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>238</span> </span><span class="WHIT">      </span><span class="NAME">this.image</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>239</span> </span><span class="WHIT">      </span><span class="NAME">this.bbox</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>240</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>241</span> 
+<span class='linenumber'>242</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>243</span>     * Get the bounding box for the image.
+<span class='linenumber'>244</span>     * @return {Rectangle2D} The bounding box which contains the entire image
+<span class='linenumber'>245</span>     */</span><span class="WHIT">
+<span class='linenumber'>246</span> </span><span class="WHIT">   </span><span class="NAME">getBoundingBox</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>247</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.bbox</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>248</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='linenumber'>249</span> 
+<span class='linenumber'>250</span> </span><span class="WHIT">	</span><span class="COMM">/**
+<span class='linenumber'>251</span> 	 * Get the HTML image object which contains the image.
+<span class='linenumber'>252</span> 	 * @return {HTMLImage}
+<span class='linenumber'>253</span> 	 */</span><span class="WHIT">
+<span class='linenumber'>254</span> </span><span class="WHIT">	</span><span class="NAME">getImage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>255</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.image</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>256</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="WHIT">		</span><span class="WHIT">
+<span class='linenumber'>257</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>258</span> </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>259</span> 
+<span class='linenumber'>260</span> </span><span class="WHIT">   </span><span class="COMM">/**
+<span class='linenumber'>261</span>     * Gets the class name of this object.
+<span class='linenumber'>262</span>     * @return {String} The string "Image"
+<span class='linenumber'>263</span>     */</span><span class="WHIT">
+<span class='linenumber'>264</span> </span><span class="WHIT">   </span><span class="NAME">getClassName</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='linenumber'>265</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="STRN">"Image"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>266</span> </span><span class="WHIT">   </span><span class="PUNC">}</span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>267</span> </span><span class="WHIT">	</span><span class="WHIT">
+<span class='linenumber'>268</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>269</span> 
+<span class='linenumber'>270</span> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">Image</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>271</span> 
+<span class='linenumber'>272</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='linenumber'>273</span> 
+<span class='linenumber'>274</span> </span></pre>
 <hr>
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:38 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:40 GMT-0500 (EST)</div>
 </body>
 </html>

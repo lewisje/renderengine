@@ -90,9 +90,23 @@ A static class which provides methods for generating random integers		 and floa
             </code></font> 
          </td>
          <td>
+            <code> <b> <a href="#parseBin">parseBin</a></b>(bin) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Parse a binary string into a number.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#random">random</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a random float between 0 (inclusive) and 1 (exclusive)
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
  
          </td>
       </tr>
@@ -106,7 +120,21 @@ A static class which provides methods for generating random integers		 and floa
          <td>
             <code> <b> <a href="#randomInt">randomInt</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get a random integer from the pseduo random number generator.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns a random integer between 0 and 4,294,967,296.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#randomRange">randomRange</a></b>(low, high, whole) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Return a random value within the <tt>low</tt> to <tt>hight</tt> range,optionally as an integer value only.
  
          </td>
       </tr>
@@ -119,6 +147,34 @@ A static class which provides methods for generating random integers		 and floa
             <code> <b> <a href="#seed">seed</a></b>(seed) </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Seed the random number generator with a known number.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#toBinary">toBinary</a></b>(num) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Converts a number to a binary string.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;String
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#toHex">toHex</a></b>(num) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Converts a number to a hexidecimal string, prefixed by "0x".
  
          </td>
       </tr>
@@ -156,10 +212,36 @@ A static class which provides methods for generating random integers		 and floa
 </table>
 
 
+   <a name="parseBin"> </a> <h3>parseBin</h3>
+      <pre>Number&nbsp;<b>parseBin</b>(bin)</pre> 
+   <ul>
+      Parse a binary string into a number.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;bin </code> - Binary string to parse 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="random"> </a> <h3>random</h3>
       <pre>Number&nbsp;<b>random</b>()</pre> 
    <ul>
-      Get a random float between 0 (inclusive) and 1 (exclusive)
+      Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -180,7 +262,7 @@ A static class which provides methods for generating random integers		 and floa
    <a name="randomInt"> </a> <h3>randomInt</h3>
       <pre>Number&nbsp;<b>randomInt</b>()</pre> 
    <ul>
-      Get a random integer from the pseduo random number generator.
+      Returns a random integer between 0 and 4,294,967,296.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -192,6 +274,38 @@ A static class which provides methods for generating random integers		 and floa
       <b>Returns:</b>
       <ul>
          <code><i>Number</i>&nbsp;</code>An integer between 0 and 2^32 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="randomRange"> </a> <h3>randomRange</h3>
+      <pre>Number&nbsp;<b>randomRange</b>(low, high, whole)</pre> 
+   <ul>
+      Return a random value within the <tt>low</tt> to <tt>hight</tt> range,optionally as an integer value only.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;low </code> - The low part of the range 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;high </code> - The high part of the range 
+      </ul>
+      <ul>
+         <code>[<i>Boolean</i>]&nbsp;whole </code> - Return whole values only 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
       </ul>
    </ul>
    
@@ -219,6 +333,58 @@ A static class which provides methods for generating random integers		 and floa
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="toBinary"> </a> <h3>toBinary</h3>
+      <pre>String&nbsp;<b>toBinary</b>(num)</pre> 
+   <ul>
+      Converts a number to a binary string.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;num </code> - The number to convert 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="toHex"> </a> <h3>toHex</h3>
+      <pre>String&nbsp;<b>toHex</b>(num)</pre> 
+   <ul>
+      Converts a number to a hexidecimal string, prefixed by "0x".
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;num </code> - The number to convert 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>String</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
 
 <!-- ============ METHOD DETAIL END ========== -->
 
@@ -228,8 +394,8 @@ A static class which provides methods for generating random integers		 and floa
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:41 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:43 GMT-0500 (EST)</div>
 </body>
 </html>

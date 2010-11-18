@@ -177,6 +177,18 @@ Pooled objects are created as needed, and reused from a static pool       of al
             <font size="-1"><code></code></font> 
          </td>
          <td>
+            <code> <b> <a href="#clearObjectDataModel">clearObjectDataModel</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Clear all of the spatial container model data.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
             <code> <b> <a href="#create">create</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Similar to a constructor, all pooled objects implement this method.
@@ -240,6 +252,18 @@ Pooled objects are created as needed, and reused from a static pool       of al
    
       <tr bgcolor="white" class="TableRowColor">
          <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getObjectDataModel">getObjectDataModel</a></b>(key) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the model data associated with an object.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
             <font size="-1"><code>
             &nbsp;Object
             </code></font> 
@@ -274,6 +298,18 @@ Pooled objects are created as needed, and reused from a static pool       of al
             <code> <b> <a href="#release">release</a></b>() </code> 
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; When a pooled object is destroyed, its <tt>release()</tt> method will be calledso it has a chance to can clean up instance variables before being put back into the pool for reuse.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code></code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#setObjectDataModel">setObjectDataModel</a></b>(key, value) </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set a key, within the object's data model, to a specific value.
  
          </td>
       </tr>
@@ -439,6 +475,22 @@ Pooled objects are created as needed, and reused from a static pool       of al
 </table>
 
 
+   <a name="clearObjectDataModel"> </a> <h3>clearObjectDataModel</h3>
+      <pre><b>clearObjectDataModel</b>()</pre> 
+   <ul>
+      Clear all of the spatial container model data.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="create"> </a> <h3>create</h3>
       <pre><b>create</b>()</pre> 
    <ul>
@@ -534,6 +586,27 @@ Pooled objects are created as needed, and reused from a static pool       of al
    <!-- ADDITIONAL ATTRIBUTES  END -->
    <hr>
 
+   <a name="getObjectDataModel"> </a> <h3>getObjectDataModel</h3>
+      <pre><b>getObjectDataModel</b>(key)</pre> 
+   <ul>
+      Get the model data associated with an object.  If <tt>key</tt> is provided, only thedata for <tt>key</tt> will be returned.  If the data has not yet been assigned,an empty object will be created to contain the data.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;key </code> - Optional key which contains the data, or <tt>null</tt> for the	entire data model. 
+      </ul>
+   </ul>
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
    <a name="getProperties"> </a> <h3>getProperties</h3>
       <pre>Object&nbsp;<b>getProperties</b>()</pre> 
    <ul>
@@ -584,6 +657,30 @@ Pooled objects are created as needed, and reused from a static pool       of al
    </ul>
    <!-- METHOD PARAMETERS START -->
    
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="setObjectDataModel"> </a> <h3>setObjectDataModel</h3>
+      <pre><b>setObjectDataModel</b>(key, value)</pre> 
+   <ul>
+      Set a key, within the object's data model, to a specific value.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   <ul>
+      <b>Parameters:</b>
+      <ul>
+         <code>[<i>String</i>]&nbsp;key </code> - The key to set the data for 
+      </ul>
+      <ul>
+         <code>[<i>Object</i>]&nbsp;value </code> - The value to assign to the key 
+      </ul>
+   </ul>
    
    <!-- METHOD PARAMETERS END -->
    <!-- ADDITIONAL ATTRIBUTES START -->
@@ -643,8 +740,8 @@ Pooled objects are created as needed, and reused from a static pool       of al
 
 <!-- ============ EVENT DETAIL END ========== -->
 
-   <div class="jsdoc_copy">&copy;2010 Brett Fattori</div>
+   <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Sun Nov 07 2010 12:24:40 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:43 GMT-0500 (EST)</div>
 </body>
 </html>
