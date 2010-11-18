@@ -44,14 +44,19 @@ Engine.initObject("ColliderComponent", "BaseComponent", function() {
  *              certain criteria will be passed to an <tt>onCollide()</tt> method which
  *              must be implemented by the host object.
  *              <p/>
- *              The event handler will be passed the time the collision was detected
- *              as its first argument, and the potential collision object as the second.
+ *              The event handler will be passed the potential collision object
+ *              as its first argument, the time the collision was detected as the second,
+ *              and the target's collision mask as the third.
  *              The host must determine if the collision is valid for itself, and then
  *              return a value which indicates whether the component should contine to
  *              check for collisions, or if it should stop.
  *              <p/>
  *              If the <tt>onCollide()</tt> method is not implemented on the host, no 
  *              collision events will be passed.
+ *              <p/>
+ *              Additionally, the host can implement <tt>onCollideEnd()</tt> to be notified
+ *              when collisions have stopped.  The time the collisions stopped will be the
+ *              only argument.
  *
  * @param name {String} Name of the component
  * @param collisionModel {SpatialCollection} The collision model
@@ -96,7 +101,6 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    release: function() {
       this.base();
       this.collisionModel = null;
-		this.setCollisionMask(0);
 		this.collideSelf = false;
    },
 
@@ -216,10 +220,11 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       this.updateModel();
 
       // If the host object needs to know about collisions...
+		var pcl = null;
       if (host.onCollide)
       {
          // Get the PCL and check for collisions
-         var pcl = this.getCollisionModel().getPCL(host.getPosition());
+         pcl = this.getCollisionModel().getPCL(host.getPosition());
          var status = ColliderComponent.CONTINUE;
 			pcl.forEach(function(obj) {
 				var hostMask = this.collisionModel.getObjectSpatialData(host, "collisionMask");
@@ -231,6 +236,12 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
             }
          }, this);
       }
+		
+		if (host.onCollideEnd) {
+			if (!pcl || (pcl && (this.collideSelf || pcl.size() > 1))) {
+				host.onCollideEnd(time);
+			}
+		}
    },
    
    /**
@@ -250,10 +261,8 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-		if (this.collideSelf || hostMask != targetMask) {
+		if (!(this.collideSelf && this === collisionObj)) {
       	return this.getHostObject().onCollide(collisionObj, time, targetMask);
-		} else if (this.getHostObject().onCollideEnd) {
-			return this.getHostObject().onCollideEnd(time);
 		}
    }
 
