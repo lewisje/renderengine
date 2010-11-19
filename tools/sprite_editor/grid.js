@@ -31,7 +31,7 @@
  *
  */
 
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 Engine.initObject("SpriteGrid", "Object2D", function() {
 

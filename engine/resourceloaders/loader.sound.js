@@ -31,8 +31,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.pooledobject.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.pooledobject.js");
+Engine.include("/engine.timers.js");
 Engine.include("/resourceloaders/loader.remote.js");
 
 Engine.initObject("SoundLoader", "RemoteLoader", function() {
@@ -42,7 +42,6 @@ Engine.initObject("SoundLoader", "RemoteLoader", function() {
  * 		 system.  Sounds resource that are loaded are cached with the loader.
  *
  * @constructor
- * @param name {String} The name of the resource loader
  * @param soundSystem {SoundSystem} A sound system instance, either {@link SoundSystemSM2} or
  * 	{@link SoundSystemHTML5}.
  * @extends RemoteLoader
@@ -58,8 +57,8 @@ var SoundLoader = RemoteLoader.extend(/** @scope SoundLoader.prototype */{
    /**
     * @private
     */
-   constructor: function(name, soundSystem) {
-      this.base(name || "SoundLoader");
+   constructor: function(soundSystem) {
+      this.base("SoundLoader");
       this.init = false;
       this.queuedSounds = [];
       this.queueingSounds = true;
@@ -68,8 +67,9 @@ var SoundLoader = RemoteLoader.extend(/** @scope SoundLoader.prototype */{
    },
 
    destroy: function() {
-      if (Engine.isSoundEnabled()) {
+      if (this.soundSystem) {
          this.soundSystem.shutdown();
+			this.soundSystem = null;
       }
    },
 
@@ -81,7 +81,7 @@ var SoundLoader = RemoteLoader.extend(/** @scope SoundLoader.prototype */{
     * @param url {String} The URL where the resource is located
     */
    load: function(name, url) {
-      var soundObj = this.soundSystem.retrieveSound(this, name, url);
+      var soundObj = this.soundSystem.loadSound(this, name, url);
 
       // We'll need to periodically check a sound's "readyState" for success
       // to know when the sound is ready for usage.

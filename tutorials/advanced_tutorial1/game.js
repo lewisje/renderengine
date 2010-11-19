@@ -1,6 +1,6 @@
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 // Load the game objects
 Game.load("/myObject.js");

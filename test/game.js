@@ -34,7 +34,7 @@
  */
 
 // Load the engine parts
-Engine.include("/engine/engine.container.js");
+Engine.include("/engine.container.js");
 
 // Load game objects
 //Game.load("/layer.js");

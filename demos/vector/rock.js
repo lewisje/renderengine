@@ -35,9 +35,9 @@ Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.billboard2d.js");
 Engine.include("/components/component.collider.js");
-Engine.include("/engine/engine.object2d.js");
-Engine.include("/engine/engine.timers.js");
-Engine.include("/engine/engine.container.js");
+Engine.include("/engine.object2d.js");
+Engine.include("/engine.timers.js");
+Engine.include("/engine.container.js");
 
 Engine.initObject("SpaceroidsRock", "Object2D", function() {
 
@@ -64,6 +64,11 @@ var SpaceroidsRock = Object2D.extend({
       this.add(Mover2DComponent.create("move"));
       this.add(Billboard2DComponent.create("billboard", Vector2DComponent.create("draw")));
       this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
+		if (Spaceroids.isAttractMode) {
+			this.getComponent("collider").setCollisionMask(Math2.parseBin("1000"));
+		} else {
+			this.getComponent("collider").setCollisionMask(Math2.parseBin("110"));
+		}
 
       // Playfield bounding box for quick checks
       this.pBox = Rectangle2D.create(0, 0, pWidth, pHeight);

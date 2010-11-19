@@ -33,7 +33,7 @@
 
 // Includes
 Engine.include("/rendercontexts/context.htmldivcontext.js");
-Engine.include("/engine/engine.container.js");
+Engine.include("/engine.container.js");
 
 // UI Element types
 Engine.include("/ui/elements/ui.base.js");

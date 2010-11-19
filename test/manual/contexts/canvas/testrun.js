@@ -1,6 +1,6 @@
 
 Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine/engine.math2d.js");
+Engine.include("/engine.math2d.js");
 
 Engine.initObject("TestRunner", null, function() {
 

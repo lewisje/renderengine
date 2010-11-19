@@ -34,7 +34,7 @@
 Engine.include("/resourceloaders/loader.multi.js");
 Engine.include("/resourceloaders/loader.object.js");
 Engine.include("/objects/object.ui.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 // UI Element types
 Engine.include("/ui/elements/ui.base.js");

@@ -33,7 +33,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.billboard2d.js");
 

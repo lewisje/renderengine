@@ -31,7 +31,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.storage.js");
+Engine.include("/engine.storage.js");
 
 Engine.initObject("PersistentStorage", "StorageBase", function() {
 

@@ -34,7 +34,7 @@
 Engine.include("/components/component.collider.js");
 Engine.include("/components/component.wiimoteinput.js");
 Engine.include("/components/component.transform2d.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 Engine.initObject("Player", "Object2D", function() {
 

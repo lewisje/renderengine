@@ -32,8 +32,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.pooledobject.js");
-Engine.include("/engine/engine.events.js");
+Engine.include("/engine.pooledobject.js");
+Engine.include("/engine.events.js");
 
 Engine.initObject("BaseObject", "PooledObject", function() {
 

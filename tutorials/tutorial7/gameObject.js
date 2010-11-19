@@ -28,7 +28,7 @@ Engine.initObject("GameObject", "Object2D", function() {
 			this.add(BoxColliderComponent.create("collide", Tutorial7.collisionModel));
 
 			// Set the collision flags
-			this.getComponent("collide").setCollisionMask(7);
+			this.getComponent("collide").setCollisionMask(Math2.parseBin("01"));
 
 
          // Start at the center of the playfield
@@ -78,17 +78,26 @@ Engine.initObject("GameObject", "Object2D", function() {
 		 * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
 		 */
 		onCollide: function(collisionObj, time, targetMask) {
-		   if (targetMask == 1) {
-		      // Colliding
+		   if (targetMask == 3) {
+		      // Colliding with a "red" box
 		      this.color = "#0000ff";
 		      return ColliderComponent.STOP;
 		   }
+			
+			return ColliderComponent.CONTINUE;
 		},
 
+		/**
+		 * Callback method which is lets our object know that existing
+		 * collisions have stopped.
+		 * 
+		 * @param collisionObj {BaseObject} The object we've collided with
+		 * @param time {Number} The time at which the collision occurred
+		 * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
+		 */
 		onCollideEnd: function(time) {
-		   // Not colliding
+		   // Not colliding anymore
 		   this.color = "#ffff00";
-		   return ColliderComponent.CONTINUE;
 		},
 		
 		/**

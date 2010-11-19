@@ -1,7 +1,7 @@
 // Load the components and engine objects
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.keyboardinput.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 // ### ADD THIS ###
 Engine.include("/components/component.vector2d.js");

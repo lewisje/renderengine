@@ -34,7 +34,7 @@
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 // Load game objects
 //Game.load("/wiihost.js");

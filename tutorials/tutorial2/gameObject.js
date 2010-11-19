@@ -1,6 +1,6 @@
 // Load the components and engine objects
 Engine.include("/components/component.transform2d.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 Engine.initObject("GameObject", "Object2D", function() {
 

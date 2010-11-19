@@ -33,7 +33,7 @@
 
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.render.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 
 Engine.initObject("CollisionBox", "Object2D", function() {

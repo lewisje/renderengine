@@ -32,7 +32,7 @@
 
 // Load engine objects
 Engine.include("/components/component.boxbody.js");
-Engine.include("/engine/engine.math2d.js");
+Engine.include("/engine.math2d.js");
 
 Engine.initObject("Crate", "Toy", function() {
 

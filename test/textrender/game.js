@@ -39,7 +39,7 @@ Engine.include("/textrender/text.bitmap.js");
 Engine.include("/textrender/text.context.js");
 Engine.include("/textrender/text.renderer.js");
 Engine.include("/resourceloaders/loader.bitmapfont.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 Engine.initObject("FontTest", "Game", function(){
 

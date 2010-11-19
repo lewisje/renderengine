@@ -2,7 +2,7 @@
 Engine.include("/components/component.sprite.js");
 Engine.include("/components/component.transform2d.js");
 Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 
 Engine.initObject("TestObject", "Object2D", function() {

@@ -35,7 +35,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.resourceloader.js");
+Engine.include("/engine.resourceloader.js");
 
 Engine.initObject("RemoteFileLoader", "ResourceLoader", function() {
 

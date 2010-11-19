@@ -32,7 +32,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.baseobject.js");
+Engine.include("/engine.baseobject.js");
 
 Engine.initObject("ResourceLoader", "BaseObject", function() {
 

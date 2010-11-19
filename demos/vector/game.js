@@ -38,10 +38,11 @@
 // Load required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/spatial/container.spatialgrid.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 Engine.include("/textrender/text.vector.js");
 Engine.include("/textrender/text.renderer.js");
 Engine.include("/resourceloaders/loader.sound.js");
+Engine.include("/sound/sound.sm2.js");
 
 // Load game objects
 Game.load("/rock.js");
@@ -423,8 +424,8 @@ var Spaceroids = Game.extend({
       // Prepare for keyboard input to start the game
       EventEngine.setHandler(document, "keypress", Spaceroids.onKeyPress);
 
-      // Load the sounds
-      this.soundLoader = SoundLoader.create();
+      // Load the sounds, use a SoundManager2 sound system
+      this.soundLoader = SoundLoader.create(new SoundSystemSM2());
       this.soundLoader.load("explode", this.getFilePath("resources/explode1.mp3"));
       this.soundLoader.load("shoot", this.getFilePath("resources/shoot.mp3"));
       this.soundLoader.load("death", this.getFilePath("resources/explode2.mp3"));

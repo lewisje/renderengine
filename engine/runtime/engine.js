@@ -2515,10 +2515,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          for (var x = 0; x < scripts.length; x++)
          {
             var src = scripts[x].src;
-            if (src != null && src.match(/(.*)\/engine\/(.*?)engine\.js/))
+				var m = src.match(/(.*\/engine)\/runtime\/engine\.js/);
+            if (src != null && m)
             {
                // Get the path
-               this.engineLocation = src.match(/(.*)\/engine\/(.*?)engine\.js/)[1];
+               this.engineLocation = m[1];
                break;
             }
          }
@@ -2623,9 +2624,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       this.loadStylesheet("/css/engine.css");
 
       // The basics needed by the engine to get started
-      this.loadNow("/engine/engine.game.js");
-      this.loadNow("/engine/engine.rendercontext.js");
-      this.loadNow("/engine/engine.pooledobject.js");
+      this.loadNow("/engine.game.js");
+      this.loadNow("/engine.rendercontext.js");
+      this.loadNow("/engine.pooledobject.js");
       this.loadNow("/rendercontexts/context.render2d.js");
       this.loadNow("/rendercontexts/context.htmlelement.js");
       this.loadNow("/rendercontexts/context.documentcontext.js");

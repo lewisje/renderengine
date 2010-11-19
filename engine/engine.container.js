@@ -31,8 +31,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.pooledobject.js");
-Engine.include("/engine/engine.baseobject.js");
+Engine.include("/engine.pooledobject.js");
+Engine.include("/engine.baseobject.js");
 
 Engine.initObject("Iterator", "PooledObject", function() {
 
@@ -123,12 +123,6 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
 			var o = this.p.ptr;
 			this.p = (this.r ? this.p.prev : this.p.next);
 
-			while (o != null && o.isDestroyed()) {
-				// See about the next in line
-				o = this.p ? this.p.ptr : null;
-				this.p = (o && this.r ? this.p.prev : this.p.next);
-			}
-
 			if (o != null) {
 				return o;
 			} else {
@@ -147,16 +141,15 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * @return {Boolean}
     */
    hasNext: function() {
-		var o = null;
 		// If the container hasn't been destroyed
 		if (this.c && !this.c.isDestroyed()) {
-			var o = this.p;
-			while (o != null && o.ptr != null && o.ptr.isDestroyed()) {
+			while (this.p != null && this.p.ptr != null && this.p.ptr.isDestroyed()) {
 				// Skip destroyed objects
-				o = (this.r ? o.prev : o.next);
+				this.p = (this.r ? this.p.prev : this.p.next);
 			}
+			return this.p != null;
 		}
-      return o != null;
+      return false;
    }
 
 }, /** @scope Iterator.prototype */{ 
@@ -568,14 +561,20 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 	 * For each object in the container, the function will be executed.
 	 * The function takes one argument: the object being processed.
 	 * Unless otherwise specified, <code>this</code> refers to the container.
+	 * <p/>
+	 * Returning <tt>false</tt> from <tt>fn</tt> will immediately halt any
+	 * further iteration over the container.
 	 * 
 	 * @param fn {Function} The function to execute for each object
 	 * @param [thisp] {Object} The object to use as <code>this</code> inside the function
 	 */
 	forEach: function(fn, thisp) {
 		var itr = this.iterator();
-		while (itr.hasNext()) {
-			fn.call(thisp || this, itr.next());
+		var result = true;
+		var hasMethod = thisp && thisp.isDestroyed;
+		while (itr.hasNext() && (hasMethod ? !thisp.isDestroyed() && result : result)) {
+			result = fn.call(thisp || this, itr.next());
+			result = (result == undefined ? true : result);
 		}
 		itr.destroy();
 	},

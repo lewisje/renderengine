@@ -2,7 +2,7 @@
 Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/resourceloaders/loader.image.js");
 Engine.include("/resourceloaders/loader.sound.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 
 // Load the game object

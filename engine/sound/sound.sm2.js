@@ -30,6 +30,7 @@
  *
  */
 
+Engine.include("/sound/sound.system.js");
 Engine.include("/libs/soundmanager2.js");
 Engine.include("/libs/AC_OETags.js");
 
@@ -104,93 +105,95 @@ Engine.initObject("SoundSystemSM2", "SoundSystem", function() {
 		},
 		
       retrieveSound: function(resourceLoader, name, url) {
+			var sound = this.base(resourceLoader, name, url);
+			
          // Only MP3 files are supported
          Assert(url.indexOf(".mp3") > 0, "Only MP3 sound format is supported!");
 
 			if (!this.init) {
-				return Sound.create(this, null);
+				return sound;
 			}
 
          // Create the sound object
-         var sound = this.soundManager.createSound({
+         var sm2sound = this.soundManager.createSound({
             "id": name,
             "url": url,
             "autoPlay": false,
             "autoLoad": true,
             "volume": 50
          });
-         var soundObj = Sound.create(this, sound);
-
-
+         sound.setSoundObject(sm2sound);
+			return sound;
       },
 		
 		destroySound: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 			sound.unload();
 		},
 		
 		playSound: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 	   	sound.play();
 		},
 
 		stopSound: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 			sound.stop();
 		},
 
 		pauseSound: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 			sound.pause();
 		},
 
 		resumeSound: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 			sound.resume();
 		},
 
 		muteSound: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 			sound.mute();
 		},
 
 		unmuteSound: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
          sound.unmute();
 		},
 
 		setSoundVolume: function(sound, volume) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
          sound.setVolume(volume);
 		},
 
 		setSoundPan: function(sound, pan) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 			sound.setPan(pan);
 		},
 		
 		setSoundPosition: function(sound, millisecondOffset) {
-			if (!(this.init || this.getReadyState(sound))) { return; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return; }
 			sound.setPosition(millisecondOffset);
 		},
 		
 		getSoundPosition: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return 0; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return 0; }
 	      return sound.position;
 		},
 		
 		getSoundSize: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return 0; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return 0; }
 	      return sound.bytesTotal;
 		},
 
 		getSoundDuration: function(sound) {
-			if (!(this.init || this.getReadyState(sound))) { return 0; }
+			if (!(this.init || this.getSoundReadyState(sound))) { return 0; }
 	      return sound.duration;
 		},
 		
 		getSoundReadyState: function(sound) {
 			if (!this.init) { return true; }
+			if (!sound) { return false; }
 	      return (sound.readyState == SoundSystemSM2.LOAD_SUCCESS);
 		}
    

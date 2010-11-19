@@ -175,7 +175,7 @@ var FNV1a32 = (function() {
 })();
 
 // Include engine files
-Engine.include("/engine/engine.pooledobject.js");
+Engine.include("/engine.pooledobject.js");
 
 Engine.initObject("FNV1Hash", "PooledObject", function() {
 
