@@ -32,7 +32,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.container.js");
+Engine.include("/engine.container.js");
 Engine.include("/components/component.base.js");
 Engine.include("/components/component.host.js");
 

@@ -33,8 +33,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.math2d.js");
-Engine.include("/engine/engine.pooledobject.js");
+Engine.include("/engine.math2d.js");
+Engine.include("/engine.pooledobject.js");
 Engine.include("/resourceloaders/loader.image.js");
 
 Engine.initObject("LevelLoader", "ImageLoader", function() {

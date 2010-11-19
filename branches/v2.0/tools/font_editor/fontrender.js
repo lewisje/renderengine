@@ -33,7 +33,7 @@
 
 Engine.include("/components/component.image.js");
 Engine.include("/components/component.transform2d.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 
 Engine.initObject("FontRender", "Object2D", function() {

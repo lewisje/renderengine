@@ -32,8 +32,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.events.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.events.js");
+Engine.include("/engine.timers.js");
 Engine.include("/components/component.input.js");
 
 Engine.initObject("MouseInputComponent", "InputComponent", function() {

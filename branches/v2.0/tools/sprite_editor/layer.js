@@ -31,8 +31,8 @@
  *
  */
 
-Engine.include("/engine/engine.object2d.js");
-Engine.include("/engine/engine.container.js");
+Engine.include("/engine.object2d.js");
+Engine.include("/engine.container.js");
 
 Engine.initObject("SpriteLayer", "Object2D", function() {
 

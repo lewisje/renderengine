@@ -2,10 +2,10 @@
 
 Engine.include("/rendercontexts/context.htmldivcontext.js");
 Engine.include("/resourceloaders/loader.object.js");
-Engine.include("/engine/engine.timers.js");
-Engine.include("/engine/engine.math2d.js");
+Engine.include("/engine.timers.js");
+Engine.include("/engine.math2d.js");
 Engine.include("/components/component.mouseinput.js");
-Engine.include("/engine/engine.events.js");
+Engine.include("/engine.events.js");
 
 
 Engine.initObject("IsometricMap", "BaseObject", function() {

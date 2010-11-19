@@ -32,7 +32,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.math2d.js");
+Engine.include("/engine.math2d.js");
 Engine.include("/components/component.render.js");
 
 Engine.initObject("SpriteComponent", "RenderComponent", function() {

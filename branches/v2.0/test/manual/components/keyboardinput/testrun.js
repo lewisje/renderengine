@@ -1,7 +1,7 @@
 
 Engine.include("/components/component.keyboardinput.js");
-Engine.include("/engine/engine.baseobject.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.baseobject.js");
+Engine.include("/engine.object2d.js");
 
 Engine.initObject("TestObject", "Object2D", function() {
 	

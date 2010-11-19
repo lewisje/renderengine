@@ -32,7 +32,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.events.js");
+Engine.include("/engine.events.js");
 Engine.include("/components/component.input.js");
 
 Engine.initObject("TouchInputComponent", "InputComponent", function() {

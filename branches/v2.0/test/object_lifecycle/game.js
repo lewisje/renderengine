@@ -33,8 +33,8 @@
 
 // Load all required engine components
 Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine/engine.timers.js");
-Engine.include("/engine/engine.hostobject.js");
+Engine.include("/engine.timers.js");
+Engine.include("/engine.hostobject.js");
 Engine.include("/components/component.logic.js");
 
 Engine.initObject("LifecycleTest", "Game", function(){

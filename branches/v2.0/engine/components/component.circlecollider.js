@@ -39,7 +39,8 @@ Engine.initObject("CircleColliderComponent", "CircleColliderComponent", function
 
 /**
  * @class An extension of the {@link ColliderComponent} which will check if the
- *        object's are colliding based on a bounding circle.  
+ *        object's are colliding based on a bounding circle.  If the bounding circle method
+ *			 isn't available, the bounding box will be used to approximate a bounding circle.
  *
  * @param name {String} Name of the component
  * @param collisionModel {SpatialCollection} The collision model
@@ -47,18 +48,44 @@ Engine.initObject("CircleColliderComponent", "CircleColliderComponent", function
  *
  * @extends ColliderComponent
  * @constructor
- * @description For this component to function, a movement vector must be available on the 
- *        host object by implementing the {@link Object2D#getVelocity} method which returns 
- *        a {@link Vector2D} instance.  Additionally the host object and collision object 
- *        must implement the {@link Object2D#getCircle} method which returns a 
- *        {@link Circle2D} instance.
+ * @description Creates a collider component for circle-circle collision testing.  Each object
+ *              must implement either the {@link Object2D#getWorldBox} or
+ *              {@link Object2D#getCircle} method and return a world-oriented bounding box or
+ *              circle, respectively.
  */
 var CircleColliderComponent = ColliderComponent.extend(/** @scope CircleColliderComponent.prototype */{
 
+	hasMethods: null,
+
    /**
-    * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision
-    * and the potential collision object.  The return value should either tell the collision
-    * tests to continue, or to stop.
+    * Releases the component back into the pool for reuse.  See {@link PooledObject#release}
+    * for more information.
+    */
+   release: function() {
+      this.base();
+		this.hasMethod = null;		
+	},
+
+	/**
+    * Establishes the link between this component and its host object.
+    * When you assign components to a host object, it will call this method
+    * so that each component can refer to its host object, the same way
+    * a host object can refer to a component with {@link HostObject#getComponent}.
+    *
+    * @param hostObject {HostObject} The object which hosts this component
+	 */
+	setHostObject: function(hostObj) {
+		this.base(hostObj);
+		this.hasMethods = [hostObj.getCircle != undefined, hostObj.getWorldBox != undefined]; // getCircle, getWorldBox
+		/* pragma:DEBUG_START */
+		AssertWarn(this.hasMethods[0] || this.hasMethods[1], "Object " + hostObj.toString() + " does not have getCircle() or getWorldBox() methods");
+		/* pragma:DEBUG_END */
+	},
+
+   /**
+    * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,
+    * the potential collision object, and the host and target masks.  The return value should 
+    * either tell the collision tests to continue, or to stop.
     * <p/>
     * A circular bounding area collision must occur to trigger the <tt>onCollide()</tt> method.
     *
@@ -76,12 +103,16 @@ var CircleColliderComponent = ColliderComponent.extend(/** @scope CircleCollider
 		var wBox, r;
 		
 		// Check for easy methods
-		if (host.getCircle) {
+		if (this.hasMethods[0]) {
 			hCircle.set(host.getCircle());
 		} else {
 			// Approximate a circle with the world box
-			wBox = host.getWorldBox ? host.getWorldBox() : null;
-			if (wBox == null) return ColliderComponent.CONTINUE;
+			wBox = this.hasMethods[1] ? host.getWorldBox() : null;
+			if (wBox == null) {
+				hCircle.destroy();
+				oCircle.destroy();
+				return ColliderComponent.CONTINUE;	// Can't perform check
+			}
 			r = wBox.get();
 			hCircle.set(wBox.getCenter(), r.w > r.h ? r.w / 2 : r.h / 2); 
 		}
@@ -91,16 +122,24 @@ var CircleColliderComponent = ColliderComponent.extend(/** @scope CircleCollider
 		} else {
 			// Approximate a circle with the world box
 			wBox = collisionObj.getWorldBox ? collisionObj.getWorldBox() : null;
-			if (wBox == null) return ColliderComponent.CONTINUE;
+			if (wBox == null) {
+				hCircle.destroy();
+				oCircle.destroy();
+				return ColliderComponent.CONTINUE;	// Can't perform check
+			}
 			r = wBox.get();
 			oCircle.set(wBox.getCenter(), r.w > r.h ? r.w / 2 : r.h / 2); 
 		}
 		
       // See if a collision will occur
       if (hCircle.isIntersecting(oCircle)) {
+      	hCircle.destroy();
+      	oCircle.destroy();
          return this.base(time, collisionObj, hostMask, targetMask);
       }
       
+		hCircle.destroy();
+		oCircle.destroy();
       return ColliderComponent.CONTINUE;
    }
 	

@@ -32,7 +32,7 @@
  */
 
 // Includes
-Engine.include("/engine/engine.hostobject.js");
+Engine.include("/engine.hostobject.js");
 
 Engine.initObject("Object2D", "HostObject", function() {
 

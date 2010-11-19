@@ -30,7 +30,7 @@
  *
  */
 
-Engine.include("/engine/engine.mathprimitives.js");
+Engine.include("/engine.mathprimitives.js");
 
 /**
  * Bin object used by convex hull method.

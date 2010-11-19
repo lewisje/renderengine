@@ -34,8 +34,8 @@
  */
 
 // Load all required engine components
-Engine.include("/engine/engine.math2d.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.math2d.js");
+Engine.include("/engine.timers.js");
 
 Game.load("/tilesets.js");
 Game.load("/isometricmap.js");

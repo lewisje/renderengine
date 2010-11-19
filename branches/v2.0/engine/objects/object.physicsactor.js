@@ -35,8 +35,8 @@ Engine.include("/components/component.boxbody.js");
 Engine.include("/components/component.distancejoint.js");
 Engine.include("/components/component.revolutejoint.js");
 
-Engine.include("/engine/engine.math2d.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.math2d.js");
+Engine.include("/engine.object2d.js");
 Engine.include("/resourceloaders/loader.object.js");
 
 Engine.initObject("PhysicsActor", "Object2D", function() {

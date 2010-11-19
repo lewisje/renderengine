@@ -31,8 +31,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.math2d.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.math2d.js");
+Engine.include("/engine.object2d.js");
 Engine.include("/components/component.transform2d.js");
 
 Engine.initObject("BaseUIElement", "Object2D", function() {

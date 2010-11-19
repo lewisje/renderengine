@@ -35,7 +35,7 @@
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.collider.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 Engine.initObject("SpaceroidsBullet", "Object2D", function() {
 
@@ -64,6 +64,7 @@ var SpaceroidsBullet = Object2D.extend({
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
       this.add(ColliderComponent.create("collide", this.field.collisionModel));
+		this.getComponent("collide").setCollisionMask(Math2.parseBin("100"));
 
       // Get the player's position and rotation,
       // then position this at the tip of the ship

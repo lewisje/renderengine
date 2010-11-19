@@ -32,8 +32,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.baseobject.js");
-Engine.include("/engine/engine.hostobject.js");
+Engine.include("/engine.baseobject.js");
+Engine.include("/engine.hostobject.js");
 
 Engine.initObject("BaseComponent", "BaseObject", function() {
 

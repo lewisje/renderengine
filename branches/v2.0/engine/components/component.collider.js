@@ -44,14 +44,19 @@ Engine.initObject("ColliderComponent", "BaseComponent", function() {
  *              certain criteria will be passed to an <tt>onCollide()</tt> method which
  *              must be implemented by the host object.
  *              <p/>
- *              The event handler will be passed the time the collision was detected
- *              as its first argument, and the potential collision object as the second.
+ *              The event handler will be passed the potential collision object
+ *              as its first argument, the time the collision was detected as the second,
+ *              and the target's collision mask as the third.
  *              The host must determine if the collision is valid for itself, and then
  *              return a value which indicates whether the component should contine to
  *              check for collisions, or if it should stop.
  *              <p/>
  *              If the <tt>onCollide()</tt> method is not implemented on the host, no 
  *              collision events will be passed.
+ *              <p/>
+ *              Additionally, the host can implement <tt>onCollideEnd()</tt> to be notified
+ *              when collisions have stopped.  The time the collisions stopped will be the
+ *              only argument.
  *
  * @param name {String} Name of the component
  * @param collisionModel {SpatialCollection} The collision model
@@ -66,6 +71,8 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
    collisionModel: null,
 	collideSelf: false,
+	hasCollideMethods: null,
+	didCollide: false,
 
    /**
     * @private
@@ -74,6 +81,8 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       this.base(name, BaseComponent.TYPE_COLLIDER, priority || 1.0);
       this.collisionModel = collisionModel;
 		this.collideSelf = false;
+		this.hasCollideMethods = [false,false];	// onCollide, onCollideEnd
+		this.didCollide = false;
    },
 
 	/**
@@ -87,6 +96,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 	setHostObject: function(hostObj) {
 		this.base(hostObj);
 		this.setCollisionMask(0x7FFFFFFF);
+		this.hasCollideMethods = [hostObj.onCollide != undefined, hostObj.onCollideEnd != undefined];
 	},
 
    /**
@@ -96,8 +106,9 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    release: function() {
       this.base();
       this.collisionModel = null;
-		this.setCollisionMask(0);
 		this.collideSelf = false;
+		this.hasCollideMethods = null;
+		this.didCollide = false;
    },
 
    /**
@@ -216,31 +227,51 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
       this.updateModel();
 
       // If the host object needs to know about collisions...
-      if (host.onCollide)
-      {
+		var pcl = null;
+      
+      // onCollide
+      if (this.hasCollideMethods[0]) {
+      	// Get the host's collision mask once
+			var hostMask = this.collisionModel.getObjectSpatialData(host, "collisionMask");
+      
          // Get the PCL and check for collisions
-         var pcl = this.getCollisionModel().getPCL(host.getPosition());
+         pcl = this.getCollisionModel().getPCL(host.getPosition());
          var status = ColliderComponent.CONTINUE;
+         var collisionsReported = 0;
+         this.didCollide = false;
+
 			pcl.forEach(function(obj) {
-				var hostMask = this.collisionModel.getObjectSpatialData(host, "collisionMask");
 				var targetMask = this.collisionModel.getObjectSpatialData(obj, "collisionMask");
             if ((hostMask & targetMask) <= hostMask && 
-					  status == ColliderComponent.CONTINUE) {
+					  status == ColliderComponent.CONTINUE ||
+					  status == ColliderComponent.COLLIDE_AND_CONTINUE) {
 
-               status = this.testCollision(time, obj, hostMask, targetMask); 
+					// Test for a collision
+               status = this.testCollision(time, obj, hostMask, targetMask);
+					
+					// If they don't return  any value, assume CONTINUE
+					status = (status == undefined ? ColliderComponent.CONTINUE : status);
+               
+					// Count actual collisions
+					collisionsReported += (status == ColliderComponent.STOP ||
+               							  status == ColliderComponent.COLLIDE_AND_CONTINUE ? 1 : 0);
             }
          }, this);
       }
+		
+		// onCollideEnd
+		if (!this.isDestroyed() && this.hasCollideMethods[1] && 
+			 this.didCollide && collisionsReported == 0) {
+			host.onCollideEnd(time);
+		}
    },
    
    /**
     * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,
-    * the potential collision object, and the collision object's flags.  The return value should 
+    * the potential collision object, and the host and target masks.  The return value should 
     * indicate if the collision tests should continue or stop.
     * <p/>
-    * If the host object implements <tt>onCollideEnd()</tt> and the we're not colliding with
-    * ourself or anything else, the method is triggered on the host.
-    * <p/>
+    * 
     * For <tt>ColliderComponent</tt> the collision test is up to the host object to determine.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
@@ -250,10 +281,10 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-		if (this.collideSelf || hostMask != targetMask) {
-      	return this.getHostObject().onCollide(collisionObj, time, targetMask);
-		} else if (this.getHostObject().onCollideEnd) {
-			return this.getHostObject().onCollideEnd(time);
+		if (!(this.collideSelf && this === collisionObj)) {
+			var test = this.getHostObject().onCollide(collisionObj, time, targetMask);
+			this.didCollide |= (test == ColliderComponent.STOP || ColliderComponent.COLLIDE_AND_CONTINUE);
+      	return test;
 		}
    }
 
@@ -270,18 +301,26 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
    /**
     * When <tt>onCollide()</tt> is called on the host object, it should
-    * return this value if it hasn't handled the collision, or if it wishes to be 
-    * notified about other potential collisions.
+    * return this value if it hasn't handled the collision, or if the host 
+    * wishes to be notified about other potential collisions.
     * @type {Number}
     */
    CONTINUE: 0,
 
    /**
     * When <tt>onCollide()</tt> is called on the host object, it should
-    * return this if no more collisions should be reported.
+    * return this if a collision occurred and no more collisions should be reported.
     * @type {Number}
     */
-   STOP: 1
+   STOP: 1,
+   
+   /**
+    * When <tt>onCollide()</tt> is called on the host object, it should
+    * return this value if a collision occurred but it hasn't handled the collision 
+    * or if the host wishes to be notified about other potential collisions.
+    * @type {Number}
+    */
+   COLLIDE_AND_CONTINUE: 2
 
 });
 

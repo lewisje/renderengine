@@ -31,8 +31,8 @@
  *
  */
 
-Engine.include("/engine/engine.timers.js");
-Engine.include("/engine/engine.pooledobject.js");
+Engine.include("/engine.timers.js");
+Engine.include("/engine.pooledobject.js");
 
 Engine.initObject("SoundSystem", null, function() {
 
@@ -63,19 +63,19 @@ Engine.initObject("SoundSystem", null, function() {
 		},
 		
 		makeReady: function() {
-			this.ready = true;
-			
 			// Retrieve queued sounds
 			var self = this;
 			Timeout.create("loadQueuedSounds", 100, function() {
-				var s = self.queuedSounds.shift();
-				self.retrieveSound(s.sLoader, s.sName, s.sUrl);
 				if (self.queuedSounds.length > 0) {
-					this.restart();
-				} else {
-					this.destroy();
+					while (self.queuedSounds.length > 0) {
+						var s = self.queuedSounds.shift();
+						self.retrieveSound(s.sLoader, s.sName, s.sUrl);
+					}
 				}
+
+				this.destroy();
 			});
+			this.ready = true;
 		},
 		
 		loadSound: function(resourceLoader, name, url) {
@@ -85,12 +85,14 @@ Engine.initObject("SoundSystem", null, function() {
 					sName: name,
 					sUrl: url
 				});
+				return Sound.create(this, null);
 			} else {
-				this.retrieveSound(resourceLoader, name, url);
+				return this.retrieveSound(resourceLoader, name, url);
 			}
 		},
 
 		retrieveSound: function(resourceLoader, name, url) {
+			return Sound.create(this, null);
 		},
 		
 		destroySound: function(sound) {
@@ -163,7 +165,7 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
    pan: -1,
    muted: false,
 	soundObj: null,
-	soundSyste: null,
+	soundSystem: null,
 
    /**
     * @private
@@ -198,6 +200,14 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
 		this.soundObj = null;
 		this.soundSystem = null;
    },
+
+	getSoundObject: function() {
+		return this.soundObj;
+	},
+
+	setSoundObject: function(soundObj) {
+		this.soundObj = soundObj;
+	},
 
    /**
     * Play the sound.  If the volume is specified, it will set volume of the

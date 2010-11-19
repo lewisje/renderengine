@@ -33,8 +33,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.math2d.js");
-Engine.include("/engine/engine.rendercontext.js");
+Engine.include("/engine.math2d.js");
+Engine.include("/engine.rendercontext.js");
 
 Engine.initObject("RenderContext2D", "RenderContext", function() {
 

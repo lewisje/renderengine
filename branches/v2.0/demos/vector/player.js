@@ -36,9 +36,9 @@ Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/components/component.collider.js");
-Engine.include("/engine/engine.object2d.js");
-Engine.include("/engine/engine.timers.js");
-Engine.include("/engine/engine.container.js");
+Engine.include("/engine.object2d.js");
+Engine.include("/engine.timers.js");
+Engine.include("/engine.container.js");
 
 Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
 
@@ -82,6 +82,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.add(Vector2DComponent.create("draw"));
       this.add(Vector2DComponent.create("thrust"));
       this.add(ColliderComponent.create("collider", this.field.collisionModel));
+		this.getComponent("collider").setCollisionMask(Math2.parseBin("010"));
 
       this.tip = Point2D.create(0, -1);
       this.players--;

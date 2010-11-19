@@ -36,7 +36,7 @@
 Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/spatial/container.spatialgrid.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 Engine.include("/physics/physics.simulation.js")
 Engine.include("/objects/object.physicsactor.js")
 Engine.include("/components/component.sprite.js")

@@ -2,7 +2,7 @@
 
 Engine.include("/resourceloaders/loader.image.js");
 Engine.include("/resourceloaders/loader.object.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 
 Engine.initObject("TileSets", "PooledObject", function() {

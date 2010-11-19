@@ -38,7 +38,7 @@ Engine.include("/rendercontexts/context.scrollingbackground.js");
 Engine.include("/resourceloaders/loader.sound.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/resourceloaders/loader.level.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 Engine.include("/objects/object.spriteactor.js");
 Engine.include("/objects/object.collisionbox.js");

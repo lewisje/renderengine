@@ -30,10 +30,9 @@
  *
  */
 
-Engine.include("/libs/soundmanager2.js");
-Engine.include("/libs/AC_OETags.js");
-Engine.include("/engine/engine.timers.js");
-Engine.include("/engine/engine.pooledobject.js");
+Engine.include("/sound/sound.system.js");
+Engine.include("/engine.timers.js");
+Engine.include("/engine.pooledobject.js");
 
 Engine.initObject("SoundSystemHTML5", "SoundSystem", function() {
 

@@ -39,7 +39,7 @@ Engine.include("/rendercontexts/context.canvascontext.js");
 Engine.include("/resourceloaders/loader.image.js");
 Engine.include("/textrender/text.renderer.js");
 Engine.include("/textrender/text.bitmap.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 Game.load("fontrender.js");
 
