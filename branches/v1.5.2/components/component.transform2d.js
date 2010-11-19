@@ -206,7 +206,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
 	 */
 	getScaleY: function() {
 		return this.scale[1];
-	}
+	},
 
    /**
     * Get the uniform scale of the transformation relative to the viewport.

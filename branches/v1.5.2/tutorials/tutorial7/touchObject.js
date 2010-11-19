@@ -39,7 +39,7 @@ Engine.initObject("TouchObject", "Object2D", function() {
 		   this.getComponent("move").setPosition(start);
 			
 			// Set the collision mask
-			this.getComponent("collide").setCollisionMask(touchable ? 1 : 8);
+			this.getComponent("collide").setCollisionMask(touchable ? Math2.parseBin("11") : "10");
 			this.color = touchable ? "#8c1717" : "#fcb514";
 
 		   // Set our bounding box so collision tests work
