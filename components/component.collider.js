@@ -248,14 +248,20 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
 					// Test for a collision
                status = this.testCollision(time, obj, hostMask, targetMask);
-               collisionsReported += (status == ColliderComponent.STOP ||
+					
+					// If they don't return  any value, assume CONTINUE
+					status = (status == undefined ? ColliderComponent.CONTINUE : status);
+               
+					// Count actual collisions
+					collisionsReported += (status == ColliderComponent.STOP ||
                							  status == ColliderComponent.COLLIDE_AND_CONTINUE ? 1 : 0);
             }
          }, this);
       }
 		
 		// onCollideEnd
-		if (this.hasCollideMethods[1] && this.didCollide && collisionsReported == 0) {
+		if (!this.isDestroyed() && this.hasCollideMethods[1] && 
+			 this.didCollide && collisionsReported == 0) {
 			host.onCollideEnd(time);
 		}
    },
