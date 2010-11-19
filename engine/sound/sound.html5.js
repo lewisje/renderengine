@@ -30,7 +30,7 @@
  *
  */
 
-Engine.include("/sound/sound.system.js");
+Engine.include("/engine.soundsystem.js");
 Engine.include("/engine.timers.js");
 Engine.include("/engine.pooledobject.js");
 

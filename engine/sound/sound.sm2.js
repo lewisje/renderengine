@@ -30,7 +30,7 @@
  *
  */
 
-Engine.include("/sound/sound.system.js");
+Engine.include("/engine.soundsystem.js");
 Engine.include("/libs/soundmanager2.js");
 Engine.include("/libs/AC_OETags.js");
 
