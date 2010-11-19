@@ -171,7 +171,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getLastPosition">getLastPosition</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the last position of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the last position of the transformation relative to the world.
  
          </td>
       </tr>
@@ -185,7 +185,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getLastRenderPosition">getLastRenderPosition</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the last position of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the last position of the transformation relative to the viewport.
  
          </td>
       </tr>
@@ -199,7 +199,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getPosition">getPosition</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the position of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the position of the transformation relative to the world.
  
          </td>
       </tr>
@@ -213,7 +213,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getRenderPosition">getRenderPosition</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the render position of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Returns the position of the transformation relative to the viewport.
  
          </td>
       </tr>
@@ -227,7 +227,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getRenderRotation">getRenderRotation</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the render rotation of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the rotation of the transformation relative to the viewport.
  
          </td>
       </tr>
@@ -241,7 +241,35 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getRenderScale">getRenderScale</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the uniform render scale of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the uniform scale of the transformation relative to the viewport.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRenderScaleX">getRenderScaleX</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the uniform scale of the transformation relative to the viewport along the X-axis.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getRenderScaleY">getRenderScaleY</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the uniform scale of the transformation relative to the viewport along the Y-axis.
  
          </td>
       </tr>
@@ -255,7 +283,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getRotation">getRotation</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the rotation of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the rotation of the transformation.
  
          </td>
       </tr>
@@ -269,7 +297,35 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#getScale">getScale</a></b>() </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the uniform scale of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the uniform scale of the transformation.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getScaleX">getScaleX</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the non-uniform scale along the X-axis of the transformation.
+ 
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>
+            &nbsp;Number
+            </code></font> 
+         </td>
+         <td>
+            <code> <b> <a href="#getScaleY">getScaleY</a></b>() </code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Get the non-uniform scale along the Y-axis of the transformation.
  
          </td>
       </tr>
@@ -293,7 +349,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#setLastPosition">setLastPosition</a></b>(point) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the last position that the transform was at.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the last position that the transformation was at.
  
          </td>
       </tr>
@@ -317,7 +373,7 @@ A simple component that maintains position, rotation, and scale.</p>
          <td>
             <code> <b> <a href="#setRotation">setRotation</a></b>(rotation) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the rotation of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the rotation of the transformation.
  
          </td>
       </tr>
@@ -327,9 +383,9 @@ A simple component that maintains position, rotation, and scale.</p>
             <font size="-1"><code></code></font> 
          </td>
          <td>
-            <code> <b> <a href="#setScale">setScale</a></b>(scale) </code> 
+            <code> <b> <a href="#setScale">setScale</a></b>(scaleX, scaleY) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the uniform scale of the transform.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Set the scale of the transform.
  
          </td>
       </tr>
@@ -556,7 +612,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getLastPosition"> </a> <h3>getLastPosition</h3>
       <pre>Point2D&nbsp;<b>getLastPosition</b>()</pre> 
    <ul>
-      Get the last position of the transform.
+      Get the last position of the transformation relative to the world.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -577,7 +633,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getLastRenderPosition"> </a> <h3>getLastRenderPosition</h3>
       <pre>Point2D&nbsp;<b>getLastRenderPosition</b>()</pre> 
    <ul>
-      Get the last position of the transform.
+      Get the last position of the transformation relative to the viewport.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -598,7 +654,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getPosition"> </a> <h3>getPosition</h3>
       <pre>Point2D&nbsp;<b>getPosition</b>()</pre> 
    <ul>
-      Returns the position of the transform.
+      Returns the position of the transformation relative to the world.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -619,7 +675,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getRenderPosition"> </a> <h3>getRenderPosition</h3>
       <pre>Point2D&nbsp;<b>getRenderPosition</b>()</pre> 
    <ul>
-      Returns the render position of the transform.
+      Returns the position of the transformation relative to the viewport.  If the world iscomprised of multiple viewports (wide and/or tall) the render positionis relative to the current viewport's position.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -640,7 +696,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getRenderRotation"> </a> <h3>getRenderRotation</h3>
       <pre>Number&nbsp;<b>getRenderRotation</b>()</pre> 
    <ul>
-      Get the render rotation of the transform.
+      Get the rotation of the transformation relative to the viewport.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -661,7 +717,49 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getRenderScale"> </a> <h3>getRenderScale</h3>
       <pre>Number&nbsp;<b>getRenderScale</b>()</pre> 
    <ul>
-      Get the uniform render scale of the transform.
+      Get the uniform scale of the transformation relative to the viewport.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getRenderScaleX"> </a> <h3>getRenderScaleX</h3>
+      <pre>Number&nbsp;<b>getRenderScaleX</b>()</pre> 
+   <ul>
+      Get the uniform scale of the transformation relative to the viewport along the X-axis.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getRenderScaleY"> </a> <h3>getRenderScaleY</h3>
+      <pre>Number&nbsp;<b>getRenderScaleY</b>()</pre> 
+   <ul>
+      Get the uniform scale of the transformation relative to the viewport along the Y-axis.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -682,7 +780,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getRotation"> </a> <h3>getRotation</h3>
       <pre>Number&nbsp;<b>getRotation</b>()</pre> 
    <ul>
-      Get the rotation of the transform.
+      Get the rotation of the transformation.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -703,7 +801,49 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="getScale"> </a> <h3>getScale</h3>
       <pre>Number&nbsp;<b>getScale</b>()</pre> 
    <ul>
-      Get the uniform scale of the transform.
+      Get the uniform scale of the transformation.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getScaleX"> </a> <h3>getScaleX</h3>
+      <pre>Number&nbsp;<b>getScaleX</b>()</pre> 
+   <ul>
+      Get the non-uniform scale along the X-axis of the transformation.
+      
+   </ul>
+   <!-- METHOD PARAMETERS START -->
+   
+   
+   <!-- METHOD PARAMETERS END -->
+   <!-- ADDITIONAL ATTRIBUTES START -->
+   <ul>
+      <b>Returns:</b>
+      <ul>
+         <code><i>Number</i>&nbsp;</code> 
+      </ul>
+   </ul>
+   
+   <!-- ADDITIONAL ATTRIBUTES  END -->
+   <hr>
+
+   <a name="getScaleY"> </a> <h3>getScaleY</h3>
+      <pre>Number&nbsp;<b>getScaleY</b>()</pre> 
+   <ul>
+      Get the non-uniform scale along the Y-axis of the transformation.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -740,7 +880,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="setLastPosition"> </a> <h3>setLastPosition</h3>
       <pre><b>setLastPosition</b>(point)</pre> 
    <ul>
-      Set the last position that the transform was at.
+      Set the last position that the transformation was at.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -782,7 +922,7 @@ A simple component that maintains position, rotation, and scale.</p>
    <a name="setRotation"> </a> <h3>setRotation</h3>
       <pre><b>setRotation</b>(rotation)</pre> 
    <ul>
-      Set the rotation of the transform.
+      Set the rotation of the transformation.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -801,16 +941,19 @@ A simple component that maintains position, rotation, and scale.</p>
    <hr>
 
    <a name="setScale"> </a> <h3>setScale</h3>
-      <pre><b>setScale</b>(scale)</pre> 
+      <pre><b>setScale</b>(scaleX, scaleY)</pre> 
    <ul>
-      Set the uniform scale of the transform.  The uniformscale applies to both the X and Y axis.
+      Set the scale of the transform.  You can apply a uniform scale byassigning only the first argument a value.  To use a non-uniform scale,use both the X and Y arguments.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
    <ul>
       <b>Parameters:</b>
       <ul>
-         <code>[<i>Number</i>]&nbsp;scale </code> - The scale of the transform with 1.0 being 100% 
+         <code>[<i>Number</i>]&nbsp;scaleX </code> - The scale of the transformation along the X-axis with 1.0 being 100% 
+      </ul>
+      <ul>
+         <code>[<i>Number</i>]&nbsp;scaleY </code> - The scale of the transformation along the Y-axis. If provided, a 			non-uniform scale can be achieved by using a number which differs from the X-axis. 
       </ul>
    </ul>
    
@@ -832,6 +975,6 @@ A simple component that maintains position, rotation, and scale.</p>
 
    <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:43 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Thu Nov 18 2010 19:08:59 GMT-0500 (EST)</div>
 </body>
 </html>

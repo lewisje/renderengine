@@ -100,9 +100,20 @@ Creates a collider component which tests the collision model for             po
             <font size="-1"><code>Number</code></font>
          </td>
          <td>
+            <code><b><a href="#COLLIDE_AND_CONTINUE">COLLIDE_AND_CONTINUE</a></b></code> 
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When <tt>onCollide()</tt> is called on the host object, it shouldreturn this value if a collision occurred but it hasn't handled the collision or if the host wishes to be notified about other potential collisions.
+         </td>
+      </tr>
+   
+      <tr bgcolor="white" class="TableRowColor">
+         <td align="right" valign="top" width="1%">
+            <font size="-1"><code>Number</code></font>
+         </td>
+         <td>
             <code><b><a href="#CONTINUE">CONTINUE</a></b></code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When <tt>onCollide()</tt> is called on the host object, it shouldreturn this value if it hasn't handled the collision, or if it wishes to be notified about other potential collisions.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When <tt>onCollide()</tt> is called on the host object, it shouldreturn this value if it hasn't handled the collision, or if the host wishes to be notified about other potential collisions.
          </td>
       </tr>
    
@@ -113,7 +124,7 @@ Creates a collider component which tests the collision model for             po
          <td>
             <code><b><a href="#STOP">STOP</a></b></code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When <tt>onCollide()</tt> is called on the host object, it shouldreturn this if no more collisions should be reported.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;When <tt>onCollide()</tt> is called on the host object, it shouldreturn this if a collision occurred and no more collisions should be reported.
          </td>
       </tr>
    
@@ -322,7 +333,7 @@ Creates a collider component which tests the collision model for             po
          <td>
             <code> <b> <a href="#testCollision">testCollision</a></b>(time, collisionObj, hostMask, targetMask) </code> 
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,the potential collision object, and the collision object's flags.
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,the potential collision object, and the host and target masks.
  
          </td>
       </tr>
@@ -449,12 +460,23 @@ Creates a collider component which tests the collision model for             po
 
 
    <!-- One single method detail entry -->
+   <a name="COLLIDE_AND_CONTINUE">
+   <!-- -->
+   </a> <h3>COLLIDE_AND_CONTINUE</h3>
+      <pre>Number <b>COLLIDE_AND_CONTINUE</b></pre> 
+   <ul>
+      When <tt>onCollide()</tt> is called on the host object, it shouldreturn this value if a collision occurred but it hasn't handled the collision or if the host wishes to be notified about other potential collisions.
+      
+   </ul>
+   <hr>
+
+   <!-- One single method detail entry -->
    <a name="CONTINUE">
    <!-- -->
    </a> <h3>CONTINUE</h3>
       <pre>Number <b>CONTINUE</b></pre> 
    <ul>
-      When <tt>onCollide()</tt> is called on the host object, it shouldreturn this value if it hasn't handled the collision, or if it wishes to be notified about other potential collisions.
+      When <tt>onCollide()</tt> is called on the host object, it shouldreturn this value if it hasn't handled the collision, or if the host wishes to be notified about other potential collisions.
       
    </ul>
    <hr>
@@ -465,7 +487,7 @@ Creates a collider component which tests the collision model for             po
    </a> <h3>STOP</h3>
       <pre>Number <b>STOP</b></pre> 
    <ul>
-      When <tt>onCollide()</tt> is called on the host object, it shouldreturn this if no more collisions should be reported.
+      When <tt>onCollide()</tt> is called on the host object, it shouldreturn this if a collision occurred and no more collisions should be reported.
       
    </ul>
    <hr>
@@ -784,7 +806,7 @@ Creates a collider component which tests the collision model for             po
    <a name="testCollision"> </a> <h3>testCollision</h3>
       <pre>Number&nbsp;<b>testCollision</b>(time, collisionObj, hostMask, targetMask)</pre> 
    <ul>
-      Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,the potential collision object, and the collision object's flags.  The return value should indicate if the collision tests should continue or stop.<p/>If the host object implements <tt>onCollideEnd()</tt> and the we're not colliding withourself or anything else, the method is triggered on the host.<p/>For <tt>ColliderComponent</tt> the collision test is up to the host object to determine.
+      Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,the potential collision object, and the host and target masks.  The return value should indicate if the collision tests should continue or stop.<p/>For <tt>ColliderComponent</tt> the collision test is up to the host object to determine.
       
    </ul>
    <!-- METHOD PARAMETERS START -->
@@ -843,6 +865,6 @@ Creates a collider component which tests the collision model for             po
 
    <div class="jsdoc_copy">The Render Engine &copy;2008-2010 Brett Fattori, All Rights Reserved</div>
 
-<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Wed Nov 17 2010 19:58:44 GMT-0500 (EST)</div>
+<div class="jsdoc_ctime">Documentation generated by <a href="http://jsdoctoolkit.org/" target="_parent">JsDoc Toolkit</a> 1.4.1b on Thu Nov 18 2010 19:08:59 GMT-0500 (EST)</div>
 </body>
 </html>
