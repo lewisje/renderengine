@@ -95,48 +95,113 @@ Engine.initObject("SoundSystem", null, function() {
 			return Sound.create(this, null);
 		},
 		
+		/**
+		 * [ABSTRACT] Destroy the given sound object
+		 * @param sound {Sound} The sound object
+		 */
 		destroySound: function(sound) {
 		},
 		
+		/**
+		 * [ABSTRACT] Play the given sound object
+		 * @param sound {Sound} The sound object
+		 */
 		playSound: function(sound) {
 		},
 
+		/**
+		 * [ABSTRACT] Stop the given sound object
+		 * @param sound {Sound} The sound object
+		 */
 		stopSound: function(sound) {
 		},
 
+		/**
+		 * [ABSTRACT] Pause the given sound object
+		 * @param sound {Sound} The sound object
+		 */
 		pauseSound: function(sound) {
 		},
 
+		/**
+		 * [ABSTRACT] Resume the given sound object
+		 * @param sound {Sound} The sound object
+		 */
 		resumeSound: function(sound) {
 		},
 
+		/**
+		 * [ABSTRACT] Mute the given sound object
+		 * @param sound {Sound} The sound object
+		 */
 		muteSound: function(sound) {
 		},
 
+		/**
+		 * [ABSTRACT] Unmute the given sound object
+		 * @param sound {Sound} The sound object
+		 */
 		unmuteSound: function(sound) {
 		},
 
+		/**
+		 * [ABSTRACT] Set the volume of the given sound object
+		 * @param sound {Sound} The sound object
+		 * @param volume {Number} A value between 0 and 100, with 0 being muted
+		 */
 		setSoundVolume: function(sound, volume) {
 		},
 
+		/**
+		 * [ABSTRACT] Pan the given sound object from left to right
+		 * @param sound {Sound} The sound object
+		 * @param pan {Number} A value between -100 and 100, with -100 being full left
+		 * 		and zero being center
+		 */
 		setSoundPan: function(sound, pan) {
 		},
 		
+		/**
+		 * [ABSTRACT] Set the position, within the sound's length, to play at
+		 * @param sound {Sound} The sound object
+		 * @param millisecondOffset {Number} The millisecond offset from the start of
+		 * 		the sounds duration
+		 */
 		setSoundPosition: function(sound, millisecondOffset) {
 		},
 
+		/**
+		 * [ABSTRACT] Get the position, in milliseconds, within a playing or paused sound
+		 * @param sound {Sound} The sound object
+		 * @return {Number}
+		 */
 		getSoundPosition: function(sound) {
 	      return 0;
 		},
 		
+		/**
+		 * [ABSTRACT] Get the size of the sound object, in bytes
+		 * @param sound {Sound} The sound object
+		 * @return {Number}
+		 */
 		getSoundSize: function(sound) {
 			return 0;
 		},
 
+		/**
+		 * [ABSTRACT] Get the length (duration) of the sound object, in milliseconds
+		 * @param sound {Sound} The sound object
+		 * @return {Number}
+		 */
 		getSoundDuration: function(sound) {
 			return 0;
 		},
 		
+		/**
+		 * [ABSTRACT] Determine if the sound object is ready to be used
+		 * @param sound {Sound} The sound object
+		 * @return {Boolean} <code>true</code> if the sound is ready
+		 */
 		getSoundReadyState: function(sound) {
 			return false;
 		}
@@ -201,10 +266,18 @@ var Sound = PooledObject.extend(/** @scope Sound.prototype */{
 		this.soundSystem = null;
    },
 
+	/**
+	 * Get the native sound object which was created by the subclassed sound system.
+	 * @return {Object}
+	 */
 	getSoundObject: function() {
 		return this.soundObj;
 	},
 
+	/**
+	 * Set the sound object which the subclassed sound system created.
+	 * @param soundObj {Object} The sound's native object
+	 */
 	setSoundObject: function(soundObj) {
 		this.soundObj = soundObj;
 	},
