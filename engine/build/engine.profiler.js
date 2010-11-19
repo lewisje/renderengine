@@ -68,7 +68,22 @@ Profiler.stop = function() {
 };
 
 /**
- * Add a profile monitor to the stack of running profiles.
+ * Add a profile monitor to the stack of running profiles.  A good way to profile code
+ * is to use the <tt>try/finally</tt> method so that the profile will be exited even
+ * if the method returns from multiple points.
+<pre>
+   function func() {
+      try {
+         Profiler.enter("func");
+         
+         doStuff = doStuff + 1;
+         return doStuff;
+      } finally {
+         Profiler.exit();
+      }
+   }
+</pre>
+ *
  * @param prof {String} The name of the profile
  * @memberOf Profiler
  */

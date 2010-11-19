@@ -138,6 +138,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  *        "debug-console" will be created an appended to the DOM for you.  This object is created when no other
  *        option is available from the browser, or when developer tools cannot be accessed.
  * @extends ConsoleRef
+ * @private
  */
 var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
@@ -268,6 +269,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 /**
  * @class A debug console abstraction for Safari browsers.
  * @extends ConsoleRef
+ * @private
  */
 var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
@@ -316,6 +318,7 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 /**
  * @class A debug console for Opera browsers.
  * @extends ConsoleRef
+ * @private
  */
 var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
@@ -365,6 +368,7 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 /**
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
  * @extends ConsoleRef
+ * @private
  */
 var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
@@ -437,6 +441,7 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 /**
  * @class A console reference to the MSIE console.
  * @extends ConsoleRef
+ * @private
  */
 var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
 
@@ -490,6 +495,7 @@ var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
  *        <li>HTMLConsoleRef - logs to an HTML div element in the body</li>
  *        <li>SafariConsoleRef - logging for Apple's Safari browser</li>
  *        </ul>
+ * @static
  */
 var Console = Base.extend(/** @scope Console.prototype */{
    constructor: null,

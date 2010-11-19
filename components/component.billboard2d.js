@@ -207,14 +207,12 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
 			this.renderComponent.execute(renderContext, time);
 		}
 			
-      /* pragma:DEBUG_START */
       // Debug the collision node
       if (Engine.getDebugMode())
       {
          renderContext.setLineStyle("blue");
          renderContext.drawRectangle(this.getHostObject().getBoundingBox());
       }
-      /* pragma:DEBUG_END */
    }
 
 }, /** @scope Billboard2DComponent.prototype */{ 
