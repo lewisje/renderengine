@@ -82,6 +82,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.add(Vector2DComponent.create("draw"));
       this.add(Vector2DComponent.create("thrust"));
       this.add(ColliderComponent.create("collider", this.field.collisionModel));
+		this.getComponent("collider").setCollisionMask(Math2.parseBin("010"));
 
       this.tip = Point2D.create(0, -1);
       this.players--;

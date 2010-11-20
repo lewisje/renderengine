@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v2.0.0.1a
- * date: Oct 9, 2010
+ * version: v1.5.3
+ * date: November 20, 2010
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -36,8 +36,8 @@
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1449 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -169,6 +169,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  *        "debug-console" will be created an appended to the DOM for you.  This object is created when no other
  *        option is available from the browser, or when developer tools cannot be accessed.
  * @extends ConsoleRef
+ * @private
  */
 var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
@@ -299,6 +300,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 /**
  * @class A debug console abstraction for Safari browsers.
  * @extends ConsoleRef
+ * @private
  */
 var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
@@ -347,6 +349,7 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 /**
  * @class A debug console for Opera browsers.
  * @extends ConsoleRef
+ * @private
  */
 var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 
@@ -396,6 +399,7 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
 /**
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
  * @extends ConsoleRef
+ * @private
  */
 var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 
@@ -468,6 +472,7 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
 /**
  * @class A console reference to the MSIE console.
  * @extends ConsoleRef
+ * @private
  */
 var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
 
@@ -521,6 +526,7 @@ var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
  *        <li>HTMLConsoleRef - logs to an HTML div element in the body</li>
  *        <li>SafariConsoleRef - logging for Apple's Safari browser</li>
  *        </ul>
+ * @static
  */
 var Console = Base.extend(/** @scope Console.prototype */{
    constructor: null,
@@ -558,12 +564,14 @@ var Console = Base.extend(/** @scope Console.prototype */{
    DEBUGLEVEL_NONE:       -1,
 
    /** @private */
-   verbosity: this.DEBUGLEVEL_NONE,
+   verbosity: null,
 
    /**
     * Starts up the console.
     */
    startup: function() {
+		Console.verbosity = this.DEBUGLEVEL_ERRORS;
+		
       if (EngineSupport.checkBooleanParam("debug") && (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          this.consoleRef = new HTMLConsoleRef();
       }
@@ -677,7 +685,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
    },
 
    /**
-    * Output an error message.  These messages will only show when <tt>DEBUGLEVEL_ERRORS</tt> is the level.
+    * Output an error message.  These messages always appear unless the debug level is explicitly
+    * set to <tt>DEBUGLEVEL_NONE</tt>.
     * You can pass as many parameters as you want to this method.  The parameters will be combined into
     * one message to output to the console.
     */
@@ -762,8 +771,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1449 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -797,7 +806,7 @@ function now() {
 
 /**
  * @class A static JavaScript implementation of a simple profiler.
- * @constructor
+ * @static
  */
 var Profiler = {
 	profileStack: [],
@@ -808,6 +817,7 @@ var Profiler = {
 
 /**
  * Start the profiler.
+ * @memberOf Profiler
  */
 Profiler.start = function() {
 	Profiler.resetProfiles();
@@ -816,6 +826,7 @@ Profiler.start = function() {
 
 /**
  * Stop the profiler, dumping whatever was being profiled.
+ * @memberOf Profiler
  */
 Profiler.stop = function() {
 	Profiler.dump();
@@ -823,8 +834,24 @@ Profiler.stop = function() {
 };
 
 /**
- * Add a profile monitor to the stack of running profiles.
+ * Add a profile monitor to the stack of running profiles.  A good way to profile code
+ * is to use the <tt>try/finally</tt> method so that the profile will be exited even
+ * if the method returns from multiple points.
+<pre>
+   function func() {
+      try {
+         Profiler.enter("func");
+         
+         doStuff = doStuff + 1;
+         return doStuff;
+      } finally {
+         Profiler.exit();
+      }
+   }
+</pre>
+ *
  * @param prof {String} The name of the profile
+ * @memberOf Profiler
  */
 Profiler.enter = function(prof) {
 	if (!Profiler.running) { return; }
@@ -853,6 +880,7 @@ Profiler.enter = function(prof) {
  * you properly balance your profile stack.  Too many "exit" calls
  * will result in a stack underflow. Missing calls to "exit" will
  * result in a stack overflow.
+ * @memberOf Profiler
  */
 Profiler.exit = function() {
 	if (!Profiler.running) { return; }
@@ -876,6 +904,7 @@ Profiler.exit = function() {
 
 /**
  * Reset any currently running profiles and clear the stack.
+ * @memberOf Profiler
  */
 Profiler.resetProfiles = function() {
 	Profiler.profileStack = [];
@@ -886,6 +915,7 @@ Profiler.resetProfiles = function() {
 /**
  * Dump the profiles that are currently in the stack to a debug window.
  * The profile stack will be cleared after the dump.
+ * @memberOf Profiler
  */
 Profiler.dump = function() {
 	if (!Profiler.running) { return; }
@@ -925,7 +955,7 @@ Profiler.dump = function() {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1216 $
+ * @version: $Revision: 1442 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -976,7 +1006,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	},
 	
 	/**
-	 * Get a random integer from the pseduo random number generator.
+	 * Returns a random integer between 0 and 4,294,967,296.
 	 * @return {Number} An integer between 0 and 2^32
 	 */
 	randomInt: function() {
@@ -985,12 +1015,62 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	},
 	
 	/**
-	 * Get a random float between 0 (inclusive) and 1 (exclusive)
+	 * Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
 	 * @return {Number} A number between 0 and 1
 	 */
 	random: function() {
 		// returns in range [0,1]
 		return this.randomInt() / (this.m - 1);
+	},
+	
+	/**
+	 * Return a random value within the <tt>low</tt> to <tt>hight</tt> range,
+	 * optionally as an integer value only.
+	 *
+	 * @param low {Number} The low part of the range
+	 * @param high {Number} The high part of the range
+	 * @param [whole] {Boolean} Return whole values only
+	 * @return {Number}
+	 */
+	randomRange: function(low, high, whole) {
+		var v = low + (this.random() * high);
+		return (whole ? Math.floor(v) : v);
+	},
+	
+	/**
+	 * Parse a binary string into a number.
+	 * 
+	 * @param bin {String} Binary string to parse
+	 * @return {Number}
+	 */
+	parseBin: function(bin) {
+		if (!isNaN(bin)) {
+			return parseInt(bin, 2);
+		}
+	},
+	
+	/**
+	 * Converts a number to a hexidecimal string, prefixed by "0x".
+	 *
+	 * @param num {Number} The number to convert
+	 * @return {String}
+	 */
+	toHex: function(num) {
+		if (!isNaN(num)) {
+			return ("0x" + num.toString(16));
+		}
+	},
+	
+	/**
+	 * Converts a number to a binary string.
+	 *
+	 * @param num {Number} The number to convert
+	 * @return {String}
+	 */
+	toBinary: function(num) {
+		if (!isNaN(num)) {
+			return num.toString(2);
+		}
 	}
 });
 
@@ -1006,7 +1086,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1325 $
+ * @version: $Revision: 1408 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1411,6 +1491,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
       }
    },
 
+	/**
+	 * Determine the OS platform from the user agent string, if possible
+	 * @private
+    * @memberOf EngineSupport
+	 */
 	checkOS: function() {
 		// Scrape the userAgent to get the OS
 		var uA = navigator.userAgent.toLowerCase();
@@ -1459,6 +1544,18 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *       <li>database - indexedDB storage is supported</li>
     *       </ul>
     *    </li>
+    *    <li>canvas:
+    *       <ul><li>emulated - Canvas support emulated by FlashCanvas</li>
+    *       <li>defined - Canvas is either native or emulated</li>
+    *       <li>text - Supports text</li>
+    *       <li>textMetrics - Supports text measurement</li>
+    *			<li>contexts:
+    *      		<ul><li>ctx2D - Supports 2D</li>
+    *				<li>ctxGL - Supports webGL</li>
+    *				</ul>
+    *			</li>
+    *       </ul>
+    *    </li>
     *    </ul>
     * </li>
     * </ul>
@@ -1467,6 +1564,51 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    sysInfo: function() {
       if (!EngineSupport._sysInfo) {
+      	
+      	// Determine if the browser supports Canvas
+      	var canvasSupport = {
+      		emulated: false,
+      		defined: false,
+      		text: false,
+      		textMetrics: false,
+      		contexts: {
+      			ctx2D: false,
+      			ctxGL: false
+      		}
+      	};
+      	if (document.addEventListener) {
+      		// Standards browsers
+      		var canvas = document.createElement("canvas");
+      		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
+      			canvasSupport.defined = true;
+	      		var c2d = canvas.getContext("2d");
+	      		if (typeof c2d != "undefined") {
+	      			canvasSupport.contexts.ctx2D = true;
+	      			
+						// Does it support native text
+						canvasSupport.text = (typeof c2d.fillText == "function");
+						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
+					}
+	      		
+					try {
+		      		var webGL = canvas.getContext("glcanvas");
+		      		if (typeof webGL != "undefined") {
+		      			canvasSupport.contexts.ctxGL = true;
+		      		}
+					} catch (ex) { /* no webgl */ }
+	      	}
+      	}
+			
+			if (typeof FlashCanvas != "undefined") {
+				// If FlashCanvas is loaded, setup for emulation
+      		canvasSupport.emulated = true;
+      		canvasSupport.defined = true;
+      		canvasSupport.contexts.ctx2D = true;
+      		canvasSupport.text = true;
+				canvasSupport.textMetrics = true;
+			}
+      	      
+      	// Build support object
          EngineSupport._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
 				           ($.browser.android ? "android" :
@@ -1495,16 +1637,18 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                   "session" : (typeof sessionStorage !== "undefined"),
                   "database": (typeof indexedDB !== "undefined")
                } : null),
-               "geo": (typeof navigator.geolocation !== "undefined")
+               "geo": (typeof navigator.geolocation !== "undefined"),
+               "canvas" : canvasSupport
             }
          };
+         
          $(document).ready(function() {
             // When the document is ready, we'll go ahead and get the width and height added in
             EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
-               "width": window.innerWidth || document.body ? document.body.parentNode.clientWidth : -1,
-               "height": window.innerHeight || document.body ? document.body.parentNode.clientHeight : -1,
-               "viewWidth": window.innerWidth,
-               "viewHeight" : window.innerHeight
+               "width": $(window).width(),
+               "height": $(window).height(),
+               "viewWidth": $(document).width(),
+               "viewHeight" : $(document).height()
             });
          });
       }
@@ -1535,9 +1679,9 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1288 $
+ * @version: $Revision: 1425 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -2088,8 +2232,8 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1380 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1450 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2137,7 +2281,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v2.0.0.1a",
+   version: "v1.5.3",
 
    constructor: null,
 
@@ -2235,7 +2379,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Check for general version specific options
 		if (opts["versions"]) {
 			for (var v in opts["versions"]) {
-				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					versionDefaults = opts["versions"][v];
 				}
@@ -2245,7 +2389,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Finally, check the OS for version specific options
 		if (osOpts && osOpts["versions"]) {
 			for (var v in osOpts["versions"]) {
-				if (EngineSupport.sysInfo().version.indexOf(v) == 0) {
+				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					platformVersions = osOpts["versions"][v];
 				}
@@ -2816,7 +2960,231 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 			Profiler.exit();
 		}
 		/* pragma:DEBUG_END */
-   }
+   },
+	
+	// ======================================================
+	// Declarations here only for documentation purposes
+	// See engine.script.js
+	// ======================================================
+	
+   /**
+    * Status message when a script is not found
+    * @type Boolean
+    * @memberOf Engine
+    * @field
+    */
+   SCRIPT_NOT_FOUND: false,
+   
+   /**
+    * Status message when a script is successfully loaded
+    * @type Boolean
+    * @memberOf Engine
+    * @field
+    */
+   SCRIPT_LOADED: true,
+
+   /**
+    * Include a script file.  This is the method used to load additional
+    * script files, relative to the engine's location.
+<pre>
+	Engine.include("/rendercontexts/context.canvascontext.js");
+</pre>
+    *
+    * @param scriptURL {String} The URL of the script file
+    * @memberOf Engine
+    * @function
+    */
+   include: null,
+
+   /**
+    * Queue a script to load from the server and append it to
+    * the head element of the browser.  Script names are
+    * cached so they will not be loaded again.  Each script in the
+    * queue is processed synchronously.
+    *
+    * @param scriptPath {String} The URL of a script to load.
+    * @memberOf Engine
+    * @function
+    */
+   loadScript: null,
+
+	/**
+	 * Load text from the specified path.
+	 *
+	 * @param path {String} The url to load
+	 * @param data {Object} Optional arguments to pass to server
+	 * @param callback {Function} The callback method which is passed the
+	 *		text and status code (a number) of the request.
+	 * @memberOf Engine
+    * @function
+	 */	 
+	loadText: null,
+	
+	/**
+	 * Load text from the specified path and parse it as JSON.  We're doing
+	 * a little pre-parsing of the returned data so that the JSON can include
+	 * comments which is not spec.
+	 *
+	 * @param path {String} The url to load
+	 * @param data {Object} Optional arguments to pass to server
+	 * @param callback {Function} The callback method which is passed the
+	 *		JSON object and status code (a number) of the request.
+    * @memberOf Engine
+    * @function
+	 */	 
+	loadJSON: null,
+
+   /**
+    * Insert a callback into the script load queue so that when a
+    * certain number of files has been loaded, we can call
+    * a method.  Allows for functionality to start with
+    * incremental loading.
+    *
+    * @param cb {Function} A callback to execute
+    * @memberOf Engine
+    * @function
+    */
+   setQueueCallback: null,
+
+   /**
+    * You can pause the queue from a callback function, then
+    * unpause it to continue processing queued scripts.  This will
+    * allow you to wait for an event to occur before continuing to
+    * to load scripts.
+    *
+    * @param state {Boolean} <tt>true</tt> to put the queue processor
+    *                        in a paused state.
+    * @memberOf Engine
+    * @function
+    */
+   pauseQueue: null,
+
+   /**
+    * Loads a game's script.  This will wait until the specified
+    * <tt>gameObjectName</tt> is available before running it.  Doing so will
+    * ensure that all dependencies have been resolved before starting a game.
+    * Also creates the default rendering context for the engine.
+    * <p/>
+    * All games should execute this method to start their processing, rather than
+    * using the script loading mechanism for engine or game scripts.  This is used
+    * for the main game script only.  Normally it would appear in the game's "index" file.
+    * <pre>
+    *  &lt;script type="text/javascript"&gt;
+    *     // Load the game script
+    *     Engine.loadGame('game.js','Spaceroids');
+    *  &lt;/script&gt;
+    * </pre>
+    *
+    * @param gameSource {String} The URL of the game script.
+    * @param gameObjectName {String} The string name of the game object to execute.  When
+    *                       the framework if ready, the <tt>startup()</tt> method of this
+    *                       object will be called.
+    * @param [gameDisplayName] {String} An optional string to display in the loading dialog
+    * @memberOf Engine
+    * @function
+    */
+   loadGame: null,
+
+   /**
+    * Load a script relative to the engine path.  A simple helper method which calls
+    * {@link #loadScript} and prepends the engine path to the supplied script source.
+    *
+    * @param scriptSource {String} A URL to load that is relative to the engine path.
+    * @memberOf Engine
+    * @function
+    */
+   load: null,
+
+   /**
+    * Load a stylesheet and append it to the document.  Allows for
+    * scripts to specify additional stylesheets that can be loaded
+    * as needed.  Additionally, you can use thise method to inject
+    * the engine path into the css being loaded.  Using the variable
+    * <tt>$&lt;enginePath&gt;</tt>, you can load css relative to the
+    * engine's path.  For example:
+    * <pre>
+    *    .foo {
+    *       background: url('$&lt;enginePath&gt;/myGame/images/bar.png') no-repeat 50% 50%;
+    *    }
+    * </pre>
+    *
+    * @param stylesheetPath {String} Path to the stylesheet, relative to
+    *                                the engine path.
+    * @memberOf Engine
+    * @function
+    */
+   loadStylesheet: null,
+
+	// ======================================================
+	// Declarations here only for documentation purposes
+	// See engine.metrics.js
+	// ======================================================
+
+   /**
+    * Toggle the display of the metrics window.  Any metrics
+    * that are being tracked will be reported in this window.
+    * @memberOf Engine
+    * @function
+    */
+   toggleMetrics: null,
+
+   /**
+    * Show the metrics window.
+    * @memberOf Engine
+    * @function
+    */
+   showMetrics: null,
+   
+   /**
+    * Show the engine performance graph.
+    * @memberOf Engine
+    * @function
+    */
+   showProfile: null,
+
+   /**
+    * Hide the metrics window.
+    * @memberOf Engine
+    * @function
+    */
+   hideMetrics: null,
+
+   /**
+    * Set the interval at which metrics are sampled by the system.
+    * The default is for metrics to be calculated every 10 engine frames.
+    *
+    * @param sampleRate {Number} The number of ticks between samples
+    * @memberOf Engine
+    * @function
+    */
+   setMetricSampleRate: null,
+
+   /**
+    * Add a metric to the game engine that can be displayed
+    * while it is running.  If smoothing is selected, a 3 point
+    * running average will be used to smooth out jitters in the
+    * value that is shown.  For the <tt>fmt</tt> argument,
+    * you can provide a string which contains the pound sign "#"
+    * that will be used to determine where the calculated value will
+    * occur in the formatted string.
+    *
+    * @param metricName {String} The name of the metric to track
+    * @param value {String/Number} The value of the metric.
+    * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
+    * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
+    * @memberOf Engine
+    * @function
+    */
+   addMetric: null,
+
+   /**
+    * Remove a metric from the display
+    *
+    * @param metricName {String} The name of the metric to remove
+    * @memberOf Engine
+    * @function
+    */
+   removeMetric: null
 
  }, { // Interface
    globalTimer: null
@@ -2859,8 +3227,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend({
-   /** @lends Engine */
+var Engine = Engine.extend(/** @lends Engine.prototype */{
    constructor: null,
 
    /*
@@ -2876,13 +3243,14 @@ var Engine = Engine.extend({
    
    /**
     * Status message when a script is not found
-    * @memberOf Engine
+    * @type Boolean
+    * @memberOf Engine.prototype
     */
    SCRIPT_NOT_FOUND: false,
    
    /**
     * Status message when a script is successfully loaded
-    * @memberOf Engine
+    * @type Boolean
     */
    SCRIPT_LOADED: true,
 
@@ -3410,8 +3778,8 @@ var Engine = Engine.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1382 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1449 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3441,7 +3809,6 @@ var Engine = Engine.extend({
 //====================================================================================================
 //====================================================================================================
 var Engine = Engine.extend({
-   /** @lends Engine */
    constructor: null,
 
    /*
@@ -3548,7 +3915,8 @@ var Engine = Engine.extend({
          this.lastMetricSample = this.metricSampleRate;
       }
       
-      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie") {
+      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie" &&
+			 parseFloat(EngineSupport.sysInfo().version) < 9) {
          // Profiler not supported in IE
          this.showMetricsProfile = false;
       }
@@ -3637,7 +4005,7 @@ var Engine = Engine.extend({
          if (this.showMetricsProfile) {
             switch (m) {
                case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
-               case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
+               //case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
                case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
                case "poolLoad" : this.drawProfilePoint("#a0a0ff", this.metrics[m].act); break;
             }

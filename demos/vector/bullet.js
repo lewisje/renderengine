@@ -64,6 +64,7 @@ var SpaceroidsBullet = Object2D.extend({
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
       this.add(ColliderComponent.create("collide", this.field.collisionModel));
+		this.getComponent("collide").setCollisionMask(Math2.parseBin("100"));
 
       // Get the player's position and rotation,
       // then position this at the tip of the ship

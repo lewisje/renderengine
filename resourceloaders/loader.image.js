@@ -205,6 +205,17 @@ return ImageLoader;
 
 Engine.initObject("Image", "PooledObject", function() {
 
+/**
+ * @class A wrapper class for images.  Images contain a reference to their resource
+ * 		 loader and the bitmap dimensions for the image.  Additionally, the dimensions
+ * 		 are used to determine the bounding box around the image.
+ *
+ * @constructor
+ * @param name {String} The name of the image object
+ * @param imageName {String} The name of the image container in the resource loader
+ * @param imageLoader {ImageLoader} The resource loader used to load the image
+ * @extends PooledObject
+ */
 var Image = PooledObject.extend(/** @scope Image.prototype */{
 
 	image: null,
