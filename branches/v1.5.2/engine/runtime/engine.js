@@ -5,8 +5,8 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v1.5.2
- * date: 11/11/2010
+ * version: v1.5.3
+ * date: November 20, 2010
  *
  * Copyright (c) 2010 Brett Fattori
  *
@@ -37,7 +37,7 @@
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1394 $
+ * @version: $Revision: 1449 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -772,7 +772,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1402 $
+ * @version: $Revision: 1449 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -834,7 +834,22 @@ Profiler.stop = function() {
 };
 
 /**
- * Add a profile monitor to the stack of running profiles.
+ * Add a profile monitor to the stack of running profiles.  A good way to profile code
+ * is to use the <tt>try/finally</tt> method so that the profile will be exited even
+ * if the method returns from multiple points.
+<pre>
+   function func() {
+      try {
+         Profiler.enter("func");
+         
+         doStuff = doStuff + 1;
+         return doStuff;
+      } finally {
+         Profiler.exit();
+      }
+   }
+</pre>
+ *
  * @param prof {String} The name of the profile
  * @memberOf Profiler
  */
@@ -2218,7 +2233,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1400 $
+ * @version: $Revision: 1450 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2266,7 +2281,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  * @static
  */
 var Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v1.5.2",
+   version: "v1.5.3",
 
    constructor: null,
 
@@ -2969,7 +2984,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    SCRIPT_LOADED: true,
 
    /**
-    * Include a script file.
+    * Include a script file.  This is the method used to load additional
+    * script files, relative to the engine's location.
+<pre>
+	Engine.include("/rendercontexts/context.canvascontext.js");
+</pre>
     *
     * @param scriptURL {String} The URL of the script file
     * @memberOf Engine
@@ -3016,7 +3035,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 	loadJSON: null,
 
    /**
-    * Put a callback into the script queue so that when a
+    * Insert a callback into the script load queue so that when a
     * certain number of files has been loaded, we can call
     * a method.  Allows for functionality to start with
     * incremental loading.
@@ -3110,21 +3129,21 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    toggleMetrics: null,
 
    /**
-    * Show the metrics window
+    * Show the metrics window.
     * @memberOf Engine
     * @function
     */
    showMetrics: null,
    
    /**
-    * Show a graph of the engine profile
+    * Show the engine performance graph.
     * @memberOf Engine
     * @function
     */
    showProfile: null,
 
    /**
-    * Hide the metrics window
+    * Hide the metrics window.
     * @memberOf Engine
     * @function
     */
@@ -3208,7 +3227,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-Engine.extend(/** @scope Engine.prototype */{
+var Engine = Engine.extend(/** @lends Engine.prototype */{
    constructor: null,
 
    /*
@@ -3760,7 +3779,7 @@ Engine.extend(/** @scope Engine.prototype */{
  * @author: Brett Fattori (brettf@renderengine.com)
  *
  * @author: $Author: bfattori $
- * @version: $Revision: 1400 $
+ * @version: $Revision: 1449 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3790,7 +3809,6 @@ Engine.extend(/** @scope Engine.prototype */{
 //====================================================================================================
 //====================================================================================================
 var Engine = Engine.extend({
-   /** @lends Engine */
    constructor: null,
 
    /*
