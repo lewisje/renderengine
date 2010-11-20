@@ -52,6 +52,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
 
    running: false,
    paused: false,
+	timerFn: null,
 
    /**
     * @private
@@ -66,6 +67,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
       this.base(name);
       this.interval = interval;
       this.callback = callback;
+		this.timerFn = null;
       
       // The engine needs to know about this timer
       Engine.addTimer(this.getId(), this);
@@ -156,6 +158,7 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
    setCallback: function(callback) {
       Assert((typeof callback == "function"), "Callback must be a function in Timer.setCallback");
       this.callback = callback;
+		this.timerFn = null;
       if (this.isRunning)
       {
          this.restart();
@@ -168,12 +171,14 @@ var Timer = BaseObject.extend(/** @scope Timer.prototype */{
     * @return {Function} The callback function
     */
    getCallback: function() {
-      var timerFn = function() {
-         arguments.callee.cb.call(arguments.callee.timer);  
-      };
-      timerFn.cb = this.callback;
-      timerFn.timer = this;
-      return timerFn;
+		if (this.timerFn === null) {
+	      this.timerFn = function() {
+	         arguments.callee.cb.call(arguments.callee.timer);  
+	      };
+	      this.timerFn.cb = this.callback;
+	      this.timerFn.timer = this;
+		}
+      return this.timerFn;
    },
 
    /**
@@ -280,8 +285,8 @@ var OneShotTimeout = Timeout.extend(/** @scope OneShotTimeout.prototype */{
    constructor: function(name, interval, callback) {
 
       var cb = function() {
-         this.destroy();
          arguments.callee.cbFn.call(this);
+         this.destroy();
       };
       cb.cbFn = callback;
 
@@ -462,4 +467,3 @@ var Interval = Timer.extend(/** @scope Interval.prototype */{
 return Interval;
 
 });
-
