@@ -64,6 +64,8 @@ Engine.initObject("KeyboardInputComponent", "InputComponent", function() {
  */
 var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputComponent.prototype */{
 
+	hasInputMethods: null,
+
    /**
     * @private
     */
@@ -83,6 +85,8 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       ctx.addEvent(this, "keypress", function(evt) {
          return self._keyPressListener(evt);
       });
+      
+      this.hasInputMethods = [false, false, false];
    },
 
    /**
@@ -99,6 +103,26 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
       this.base();
    },
 
+	release: function() {
+		this.base();
+		this.hasInputMethods = null;
+	},
+
+	/**
+    * Establishes the link between this component and its host object.
+    * When you assign components to a host object, it will call this method
+    * so that each component can refer to its host object, the same way
+    * a host object can refer to a component with {@link HostObject#getComponent}.
+    *
+    * @param hostObject {HostObject} The object which hosts this component
+	 */
+	setHostObject: function(hostObj) {
+		this.base(hostObj);
+		this.hasInputMethods = [hostObj.onKeyDown != undefined, 
+										hostObj.onKeyUp != undefined, 
+										hostObj.onKeyPressed != undefined];
+	},
+
    /**
     * @private
     */
@@ -112,7 +136,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
     * @private
     */
    _keyDownListener: function(eventObj) {
-      if (this.getHostObject().onKeyDown) {
+      if (this.hasInputMethods[0]) {
          this.record(eventObj,KeyboardInputComponent.RECORD_PART);
          return this.getHostObject().onKeyDown(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
@@ -122,7 +146,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
     * @private
     */
    _keyUpListener: function(eventObj) {
-      if (this.getHostObject().onKeyUp) {
+      if (this.hasInputMethods[1]) {
          this.record(eventObj,KeyboardInputComponent.RECORD_PART);
          return this.getHostObject().onKeyUp(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }
@@ -132,7 +156,7 @@ var KeyboardInputComponent = InputComponent.extend(/** @scope KeyboardInputCompo
     * @private
     */
    _keyPressListener: function(eventObj) {
-      if (this.getHostObject().onKeyPress) {
+      if (this.hasInputMethods[2]) {
          this.record(eventObj,KeyboardInputComponent.RECORD_PART);
          return this.getHostObject().onKeyPress(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
       }

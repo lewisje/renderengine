@@ -61,6 +61,8 @@ Engine.initObject("TouchInputComponent", "InputComponent", function() {
  */
 var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.prototype */{
 
+	hasTouchMethods: null,
+
    /**
     * @private
     */
@@ -97,6 +99,8 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
 			}
          return self._touchCancelListener(evt);
       });
+      
+      this.hasTouchMethods = [false, false, false, false];
    },
 
    /**
@@ -113,6 +117,27 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
       ctx.removeEvent(this, "touchcancel");
       this.base();
    },
+
+	release: function() {
+		this.base();
+		this.hasTouchMethods = null;
+	},
+
+	/**
+    * Establishes the link between this component and its host object.
+    * When you assign components to a host object, it will call this method
+    * so that each component can refer to its host object, the same way
+    * a host object can refer to a component with {@link HostObject#getComponent}.
+    *
+    * @param hostObject {HostObject} The object which hosts this component
+	 */
+	setHostObject: function(hostObj) {
+		this.base(hostObj);
+		this.hasTouchMethods = [hostObj.onTouchStart != undefined, 
+										hostObj.onTouchEnd != undefined, 
+										hostObj.onTouchMove != undefined,
+										hostObj.onTouchCancel != undefined];
+	},
 
    /**
     * Process the touches and pass an array of touch objects to be handled by the
@@ -133,7 +158,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     * @private
     */
    _touchStartListener: function(eventObj) {
-      if (this.getHostObject().onTouchStart) {
+      if (this.hasTouchMethods[0]) {
          return this.getHostObject().onTouchStart(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
@@ -142,7 +167,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     * @private
     */
    _touchEndListener: function(eventObj) {
-      if (this.getHostObject().onTouchEnd) {
+      if (this.hasTouchMethods[1]) {
          return this.getHostObject().onTouchEnd(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
@@ -151,7 +176,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     * @private
     */
    _touchMoveListener: function(eventObj) {
-      if (this.getHostObject().onTouchMove) {
+      if (this.hasTouchMethods[2]) {
          return this.getHostObject().onTouchMove(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
@@ -160,7 +185,7 @@ var TouchInputComponent = InputComponent.extend(/** @scope TouchInputComponent.p
     * @private
     */
    _touchCancelListener: function(eventObj) {
-      if (this.getHostObject().onTouchCancel) {
+      if (this.hasTouchMethods[3]) {
          return this.getHostObject().onTouchCancel(this.processTouches(eventObj.originalEvent), eventObj);
       }
    }

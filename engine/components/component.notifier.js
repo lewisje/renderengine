@@ -33,6 +33,8 @@
 
 // Includes
 Engine.include("/components/component.logic.js");
+Engine.include("/engine.fnv1hash.js");
+Engine.include("/engine.container.js");
 
 Engine.initObject("NotifierComponent", "LogicComponent", function() {
 
@@ -59,6 +61,7 @@ Engine.initObject("NotifierComponent", "LogicComponent", function() {
 var NotifierComponent = LogicComponent.extend(/** @scope NotifierComponent.prototype */{
 
    notifyLists: null,
+   hasher: null,
 
    /**
     * @private
@@ -66,7 +69,19 @@ var NotifierComponent = LogicComponent.extend(/** @scope NotifierComponent.proto
    constructor: function(name, priority) {
       this.base(name, priority || 1.0);
       this.notifyLists = {};
+      this.hasher = FNV1Hash.create();
    },
+
+	/**
+	 * Destroy the notifier component.
+	 */
+	destroy: function() {
+		this.hasher.destroy();
+		for (var n in this.notifyLists) {
+			this.notifyLists[n].destroy();
+		}
+		this.base();
+	},
 
    /**
     * Releases the component back into the object pool. See {@link PooledObject#release}
@@ -75,71 +90,60 @@ var NotifierComponent = LogicComponent.extend(/** @scope NotifierComponent.proto
    release: function() {
       this.base();
       this.notifyLists = null;
+      this.hasher = null;
    },
 
    /**
-    * Subscribe to the event type specified.  The specified callback
-    * will be passed the relative object and event object as its arguments.
+    * Subscribe to the event type specified, receiving a subscriber Id in return.  
+    * When the event type is posted, the specified callback will either be called in
+    * the scope of <tt>thisObj</tt>, or if <tt>thisObj</tt> is <tt>null</tt> then the
+    * scope will be this component's host object.
+    * <p/>
+    * Any object can subscribe to any other object's events.  This is a handy method
+    * to use event passing as a way to propagate actions from one object to a group
+    * of other objects.
     *
-    * @param type {String} The type name of the event list.
-    * @param thisObj {Object} The scope object for the callback, or <tt>null</tt>
+    * @param type {String} The type name of the event.
     * @param fn {Function} The function to call when the event triggers.
+    * @param [thisObj] {Object} The object which will represent "this" for the callback.
+    * 
+    * @return {String} A subscriber Id which can later be used to unsubscribe
     */
-   subscribe: function(type, thisObj, fn) {
+   subscribe: function(type, fn, thisObj) {
       if (this.notifyLists[type] == null) {
-         this.notifyLists[type] = [];
+         this.notifyLists[type] = HashContainer.create("subscribers");;
       }
-      this.notifyLists[type].push({parent: thisObj, func: fn});
-   },
-
-   /**
-    * @deprecated
-    * @see #subscribe
-    */
-   addRecipient: function(type, thisObj, fn) {
-      this.subscribe(type, thisObj, fn);
+      
+      // get a unique subscriber Id
+      var subId = this.hasher.updateHash(type + fn.toString() + (thisObj || this.getHostObject()).toString());
+      this.notifyLists[type].add(subId, {parent: thisObj, func: fn});
+      return subId;
    },
 
    /**
     * Unsubscribe from the event type specified.  If you only
-    * pass the event type, all subscribers will be removed.  Passing
-    * the type and relative object will remove all listeners for the
-    * event type and scoped object.  Finally, passing the type, scoped
-    * object, and callback will remove the specific subscriber.
+    * pass the event type, all subscribers will be removed for that type.  
+    * Passing the optional <tt>subscriberId</tt> will unsubscribe a specific
+    * subscriber.
     *
-    * @param type {String} The type name of the event list.
-    * @param [thisObj] {Object} The scope object for the callback
-    * @param [fn] {Function} The function to remove from the notification list.
+    * @param type {String} The event type to unsubscribe from
+    * @param [subscriberId] {String} The subscriber Id which was returned from {@link #subscribe}
     */
-   unsubscribe: function(type, thisObj, fn) {
-      if (fn != null) {
+   unsubscribe: function(type, subscriberId) {
+      if (subscriberId != null) {
          // Remove a specific subscriber
-         var o = {parent: thisObj, func: fn};
-         EngineSupport.arrayRemove(this.notifyLists[type], o);
-      } else if (thisObj != null) {
-         // Remove all subscribers for the scope object
-         var newSubscribers = EngineSupport.filter(this.notifyLists[type], 
-            function(val, idx) {
-               return (val.parent !== thisObj);
-            });
-         this.notifyLists[type] = newSubscribers;
+         this.notifyLists[type].remove(subscriberId);
       } else {
          // Remove all subscribers for the event type
-         this.notifyLists[type] = [];
+         this.notifyLists[type].clear();
       }
-   },
-   
-   /**
-    * @deprecated
-    * @see #unsubscribe
-    */
-   removeRecipient: function(type, thisObj, fn) {
-      
    },
 
    /**
     * Post a message of the given type, with the event object
-    * which subscribers will act upon.
+    * which subscribers can act upon.  The event object is free-form and
+    * can contain anything.  The subscribers should know what to look for
+    * and how to interpret the event object being passed to them.
     *
     * @param type {String} The type of the event
     * @param eventObj {Object} An object which subscribers can use
@@ -160,40 +164,14 @@ var NotifierComponent = LogicComponent.extend(/** @scope NotifierComponent.proto
          return;
       }
 
-      // Using Duff's device with loop inversion
-      var p = 0;
-      var s = null;
-      switch(this.notifyLists[type].length & 0x3)
-      {
-         case 3:
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-         case 2:
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-         case 1:
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-      }
-
-      if (p < this.notifyLists[type].length)
-      {
-         do
-         {
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-            s = this.notifyLists[type][p++];
-            s.func.call(s.parent, eventObj);
-
-         } while (p < this.notifyLists[type].length);
-      }
+		var s = null;
+		var scopeObj = null;
+		var host = this.getHostOject();
+		for (var itr = this.notifyLists[type].iterator(); itr.hasNext(); ) {
+			s = itr.next();
+			scopeObj = s.parent || host;
+			s.func.call(scopeObj, eventObj);
+		}
    }
 }, /** @scope NotifierComponent.prototype */{
    /**
