@@ -33,22 +33,13 @@
 
 // Includes
 Engine.include("/rendercontexts/context.htmldivcontext.js");
-Engine.include("/engine.container.js");
-
-// UI Element types
-Engine.include("/ui/elements/ui.base.js");
-Engine.include("/ui/elements/ui.button.js");
-Engine.include("/ui/elements/ui.checkbox.js");
-Engine.include("/ui/elements/ui.image.js");
-Engine.include("/ui/elements/ui.input.js");
-Engine.include("/ui/elements/ui.textbox.js");
 
 Engine.initObject("UI", "HTMLDivContext", function() {
 
 /**
  * @class A user interface object.  Draws a user interface which a user
- * 		 can interact with.  The user interface can be read from a resource
- * 		 file.
+ * 		 can interact with.  The user interface is simply an HTML file which
+ * 		 is lazy loaded via AHAH.
  * 
  * @param name {String} The name of the user interface
  * @constructor
@@ -58,66 +49,53 @@ Engine.initObject("UI", "HTMLDivContext", function() {
 var UI = HTMLDivContext.extend(/** @scope UI.prototype */{
 
 	visible: null,
-	rendered: false,
+	loaded: false,
+	url: null,
 
    /**
     * @private
     */
-   constructor: function(name, top, left, width, height) {
-		top = top || 0;
-		left = left || 0;
+   constructor: function(name, url, width, height) {
 		width = width || EngineSupport.sysInfo().viewWidth;
 		height = height || EngineSupport.sysInfo().viewHeight;
 		this.base(name, width, height);
+		this.url = url;
 		this.visible = false;
-		this.rendered = false;
-		this.getSurface().css({
-			top: top,
-			left: left,
-			display: "none"
-		});
+		this.getSurface().css("display", "none");
    },
 	
-	/**
-	 * Destroy the object.
-	 */
-	destroy: function() {
-		this.elements.cleanUp();
-		this.elements.destroy();
-	},
-
 	isVisible: function() {
 		return this.visible;
 	},
 	
-	add: function(uiElement) {
-      Assert((BaseUIElement.isInstance(uiElement)), "Invalid element type added to UI");
-      uiElement.setUI(this);
-		this.base(uiElement);
+	show: function(fn) {
+		if (!this.loaded) {
+			var self = this;
+			this.getSurface().load(url, function() {
+				self.loaded = true;
+				self._show(fn);
+			})			
+		} else {
+			this._show(fn);
+		}
 	},
-	
-	show: function() {
-		this.visible = true;
+
+	_show: function(fn) {
 		this.getSurface().css("display", "block");
-	},
+		this.visible = true;
+		if (fn) {
+			fn.call(this.getElement());
+		}
+	},	
+
 	
-	hide: function() {
+	hide: function(fn) {
 		this.visible = false;
 		this.getSurface().css("display", "none");	
-	},
-	
-   /**
-    * Draw the UI objects within the render context.
-    *
-    * @param renderContext {RenderContext} The context the UI will be rendered within.
-    * @param time {Number} The global time within the engine.
-    */
-   update: function(renderContext, time) {
-      // Draw the UI objects
-      for (var ui = this.elements.iterator(); ui.hasNext(); ) {
-         ui.next().update(renderContext, time);
-      }
-   }
+		if (fn) {
+			fn.call(this.getElement());
+		}
+	}
 
 }, /** @scope UI.prototype */{
    /**

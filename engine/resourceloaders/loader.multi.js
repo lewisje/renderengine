@@ -170,6 +170,26 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 	},
 	
 	/**
+	 * Get the type of loader for the given resource name
+	 * @param name {String} The resource name
+	 */
+	getLoaderForName: function(name) {
+		// Determine the loader type by file extension
+		var loaderType = "object";
+		for (var lm in this.loaderMappings) {
+			var loader = this.loaderMappings[lm];
+			var exts = loader.extension.split(",");
+			for (var e in exts) {
+				if (name.indexOf("." + exts[e]) != -1) {
+					loaderType = lm;
+					break;
+				}
+			}
+		}
+		return loaderType;
+	},
+	
+	/**
 	 * Remove a loader type which the multiresource loader uses.
 	 * @param loaderType {String} The loader type to remove
 	 */
@@ -190,35 +210,27 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 	},
 
 	/**
-	 * Load a resource with the registered loader type.  The arguments passed after the
-	 * loader type should match the required arguments for the <code>load()</code> method of the type of loader being used.
-	 * If the class isn't loaded yet, the request will be deferred until the class is available.
+	 * Load a resource with the registered loader type.  Resource loaders are
+	 * determined by the extension of the URL being loaded. If the loader 
+	 * class isn't loaded yet, the request will be deferred until the class is available.
 	 * 
-	 * @param loaderType {String} The type of loader to load the resource
+	 * @param url {String} The url to load
 	 * @param [args...] {Object} The arguments for the loader
+	 * @return {String} The name given to the resource
 	 */
-	load: function(loaderType /*, args */) {
-		var args = arguments, argArray = [];
-		for (var a in arguments) {
+	load: function(url /*, args */) {
+		var argArray = [];
+		
+		// The name is the URL after the last slash
+		var sl = url.lastIndexOf("/");
+		var name = url.substring(sl + 1);
+		argArray.push(name);
+		
+		for (var a = 0; a < arguments.length; a++) {
 			argArray.push(arguments[a]);
 		}
-		if (!this.isPath(argArray[0])) {
-			argArray.shift();
-		} else {
-			// Determine the loader type by file extension
-			loaderType = "object";
-			for (var lm in this.loaderMappings) {
-				var l = this.loaderMappings[l];
-				var exts = l.extension.split(",");
-				for (var e in exts) {
-					if (argArray[0].indexOf("." + exts[e]) != -1) {
-						loaderType = l;
-						break;
-					}
-				}
-			}
-				
-		}
+
+		var loaderType = this.getLoaderForName(name);
 
 		var c = this.loaderMappings[loaderType].clazz;
 		if (!this.checkForClass(c)) {
@@ -227,6 +239,8 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 			// The class is loaded, load the resource
 			this.getLoader(loaderType).load.apply(window, argArray);
 		}
+		
+		return name;
 	},
 	
 	/**
@@ -298,30 +312,20 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 	 * be checked against.  If no arguments are passed, all resource loaders are checked to see if
 	 * all resources are loaded.
 	 * 
-	 * @param name {String} The name of the resource to check for
-	 * @param [loaderType] {String} Optionally, the name of the loader to check against
+	 * @param resource {String} The name of the resource to check
+	 * @param [name] {String} The optional name within the resource
 	 */
-	isReady: function(name, loaderType) {
-		if (loaderType != null) {
-			// Check a specific loader
-			if (!this.checkForClass(this.loaderMappings[loaderType].clazz)) {
-				// The loader isn't even loaded itself yet
-				return false;
-			}
-			
-			// The class is loaded, check for the resource
-			return this.getLoader(loaderType).isReady(name);
+	isReady: function(resource, name) {
+		var loaderType = this.getLoaderForName(resource);
+
+		// Check a specific loader
+		if (!this.checkForClass(this.loaderMappings[loaderType].clazz)) {
+			// The loader isn't even loaded itself yet
+			return false;
 		}
 		
-		// Assume ready until a loader says otherwise
-		var ready = true;
-		for (var l in this.loaders) {
-			var loader = this.loaders[l];
-			ready &= (this.checkForClass(this.loaderMappings[loader].clazz) &&
-							this.getLoader(loader).isReady(name));
-		}
-		
-		return ready;	
+		// The class is loaded, check for the resource
+		return this.getLoader(loaderType).isReady(name);
 	},
 	
 	/**
@@ -330,27 +334,23 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 	 * @param name {String} The resource name to unload
 	 * @param [loaderType] {String} Optionally, the name of the resource loader
 	 */
-	unload: function(name, loaderType) {
+	unload: function(resource, name) {
+		var loaderType = this.getLoaderForName(resource);
+
 		if (loaderType != null && this.checkForClass(this.loaderMappings[loaderType].clazz)) {
 	  		this.getLoader(loaderType).unload(name);
-	   } else if (!loaderType) {
-			for (var l in this.loaders) {
-				var loader = this.loaders[l];
-				if (this.checkForClass(this.loaderMappings[loader].clazz)) {
-					this.getLoader(loader).unload(name);
-				}	
-			}
-		} 
+	   } 
 	},
 
 	/**
 	 * Get the cached object from the specified loader, by name.
 	 * 
-	 * @param loaderType {String} The type of loader to get the object from
+	 * @param resource {String} The resource to get the object from
 	 * @param name {String} The name of the object to get from the cache
 	 * @return {Object}
 	 */
-	get: function(loaderType, name) {
+	get: function(resource, name) {
+		var loaderType = this.getLoaderForName(resource);
 		if (!this.checkForClass(this.loaderMappings[loader].clazz)) {
 	  		return null;
 	   } else {
@@ -362,10 +362,11 @@ var MultiResourceLoader = ResourceLoader.extend(/** @scope MultiResourceLoader.p
 	 * Gets the loader object by its given type, allowing you to call its methods
 	 * directly.
 	 * 
-	 * @param loaderType {String} The name of the loader type
+	 * @param resource {String} The resource which will determine the loader
 	 * @return {ResourceLoader}
 	 */
-	getLoader: function(loaderType) {
+	getLoader: function(resource) {
+		var loaderType = this.getLoaderForName(resource);
 		var inst = this.loaderMappings[loaderType].instance;
 		if (inst == null) {
 			inst = this.loaderMappings[loaderType].instance = window[this.loaderMappings[loaderType].clazz].create();

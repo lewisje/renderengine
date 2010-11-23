@@ -148,7 +148,7 @@ var Game = Base.extend(/** @scope Game.prototype */{
       if (fileName.indexOf(loc.protocol) == -1) {
          return this.getGamePath() + fileName;
       } else {
-         return file;
+         return fileName;
       }
    }
 });
