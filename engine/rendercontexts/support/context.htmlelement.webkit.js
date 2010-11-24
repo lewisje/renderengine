@@ -30,3 +30,42 @@
  * THE SOFTWARE.
  *
  */
+
+/**
+ * @class Extending HTMLElementContext for Safari to include CSS transformations.
+ *
+ * @extends HTMLElementContext
+ * @constructor
+ * @description Create an instance of an HTML element rendering context.  This context
+ * represents any HTML element.
+ * @param name {String} The name of the context
+ * @param element {Number} The element which is the surface of the context.
+ * @see DocumentContext
+ */
+var HTMLElementContext = HTMLElementContext.extend(/** @scope HTMLElementContext.prototype */{
+
+	/**
+	 * Set the rotation angle of the current transform
+	 *
+	 * @param angle {Number} An angle in degrees
+	 */
+	setRotation: function(angle) {
+		this.jQ().css("-webkit-transform", "rotate(" + angle + "deg)");
+		this.base(angle);
+	},
+
+	/**
+	 * Set the scale of the current transform.  Specifying
+	 * only the first parameter implies a uniform scale.
+	 *
+	 * @param scaleX {Number} The X scaling factor, with 1 being 100%
+	 * @param scaleY {Number} The Y scaling factor
+	 */
+	setScale: function(scaleX, scaleY) {
+		scaleX = scaleX || 1;
+		scaleY = scaleY || scaleX;
+		this.jQ().css("-webkit-transform", "scale(" + scaleX + "," + scaleY + ")");
+		this.base(scaleX, scaleY);
+	}
+
+});
