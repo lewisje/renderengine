@@ -32,6 +32,7 @@
 
 // Includes
 Engine.include("/rendercontexts/context.render2d.js");
+Engine.include("/engine.math2d.js");
 
 Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
 
@@ -128,11 +129,40 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
    },
    
    /**
+    * Serializes the current transformation state to an object.
+    * @return {Object}
+    */
+   serializeTransform: function() {
+   	return {
+   		pos: this.cursorPos,
+   		rot: this.getRotation(),
+   		sclX: this.getScaleX(),
+   		sclY: this.getScaleY(),
+   		stroke: this.getLineStyle(),
+   		sWidth: this.getLineWidth(),
+   		fill: this.getFillStyle()   		
+   	};
+   },
+   
+   /**
+    * Deserializes a transformation state from an object.
+    * @param transform {Object} The object which contains the current transformation
+    */
+   deserializeTransform: function(transform) {
+   	this.setPosition(transform.pos);
+   	this.setRotation(transform.rot);
+   	this.setScale(transform.sclX, transform.sclY);
+   	this.setLineStyle(transform.stroke);
+   	this.setLineWidth(transform.sWidth);
+   	this.setFillStyle(transform.fill);
+   },
+   
+   /**
     * Push a transform state onto the stack.
     */
    pushTransform: function() {
       this.base();
-      this.transformStack.push(this.cursorPos); 
+      this.transformStack.push(this.serializeTransform()); 
    },
    
    /**
@@ -140,7 +170,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    popTransform: function() {
       this.base();
-      this.cursorPos = this.transformStack.pop();
+      this.deserializeTransform(this.transformStack.pop());
    },
 
    //================================================================
@@ -360,9 +390,13 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
          case "safari" :
                if (version >= 3) {
                   // Load support for webkit transforms
-                  Engine.include("/rendercontexts/support/context.htmlelement.safari.js");
+                  Engine.include("/rendercontexts/support/context.htmlelement.webkit.js");
                }
             break;
+         case "chrome" :
+					// Load support for webkit transforms
+					Engine.include("/rendercontexts/support/context.htmlelement.webkit.js");
+				break;
          case "mozilla" :
                if (version >= 1.9) {
                   // Load support for gecko transforms
