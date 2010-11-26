@@ -164,6 +164,15 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
 	getImage: function(name) {
 		return Image.create("Image", name, this); 	
 	},
+
+	/**
+	 * Get the specific image resource by name.
+	 * @param name {String} The name of the resource
+	 * @return {Image}
+	 */
+	getResourceObject: function(name) {
+		return this.getImage(name);
+	},
    
    /**
     * Get the dimensions of an image from the resource stored with 
@@ -184,6 +193,7 @@ var ImageLoader = RemoteLoader.extend(/** @scope ImageLoader.prototype */{
    getResourceType: function() {
       return "image";
    }
+	
 }, /** @scope ImageLoader.prototype */{
    /**
     * Get the class name of this object

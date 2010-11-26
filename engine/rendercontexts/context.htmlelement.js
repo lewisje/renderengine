@@ -52,10 +52,12 @@ Engine.initObject("HTMLElementContext", "RenderContext2D", function() {
 var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.prototype */{
 
    transformStack: null,
-   
    cursorPos: null,
-   
    jQObj: null,
+	hasTxfm: false,
+	txfmBrowser: null,
+	txfmOrigin: null,
+	txfm: null,	
 
    /**
     * @private
@@ -64,10 +66,12 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       this.base(name || "HTMLElementContext", element);
       element.id = this.getId();
       this.cursorPos = Point2D.create(0,0);
+		this.txfm = [];
       this.transformStack = [];
       this.pushTransform();
       this.jQObj = null;
       this.setViewport(Rectangle2D.create(0, 0, this.jQ().width(), this.jQ().height()));
+		this.checkTransformSupport();
    },
 
    /**
@@ -88,8 +92,53 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       }
       this.cursorPos.destroy();
       this.getViewport().destroy();
+		this.txfm = null;
       this.base();
    },
+
+	/**
+	 * Check the browser and version to see if it supports transformations.
+	 * @private
+	 */
+	checkTransformSupport: function() {
+      var version = parseFloat(EngineSupport.sysInfo().version);
+      switch (EngineSupport.sysInfo().browser) {
+         case "safari" :
+               if (version >= 3) {
+                  // Support for webkit transforms
+                  this.hasTxfm = true;
+						this.txfmBrowser = "-webkit-transform";
+						this.txfmOrigin = "-webkit-transform-origin";
+               }
+            break;
+         case "chrome" :
+					// Support for webkit transforms
+               this.hasTxfm = true;
+					this.txfmBrowser = "-webkit-transform";
+					this.txfmOrigin = "-webkit-transform-origin";
+				break;
+         case "firefox" :
+               if (version >= 3.5) {
+                  // Support for gecko transforms
+                  this.hasTxfm = true;
+						this.txfmBrowser = "-moz-transform";
+						this.txfmOrigin = "-moz-transform-origin";
+               }
+            break;
+			case "opera" :
+               if (version >= 10.5) {
+                  // Support for opera transforms
+                  this.hasTxfm = true;
+						this.txfmBrowser = "-o-transform";
+						this.txfmOrigin = "-o-transform-origin";
+               }
+            break;
+         default:
+				this.hasTxfm = false;
+            break;
+      };
+		
+	},
 
    /**
     * Retrieve the jQuery object which represents the element.
@@ -135,9 +184,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
    serializeTransform: function() {
    	return {
    		pos: this.cursorPos,
-   		rot: this.getRotation(),
-   		sclX: this.getScaleX(),
-   		sclY: this.getScaleY(),
+			txfm: this.txfm,
    		stroke: this.getLineStyle(),
    		sWidth: this.getLineWidth(),
    		fill: this.getFillStyle()   		
@@ -149,9 +196,8 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param transform {Object} The object which contains the current transformation
     */
    deserializeTransform: function(transform) {
+		this.txfm = transform.txfm;
    	this.setPosition(transform.pos);
-   	this.setRotation(transform.rot);
-   	this.setScale(transform.sclX, transform.sclY);
    	this.setLineStyle(transform.stroke);
    	this.setLineWidth(transform.sWidth);
    	this.setFillStyle(transform.fill);
@@ -193,8 +239,40 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    setPosition: function(point) {
       this.cursorPos.set(point);
+		if (this.hasTxfm) {
+			var p = point.get();
+			this.txfm[0] = "translate(" + p.x + "px," + p.y + "px)";	
+		}
       this.base(point);
    },
+
+	/**
+	 * Set the rotation angle of the current transform
+	 *
+	 * @param angle {Number} An angle in degrees
+	 */
+	setRotation: function(angle) {
+		if (this.hasTxfm) {
+			this.txfm[1] = "rotate(" + angle + "deg)";	
+		}
+		this.base(angle);
+	},
+
+	/**
+	 * Set the scale of the current transform.  Specifying
+	 * only the first parameter implies a uniform scale.
+	 *
+	 * @param scaleX {Number} The X scaling factor, with 1 being 100%
+	 * @param scaleY {Number} The Y scaling factor
+	 */
+	setScale: function(scaleX, scaleY) {
+		scaleX = scaleX || 1;
+		scaleY = scaleY || scaleX;
+		if (this.hasTxfm) {
+			this.txfm[2] = "scale(" + scaleX + "," + scaleY + ")";	
+		}
+		this.base(scaleX, scaleY);
+	},
 
   /**
     * Set the width of the context drawing area.
@@ -216,6 +294,25 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       this.jQ().height(height);
    },
 
+	/**
+	 * Merge in the CSS transformations object, if the browser supports it.
+	 * @param css {Object} CSS properties to merge with
+	 * @return {Object}
+	 * @private
+	 */
+	_mergeTransform: function(ref, css) {
+		if (this.hasTxfm) {
+			css[this.txfmBrowser] = this.txfm[0] + " " +
+				(ref.getRotation() != 0 ? this.txfm[1] + " " : "") +
+				(ref.getScale() != 1 ? this.txfm[2] : "");
+		} else {
+			css.top = this.cursorPos.y;
+			css.left = this.cursorPos.x;
+		}
+		
+		return css;
+	},
+
    /**
     * Draw an un-filled rectangle on the context.
     *
@@ -224,7 +321,11 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    drawRectangle: function(rect, ref) {
       var rD = rect.getDims();
-      var d = $("<div>").css({
+		if (!ref) {
+			ref = $("<div>");
+			this.jQ().append(ref);
+		}
+      var d = ref.css(this._mergeTransform(ref, {
          borderWidth: this.getLineWidth(),
          borderColor: this.getLineStyle(),
          left: rD.l,
@@ -232,8 +333,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
          width: rD.w,
          height: rD.h,
          position: "absolute"
-      });
-      this.jQ().append(d);
+      }));
    },
 
    /**
@@ -244,7 +344,11 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    drawFilledRectangle: function(rect, ref) {
       var rD = rect.getDims();
-      var d = $("<div>").css({
+		if (!ref) {
+			ref = $("<div>");
+			this.jQ().append(ref);
+		}
+      var d = ref.css(this._mergeTransform(ref, {
          borderWidth: this.getLineWidth(),
          borderColor: this.getLineStyle(),
          backgroundColor: this.getFillStyle(),
@@ -253,8 +357,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
          width: rD.w,
          height: rD.h,
          position: "absolute"
-      });
-      this.jQ().append(d);
+      }));
    },
 
    /**
@@ -264,7 +367,7 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     * @param ref {HostObject} A reference host object
     */
    drawPoint: function(point, ref) {
-      return this.drawFilledRectangle(Rectangle2D.creat(point.x, point.y, 1, 1), ref);
+      this.drawFilledRectangle(Rectangle2D.create(point.x, point.y, 1, 1), ref);
    },
 
    /**
@@ -283,13 +386,12 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       // will give us a reference to the HTML element which we can then
       // just modify the displayed image for.
       if (ref && ref.jQ()) {
-         ref.jQ().css({
-            top: this.cursorPos.y,
-            left: this.cursorPos.x,
-            width: rD.w,
-            height: rD.h,
-            backgroundPosition: -tl.x + "px " + tl.y + "px"
-         });
+			var css = this._mergeTransform(ref, {
+				width: rD.w,
+				height: rD.h,
+				backgroundPosition: -tl.x + "px " + tl.y + "px"
+			}); 
+         ref.jQ().css(css);
       }
    },
 
@@ -313,11 +415,11 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       // will give us a reference to the HTML element which we can then
       // just modify the displayed image for.
       if (ref && ref.jQ()) {
-         ref.jQ().css({
-            top: rD.t,
-            left: rD.l,
-            width: rD.w,
-            height: rD.h});
+			ref.jQ().css(this._mergeTransform(ref, {
+				width: rD.w,
+				height: rD.h
+			})); 
+
          // Only modify the source, width, and height if they change it
          if (ref.jQ().attr("src") != image.src) {
             ref.jQ().attr("src", image.src);
@@ -345,27 +447,39 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
       // will give us a reference to the HTML element which we can then
       // just modify the displayed text for.
       if (ref && ref.jQ()) {
-         ref.jQ().css({
+			var css = this._mergeTransform(ref, {
             font: this.getNormalizedFont(),
             color: this.getFillStyle(),
-            left: this.cursorPos.x + point.x,
-            top: this.cursorPos.y + point.y,
+            left: point.x,
+            top: point.y,
             position: "absolute"
-         }).text(text);
+			}); 
+         ref.jQ().css(css).text(text);
       }
    },
 	
-	drawElement: function(point, ref) {
+	drawElement: function(ref) {
 		if (ref && ref.jQ()) {
-			if (ref.jQ().css("left") != this.cursorPos.x + point.x ||
-			 ref.jQ().css("top") != this.cursorPos.y + point.y) {
-				ref.jQ().css({
-	            left: this.cursorPos.x + point.x,
-	            top: this.cursorPos.y + point.y,
-	            position: "absolute",
-					display: "block"
-				});
-			 }
+			// TODO: Can probably save cycles by checking for changes in the
+			//			transformations before blindly applying them
+			var css = {};
+			if (this.hasTxfm && ref.getOrigin) {
+				if (ref.getOrigin().isZero()) {
+					css[this.txfmOrigin] = "top left";	
+				} else {
+					var offs = Point2D.create(ref.getOrigin());
+					offs.neg();
+					var pos = Point2D.create(this.getPosition());
+					pos.add(offs);
+					this.setPosition(pos);
+					var o = ref.getOrigin().get();
+					css[this.txfmOrigin] = o.x + "px " + o.y + "px";
+					offs.destroy();
+					pos.destroy();
+				}			
+			}
+			css = this._mergeTransform(ref, css);
+			ref.jQ().css(css);
 		}
 	}
 
@@ -378,35 +492,6 @@ var HTMLElementContext = RenderContext2D.extend(/** @scope HTMLElementContext.pr
     */
    getClassName: function() {
       return "HTMLElementContext";
-   },
-   
-   /**
-    * When the HTMLElementContext's dependencies are resolved, check the browser
-    * type and load a specific object which handles specific processing.
-    */
-   resolved: function() {
-      var version = parseFloat(EngineSupport.sysInfo().version);
-      switch (EngineSupport.sysInfo().browser) {
-         case "safari" :
-               if (version >= 3) {
-                  // Load support for webkit transforms
-                  Engine.include("/rendercontexts/support/context.htmlelement.webkit.js");
-               }
-            break;
-         case "chrome" :
-					// Load support for webkit transforms
-					Engine.include("/rendercontexts/support/context.htmlelement.webkit.js");
-				break;
-         case "mozilla" :
-               if (version >= 1.9) {
-                  // Load support for gecko transforms
-                  Engine.include("/rendercontexts/support/context.htmlelement.gecko.js");
-               }
-            break;
-         default:
-            break;
-      };
-      
    }
 });
 
