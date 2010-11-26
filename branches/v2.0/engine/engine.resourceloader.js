@@ -166,6 +166,15 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
       }
    },
    
+	/**
+	 * Get the specific resource supported by the resource loader.
+	 * @param name {String} The name of the resource
+	 * @return {Object}
+	 */
+	getResourceObject: function(name) {
+		return this.get(name);
+	},
+	
    /**
     * Set the data associated with the name.  The ready state is set
     * to <tt>false</tt>, so it will be up to the developer to call
@@ -212,12 +221,20 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
    },
 
 	/**
-	 * Exports an object which contains references to all of the resources
-	 * which have been loaded by this resource loader.  This method is optional
-	 * and may not be implemented directly by the loader.
+	 * Export all of the resources in this loader, as a JavaScript object, with the
+	 * resource name as the key and the corresponding object as the value.
+	 * @param [resourceNames] {Array} An optional array of resources to export, by name,
+	 * 		or <code>null</tt> to export all resources
 	 */
-	exportAll: function() {
-		return {};
+	exportAll: function(resourceNames) {
+		var o = this.base();
+		var resources = this.getResources();
+		for (var i in resources) {
+			if (!resourceNames || EngineSupport.indexOf(resourceNames, resources[i]) != -1) {
+				o[resources[i]] = this.getResourceObject(resources[i]);
+			}
+		}
+		return o;
 	},
 
    /**

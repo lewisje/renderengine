@@ -39,7 +39,7 @@ Engine.include("/resourceloaders/loader.image.js");
 Engine.initObject("SpriteLoader", "ImageLoader", function() {
 
 /**
- * @class Loads sprites and makes them available to the system.  Sprites are
+ * @class Loads sprite resources and makes them available to the system.  Sprites are
  *        defined by an external JSON resource file.  A sprite definition file 
  *        is a JSON file which can support single-line comments.  The format 
  *        describes the image which contains the bitmap, the size of the bitmap,
@@ -191,11 +191,20 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
       return s;
    },
 
-	exportAll: function(resource) {
+	/**
+	 * Export all of the sprites in the specified resource, as a JavaScript object, with the
+	 * sprite name as the key and the corresponding {@link Sprite} as the value.
+	 * @param resource {String} The name of the sprite resource
+	 * @param [spriteNames] {Array} An optional array of sprites to export, by name,
+	 * 		or <code>null</tt> to export all sprites
+	 */
+	exportAll: function(resource, spriteNames) {
 		var o = this.base();
 		var sprites = this.getSpriteNames(resource);
 		for (var i in sprites) {
-			o[sprites[i]] = this.getSprite(resource, sprites[i]);
+			if (!spriteNames || EngineSupport.indexOf(spriteNames, sprites[i]) != -1) {
+				o[sprites[i]] = this.getSprite(resource, sprites[i]);
+			}
 		}
 		return o;
 	},

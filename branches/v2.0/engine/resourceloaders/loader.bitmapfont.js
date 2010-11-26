@@ -116,6 +116,7 @@ var BitmapFontLoader = ImageLoader.extend(/** @scope BitmapFontLoader.prototype 
    getResourceType: function() {
       return "bitmap font";
    }
+	
 }, { /** @scope BitmapFontLoader.protoype */
    /**
     * Get the class name of this object

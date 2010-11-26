@@ -138,6 +138,15 @@ var SoundLoader = RemoteLoader.extend(/** @scope SoundLoader.prototype */{
       return this.get(sound);
    },
 
+	/**
+	 * Get the specific sound resource by name.
+	 * @param name {String} The name of the resource
+	 * @return {Sound}
+	 */
+	getResourceObject: function(name) {
+		return this.getSound(name);
+	},
+
    /**
     * The name of the resource this loader will get.
     * @return {String} The string "sound"
@@ -145,6 +154,7 @@ var SoundLoader = RemoteLoader.extend(/** @scope SoundLoader.prototype */{
    getResourceType: function() {
       return "sound";
    }
+		
 }, /** @scope SoundResourceLoader.prototype */{
    /**
     * Get the class name of this object

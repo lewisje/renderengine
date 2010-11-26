@@ -93,10 +93,11 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 	 * Set the render origin of the object.  The render origin is where the object will be
 	 * centered around when drawing position and rotation.
 	 *  
-	 * @param point {Point2D} The render origin (default: 0,0 - top left corner)
+	 * @param x {Number|Point2D} The X coordinate or the render origin (default: 0,0 - top left corner)
+	 * @param y {Number} The Y coordinate or <code>null</code> if X is a <code>Point2D</code>
 	 */
-	setOrigin: function(point) {
-		this.origin = point;
+	setOrigin: function(x, y) {
+		this.origin.set(x, y);
 	},
 	
 	/**
