@@ -7,15 +7,23 @@ Engine.initObject("Player", "Object2D", function() {
 	
 	var Player = Object2D.extend({
 		
+		spinRate: null,
+		
 		constructor: function() {
 			this.base("box");
 			
 			this.add(Transform2DComponent.create("move"));
 			this.setPosition(Math2D.randomPoint(HTMLContextTest.getFieldBox()));
+			
+			// Set the spin rate to a random value
+			this.spinRate = 3 + Math2.random() * 5;
 
+			// Add the DOM render component.  This is what
+			// causes the transformations to be updated each frame
+			// for a simple DOM object.
 			this.add(DOMRenderComponent.create("draw"));
 			
-			// The representation of this object in an HTML context
+			// The representation of this object in the HTML context
 			this.setElement($("<div>").css({
 				width: 100,
 				height: 100,
@@ -30,7 +38,7 @@ Engine.initObject("Player", "Object2D", function() {
 		update: function(renderContext, time) {
 			renderContext.pushTransform();
 			
-			this.setRotation(this.getRotation() + 1);
+			this.setRotation(this.getRotation() + this.spinRate);
 			
 			this.base(renderContext, time);
 			renderContext.popTransform();

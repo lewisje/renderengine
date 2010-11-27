@@ -33,6 +33,7 @@
 
 // Includes
 Engine.include("/engine.hostobject.js");
+Engine.include("/collision/collision.convexhull.js");
 
 Engine.initObject("Object2D", "HostObject", function() {
 
@@ -56,6 +57,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 	lastPosition: null,
 	
 	origin: null,
+	
+	collisionHull: null,
 
    /**
     * @private
@@ -67,6 +70,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.wBox = Rectangle2D.create(0,0,1,1);
       this.zIndex = 1;
 		this.origin = Point2D.create(0,0);
+		this.collisionHull = null;
    },
 	
 	/**
@@ -76,6 +80,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.bBox.destroy();
 		this.wBox.destroy();
 		this.lastPosition.destroy();
+		this.collisionHull.destroy();
 		this.base();
 	},
 
@@ -87,6 +92,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       this.zIndex = 1;
       this.bBox = null;
 		this.lastPosition = null;
+		this.collisionHull = null;
    },
 
 	/**
@@ -150,6 +156,23 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       // ABSTRACT METHOD
    },
    
+	/**
+	 * Set the convex hull used for collision.
+	 * @param convexHull {ConvexHull} The convex hull object
+	 */
+	setCollisionHull: function(convexHull) {
+		Assert(convexHull instanceof ConvexHull, "setCollisionHull() failed!");
+		this.collisionHull = convexHull;	
+	},
+	
+	/**
+	 * Get the convex hull used for collision.
+	 * @return {ConvexHull}
+	 */
+	getCollisionHull: function() {
+		return this.collisionHull;
+	},
+	
    /**
     * [ABSTRACT] Get the velocity of the object.
     * @return {Vector2D}

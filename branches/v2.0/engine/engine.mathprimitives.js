@@ -809,7 +809,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    rightNormal: function() {
    	var t = this.get();
-   	var norm = Vector2D.create(-t.y, t.x);
+   	var norm = Vector2D.create(-t.y, t.x).normalize();
    },
    
    /**
@@ -831,6 +831,11 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
       return "Vector2D";
    }
 });
+
+/**
+ * The "zero" vector. This vector should not be modified.
+ */
+Vector2D.ZERO = Vector2D.create(0,0);
 
 return Vector2D;
 
@@ -924,6 +929,11 @@ var Vector3D = Point3D.extend(/** @scope Vector3D.prototype */{
       return "Vector3D";
    }
 });
+
+/**
+ * The "zero" vector. This vector should not be modified.
+ */
+Vector3D.ZERO = Vector3D.create(0,0,0);
 
 return Vector3D;
 
