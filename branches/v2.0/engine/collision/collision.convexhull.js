@@ -54,6 +54,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	faces: null,
 	normals: null,
 	vertexes: null,
+	dirty: false,
 
 	/**
 	 * @private
@@ -89,23 +90,9 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 
 		// Create the simplified hull
 		this.vertexes = Math2D.convexHull(points, lod);
-		
-		// Build the face and normals array
+		this.dirty = true;
 		this.faces = [];
 		this.normals = [];
-		var v = Vector2D.create(0,0);
-		for (var n = 0; n < this.hull.length; n++) {
-			var p1 = this.hull[n];
-			var p2;
-			if (n == 0) {	// Special case
-				p2 = this.hull[this.hull.length - 1];
-			} else {
-				p2 = this.hull[n - 1];
-			}
-			v.set(p1).sub(p2);
-			this.faces.push(v);
-			this.normals.push(v.rightNormal());
-		}		
 	},
 
 	/**
@@ -125,10 +112,36 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	},
 
 	/**
+	 * Build the faces and normals array, if the hull has been transformed.
+	 * @private
+	 */
+	_build: function() {
+		if (this.dirty) {
+			// Destroy any previous objects
+			for (var k = 0; k < this.faces.length; k++) {
+				this.faces[k].destroy();
+				this.normals[k].destroy();
+			}
+			
+			// Build the face and normals array
+			for (var n = 1; n < this.hull.length; n++) {
+				var p1 = this.hull[n];
+				var p2 = this.hull[n-1];
+				v.set(p2).sub(p1);
+				var v = Vector2D.create(0,0);
+				this.faces.push(v);
+				this.normals.push(v.rightNormal());
+			}
+			this.dirty = false;		
+		}
+	},
+
+	/**
 	 * Get the array of face vectors in the convex hull
 	 * @return {Array} of {@link Vector2D}
 	 */
 	getFaces: function() {
+		this._build();
 		return this.faces;
 	},
 
@@ -137,6 +150,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 * @return {Array} of {@link Vector2D}
 	 */
 	getNormals: function() {
+		this._build();
 		return this.normals;
 	},
 	
@@ -154,6 +168,45 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 */
 	getType: function() {
 		return ConvexHull.CONVEX_NGON;
+	},
+	
+	/**
+	 * Transform the points of the hull.
+	 * 
+	 * @param pos {Point2D}
+	 * @param rot {Number}
+	 * @param scaleX {Number}
+	 * @param scaleY {Number}
+	 */
+	transform: function(pos, rot, scaleX, scaleY) {
+		this.dirty = true;
+
+		// Default some values
+		rot = rot || 0;
+		scaleX = scaleX || 1.0;
+		scaleY = scaleY || scaleX;
+		
+		var p = pos.get();
+		var tM = $M([
+			[1,0,p.x],
+			[0,1,p.y],
+			[0,0,1]
+		]);
+		if (rot != 0) {
+			tM.multiply($M.Rotation(Math2D.degToRad(rot), $V([0,1,0])));
+		}
+		if (scaleX != 1.0 && scaleY != 1.0) {
+			tM.multiply($M([
+				[scaleX,0,0],
+				[0,scaleY,0],
+				[0,0,1]
+			]));
+		}
+
+		// Transform the vertexes of the hull		
+		for (var p = 0; p < this.vertexes.length; p++) {
+			this.vertexes.transform(tM);	
+		}	
 	}
 
 }, { /** @scope ConvexHull.prototype */

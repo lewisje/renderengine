@@ -8,7 +8,7 @@ Engine.include("/spatial/container.spatialgrid.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 
 // Load the timers
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.timers.js");
 
 
 // Load the game objects

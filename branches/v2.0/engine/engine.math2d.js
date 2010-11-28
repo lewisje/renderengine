@@ -511,7 +511,15 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		c.destroy();
       
       return moveVec;         
-   }
+   },
+	
+	/**
+	 * Returns an identity matrix
+	 * @return {Matrix}
+	 */
+	identityMatrix: function() {
+		return $M.I(3);	
+	}
 	
 });
 

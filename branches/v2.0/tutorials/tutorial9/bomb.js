@@ -2,8 +2,8 @@
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.boxcollider.js");
 Engine.include("/components/component.sprite.js");
-Engine.include("/engine/engine.object2d.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.object2d.js");
+Engine.include("/engine.timers.js");
 
 Engine.initObject("Bomb", "Object2D", function() {
 

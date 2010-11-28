@@ -2,7 +2,7 @@
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/components/component.boxcollider.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 Engine.initObject("GameObject", "Object2D", function() {
 

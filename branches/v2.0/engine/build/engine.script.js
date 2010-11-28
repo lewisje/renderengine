@@ -458,7 +458,7 @@ var Engine = Engine.extend({
 	
 		// Load the options specific to the browser.  Whether they load, or not,
 		// the game will continue to load.
-		Engine.loadJSON(Engine.getEnginePath() + "/engine/configs/" + EngineSupport.sysInfo().browser + ".config", function(bData, status) {
+		Engine.loadJSON(Engine.getEnginePath() + "/configs/" + EngineSupport.sysInfo().browser + ".config", function(bData, status) {
 			if (status == 200) {
 				Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
 				Engine.setOptions(bData);
