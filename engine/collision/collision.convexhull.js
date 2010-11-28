@@ -205,7 +205,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 
 		// Transform the vertexes of the hull		
 		for (var p = 0; p < this.vertexes.length; p++) {
-			this.vertexes.transform(tM);	
+			this.vertexes[p].transform(tM);	
 		}	
 	}
 
