@@ -1,7 +1,7 @@
 // Load the components and engine objects
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.boxcollider.js");
-Engine.include("/engine/engine.object2d.js");
+Engine.include("/engine.object2d.js");
 
 Engine.initObject("TouchObject", "Object2D", function() {
 

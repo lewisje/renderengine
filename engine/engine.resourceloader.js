@@ -227,7 +227,7 @@ var ResourceLoader = BaseObject.extend(/** @scope ResourceLoader.prototype */{
 	 * 		or <code>null</tt> to export all resources
 	 */
 	exportAll: function(resourceNames) {
-		var o = this.base();
+		var o = {};
 		var resources = this.getResources();
 		for (var i in resources) {
 			if (!resourceNames || EngineSupport.indexOf(resourceNames, resources[i]) != -1) {

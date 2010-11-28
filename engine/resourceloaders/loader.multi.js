@@ -31,8 +31,8 @@
  */
 
 // Includes
-Engine.include("/engine/engine.resourceloader.js");
-Engine.include("/engine/engine.timers.js");
+Engine.include("/engine.resourceloader.js");
+Engine.include("/engine.timers.js");
 
 Engine.initObject("MultiResourceLoader", "ResourceLoader", function() {
 

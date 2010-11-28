@@ -52,12 +52,27 @@ Engine.initObject("SATColliderComponent", "ColliderComponent", function() {
  */
 var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderComponent.prototype */{
 
+	impulseVector: null,
+	
+	constructor: function(name, collisionModel, priority) {
+		this.base(name, collisionModel, priority);
+		this.impulseVector = Vector2D.create(0,0);
+	},
+	
+	destroy: function() {
+		this.impulseVector.destroy();
+		this.base();
+	},
+	
+	release: function() {
+		this.base();
+		this.impulseVector = null;
+	},
+
    /**
     * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,
     * the potential collision object, and the host and target masks.  The return value should 
     * either tell the collision tests to continue or stop.
-    * <p/>
-    * A world bounding box collision must occur to trigger the <tt>onCollide()</tt> method.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
     * @param collisionObj {HostObject} The host object with which the collision potentially occurs
@@ -66,10 +81,13 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-		this.repulsionVector = SATColliderComponent.test(this.getHostObject().getCollisionHull(), 
+		var vect = SATColliderComponent.test(this.getHostObject().getCollisionHull(), 
 			collisionObj.getCollisionHull());
+		
+		this.impulseVector.set(vect);
+		vect.destroy();
 			
-      if (!this.repulsionVector.isZero()) {
+      if (!this.impulseVector.isZero()) {
          return this.base(time, collisionObj, hostMask, targetMask);
       }
       
@@ -77,12 +95,12 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
    },
 	
 	/**
-	 * Returns the computed repulsion vector to keep the two objects separate along
+	 * Returns the computed impulse vector to keep the two objects separate along
 	 * the shortest vector.
 	 * @return {Vector2D}
 	 */
-	getRepulsionVector: function() {
-		return this.repulsionVector;
+	getImpulseVector: function() {
+		return this.impulseVector;
 	}
 
 }, { /** @scope SATColliderComponent.prototype */

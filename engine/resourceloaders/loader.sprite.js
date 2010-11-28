@@ -199,7 +199,7 @@ var SpriteLoader = ImageLoader.extend(/** @scope SpriteLoader.prototype */{
 	 * 		or <code>null</tt> to export all sprites
 	 */
 	exportAll: function(resource, spriteNames) {
-		var o = this.base();
+		var o = {};
 		var sprites = this.getSpriteNames(resource);
 		for (var i in sprites) {
 			if (!spriteNames || EngineSupport.indexOf(spriteNames, sprites[i]) != -1) {

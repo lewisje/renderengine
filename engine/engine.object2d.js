@@ -80,7 +80,9 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.bBox.destroy();
 		this.wBox.destroy();
 		this.lastPosition.destroy();
-		this.collisionHull.destroy();
+		if (this.collisionHull) {
+			this.collisionHull.destroy();
+		}
 		this.base();
 	},
 

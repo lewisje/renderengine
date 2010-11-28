@@ -6,7 +6,7 @@
 	<property name="version.name" value=""/>
    <property name="build.date" value=""/>
    <property name="dist.home" value="${basedir}/dist_${app.version}"/>
-   <property name="engine.src" value="${basedir}/engine/build"  />
+   <property name="engine.src" value="${basedir}/engine/build"/>
    <property name="make.dir" value="${basedir}/make"/>
    <property name="compressor.jar" value="${make.dir}/yuicompressor-2.4.2.jar"/>
    <property name="compiler.jar" value="${make.dir}/compiler.jar"/>

@@ -120,10 +120,24 @@ Engine.initObject("Point2D", "MathObject", function() {
  */
 var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
-   _vec: null,
+   _vec: $V([0,0]),
 
-   x: 0,
-   y: 0,
+	// Define setters and getters
+	get x() {
+		return this._vec.e(0);
+	},
+	
+	set x(val) {
+		this._vec.setElements([val, this._vec.e(1)]);
+	},
+
+	get y() {
+		return this._vec.e(1);
+	},
+	
+	set y(val) {
+		this._vec.setElements([this._vec.e(0), val]);
+	},
 
    /**
     * @private
@@ -134,19 +148,13 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       this.set(x, y);
    },
 
+	/**
+	 * Release this to the pool for reuse.
+	 */
    release: function() {
       this.base();
       this.x = 0;
       this.y = 0;
-      this._vec.setElements([0,0]);
-   },
-
-   /**
-    * Private method used to update underlying object.
-    * @private
-    */
-   upd: function() {
-      this.x = this._vec.e(1); this.y = this._vec.e(2);
    },
 
 	/**
@@ -155,7 +163,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 	 * @return {Array}
 	 */
 	simplify: function() {
-		return [this._vec.e(1), this._vec.e(2)];
+		return [this.x, this.y];
 	},
 
    /**
@@ -179,14 +187,16 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    set: function(x, y) {
 		if (x.length && x.splice && x.shift) {
 			// An array
-			this._vec.setElements([x[0],x[1]]);
+			this.x = x[0];
+			this.y = x[1];
 		} else if (Point2D.isInstance(x)) {
-         this._vec = x._vec.dup();
+			this.x = x.x;
+			this.y = x.y;
       } else {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
-         this._vec.setElements([x, y]);
+         this.x = x;
+			this.y = y || 0;
       }
-      this.upd();
       return this;
    },
    
@@ -195,7 +205,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Object}
     */
    get: function() {
-      return { x: this._vec.e(1), y: this._vec.e(2) };
+      return { x: this.x, y: this.y };
    },
 
    /**
@@ -204,8 +214,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @param x {Number} The X coordinate
     */
    setX: function(x) {
-      this._vec.setElements([x, this._vec.e(2)]);
-      this.upd();
+      this.x = x;
    },
 
    /**
@@ -214,8 +223,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @param y {Number} The Y coordinate
     */
    setY: function(y) {
-      this._vec.setElements([this._vec.e(1), y]);
-      this.upd();
+      this.y = y;
    },
 
    /**
@@ -225,8 +233,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    add: function(point) {
-      this._vec = this._vec.add(point._vec);
-      this.upd();
+		this.x += point.x;
+		this.y += point.y;
       return this;
    },
 
@@ -236,8 +244,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    addScalar: function(scalar) {
-      this._vec = this._vec.map(function(x) { return x + scalar; });
-      this.upd();
+      this.x += scalar;
+		this.y += scalar;
       return this;
    },
 
@@ -247,8 +255,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    sub: function(point) {
-      this._vec = this._vec.subtract(point._vec);
-      this.upd();
+		this.x -= point.x;
+		this.y -= point.y;
       return this;
    },
 
@@ -258,8 +266,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    convolve: function(point) {
-      this._vec = this._vec.map(function(x, i) { return x * (i == 1 ? point.x : point.y); });
-      this.upd();
+		this.x *= point.x;
+		this.y *= point.y;
       return this;
    },
 
@@ -270,9 +278,9 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    convolveInverse: function(point) {
-      Assert((point.x != 0 && point.y != 0), "Division by zero in Point.convolveInverse");
-      this._vec = this._vec.map(function(x, i) { return x / (i == 1 ? point.x : point.y); });
-      this.upd();
+      Assert((point.x != 0 && point.y != 0), "Division by zero in Point2D.convolveInverse");
+		this.x /= point.x;
+		this.y /= point.y;
       return this;
    },
 
@@ -282,8 +290,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    mul: function(scalar) {
-      this._vec = this._vec.x(scalar);
-      this.upd();
+		this.x *= scalar;
+		this.y *= scalar;
       return this;
    },
 
@@ -294,9 +302,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     */
    div: function(scalar) {
       Assert((scalar != 0), "Division by zero in Point.divScalar");
-
-      this._vec = this._vec.x(1 / scalar);
-      this.upd();
+      this.x /= scalar;
+		this.y /= scalar;
       return this;
    },
 
@@ -305,8 +312,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Point2D} This point
     */
    neg: function() {
-      this._vec.setElements([ -this._vec.e(1), -this._vec.e(2) ]);
-      this.upd();
+		this.x *= -1;
+		this.y *= -1;
       return this;
    },
 
@@ -315,7 +322,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the point's elements are both zero.
     */
    isZero: function() {
-      return this._vec.eql(Vector.Zero(2));
+      return this.x == 0 && this.y == 0;
    },
    
    /**
@@ -342,7 +349,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 	project: function(height, projectionType) {
 		height = height || 0;
 		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
-		var pt = Point3D.create(0,0,0), j = this.get();
+		var pt = Point3D.create(0,0,0), j = this;
 		switch (projectionType) {
 			case Math2D.ISOMETRIC_PROJECTION:
 				pt.set(0.5 * j.x + j.y - height, -(0.5 * j.x) + j.y - height, height); break;
@@ -354,12 +361,22 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 		return pt;		
 	},
 
+	/**
+	 * Mutator method which transforms this point by the specified matrix
+	 * @param matrix {Matrix} The matrix to transform this point by
+	 * @return {Point2D} This point
+	 */
+	transform: function(matrix) {
+		this._vec = matrix.multiply(this._vec);
+		return this;
+	},
+
    /**
     * Returns a printable version of this object fixed to two decimal places.
     * @return {String} Formatted as "x,y"
     */
    toString: function() {
-      return Number(this._vec.e(1)).toFixed(2) + "," + Number(this._vec.e(2)).toFixed(2);
+      return Number(this.x).toFixed(2) + "," + Number(this.y).toFixed(2);
    }
 
 }, { /** @scope Point2D.prototype */
@@ -399,11 +416,32 @@ Engine.initObject("Point3D", "MathObject", function() {
  */
 var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 
-   _vec: null,
+   _vec: $V([0,0,0]),
 
-   x: 0,
-   y: 0,
-	z: 0,
+	// Define setters and getters
+	get x() {
+		return this._vec.e(0);
+	},
+	
+	set x(val) {
+		this._vec.setElements([val, this._vec.e(1), this._vec.e(2)]);
+	},
+
+	get y() {
+		return this._vec.e(1);
+	},
+	
+	set y(val) {
+		this._vec.setElements([this._vec.e(0), val, this._vec.e(2)]);
+	},
+
+	get z() {
+		return this._vec.e(2);
+	},
+	
+	set z(val) {
+		this._vec.setElements([this._vec.e(0), this._vec.e(1), val]);
+	},
 
    /**
     * @private
@@ -419,15 +457,6 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
       this.x = 0;
       this.y = 0;
 		this.z = 0;
-      this._vec.setElements([0,0,0]);
-   },
-
-   /**
-    * Private method used to update underlying object.
-    * @private
-    */
-   upd: function() {
-      this.x = this._vec.e(1); this.y = this._vec.e(2); this.z = this._vec.e(3);
    },
 
 	/**
@@ -436,7 +465,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 	 * @return {Array}
 	 */
 	simplify: function() {
-		return [this._vec.e(1), this._vec.e(2), this._vec.e(3)];
+		return [this.x, this.y, this.z];
 	},
 
    /**
@@ -462,15 +491,20 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
    set: function(x, y, z) {
   		if (x.length && x.splice && x.shift) {
 			// An array
-			this._vec.setElements([x[0],x[1],x[2]]);
+			this.x = x[0];
+			this.y = x[1];
+			this.z = x[2];
 		} else if (Point3D.isInstance(x)) {
-         this._vec = x._vec.dup();
+         this.x = x.x;
+			this.y = x.y;
+			this.z = x.z
       } else {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
 			AssertWarn((z != null), "Undefined Z value for point initialized to zero.");
-         this._vec.setElements([x, y || 0, z || 0]);
+         this.x = x;
+			this.y = y || 0;
+			this.z = z || 0;
       }
-      this.upd();
       return this;
    },
    
@@ -479,7 +513,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Object}
     */
    get: function() {
-      return { x: this._vec.e(1), y: this._vec.e(2), z: this._vec.e(3) };
+      return { x: this.x, y: this.x, z: this.z };
    },
 
    /**
@@ -488,8 +522,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @param x {Number} The X coordinate
     */
    setX: function(x) {
-      this._vec.setElements([x, this._vec.e(2), this._vec.e(3)]);
-      this.upd();
+      this.x = x;
    },
 
    /**
@@ -498,8 +531,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @param y {Number} The Y coordinate
     */
    setY: function(y) {
-      this._vec.setElements([this._vec.e(1), y, this._vec.e(3)]);
-      this.upd();
+      this.y = y;
    },
 	
    /**
@@ -508,7 +540,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @param z {Number} The Z coordinate
     */
 	setZ: function(z) {
-		this._vec.setElements([this._vec.e(1), this._vec.e(2), z])
+		this.z = z;
 	},
 
    /**
@@ -518,8 +550,9 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Point3D} This point
     */
    add: function(point) {
-      this._vec = this._vec.add(point._vec);
-      this.upd();
+		this.x += point.x;
+		this.y += point.y;
+		this.z += point.z;
       return this;
    },
 
@@ -529,8 +562,9 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Point3D} This point
     */
    addScalar: function(scalar) {
-      this._vec = this._vec.map(function(x) { return x + scalar; });
-      this.upd();
+		this.x += scalar;
+		this.y += scalar;
+		this.z += scalar;
       return this;
    },
 
@@ -540,8 +574,9 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Point3D} This point
     */
    sub: function(point) {
-      this._vec = this._vec.subtract(point._vec);
-      this.upd();
+		this.x -= point.x;
+		this.y -= point.y;
+		this.z -= point.z;
       return this;
    },
 
@@ -551,8 +586,9 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Point3D} This point
     */
    convolve: function(point) {
-      this._vec = this._vec.map(function(x, i) { return x * (i == 1 ? point.x : (i == 2 ? point.y : point.z)); });
-      this.upd();
+		this.x *= point.x;
+		this.y *= point.y;
+		this.z *= point.z;
       return this;
    },
 
@@ -563,9 +599,10 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Point3D} This point
     */
    convolveInverse: function(point) {
-      Assert((point.x != 0 && point.y != 0), "Division by zero in Point.convolveInverse");
-      this._vec = this._vec.map(function(x, i) { return x / (i == 1 ? point.x : (i == 2 ? point.y : point.z)); });
-      this.upd();
+      Assert((point.x != 0 && point.y != 0 && point.z != 0), "Division by zero in Point3D.convolveInverse");
+      this.x /= point.x;
+		this.y /= point.y;
+		this.z /= point.z;
       return this;
    },
 
@@ -575,8 +612,9 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Point3D} This point
     */
    mul: function(scalar) {
-      this._vec = this._vec.map(function(x) { return x * scalar; });
-      this.upd();
+		this.x *= scalar;
+		this.y *= scalar;
+		this.z *= scalar;
       return this;
    },
 
@@ -587,9 +625,9 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     */
    div: function(scalar) {
       Assert((scalar != 0), "Division by zero in Point.divScalar");
-
-      this._vec = this._vec.map(function(x) { return x / scalar; });
-      this.upd();
+		this.x /= scalar;
+		this.y /= scalar;
+		this.z /= scalar;
       return this;
    },
 
@@ -598,8 +636,9 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Point2D} This point
     */
    neg: function() {
-      this._vec.setElements([ -this._vec.e(1), -this._vec.e(2), this._vec.e(3) ]);
-      this.upd();
+		this.x *= -1;
+		this.y *= -1;
+		this.z *= -1;
       return this;
    },
 
@@ -608,7 +647,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {Boolean} <tt>true</tt> if the point's elements are all zero.
     */
    isZero: function() {
-      return this._vec.eql(Vector.Zero);
+      return this.x == 0 && this.y == 0 && this.z == 0;
    },
    
    /**
@@ -632,7 +671,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 	 */
 	project: function(projectionType) {
 		projectionType = projectionType || Math2D.ISOMETRIC_PROJECTION;
-		var pt = Point2D.create(0,0), j = this.get();
+		var pt = Point2D.create(0,0), j = this;
 		switch (projectionType) {
 			case Math2D.ISOMETRIC_PROJECTION:
 				pt.set(j.x - j.z, j.y + ((j.x + j.z) / 2)); break;
@@ -649,7 +688,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @return {String} Formatted as "x,y"
     */
    toString: function() {
-      return Number(this._vec.e(1)).toFixed(2) + "," + Number(this._vec.e(2)).toFixed(2) + "," + Number(this._vec.e(3)).toFixed(2);
+      return Number(this.x).toFixed(2) + "," + Number(this.y).toFixed(2) + "," + Number(this.z).toFixed(2);
    }
 
 }, { /** @scope Point3D.prototype */
@@ -690,7 +729,6 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    constructor: function(x, y) {
       this.base(x,y);
-		this.upd();
    },
 
    /**
@@ -700,7 +738,6 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    normalize: function() {
       this._vec = this._vec.toUnitVector();
-      this.upd();
       return this;
    },
 
@@ -729,7 +766,6 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    cross: function(vector) {
       this._vec = this._vec.cross(vector._vec);
-      this.upd();
       return this;
    },
 
@@ -782,7 +818,6 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    rotate: function(angle, axis) {
    	this._vec = this._vec.rotate(Math2D.degToRad(angle), axis);
-      this.upd();
    	return this;
    },
    
@@ -794,8 +829,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     */
    projectOnto: function(vector) {
    	var proj = Vector2D.create(0,0);
-   	var t = this.get();
-   	var v = vector.get();
+   	var v = vector;
    	var dp = this.dot(vector);
    	proj.set( (dp / (v.x * v.x + v.y * v.y)) * v.x,
    				 (dp / (v.x * v.x + v.y * v.y)) * v.y);
@@ -808,8 +842,7 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
     * @return {Vector2D}
     */
    rightNormal: function() {
-   	var t = this.get();
-   	var norm = Vector2D.create(-t.y, t.x).normalize();
+   	return Vector2D.create(-this.y, this.x).normalize();
    },
    
    /**
@@ -864,7 +897,6 @@ var Vector3D = Point3D.extend(/** @scope Vector3D.prototype */{
     */
    constructor: function(x, y, z) {
       this.base(x,y,z);
-		this.upd();
    },
 
    /**
@@ -874,7 +906,6 @@ var Vector3D = Point3D.extend(/** @scope Vector3D.prototype */{
     */
    normalize: function() {
       this._vec = this._vec.toUnitVector();
-      this.upd();
       return this;
    },
 
@@ -903,7 +934,6 @@ var Vector3D = Point3D.extend(/** @scope Vector3D.prototype */{
     */
    cross: function(vector) {
       this._vec = this._vec.cross(vector._vec);
-      this.upd();
       return this;
    },
 
@@ -961,10 +991,14 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param height {Number} The height of the rectangle
     */
    constructor: function(x, y, width, height) {
+		this.base("Rectangle2D");
+
       this.topLeft = Point2D.create(0,0);
       this.bottomRight = Point2D.create(0,0);
       this.dims = Point2D.create(0,0);
 		this.center = Point2D.create(0,0);
+		
+		
       this.set(x,y,width,height);
 		this.base("Rectangle2D");
    },
@@ -987,26 +1021,28 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       this.base();
       this.topLeft = null;
       this.dims = null;
+      this.bottomRight = null;
+		this.center = null;
    },
 
    /**
     * Set the values of this rectangle.
     *
-    * @param x {Number|Rectangle2D} An optional value to initialize the X coordinate of the rectangle, or a rectangle to clone
+    * @param x {Array|Number|Rectangle2D} An optional value to initialize the X coordinate of the rectangle, or a rectangle to clone
     * @param y {Number} An optional value to initialize the Y coordinate of the rectangle
     * @param width {Number} An optional value to initialize the width of the rectangle
     * @param height {Number} An optional value to initialize the height of the rectangle
     */
-   set: function(x, y, width, height)
-   {
-      if (Rectangle2D.isInstance(x)) {
-			var r = x.get();
-         this.set(r.x, r.y, r.w, r.h);
-      }
-      else
-      {
-         this.topLeft.set(x || 0, y || 0);
-         this.dims.set(width || 0, height || 0);
+   set: function(x, y, width, height) {
+		if (x.length && x.splice && x.shift) {
+         this.topLeft.set(x[0],x[1]);
+			this.dims.set(x[2],x[3]);
+		} else if (Rectangle2D.isInstance(x)) {
+         this.topLeft.set(x.x,x.y);
+			this.dims.set(x.w,x.h);
+      } else {
+         this.topLeft.set(x,y);
+			this.dims.set(width,height);
       }
    },
 
@@ -1017,9 +1053,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @return {Object} An object with the specified elements
     */
    get: function() {
-      var tl = this.getTopLeft();
-      var d = this.getDims();
-      return {x: tl.x, y: tl.y, w: d.x, h: d.y, r: tl.x + d.x, b: tl.y + d.y};
+      return {x: this.x, y: this.y, w: this.w, h: this.h, r: this.r, b: this.b};
    },
 
    /**
@@ -1029,7 +1063,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the two rectangles are equal
     */
    equals: function(rect) {
-      return (this.topLeft.equals(rect.getTopLeft()) && this.dims.equals(rect.getDims()));
+      return this.x == rect.x && this.y == rect.y &&
+				 this.w == rect.w && this.h == rect.h;
    },
 
    /**
@@ -1043,8 +1078,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     *                      the offset along the Y axis.
     * @return {Rectangle2D} This rectangle
     */
-   offset: function(offsetPtOrX, offsetY)
-   {
+   offset: function(offsetPtOrX, offsetY) {
       var offs = Point2D.create(0,0);
       if (Point2D.isInstance(offsetPtOrX)) {
          offs.set(offsetPtOrX);
@@ -1052,7 +1086,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
          offs.set(offsetPtOrX, offsetY);
       }
 
-      this.topLeft.add(offs);
+		this.x += offs.x;
+		this.y += offs.y;
 		offs.destroy();
       return this;
    },
@@ -1065,9 +1100,11 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    setTopLeft: function(ptOrX, y) {
       if (Point2D.isInstance(ptOrX)) {
-         this.topLeft.set(ptOrX);
+			this.x = ptOrX.x;
+			this.y = ptOrX.y;
       } else {
-         this.topLeft.set(ptOrX, y);
+			this.x = ptOrX;
+			this.y = y;
       }
    },
 
@@ -1078,9 +1115,11 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    setDims: function(ptOrX, y) {
       if (Point2D.isInstance(ptOrX)) {
-         this.dims.set(ptOrX.x, ptOrX.y);
+			this.w = ptOrX.x;
+			this.h = ptOrX.y;
       } else {
-         this.dims.set(ptOrX, y)
+			this.w = ptOrX;
+			this.h = y;
       }
    },
 
@@ -1090,9 +1129,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param width {Number} The new width of the rectangle
     */
    setWidth: function(width) {
-		var p = Point2D.create(width, this.get().h);
-      this.setDims(p);
-		p.destroy();
+		this.w = width;
    },
 
    /**
@@ -1101,9 +1138,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param height {Number} The new height of the rectangle
     */
    setHeight: function(height) {
-		var p = Point2D.create(this.get().w, height);
-      this.setDims(p);
-		p.destroy();
+		this.h = height;
    },
 
    /**
@@ -1115,9 +1150,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @return {Vector2D} The vector to resolve the overlap
     * @private
     */
-   isOverlapped: function(rect)
-   {
-      // TODO: This will implement the Separating Axis Theorem, eventually...
+   isOverlapped: function(rect) {
+      // TODO: Implement
    },
 
    /**
@@ -1127,12 +1161,10 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @return {Boolean} <tt>true</tt> if the two rectangles intersect.
     */
    isIntersecting: function(rect) {
-      var r1 = this.get();
-      var r2 = rect.get();
-      return !(r1.r < r2.x ||
-               r1.x > r2.r ||
-               r1.y > r2.b ||
-               r1.b < r2.y);
+      return !(this.r < rect.x ||
+               this.x > rect.r ||
+               this.y > rect.b ||
+               this.b < rect.y);
    },
 
    /**
@@ -1141,14 +1173,11 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param rect A {@link Rectangle2D} to compare against
     * @return {Boolean} <tt>true</tt> if the this rectangle is fully contained in the specified rectangle.
     */
-   isContained: function(rect)
-   {
-      var r1 = this.get();
-      var r2 = rect.get();
-      return ((r1.x >= r2.x) &&
-              (r1.y >= r2.y) &&
-              (r1.r <= r2.r) &&
-              (r1.b <= r2.b));
+   isContained: function(rect) {
+      return ((this.x >= rect.x) &&
+              (this.y >= rect.y) &&
+              (this.r <= rect.r) &&
+              (this.b <= rect.b));
    },
 
    /**
@@ -1157,15 +1186,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param rect A {@link Rectangle2D} to compare against
     * @return {Boolean} <tt>true</tt> if the rectangle is fully contained within this rectangle.
     */
-   containsRect: function(rect)
-   {
-      var r1 = this.get();
-      var r2 = rect.get();
-      return ((r2.x >= r1.x) &&
-              (r2.y >= r1.y) &&
-              (r2.r <= r1.r) &&
-              (r2.b <= r1.b));
-
+   containsRect: function(rect) {
+		return rect.isContained(this);
    },
 
    /**
@@ -1174,13 +1196,11 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * @param point {Point} The point to test
     * @return {Boolean} <tt>true</tt> if the point is within this rectangle
     */
-   containsPoint: function(point)
-   {
-      var r1 = this.get();
-      return (point.x >= r1.x &&
-              point.y >= r1.y &&
-              point.x <= r1.r &&
-              point.y <= r1.b);
+   containsPoint: function(point) {
+      return (point.x >= this.x &&
+              point.y >= this.y &&
+              point.x <= this.r &&
+              point.y <= this.b);
    },
 
    /**
@@ -1188,9 +1208,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     *
     * @return {Point2D} The center point of the rectangle
     */
-   getCenter: function()
-   {
-		this.center.set(this.topLeft.x + (this.dims.x * 0.5), this.topLeft.y + (this.dims.y * 0.5));
+   getCenter: function() {
 		return this.center;
    },
 
@@ -1215,9 +1233,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     *
     * @return {Number}
     */
-   len_x: function()
-   {
-      return Math.abs(this.dims.x);
+   len_x: function() {
+      return Math.abs(this.w);
    },
 
    /**
@@ -1225,17 +1242,15 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     *
     * @return {Number}
     */
-   len_y: function()
-   {
-      return Math.abs(this.dims.y);
+   len_y: function() {
+      return Math.abs(this.h);
    },
 
    /**
     * Gets a {@link Point2D} representing the top-left corner of this rectangle.
     * @return {Point2D}
     */
-   getTopLeft: function()
-   {
+   getTopLeft: function() {
       return this.topLeft;
    },
 
@@ -1243,8 +1258,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Gets a {@link Point2D) representing the width and height of this rectangle.
     * @return {Point2D}
     */
-   getDims: function()
-   {
+   getDims: function() {
       return this.dims;
    },
 
@@ -1252,9 +1266,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Gets a {@link Point2D} representing the bottom-right corner of this rectangle.
     * @return {Point2D}
     */
-   getBottomRight: function()
-   {
-		this.bottomRight.set(this.topLeft).add(this.dims);
+   getBottomRight: function() {
       return this.bottomRight;
    },
 
@@ -1262,10 +1274,10 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     * Returns a printable version of this object.
     * @return {String} Formatted like "x,y [w,h]"
     */
-   toString: function()
-   {
+   toString: function() {
       return (this.topLeft + " [" + this.dims + "]");
    }
+	
 }, { /** @scope Rectangle2D.prototype */
    
    /**
@@ -1275,6 +1287,57 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
    getClassName: function() {
       return "Rectangle2D";
    }
+});
+
+var rp = Rectangle2D.prototype;
+
+// Define setters and getters
+rp.__defineGetter__("x", function() {
+	return this.getTopLeft() != null ? this.getTopLeft().x : 0;
+});
+
+rp.__defineSetter__("x", function(val) {
+	this.getTopLeft().setX(val);
+	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+});
+
+rp.__defineGetter__("y", function() {
+	return this.getTopLeft() != null ? this.getTopLeft().y : 0;
+});
+
+rp.__defineSetter__("y", function(val) {
+	this.getTopLeft().setY(val);
+	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+});
+
+rp.__defineGetter__("w", function() {
+	return this.getDims() != null ? this.getDims().x : 0;
+});
+
+rp.__defineSetter__("w", function(val) {
+	this.getDims().setX(val);
+	this.bottomRight.set(this.getTopLeft().x + this.getDims().x, this.getTopLeft().y + this.getDims().y);
+	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+});
+
+rp.__defineGetter__("h", function() {
+	return this.getDims() != null ? this.getDims().y : 0;
+});
+
+rp.__defineSetter__("h", function(val) {
+	this.getDims().setY(val);
+	this.bottomRight.set(this.getTopLeft().x + this.getDims().x, this.getTopLeft().y + this.getDims().y);
+	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+});
+
+rp.__defineGetter__("r", function() {
+	return this.getDims() != null && this.getTopLeft() != null ? 
+			 this.getTopLeft().x + this.getDims().x : 0;
+});
+
+rp.__defineGetter__("b", function() {
+	return this.getDims() != null && this.getTopLeft() != null ?
+			 this.getTopLeft().y + this.getDims().y : 0;
 });
 
 return Rectangle2D;
@@ -1290,7 +1353,6 @@ Engine.initObject("Circle2D", "MathObject", function() {
 var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
 
    center: null,
-   
    radius: 0,
    
    /**
@@ -1373,8 +1435,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
     * @param offsetY {int} If <code>offsetPtOrX</code> is an integer value for the offset in the X axis, this should be
     *                      the offset along the Y axis.
     */
-   offset: function(offsetPtOrX, offsetY)
-   {
+   offset: function(offsetPtOrX, offsetY) {
       var offs = Point2D.create(0,0);
       if (Point2D.isInstance(offsetPtOrX)) {
          offs.set(offsetPtOrX);
@@ -1429,8 +1490,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
     * @param circle {Circle} A circle to compare against
     * @return {Boolean} <tt>true</tt> if the this circle is fully contained in the specified circle.
     */
-   isContained: function(circle)
-   {
+   isContained: function(circle) {
       var d = circle.getCenter().dist(this.getCenter());
       return (d < (this.getRadius() + circle.getRadius()));
    },
@@ -1441,8 +1501,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
     * @param circle {Circle} A circle to compare against
     * @return {Boolean} <tt>true</tt> if the rectangle is fully contained within this rectangle.
     */
-   containsCircle: function(circle)
-   {
+   containsCircle: function(circle) {
       return circle.isContained(this);
    },
 
@@ -1452,8 +1511,7 @@ var Circle2D = MathObject.extend(/** @scope Circle2D.prototype */{
     * @param point {Point} The point to test
     * @return {Boolean} <tt>true</tt> if the point is within the circle
     */
-   containsPoint: function(point)
-   {
+   containsPoint: function(point) {
       var c1 = this.getCenter();
       var r = this.getRadius();
       return (c1.dist(point) <= r);
