@@ -83,8 +83,8 @@ Engine.initObject("Bomb", "Object2D", function() {
 		 * Play a little animation and make the bomb explode
 		 */
 		explode: function() {
-			// Remove the bomb from the collision model so we don't trigger another collision
-			Tutorial9.collisionModel.removeObject(this);
+			// Set the collision mask so we don't collide again
+			this.getComponent("collide").setCollisionMask(Math2.parseBin("00"));
 			
 			// Draw an explosion of sorts
 			this.getComponent("draw").setSprite(Tutorial9.spriteLoader.getSprite("sprites", "boom"));
@@ -99,6 +99,8 @@ Engine.initObject("Bomb", "Object2D", function() {
 			
 			var self = this;
 			OneShotTrigger.create("explosion", 500, function() {
+				// Remove the bomb from the collision model
+				Tutorial9.collisionModel.removeObject(self);
 				self.destroy();
 			}, 10, function() {
 				var mc = self.getComponent("move");

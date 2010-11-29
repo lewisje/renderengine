@@ -120,31 +120,14 @@ Engine.initObject("Point2D", "MathObject", function() {
  */
 var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
-   _vec: $V([0,0]),
-
-	// Define setters and getters
-	get x() {
-		return this._vec.e(0);
-	},
-	
-	set x(val) {
-		this._vec.setElements([val, this._vec.e(1)]);
-	},
-
-	get y() {
-		return this._vec.e(1);
-	},
-	
-	set y(val) {
-		this._vec.setElements([this._vec.e(0), val]);
-	},
+   _vec: null,
 
    /**
     * @private
     */
    constructor: function(x, y) {
       this.base("Point2D");
-		this._vec = $V([0,0]);
+		this._vec = $V([0,0,1]);
       this.set(x, y);
    },
 
@@ -156,6 +139,13 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
       this.x = 0;
       this.y = 0;
    },
+
+	/**
+	 * @private
+	 */
+	_getVec: function() {
+		return this._vec;
+	},
 
 	/**
 	 * Returns a simplified version of a Point2D.  The simplified version is
@@ -187,15 +177,12 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
    set: function(x, y) {
 		if (x.length && x.splice && x.shift) {
 			// An array
-			this.x = x[0];
-			this.y = x[1];
+			this._vec.setElements([x[0],x[1],1]);
 		} else if (Point2D.isInstance(x)) {
-			this.x = x.x;
-			this.y = x.y;
+			this._vec.setElements([x.x,x.y,1]);
       } else {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
-         this.x = x;
-			this.y = y || 0;
+			this._vec.setElements([x,y||0,1]);
       }
       return this;
    },
@@ -214,7 +201,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @param x {Number} The X coordinate
     */
    setX: function(x) {
-      this.x = x;
+      this.set(x,this.y);
    },
 
    /**
@@ -223,7 +210,7 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
     * @param y {Number} The Y coordinate
     */
    setY: function(y) {
-      this.y = y;
+      this.set(this.x,y);
    },
 
    /**
@@ -395,6 +382,26 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
  */
 Point2D.ZERO = Point2D.create(0,0);
 
+// Define setters and getters
+var pp = Point2D.prototype;
+pp.__defineGetter__("x", function() {
+	return this._getVec().e(1);
+});
+
+pp.__defineSetter__("x", function(val) {
+	var v = this._getVec();
+	v.setElements([val, v.e(2), 1]);
+});
+
+pp.__defineGetter__("y", function() {
+	return this._getVec().e(2);
+});
+
+pp.__defineSetter__("y", function(val) {
+	var v = this._getVec();
+	v.setElements([v.e(1), val, 1]);
+});
+
 return Point2D;
 
 });
@@ -416,32 +423,7 @@ Engine.initObject("Point3D", "MathObject", function() {
  */
 var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 
-   _vec: $V([0,0,0]),
-
-	// Define setters and getters
-	get x() {
-		return this._vec.e(0);
-	},
-	
-	set x(val) {
-		this._vec.setElements([val, this._vec.e(1), this._vec.e(2)]);
-	},
-
-	get y() {
-		return this._vec.e(1);
-	},
-	
-	set y(val) {
-		this._vec.setElements([this._vec.e(0), val, this._vec.e(2)]);
-	},
-
-	get z() {
-		return this._vec.e(2);
-	},
-	
-	set z(val) {
-		this._vec.setElements([this._vec.e(0), this._vec.e(1), val]);
-	},
+   _vec: null,
 
    /**
     * @private
@@ -458,6 +440,13 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
       this.y = 0;
 		this.z = 0;
    },
+
+	/**
+	 * @private
+	 */
+	_getVec: function() {
+		return this._vec;
+	},
 
 	/**
 	 * Returns a simplified version of a Point3D.  The simplified version is
@@ -491,19 +480,13 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
    set: function(x, y, z) {
   		if (x.length && x.splice && x.shift) {
 			// An array
-			this.x = x[0];
-			this.y = x[1];
-			this.z = x[2];
+			this._vec.setElements(x);
 		} else if (Point3D.isInstance(x)) {
-         this.x = x.x;
-			this.y = x.y;
-			this.z = x.z
+			this._vec.setElements([x.x,x.y,x.z]);
       } else {
          AssertWarn((y != null), "Undefined Y value for point initialized to zero.");
 			AssertWarn((z != null), "Undefined Z value for point initialized to zero.");
-         this.x = x;
-			this.y = y || 0;
-			this.z = z || 0;
+			this._vec.setElements([x,y||0,z||0]);
       }
       return this;
    },
@@ -522,7 +505,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @param x {Number} The X coordinate
     */
    setX: function(x) {
-      this.x = x;
+      this.set(x,this.y,this.z);
    },
 
    /**
@@ -531,7 +514,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @param y {Number} The Y coordinate
     */
    setY: function(y) {
-      this.y = y;
+      this.set(this.x,y,this.z);
    },
 	
    /**
@@ -540,7 +523,7 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
     * @param z {Number} The Z coordinate
     */
 	setZ: function(z) {
-		this.z = z;
+		this.set(this.x,this.y,z);
 	},
 
    /**
@@ -703,6 +686,35 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
 });
 
 Point3D.ZERO = Point3D.create(0,0,0);
+
+// Define setters and getters
+var pp = Point3D.prototype;
+pp.__defineGetter__("x", function() {
+	return this._getVec().e(1);
+});
+
+pp.__defineSetter__("x", function(val) {
+	var v = this._getVec();
+	v.setElements([val, v.e(2), v.e(3)]);
+});
+
+pp.__defineGetter__("y", function() {
+	return this._getVec().e(2);
+});
+
+pp.__defineSetter__("y", function(val) {
+	var v = this._getVec();
+	v.setElements([v.e(1), val, v.e(3)]);
+});
+
+pp.__defineGetter__("z", function() {
+	return this._getVec().e(3);
+});
+
+pp.__defineSetter__("z", function(val) {
+	var v = this._getVec();
+	v.setElements([v.e(1), v.e(2), val]);
+});
 	
 return Point3D;
 

@@ -98,6 +98,21 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    },
 
 	/**
+	 * Update the object, transforming the collision hull if one has been
+	 * assigned to the object.
+	 * 
+	 * @param renderContext {RenderContext} The render context which contains the object
+	 * @param time {Number} The current engine time
+	 */
+	update: function(renderContext, time) {
+		if (this.collisionHull) {
+			// Update the collision hull
+			this.collisionHull.transform(this.getOrigin(), this.getPosition(), this.getRotation(), this.getScaleX(), this.getScaleY());
+		}
+		this.base(renderContext, time);
+	},
+
+	/**
 	 * Set the render origin of the object.  The render origin is where the object will be
 	 * centered around when drawing position and rotation.
 	 *  
@@ -119,14 +134,16 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    /**
     * Set the bounding box of this object
     *
-    * @param x {Number|Rectangle2D} The X coordinate, or the rectangle that completely encompasses
+    * @param width {Number|Rectangle2D} The width, or the rectangle that completely encompasses
     *                           		this object.
-    * @param y {Number} If X is a coordinate, this is the Y coordinate
-    * @param w {Number} If X is a coordinate, this is the width
-    * @param h {Number} If X is a coordinate, this is the height
+    * @param height {Number} If width is a number, this is the height
     */
-   setBoundingBox: function(x,y,w,h) {
-		this.bBox.set(x,y,w,h);
+   setBoundingBox: function(width, height) {
+		if (width instanceof Rectangle2D) {
+			this.bBox.set(width);
+		} else {
+			this.bBox.set(0,0,width,height);
+		}
    },
 
    /**

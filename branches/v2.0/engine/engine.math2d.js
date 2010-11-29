@@ -280,21 +280,21 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		var NONE = -1;
 		var minmin=0, minmax=0,
 			 maxmin=0, maxmax=0,
-			 xmin = points[0].get().x,  xmax = points[0].get().x,
+			 xmin = points[0].x,  xmax = points[0].x,
 			 cP, bot=0, top=(-1), n = points.length,  // indices for bottom and top of the stack
 	 		 hull = [];
 			 
 		// Get the points with (1) min-max x-coord, and (2) min-max y-coord
 		for ( i=1; i < n; i++) {
-			cP = points[i].get();
+			cP = points[i];
 			if (cP.x <= xmin) {
 				if (cP.x < xmin) {        // new xmin
 					xmin = cP.x;
 					minmin = minmax = i;
 				} else {                      // another xmin
-					if (cP.y < points[minmin].get().y)
+					if (cP.y < points[minmin].y)
 						minmin = i;
-					else if (cP.y > points[minmax].get().y)
+					else if (cP.y > points[minmax].y)
 						minmax = i;
 				}
 			}
@@ -304,9 +304,9 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 					xmax = cP.x;
 					maxmin = maxmax = i;
 				} else {                      // another xmax
-					if (cP.y < points[maxmin].get().y)
+					if (cP.y < points[maxmin].y)
 						maxmin = i;
-					else if (cP.y > points[maxmax].get().y)
+					else if (cP.y > points[maxmax].y)
 						maxmax = i;
 				}
 			}
@@ -329,7 +329,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		
 		for (var b, i=0; i < n; i++) {
 			var cPP = points[i]; 
-			cP = cPP.get();
+			cP = cPP;
 			if (cP.x == xmin || cP.x == xmax) // already have bins 0 and k+1 
 				continue;
 			
@@ -361,7 +361,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 				continue;
 			
 			var cPP = points[bin.B[i].min];    // select the current min point
-			cP = cPP.get();
+			cP = cPP;
 
 			while (top > 0) {        // there are at least 2 points on the stack
 				// test if current point is left of the line at the stack top
@@ -518,7 +518,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * @return {Matrix}
 	 */
 	identityMatrix: function() {
-		return $M.I(3);	
+		return Matrix.I(3);	
 	}
 	
 });

@@ -3,6 +3,7 @@ Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/components/component.boxcollider.js");
 Engine.include("/components/component.sprite.js");
+Engine.include("/collision/collision.AABB.js");
 Engine.include("/engine.object2d.js");
 
 Engine.initObject("Player", "Object2D", function() {
@@ -56,6 +57,9 @@ Engine.initObject("Player", "Object2D", function() {
 			// Move the player's origin to the center of the bounding box
 			this.setOrigin(this.getBoundingBox().getCenter());
 			
+			// Create a collision hull
+			this.setCollisionHull(AABBHull.create(this.getBoundingBox()));
+			
 			// The player isn't dead
 			this.dead = false;
 			
@@ -91,6 +95,15 @@ Engine.initObject("Player", "Object2D", function() {
 			this.move();
 			
 			renderContext.popTransform();
+			
+			/* Debug the world box */
+			renderContext.setLineStyle("#0000ff");
+			renderContext.drawRectangle(this.getWorldBox());
+			
+			/* Debug the collision hull */
+			renderContext.setLineStyle("#ffff00");
+			var h = this.getCollisionHull();
+			renderContext.drawPolygon(h.getVertexes());
       },
 		
 		/**
@@ -120,7 +133,7 @@ Engine.initObject("Player", "Object2D", function() {
 				// Does the player have shields?
 				if (this.hasShields) {
 					// Colliding with a bomb - remove it
-					collisionObj.destroy();
+					collisionObj.explode();
 
 					// Turn off the shields
 					this.getComponent("shield").setDrawMode(RenderComponent.NO_DRAW);
@@ -268,6 +281,10 @@ Engine.initObject("Player", "Object2D", function() {
 		setRotation: function(angle) {
 			this.base(angle);
 			this.getComponent("move").setRotation(angle);
+		},
+		
+		getRotation: function() {
+			return this.getComponent("move").getRotation();
 		},
 
 		/**
