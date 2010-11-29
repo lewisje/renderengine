@@ -50,6 +50,8 @@ Engine.initObject("ConvexHull", null, function() {
 var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 
 	center: null,
+	oCenter: null,
+	oVerts: null,
 	radius: -1,
 	faces: null,
 	normals: null,
@@ -66,10 +68,11 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 		// Calculate the center and radius based on the given points
 		var cX = 0, cY = 0;
 		for (var p = 0; p < points.length; p++) {
-			cX += points[p].get().x;
-			cY += points[p].get().y;
+			cX += points[p].x;
+			cY += points[p].y;
 		}
 		this.center = Point2D.create(cX / points.length, cY / points.length);
+		this.oCenter = Point2D.create(this.center);
 
 		// Back through the points again to find the point farthest from the center
 		// to create our radius
@@ -77,8 +80,8 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 		var rVec = Vector2D.create(0,0);
 		var d = Vector2D.create(0,0);
 		for (var p = 0; p < points.length; p++) {
-			d.set(this.center);
-			d.sub(points[p]);
+			d.set(points[p]);
+			d.sub(this.center);
 			if (d.len() > dist) {
 				dist = d.len();
 				rVec.set(d);
@@ -90,6 +93,11 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 
 		// Create the simplified hull
 		this.vertexes = Math2D.convexHull(points, lod);
+		this.oVerts = [];
+		for (var p in this.vertexes) {
+			this.oVerts.push(Vector2D.create(this.vertexes[p]));
+		}
+		
 		this.dirty = true;
 		this.faces = [];
 		this.normals = [];
@@ -124,9 +132,9 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 			}
 			
 			// Build the face and normals array
-			for (var n = 1; n < this.hull.length; n++) {
-				var p1 = this.hull[n];
-				var p2 = this.hull[n-1];
+			for (var n = 1; n < this.vertexes.length; n++) {
+				var p1 = this.vertexes[n];
+				var p2 = this.vertexes[n-1];
 				v.set(p2).sub(p1);
 				var v = Vector2D.create(0,0);
 				this.faces.push(v);
@@ -159,7 +167,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 * @return {Array} of {@link Point2D}
 	 */
 	getVertexes: function() {
-		return this.hull;	
+		return this.vertexes;	
 	},
 	
 	/**
@@ -178,7 +186,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 * @param scaleX {Number}
 	 * @param scaleY {Number}
 	 */
-	transform: function(pos, rot, scaleX, scaleY) {
+	transform: function(origin, pos, rot, scaleX, scaleY) {
 		this.dirty = true;
 
 		// Default some values
@@ -186,25 +194,47 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 		scaleX = scaleX || 1.0;
 		scaleY = scaleY || scaleX;
 		
-		var p = pos.get();
+		var p = Point2D.create(pos);
+		p.sub(origin);
 		var tM = $M([
 			[1,0,p.x],
 			[0,1,p.y],
 			[0,0,1]
 		]);
+		p.destroy();
 		if (rot != 0) {
-			tM.multiply($M.Rotation(Math2D.degToRad(rot), $V([0,1,0])));
+			// Move the origin
+			rM = $M([
+				[1,0,origin.x],
+				[0,1,origin.y],
+				[0,0,1]
+			]);
+			// Rotate
+			rM = rM.multiply(Matrix.Rotation(Math2D.degToRad(rot), $V([0,0,1])));
+			// Move the origin back
+			rM = rM.multiply($M([
+				[1,0,-origin.x],
+				[0,1,-origin.y],
+				[0,0,1]
+			]));
+			
+			tM = tM.multiply(rM);
 		}
 		if (scaleX != 1.0 && scaleY != 1.0) {
-			tM.multiply($M([
+			tM = tM.multiply($M([
 				[scaleX,0,0],
 				[0,scaleY,0],
 				[0,0,1]
 			]));
 		}
 
+		// Transform the center of the hull
+		this.center.set(this.oCenter);
+		this.center.transform(tM);
+
 		// Transform the vertexes of the hull		
 		for (var p = 0; p < this.vertexes.length; p++) {
+			this.vertexes[p].set(this.oVerts[p]);
 			this.vertexes[p].transform(tM);	
 		}	
 	}

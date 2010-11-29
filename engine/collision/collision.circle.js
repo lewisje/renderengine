@@ -52,7 +52,7 @@ var CircleHull = ConvexHull.extend(/** @scope CircleHull.prototype */{
 	 */
 	constructor: function(center, radius) {
 		// We'll create an AABB for the circle
-		var p = center.get();
+		var p = center;
 		this.base([Point2D.create(p.x - r, p.y - r),
 					  Point2D.create(p.x + r, p.y - r),
 					  Point2D.create(p.x + r, p.y + r),

@@ -47,11 +47,10 @@ Engine.initObject("AABBHull", "ConvexHull", function() {
 var AABBHull = ConvexHull.extend(/** @scope AABBHull.prototype */{
 
 	constructor: function(rect) {
-		var r = rect.get();	
 		var points = [Point2D.create(0,0),
-						  Point2D.create(r.w,0),
-						  Point2D.create(r.w,r.h),
-						  Point2D.create(0,r.h)];
+						  Point2D.create(rect.w,0),
+						  Point2D.create(rect.w,rect.h),
+						  Point2D.create(0,rect.h)];
 		this.base(points, 4);
 	}
 
