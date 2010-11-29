@@ -242,6 +242,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 			[0,1,point.y],
 			[0,0,1]
 		]);
+		this.tMtx = this.tMtx.multiply(this.oMtx);
 		this.updateTransform();
    },
 
@@ -276,7 +277,12 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    setRotation: function(angle) {
 		if (angle != 0) {
 			// Move the origin
-			this.rMtx = this.oMtx.dup(); 
+			var om = this.oMtx;
+			this.rMtx.setElements([
+				om.row(1).elements,
+				om.row(2).elements,
+				om.row(3).elements
+			]);
 			// Rotate
 			this.rMtx = this.rMtx.multiply(Matrix.Rotation(Math2D.degToRad(angle), Object2D.ROTATION_AXIS));
 			// Move the origin back
