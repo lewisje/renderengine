@@ -1025,6 +1025,14 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 		this.center = null;
    },
 
+	/**
+	 * @private
+	 */
+	_upd: function() {
+		this.bottomRight.set(this.getTopLeft().x + this.getDims().x, this.getTopLeft().y + this.getDims().y);
+		this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+	},
+
    /**
     * Set the values of this rectangle.
     *
@@ -1044,6 +1052,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
          this.topLeft.set(x,y);
 			this.dims.set(width,height);
       }
+		this._upd();		
    },
 
    /**
@@ -1089,6 +1098,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 		this.x += offs.x;
 		this.y += offs.y;
 		offs.destroy();
+		this._upd();		
       return this;
    },
 
@@ -1106,6 +1116,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 			this.x = ptOrX;
 			this.y = y;
       }
+		this._upd();		
    },
 
    /**
@@ -1121,7 +1132,8 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
 			this.w = ptOrX;
 			this.h = y;
       }
-   },
+ 		this._upd();		
+  },
 
    /**
     * Set the width of the rectangle.
@@ -1130,6 +1142,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    setWidth: function(width) {
 		this.w = width;
+		this._upd();		
    },
 
    /**
@@ -1139,6 +1152,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    setHeight: function(height) {
 		this.h = height;
+		this._upd();		
    },
 
    /**
@@ -1298,7 +1312,7 @@ rp.__defineGetter__("x", function() {
 
 rp.__defineSetter__("x", function(val) {
 	this.getTopLeft().setX(val);
-	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+	this.getCenter().set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
 });
 
 rp.__defineGetter__("y", function() {
@@ -1307,7 +1321,7 @@ rp.__defineGetter__("y", function() {
 
 rp.__defineSetter__("y", function(val) {
 	this.getTopLeft().setY(val);
-	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+	this.getCenter().set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
 });
 
 rp.__defineGetter__("w", function() {
@@ -1316,8 +1330,8 @@ rp.__defineGetter__("w", function() {
 
 rp.__defineSetter__("w", function(val) {
 	this.getDims().setX(val);
-	this.bottomRight.set(this.getTopLeft().x + this.getDims().x, this.getTopLeft().y + this.getDims().y);
-	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+	this.getBottomRight().set(this.getTopLeft().x + this.getDims().x, this.getTopLeft().y + this.getDims().y);
+	this.getCenter().set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
 });
 
 rp.__defineGetter__("h", function() {
@@ -1326,8 +1340,8 @@ rp.__defineGetter__("h", function() {
 
 rp.__defineSetter__("h", function(val) {
 	this.getDims().setY(val);
-	this.bottomRight.set(this.getTopLeft().x + this.getDims().x, this.getTopLeft().y + this.getDims().y);
-	this.center.set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
+	this.getBottomRight().set(this.getTopLeft().x + this.getDims().x, this.getTopLeft().y + this.getDims().y);
+	this.getCenter().set(this.getTopLeft().x + (this.getDims().x * 0.5), this.getTopLeft().y + (this.getDims().y * 0.5));
 });
 
 rp.__defineGetter__("r", function() {
