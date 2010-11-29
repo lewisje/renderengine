@@ -250,7 +250,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 			[0,1,point.y],
 			[0,0,1]
 		]);
-		this.tMtx = this.tMtx.multiply(this.oMtx);
+		this.tMtx = this.tMtx.multiply(this.oMtxN);
 		this.updateTransform();
    },
 
