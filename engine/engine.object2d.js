@@ -143,14 +143,22 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 	 */
 	setOrigin: function(x, y) {
 		this.origin.set(x, y);
+		var xP = x;
+		var yP = y;
+		
+		if (x instanceof Point2D) {
+			xP = x.x;
+			yP = x.y;
+		}
+		
 		this.oMtx.setElements([
-			[1,0,x],
-			[0,1,y],
+			[1,0,xP],
+			[0,1,yP],
 			[0,0,1]
 		]);
 		this.oMtxN.setElements([
-			[1,0,-x],
-			[0,1,-y],
+			[1,0,-xP],
+			[0,1,-yP],
 			[0,0,1]
 		]);
 	},
