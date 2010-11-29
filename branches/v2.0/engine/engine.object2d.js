@@ -144,12 +144,12 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 	setOrigin: function(x, y) {
 		this.origin.set(x, y);
 		this.oMtx.setElements([
-			[0,0,x],
+			[1,0,x],
 			[0,1,y],
 			[0,0,1]
 		]);
 		this.oMtxN.setElements([
-			[0,0,-x],
+			[1,0,-x],
 			[0,1,-y],
 			[0,0,1]
 		]);
@@ -238,7 +238,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     */
    setPosition: function(point) {
 		this.tMtx.setElements([
-			[0,0,point.x],
+			[1,0,point.x],
 			[0,1,point.y],
 			[0,0,1]
 		]);
