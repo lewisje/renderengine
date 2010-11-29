@@ -293,6 +293,10 @@ Engine.initObject("Player", "Object2D", function() {
 		 * "bounce".
 		 */
 		move: function() {
+			if (this.moveVec.isZero()) {
+				return;
+			}
+			
 			var pos = this.getPosition();
 
 			// Determine if we hit a "wall" of our playfield
