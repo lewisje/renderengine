@@ -39,7 +39,8 @@ Engine.initObject("ConvexHull", null, function() {
  * @class A convex hull with which to perform collision testing.  A convex hull
  * 		 is a simplification of the object which it contains.
  *
- * @param points {Array} An array of {@link Point2D} which make up the shape of the object
+ * @param points {Array} An array of {@link Point2D} which make up the shape to 
+ * 		create the hull from.
  * @param [lod] {Number} The level of detail for the hull.  Larger numbers make for a more 
  * 		complex hull.  Default: 6
  *
@@ -75,7 +76,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 		this.oCenter = Point2D.create(this.center);
 
 		// Back through the points again to find the point farthest from the center
-		// to create our radius
+		// to create our smallest radius which encloses our shape
 		var dist = -1;
 		var rVec = Vector2D.create(0,0);
 		var d = Vector2D.create(0,0);
@@ -120,12 +121,12 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	},
 
 	/**
-	 * Build the faces and normals array, if the hull has been transformed.
+	 * Build the faces and normals array if the hull has been transformed.
 	 * @private
 	 */
 	_build: function() {
 		if (this.dirty) {
-			// Destroy any previous objects
+			// Destroy any previous objects - they will be reused
 			for (var k = 0; k < this.faces.length; k++) {
 				this.faces[k].destroy();
 				this.normals[k].destroy();
@@ -179,63 +180,20 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	},
 	
 	/**
-	 * Transform the points of the hull.
-	 * 
-	 * @param pos {Point2D}
-	 * @param rot {Number}
-	 * @param scaleX {Number}
-	 * @param scaleY {Number}
+	 * Transform the center and vertexes of the hull.
+	 * @param matrix {Matrix}
 	 */
-	transform: function(origin, pos, rot, scaleX, scaleY) {
+	transform: function(matrix) {
 		this.dirty = true;
-
-		// Default some values
-		rot = rot || 0;
-		scaleX = scaleX || 1.0;
-		scaleY = scaleY || scaleX;
-		
-		var p = Point2D.create(pos);
-		p.sub(origin);
-		var tM = $M([
-			[1,0,p.x],
-			[0,1,p.y],
-			[0,0,1]
-		]);
-		p.destroy();
-		if (rot != 0) {
-			// Move the origin
-			rM = $M([
-				[1,0,origin.x],
-				[0,1,origin.y],
-				[0,0,1]
-			]);
-			// Rotate
-			rM = rM.multiply(Matrix.Rotation(Math2D.degToRad(rot), $V([0,0,1])));
-			// Move the origin back
-			rM = rM.multiply($M([
-				[1,0,-origin.x],
-				[0,1,-origin.y],
-				[0,0,1]
-			]));
-			
-			tM = tM.multiply(rM);
-		}
-		if (scaleX != 1.0 && scaleY != 1.0) {
-			tM = tM.multiply($M([
-				[scaleX,0,0],
-				[0,scaleY,0],
-				[0,0,1]
-			]));
-		}
 
 		// Transform the center of the hull
 		this.center.set(this.oCenter);
-		this.center.transform(tM);
+		this.center.transform(matrix);
 
 		// Transform the vertexes of the hull		
 		for (var p = 0; p < this.vertexes.length; p++) {
 			this.vertexes[p].set(this.oVerts[p]);
-			this.vertexes[p].transform(tM);	
+			this.vertexes[p].transform(matrix);	
 		}	
 	}
 

@@ -51,7 +51,7 @@ var CircleHull = ConvexHull.extend(/** @scope CircleHull.prototype */{
 	 * @private
 	 */
 	constructor: function(center, radius) {
-		// We'll create an AABB for the circle
+		// We'll use an AABB to create the circular hull
 		var p = center;
 		this.base([Point2D.create(p.x - r, p.y - r),
 					  Point2D.create(p.x + r, p.y - r),
@@ -71,13 +71,13 @@ var CircleHull = ConvexHull.extend(/** @scope CircleHull.prototype */{
 
    /**
     * Get the class name of this object
-    * @return {String} "AABBHull"
+    * @return {String} "CircleHull"
     */
    getClassName: function() {
-      return "AABBHull";
+      return "CircleHull";
    }   
 });
 
-return AABBHull;
+return CircleHull;
 
 });
