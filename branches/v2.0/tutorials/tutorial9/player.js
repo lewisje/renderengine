@@ -3,7 +3,7 @@ Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.keyboardinput.js");
 Engine.include("/components/component.convexcollider.js");
 Engine.include("/components/component.sprite.js");
-Engine.include("/collision/collision.OBB.js");
+Engine.include("/collision/collision.convexhull.js");
 Engine.include("/engine.object2d.js");
 
 Engine.initObject("Player", "Object2D", function() {
@@ -24,12 +24,6 @@ Engine.initObject("Player", "Object2D", function() {
 			// Add the component which handles keyboard input
 			this.add(KeyboardInputComponent.create("input"));
 
-			// Add the component for collisions
-			this.add(ConvexColliderComponent.create("collide", Tutorial9.collisionModel));
-
-			// Set the collision flags
-			this.getComponent("collide").setCollisionMask(Math2.parseBin("11"));
-
 		   // Add the component for rendering
 			this.sprites = Tutorial9.spriteLoader.exportAll("sprites", ["stand","walk","dead","shield"]);
 		   this.add(SpriteComponent.create("draw", this.sprites.stand));
@@ -41,27 +35,36 @@ Engine.initObject("Player", "Object2D", function() {
 			// Don't draw the shield, just yet
 			this.getComponent("shield").setDrawMode(RenderComponent.NO_DRAW);
 
-         // Start at the center of the playfield
-         var start = Tutorial9.getFieldBox().getCenter();
-			start.sub(Point2D.create(25, 25));
-			
 			// Set our bounding box so collision tests work
 			this.setBoundingBox(this.sprites.stand.getBoundingBox());
-			
-			// Create a collision hull
+
+			// -------------------------------------------------------------------
+
+			// Add the component for collisions
+			this.add(ConvexColliderComponent.create("collide", Tutorial9.collisionModel));
+
+			// Create a collision hull, this is required by the ConvexColliderComponent
 			var points = Math2D.regularPolygon(6, 28);
 			for (var i = 0; i < points.length; i++) {
 				points[i].add(this.getBoundingBox().getCenter());
 			}
 			this.setCollisionHull(ConvexHull.create(points, 6));
 
+			// Set the collision flags
+			this.getComponent("collide").setCollisionMask(Math2.parseBin("11"));
+
+			// -------------------------------------------------------------------
+
+
 			// Move the player's origin to the center of the bounding box
 			this.setOrigin(this.getBoundingBox().getCenter());
 
-			// Position the object
+			// Position the object at the center of the playfield
+         var start = Tutorial9.getFieldBox().getCenter();
+			start.sub(Point2D.create(25, 25));
          this.setPosition(start);
 			
-			// Set the velocity to zero and a heading angle
+			// Set the movement vector to zero
 			this.moveVec = Vector2D.create(0,0);
 			
 			// The player isn't dead
