@@ -53,7 +53,7 @@ Engine.initObject("Player", "Object2D", function() {
 			for (var i = 0; i < points.length; i++) {
 				points[i].add(this.getBoundingBox().getCenter());
 			}
-			this.setCollisionHull(ConvexHull.create(points));
+			this.setCollisionHull(ConvexHull.create(points, 6));
 
 			// Move the player's origin to the center of the bounding box
 			this.setOrigin(this.getBoundingBox().getCenter());

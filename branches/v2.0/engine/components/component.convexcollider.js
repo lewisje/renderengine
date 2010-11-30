@@ -391,12 +391,13 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 		// Find the closest vertex to use to find normal
 		var i,j;
 		for (i = 0; i < vectors.length; i++) {
-			distance = (cC.x - vectors[i].x) * (cC.x - vectors[i].x) +
-						  (cC.y - vectors[i].y) * (cC.y - vectors[i].y);
+			// These points have been transformed
+			distance = (cC.x - (pC.x + vectors[i].x)) * (cC.x - (pC.x + vectors[i].x)) +
+						  (cC.y - (pC.y + vectors[i].y)) * (cC.y - (pC.y + vectors[i].y));
 			if (distance < testDistance) {
 				// Closest has the lowest distance
 				testDistance = distance;
-				closestVector.set(vectors[i].x, vectors[i].y);
+				closestVector.set(pC.x + vectors[i].x, pC.y + vectors[i].y);
 			}
 		}
 		

@@ -398,6 +398,12 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		//	hull[++top] = points[minmin];  // push joining endpoint onto stack
 		
 		bin = null;                  // free bins before returning
+		
+		// See if the first and last points are identical
+		if (hull[0].equals(hull[hull.length - 1])) {
+			hull.pop();
+		}
+		
 		return hull;              // # of points on the stack
 	},	
 	
