@@ -87,9 +87,10 @@ Engine.initObject("Powerup", "Object2D", function() {
 
 		   renderContext.popTransform();
 
-			/* Debug the world box */
+			/* Debug the world box
 			renderContext.setLineStyle("#0000ff");
 			renderContext.drawRectangle(this.getWorldBox());
+			 */
 			
 			/* Debug the collision hull */
 			renderContext.setLineStyle("#ffff00");

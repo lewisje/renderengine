@@ -256,7 +256,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * @return {Number} &lt;0 (to left), 0 (on), &gt;0 (to right)
 	 */
 	pointLeftOfLine: function(endPoint0, endPoint1, testPoint) {
-		var p0 = point0.get(), p1 = point1.get(), p2 = point2.get(); 
+		var p0 = endPoint0, p1 = endPoint1, p2 = testPoint; 
 		return (p1.x - p0.x)*(p2.y - p0.y) - (p2.x - p0.x)*(p1.y - p0.y);
 	},
 
@@ -335,7 +335,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 			
 			// check if a lower or upper point
 			if (Math2D.pointLeftOfLine(points[minmin], points[maxmin], cPP) < 0) {  // below lower line
-				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
+				b = Math.floor((k * (cP.x - xmin) / (xmax - xmin) ) + 1);  // bin #
 				if (bin.B[b].min == NONE)       // no min point in this range
 					bin.B[b].min = i;           // first min
 				else if (cP.y < points[bin.B[b].min].get().y)
@@ -344,7 +344,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 			}
 			
 			if (Math2D.pointLeftOfLine(points[minmax], points[maxmax], cPP) > 0) {  // above upper line
-				b = (k * (cP.x - xmin) / (xmax - xmin) ) + 1;  // bin #
+				b = Math.floor((k * (cP.x - xmin) / (xmax - xmin) ) + 1);  // bin #
 				if (bin.B[b].max == NONE)       // no max point in this range
 					bin.B[b].max = i;           // first max
 				else if (cP.y > points[bin.B[b].max].get().y)
@@ -527,7 +527,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		var angle, p;
 		var points = [];
 		for (var i = 0; i < sides; i++) {
-			angle = (i * rot) + ((Math2D.PI - rotation) * 0.5);
+			angle = (i * rot) + ((Math2D.PI - rot) * 0.5);
 			p = Point2D.create(Math.cos(angle) * radius, Math.sin(angle) * radius);
 			points.push(p);
 		}
