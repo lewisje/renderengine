@@ -49,7 +49,11 @@ Engine.initObject("Player", "Object2D", function() {
 			this.setBoundingBox(this.sprites.stand.getBoundingBox());
 			
 			// Create a collision hull
-			this.setCollisionHull(OBBHull.create(this.getBoundingBox()));
+			var points = Math2D.regularPolygon(6, 28);
+			for (var i = 0; i < points.length; i++) {
+				points[i].add(this.getBoundingBox().getCenter());
+			}
+			this.setCollisionHull(ConvexHull.create(points));
 
 			// Move the player's origin to the center of the bounding box
 			this.setOrigin(this.getBoundingBox().getCenter());
@@ -96,9 +100,10 @@ Engine.initObject("Player", "Object2D", function() {
 			
 			renderContext.popTransform();
 			
-			/* Debug the world box */
+			/* Debug the world box
 			renderContext.setLineStyle("#0000ff");
 			renderContext.drawRectangle(this.getWorldBox());
+			 */
 			
 			/* Debug the collision hull */
 			renderContext.setLineStyle("#ffff00");
