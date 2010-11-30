@@ -1,8 +1,9 @@
 // Load the components and engine objects
 Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.boxcollider.js");
+Engine.include("/components/component.convexcollider.js");
 Engine.include("/components/component.sprite.js");
 Engine.include("/engine.object2d.js");
+Engine.include("/collision/collision.circle.js");
 
 Engine.initObject("Powerup", "Object2D", function() {
 
@@ -15,7 +16,7 @@ Engine.initObject("Powerup", "Object2D", function() {
 		   this.add(Transform2DComponent.create("move"));
 
 		   // Add the component for collisions
-		   this.add(BoxColliderComponent.create("collide", Tutorial9.collisionModel));
+		   this.add(ConvexColliderComponent.create("collide", Tutorial9.collisionModel));
 
 		   // Add the component for rendering
 			var shieldSprite = Tutorial9.spriteLoader.getSprite("sprites", "powerup");
@@ -28,18 +29,31 @@ Engine.initObject("Powerup", "Object2D", function() {
 		   var rY = Math2.random() * 100 < 50 ? -1 : 1;
 		   dX *= rX;
 		   dY *= rY;
-		   var start = Point2D.create(Tutorial9.getFieldBox().getCenter());
-		   start.add(Point2D.create(dX, dY));
-			
-		   // Position the object
-		   this.getComponent("move").setPosition(start);
 			
 			// Set the collision mask
 			this.getComponent("collide").setCollisionMask(Math2.parseBin("10"));
 
 		   // Set our bounding box so collision tests work
 		   this.setBoundingBox(shieldSprite.getBoundingBox());
+
+			// Create a collision hull
+			this.setCollisionHull(CircleHull.create(this.getBoundingBox()));
+
+		   var start = Point2D.create(Tutorial9.getFieldBox().getCenter());
+		   start.add(Point2D.create(dX, dY));
+			
+			// Set the origin
+			this.setOrigin(this.getBoundingBox().getCenter());
+
+		   // Position the object
+		   this.setPosition(start);
+						
 			start.destroy();
+		},
+
+		setPosition: function(pos) {
+			this.getComponent("move").setPosition(pos);
+			this.base(pos);			
 		},
 
 		/**
@@ -72,6 +86,15 @@ Engine.initObject("Powerup", "Object2D", function() {
 		   this.base(renderContext, time);
 
 		   renderContext.popTransform();
+
+			/* Debug the world box */
+			renderContext.setLineStyle("#0000ff");
+			renderContext.drawRectangle(this.getWorldBox());
+			
+			/* Debug the collision hull */
+			renderContext.setLineStyle("#ffff00");
+			var h = this.getCollisionHull();
+			renderContext.drawArc(h.getCenter(), h.getRadius(), 0, 360);
 		}
 
 	}, { // Static

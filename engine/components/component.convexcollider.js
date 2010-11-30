@@ -1,9 +1,9 @@
 /**
  * The Render Engine
- * SATColliderComponent
+ * ConvexColliderComponent
  *
- * @fileoverview A collision component which determines collisions via
- *               the Separating Axis Theorem.
+ * @fileoverview A collision component which determines collisions using
+ *               the Separating Axis Theorem and a convex hull.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -35,11 +35,21 @@
 // Includes
 Engine.include("/components/component.collider.js");
 
-Engine.initObject("SATColliderComponent", "ColliderComponent", function() {
+Engine.initObject("ConvexColliderComponent", "ColliderComponent", function() {
 
 /**
  * @class An extension of the {@link ColliderComponent} which will check the
- *        object's bounding boxes for collision using the Separating Axis Theorm (SAT).
+ *        object's convex collision hulls using the Separating Axis Theorm (SAT).  Each object must
+ *        have a collision hull assigned to it with {@link Object2D#setCollisionHull}.
+ *        <p/>
+ *        The SAT states that, if an axis can be found where the two object's hull
+ *        don't overlap, then the two objects cannot be colliding.  When a collision
+ *        is determined, querying {@link #getImpulseVector} will return a {@link Vector2D}
+ *        which can be used to separate the first object from the second.  Negating the
+ *        vector, you can apply it to the target object instead.
+ *        <p/>
+ *        The vector can also be manipulated to simulate physical forces such as
+ *        bounciness and friction.
  *
  * @param name {String} Name of the component
  * @param collisionModel {SpatialCollection} The collision model
@@ -48,31 +58,40 @@ Engine.initObject("SATColliderComponent", "ColliderComponent", function() {
  * @extends ColliderComponent
  * @constructor
  * @description Creates a collider component for SAT collision testing.  Each object's
- *              collision will be determined using its {@link Object2D#getCollisionHull}.
+ *              collision will be determined using its convex collision hull.
  */
-var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderComponent.prototype */{
+var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderComponent.prototype */{
 
 	impulseVector: null,
 	
+	/**
+	 * @private
+	 */
 	constructor: function(name, collisionModel, priority) {
 		this.base(name, collisionModel, priority);
 		this.impulseVector = Vector2D.create(0,0);
 	},
 	
+	/**
+	 * Destroy the collider component.
+	 */
 	destroy: function() {
 		this.impulseVector.destroy();
 		this.base();
 	},
 	
+	/**
+	 * Release the component back into the object pool.
+	 */
 	release: function() {
 		this.base();
 		this.impulseVector = null;
 	},
 
    /**
-    * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,
-    * the potential collision object, and the host and target masks.  The return value should 
-    * either tell the collision tests to continue or stop.
+    * If a collision occurs, calls the host object's <tt>onCollide()</tt> method, 
+    * passing the time of the collision, the potential collision object, and the host 
+    * and target masks.  The return value should either tell the collision tests to continue or stop.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
     * @param collisionObj {HostObject} The host object with which the collision potentially occurs
@@ -81,10 +100,10 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-		var vect = SATColliderComponent.test(this.getHostObject().getCollisionHull(), 
+		var vect = ConvexColliderComponent.test(this.getHostObject().getCollisionHull(), 
 			collisionObj.getCollisionHull());
 		
-		this.impulseVector.set(vect);
+		this.impulseVector.set(vect).neg();
 		vect.destroy();
 			
       if (!this.impulseVector.isZero()) {
@@ -107,10 +126,10 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 
    /**
     * Get the class name of this object
-    * @return {String} "SATColliderComponent"
+    * @return {String} "ConvexColliderComponent"
     */
    getClassName: function() {
-      return "SATColliderComponent";
+      return "ConvexColliderComponent";
    },
 	
 	/**
@@ -120,7 +139,7 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 	 * shape to not collide with the second shape.  If no collision is determined, the
 	 * repulsion vector will be {@link Vector2D#ZERO}.
 	 * <p/>
-	 * The resulting tests used by this method can be found at:<br/>
+	 * The resulting tests used by this component can be found at:<br/>
 	 * http://rocketmandevelopment.com/2010/05/19/separation-of-axis-theorem-for-collision-detection/
 	 *  
 	 * @param shape1 {ConvexHull}
@@ -128,31 +147,30 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 	 * @return {Vector2D}
 	 */
 	test: function(shape1, shape2) {
+		Assert(shape1 != null && shape2 != null, "ConvexColliderComponent failed with: Object has no collision hull!");
+			
 		if (shape1.getType() == ConvexHull.CONVEX_CIRCLE &&
 			 shape2.getType() == ConvexHull.CONVEX_CIRCLE) {
 			// Perform circle-circle test if both shapes are circles
-			return SATColliderComponent.ccTest(shape1, shape2);	 	
+			return ConvexColliderComponent.ccTest(shape1, shape2);	 	
 		} else if (shape1.getType() != ConvexHull.CONVEX_CIRCLE &&
 					  shape2.getType() != ConvexHull.CONVEX_CIRCLE) {
 			// Perform n-gon test if both shapes are NOT circles
-			return SATColliderComponent.ngonTest(shape1, shape2);			  	
+			return ConvexColliderComponent.ngonTest(shape1, shape2);			  	
 		} else {
 			// One shape is a circle, the other is an n-gon, do that test
-			return SATColliderComponent.cnTest(shape1, shape2);
+			return ConvexColliderComponent.cnTest(shape1, shape2);
 		}		
 	},
 	
 	/**
 	 * Circle-circle test
-	 * @param shape1 {ConvexHull}
-	 * @param shape2 {ConvexHull}
-	 * @return {Vector2D}
 	 * @private
 	 */
 	ccTest: function(shape1, shape2) {
 		var tRad = shape1.getRadius() + shape2.getRadius();
-		var c1 = shape1.getCenter().get();
-		var c2 = shape2.getCenter().get();
+		var c1 = shape1.getCenter();
+		var c2 = shape2.getCenter();
 		var distSqr = (c1.x - c2.x) * (c1.x - c2.x) +
 						  (c1.y - c2.y) * (c1.y - c2.y);
 		if (distSqr < tRad * tRad) {
@@ -167,57 +185,54 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 	
 	/**
 	 * Poly-poly test
-	 * @param shape1 {ConvexHull}
-	 * @param shape2 {ConvexHull}
-	 * @return {Vector2D}
 	 * @private
 	 */
 	ngonTest: function(shape1, shape2) {
 		var test1, test2, testNum, min1, min2, max1, max2, offset, temp;
 		var axis = Vector2D.create(0,0);
 		var vectorOffset = Vector2D.create(0,0);
-		var faces1 = shape1.getFaces();
-		var faces2 = shape2.getFaces();
-		if (faces1.length == 2) {
+		var vectors1 = shape1.getUntransformedVertexes();
+		var vectors2 = shape2.getUntransformedVertexes();
+		if (vectors1.length == 2) {
 			// Pad to fix the test
-			temp = Vector2D.create(-(faces1[1].y - faces1[0].y),
-											faces1[1].x - faces1[0].x);
-			faces1.push(faces1[1].add(temp));
+			temp = Vector2D.create(-(vectors1[1].y - vectors1[0].y),
+											vectors1[1].x - vectors1[0].x);
+			vectors1.push(vectors1[1].add(temp));
 			temp.destroy();
 		}
-		if (faces2.length == 2) {
-			temp = Vector2D.create(-(faces2[1].y - faces2[0].y),
-											faces2[1].x - faces2[0].x);
-			faces2.push(faces2[1].add(temp));
+		if (vectors2.length == 2) {
+			temp = Vector2D.create(-(vectors2[1].y - vectors2[0].y),
+											vectors2[1].x - vectors2[0].x);
+			vectors2.push(vectors2[1].add(temp));
 			temp.destroy();
 		}
 		
 		// Find vertical offset
-		var sc1 = shape1.getCenter().get();
-		var sc2 = shape2.getCenter().get();
+		var sc1 = shape1.getCenter();
+		var sc2 = shape2.getCenter();
 		vectorOffset.set(sc1.x - sc2.x, sc1.y - sc2.y);
 		
 		// Loop to begin projection
-		for (var i = 0; i < faces1.length; i++) {
-			axis.set(shape1.getNormals()[i]);
+		for (var i = 0; i < vectors1.length; i++) {
+			ConvexColliderComponent.findNormalAxis(axis, vectors1, i);
 			
 			// project polygon 1
-			min1 = axis.dot(faces1[0]);
+			min1 = axis.dot(vectors1[0]);
 			max1 = min1;	// Set max and min equal
 			
 			var j;
-			for (j = 1; j < faces1.length; j++) {
-				testNum = axis.dot(faces1[j]);	// Project each point
+			for (j = 1; j < vectors1.length; j++) {
+				testNum = axis.dot(vectors1[j]);	// Project each point
 				if (testNum < min1) min1 = testNum;	// Test for new smallest
 				if (testNum > max1) max1 = testNum;	// Test for new largest
 			}
 			
 			// project polygon 2
-			min2 = axis.dot(faces2[0]);
+			min2 = axis.dot(vectors2[0]);
 			max2 = min2;	// Set 2's max and min
 			
-			for (j = 1; j < faces2.length; j++) {
-				testNum = axis.dot(faces2[j]);	// Project the point
+			for (j = 1; j < vectors2.length; j++) {
+				testNum = axis.dot(vectors2[j]);	// Project the point
 				if (testNum < min2) min2 = testNum;	// Test for new min
 				if (testNum > max2) max2 = testNum; // Test for new max
 			}
@@ -236,9 +251,8 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 				// Clean up before returning
 				axis.destroy();
 				vectorOffset.destroy();
-
 				// If either is greater than zero, there is a gap
-				return Vector2D.ZERO;
+				return Vector2D.create(Vector2D.ZERO);
 			}
 		}
 		
@@ -256,63 +270,60 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 	/**
 	 * @private
 	 */
-	findNormalAxis: function(vertices, index) {
+	findNormalAxis: function(axis, vertices, index) {
 		var vector1 = vertices[index];
 		var vector2 = (index >= vertices.length - 1) ? vertices[0] : vertices[index + 1];
-		var normalAxis = Vector2D.create(-(vector2.y - vector1.y), vector2.x - vector1.x);
-		normalAxis.normalize();
-		return normalAxis;
+		axis.set(-(vector2.y - vector1.y), vector2.x - vector1.x);
+		axis.normalize();
 	},
 	
 	/**
 	 * Circle-poly test
-	 * @param shape1 {ConvexHull}
-	 * @param shape2 {ConvexHull}
-	 * @return {Vector2D}
 	 * @private
 	 */
 	cnTest: function(shape1, shape2) {
 		var test1, test2, test, min1, max1, min2, max2, offset, distance;
 		var vectorOffset = Vector2D.create(0,0);
-		var faces, center, radius, poly;
+		var vectors, center, radius, poly;
 		var testDistance = 0x7FFFFFFF;
 		var closestVector = Vector2D.create(0,0);
+		var normalAxis = Vector2D.create(0,0);
 		
 		// Determine which shape is the circle and which is the polygon
 		if (shape1.getType() != ConvexHull.CONVEX_CIRCLE) {
-			faces = shape1.getFaces();
+			vectors = shape1.getUntransformedVertexes();
 			poly = shape1.getCenter();
 			center = shape2.getCenter();
 			radius = shape2.getRadius();
 		} else {
-			faces = shape2.getFaces();
+			vectors = shape2.getUntransformedVertexes();
 			poly = shape2.getCenter();
 			center = shape1.getCenter();
 			radius = shape1.getRadius();
 		}
 		
 		// Find offset
-		var pC = poly.get();
-		var cC = center.get();
+		var pC = poly;
+		var cC = center;
 		vectorOffset.set(pC.x - cC.x, pC.y - cC.y);
 		
-		if (faces.length == 2) {
+		if (vectors.length == 2) {
 			// Pad to fix the test
-			temp = Vector2D.create(-(faces[1].y - faces[0].y),
-											faces[1].x - faces[0].x);
-			faces.push(faces[1].add(temp));
+			temp = Vector2D.create(-(vectors[1].y - vectors[0].y),
+											vectors[1].x - vectors[0].x);
+			vectors.push(vectors[1].add(temp));
 			temp.destroy();
 		}
 		
 		// Find the closest vertex to use to find normal
 		var i,j;
-		for (i = 0; i < faces.length; i++) {
-			distance = (cC.x - (pC.x + faces[i].x)) * (cC.x - (pC.x + faces[i].x)) +
-						  (cC.y - (pC.y + faces[i].y)) * (cC.y - (pC.y + faces[i].y));
+		for (i = 0; i < vectors.length; i++) {
+			distance = (cC.x - (pC.x + vectors[i].x)) * (cC.x - (pC.x + vectors[i].x)) +
+						  (cC.y - (pC.y + vectors[i].y)) * (cC.y - (pC.y + vectors[i].y));
 			if (distance < testDistance) {
-				// Closes has the lowest distance
+				// Closest has the lowest distance
 				testDistance = distance;
-				closestVector.set(pC.x + faces[i].x, pC.y + faces[i].y);
+				closestVector.set(pC.x + vectors[i].x, pC.y + vectors[i].y);
 			}
 		}
 		
@@ -321,11 +332,11 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 		normalAxis.normalize();	// set length to 1
 		
 		// Project the polygon's points
-		min1 = normalAxis.dot(faces[0]);
+		min1 = normalAxis.dot(vectors[0]);
 		max1 = min1;
 		
-		for (j = 1; j < faces.length; j++) {
-			test = normalAxis.dot(faces[j]);
+		for (j = 1; j < vectors.length; j++) {
+			test = normalAxis.dot(vectors[j]);
 			if (test < min1) min1 = test;
 			if (test > max1) max1 = test;
 		}
@@ -337,22 +348,26 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 		// Offset the polygon's max/min
 		offset = normalAxis.dot(vectorOffset);
 		min1 += offset;
-		max1 += offsetl
+		max1 += offset;
+		
+		test1 = min1 - max2;
+		test2 = min2 - max1;
 		
 		if (test1 > 0 || test2 > 0) {
 			// Clean up before returning
+			normalAxis.destroy();
 			vectorOffset.destroy();
 			closestVector.destroy();
-			return Vector2D.ZERO;
+			return Vector2D.create(Vector2D.ZERO);
 		}
-		
-		for (i = 0; i < faces.length; i++) {
-			var normalAxis = SATColliderComponent.findNormalAxis(faces, i);
-			min1 = normalAxis.dot(faces[0]);
+
+		for (i = 0; i < vectors.length; i++) {
+			ConvexColliderComponent.findNormalAxis(normalAxis, vectors, i);
+			min1 = normalAxis.dot(vectors[0]);
 			max1 = min1;
 			
-			for (j = 1; j < faces.length; j++) {
-				test = normalAxis.dot(faces[j]);
+			for (j = 1; j < vectors.length; j++) {
+				test = normalAxis.dot(vectors[j]);
 				if (test < min1) min1 = test;
 				if (test > max1) max1 = test;
 			}
@@ -368,13 +383,13 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 			// Do the test, again
 			test1 = min1 - max2;
 			test2 = min2 - max1;
-			
+
 			if (test1 > 0 || test2 > 0) {
 				// Clean up before returning
+				normalAxis.destroy();
 				vectorOffset.destroy();
 				closestVector.destroy();
-				normalAxis.destroy();
-				return Vector2D.ZERO;	
+				return Vector2D.create(Vector2D.ZERO);	
 			}
 		}	
 		
@@ -390,6 +405,6 @@ var SATColliderComponent = ColliderComponent.extend(/** @scope SATColliderCompon
 	}
 });
 
-return SATColliderComponent;
+return ConvexColliderComponent;
 
 });

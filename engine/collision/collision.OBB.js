@@ -2,7 +2,8 @@
  * The Render Engine
  * AABBHull
  *
- * @fileoverview A collision shape which represents an AABB hull.
+ * @fileoverview A collision shape which represents an object's bounding box 
+ * 				  as the convex hull.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -31,40 +32,41 @@
  *
  */
 
+Engine.include("/collision/collision.convexhull.js");
 Engine.include("/engine.math2d.js");
 
-Engine.initObject("AABBHull", "ConvexHull", function() {
+Engine.initObject("OBBHull", "ConvexHull", function() {
 
 /**
- * @class An rectangular convex hull.
+ * @class A rectangular convex hull which reflects the object's current transformation.
  *
- * @param rect {Rectangle2D} An rectangle which represents the AABB
+ * @param boundingBox {Rectangle2D} The object's bounding box
  *
  * @extends ConvexHull
  * @constructor
- * @description Creates an AABB hull.
+ * @description Creates an Object Bounding Box hull.
  */
-var AABBHull = ConvexHull.extend(/** @scope AABBHull.prototype */{
+var OBBHull = ConvexHull.extend(/** @scope OBBHull.prototype */{
 
 	constructor: function(rect) {
 		var points = [Point2D.create(0,0),
 						  Point2D.create(rect.w,0),
 						  Point2D.create(rect.w,rect.h),
 						  Point2D.create(0,rect.h)];
-		this.base(points, 4);
+		this.base(points);
 	}
 
-}, { /** @scope ConvexHull.prototype */
+}, { /** @scope OBBHull.prototype */
 
    /**
     * Get the class name of this object
-    * @return {String} "AABBHull"
+    * @return {String} "OBBHull"
     */
    getClassName: function() {
-      return "AABBHull";
+      return "OBBHull";
    }   
 });
 
-return AABBHull;
+return OBBHull;
 
 });

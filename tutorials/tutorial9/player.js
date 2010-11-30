@@ -1,9 +1,9 @@
 // Load the components and engine objects
 Engine.include("/components/component.transform2d.js");
 Engine.include("/components/component.keyboardinput.js");
-Engine.include("/components/component.boxcollider.js");
+Engine.include("/components/component.convexcollider.js");
 Engine.include("/components/component.sprite.js");
-Engine.include("/collision/collision.AABB.js");
+Engine.include("/collision/collision.OBB.js");
 Engine.include("/engine.object2d.js");
 
 Engine.initObject("Player", "Object2D", function() {
@@ -25,7 +25,7 @@ Engine.initObject("Player", "Object2D", function() {
 			this.add(KeyboardInputComponent.create("input"));
 
 			// Add the component for collisions
-			this.add(BoxColliderComponent.create("collide", Tutorial9.collisionModel));
+			this.add(ConvexColliderComponent.create("collide", Tutorial9.collisionModel));
 
 			// Set the collision flags
 			this.getComponent("collide").setCollisionMask(Math2.parseBin("11"));
@@ -45,20 +45,20 @@ Engine.initObject("Player", "Object2D", function() {
          var start = Tutorial9.getFieldBox().getCenter();
 			start.sub(Point2D.create(25, 25));
 			
+			// Set our bounding box so collision tests work
+			this.setBoundingBox(this.sprites.stand.getBoundingBox());
+			
+			// Create a collision hull
+			this.setCollisionHull(OBBHull.create(this.getBoundingBox()));
+
+			// Move the player's origin to the center of the bounding box
+			this.setOrigin(this.getBoundingBox().getCenter());
+
 			// Position the object
          this.setPosition(start);
 			
 			// Set the velocity to zero and a heading angle
 			this.moveVec = Vector2D.create(0,0);
-			
-			// Set our bounding box so collision tests work
-			this.setBoundingBox(this.sprites.stand.getBoundingBox());
-			
-			// Move the player's origin to the center of the bounding box
-			this.setOrigin(this.getBoundingBox().getCenter());
-			
-			// Create a collision hull
-			this.setCollisionHull(AABBHull.create(this.getBoundingBox()));
 			
 			// The player isn't dead
 			this.dead = false;
@@ -122,6 +122,12 @@ Engine.initObject("Player", "Object2D", function() {
 					collisionObj.destroy();
 					this.getComponent("shield").setDrawMode(RenderComponent.DRAW);
 					this.hasShields = true;
+				} else {
+					// Already have shields, stop movement
+					var pP = this.getPosition();
+					var iV = this.getComponent("collide").getImpulseVector();
+					pP.add(iV);
+					this.setPosition(pP);
 				}
 				
 				// This was a safe collision, so check for others... 
@@ -138,7 +144,7 @@ Engine.initObject("Player", "Object2D", function() {
 					// Turn off the shields
 					this.getComponent("shield").setDrawMode(RenderComponent.NO_DRAW);
 					this.hasShields = false; 
-					
+
 					// The player had shields, but maybe they are touching something else
 			      return ColliderComponent.COLLIDE_AND_CONTINUE;
 				} else {
