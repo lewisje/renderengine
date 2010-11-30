@@ -121,7 +121,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	getRadius: function() {
 		return this.radius;
 	},
-
+	
 	/**
 	 * Get the array of vertexes in the convex hull
 	 * @return {Array} of {@link Point2D}

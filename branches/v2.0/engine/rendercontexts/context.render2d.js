@@ -549,6 +549,21 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
       }
    },
 
+	/**
+	 * Draw an un-filled regular polygon with N sides.
+	 * 
+	 * @param sides {Number} The number of sides, must be more than 2
+	 * @param center {Point2D} The center of the polygon
+	 * @param [radius] {Number} The radius of the polygon. Default: 100
+	 */
+	drawRegularPolygon: function(sides, center, radius) {
+		var poly = Math2D.regularPolygon(sides, radius);
+		for (var p = 0; p < poly.length; p++) {
+			poly[p].add(center);
+		}
+		this.drawPolygon(poly);
+	},
+
    /**
     * Draw an un-filled polygon on the context.
     *
@@ -560,7 +575,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
       this.strokePath();
       this.lineSeg.moveTo = false;
    },
-
+	
    /**
     * Draw a non-closed poly line on the context.
     *
@@ -584,6 +599,21 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
       this.fillPath();
       this.lineSeg.moveTo = false;
    },
+
+	/**
+	 * Draw an un-filled regular polygon with N sides.
+	 * 
+	 * @param sides {Number} The number of sides, must be more than 2
+	 * @param center {Point2D} The center of the polygon
+	 * @param [radius] {Number} The radius of the polygon. Default: 100
+	 */
+	drawFilledRegularPolygon: function(sides, center, radius) {
+		var poly = Math2D.regularPolygon(sides, radius);
+		for (var p = 0; p < poly.length; p++) {
+			poly[p].add(center);
+		}
+		this.drawFilledPolygon(poly);
+	},
 
    /**
     * Draw a line on the context.
