@@ -394,8 +394,8 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 			}
 			hull[++top] = cPP;        // push current point onto stack
 		}
-		if (minmax != minmin)
-			hull[++top] = points[minmin];  // push joining endpoint onto stack
+		//if (minmax != minmin)
+		//	hull[++top] = points[minmin];  // push joining endpoint onto stack
 		
 		bin = null;                  // free bins before returning
 		return hull;              // # of points on the stack

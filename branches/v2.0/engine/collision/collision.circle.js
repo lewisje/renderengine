@@ -31,32 +31,40 @@
  *
  */
 
+Engine.include("/collision/collision.OBB.js");
 Engine.include("/engine.math2d.js");
 
-Engine.initObject("CircleHull", "ConvexHull", function() {
+Engine.initObject("CircleHull", "OBBHull", function() {
 
 /**
  * @class A circular convex hull.
  *
- * @param center {Point2D} The circle's center
- * @param radius {Number} The circle's radius
+ * @param center {Rectangle2D|Point2D} Either the circle's center point, or a rectangle to use
+ * 		 to approximate the bounding circle.
+ * @param radius {Number} The circle's radius if the first argument is a <tt>Point2D</tt>
  *
- * @extends ConvexHull
+ * @extends OBBHull
  * @constructor
  * @description Creates a circular hull.
  */
-var CircleHull = ConvexHull.extend(/** @scope CircleHull.prototype */{
+var CircleHull = OBBHull.extend(/** @scope CircleHull.prototype */{
 
 	/**
 	 * @private
 	 */
 	constructor: function(center, radius) {
 		// We'll use an AABB to create the circular hull
-		var p = center;
-		this.base([Point2D.create(p.x - r, p.y - r),
-					  Point2D.create(p.x + r, p.y - r),
-					  Point2D.create(p.x + r, p.y + r),
-					  Point2D.create(p.x - r, p.y + r)], 4);
+		var rect;
+		if (center instanceof Rectangle2D) {
+			rect = center;
+		} else {
+			var p = center;
+			rect = Rectangle2D.create(Point2D.create(p.x - r, p.y - r),
+						  		Point2D.create(p.x + r, p.y - r),
+						  		Point2D.create(p.x + r, p.y + r),
+						  		Point2D.create(p.x - r, p.y + r));
+		}
+		this.base(rect);
 	},
 	
 	/**

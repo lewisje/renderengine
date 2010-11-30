@@ -39,7 +39,8 @@ Engine.initObject("BoxColliderComponent", "ColliderComponent", function() {
 
 /**
  * @class An extension of the {@link ColliderComponent} which will check the
- *        object's bounding boxes for semi-precise collision.
+ *        object's axis-aligned bounding boxes for collision.  This type of
+ *        collider can only indicate that a collision has occurred.
  *
  * @param name {String} Name of the component
  * @param collisionModel {SpatialCollection} The collision model
@@ -81,9 +82,9 @@ var BoxColliderComponent = ColliderComponent.extend(/** @scope BoxColliderCompon
 	},
 
    /**
-    * Call the host object's <tt>onCollide()</tt> method, passing the time of the collision,
-    * the potential collision object, and the host and target masks.  The return value should 
-    * either tell the collision tests to continue or stop.
+    * If a collision occurs, calls the host object's <tt>onCollide()</tt> method, 
+    * passing the time of the collision, the potential collision object, and the host 
+    * and target masks.  The return value should either tell the collision tests to continue or stop.
     * <p/>
     * A world bounding box collision must occur to trigger the <tt>onCollide()</tt> method.
     *

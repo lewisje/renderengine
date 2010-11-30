@@ -210,6 +210,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    /**
     * [ABSTRACT] Get the world bounding circle.
     * @return {Circle2D}
+    * @deprecated
     */
    getCircle: function() {
       // ABSTRACT METHOD
@@ -235,6 +236,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    /**
     * [ABSTRACT] Get the velocity of the object.
     * @return {Vector2D}
+    * @deprecated
     */
    getVelocity: function() {
       // ABSTRACT METHOD

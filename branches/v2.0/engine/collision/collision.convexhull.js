@@ -37,12 +37,15 @@ Engine.initObject("ConvexHull", null, function() {
 
 /**
  * @class A convex hull with which to perform collision testing.  A convex hull
- * 		 is a simplification of the object which it contains.
+ * 		 is a simplification of the points which either comprise an object, or
+ * 		 the points around an object.  There are two simplified hull types which
+ * 		 can also be used: {@link OBBHull} and {@link CircleHull}
  *
  * @param points {Array} An array of {@link Point2D} which make up the shape to 
  * 		create the hull from.
  * @param [lod] {Number} The level of detail for the hull.  Larger numbers make for a more 
- * 		complex hull.  Default: 6
+ * 		complex hull.  Points will not be created if the number of points availble is
+ * 		less than the LOD.  Default: 4
  *
  * @extends PooledObject
  * @constructor
@@ -50,21 +53,21 @@ Engine.initObject("ConvexHull", null, function() {
  */
 var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 
-	center: null,
 	oCenter: null,
 	oVerts: null,
-	radius: -1,
-	faces: null,
-	normals: null,
+	uVerts: null,
+	center: null,
 	vertexes: null,
-	dirty: false,
+	faces: null,
+
+	radius: -1,
 
 	/**
 	 * @private
 	 */
 	constructor: function(points, lod) {
 		this.base("ConvexHull");
-		lod = lod || 6;
+		lod = lod || 4;
 
 		// Calculate the center and radius based on the given points
 		var cX = 0, cY = 0;
@@ -95,13 +98,12 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 		// Create the simplified hull
 		this.vertexes = Math2D.convexHull(points, lod);
 		this.oVerts = [];
+		this.uVerts = [];
+		this.ouVerts = [];
 		for (var p in this.vertexes) {
 			this.oVerts.push(Vector2D.create(this.vertexes[p]));
+			this.uVerts.push(Vector2D.create(this.vertexes[p]).sub(this.center));
 		}
-		
-		this.dirty = true;
-		this.faces = [];
-		this.normals = [];
 	},
 
 	/**
@@ -121,54 +123,19 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	},
 
 	/**
-	 * Build the faces and normals array if the hull has been transformed.
-	 * @private
-	 */
-	_build: function() {
-		if (this.dirty) {
-			// Destroy any previous objects - they will be reused
-			for (var k = 0; k < this.faces.length; k++) {
-				this.faces[k].destroy();
-				this.normals[k].destroy();
-			}
-			
-			// Build the face and normals array
-			for (var n = 1; n < this.vertexes.length; n++) {
-				var p1 = this.vertexes[n];
-				var p2 = this.vertexes[n-1];
-				v.set(p2).sub(p1);
-				var v = Vector2D.create(0,0);
-				this.faces.push(v);
-				this.normals.push(v.rightNormal());
-			}
-			this.dirty = false;		
-		}
-	},
-
-	/**
-	 * Get the array of face vectors in the convex hull
-	 * @return {Array} of {@link Vector2D}
-	 */
-	getFaces: function() {
-		this._build();
-		return this.faces;
-	},
-
-	/**
-	 * Get the array of face normal vectors in the convex hull
-	 * @return {Array} of {@link Vector2D}
-	 */
-	getNormals: function() {
-		this._build();
-		return this.normals;
-	},
-	
-	/**
 	 * Get the array of vertexes in the convex hull
 	 * @return {Array} of {@link Point2D}
 	 */
 	getVertexes: function() {
 		return this.vertexes;	
+	},
+
+	/**
+	 * Get the array of untransformed vertexes in the convex hull
+	 * @return {Array} of {@link Point2D}
+	 */
+	getUntransformedVertexes: function() {
+		return this.uVerts;	
 	},
 	
 	/**
@@ -184,19 +151,17 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 * @param matrix {Matrix}
 	 */
 	transform: function(matrix) {
-		this.dirty = true;
-
 		// Transform the center of the hull
 		this.center.set(this.oCenter);
 		this.center.transform(matrix);
 
-		// Transform the vertexes of the hull		
+		// Transform the vertexes, faces, and normals of the hull		
 		for (var p = 0; p < this.vertexes.length; p++) {
 			this.vertexes[p].set(this.oVerts[p]);
 			this.vertexes[p].transform(matrix);	
-		}	
+		}
 	}
-
+	
 }, { /** @scope ConvexHull.prototype */
 
    /**
