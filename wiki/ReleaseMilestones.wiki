@@ -64,5 +64,5 @@ Maybe you're looking for FutureGoals?
 
 The following list is a set of goals to be reached for each intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
 
-== Version 2.0 beta 1 [TBA] ==
+== Version 2.0 beta 1 (TBA) ==
 || *Status* || *Goal* || *Description* ||
