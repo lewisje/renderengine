@@ -4,35 +4,39 @@ See the ArchivedReleases page for past release information.
 Maybe you're looking for FutureGoals?
 
 = Planned Release Features for v2.0 =
-  # New editors
+  # Editors
     * Sprite editor
     * 2D game editor
     * Particle effect editor
-  # User interfaces
-    * UIManager class 
-    * UI elements
-      * UIButtonElement
-      * UIImageElement
-      * UITextElement
-      * UIInputElement
-      * UICheckboxElement
-  # New broad-phase collision model
+  # ~~User interfaces~~ (UI Example in HTML)
+    * ~~UIManager class~~
+    * ~~UI elements~~
+      * ~~UIButtonElement~~
+      * ~~UIImageElement~~
+      * ~~UITextElement~~
+      * ~~UIInputElement~~
+      * ~~UICheckboxElement~~
+  # Broad-phase collision model
     * SpatialBSPTree
-  # New narrow-phase collision components
-    * GJKColliderComponent
-    * SATColliderComponent
-  # New sound abstraction layer
+  # Narrow-phase collision component
+    * !ConvexColliderComponent
+  # Collision hulls
+    * !ConvexHull
+    * OBBHull
+    * !CircleHull
+  # Sound abstraction layer
     * !SoundSystem
       * !SoundManager 2 upgrade
       * HTML5Audio (lightweight)
-  # New rendering contexts
+  # Rendering contexts
     * SVG
+    * HTML context with CSS transformations
     * Scrolling/layered/parallax background
   # Starter Objects
     * !SpriteActor class
-  # New components
-    * AStarAIComponent
-  # New physics components
+  # Path finding
+    * AStarPathfindingComponent
+  # Physics components
     * !PolyBodyComponent
     * !GearJointComponent
     * !PulleyJointComponent
@@ -48,12 +52,16 @@ Maybe you're looking for FutureGoals?
     * Orthogonal
     * Isometric
   # Multi-player support using Socket.IO
-  # New demos
+    * Example server
+    * !MultiplayerComponent
+  # Demos
     * Isometric demo - NEW
-    * Touch input and UI demo - NEW
+    * Touch input demo (with HTML UI) - NEW
     * Sprite demo with editor - NEW
     * Orthogonal tilemapping demo - NEW
 
 = Release Goals and Milestones =
 
 The following list is a set of goals to be reached for each intended release.  Some goals may be added to finalize a release, others may be removed to advance a release's timeline.
+
+*The Render Engine 2.0b1 [TBA]*
