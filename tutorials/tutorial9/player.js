@@ -125,8 +125,8 @@ Engine.initObject("Player", "Object2D", function() {
 				} else {
 					// Already have shields, stop movement
 					var pP = this.getPosition();
-					var iV = this.getComponent("collide").getImpulseVector();
-					pP.add(iV);
+					var iV = this.getComponent("collide").getCollisionData().impulseVector;
+					pP.add(iV.neg());
 					this.setPosition(pP);
 				}
 				

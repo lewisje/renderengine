@@ -514,6 +514,27 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
    },
 	
 	/**
+	 * Generate an array of points which represents a regular polygon
+	 * with N sides.
+	 * @param sides {Number} The number of sides in the polygon, must be more than 2.
+	 * @param [radius] {Number} The radius for the polygon.  Default: 100
+	 * @return {Array} an array of {@link Point2D}
+	 */
+	regularPolygon: function(sides, radius) {
+		Assert(sides > 2, "RenderContext2D.drawNgon() called with sides < 3");
+		radius = radius || 100;
+		var rot = Math2D.TWO_PI / sides;
+		var angle, p;
+		var points = [];
+		for (var i = 0; i < sides; i++) {
+			angle = (i * rot) + ((Math2D.PI - rotation) * 0.5);
+			p = Point2D.create(Math.cos(angle) * radius, Math.sin(angle) * radius);
+			points.push(p);
+		}
+		return points;
+	},
+	
+	/**
 	 * Returns an identity matrix
 	 * @return {Matrix}
 	 */
