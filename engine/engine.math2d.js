@@ -399,7 +399,8 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 		
 		bin = null;                  // free bins before returning
 		
-		// See if the first and last points are identical
+		// See if the first and last points are identical.  This will cause a problem
+		// if the hull is used for SAT collisions.
 		if (hull[0].equals(hull[hull.length - 1])) {
 			hull.pop();
 		}

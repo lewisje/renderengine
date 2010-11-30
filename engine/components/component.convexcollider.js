@@ -356,7 +356,7 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 		var vectors, center, radius, poly;
 		var testDistance = 0x7FFFFFFF;
 		var shortestDistance = 0x7FFFFFFF;
-		var closestVector = Vector2D.create(0,0);
+		var closestVertex = Vector2D.create(0,0);
 		var normalAxis = Vector2D.create(0,0);
 		var unitVec = null;
 		var overlap = 0;
@@ -397,13 +397,16 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 			if (distance < testDistance) {
 				// Closest has the lowest distance
 				testDistance = distance;
-				closestVector.set(pC.x + vectors[i].x, pC.y + vectors[i].y);
+				closestVertex.set(pC.x + vectors[i].x, pC.y + vectors[i].y);
 			}
 		}
 		
 		// Get the normal vector from the poly to the circle
-		normalAxis.set(closestVector.x - cC.x, closestVector.y - cC.y);
+		normalAxis.set(closestVertex.x - cC.x, closestVertex.y - cC.y);
 		normalAxis.normalize();	// set length to 1
+		
+		// We'll remember this so that we can use it in the collision data
+		unitVec = Vector2D.create(normalAxis);
 		
 		// Project the polygon's points against the circle
 		min1 = normalAxis.dot(vectors[0]);
@@ -430,9 +433,10 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 		
 		if (test1 > 0 || test2 > 0) {
 			// Clean up before returning
+			unitVec.destroy();
 			normalAxis.destroy();
 			vectorOffset.destroy();
-			closestVector.destroy();
+			closestVertex.destroy();
 			
 			// Not colliding
 			return null;
@@ -465,22 +469,20 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 
 			if (test1 > 0 || test2 > 0) {
 				// Clean up before returning
+				unitVec.destroy();
 				normalAxis.destroy();
 				vectorOffset.destroy();
-				closestVector.destroy();
+				closestVertex.destroy();
 				
 				// Not colliding
 				return null;	
 			}
-			
-			var dist = -(max2 - min1);
-			var aDist = Math.abs(dist);
-			if(aDist < shortestDistance) {
-				unitVec = normalAxis;
-				overlap = dist;
-				shortestDistance = aDist;
-			}
-		}	
+		}
+		
+		// The overlap is the nearest poly point to the center of the circle, minus the radius
+		var c = Vector2D.create(center);
+		overlap = c.sub(closestVertex).len();
+		overlap -= radius;
 		
 		// If we got here, there is a collision
 		var cData = CollisionData.create(overlap,
@@ -490,9 +492,10 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 													Vector2D.create(unitVec.x * overlap,
 																		 unitVec.y * overlap));
 
-		// Clean up before returning		
+		// Clean up before returning
+		c.destroy();
 		vectorOffset.destroy();
-		closestVector.destroy();
+		closestVertex.destroy();
 		
 		// Return the collision data
 		return cData;

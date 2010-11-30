@@ -57,8 +57,8 @@ Engine.initObject("Tutorial9", "Game", function(){
          // Add the new rendering context to the default engine context
          Engine.getDefaultContext().add(this.renderContext);
 			
-			// Create the collision model with 5x5 divisions
-			this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
+			// Create the collision model with 9x9 divisions
+			this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 9);
 			
 			this.spriteLoader = SpriteLoader.create();
          
@@ -85,6 +85,7 @@ Engine.initObject("Tutorial9", "Game", function(){
       teardown: function(){
          this.renderContext.destroy();
 			this.spriteLoader.destroy();
+			this.collisionModel.destroy();
       },
 
 		/**
