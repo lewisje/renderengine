@@ -59,6 +59,7 @@ Maybe you're looking for FutureGoals?
     * Touch input demo (with HTML UI) - NEW
     * Sprite demo with editor - NEW
     * Orthogonal tilemapping demo - NEW
+  # New tutorials
 
 = Release Goals and Milestones =
 
@@ -66,3 +67,16 @@ The following list is a set of goals to be reached for each intended release.  S
 
 == Version 2.0 beta 1 (TBA) ==
 || *Status* || *Goal* || *Description* ||
+|| _Complete_ || Collision || Collision hulls: OBB, Circle, Convex ||
+|| _95%_ || Collision || Convex collision component (SAT) ||
+|| _75%_ || Engine || Sound system abstraction, including two sound engines ||
+|| _50%_ || Context || HTML Context with CSS transforms ||
+|| _10%_ || Demo || Isometric tilemapping ||
+|| _10%_ || Editor || Sprite editor ||
+|| _25%_ || Context || Scrolling background, parallax, layered ||
+|| _5%_ || Demo || Orthogonal tilemapped sprite demo ||
+|| _5%_ || Engine || Browser local storage support ||
+|| _5%_ || Editor || 2D game editor ||
+|| _5%_ || Object || Sprite actor ||
+
+_Anything not listed here has not been started_
