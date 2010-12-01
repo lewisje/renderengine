@@ -1,10 +1,9 @@
 // Load the components and engine objects
 Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.convexcollider.js");
+Engine.include("/components/component.boxcollider.js");
 Engine.include("/components/component.sprite.js");
 Engine.include("/engine.object2d.js");
 Engine.include("/engine.timers.js");
-Engine.include("/collision/collision.OBB.js");
 
 Engine.initObject("Bomb", "Object2D", function() {
 
@@ -17,7 +16,7 @@ Engine.initObject("Bomb", "Object2D", function() {
 		   this.add(Transform2DComponent.create("move"));
 
 		   // Add the component for collisions
-		   this.add(ConvexColliderComponent.create("collide", Tutorial9.collisionModel));
+		   this.add(BoxColliderComponent.create("collide", Tutorial9.collisionModel));
 
 		   // Add the component for rendering
 			var bombSprite = Tutorial9.spriteLoader.getSprite("sprites", "bomb");
@@ -33,21 +32,18 @@ Engine.initObject("Bomb", "Object2D", function() {
 		   var start = Point2D.create(Tutorial9.getFieldBox().getCenter());
 		   start.add(Point2D.create(dX, dY));
 			
+		   // Position the object
+		   this.getComponent("move").setPosition(start);
+			
 			// Set the collision mask
 			this.getComponent("collide").setCollisionMask(Math2.parseBin("01"));
 
 		   // Set our bounding box so collision tests work
 		   this.setBoundingBox(bombSprite.getBoundingBox());
 			
-			// Create a collision hull
-			this.setCollisionHull(OBBHull.create(this.getBoundingBox()));
-
 			// Move the bombs's origin to the center of the bounding box
 			this.setOrigin(this.getBoundingBox().getCenter());
-
-		   // Position the object
-		   this.setPosition(start);
-						
+			
 			start.destroy();
 		},
 
@@ -57,11 +53,6 @@ Engine.initObject("Bomb", "Object2D", function() {
 		 */
 		getPosition: function() {
 			return this.getComponent("move").getPosition();
-		},
-
-		setPosition: function(pos) {
-			this.getComponent("move").setPosition(pos);
-			this.base(pos);
 		},
 
 		/**
@@ -86,24 +77,14 @@ Engine.initObject("Bomb", "Object2D", function() {
 		   this.base(renderContext, time);
 
 		   renderContext.popTransform();
-		
-			/* Debug the world box
-			renderContext.setLineStyle("#0000ff");
-			renderContext.drawRectangle(this.getWorldBox());
-			 */
-			
-			/* Debug the collision hull */
-			renderContext.setLineStyle("#ffff00");
-			var h = this.getCollisionHull();
-			renderContext.drawPolygon(h.getVertexes());
 		},
 		
 		/**
 		 * Play a little animation and make the bomb explode
 		 */
 		explode: function() {
-			// Set the collision mask so we don't collide again
-			this.getComponent("collide").setCollisionMask(Math2.parseBin("00"));
+			// Remove the bomb from the collision model so we don't trigger another collision
+			Tutorial9.collisionModel.removeObject(this);
 			
 			// Draw an explosion of sorts
 			this.getComponent("draw").setSprite(Tutorial9.spriteLoader.getSprite("sprites", "boom"));
@@ -118,8 +99,6 @@ Engine.initObject("Bomb", "Object2D", function() {
 			
 			var self = this;
 			OneShotTrigger.create("explosion", 500, function() {
-				// Remove the bomb from the collision model
-				Tutorial9.collisionModel.removeObject(self);
 				self.destroy();
 			}, 10, function() {
 				var mc = self.getComponent("move");
