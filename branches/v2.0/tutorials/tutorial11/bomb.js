@@ -4,6 +4,7 @@ Engine.include("/components/component.convexcollider.js");
 Engine.include("/components/component.sprite.js");
 Engine.include("/engine.object2d.js");
 Engine.include("/engine.timers.js");
+Engine.include("/engine.container.js");
 Engine.include("/collision/collision.OBB.js");
 
 Engine.initObject("Bomb", "Object2D", function() {
@@ -92,11 +93,11 @@ Engine.initObject("Bomb", "Object2D", function() {
 			renderContext.drawRectangle(this.getWorldBox());
 			 */
 			
-			/* Debug the collision hull
+			/* Debug the collision hull */
 			renderContext.setLineStyle("#ffff00");
 			var h = this.getCollisionHull();
 			renderContext.drawPolygon(h.getVertexes());
-			 */
+			
 		},
 		
 		/**
@@ -116,7 +117,23 @@ Engine.initObject("Bomb", "Object2D", function() {
 		   this.getComponent("move").setPosition(pos);
 			pos.destroy();
 			offset.destroy();
+
+			// Generate some particles
+			// We don't need to destroy this container.  The particle engine
+			// will do that for us
+	      var p = Container.create();
+			var pt = Point2D.create(this.getPosition());
+			pt.add(this.getOrigin());
+	      for (var x = 0; x < 40; x++)
+	      {
+	         var decel = Math2.random() * 0.08;
+				var r = Math.floor(Math2.random() * 500);
+	         p.add(SimpleParticle.create(pt, 2000 + r, decel));
+	      }
+	      Tutorial11.pEngine.addParticles(p);
+			pt.destroy();
 			
+			// Now animate the sprite explosion
 			var self = this;
 			OneShotTrigger.create("explosion", 500, function() {
 				// Remove the bomb from the collision model

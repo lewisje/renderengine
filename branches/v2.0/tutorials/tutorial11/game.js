@@ -10,11 +10,15 @@ Engine.include("/resourceloaders/loader.sprite.js");
 // Load the timers
 Engine.include("/engine.timers.js");
 
+// Load the particle engine
+Engine.include("/engine.particles.js");
+
 
 // Load the game objects
 Game.load("/player.js");
 Game.load("/bomb.js");
 Game.load("/powerup.js");
+Game.load("/particle.js");
 
 Engine.initObject("Tutorial11", "Game", function(){
 
@@ -41,6 +45,8 @@ Engine.initObject("Tutorial11", "Game", function(){
 		
 		collisionModel: null,
 		spriteLoader: null,
+		
+		pEngine: null,
 
       /**
        * Called to set up the game, download any resources, and initialize
@@ -61,11 +67,14 @@ Engine.initObject("Tutorial11", "Game", function(){
 			
 			// Create the collision model with 9x9 divisions
 			this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 9);
-			
-			this.spriteLoader = SpriteLoader.create();
+
+			// Create a particle engine
+			this.pEngine = ParticleEngine.create();
+			this.renderContext.add(this.pEngine);			
          
          // Load the sprites
-         this.spriteLoader.load("sprites", this.getFilePath("resources/tutorial9.sprite"));
+			this.spriteLoader = SpriteLoader.create();
+         this.spriteLoader.load("sprites", this.getFilePath("resources/tutorial11.sprite"));
 			
 			// Wait until the resources are ready before running the game
 			Timeout.create("resourceWait", 250, function() {

@@ -91,11 +91,11 @@ Engine.initObject("Powerup", "Object2D", function() {
 			renderContext.drawRectangle(this.getWorldBox());
 			 */
 			
-			/* Debug the collision hull
+			/* Debug the collision hull */
 			renderContext.setLineStyle("#ffff00");
 			var h = this.getCollisionHull();
 			renderContext.drawArc(h.getCenter(), h.getRadius(), 0, 360);
-			 */
+			
 		}
 
 	}, { // Static
