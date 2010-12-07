@@ -58,6 +58,7 @@ Engine.initObject("CollisionData", "PooledObject", function() {
 			this.shape1 = s1;
 			this.shape2 = s2;
 			this.impulseVector = i;
+			this.base("CollisionData");
 		},
 		
 		destroy: function() {
@@ -170,6 +171,25 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 	getCollisionData: function() {
 		return this.cData;
 	}
+	
+   /* pragma:DEBUG_START */
+	,execute: function(renderContext, time) {
+		this.base(renderContext, time);
+      // Debug the collision hull
+      if (Engine.getDebugMode() && !this.isDestroyed())
+      {
+			renderContext.pushTransform();
+         renderContext.setLineStyle("blue");
+			var cHull = this.getHostObject().getCollisionHull();
+			if (cHull.getType() == ConvexHull.CONVEX_NGON) {
+				renderContext.drawPolygon(cHull.getUntransformedVertexes());
+			} else {
+				renderContext.drawArc(Point2D.ZERO, cHull.getRadius(), 0, 359);
+			}
+			renderContext.popTransform();
+      }
+	}
+   /* pragma:DEBUG_END */
 
 }, { /** @scope SATColliderComponent.prototype */
 

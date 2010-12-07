@@ -77,35 +77,31 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
     * @private
     */
    calculateBoundingBox: function() {
-
-      var x1 = 0;
-      var x2 = 0;
-      var y1 = 0;
-      var y2 = 0;
-      for (var p = 0; p < this.rText.length; p++)
-      {
+      var x1 = Math2.MAX_INT;
+      var x2 = -Math2.MAX_INT;
+      var y1 = Math2.MAX_INT;
+      var y2 = -Math2.MAX_INT;
+      for (var p = 0; p < this.rText.length; p++) {
          var pt = this.rText[p];
-         if (pt) {
-            if (pt.x < x1)
-            {
-               x1 = pt.x;
-            }
-            if (pt.x > x2)
-            {
-               x2 = pt.x;
-            }
-            if (pt.y < y1)
-            {
-               y1 = pt.y;
-            }
-            if (pt.y > y2)
-            {
-               y2 = pt.y;
-            }
-         }
+
+			if (pt != null) {
+	         if (pt.x < x1) {
+	            x1 = pt.x;
+	         }
+	         if (pt.x > x2) {
+	            x2 = pt.x;
+	         }
+	         if (pt.y < y1) {
+	            y1 = pt.y;
+	         }
+	         if (pt.y > y2) {
+	            y2 = pt.y;
+	         }
+			}
       }
 
-      this.getHostObject().setBoundingBox(new Rectangle2D(x1 * this.getSize(), y1 * this.getSize(), (Math.abs(x1) + x2 + 2) * this.getSize(), (Math.abs(y1) + y2 + 2) * this.getSize()));
+		this.getHostObject().getBoundingBox().set(0,0,((Math.abs(x1) + x2) * this.getSize()) + 2, ((Math.abs(y1) + y2) * this.getSize()) + 2);
+		this.setTextAlignment(this.getTextAlignment());
    },
 
    /**
@@ -116,6 +112,26 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       this.base(size);
       this.calculateBoundingBox();
    },
+	
+	/**
+	 * Set the text alignment
+	 * @param align {Number}
+	 */
+	setTextAlignment: function(align) {
+		// Adjust the origin, based on the alignment
+		var b = this.getHostObject().getBoundingBox();
+		var c = b.getCenter();
+		var o = Point2D.create(0,0);
+		if (align == AbstractTextRenderer.ALIGN_RIGHT) {
+			o.set(c.x + b.getHalfWidth(), 0);	
+		} else if (align == AbstractTextRenderer.ALIGN_LEFT) {
+			o.set(c.x - b.getHalfWidth(), 0);	
+		} else {
+			o.set(c.x, 0);
+		}
+		
+		this.getHostObject().setOrigin(o);
+	},
 
    /**
     * Set the text to render.
@@ -141,13 +157,10 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       text = text.replace(/&COPY;/g,"a").replace(/&REG;/g,"b");
 
       var lCount = text.length;
-      var align = this.getTextAlignment();
-      var letter = (align == AbstractTextRenderer.ALIGN_RIGHT ? text.length - 1 : 0);
-      var kern = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing), 0);
+      var letter = 0;
+      var kern = new Point2D(spacing, 0);
 		var lineHeight = this.getSize() * 5;
 		var y = 0;
-      //var space = new Point2D((align == AbstractTextRenderer.ALIGN_RIGHT ? -spacing : spacing) * 0.07, 0);
-
 
       // Vectorize the text
       var pc = new Point2D(0,y);
@@ -182,7 +195,7 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 	            pc.add(kern);
 	         }
 			}
-         letter += (align == AbstractTextRenderer.ALIGN_RIGHT ? -1 : 1);
+         letter += 1;
       }
 		pc.destroy();
       this.calculateBoundingBox();
@@ -199,6 +212,10 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
       }
 
       renderContext.pushTransform();
+		var o = Point2D.create(this.getHostObject().getOrigin());
+		o.neg();
+		renderContext.setPosition(o);
+		o.destroy();
       renderContext.setScale(this.getSize());
       // Set the stroke and fill styles
       if (this.getColor() != null)

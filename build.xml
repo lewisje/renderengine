@@ -459,7 +459,7 @@
 		<replaceregexp match="Engine.removeMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- PRAGMA DEBUG BLOCKS -->
-		<replaceregexp match="\/\* pragma:DEBUG_START \*\/(.|\n)*?\/\* pragma:DEBUG_END \*\/" replace="" flags="gm" file="${input.file}"/>
+		<replaceregexp match="\/\*\s*pragma:DEBUG_START\s*\*\/(.|\n)*?\/\*\s*pragma:DEBUG_END\s*\*\/" replace="" flags="gm" file="${input.file}"/>
 	
   	</target>
 

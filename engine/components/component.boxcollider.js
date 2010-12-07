@@ -103,6 +103,26 @@ var BoxColliderComponent = ColliderComponent.extend(/** @scope BoxColliderCompon
       
       return ColliderComponent.CONTINUE;
    }
+	
+   /* pragma:DEBUG_START */
+	,execute: function(renderContext, time) {
+		this.base(renderContext, time);
+      // Debug the collision box
+      if (Engine.getDebugMode() && !this.isDestroyed())
+      {
+			renderContext.pushTransform();
+			var origin = Point2D.create(this.getHostObject().getOrigin());
+			var rect = Rectangle2D.create(this.getHostObject().getBoundingBox());
+			rect.offset(origin.neg());
+         renderContext.setLineStyle("blue");
+         renderContext.drawRectangle(rect);
+			renderContext.popTransform();
+			origin.destroy();
+			rect.destroy();
+      }
+	}
+   /* pragma:DEBUG_END */
+
 
 }, { /** @scope BoxColliderComponent.prototype */
 

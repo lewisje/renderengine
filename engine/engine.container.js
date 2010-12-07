@@ -109,31 +109,19 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
     * @throws {Error} An error if called when no more elements are available
     */
    next: function() {
-   
-		/* pragma:DEBUG_START */
-		try {
-			Profiler.enter("Iterator.next()");
-		/* pragma:DEBUG_END */
-
-			if (this.c.isDestroyed()) {
-				throw new Error("Invalid iterator over destroyed container!");
-			}
-
-			// Get the next and move the pointer
-			var o = this.p.ptr;
-			this.p = (this.r ? this.p.prev : this.p.next);
-
-			if (o != null) {
-				return o;
-			} else {
-				throw new Error("Index out of range");
-			}
-
-		/* pragma:DEBUG_START */
-		} finally {
-			Profiler.exit();
+		if (this.c.isDestroyed()) {
+			throw new Error("Invalid iterator over destroyed container!");
 		}
-		/* pragma:DEBUG_END */
+
+		// Get the next and move the pointer
+		var o = this.p.ptr;
+		this.p = (this.r ? this.p.prev : this.p.next);
+
+		if (o != null) {
+			return o;
+		} else {
+			throw new Error("Index out of range");
+		}
    },
 
    /**
@@ -161,6 +149,7 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
    getClassName: function() {
       return "Iterator";
    }
+	
 });
 
 return Iterator;
@@ -742,6 +731,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    getClassName: function() {
       return "Container";
    }
+	
 });
 
 return Container;
@@ -927,6 +917,7 @@ var HashContainer = Container.extend(/** @scope HashContainer.prototype */{
    getClassName: function() {
       return "HashContainer";
    }
+	
 });
 
 return HashContainer;

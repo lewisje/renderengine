@@ -102,17 +102,6 @@ Engine.initObject("Player", "Object2D", function() {
 			this.move();
 			
 			renderContext.popTransform();
-			
-			/* Debug the world box
-			renderContext.setLineStyle("#0000ff");
-			renderContext.drawRectangle(this.getWorldBox());
-			 */
-			
-			/* Debug the collision hull */
-			renderContext.setLineStyle("#ffff00");
-			var h = this.getCollisionHull();
-			renderContext.drawPolygon(h.getVertexes());
-			
       },
 		
 		/**

@@ -67,7 +67,7 @@ var AbstractTextRenderer = BaseComponent.extend(/** @scope AbstractTextRenderer.
       this.weight = 1;
       this.font = null;
       this.style = null;
-      this.alignment = null;
+      this.alignment = AbstractTextRenderer.ALIGN_LEFT;
 		this.lineSpacing = 7;
    },
 

@@ -42,7 +42,8 @@ Engine.initObject("ColliderComponent", "BaseComponent", function() {
  *              collision list (PCL) for the host object, using its current position
  *              obtained from {@link Object2D#getPosition}. Each object which meets
  *              certain criteria will be passed to an <tt>onCollide()</tt> method which
- *              must be implemented by the host object.
+ *              must be implemented by the host object.  By design, an object cannot
+ *              collide with itself.
  *              <p/>
  *              The event handler will be passed the potential collision object
  *              as its first argument, the time the collision was detected as the second,
@@ -70,7 +71,7 @@ Engine.initObject("ColliderComponent", "BaseComponent", function() {
 var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.prototype */{
 
    collisionModel: null,
-	collideSelf: false,
+	collideSame: false,
 	hasCollideMethods: null,
 	didCollide: false,
 
@@ -80,7 +81,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    constructor: function(name, collisionModel, priority) {
       this.base(name, BaseComponent.TYPE_COLLIDER, priority || 1.0);
       this.collisionModel = collisionModel;
-		this.collideSelf = false;
+		this.collideSame = false;
 		this.hasCollideMethods = [false,false];	// onCollide, onCollideEnd
 		this.didCollide = false;
    },
@@ -106,7 +107,7 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    release: function() {
       this.base();
       this.collisionModel = null;
-		this.collideSelf = false;
+		this.collideSame = false;
 		this.hasCollideMethods = null;
 		this.didCollide = false;
    },
@@ -120,20 +121,22 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
    },
 	
 	/**
-	 * Set whether or not an object can collide with itself.  By default,
-	 * this is <tt>false</tt>.
-	 * @param state {Boolean} <tt>true</tt> if an object can collide with itself
+	 * Set whether or not an object can collide with an object with the same mask.  By default,
+	 * this is <tt>false</tt>.  If you have objects which should collide, and they have the
+	 * same mask, this should be set to <tt>true</tt>.
+	 * @param state {Boolean} <tt>true</tt> if an object can collide with objects with the same mask
 	 */
-	setCollideSelf: function(state) {
-		this.collideSelf = state;
+	setCollideSame: function(state) {
+		this.collideSame = state;
 	},
 	
 	/**
-	 * Returns <tt>true</tt> if an object can collide with itself.  Default: <tt>false</tt>
+	 * Returns <tt>true</tt> if an object can collide with an object with the same mask.  
+	 * Default: <tt>false</tt>
 	 * @return {Boolean}
 	 */
-	getCollideSelf: function() {
-		return this.collideSelf;
+	getCollideSame: function() {
+		return this.collideSame;
 	},
 	
 	/**
@@ -242,7 +245,8 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
 
 			pcl.forEach(function(obj) {
 				var targetMask = this.collisionModel.getObjectSpatialData(obj, "collisionMask");
-            if ((hostMask & targetMask) <= hostMask && 
+            if (obj !== this.getHostObject() &&		// Cannot collide with itself
+					 (hostMask & targetMask) <= hostMask && 
 					  status == ColliderComponent.CONTINUE ||
 					  status == ColliderComponent.COLLIDE_AND_CONTINUE) {
 
@@ -281,11 +285,13 @@ var ColliderComponent = BaseComponent.extend(/** @scope ColliderComponent.protot
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-		if (!(this.collideSelf && this === collisionObj)) {
-			var test = this.getHostObject().onCollide(collisionObj, time, targetMask);
-			this.didCollide |= (test == ColliderComponent.STOP || ColliderComponent.COLLIDE_AND_CONTINUE);
-      	return test;
+		if (hostMask == targetMask && !this.collideSame) {
+			return ColliderComponent.CONTINUE;
 		}
+		
+		var test = this.getHostObject().onCollide(collisionObj, time, targetMask);
+		this.didCollide |= (test == ColliderComponent.STOP || ColliderComponent.COLLIDE_AND_CONTINUE);
+   	return test;
    }
 
 }, /** @scope ColliderComponent.prototype */{ // Statics

@@ -47,6 +47,12 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	c: 12345,
 	
 	/**
+	 * Largest integer
+	 * @type {Number}
+	 */
+	MAX_INT: 0xFFFFFFFF,		// 64-bits
+	
+	/**
 	 * Seed the random number generator with a known number.  This
 	 * ensures that random numbers occur in a known sequence.
 	 * 

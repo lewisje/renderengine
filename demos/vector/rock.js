@@ -34,7 +34,7 @@
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.billboard2d.js");
-Engine.include("/components/component.collider.js");
+Engine.include("/components/component.convexcollider.js");
 Engine.include("/engine.object2d.js");
 Engine.include("/engine.timers.js");
 Engine.include("/engine.container.js");
@@ -54,33 +54,29 @@ var SpaceroidsRock = Object2D.extend({
 
    size: 10,
    speed: 0.3,
-   pBox: null,
    scoreValue: 10,
 
-   constructor: function(size, position, pWidth, pHeight) {
+   constructor: function(size, position) {
       this.base("Spaceroid");
 
       // Add components to move and draw the asteroid
       this.add(Mover2DComponent.create("move"));
       this.add(Billboard2DComponent.create("billboard", Vector2DComponent.create("draw")));
-      this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
+      this.add(ConvexColliderComponent.create("collider", Spaceroids.collisionModel));
+		this.getComponent("collider").setCollisionMask(SpaceroidsRock.COLLISION_MASK);
 		if (Spaceroids.isAttractMode) {
-			this.getComponent("collider").setCollisionMask(Math2.parseBin("1000"));
-		} else {
-			this.getComponent("collider").setCollisionMask(Math2.parseBin("110"));
+			// In attract mode, rocks can collide
+			this.getComponent("collider").setCollideSame(true);
 		}
-
-      // Playfield bounding box for quick checks
-      this.pBox = Rectangle2D.create(0, 0, pWidth, pHeight);
-
+		
       // Set size and position
       this.size = size || 10;
       this.scoreValue = SpaceroidsRock.values[String(this.size)];
-      if (!position)
-      {
+      if (!position) {
          // Set the position
-         position = new Point2D( Math.floor(Math2.random() * this.pBox.getDims().x),
-                                 Math.floor(Math2.random() * this.pBox.getDims().y));
+			var vp = Spaceroids.renderContext.getBoundingBox();
+         position = new Point2D( Math.floor(Math2.random() * vp.w),
+                                 Math.floor(Math2.random() * vp.h));
       }
       this.setPosition(position);
       this.getComponent("move").setCheckLag(false);
@@ -90,7 +86,6 @@ var SpaceroidsRock = Object2D.extend({
       this.base();
       this.size = 10;
       this.speed = 0.3;
-      this.pBox = null;
       this.scoreValue = 10;
    },
 
@@ -100,7 +95,6 @@ var SpaceroidsRock = Object2D.extend({
     */
    destroy: function() {
    	Spaceroids.collisionModel.removeObject(this);
-      this.pBox.destroy();
       this.base();
    },
 
@@ -132,11 +126,13 @@ var SpaceroidsRock = Object2D.extend({
       renderContext.popTransform();
 
       // Debug the collision node
+		/*
       if (!this.isDestroyed() && Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
       {
-         renderContext.setLineStyle("blue");
+         renderContext.setLineStyle("orange");
          renderContext.drawRectangle(this.getComponent("collider").getSpatialNode().getRect());
       }
+      */
    },
 
    /**
@@ -212,6 +208,13 @@ var SpaceroidsRock = Object2D.extend({
       c_draw.setLineStyle("white");
       c_draw.setLineWidth(0.8);
 		
+		// Set the bounding box and origin
+		this.setBoundingBox(c_draw.getBoundingBox());
+		this.setOrigin(c_draw.getBoundingBox().getCenter());
+		this.setCollisionHull(c_draw.getConvexHull());
+
+		c_draw.transformPoints(Math2D.translationMatrix(this.getOrigin()));
+		
 		this.getComponent("billboard").regenerate();
    },
 
@@ -281,8 +284,8 @@ var SpaceroidsRock = Object2D.extend({
          for (var p = 0; p < 3; p++)
          {
             var rock = SpaceroidsRock.create(this.size - 4, this.getPosition());
-            this.getRenderContext().add(rock);
-            rock.setup(this.pBox.getDims().x, this.pBox.getDims().y);
+            Spaceroids.renderContext.add(rock);
+            rock.setup();
             
             var r_mover = rock.getComponent("move");
             r_mover.setVelocity(r_mover.getVelocity().mul(curVel + 0.5));
@@ -306,10 +309,8 @@ var SpaceroidsRock = Object2D.extend({
     * object is the player, calls the <tt>kill()</tt> method on the player
     * object.
     */
-   onCollide: function(obj) {
-      if (SpaceroidsPlayer.isInstance(obj) && Spaceroids.playerObj &&
-          !Spaceroids.playerObj.isNuking() &&
-          (this.getWorldBox().isIntersecting(obj.getWorldBox())))
+   onCollide: function(obj, time, mask) {
+      if (mask == SpaceroidsPlayer.COLLISION_MASK && !Spaceroids.playerObj.isNuking())
       {
          if (obj.isAlive())
          {
@@ -319,11 +320,8 @@ var SpaceroidsRock = Object2D.extend({
          }
       }
 
-      if (Spaceroids.isAttractMode &&
-            obj.killTimer < Engine.worldTime &&
-            SpaceroidsRock.isInstance(obj) &&
-            obj != this &&
-            this.getWorldBox().isIntersecting(obj.getWorldBox()))
+      if (Spaceroids.isAttractMode && obj.killTimer < Engine.worldTime &&
+            mask == SpaceroidsRock.COLLISION_MASK)
       {
          this.kill();
          obj.kill();
@@ -356,7 +354,9 @@ var SpaceroidsRock = Object2D.extend({
     * The value of each size, in points
     * @private
     */
-   values: { "10": 10, "6": 15, "2": 20 }
+   values: { "10": 10, "6": 15, "2": 20 },
+	
+	COLLISION_MASK: Math2.parseBin("110")
 
 });
 

@@ -94,6 +94,10 @@ var BaseObject = PooledObject.extend(/** @scope BaseObject.prototype */{
          }
       }
 
+		if (this.element != null && this.element != document) {
+			$(this.element).empty().remove();
+		}
+
       this.base();
    },
 

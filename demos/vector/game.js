@@ -133,8 +133,10 @@ var Spaceroids = Game.extend({
     * and start message are displayed with asteroids in the background
     */
    attractMode: function() {
-      var titlePos = Point2D.create(150, 100);
-      var copyPos = Point2D.create(160, 570);
+		var center = this.fieldBox.getCenter();
+		
+      var titlePos = Point2D.create(center.x, 100);
+      var copyPos = Point2D.create(center.x, 570);
       this.cleanupPlayfield();
       Spaceroids.isAttractMode = true;
 
@@ -153,11 +155,13 @@ var Spaceroids = Game.extend({
       var title = TextRenderer.create(VectorText.create(), "Asteroids", 2);
       title.setPosition(titlePos);
       title.setColor("#ffffff");
+		title.setTextAlignment(AbstractTextRenderer.ALIGN_CENTER);
       this.renderContext.add(title);
 
       var copy = TextRenderer.create(VectorText.create(), "&copy;2009 Brett Fattori", 0.6);
       copy.setColor("#ffffff");
       copy.setPosition(copyPos);
+		copy.setTextAlignment(AbstractTextRenderer.ALIGN_CENTER);
       this.renderContext.add(copy);
 
       // Instructions
@@ -166,7 +170,8 @@ var Spaceroids = Game.extend({
 		
       var inst = TextRenderer.create(VectorText.create(), instruct, 0.8);
       inst.setColor("#00ff00");
-      inst.setPosition(Point2D.create(130, 485));
+      inst.setPosition(Point2D.create(center.x, 485));
+		inst.setTextAlignment(AbstractTextRenderer.ALIGN_CENTER);
       this.renderContext.add(inst);
 
       var startText;
@@ -178,8 +183,9 @@ var Spaceroids = Game.extend({
 		this.renderContext.add(evolved);
 
       Spaceroids.start = TextRenderer.create(VectorText.create(), startText, 1);
-      Spaceroids.start.setPosition(Point2D.create(96, 450));
+      Spaceroids.start.setPosition(Point2D.create(center.x, 450));
       Spaceroids.start.setColor("#ffffff");
+		Spaceroids.start.setTextAlignment(AbstractTextRenderer.ALIGN_CENTER);
       Spaceroids.renderContext.add(Spaceroids.start);
 
       var flash = function() {
@@ -260,7 +266,7 @@ var Spaceroids = Game.extend({
          this.hscoreObj.setText(this.hiScore);
       }
 
-      this.scoreObj.setText(this.playerScore);
+    this.scoreObj.setText(this.playerScore);
    },
 
    recordDemo: function() {
@@ -303,14 +309,11 @@ var Spaceroids = Game.extend({
       this.playerScore = 0;
       this.cleanupPlayfield();
 
-      var pWidth = this.fieldWidth;
-      var pHeight = this.fieldHeight;
-
       this.nextLevel();
 
       this.playerObj = SpaceroidsPlayer.create();
       this.renderContext.add(this.playerObj);
-      this.playerObj.setup(pWidth, pHeight);
+      this.playerObj.setup();
 
       // Start up a particle engine
       this.pEngine = ParticleEngine.create();
@@ -378,9 +381,10 @@ var Spaceroids = Game.extend({
       }
 
       var g = TextRenderer.create(VectorText.create(), "Game Over", 3);
-      g.setPosition(Point2D.create(100, 260));
+      g.setPosition(Point2D.create(this.fieldBox.getCenter().x, 260));
       g.setTextWeight(0.8);
       g.setColor("#ffffff");
+		g.setTextAlignment(AbstractTextRenderer.ALIGN_CENTER);
       this.renderContext.add(g);
 
       if (!this.gameRunning)
@@ -444,8 +448,15 @@ var Spaceroids = Game.extend({
          return;
       }
       
-      // Go into attract mode
-      Spaceroids.attractMode();
+		Timeout.create("wait", 150, function() {
+			if (Spaceroids.soundLoader.isReady()) {
+		      // Go into attract mode as soon as the sounds are loaded
+				this.destroy();
+		      Spaceroids.attractMode();
+			} else {
+				this.restart();
+			}
+		});
    },
 
    /**
@@ -457,7 +468,7 @@ var Spaceroids = Game.extend({
       this.scoreObj = null;
       this.hscoreObj = null;
 
-      EventEngine.removeHandler(document, "keypress", Spaceroids.onKeyPress);
+      EventEngine.clearHandler(document, "keypress", Spaceroids.onKeyPress);
 
       this.renderContext.destroy();
    },
@@ -467,7 +478,7 @@ var Spaceroids = Game.extend({
     */
    blinkScreen: function(color) {
       if (!Spaceroids.isAttractMode) {
-         $(this.renderContext.getSurface()).css("background", color || "white");
+         $(this.renderContext.getSurface()).css("background", color || "#8F8F8F");
          var surf = this.renderContext.getSurface();
          OneShotTimeout.create("blink", 100, function() {
             $(surf).css("background", "black");
