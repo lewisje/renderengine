@@ -379,6 +379,8 @@ var Point2D = MathObject.extend(/** @scope Point2D.prototype */{
 
 /**
  * The "zero" point. This point should not be modified.
+ * @type {Point2D}
+ * @memberOf Point2D
  */
 Point2D.ZERO = Point2D.create(0,0);
 
@@ -685,6 +687,11 @@ var Point3D = MathObject.extend(/** @scope Point3D.prototype */{
    }
 });
 
+/**
+ * The "zero" point
+ * @type {Point3D}
+ * @memberOf Point3D
+ */
 Point3D.ZERO = Point3D.create(0,0,0);
 
 // Define setters and getters
@@ -879,8 +886,24 @@ var Vector2D = Point2D.extend(/** @scope Vector2D.prototype */{
 
 /**
  * The "zero" vector. This vector should not be modified.
+ * @type {Vector2D}
+ * @memberOf Vector2D
  */
 Vector2D.ZERO = Vector2D.create(0,0);
+
+/**
+ * The "up" vector
+ * @type {Vector2D}
+ * @memberOf Vector2D
+ */
+Vector2D.UP = Vector2D.create(0,-1);
+
+/**
+ * The "left" vector
+ * @type {Vector2D}
+ * @memberOf Vector2D
+ */
+Vector2D.LEFT = Vector2D.create(-1,0);
 
 return Vector2D;
 
@@ -974,6 +997,8 @@ var Vector3D = Point3D.extend(/** @scope Vector3D.prototype */{
 
 /**
  * The "zero" vector. This vector should not be modified.
+ * @type {Vector3D}
+ * @memberOf Vector3D
  */
 Vector3D.ZERO = Vector3D.create(0,0,0);
 
@@ -1101,7 +1126,7 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
     */
    offset: function(offsetPtOrX, offsetY) {
       var offs = Point2D.create(0,0);
-      if (Point2D.isInstance(offsetPtOrX)) {
+      if (offsetPtOrX instanceof Point2D) {
          offs.set(offsetPtOrX);
       } else {
          offs.set(offsetPtOrX, offsetY);

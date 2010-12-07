@@ -339,39 +339,27 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param time {Number} The current render time in milliseconds from the engine.
     */
    render: function(time) {
-   
-		/* pragma:DEBUG_START */
-		try {
-			Profiler.enter("RenderContext.render(time)");
-		/* pragma:DEBUG_END */
+		// Push the world transform
+		this.pushTransform();
 
-			// Push the world transform
-			this.pushTransform();
+		this.setupWorld(time);
 
-			this.setupWorld(time);
-
-			// Run the objects if they are visible
-			var objs = this.iterator();
-			while (objs.hasNext()) {
-				this.renderObject(objs.next(), time);
-			}
-
-			objs.destroy();   
-
-			// Restore the world transform
-			this.popTransform();
-
-			// Safely remove any objects that were removed from
-			// the context while it was rendering
-			if (this.safeRemoveList.length > 0) {
-				this._safeRemove();
-			}
-		
-		/* pragma:DEBUG_START */
-		} finally {
-			Profiler.exit();
+		// Run the objects if they are visible
+		var objs = this.iterator();
+		while (objs.hasNext()) {
+			this.renderObject(objs.next(), time);
 		}
-		/* pragma:DEBUG_END */
+
+		objs.destroy();   
+
+		// Restore the world transform
+		this.popTransform();
+
+		// Safely remove any objects that were removed from
+		// the context while it was rendering
+		if (this.safeRemoveList.length > 0) {
+			this._safeRemove();
+		}
    },
 
    /**
@@ -380,18 +368,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @param time {Number} The world time, in milliseconds
     */
    renderObject: function(obj, time) {
-		/* pragma:DEBUG_START */
-		try {
-			Profiler.enter("RenderContext.renderObject(obj, time)");
-		/* pragma:DEBUG_END */
-	
-			obj.update(this, time);
-			
-		/* pragma:DEBUG_START */
-		} finally {
-			Profiler.exit();
-		}
-		/* pragma:DEBUG_END */
+		obj.update(this, time);
    },
 
    /**

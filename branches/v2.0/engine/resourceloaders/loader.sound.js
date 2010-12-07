@@ -93,7 +93,7 @@ var SoundLoader = RemoteLoader.extend(/** @scope SoundLoader.prototype */{
 			Timeout.create("waitForSounds", 500, function() {
             var sounds = self.getResources();
             for (var s in sounds) {
-               if (!self.isReady(sounds[s]) && !self.get(sounds[s]).getReadyState()) {
+               if (!self.isReady(sounds[s]) && self.get(sounds[s]).getReadyState()) {
                   self.setReady(sounds[s], true);
                   self.loadingSounds--;
                }

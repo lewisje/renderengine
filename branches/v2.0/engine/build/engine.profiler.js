@@ -180,3 +180,37 @@ Profiler.dump = function() {
 	
 	Profiler.resetProfiles();
 };
+
+/**
+ * Wire the objects in the array with profiling 
+ * @param objArray {Array} Object array
+ */
+Profiler.wireObjects = function(objArray) {
+	for (var obj in objArray) {
+
+		for (var o in objArray[obj].prototype) {
+			try {
+				if (typeof objArray[obj].prototype[o] == "function" && 
+					 objArray[obj].prototype.hasOwnProperty(o) && o != "constructor") {
+					// wrap it in a function to profile it
+					var f = objArray[obj].prototype[o];
+					var fn = function() {
+						try {
+							Profiler.enter(arguments.callee.ob + "." + arguments.callee.o + "()");
+							return arguments.callee.f.apply(this, arguments);
+						} finally {
+							Profiler.exit();
+						}
+					};
+					fn.f = f;
+					fn.o = o;
+					fn.ob = objArray[obj].getClassName(); 
+					
+					objArray[obj].prototype[o] = fn;
+				}
+			} catch (e) {
+			}
+		}
+		
+	}
+};

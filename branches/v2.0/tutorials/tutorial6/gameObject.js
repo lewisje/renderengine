@@ -33,7 +33,6 @@ Engine.initObject("GameObject", "Object2D", function() {
 
          // Start at the center of the playfield
          var start = Tutorial6.getFieldBox().getCenter();
-         start.sub(Point2D.create(25, 25));
          
          // ### ADD THIS ###
          // Set our object's shape
@@ -57,6 +56,10 @@ Engine.initObject("GameObject", "Object2D", function() {
          
          // Position the object
          this.setPosition(start);
+			
+			// Set the bounding box
+			this.setBoundingBox(c_draw.getBoundingBox());
+			this.setOrigin(c_draw.getBoundingBox().getCenter());
          
          // Set the velocity to zero
          this.moveVec = Vector2D.create(0,0);

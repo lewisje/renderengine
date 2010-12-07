@@ -81,7 +81,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
     * @const
     */
    INV_PI: 0.31831,
-
+	
    /**
     * Convert degrees to radians.
     * @param degrees {Number} An angle in degrees
@@ -547,6 +547,48 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 */
 	identityMatrix: function() {
 		return Matrix.I(3);	
+	},
+	
+	/**
+	 * Returns a matrix which can be used to translate points by
+	 * the given vector.
+	 * @param vector {Vector2D} The translation vector
+	 * @return {Matrix}
+	 */
+	translationMatrix: function(vector) {
+		return $M([
+			[1,0,vector.x],
+			[0,1,vector.y],
+			[0,0,1]
+		]);
+	},
+	
+	/**
+	 * Returns a matrix which can be used to rotate points by
+	 * the given angle.
+	 * @param angle {Number} The rotation, in degrees
+	 * @return {Matrix}
+	 */
+	rotationMatrix: function(angle) {
+		return Matrix.Rotation(Math2D.degToRad(angle), $V([0,0,1]));
+	},
+	
+	/**
+	 * Returns a matrix which can be used to scale points by
+	 * the given amounts.  Providing neither the scale along X nor Y will
+	 * return the identity matrix.
+	 * @param scaleX {Number} Scale along the X axis, <tt>null</tt> for 1.0
+	 * @param scaleY {Number} Scale along the Y axis, <tt>null</tt> to use the X scaling amount
+	 * @return {Matrix}
+	 */
+	scalingMatrix: function(scaleX, scaleY) {
+		scaleX = scaleX || 1.0;
+		scaleY = scaleY || scaleX;
+		return $M([
+			[scaleX,0,0],
+			[0,scaleY,0],
+			[0,0,1]
+		]);	
 	}
 	
 });

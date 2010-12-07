@@ -171,6 +171,7 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
 				Billboard2DComponent.tempContext.getElement().height = hostBox.h + 1;
 				Billboard2DComponent.tempContext.reset();
 				var p = Point2D.create(Math.abs(hostBox.x), Math.abs(hostBox.y) + 1);
+				p.add(this.getHostObject().getOrigin());
 				Billboard2DComponent.tempContext.setPosition(p);
 				p.destroy();
 				this.renderComponent.execute(Billboard2DComponent.tempContext, time);
@@ -202,19 +203,21 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
 			if (hostBox.x < 0 || hostBox.y < 0) {
 				renderContext.popTransform();
 			}
+
+	      /* pragma:DEBUG_START */
+	      // Debug the billboard image box
+	      if (Engine.getDebugMode())
+	      {
+	         renderContext.setLineStyle("green");
+	         renderContext.drawRectangle(this.getHostObject().getBoundingBox());
+	      }
+	      /* pragma:DEBUG_END */
+
 			this.transformOrigin(renderContext, false);
 		} else {
 			this.renderComponent.execute(renderContext, time);
 		}
 			
-      /* pragma:DEBUG_START */
-      // Debug the collision node
-      if (Engine.getDebugMode())
-      {
-         renderContext.setLineStyle("blue");
-         renderContext.drawRectangle(this.getHostObject().getBoundingBox());
-      }
-      /* pragma:DEBUG_END */
    }
 
 }, /** @scope Billboard2DComponent.prototype */{ 

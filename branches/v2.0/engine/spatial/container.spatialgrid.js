@@ -237,7 +237,6 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * @return {Container} A container of objects found that could be collision targets
     */
    getPCL: function(point) {
-
 		var pcl = this.base(point);
 		pcl.clear();
 
@@ -268,9 +267,11 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
 		}
 
       for (var d = 0; d < nodes.length; d++) {
+			/* pragma:DEBUG_START */
 			if (!nodes[d]) {
 				debugger;
 			}
+			/* pragma:DEBUG_END */
 			var objs = nodes[d].getObjects();
          pcl.addAll(objs);
 			objs.destroy();

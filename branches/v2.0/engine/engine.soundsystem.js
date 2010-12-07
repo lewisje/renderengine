@@ -92,7 +92,15 @@ Engine.initObject("SoundSystem", null, function() {
 		},
 
 		retrieveSound: function(resourceLoader, name, url) {
-			return Sound.create(this, null);
+			// See if the resource loader has a sound object for us already
+			var sound = resourceLoader.get(name);
+			if (sound == null) {
+				// No, return an empty sound object
+				return Sound.create(this, null);
+			} else {
+				// Yep, return the existing sound object
+				return sound;
+			}
 		},
 		
 		/**

@@ -114,6 +114,7 @@ Engine.initObject("Tutorial11", "Game", function(){
 			for (var i = 0; i < 3; i++) {
 		 		this.renderContext.add(Bomb.create());
 		 	}
+			
 		},
 
       /**

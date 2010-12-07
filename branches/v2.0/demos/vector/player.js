@@ -50,25 +50,20 @@ Engine.initObject("SpaceroidsPlayer", "Object2D", function() {
 var SpaceroidsPlayer = Object2D.extend({
 
    size: 4,
-   field: null,
    rotDir: 0,
    thrusting: false,
    bullets: 0,
-   tip: null,
    players: 3,
    alive: false,
    playerShape: null,
    nukes: null,
    nuking: null,
-   pBox: null,
    
    rec: false,
 
    constructor: function() {
       this.base("Player");
       this.rec = false;
-
-      this.field = Spaceroids;
 
       // Add components to move and draw the player
 		this.add(KeyboardInputComponent.create("input"));
@@ -81,10 +76,9 @@ var SpaceroidsPlayer = Object2D.extend({
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
       this.add(Vector2DComponent.create("thrust"));
-      this.add(ColliderComponent.create("collider", this.field.collisionModel));
-		this.getComponent("collider").setCollisionMask(Math2.parseBin("010"));
+      this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
+		this.getComponent("collider").setCollisionMask(SpaceroidsPlayer.COLLISION_MASK);
 
-      this.tip = Point2D.create(0, -1);
       this.players--;
 
       this.alive = true;
@@ -94,13 +88,10 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("move").setCheckLag(false);
       this.nukes = 0;	// Have to earn your nukes
       this.nuking = false;
-      this.pBox = Rectangle2D.create(0,0,1,1);
    },
 
    destroy: function() {
    	Spaceroids.collisionModel.removeObject(this);
-      this.tip.destroy();
-      this.pBox.destroy();
       this.base();
    },
 
@@ -110,13 +101,11 @@ var SpaceroidsPlayer = Object2D.extend({
       this.rotDir = 0;
       this.thrusting = false;
       this.bullets = 0;
-      this.tip = null;
       this.players = 3;
       this.alive = false;
       this.playerShape = null;
       this.nukes = null;
       this.nuking = null;
-      this.pBox = null;
    },
 
    /**
@@ -131,21 +120,21 @@ var SpaceroidsPlayer = Object2D.extend({
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
       var p = Point2D.create(c_mover.getPosition());
-      c_mover.setPosition(this.field.wrap(p, this.getBoundingBox()));
+      c_mover.setPosition(Spaceroids.wrap(p, this.getBoundingBox()));
       c_mover.setRotation(c_mover.getRotation() + this.rotDir);
       p.destroy();
 
       if (this.thrusting)
       {
          var r = c_mover.getRotation();
-         var dir = Math2D.getDirectionVector(Point2D.ZERO, this.tip, r);
+         var dir = Math2D.getDirectionVector(Point2D.ZERO, Vector2D.UP, r);
 
          c_mover.setAcceleration(dir.mul(0.3));
 
          // Particle trail
 			var inv = Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
 			var colr = SpaceroidsPlayer.TRAIL_COLORS[Math.floor(Math2.random() * 3)];
-			this.field.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
+			Spaceroids.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
 			inv.destroy();
          dir.destroy();
       } else {
@@ -256,10 +245,7 @@ var SpaceroidsPlayer = Object2D.extend({
     * @param pWidth {Number} The width of the playfield in pixels
     * @param pHeight {Number} The height of the playfield in pixels
     */
-   setup: function(pWidth, pHeight) {
-
-      // Playfield bounding box for quick checks
-      this.pBox.set(0, 0, pWidth, pHeight);
+   setup: function() {
 
       // Randomize the position and velocity
       var c_mover = this.getComponent("move");
@@ -299,7 +285,7 @@ var SpaceroidsPlayer = Object2D.extend({
       c_thrust.setDrawMode(RenderComponent.NO_DRAW);
 
       // Put us in the middle of the playfield
-      c_mover.setPosition( this.pBox.getCenter() );
+      c_mover.setPosition(Spaceroids.renderContext.getBoundingBox().getCenter());
       c_mover.setVelocityDecay(0.03);
    },
 
@@ -311,7 +297,7 @@ var SpaceroidsPlayer = Object2D.extend({
       var b = SpaceroidsBullet.create(this);
       this.getRenderContext().add(b);
       this.bullets++;
-      this.field.soundLoader.get("shoot").play({volume: 15});
+      Spaceroids.soundLoader.get("shoot").play({volume: 15});
    },
 
    /**
@@ -365,7 +351,7 @@ var SpaceroidsPlayer = Object2D.extend({
 
       this.getComponent("draw").setDrawMode(RenderComponent.NO_DRAW);
       this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
-      this.field.soundLoader.get("thrust").stop();
+      Spaceroids.soundLoader.get("thrust").stop();
 
       // Make some particles
       var p = Container.create();
@@ -374,15 +360,15 @@ var SpaceroidsPlayer = Object2D.extend({
 			p.add(TrailParticle.create(this.getPosition(), this.getRotation(), 45, "#ffffaa", 2000));
          p.add(SimpleParticle.create(this.getPosition(), 3000));
       }
-      this.field.pEngine.addParticles(p);
+      Spaceroids.pEngine.addParticles(p);
 
       this.getComponent("move").setVelocity(Point2D.ZERO);
-      this.getComponent("move").setPosition(this.getRenderContext().getBoundingBox().getCenter());
+      this.getComponent("move").setPosition(Spaceroids.renderContext.getBoundingBox().getCenter());
       this.getComponent("move").setRotation(0);
       this.rotDir = 0;
       this.thrusting = false;
 
-      this.field.soundLoader.get("death").play({volume: 80});
+      Spaceroids.soundLoader.get("death").play({volume: 80});
 
       // Remove one of the players
       if (this.players-- > 0)
@@ -393,7 +379,7 @@ var SpaceroidsPlayer = Object2D.extend({
       }
       else
       {
-         this.field.gameOver();
+         Spaceroids.gameOver();
       }
 
    },
@@ -411,7 +397,7 @@ var SpaceroidsPlayer = Object2D.extend({
       // Hide the player
       this.alive = false;
       this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
-      this.field.soundLoader.get("thrust").stop();
+      Spaceroids.soundLoader.get("thrust").stop();
       this.thrusting = false;
       this.hyperjump = true;
 
@@ -425,7 +411,7 @@ var SpaceroidsPlayer = Object2D.extend({
       // Give it some time and move the player somewhere random
       OneShotTimeout.create("hyperspace", 800, function() {
          self.getComponent("move").setVelocity(Point2D.ZERO);
-         var randPt = Math2D.randomPoint(self.getRenderContext().getBoundingBox());
+         var randPt = Math2D.randomPoint(Spaceroids.renderContext.getBoundingBox());
          self.getComponent("move").setPosition(randPt);
          self.setScale(1);
          self.getComponent("draw").setDrawMode(RenderComponent.DRAW);
@@ -514,7 +500,7 @@ var SpaceroidsPlayer = Object2D.extend({
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.DRAW);
             if (!this.thrusting) {
-               this.field.soundLoader.get("thrust").play({volume: 30});
+               Spaceroids.soundLoader.get("thrust").play({volume: 30});
             }
             this.thrusting = true;
             break;
@@ -545,7 +531,7 @@ var SpaceroidsPlayer = Object2D.extend({
          case EventEngine.KEYCODE_UP_ARROW:
             this.getComponent("thrust").setDrawMode(RenderComponent.NO_DRAW);
             this.thrusting = false;
-            this.field.soundLoader.get("thrust").stop();
+            Spaceroids.soundLoader.get("thrust").stop();
             break;
 
       }
@@ -569,9 +555,9 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("thrust").setDrawMode(pressed ? RenderComponent.DRAW : RenderComponent.NO_DRAW);
       this.thrusting = pressed;
       if (pressed) {
-         this.field.soundLoader.get("thrust").play({volume: 30});
+         Spaceroids.soundLoader.get("thrust").play({volume: 30});
       } else {
-         this.field.soundLoader.get("thrust").stop();
+         Spaceroids.soundLoader.get("thrust").stop();
       }
    },
 
@@ -610,7 +596,9 @@ var SpaceroidsPlayer = Object2D.extend({
 
    TRAIL_COLORS: ["red", "orange", "yellow", "white", "lime"],
    NUKE_COLORS: ["#1111ff", "#8833ff", "#ffff00"],
-   KILL_PARTICLES: 40
+   KILL_PARTICLES: 40,
+	
+	COLLISION_MASK: Math2.parseBin("010")
    
 });
 

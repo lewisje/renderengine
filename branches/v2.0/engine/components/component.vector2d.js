@@ -34,6 +34,7 @@
 // Includes
 Engine.include("/engine.math2d.js");
 Engine.include("/components/component.render.js");
+Engine.include("/collision/collision.convexhull.js");
 
 Engine.initObject("Vector2DComponent", "RenderComponent", function() {
 
@@ -52,7 +53,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
    lineWidth: 1,
    fillStyle: null,          // Default to none
    points: null,
-   fullBox: null,
+   bBox: null,
    closedManifold: null,
 
    /**
@@ -62,11 +63,11 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       this.base(name, priority || 0.1);
       this.closedManifold = true;
 		this.points = [];
-		this.fullBox = Rectangle2D.create(0,0,0,0);
+		this.bBox = Rectangle2D.create(0,0,0,0);
    },
 
 	destroy: function() {
-		this.fullBox.destroy();
+		this.bBox.destroy();
 		while (this.points.length > 0) {
 			this.points.shift().destroy();
 		}
@@ -83,7 +84,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       this.lineWidth = 1;
       this.fillStyle = null;
       this.points = null;
-      this.fullBox = null;
+      this.bBox = null;
       this.closedManifold = null;
    },
 
@@ -93,44 +94,28 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * @private
     */
    calculateBoundingBox: function() {
-      var x1 = 0;
-      var x2 = 0;
-      var y1 = 0;
-      var y2 = 0;
-      for (var p = 0; p < this.points.length; p++)
-      {
+      var x1 = Math2.MAX_INT;
+      var x2 = -Math2.MAX_INT;
+      var y1 = Math2.MAX_INT;
+      var y2 = -Math2.MAX_INT;
+      for (var p = 0; p < this.points.length; p++) {
          var pt = this.points[p];
 
-         if (pt.x < x1)
-         {
+         if (pt.x < x1) {
             x1 = pt.x;
          }
-         if (pt.x > x2)
-         {
+         if (pt.x > x2) {
             x2 = pt.x;
          }
-         if (pt.y < y1)
-         {
+         if (pt.y < y1) {
             y1 = pt.y;
          }
-         if (pt.y > y2)
-         {
+         if (pt.y > y2) {
             y2 = pt.y;
          }
       }
 
-		this.getHostObject().setBoundingBox(x1, y1, Math.abs(x1) + x2, Math.abs(y1) + y2);
-		var bbox = this.getHostObject().getBoundingBox();
-		
-      // Figure out longest axis
-      if (bbox.len_x() > bbox.len_y)
-      {
-         this.fullBox.set(x1,x1,Math.abs(x1) + x2,Math.abs(x1) + x2);
-      }
-      else
-      {
-         this.fullBox.set(y1,y1,Math.abs(y1) + y2,Math.abs(y1) + y2);
-      }
+		this.bBox.set(0,0,Math.abs(x1) + x2,Math.abs(y1) + y2);
    },
 
    /**
@@ -148,6 +133,34 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       this.renderState = null;
       this.calculateBoundingBox();
    },
+	
+	/**
+	 * Transform all of the points by the given matrix
+	 * @param matrix {Matrix}
+	 */
+	transformPoints: function(matrix) {
+		for (var c in this.points) {
+			this.points[c].transform(matrix);
+		}
+	},
+
+	/**
+	 * Get the box which would enclose the shape
+	 * @return {Rectangle2D}
+	 */
+	getBoundingBox: function() {
+		return this.bBox;
+	},
+
+	/**
+	 * Get a convex hull that would enclose the points.  The the LOD isn't
+	 * specified, it will be assumed to be 4.
+	 * @param [lod] {Number} The level of detail for the hull.
+	 * @return {Array} An array of {@link Point2D}
+	 */
+	getConvexHull: function(lod) {
+		return ConvexHull.create(this.points, lod || this.points.length - 1);
+	},
 
    /**
     * Set the color of the lines to be drawn for this shape.
@@ -218,38 +231,31 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
-      if (!(this.points && this.base(renderContext, time)))
-      {
+      if (!(this.points && this.base(renderContext, time))) {
          return;
       }
 
       // Set the stroke and fill styles
-      if (this.getLineStyle() != null)
-      {
+      if (this.getLineStyle() != null) {
          renderContext.setLineStyle(this.strokeStyle);
       }
 
       renderContext.setLineWidth(this.lineWidth);
 
-      if (this.getFillStyle() != null)
-      {
+      if (this.getFillStyle() != null) {
          renderContext.setFillStyle(this.fillStyle);
       }
 
 		this.transformOrigin(renderContext, true);
 
       // Render out the points
-      if (this.closedManifold)
-      {
+      if (this.closedManifold) {
          renderContext.drawPolygon(this.points);
-      }
-      else
-      {
+      } else {
          renderContext.drawPolyline(this.points);
       }
 
-      if (this.fillStyle)
-      {
+      if (this.fillStyle) {
          renderContext.drawFilledPolygon(this.points);
       }
 

@@ -250,6 +250,26 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
       renderContext.setPosition(this.getRenderPosition());
       renderContext.setRotation(this.getRenderRotation());
       renderContext.setScale(this.getRenderScaleX(), this.getRenderScaleY());
+		
+      /* pragma:DEBUG_START */
+      // Debug the origin
+      if (Engine.getDebugMode())
+      {
+			renderContext.setLineWidth(1);
+			var up = Vector2D.create(Vector2D.UP).mul(10);
+			var left = Vector2D.create(Vector2D.LEFT).mul(10);
+			var origin = this.getHostObject().getOrigin();
+			renderContext.pushTransform();
+			//renderContext.setPosition(origin);
+         renderContext.setLineStyle("red");
+         renderContext.drawLine(Point2D.ZERO, up);
+         renderContext.setLineStyle("blue");
+         renderContext.drawLine(Point2D.ZERO, left);
+			renderContext.popTransform();
+			up.destroy();
+			left.destroy();
+      }
+      /* pragma:DEBUG_END */
    }
    
 }, /** @scope Transform2DComponent.prototype */{
