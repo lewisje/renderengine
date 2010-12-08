@@ -157,6 +157,16 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       }
    },
 
+      // Debug the collision node
+		/*
+      if (!this.isDestroyed() && Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
+      {
+         renderContext.setLineStyle("orange");
+         renderContext.drawRectangle(this.getComponent("collider").getSpatialNode().getRect());
+      }
+      */
+
+
    /**
     * Releases the object back into the object pool.  See {@link PooledObject#release}
     * for more information.

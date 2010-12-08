@@ -49,7 +49,7 @@ Engine.initObject("RenderComponent", "BaseComponent", function() {
 var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype */{
 
    drawMode: 0,
-   
+   origin: null,
    oldDisplay: null,
 
    /**
@@ -58,7 +58,13 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
    constructor: function(name, priority) {
       this.base(name, BaseComponent.TYPE_RENDERING, priority || 0.1);
       this.oldDisplay = null;
+		this.origin = Point2D.create(0,0);
    },
+
+	destroy: function() {
+		this.origin.destroy();
+		this.base();
+	},
 
    /**
     * Releases the component back into the object pool. See {@link PooledObject#release}
@@ -99,11 +105,14 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
 			return;
 		}
 		
-		if (before) {
+		if (!this.origin.equals(this.getHostObject().getOrigin())) {
+			this.origin.set(this.getHostObject().getOrigin());
+		}
+		
+		if (before === true) {
 			renderContext.pushTransform();
-			var origin = Point2D.create(this.getHostObject().getOrigin());
-			renderContext.setPosition(origin.neg());
-			origin.destroy();
+			renderContext.setPosition(this.origin.neg());
+			this.origin.neg();
 		} else {
 			renderContext.popTransform();
 		}
