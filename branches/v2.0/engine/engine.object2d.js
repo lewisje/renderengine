@@ -58,12 +58,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 	origin: null,
 	collisionHull: null,
 	
-	// Current transformation matrix and the individual matrices for
-	// tranlate, rotate, scale, and origin/negative-origin
-	txfm: null,
-	tMtx: null,
-	rMtx: null,
-	sMtx: null,
+	// Current origin/negative-origin matrices
 	oMtx: null,
 	oMtxN: null,
 
@@ -80,12 +75,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.collisionHull = null;
 		
 		// Initialize the matrices
-		this.txfm = Object2D.IDENTITY.dup();
-		this.tMtx = Object2D.IDENTITY.dup();
-		this.rMtx = Object2D.IDENTITY.dup();
-		this.sMtx = Object2D.IDENTITY.dup();
-		this.oMtx = Object2D.IDENTITY.dup();
-		this.oMtxN = Object2D.IDENTITY.dup();
+		this.oMtx = Math2D.identityMatrix();
+		this.oMtxN = Math2D.identityMatrix();
    },
 	
 	/**
@@ -112,26 +103,49 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.collisionHull = null;
 		
 		// Free the matrices
-		this.txfm = null;
-		this.tMtx = null;
-		this.rMtx = null;
-		this.sMtx = null;
 		this.oMtx = null;
 		this.oMtxN = null;
    },
 
 	/**
-	 * Update the transformation matrix which is 
-	 * used to transform the collision hull.
-	 * @private
+	 * Get the transformation matrix for this object
+	 * @return {Matrix}
 	 */
-	updateTransform: function() {
-		// We only need to update when we have a collision hull (at the moment)
-		if (this.collisionHull) {
-			// Update the current transformation matrix
-			this.txfm = this.tMtx.multiply(this.rMtx).multiply(this.sMtx);
-			this.collisionHull.transform(this.txfm);
+	getTransformationMatrix: function() {
+		// Translation
+		var p = this.getRenderPosition();
+		var tMtx = $M([
+			[1,0,p.x],
+			[0,1,p.y],
+			[0,0,1]
+		]);
+		tMtx = tMtx.multiply(this.oMtxN);
+		
+		// Rotation
+		var a = this.getRotation();
+		var rMtx;
+		if (a != 0) {
+			// Move the origin
+			rMtx = this.oMtx.dup();
+			// Rotate
+			rMtx = rMtx.multiply(Matrix.Rotation(Math2D.degToRad(a), Object2D.ROTATION_AXIS));
+			// Move the origin back
+			rMtx = rMtx.multiply(this.oMtxN);
+		} else {
+			// Set to identity
+			rMtx = Math2D.identityMatrix();
 		}
+
+		// Scale
+		var sX = this.getScaleX();
+		var sY = this.getScaleY();
+		var sMtx = $M([
+			[sX,0,0],
+			[0,sY,0],
+			[0,0,1]
+		]);
+		
+		return tMtx.multiply(rMtx).multiply(sMtx);
 	},
 
 	/**
@@ -143,22 +157,23 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 	 */
 	setOrigin: function(x, y) {
 		this.origin.set(x, y);
-		var xP = x;
-		var yP = y;
-		
+
+		var pX = x;
+		var pY = y;
+
 		if (x instanceof Point2D) {
-			xP = x.x;
-			yP = x.y;
+			pX = x.x;
+			pY = x.y;
 		}
-		
+
 		this.oMtx.setElements([
-			[1,0,xP],
-			[0,1,yP],
+			[1,0,pX],
+			[0,1,pY],
 			[0,0,1]
 		]);
 		this.oMtxN.setElements([
-			[1,0,-xP],
-			[0,1,-yP],
+			[1,0,-pX],
+			[0,1,-pY],
 			[0,0,1]
 		]);
 	},
@@ -221,8 +236,9 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 	 * @param convexHull {ConvexHull} The convex hull object
 	 */
 	setCollisionHull: function(convexHull) {
-		Assert(convexHull instanceof ConvexHull, "setCollisionHull() failed!");
-		this.collisionHull = convexHull;	
+		Assert(convexHull instanceof ConvexHull, "setCollisionHull() - not ConvexHull!");
+		this.collisionHull = convexHull;
+		this.collisionHull.setHostObject(this);	
 	},
 	
 	/**
@@ -243,17 +259,10 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    },
 
    /**
-    * Store the position of the object in the translation matrix
+    * [ABSTRACT] Set the position of the object
     * @param point {Point2D} The position of the object
     */
    setPosition: function(point) {
-		this.tMtx.setElements([
-			[1,0,point.x],
-			[0,1,point.y],
-			[0,0,1]
-		]);
-		this.tMtx = this.tMtx.multiply(this.oMtxN);
-		this.updateTransform();
    },
 
    /**
@@ -281,31 +290,10 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    },
 
    /**
-    * Store the rotation of the object in the rotation matrix, accounting for origin
+    * [ABSTRACT] Set the rotation of the object
     * @param angle {Number} The rotation angle
     */
    setRotation: function(angle) {
-		if (angle != 0) {
-			// Move the origin
-			var om = this.oMtx;
-			this.rMtx.setElements([
-				om.row(1).elements,
-				om.row(2).elements,
-				om.row(3).elements
-			]);
-			// Rotate
-			this.rMtx = this.rMtx.multiply(Matrix.Rotation(Math2D.degToRad(angle), Object2D.ROTATION_AXIS));
-			// Move the origin back
-			this.rMtx = this.rMtx.multiply(this.oMtxN);
-		} else {
-			// Set to identity
-			this.rMtx.setElements([
-				[1,0,0],
-				[0,1,0],
-				[0,0,1]
-			]);
-		}
-		this.updateTransform();
    },
 
    /**
@@ -322,12 +310,6 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @param scaleY {Number} The scale along the Y axis
     */
    setScale: function(scaleX, scaleY) {
-		this.sMtx.setElements([
-			[scaleX,0,0],
-			[0,scaleY,0],
-			[0,0,1]
-		]);
-		this.updateTransform();
    },
 
    /**
@@ -399,8 +381,10 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
                            null, false],
          "Rotation"     : [function() { return self.getRotation(); },
                            function(i) { self.setRotation(i); }, true],
-         "Scale"        : [function() { return self.getScale(); },
-                           function(i) {self.setScale(i,i); }, true]
+         "ScaleX"        : [function() { return self.getScaleX(); },
+                           function(i) {self.setScaleX(i); }, true],
+         "ScaleY"        : [function() { return self.getScaleY(); },
+                           function(i) {self.setScaleY(i); }, true]
       });
    }
 
@@ -413,21 +397,12 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
    getClassName: function() {
       return "Object2D";
    },
-   
+	
    /**
     * The axis of rotation
     * @private
     */
-   ROTATION_AXIS: $V([0,0,1]),
-   
-   /**
-    * The identity matrix
-    */
-   IDENTITY: $M([
-		[1,0,0],
-		[0,1,0],
-		[0,0,1]
-	])
+   ROTATION_AXIS: $V([0,0,1])
 });
 
 return Object2D;

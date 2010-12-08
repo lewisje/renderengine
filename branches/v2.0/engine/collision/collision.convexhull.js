@@ -58,10 +58,10 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	uVerts: null,
 	center: null,
 	vertexes: null,
-	faces: null,
+	hostObj: null,
 
 	radius: -1,
-
+	
 	/**
 	 * @private
 	 */
@@ -71,6 +71,8 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 
 		// Calculate the center and radius based on the given points
 		var cX = 0, cY = 0;
+		var x1 = Math2.MAX_INT, x2 = -Math2.MAX_INT;
+		var y1 = x1, y2 = x2;
 		for (var p = 0; p < points.length; p++) {
 			cX += points[p].x;
 			cY += points[p].y;
@@ -99,11 +101,49 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 		this.vertexes = Math2D.convexHull(points, lod);
 		this.oVerts = [];
 		this.uVerts = [];
-		this.ouVerts = [];
 		for (var p in this.vertexes) {
 			this.oVerts.push(Vector2D.create(this.vertexes[p]));
 			this.uVerts.push(Vector2D.create(this.vertexes[p]).sub(this.center));
 		}
+	},
+
+	destroy: function() {
+		// Destroy the center
+		this.oCenter.destroy();
+		this.center.destroy();
+	
+		// Destroy the verts
+		for (var v in this.vertexes) {
+			this.vertexes[v].destroy();
+			this.oVerts[v].destroy();
+			this.uVerts[v].destroy();
+		}
+		
+		this.base();	
+	},
+
+	release: function() {
+		this.base();
+
+		// Free the matrices
+		this.txfm = null;
+		
+		// Free the verts and center
+		this.hostObj = null;
+		this.center = null;
+		this.oCenter = null;
+		this.vertexes = null;
+		this.oVerts = null;
+		this.uVerts = null;
+	},
+
+	/**
+	 * Set the object which is using this collision hull.
+	 * 
+	 * @param hostObj {Object2D} The object which is using the hull
+	 */
+	setHostObject: function(obj) {
+		this.hostObj = obj;
 	},
 
 	/**
@@ -111,6 +151,11 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 * @return {Point2D}
 	 */
 	getCenter: function() {
+		var txfm = this.hostObj.getTransformationMatrix();
+		
+		// Transform the center of the hull
+		this.center.set(this.oCenter);
+		this.center.transform(txfm);
 		return this.center;
 	},
 
@@ -127,6 +172,13 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 * @return {Array} of {@link Point2D}
 	 */
 	getVertexes: function() {
+		var txfm = this.hostObj.getTransformationMatrix();
+
+		// Transform the vertexes		
+		for (var p = 0; p < this.vertexes.length; p++) {
+			this.vertexes[p].set(this.oVerts[p]);
+			this.vertexes[p].transform(txfm);	
+		}
 		return this.vertexes;	
 	},
 
@@ -144,22 +196,6 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 */
 	getType: function() {
 		return ConvexHull.CONVEX_NGON;
-	},
-	
-	/**
-	 * Transform the center and vertexes of the hull.
-	 * @param matrix {Matrix}
-	 */
-	transform: function(matrix) {
-		// Transform the center of the hull
-		this.center.set(this.oCenter);
-		this.center.transform(matrix);
-
-		// Transform the vertexes, faces, and normals of the hull		
-		for (var p = 0; p < this.vertexes.length; p++) {
-			this.vertexes[p].set(this.oVerts[p]);
-			this.vertexes[p].transform(matrix);	
-		}
 	}
 	
 }, { /** @scope ConvexHull.prototype */
@@ -182,7 +218,7 @@ var ConvexHull = PooledObject.extend(/** @scope ConvexHull.prototype */{
 	 * A circular convex hull shape (center and radius)
 	 * @type {Number}
 	 */
-	CONVEX_CIRCLE: 2   
+	CONVEX_CIRCLE: 2
 });
 
 return ConvexHull;

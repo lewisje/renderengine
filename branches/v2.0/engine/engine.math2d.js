@@ -270,12 +270,17 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * liable for any real or imagined damage resulting from its use.
 	 * Users of this code must verify correctness for their application.
 	 * 
-	 * @param points {Array} An array of {@link Point2D} instances
+	 * @param pts {Array} An array of {@link Point2D} instances
 	 * @param k {Number} The approximation accuracy (larger = more accurate)
 	 * @return {Array} An array of {@link Point2D} which contains the 
 	 * 	approximate hull of the given points
 	 */ 
-	convexHull: function(points, k) {
+	convexHull: function(pts, k) {
+	
+		var points = [];
+		for (var pz = 0; pz < pts.length; pz++) {
+			points.push(Point2D.create(pts[pz]));
+		}
 	
 		var NONE = -1;
 		var minmin=0, minmax=0,
@@ -405,6 +410,7 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 			hull.pop();
 		}
 		
+		points = null;
 		return hull;              // # of points on the stack
 	},	
 	
@@ -542,11 +548,43 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	},
 	
 	/**
+	 * Get a point which represents the logical center of all of the
+	 * given points.
+	 * @param points {Array} An array of {@link Point2D}
+	 * @return {Point2D}
+	 */
+	getCenterOfPoints: function(points) {
+		var p = Point2D.create(0,0);
+		for (var pt = 0; pt < points.length; pt++) {
+			p.add(points[pt]);
+		}
+		p.div(points.length);
+		return p;
+	},
+	
+	/**
+	 * Transform all of the points by the given matrix.  This method
+	 * transforms all of the points in the array by mutating the points.
+	 * @param points {Array} An array of {@link Point2D}
+	 * @param matrix {Matrix} The matrix to transform the points with
+	 */
+	transformPoints: function(points, matrix) {
+		for (var pt = 0; pt < points.lengt; pt++) {
+			points[pt].transform(matrix);
+		}
+		return points;
+	},
+	
+	/**
 	 * Returns an identity matrix
 	 * @return {Matrix}
 	 */
 	identityMatrix: function() {
-		return Matrix.I(3);	
+		return $M([
+			[1,0,0],
+			[0,1,0],
+			[0,0,1]
+		]);	
 	},
 	
 	/**

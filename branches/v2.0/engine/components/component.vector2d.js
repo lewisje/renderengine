@@ -132,6 +132,14 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
       this.points = pc;
       this.renderState = null;
       this.calculateBoundingBox();
+		
+		// Get the center of the bounding box and move all of the points so none are negative
+		var hP = Point2D.create(this.bBox.getHalfWidth(), this.bBox.getHalfHeight());
+		for (p in this.points) {
+			this.points[p].add(hP);
+		}
+		
+		this.calculateBoundingBox();
    },
 	
 	/**
@@ -139,9 +147,10 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
 	 * @param matrix {Matrix}
 	 */
 	transformPoints: function(matrix) {
-		for (var c in this.points) {
+		for (var c=0; c < this.points.length; c++) {
 			this.points[c].transform(matrix);
 		}
+		this.calculateBoundingBox();
 	},
 
 	/**
@@ -150,6 +159,14 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
 	 */
 	getBoundingBox: function() {
 		return this.bBox;
+	},
+
+	/**
+	 * Get the center point from all of the points
+	 * @return {Point2D}
+	 */ 
+	getCenter: function() {
+		return Math2D.getCenterOfPoints(this.points);
 	},
 
 	/**

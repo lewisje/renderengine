@@ -124,15 +124,6 @@ var SpaceroidsRock = Object2D.extend({
       renderContext.pushTransform();
       this.base(renderContext, time);
       renderContext.popTransform();
-
-      // Debug the collision node
-		/*
-      if (!this.isDestroyed() && Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
-      {
-         renderContext.setLineStyle("orange");
-         renderContext.drawRectangle(this.getComponent("collider").getSpatialNode().getRect());
-      }
-      */
    },
 
    /**
@@ -196,8 +187,7 @@ var SpaceroidsRock = Object2D.extend({
 
       // Scale the shape
       var s = [];
-      for (var p = 0; p < tmp.length; p++)
-      {
+      for (var p = 0; p < tmp.length; p++) {
          var pt = Point2D.create(tmp[p][0], tmp[p][1]);
          pt.mul(this.size);
          s.push(pt);
@@ -207,13 +197,11 @@ var SpaceroidsRock = Object2D.extend({
       c_draw.setPoints(s);
       c_draw.setLineStyle("white");
       c_draw.setLineWidth(0.8);
-		
-		// Set the bounding box and origin
-		this.setBoundingBox(c_draw.getBoundingBox());
-		this.setOrigin(c_draw.getBoundingBox().getCenter());
-		this.setCollisionHull(c_draw.getConvexHull());
 
-		c_draw.transformPoints(Math2D.translationMatrix(this.getOrigin()));
+		// Set the bounding box, collision hull, and origin
+		this.setOrigin(c_draw.getCenter());
+		this.setCollisionHull(c_draw.getConvexHull());
+		this.setBoundingBox(c_draw.getBoundingBox());
 		
 		this.getComponent("billboard").regenerate();
    },

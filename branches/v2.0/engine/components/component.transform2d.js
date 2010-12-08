@@ -258,14 +258,10 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
 			renderContext.setLineWidth(1);
 			var up = Vector2D.create(Vector2D.UP).mul(10);
 			var left = Vector2D.create(Vector2D.LEFT).mul(10);
-			var origin = this.getHostObject().getOrigin();
-			renderContext.pushTransform();
-			//renderContext.setPosition(origin);
          renderContext.setLineStyle("red");
          renderContext.drawLine(Point2D.ZERO, up);
          renderContext.setLineStyle("blue");
          renderContext.drawLine(Point2D.ZERO, left);
-			renderContext.popTransform();
 			up.destroy();
 			left.destroy();
       }
