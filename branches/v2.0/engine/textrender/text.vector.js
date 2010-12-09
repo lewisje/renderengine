@@ -50,7 +50,6 @@ Engine.initObject("VectorText", "AbstractTextRenderer", function() {
 var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 
    rText: null,
-
    spacing: 0,
 
    /**
@@ -173,21 +172,15 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 				y += (this.getSize() * 10) + this.getLineSpacing();
 				pc.set(0, y);
 			} else {
-	         var glyph = VectorText.charSet[chr - 32];
-	         if (glyph.length == 0)
-	         {
+	         var glyph = VectorText.chars[chr - 32];
+	         if (glyph.length == 0) {
 	            pc.add(kern);
-	         }
-	         else
-	         {
-	            for (var p = 0; p < glyph.length; p++)
-	            {
-	               if (glyph[p] != null)
-	               {
-	                  this.rText.push(Point2D.create(glyph[p][0], glyph[p][1]).add(pc));
-	               }
-	               else
-	               {
+	         } else {
+	         
+	            for (var p = 0; p < glyph.length; p++) {
+	               if (glyph[p] != null) {
+	                  this.rText.push(Point2D.create(glyph[p]).add(pc));
+	               } else {
 	                  this.rText.push(null);
 	               }
 	            }
@@ -238,6 +231,76 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
    getClassName: function() {
       return "VectorText";
    },
+
+	/**
+	 * @private
+	 */
+	chars: null,
+
+	/**
+	 * @private
+	 */
+	_precalc: function() {
+		VectorText.chars = [];
+		var lb = function(glyph) {
+			var x1 = Math2.MAX_INT;
+			var x2 = -Math2.MAX_INT;
+			var y1 = Math2.MAX_INT;
+			var y2 = -Math2.MAX_INT;
+			for (var p = 0; p < glyph.length; p++) {
+				var pt = glyph[p];
+
+				if (pt != null) {
+					if (pt.x < x1) {
+						x1 = pt.x;
+					}
+					if (pt.x > x2) {
+						x2 = pt.x;
+					}
+					if (pt.y < y1) {
+						y1 = pt.y;
+					}
+					if (pt.y > y2) {
+						y2 = pt.y;
+					}
+				}
+			}
+
+			// Get the center of the bounding box and move all of the points so none are negative
+			var b = Rectangle2D.create(0,0,Math.abs(x1)+x2,Math.abs(y1)+y2);		
+			var hP = Point2D.create(b.getHalfWidth()+1, b.getHalfHeight()+1);
+			for (p in glyph) {
+				if (glyph[p]) {
+					glyph[p].add(hP);
+				}
+			}
+		};
+	
+		// Convert the character set into adjusted points
+		for (var c in VectorText.charSet) {
+			var chr = VectorText.charSet[c], newChr = [];
+
+			// Convert to points
+			for (var p in chr) {
+				if (chr[p]) {
+					newChr.push(Point2D.create(chr[p][0],chr[p][1]));
+				} else {
+					newChr.push(null);
+				}
+			}
+			
+			// Adjust the origin of each point to zero
+			lb(newChr);
+			VectorText.chars.push(newChr);
+		}
+	},
+
+	/**
+	 * @private
+	 */
+	resolved: function() {
+		VectorText._precalc();
+	},
 
    /**
     * The character set
