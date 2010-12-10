@@ -605,10 +605,30 @@ var Math2D = Base.extend(/** @scope Math2D.prototype */{
 	 * Returns a matrix which can be used to rotate points by
 	 * the given angle.
 	 * @param angle {Number} The rotation, in degrees
+	 * @param [origin] {Point2D} Optional origin to rotate around
 	 * @return {Matrix}
 	 */
-	rotationMatrix: function(angle) {
-		return Matrix.Rotation(Math2D.degToRad(angle), $V([0,0,1]));
+	rotationMatrix: function(angle, origin) {
+		var rMtx;
+		if (!origin) {
+			rMtx = Matrix.Rotation(Math2D.degToRad(angle), $V([0,0,1]));
+		} else {
+			// Move the origin
+			rMtx = $M([
+				[1,0,origin.x],
+				[0,1,origin.y],
+				[0,0,1]
+			]);
+			// Rotate
+			rMtx = rMtx.multiply(Matrix.Rotation(Math2D.degToRad(a), $V([0,0,1])));
+			// Move the origin back
+			rMtx = rMtx.multiply($M([
+				[1,0,-origin.x],
+				[0,1,-origin.y],
+				[0,0,1]
+			]));
+		}
+		return rMtx;
 	},
 	
 	/**
