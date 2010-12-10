@@ -53,6 +53,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 
    /** @private */
    bBox: null,
+   AABB: null,
 	wBox: null,
 	lastPosition: null,
 	origin: null,
@@ -69,6 +70,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       this.base(name);
       this.lastPosition = Point2D.create(5,5);
 		this.bBox = Rectangle2D.create(0,0,1,1);
+		this.AABB = Rectangle2D.create(0,0,1,1);
 		this.wBox = Rectangle2D.create(0,0,1,1);
       this.zIndex = 1;
 		this.origin = Point2D.create(0,0);
@@ -220,6 +222,48 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.wBox.offset(rPos);
 		rPos.destroy();
       return this.wBox;
+   },
+   
+   /**
+    * Get the axis aligned world bounding box for the object.  This bounding box
+    * is ensured to encompass the entire object.
+    * @return {Rectangle2D}
+    */
+   getAABB: function() {
+   	// Start with the world bounding box and transform it
+   	var bb = Rectangle2D.create(this.getBoundingBox());
+   	
+   	// Transform the world box
+   	var txfm = this.getTransformationMatrix();
+
+   	var p1 = bb.getTopLeft();
+   	var p2 = Point2D.create(bb.getTopLeft());
+   	p2.x += bb.getDims().x;
+   	var p3 = bb.getBottomRight();
+   	var p4 = Point2D.create(bb.getTopLeft());
+   	p4.y += bb.getDims().y;
+   	var pts = [p1.transform(txfm),p2.transform(txfm),p3.transform(txfm),p4.transform(txfm)];
+   	
+   	// Now find the AABB
+   	var x1 = Math2.MAX_INT;
+   	var x2 = -Math2.MAX_INT;
+   	var y1 = x1;
+   	var y2 = x2;
+   	
+   	for (var p in pts) {
+   		var pt = pts[p];
+   		if (pt.x < x1) x1 = pt.x;
+   		if (pt.x > x2) x2 = pt.x;
+   		if (pt.y < y1) y1 = pt.y;
+   		if (pt.y > y2) y2 = pt.y;
+   	}
+   	
+   	bb.destroy();
+   	p2.destroy();
+   	p3.destroy();
+   	
+   	this.AABB.set(x1,y1,x2-x1,y2-y1);
+   	return this.AABB;
    },
    
    /**

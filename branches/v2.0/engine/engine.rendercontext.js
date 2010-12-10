@@ -317,7 +317,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * Update the render context before rendering the objects to the surface.
     * If the context isn't static, this will reset and then render the context.
     * If the context is static, you'll need to perform the reset and render yourself.
-    * This allows you to updated objects in the world, skip the reset, and then
+    * This allows you to update objects in the world, skip the reset, and then
     * render yourself.  This can be an effective way to handle redrawing the world
     * only as needed.
     *
