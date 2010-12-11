@@ -150,10 +150,27 @@ var ConvexColliderComponent = ColliderComponent.extend(/** @scope SATColliderCom
 		if (this.cData != null) {
 			// Clean up old data first
 			this.cData.destroy();
+			this.cData = null;
 		}
 		
-		this.cData = ConvexColliderComponent.test(this.getHostObject().getCollisionHull(), 
-			collisionObj.getCollisionHull());
+		// Perform an early out test
+		var hull1 = this.getHostObject().getCollisionHull();
+		var hull2 = collisionObj.getCollisionHull();
+		
+		// We use the bounding circles to determine if the
+		// two objects could even potentially collide
+		var tRad = hull1.getRadius() + hull2.getRadius();
+		var c1 = hull1.getCenter();
+		var c2 = hull2.getCenter();
+		var distSqr = (c1.x - c2.x) * (c1.x - c2.x) +
+						  (c1.y - c2.y) * (c1.y - c2.y);
+		if (distSqr > tRad * tRad) {
+			// Too far apart to be colliding
+			return ColliderComponent.CONTINUE;
+		}		
+		
+		// Perform the test
+		this.cData = ConvexColliderComponent.test(hull1, hull2); 
 		
 		// If a collision occurred, there will be a data structure describing it	
       if (this.cData != null) {

@@ -124,6 +124,16 @@ var SpaceroidsRock = Object2D.extend({
       renderContext.pushTransform();
       this.base(renderContext, time);
       renderContext.popTransform();
+		
+		/*
+		if (!this.isDestroyed()) {
+			renderContext.pushTransform();
+			//renderContext.moveTo(Point2D.ZERO);
+			renderContext.setLineStyle("red");
+			renderContext.drawRectangle(this.getAABB());
+			renderContext.popTransform();
+		}
+		*/
    },
 
    /**
@@ -245,7 +255,7 @@ var SpaceroidsRock = Object2D.extend({
     */
    kill: function() {
       // Make some particles
-      var pCount = Spaceroids.isAttractMode ? 25 : 10;
+      var pCount = Spaceroids.isAttractMode ? 6 : 4;
 
       var p = Container.create();
       for (var x = 0; x < pCount; x++)
