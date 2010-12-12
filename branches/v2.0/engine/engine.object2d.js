@@ -72,7 +72,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.bBox = Rectangle2D.create(0,0,1,1);
 		this.AABB = Rectangle2D.create(0,0,1,1);
 		this.wBox = Rectangle2D.create(0,0,1,1);
-      this.zIndex = 1;
+      this.zIndex = 0;
 		this.origin = Point2D.create(0,0);
 		this.collisionHull = null;
 		
@@ -388,6 +388,9 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @param zIndex {Number} The z-index of this object
     */
    setZIndex: function(zIndex) {
+      if (this.getRenderContext() && this.getRenderContex().swapBins) {
+	  		this.getRenderContext().swapBins(this, this.zIndex, zIndex);
+		}
       this.zIndex = zIndex;
       if (this.getRenderContext()) {
          this.getRenderContext().sort();

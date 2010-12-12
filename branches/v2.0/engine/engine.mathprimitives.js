@@ -1321,6 +1321,40 @@ var Rectangle2D = MathObject.extend(/** @scope Rectangle2D.prototype */{
       return this.bottomRight;
    },
 
+	/**
+	 * Mutator method which will join this rectangle with another 
+	 * rectangle.  Joining two rectangles will create a rectangle that 
+	 * would enclose both rectangles.  It is best to see if two rectangles
+	 * are overlapping before joining them, since joining two disjoint
+	 * rectangles would enclose areas not contained in either.
+	 * 
+	 * @param rect {Rectangle2D} The rectangle to join with
+	 * @return {Rectangle2D} This rectangle
+	 */
+	join: function(rect) {
+		var x1 = this.topLeft.x;
+		var x2 = this.topLeft.x + this.dims.x;
+		var x3 = rect.topLeft.x;
+		var x4 = rect.topLeft.x + rect.dims.x;
+		var y1 = this.topLeft.y;
+		var y2 = this.topLeft.y + this.dims.y;
+		var y3 = rect.topLeft.y;
+		var y4 = rect.topLeft.y + rect.dims.y;
+		
+		var x=Math2.MAX_INT,y=x,w=-Math2.MAX_INT,h=w;
+		if (x1<x) x = x1; if (x2<x) x = x2;
+		if (x3<x) x = x3; if (x4<x) x = x4;
+		if (x1>w) w = x1; if (x2>w) w = x2;
+		if (x3>w) w = x3; if (x4>w) w = x4;
+		if (y1<y) y = y1; if (y2<y) y = y2;
+		if (y3<y) y = y3; if (y4<y) y = y4;
+		if (y1>h) h = y1; if (y2>h) h = y2;
+		if (y3>h) h = y3; if (y4>h) h = y4;
+		this.topLeft.x = x; this.topLeft.y = y;
+		this.dims.x = w-x; this.dims.y = h-y;
+		return this;
+	},
+
    /**
     * Returns a printable version of this object.
     * @return {String} Formatted like "x,y [w,h]"

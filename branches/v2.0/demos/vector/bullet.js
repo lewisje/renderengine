@@ -84,6 +84,7 @@ var SpaceroidsBullet = Object2D.extend({
 		dir.destroy();
 		p.destroy();
 		dPos.destroy();
+		this.setZIndex(1);
    },
 
    release: function() {

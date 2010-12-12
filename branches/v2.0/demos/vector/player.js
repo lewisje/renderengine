@@ -88,6 +88,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.getComponent("move").setCheckLag(false);
       this.nukes = 0;	// Have to earn your nukes
       this.nuking = false;
+		this.setZIndex(1);
    },
 
    destroy: function() {

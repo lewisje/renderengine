@@ -35,6 +35,7 @@
 // Includes
 Engine.include("/engine.math2d.js");
 Engine.include("/engine.rendercontext.js");
+Engine.include("/engine.container.js");
 
 Engine.initObject("RenderContext2D", "RenderContext", function() {
 
@@ -69,6 +70,7 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	fontAlign: "left",
 	fontBaseline: "alphabetic",
 	fontStyle: "normal",
+	zBins: null,
 
 	/**
 	 * @private
@@ -78,6 +80,10 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
       this.wPosition = Point2D.create(0,0);
       this.wRotation = 0;
       this.wScale = 1;
+		this.zBins = {
+			"Bin0": Container.create()
+		};
+		this.zBins.activeBins = [0];
    },
 
    /**
@@ -106,7 +112,88 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 		this.fontAlign = "left";
 		this.fontBaseline = "alphabetic";
 		this.fontStyle = "normal";
+		this.zBins = null;
    },
+
+	/**
+	 * Sorts objects by their {@link Object2D#getZIndex z-index}.  Objects
+	 * that don't have a z-index are untouched.
+	 */
+	sort: function() {
+      this.base(RenderContext2D.sortFn);
+	},
+
+   /**
+    * Add an object to the context.  Only objects
+    * within the context will be rendered.  If an object declared
+    * an <tt>afterAdd()</tt> method, it will be called after the object
+    * has been added to the context.
+    *
+    * @param obj {BaseObject} The object to add to the render list
+    */
+	add: function(obj) {
+      this.base(obj);
+		
+		// Organize objects into bins by their zIndex so we can
+		// determine dirty rectangles
+		if (obj.getZIndex) {
+			this.swapBins(obj, RenderContext2D.NO_ZBIN, obj.getZIndex());
+		}
+	},
+
+   /**
+    * Remove an object from the render context.  The object is
+    * not destroyed when it is removed from the container.  The removal
+    * occurs after each update to avoid disrupting the flow of object
+    * traversal.
+    *
+    * @param obj {Object} The object to remove from the container.
+    * @return {Object} The object that was removed
+    */
+   remove: function(obj) {
+		this.base(obj);
+		
+		if (obj.getZIndex) {
+			// Remove the object from the zBins
+			var zBin = this.zBins["Bin" + obj.getZIndex()];
+			zBin.remove(obj);
+		}
+   },
+
+	/**
+	 * Swap the zBin that the object is contained within.
+	 * @param obj {Object2D} The object to swap
+	 * @param oldBin {Number} The old bin number, or <tt>RenderContext2D.NO_ZBIN</tt> to just
+	 * 	insert into a new bin.
+	 * @param newBin {Number} The new bin to put the object into
+	 */
+	swapBins: function(obj, oldBin, newBin) {
+		if (obj.getZIndex) {
+			if (oldBin != RenderContext2D.NO_ZBIN) {
+				// Remove the object from the old zBin
+				var zBin = this.zBins["Bin" + oldBin];
+				zBin.remove(obj);
+			}
+
+			// The bin name
+			var bin = "Bin" + newBin;
+			
+			// We'll need to know the sorted order of bin numbers since there may be gaps
+			if (!this.zBins[bin]) {
+				this.zBins.activeBins.push(newBin);
+				this.zBins.activeBins.sort();
+			}
+			
+			// Add to a bin
+			var zBin = this.zBins[bin];
+			if (!zBin) {
+				this.zBins[bin] = Container.create();
+				zBin = this.zBins[bin];
+			}
+			
+			zBin.add(obj);
+		}
+	},
 
    /**
     * Set the background color of the context.
@@ -790,6 +877,18 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    getClassName: function() {
       return "RenderContext2D";
    },
+
+   /**
+    * Sort the objects to draw from objects with the lowest
+    * z-index to the highest z-index.
+    * @static
+    */
+   sortFn: function(obj1, obj2) {
+      if (obj1.getZIndex && obj2.getZIndex) {
+         return obj1.getZIndex() - obj2.getZIndex();
+      }
+      return 0
+   },
 	
 	/**
 	 * Bold text weight
@@ -891,7 +990,12 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	 * Text style oblique
 	 * @type {String}
 	 */
-	FONT_STYLE_OBLIQUE: "oblique"
+	FONT_STYLE_OBLIQUE: "oblique",
+	
+	/**
+	 * @private
+	 */
+	NO_ZBIN: 0xDEADBEEF
 });
 
 return RenderContext2D;
