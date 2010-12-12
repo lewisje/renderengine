@@ -80,6 +80,7 @@ var SpaceroidsRock = Object2D.extend({
       }
       this.setPosition(position);
       this.getComponent("move").setCheckLag(false);
+		this.setZIndex(1);
    },
 
    release: function() {

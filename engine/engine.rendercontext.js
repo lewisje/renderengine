@@ -236,7 +236,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 
          // Create a structure to hold information that is related to
          // the render context that keeps it separate from the rest of the object.
-         obj.RenderContext = {};
+			obj.setObjectDataModel(RenderContext.DATA_MODEL, {});
       }
 
       if (obj.afterAdd) {
@@ -292,14 +292,14 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
     * @return {Object} An object with data used by the context
     */
    getContextData: function(obj) {
-      return obj.RenderContext;
+      return obj.getObjectDataModel(RenderContext.DATA_MODEL);
    },
 
    /**
-    * Sort the render context's objects by their respective Z-index value.
+    * [ABSTRACT] Sort the render context's objects.
     */
-   sort: function() {
-      this.base(RenderContext.sortFn);
+   sort: function(sortFn) {
+		this.base(sortFn);
    },
 
    /**
@@ -410,24 +410,17 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 }, /** @scope RenderContext.prototype */{ 
 
    /**
-    * Sort the objects to draw from objects with the lowest
-    * z-index to the highest z-index.
-    * @static
-    */
-   sortFn: function(obj1, obj2) {
-      if (obj1.getZIndex && obj2.getZIndex) {
-         return obj1.getZIndex() - obj2.getZIndex();
-      }
-      return 0
-   },
-
-   /**
     * Get the class name of this object
     * @return {String} "RenderContext"
     */
    getClassName: function() {
       return "RenderContext";
-   }
+   },
+	
+	/**
+	 * @private
+	 */
+	DATA_MODEL: "RenderContext"
 
 });
 
