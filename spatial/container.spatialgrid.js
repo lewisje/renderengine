@@ -128,7 +128,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
    xLocator: 1,
    yLocator: 1,
    
-   accuracy: 1,
+   accuracy: 0,
 
    /**
     * @private
@@ -142,6 +142,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       this.divisions = divisions;
       this.xLocator = 1 / gX;
       this.yLocator = 1 / gY;
+		this.accuracy = SpatialGrid.HIGH_ACCURACY;
 
       var grid = [];
       this.setRoot(grid);
@@ -165,6 +166,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       this.divisions = 1;
       this.xLocator = 1;
       this.yLocator = 1;
+		this.accuracy = 0;
    },
 
    /**
@@ -250,7 +252,7 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
       nodes.push(this.getNode(x, y));
      
       // if our borders cross the margin, we can drop up to two nodes
-      if (this.accuracy == SpatialGrid.BEST_ACCURACY) {
+      if (this.accuracy >= SpatialGrid.BEST_ACCURACY) {
          if (x > 0) { n = this.getNode(x - 1, y); if (n.getCount() != 0) nodes.push(n); }
          if (x < this.divisions) { n = this.getNode(x + 1, y); if (n.getCount() != 0) nodes.push(n); }
          if (y > 0) { n = this.getNode(x, y - 1); if (n.getCount() != 0) nodes.push(n); }
@@ -309,8 +311,16 @@ var SpatialGrid = SpatialContainer.extend(/** @scope SpatialGrid.prototype */{
     * Collision checks are performed in the node where the object
     * being tested resides, and in the four surrounding polar nodes.
     * @type {Number}
+    * @deprecated
     */
    BEST_ACCURACY: 1,
+
+   /**
+    * Collision checks are performed in the node where the object
+    * being tested resides, and in the four surrounding polar nodes.
+    * @type {Number}
+    */
+	BETTER_ACCURACY: 1,
 	
    /**
     * Collision checks are performed in the node where the object

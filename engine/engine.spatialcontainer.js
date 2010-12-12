@@ -54,7 +54,6 @@ Engine.initObject("SpatialNode", null, function() {
 var SpatialNode = Base.extend(/** @scope SpatialNode.prototype */{
 
    idx: 0,
-
    objects: null,
 
    /**
@@ -150,11 +149,8 @@ Engine.initObject("SpatialContainer", "BaseObject", function() {
 var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype */{
 
    root: null,
-
    width: 0,
-
    height: 0,
-	
 	pcl: null,
 
    /**
@@ -231,7 +227,7 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     */
    addObject: function(obj, point) {
    	// See if the object is already in a node and remove it
-   	var oldNode = obj._COLLISION_MODEL_DATA && obj._COLLISION_MODEL_DATA.lastNode ? obj._COLLISION_MODEL_DATA.lastNode : null;
+   	var oldNode = this.getObjectSpatialData(obj, "lastNode");
    	if (oldNode != null) {
    		if (!oldNode.contains(point)) {
    			// The node is no longer in the same node
@@ -248,12 +244,49 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
 			node.addObject(obj);
 
 			// Update the collision data on the object
-			obj._COLLISION_MODEL_DATA = { 
-				lastNode: node 
-			};
+			this.setObjectSpatialData(obj, "lastNode", node); 
 		}
    },
    
+	/**
+	 * Get the spatial model data for the object.  If <tt>key</tt> is provided, only the
+	 * data for <tt>key</tt> will be returned.  If the data has not yet been assigned,
+	 * an empty object will be created to contain the data.
+	 * 
+	 * @param obj {BaseObject} The object which has the data
+	 * @param [key] {String} Optional key which contains the data, or <tt>null</tt> for the
+	 * 	entire data model. 
+	 */
+	getObjectSpatialData: function(obj, key) {
+		var mData = obj.getObjectDataModel(SpatialContainer.DATA_MODEL);
+		if (mData == null) {
+			obj.setObjectDataModel(SpatialContainer.DATA_MODEL, {});
+			mData = obj.getObjectDataModel(SpatialContainer.DATA_MODEL);
+		}
+		return key ? mData[key] : mData;
+	},
+	
+	/**
+	 * Set a key, within the object's spatial data model, to a specific value.
+	 * 
+	 * @param obj {BaseObject} The object to receive the data
+	 * @param key {String} The key to set the data for
+	 * @param value {Object} The value to assign to the key
+	 */
+	setObjectSpatialData: function(obj, key, value) {
+		var mData = this.getObjectSpatialData(obj);
+		mData[key] = value;
+	},
+	
+	/**
+	 * Clear all of the spatial container model data.
+	 * 
+	 * @param obj {BaseObject} The object which has the data model
+	 */
+	clearObjectSpatialData: function(obj) {
+		obj.setObjectDataMode(SpatialContainer.DATA_MODEL, null);
+	},
+	
    /**
     * Remove an object from the collision model.  This is done so collisions are
     * no longer checked against this object.
@@ -261,11 +294,11 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     * @param obj {BaseObject} The object to remove
     */
    removeObject: function(obj) {
-		var oldNode = obj._COLLISION_MODEL_DATA && obj._COLLISION_MODEL_DATA.lastNode ? obj._COLLISION_MODEL_DATA.lastNode : null;
+		var oldNode = this.getObjectSpatialData(obj, "lastNode");
 		if (oldNode != null) {
 			oldNode.removeObject(obj);
 		}
-		obj._COLLISION_MODEL_DATA = null;
+		obj[SpatialContainer.DATA_MODEL] = null;
    },
    
    /**
@@ -306,7 +339,12 @@ var SpatialContainer = BaseObject.extend(/** @scope SpatialContainer.prototype *
     */
    getClassName: function() {
       return "SpatialContainer";
-   }
+   },
+	
+	/**
+	 * @private
+	 */
+	DATA_MODEL: "SpatialContainer"
 
 });
 

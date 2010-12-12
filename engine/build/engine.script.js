@@ -35,8 +35,7 @@
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend({
-   /** @lends Engine */
+var Engine = Engine.extend(/** @lends Engine.prototype */{
    constructor: null,
 
    /*
@@ -52,13 +51,14 @@ var Engine = Engine.extend({
    
    /**
     * Status message when a script is not found
-    * @memberOf Engine
+    * @type Boolean
+    * @memberOf Engine.prototype
     */
    SCRIPT_NOT_FOUND: false,
    
    /**
     * Status message when a script is successfully loaded
-    * @memberOf Engine
+    * @type Boolean
     */
    SCRIPT_LOADED: true,
 

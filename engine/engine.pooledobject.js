@@ -55,6 +55,8 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    name: "",
 	
 	_destroyed: false,
+	
+	
 
    /**
     * @private
@@ -163,6 +165,41 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
 	 */
 	isDestroyed: function() {
 		return this._destroyed;
+	},
+	
+	/**
+	 * Get the model data associated with an object.  If <tt>key</tt> is provided, only the
+	 * data for <tt>key</tt> will be returned.  If the data has not yet been assigned,
+	 * an empty object will be created to contain the data.
+	 * 
+	 * @param [key] {String} Optional key which contains the data, or <tt>null</tt> for the
+	 * 	entire data model. 
+	 */
+	getObjectDataModel: function(key) {
+		var mData = this[PooledObject.DATA_MODEL];
+		if (mData == null) {
+			this[PooledObject.DATA_MODEL] = {};
+			mData = this[PooledObject.DATA_MODEL];
+		}
+		return key ? mData[key] : mData;
+	},
+	
+	/**
+	 * Set a key, within the object's data model, to a specific value.
+	 * 
+	 * @param key {String} The key to set the data for
+	 * @param value {Object} The value to assign to the key
+	 */
+	setObjectDataModel: function(key, value) {
+		var mData = this.getObjectDataModel();
+		mData[key] = value;
+	},
+	
+	/**
+	 * Clear all of the spatial container model data.
+	 */
+	clearObjectDataModel: function() {
+		this[PooledObject.DATA_MODEL] = null;
 	}
 	
 }, /** @scope PooledObject.prototype **/{
@@ -284,7 +321,12 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
          Console.warn("Object is missing getClassName()");
       }
       return "PooledObject";
-   }
+   },
+	
+	/**
+	 * @private
+	 */
+	DATA_MODEL: "$$OBJECT_DATA_MODEL"
 
 });
 

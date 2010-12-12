@@ -60,6 +60,8 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    worldRotation: null,
    worldScale: null,
    staticCtx: null,
+	
+	safeRemoveList: null,
 
    /**
     * @private
@@ -73,6 +75,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldRotation = 0;
       this.viewport = Rectangle2D.create(0, 0, 100, 100);
       this.staticCtx = false;
+		this.safeRemoveList = [];
    },
 
    /**
@@ -86,6 +89,7 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
       this.worldPosition = null;
       this.worldRotation = null;
       this.staticCtx = null;
+		this.safeRemoveList = null;
    },
 
    /**
@@ -244,6 +248,45 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
    },
 
    /**
+    * Remove an object from the render context.  The object is
+    * not destroyed when it is removed from the container.  The removal
+    * occurs after each update to avoid disrupting the flow of object
+    * traversal.
+    *
+    * @param obj {Object} The object to remove from the container.
+    * @return {Object} The object that was removed
+    */
+   remove: function(obj) {
+		this.safeRemoveList.push(obj);
+   },
+
+   /**
+    * Remove an object from the render context at the specified index.
+    * The object is not destroyed when it is removed.  The removal
+    * occurs after each update to avoid disrupting the flow of object
+    * traversal.
+    *
+    * @param idx {Number} An index between zero and the size of the container minus 1.
+    * @return {Object} The object removed from the container.
+    */
+   removeAtIndex: function(idx) {
+		this.safeRemoveList.push(this._find(idx));
+	},
+
+	/**
+	 * This method is called after the update to remove items from the
+	 * context.
+	 * @private
+	 */
+	_safeRemove: function() {
+		var obj;
+		while ((obj = this.safeRemoveList.shift()) != null) {
+			Container.prototype.remove.call(this, obj);
+		}
+		this.safeRemoveList.length = 0;
+	},
+
+   /**
     * Returns the structure that contains information held about
     * the rendering context.  This object allows a context to store
     * extra information on an object that an object wouldn't know about.
@@ -311,13 +354,20 @@ var RenderContext = Container.extend(/** @scope RenderContext.prototype */{
 			// Run the objects if they are visible
 			var objs = this.iterator();
 			while (objs.hasNext()) {
-				this.renderObject(objs.next(), time);
+				var o = objs.next();
+				this.renderObject(o, time);
 			}
 
 			objs.destroy();   
 
 			// Restore the world transform
 			this.popTransform();
+
+			// Safely remove any objects that were removed from
+			// the context while it was rendering
+			if (this.safeRemoveList.length > 0) {
+				this._safeRemove();
+			}
 		
 		/* pragma:DEBUG_START */
 		} finally {

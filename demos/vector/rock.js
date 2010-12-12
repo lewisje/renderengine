@@ -64,6 +64,12 @@ var SpaceroidsRock = Object2D.extend({
       this.add(Mover2DComponent.create("move"));
       this.add(Billboard2DComponent.create("billboard", Vector2DComponent.create("draw")));
       this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
+		
+		if (Spaceroids.isAttractMode) {
+			this.getComponent("collider").setCollisionMask(Math2.parseBin("1000"));
+		} else {
+			this.getComponent("collider").setCollisionMask(Math2.parseBin("110"));
+		}
 
       // Playfield bounding box for quick checks
       this.pBox = Rectangle2D.create(0, 0, pWidth, pHeight);
