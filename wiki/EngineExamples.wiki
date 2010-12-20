@@ -27,9 +27,3 @@ The following is a quick test I put together to test text rendering with the thr
 
    * [http://renderengine.googlecode.com/svn/tags/v1.5.3/test/textrender/index.html?metrics=true Vector, bitmap, and native font rendering]
 
-
-==!PistolSlut by Mary Rose Cook==
-
-[http://pistolslut.com PistolSlut] is a 2D side-scrolling shooter that is in development by a third party.
-
-There will be more examples, in the future, which will appear on this page.  If you have any good examples of the engine in use, let me know and I'll include them here as well!
