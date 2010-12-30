@@ -97,6 +97,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    setPosition: function(point) {
       this.setLastPosition(this.getPosition());
       this.position.set(point);
+		this.getHostObject().markDirty();
    },
 
    /**
@@ -151,6 +152,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
     */
    setRotation: function(rotation) {
       this.rotation = rotation;
+		this.getHostObject().markDirty();
    },
 
    /**
@@ -182,6 +184,7 @@ var Transform2DComponent = BaseComponent.extend(/** @scope Transform2DComponent.
    setScale: function(scaleX, scaleY) {
    	scaleX = scaleX || 1.0;
       this.scale = [scaleX, scaleY || scaleX];
+		this.getHostObject().markDirty();
    },
 
    /**

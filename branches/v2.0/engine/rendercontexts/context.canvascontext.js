@@ -54,6 +54,9 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    context2D: null,
    worldRect: null,
    mouseHandler: false,
+	divisions: -1,
+	dirtyBins: null,
+	firstFrame: null,
 
    /**
     * @private
@@ -77,6 +80,11 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       
       canvas.id = this.getId();
       this.setWorldScale(this.getWorldScale());
+		
+		// Set the number of divisions along X and Y
+		this.divisions = 5;
+		this.dirtyBins = {};
+		this.firstFrame = true;
    },
 
    afterAdd: function(parent) {
@@ -101,6 +109,16 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
       this.context2D = null;
       this.mouseHandler = false;
    },
+
+	/**
+	 * Set the number of divisions along the X and Y axis used to determine the
+	 * number of dirty rectangles for the current viewport.
+	 *  
+	 * @param divisions {Number} The number of divisions along X and Y.  Defaults to 5.
+	 */
+	setDivisions: function(divisions) {
+		this.divisions = divisions;
+	},
 
    /**
     * Set the scale of the world
@@ -151,12 +169,14 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
    // Drawing functions
 
    /**
-    * Reset the context, clearing it and preparing it for drawing.
+    * Reset the entire context, clearing it and preparing it for drawing.
     */
    reset: function(rect) {
-      var cRect = (rect != null ? rect : this.getViewport());
-      var d = cRect.get();
-      this.get2DContext().clearRect(d.x, d.y, d.w, d.h);
+		if (!Engine.options.useDirtyRectangles) {
+	      var cRect = (rect != null ? rect : this.getViewport());
+	      var d = cRect.get();
+	      this.get2DContext().clearRect(d.x, d.y, d.w, d.h);
+		}
    },
 
    /**
@@ -174,6 +194,62 @@ var CanvasContext = RenderContext2D.extend(/** @scope CanvasContext.prototype */
 
       this.base(time);
    },
+
+	/**
+	 * Capture the dirty rectangles for the bin
+	 * @param {Object} bin
+	 * @param {Object} itr
+	 */
+	captureBin: function(bin, itr) {
+		var dBin = this.dirtyBins["Bin" + bin];
+		if (!dBin) {
+			dBin = this.dirtyBins["Bin" + bin] = [];
+		}
+		
+		// Brute force method
+		itr.reset();
+		while (itr.hasNext()) {
+			var obj = itr.next();
+			if (obj.wasDirty && obj.wasDirty()) { 
+				var aabb = obj.getAABB();
+				dBin.push({
+					p: aabb.getTopLeft(),
+					d: this.getImage(obj.getAABB())
+				});
+			}
+		}
+		itr.reset();
+	},
+
+	/**
+	 * Reset the bin's dirty rectangles before drawing the dirty objects
+	 * in the bin.
+	 * @param {Object} bin
+	 */
+	resetBin: function(bin) {
+		var dBin = this.dirtyBins["Bin" + bin];
+		while (dBin && dBin.length > 0) {
+			var r = dBin.shift();
+			this.putImage(r.d, r.p);
+		}		
+	},
+
+	/**
+	 * Render all of the objects in a single bin, grouped by z-index.
+	 * @param bin {Number} The bin number being rendered
+	 * @param itr {Iterator} The iterator over all the objects in the bin
+    * @param time {Number} The current render time in milliseconds from the engine.
+	 */
+	renderBin: function(bin, itr, time) {
+		if (Engine.options.useDirtyRectangles) {
+			if (!this.firstFrame) {
+				this.resetBin(bin);
+			}
+			this.captureBin(bin, itr);
+			this.firstFrame = false;
+		}
+		this.base(bin, itr, time);
+	},
 
    /**
     * Set the background color of the context.

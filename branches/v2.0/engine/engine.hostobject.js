@@ -62,6 +62,14 @@ Engine.initObject("HostObject", "HashContainer", function() {
 var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
 
    renderContext: null,
+	dirtyFlag: false,
+	oldDirty: false,
+
+	constructor: function(name) {
+		this.base(name);
+		this.dirtyFlag = true;
+		this.oldDirty = false;
+	},
 
    /**
     * Release the object back into the object pool.
@@ -69,6 +77,8 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    release: function() {
       this.base();
       this.renderContext = null;
+		this.dirtyFlag = false;
+		this.oldDirty = false;
    },
 
    /**
@@ -84,6 +94,32 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
    },
 
 
+	/**
+	 * Marks the object as dirty.  An object is considered dirty if something about
+	 * it has changed which would affect how it is rendered.
+	 */
+	markDirty: function() {
+		this.dirtyFlag = true;
+	},
+	
+	/**
+	 * Check the flag which indicates if the object is dirty.
+	 * @return {Boolean}
+	 */
+	isDirty: function() {
+		return this.dirtyFlag;
+	},
+	
+	/**
+	 * Check the flag which indicates if the object <i>was</i> dirty the last time
+	 * it was updated.  Objects which aren't dirty, but were dirty, need to be redrawn
+	 * one more time so they aren't missed in the next frame.
+	 * @return {Boolean}
+	 */
+	wasDirty: function() { 
+		return this.oldDirty; 
+	},
+
    /**
     * Set the rendering context this object will be drawn within.  This method is
     * called when a host object is added to a rendering context.
@@ -92,6 +128,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
     */
    setRenderContext: function(renderContext) {
       this.renderContext = renderContext;
+		this.markDirty();
    },
 
    /**
@@ -119,6 +156,8 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       }
 
 		components.destroy();
+		this.oldDirty = this.dirtyFlag;
+		this.dirtyFlag = false;
 
       this.base(renderContext, time);
    },
@@ -150,6 +189,7 @@ var HostObject = HashContainer.extend(/** @scope HostObject.prototype */{
       {
          this.sort(HostObject.componentSort);
       }
+		this.markDirty();
    },
 
    /**

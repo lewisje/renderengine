@@ -116,6 +116,21 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
    },
 
 	/**
+	 * Clean up the render bins after cleaning up the contained objects.
+	 */
+	cleanUp: function() {
+		this.base();
+		for (var b in this.zBins.activeBins) {
+			this.zBins["Bin" + b].destroy();
+			this.zBins["Bin" + b] = null;
+		}
+		this.zBins = {
+			"Bin0": Container.create()
+		};
+		this.zBins.activeBins = [0];
+	},
+
+	/**
 	 * Sorts objects by their {@link Object2D#getZIndex z-index}.  Objects
 	 * that don't have a z-index are untouched.
 	 */
@@ -138,6 +153,9 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 		// determine dirty rectangles
 		if (obj.getZIndex) {
 			this.swapBins(obj, RenderContext2D.NO_ZBIN, obj.getZIndex());
+		} else {
+			// If they don't have a zIndex, put them in the zeroth bin
+			this.swapBins(obj, RenderContext2D.NO_ZBIN, 0);
 		}
 	},
 
@@ -157,6 +175,8 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 			// Remove the object from the zBins
 			var zBin = this.zBins["Bin" + obj.getZIndex()];
 			zBin.remove(obj);
+		} else {
+			this.zBins["Bin0"].remove(obj);
 		}
    },
 
@@ -168,30 +188,69 @@ var RenderContext2D = RenderContext.extend(/** @scope RenderContext2D.prototype 
 	 * @param newBin {Number} The new bin to put the object into
 	 */
 	swapBins: function(obj, oldBin, newBin) {
-		if (obj.getZIndex) {
-			if (oldBin != RenderContext2D.NO_ZBIN) {
-				// Remove the object from the old zBin
-				var zBin = this.zBins["Bin" + oldBin];
-				zBin.remove(obj);
-			}
+		if (oldBin != RenderContext2D.NO_ZBIN) {
+			// Remove the object from the old zBin
+			var zBin = this.zBins["Bin" + oldBin];
+			zBin.remove(obj);
+		}
 
-			// The bin name
-			var bin = "Bin" + newBin;
-			
-			// We'll need to know the sorted order of bin numbers since there may be gaps
-			if (!this.zBins[bin]) {
-				this.zBins.activeBins.push(newBin);
-				this.zBins.activeBins.sort();
-			}
-			
-			// Add to a bin
-			var zBin = this.zBins[bin];
-			if (!zBin) {
-				this.zBins[bin] = Container.create();
-				zBin = this.zBins[bin];
-			}
-			
-			zBin.add(obj);
+		// The bin name
+		var bin = "Bin" + newBin;
+		
+		// We'll need to know the sorted order of bin numbers since there may be gaps
+		if (!this.zBins[bin]) {
+			this.zBins.activeBins.push(newBin);
+			this.zBins.activeBins.sort();
+		}
+		
+		// Add to a bin
+		var zBin = this.zBins[bin];
+		if (!zBin) {
+			this.zBins[bin] = Container.create();
+			zBin = this.zBins[bin];
+		}
+		
+		zBin.add(obj);
+	},
+
+   /**
+    * Called to render all of the objects to the context.
+    *
+    * @param time {Number} The current render time in milliseconds from the engine.
+    */
+   render: function(time) {
+		// Push the world transform
+		this.pushTransform();
+
+		this.setupWorld(time);
+
+		// Run the objects in each bin
+		for (var zbin in this.zBins.activeBins) {
+			var bin  = this.zBins["Bin" + this.zBins.activeBins[zbin]];
+			var objs = bin.iterator();
+			this.renderBin(zbin, objs, time);
+			objs.destroy();   
+		}
+
+		// Restore the world transform
+		this.popTransform();
+
+		// Safely remove any objects that were removed from
+		// the context while it was rendering
+		if (this.safeRemoveList.length > 0) {
+			this._safeRemove();
+		}
+   },
+
+	/**
+	 * Render all of the objects in a single bin, grouped by z-index.
+	 * @param bin {Number} The bin number being rendered
+	 * @param itr {Iterator} The iterator over all the objects in the bin
+    * @param time {Number} The current render time in milliseconds from the engine.
+	 */
+	renderBin: function(bin, itr, time) {
+		while (itr.hasNext()) {
+			this.renderObject(itr.next(), time);
 		}
 	},
 

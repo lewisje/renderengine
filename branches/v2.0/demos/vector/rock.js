@@ -211,7 +211,7 @@ var SpaceroidsRock = Object2D.extend({
 
 		// Set the bounding box, collision hull, and origin
 		this.setOrigin(c_draw.getCenter());
-		this.setCollisionHull(c_draw.getConvexHull());
+		this.setCollisionHull(c_draw.getCircleHull(0.75));
 		this.setBoundingBox(c_draw.getBoundingBox());
 		
 		this.getComponent("billboard").regenerate();

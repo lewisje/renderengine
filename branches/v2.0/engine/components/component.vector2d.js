@@ -35,6 +35,8 @@
 Engine.include("/engine.math2d.js");
 Engine.include("/components/component.render.js");
 Engine.include("/collision/collision.convexhull.js");
+Engine.include("/collision/collision.OBB.js");
+Engine.include("/collision/collision.circle.js");
 
 Engine.initObject("Vector2DComponent", "RenderComponent", function() {
 
@@ -140,6 +142,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
 		}
 		
 		this.calculateBoundingBox();
+		this.getHostObject().markDirty();
    },
 	
 	/**
@@ -151,6 +154,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
 			this.points[c].transform(matrix);
 		}
 		this.calculateBoundingBox();
+		this.getHostObject().markDirty();
 	},
 
 	/**
@@ -173,10 +177,27 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
 	 * Get a convex hull that would enclose the points.  The the LOD isn't
 	 * specified, it will be assumed to be 4.
 	 * @param [lod] {Number} The level of detail for the hull.
-	 * @return {Array} An array of {@link Point2D}
+	 * @return {ConvexHull} A convex hull
 	 */
 	getConvexHull: function(lod) {
 		return ConvexHull.create(this.points, lod || this.points.length - 1);
+	},
+	
+	/**
+	 * Get an Object Bounding Box (OBB) convex hull.
+	 * @return {OBBHull} A convex hull
+	 */
+	getOBBHull: function() {
+		return OBBHull.create(this.getBoundingBox());
+	},
+	
+	/**
+	 * Get a circular convex hull which encloses the points.
+	 * @param radiusPct {Number} A percentage of the calculated radius of the points, or <tt>null</tt>
+	 * @return {CircleHull} A convex hull
+	 */
+	getCircleHull: function(radiusPct) {
+		return CircleHull.create(this.points, radiusPct);
 	},
 
    /**
@@ -186,6 +207,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     */
    setLineStyle: function(strokeStyle) {
       this.strokeStyle = strokeStyle;
+		this.getHostObject().markDirty();
    },
 
    /**
@@ -203,6 +225,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     */
    setLineWidth: function(lineWidth) {
       this.lineWidth = lineWidth;
+		this.getHostObject().markDirty();
    },
 
    /**
@@ -220,6 +243,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     */
    setFillStyle: function(fillStyle) {
       this.fillStyle = fillStyle;
+		this.getHostObject().markDirty();
    },
 
    /**
@@ -238,6 +262,7 @@ var Vector2DComponent = RenderComponent.extend(/** @scope Vector2DComponent.prot
     */
    setClosed: function(closed) {
       this.closedManifold = closed;
+		this.getHostObject().markDirty();
    },
 
    /**

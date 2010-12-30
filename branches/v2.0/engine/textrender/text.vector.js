@@ -117,13 +117,15 @@ var VectorText = AbstractTextRenderer.extend(/** @scope VectorText.prototype */{
 	 * @param align {Number}
 	 */
 	setTextAlignment: function(align) {
+		this.base(align);
+
 		// Adjust the origin, based on the alignment
 		var b = this.getHostObject().getBoundingBox();
 		var c = b.getCenter();
 		var o = Point2D.create(0,0);
-		if (align == AbstractTextRenderer.ALIGN_RIGHT) {
+		if (align === AbstractTextRenderer.ALIGN_RIGHT) {
 			o.set(c.x + b.getHalfWidth(), 0);	
-		} else if (align == AbstractTextRenderer.ALIGN_LEFT) {
+		} else if (align === AbstractTextRenderer.ALIGN_LEFT) {
 			o.set(c.x - b.getHalfWidth(), 0);	
 		} else {
 			o.set(c.x, 0);

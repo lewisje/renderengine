@@ -131,6 +131,7 @@ var Billboard2DComponent = RenderComponent.extend(/** @scope Billboard2DComponen
    regenerate: function() {
       this.mode = Billboard2DComponent.REDRAW;
 		this.hostRect = null;
+		this.getHostObject().markDirty();
    },
 
 	/**

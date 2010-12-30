@@ -31,7 +31,7 @@
  *
  */
 
-Engine.include("/collision/collision.OBB.js");
+Engine.include("/collision/collision.convexhull.js");
 Engine.include("/engine.math2d.js");
 
 Engine.initObject("CircleHull", "OBBHull", function() {
@@ -39,32 +39,45 @@ Engine.initObject("CircleHull", "OBBHull", function() {
 /**
  * @class A circular convex hull.
  *
- * @param center {Rectangle2D|Point2D} Either the circle's center point, or a rectangle to use
+ * @param center {Rectangle2D|Point2D|Array} Either the circle's center point, or a rectangle to use
  * 		 to approximate the bounding circle.
- * @param radius {Number} The circle's radius if the first argument is a <tt>Point2D</tt>
+ * @param radius {Number} The circle's radius if the first argument is a <tt>Point2D</tt>, or a
+ * 		 percentage of the calculated radius if the first argument is an <tt>Array</tt>.
  *
- * @extends OBBHull
+ * @extends ConvexHull
  * @constructor
  * @description Creates a circular hull.
  */
-var CircleHull = OBBHull.extend(/** @scope CircleHull.prototype */{
+var CircleHull = ConvexHull.extend(/** @scope CircleHull.prototype */{
 
 	/**
 	 * @private
 	 */
 	constructor: function(center, radius) {
-		// We'll use an AABB to create the circular hull
-		var rect;
-		if (center instanceof Rectangle2D) {
-			rect = center;
+		if (center && (center.length && center.splice && center.shift)) {
+			// An array of points
+			this.base(center, center.length);
+			if (radius) {
+				this.radius *= radius;
+			}
 		} else {
-			var p = center;
-			rect = Rectangle2D.create(Point2D.create(p.x - r, p.y - r),
-						  		Point2D.create(p.x + r, p.y - r),
-						  		Point2D.create(p.x + r, p.y + r),
-						  		Point2D.create(p.x - r, p.y + r));
+			// Approximate with a rectangle 
+			var rect;
+			if (center instanceof Rectangle2D) {
+				rect = center;
+			} else {
+				var p = center;
+				rect = Rectangle2D.create(Point2D.create(p.x - radius, p.y - radius),
+							  		Point2D.create(p.x + radius, p.y - radius),
+							  		Point2D.create(p.x + radius, p.y + radius),
+							  		Point2D.create(p.x - radius, p.y + radius));
+			}
+			this.base([Point2D.create(0,0),
+						  Point2D.create(rect.w,0),
+						  Point2D.create(rect.w,rect.h),
+						  Point2D.create(0,rect.h)]);
+			rect.destroy();
 		}
-		this.base(rect);
 	},
 	
 	/**

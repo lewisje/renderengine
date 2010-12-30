@@ -108,7 +108,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		this.oMtx = null;
 		this.oMtxN = null;
    },
-
+	
 	/**
 	 * Get the transformation matrix for this object
 	 * @return {Matrix}
@@ -178,6 +178,8 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 			[0,1,-pY],
 			[0,0,1]
 		]);
+		
+		this.markDirty();
 	},
 	
 	/**
@@ -201,6 +203,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		} else {
 			this.bBox.set(0,0,width,height);
 		}
+		this.markDirty();
    },
 
    /**
@@ -283,6 +286,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
 		Assert(convexHull instanceof ConvexHull, "setCollisionHull() - not ConvexHull!");
 		this.collisionHull = convexHull;
 		this.collisionHull.setHostObject(this);	
+		this.markDirty();
 	},
 	
 	/**
@@ -307,6 +311,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @param point {Point2D} The position of the object
     */
    setPosition: function(point) {
+		this.markDirty();
    },
 
    /**
@@ -338,6 +343,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @param angle {Number} The rotation angle
     */
    setRotation: function(angle) {
+		this.markDirty();
    },
 
    /**
@@ -354,6 +360,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @param scaleY {Number} The scale along the Y axis
     */
    setScale: function(scaleX, scaleY) {
+		this.markDirty();
    },
 
    /**
@@ -395,6 +402,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
       if (this.getRenderContext()) {
          this.getRenderContext().sort();
       }
+		this.markDirty();
    },
 
    /**

@@ -34,6 +34,17 @@
 // Start the console so logging can take place immediately
 Console.startup();
 
+// Default engine options
+Engine.defaultOptions = {
+   skipFrames: true,													// Skip missed frames
+   billboards: true,													// Use billboards to speed up rendering
+   hardwareAccel: false,											// Hardware acceleration flag
+   pointAsArc: true,													// Draw points as arcs or rectangles
+	transientMathObject: false,									// Transient (non-pooled) MathObjects
+	useDirtyRectangles: false										// Enable canvas dirty rectangles redraws
+};
+
+
 // Start the engine
 Engine.options = $.extend({}, Engine.defaultOptions);
 Engine.startup();

@@ -59,15 +59,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 
    constructor: null,
 
-   // Default configuration options
-   defaultOptions: {
-      skipFrames: true,		// Skip missed frames
-      billboards: true,		// Use billboards to speed up rendering
-      hardwareAccel: false,// Hardware acceleration is not available
-      pointAsArc: true,		// Draw points are arcs
-		transientMathObject: false		// MathObject is not transient (pooled)
-   },
-
    // Global engine options
    options: {},
 
