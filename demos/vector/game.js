@@ -43,6 +43,7 @@ Engine.include("/textrender/text.vector.js");
 Engine.include("/textrender/text.renderer.js");
 Engine.include("/resourceloaders/loader.sound.js");
 Engine.include("/sound/sound.sm2.js");
+Engine.include("/collision/collision.circle.js");
 
 // Load game objects
 Game.load("/rock.js");
@@ -114,18 +115,18 @@ var Spaceroids = Game.extend({
     */
    cleanupPlayfield: function() {
 
-      // Remove any rocks still floating around
-      var objs = this.renderContext.getObjects();
-      while (objs.length > 0)
-      {
-         objs.shift().destroy();
-      }
+		// Detach the particle engine so it isn't destroyed
+		this.renderContext.remove(this.pEngine);
 
+		this.scoreObj = null;
+		this.hscoreObj = null;
+		this.start = null;
+
+      // Destroy all objects attached to the context
+      this.renderContext.cleanUp();
       this.rocks = 0;
       this.level = 0;
 
-      this.scoreObj = null;
-      this.hscoreObj = null;
    },
 
    /**
@@ -205,9 +206,6 @@ var Spaceroids = Game.extend({
 
       Spaceroids.intv = Timeout.create("startkey", 1000, flash);
 
-      // Start up a particle engine
-      this.pEngine = ParticleEngine.create();
-      
       if (EngineSupport.sysInfo().browser == "chrome") {
          // Chrome can handle a lot of particles
          this.pEngine.setMaximum(5000);
@@ -234,7 +232,7 @@ var Spaceroids = Game.extend({
     */
    addHiScore: function() {
       this.hscoreObj = TextRenderer.create(VectorText.create(), this.hiScore, 2);
-      this.hscoreObj.setPosition(Point2D.create(400, 20));
+      this.hscoreObj.setPosition(Point2D.create(400, 5));
       this.hscoreObj.setColor("#ffffff");
       this.hscoreObj.setTextWeight(0.5);
       this.hscoreObj.setTextAlignment(AbstractTextRenderer.ALIGN_RIGHT);
@@ -246,7 +244,7 @@ var Spaceroids = Game.extend({
     */
    addScore: function() {
       this.scoreObj = TextRenderer.create(VectorText.create(), this.playerScore, 2);
-      this.scoreObj.setPosition(Point2D.create(130, 20));
+      this.scoreObj.setPosition(Point2D.create(130, 5));
       this.scoreObj.setColor("#ffffff");
       this.scoreObj.setTextWeight(0.5);
       this.scoreObj.setTextAlignment(AbstractTextRenderer.ALIGN_RIGHT);
@@ -269,6 +267,10 @@ var Spaceroids = Game.extend({
     this.scoreObj.setText(this.playerScore);
    },
 
+	/**
+	 * Record a demo script
+	 * @private
+	 */
    recordDemo: function() {
       Spaceroids.rec = true;
       Spaceroids.demoScript = {};
@@ -278,6 +280,10 @@ var Spaceroids = Game.extend({
       Spaceroids.startGame();
    },
    
+	/**
+	 * Playback a demo script
+	 * @private
+	 */
    playDemo: function() {
       Spaceroids.play = true;
       var demoMode = Spaceroids.demoModes[0];
@@ -292,18 +298,19 @@ var Spaceroids = Game.extend({
     */
    startGame: function() {
 
-      if (this.gameRunning)
-      {
+      if (this.gameRunning) {
          return;
       }
 
       this.gameRunning = true;
 
       if (!Spaceroids.rec && !Spaceroids.play) {
-         Spaceroids.attractTimer.destroy();
+         this.attractTimer.destroy();
+			this.attractTimer = null;
          Spaceroids.isAttractMode = false;
    
-         Spaceroids.intv.destroy();
+         this.intv.destroy();
+			this.intv = null;
       }
 
       this.playerScore = 0;
@@ -315,8 +322,6 @@ var Spaceroids = Game.extend({
       this.renderContext.add(this.playerObj);
       this.playerObj.setup();
 
-      // Start up a particle engine
-      this.pEngine = ParticleEngine.create();
       if (EngineSupport.sysInfo().browser == "chrome") {
          // Chrome can handle a LOT!
          this.pEngine.setMaximum(5000);
@@ -387,23 +392,23 @@ var Spaceroids = Game.extend({
 		g.setTextAlignment(AbstractTextRenderer.ALIGN_CENTER);
       this.renderContext.add(g);
 
-      if (!this.gameRunning)
-      {
+      if (!this.gameRunning) {
          return;
       }
 
       Spaceroids.gameSound.destroy();
+      Spaceroids.gameSound = null;
 
       this.gameRunning = false;
 
       // Remove the player
-      if (this.playerObj)
-      {
+      if (this.playerObj) {
          this.playerObj.destroy();
+			this.playerObj = null;
       }
 
       // Back to attract mode in 10sec
-      var t = Timeout.create("gameover", 10000, function() { Spaceroids.attractMode(); });
+      OneShotTimeout.create("gameover", 10000, function() { Spaceroids.attractMode(); });
    },
 
    /**
@@ -436,6 +441,9 @@ var Spaceroids = Game.extend({
       this.soundLoader.load("thrust", this.getFilePath("resources/thrust.mp3"));
       this.soundLoader.load("lowboop", this.getFilePath("resources/low.mp3"));
       this.soundLoader.load("hiboop", this.getFilePath("resources/hi.mp3"));
+
+      // Start up a particle engine
+      this.pEngine = ParticleEngine.create();
 
       // Demo recording and playback
       if (EngineSupport.checkBooleanParam("record")) {
@@ -471,6 +479,7 @@ var Spaceroids = Game.extend({
       EventEngine.clearHandler(document, "keypress", Spaceroids.onKeyPress);
 
       this.renderContext.destroy();
+		this.pEngine.destroy();		
    },
    
    /**
@@ -516,25 +525,21 @@ var Spaceroids = Game.extend({
       // Wrap if it's off the playing field
       var x = pos.x;
       var y = pos.y;
-      var fb = this.renderContext.getViewport().get();
+      var fb = this.renderContext.getViewport();
 
       if (pos.x < fb.x || pos.x > fb.r ||
-          pos.y < fb.y || pos.y > fb.b)
-      {
-         if (pos.x > fb.r + rX)
-         {
+          pos.y < fb.y || pos.y > fb.b) {
+         
+			if (pos.x > fb.r + rX) {
             x = (fb.x - (rX - 1));
          }
-         if (pos.y > fb.b + rY)
-         {
+         if (pos.y > fb.b + rY) {
             y = (fb.y - (rY - 1));
          }
-         if (pos.x < fb.x - rX)
-         {
+         if (pos.x < fb.x - rX) {
             x = (fb.r + (rX - 1));
          }
-         if (pos.y < fb.y - rY)
-         {
+         if (pos.y < fb.y - rY) {
             y = (fb.b + (rY - 1));
          }
          pos.set(x,y);

@@ -35,7 +35,7 @@
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
 Engine.include("/components/component.keyboardinput.js");
-Engine.include("/components/component.collider.js");
+Engine.include("/components/component.convexcollider.js");
 Engine.include("/engine.object2d.js");
 Engine.include("/engine.timers.js");
 Engine.include("/engine.container.js");
@@ -76,7 +76,7 @@ var SpaceroidsPlayer = Object2D.extend({
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
       this.add(Vector2DComponent.create("thrust"));
-      this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
+      this.add(ConvexColliderComponent.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsPlayer.COLLISION_MASK);
 
       this.players--;
@@ -146,13 +146,6 @@ var SpaceroidsPlayer = Object2D.extend({
       this.base(renderContext, time);
       renderContext.popTransform();
 
-      // Debug the collision node
-      if (Engine.getDebugMode() && this.getComponent("collider").getSpatialNode())
-      {
-         renderContext.setLineStyle("red");
-         renderContext.drawRectangle(this.getComponent("collider").getSpatialNode().getRect());
-      }
-
       // Draw the remaining lives
       renderContext.setLineStyle("white");
       var posX = 170;
@@ -167,7 +160,7 @@ var SpaceroidsPlayer = Object2D.extend({
          dp.destroy();
       }
       
-      // If they have their nukes, draw them too
+      // If they have nukes, draw them too
       if (this.nukes > 0) {
 			renderContext.pushTransform();
 			renderContext.setLineStyle("yellow");
@@ -268,6 +261,10 @@ var SpaceroidsPlayer = Object2D.extend({
       // Assign the shape to the vector component
       c_draw.setPoints(s);
       c_draw.setLineStyle("white");
+
+		this.setOrigin(c_draw.getCenter());
+		this.setCollisionHull(c_draw.getCircleHull());
+		this.setBoundingBox(c_draw.getBoundingBox());
 
       // Save the shape so we can draw lives remaining
       this.playerShape = s;

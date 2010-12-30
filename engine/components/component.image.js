@@ -98,6 +98,7 @@ var ImageComponent = RenderComponent.extend(/** @scope ImageComponent.prototype 
    setImage: function(image) {
       this.currentImage = image;
       this.bbox = image.getBoundingBox();
+		this.getHostObject().markDirty();
    },
 
    /**

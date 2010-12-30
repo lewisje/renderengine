@@ -127,6 +127,11 @@ var RenderComponent = BaseComponent.extend(/** @scope RenderComponent.prototype 
     */
    execute: function(renderContext, time) {
 
+		if (Engine.options.useDirtyRectangles && !this.getHostObject().isDirty()) {
+			// Objects that aren't dirty don't need to re-render
+			return false;
+		}
+
       // Check visibility
       if ((this.drawMode == RenderComponent.NO_DRAW) ||
           this.getHostObject().getWorldBox &&

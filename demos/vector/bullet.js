@@ -34,7 +34,7 @@
 
 Engine.include("/components/component.mover2d.js");
 Engine.include("/components/component.vector2d.js");
-Engine.include("/components/component.boxcollider.js");
+Engine.include("/components/component.convexcollider.js");
 Engine.include("/engine.object2d.js");
 
 Engine.initObject("SpaceroidsBullet", "Object2D", function() {
@@ -59,7 +59,7 @@ var SpaceroidsBullet = Object2D.extend({
       // Add components to move and draw the bullet
       this.add(Mover2DComponent.create("move"));
       this.add(Vector2DComponent.create("draw"));
-      this.add(BoxColliderComponent.create("collide", Spaceroids.collisionModel));
+      this.add(ConvexColliderComponent.create("collide", Spaceroids.collisionModel));
 		this.getComponent("collide").setCollisionMask(SpaceroidsBullet.COLLISION_MASK);
 
       // Get the player's position and rotation,
@@ -72,6 +72,11 @@ var SpaceroidsBullet = Object2D.extend({
       c_draw.setPoints(SpaceroidsBullet.shape);
       c_draw.setLineStyle("white");
       c_draw.setFillStyle("white");
+
+		this.setOrigin(c_draw.getCenter());
+		this.setCollisionHull(c_draw.getCircleHull());
+		this.setBoundingBox(c_draw.getBoundingBox());
+
 
       var r = p_mover.getRotation();
       var dir = Math2D.getDirectionVector(Point2D.ZERO, Vector2D.UP, r);
@@ -139,9 +144,6 @@ var SpaceroidsBullet = Object2D.extend({
     */
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
-
-      // Particle trail
-		Spaceroids.pEngine.addParticle(BulletParticle.create(this.getPosition(), this.rot, 45, "#fff", 250));
 
       // Is this bullet in field any more?
       var p = c_mover.getPosition();

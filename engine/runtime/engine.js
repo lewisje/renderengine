@@ -766,7 +766,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1460 $
+ * @version: $Revision: 1503 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -983,7 +983,7 @@ Profiler.wireObjects = function(objArray) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1440 $
+ * @version: $Revision: 1503 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2318,15 +2318,6 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
    version: "v2.0.0.2",
 
    constructor: null,
-
-   // Default configuration options
-   defaultOptions: {
-      skipFrames: true,		// Skip missed frames
-      billboards: true,		// Use billboards to speed up rendering
-      hardwareAccel: false,// Hardware acceleration is not available
-      pointAsArc: true,		// Draw points are arcs
-		transientMathObject: false		// MathObject is not transient (pooled)
-   },
 
    // Global engine options
    options: {},
@@ -4140,6 +4131,17 @@ if (EngineSupport.checkBooleanParam("profile"))
 
 // Start the console so logging can take place immediately
 Console.startup();
+
+// Default engine options
+Engine.defaultOptions = {
+   skipFrames: true,													// Skip missed frames
+   billboards: true,													// Use billboards to speed up rendering
+   hardwareAccel: false,											// Hardware acceleration flag
+   pointAsArc: true,													// Draw points as arcs or rectangles
+	transientMathObject: false,									// Transient (non-pooled) MathObjects
+	useDirtyRectangles: false										// Enable canvas dirty rectangles redraws
+};
+
 
 // Start the engine
 Engine.options = $.extend({}, Engine.defaultOptions);

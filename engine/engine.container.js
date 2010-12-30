@@ -69,7 +69,6 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
    c: null,
 	p: null,
 	r: false,
-	logicalNext: null,
 
    /**
     * @private
@@ -79,7 +78,6 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       this.c = container;
 		this.p = container._head;
 		this.r = false;
-		this.logicalNext = null;
    },
 
    /**
@@ -90,8 +88,14 @@ var Iterator = PooledObject.extend(/** @scope Iterator.prototype */{
       this.c = null;
 		this.p = null;
 		this.r = false;
-		this.logicalNext = null;
    },
+
+	/**
+	 * Reset the iterator to the start of the collection.
+	 */
+	reset: function() {
+		this.p = this.r ? this.c._tail : this.c._head;
+	},
 
    /**
     * Reverse the order of the elements in the container (non-destructive) before
@@ -587,8 +591,8 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
 	},
 	
    /**
-    * Remove all objects from the container.  None of the objects are
-    * destroyed, only removed from this container.
+    * Remove all references to objects in the container.  None of the objects are
+    * actually destroyed.  Use {@link #cleanUp} to remove and destroy all objects.
     */
    clear: function() {
 		this._head = null;
@@ -597,7 +601,7 @@ var Container = BaseObject.extend(/** @scope Container.prototype */{
    },
 
    /**
-    * Remove and destroy all objects from the container.
+    * Remove and destroy all objects in the container.
     */
    cleanUp: function() {
 		var a = this.getAll(), h;

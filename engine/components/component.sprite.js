@@ -98,6 +98,7 @@ var SpriteComponent = RenderComponent.extend(/** @scope SpriteComponent.prototyp
             background: "url('" + sprite.getSourceImage().src + "') no-repeat"
          });
       }
+		this.getHostObject().markDirty();
    },
 
    /**
