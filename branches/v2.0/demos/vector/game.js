@@ -44,6 +44,7 @@ Engine.include("/textrender/text.renderer.js");
 Engine.include("/resourceloaders/loader.sound.js");
 Engine.include("/sound/sound.sm2.js");
 Engine.include("/collision/collision.circle.js");
+Engine.include("/storage/storage.persistent.js");
 
 // Load game objects
 Game.load("/rock.js");
@@ -94,6 +95,8 @@ var Spaceroids = Game.extend({
    
    rec: false,
    play: false,
+	
+	pStore: null,
 
    /**
     * Handle the keypress which starts the game
@@ -408,7 +411,20 @@ var Spaceroids = Game.extend({
       }
 
       // Back to attract mode in 10sec
-      OneShotTimeout.create("gameover", 10000, function() { Spaceroids.attractMode(); });
+      OneShotTimeout.create("gameover", 10000, function() {
+			// See if a high score exists
+			var sql = "SELECT HighScore.* FROM HighScore";
+			var result = Spaceroids.pStore.execSql(sql);
+			if (result.length != 0) {
+				sql = "UPDATE HighScore SET score=" + Spaceroids.hiScore + " WHERE HighScore.id==0";	
+			} else {
+				sql = "INSERT INTO HighScore (score, id) VALUES (" + Spaceroids.hiScore + ",0)";
+			}
+			// Store the high score
+			Spaceroids.pStore.execSql(sql);
+			
+			Spaceroids.attractMode(); 
+		});
    },
 
    /**
@@ -441,6 +457,22 @@ var Spaceroids = Game.extend({
       this.soundLoader.load("thrust", this.getFilePath("resources/thrust.mp3"));
       this.soundLoader.load("lowboop", this.getFilePath("resources/low.mp3"));
       this.soundLoader.load("hiboop", this.getFilePath("resources/hi.mp3"));
+
+		// Use persistent storage to keep the high score
+		this.pStore = PersistentStorage.create("AsteroidsEvolutionStorage");
+
+		// See if the high score table exists
+		if (!this.pStore.tableExists("HighScore")) {
+			// Create it
+			this.pStore.createTable("HighScore", ["id","score"], ["Number","Number"]);
+		} else {
+			// See if there's a high score already saved
+			var sql = "SELECT HighScore.* FROM HighScore WHERE HighScore.id==0";
+			var result = Spaceroids.pStore.execSql(sql);
+			if (result.length != 0) {
+				this.hiScore = result[0].score;	
+		 	} 
+		}
 
       // Start up a particle engine
       this.pEngine = ParticleEngine.create();
@@ -545,7 +577,15 @@ var Spaceroids = Game.extend({
          pos.set(x,y);
       }
       return pos;
-   }
+   },
+	
+	/**
+	 * The name of the game
+	 * @return {String}
+	 */
+	getName: function() {
+		return "Asteroids Evolved";
+	}
 });
 
 return Spaceroids;

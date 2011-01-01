@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * PersistentStorage
+ * TransientStorage
  *
- * @fileoverview A storage object where data is maintained between browser sessions.
+ * @fileoverview A storage object where data only exists during the browser session.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -33,13 +33,12 @@
 // Includes
 Engine.include("/storage/storage.browser.js");
 
-Engine.initObject("PersistentStorage", "BrowserStorage", function() {
+Engine.initObject("TransientStorage", "BrowserStorage", function() {
 
 /**
- * @class <tt>PersistentStorage</tt> is used to maintain data between browser
- * 	sessions.  The schema and data tables will persist in the user's browser
- * 	between restarts.  This is a good place to store configuration data,
- * 	high score tables, and other data which needs to be maintained.
+ * @class <tt>TransientStorage</tt> is used to hold data that is used only
+ * 	while the game is active.  Transient data is an alternative to using
+ * 	a lot of local variables or object structures to store the data.
  * 	<p/>
  * 	Data is stored and retrieved using a SQL-like syntax.  For information
  * 	about the SQL syntax, see http://code.google.com/p/trimpath/wiki/TrimQuery
@@ -47,9 +46,10 @@ Engine.initObject("PersistentStorage", "BrowserStorage", function() {
  * @param name {String} The name of the object
  * @extends BrowserStorage
  * @constructor
- * @description This class of storage is used to persist data between browser sessions.
+ * @description This class of storage is used to hold data during the current 
+ * 	browser session only.
  */
-var PersistentStorage = BrowserStorage.extend(/** @scope PersistentStorage.prototype */{
+var TransientStorage = BrowserStorage.extend(/** @scope TransientStorage.prototype */{
 
    enabled: null,
 
@@ -57,8 +57,8 @@ var PersistentStorage = BrowserStorage.extend(/** @scope PersistentStorage.proto
     * @private
     */
    constructor: function(name) {
-      this.enabled = EngineSupport.sysInfo().support.storage.local;
-      AssertWarn(this.enabled, "PersistentStorage is not supported by browser - DISABLED");
+      this.enabled = EngineSupport.sysInfo().support.storage.session;
+      AssertWarn(this.enabled, "TransientStorage is not supported by browser - DISABLED");
       this.base(name);
    },
 
@@ -72,25 +72,25 @@ var PersistentStorage = BrowserStorage.extend(/** @scope PersistentStorage.proto
 
 	/**
 	 * Initialize the storage object to the localStorage browser object
-	 * @return {Object} The <tt>localStorage</tt> object
+	 * @return {Object} The <tt>sessionStorage</tt> object
 	 */
 	initStorageObject: function() {
-		return window.localStorage;
+		return window.sessionStorage;
 	}
-		   
- }, /** @scope PersistentStorage.prototype */{
+	   
+ }, /** @scope TransientStorage.prototype */{
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "PersistentStorage"
+    * @return {String} "TransientStorage"
     */
    getClassName: function() {
-      return "PersistentStorage";
+      return "TransientStorage";
    }
    
 });
 
-return PersistentStorage;
+return TransientStorage;
 
 });
