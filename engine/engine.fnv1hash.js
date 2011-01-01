@@ -140,7 +140,7 @@ var FNV132 = (function() {
       },
       
       getHash: function(hash) {
-         return Number(hash & 0x00000000ffffffff).toString(16);
+         return Number(hash & 0x0000007ffffffff).toString(16);
       },
       
       INIT: 0x811c9dc5
@@ -167,7 +167,7 @@ var FNV1a32 = (function() {
       },
       
       getHash: function(hash) {
-         return Number(hash & 0x00000000ffffffff).toString(16);
+         return Number(hash & 0x0000007fffffffff).toString(16);
       },
 
       INIT: 0x811c9dc5

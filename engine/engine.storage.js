@@ -31,7 +31,9 @@
  */
 
 // Includes
+Engine.include("/libs/trimpath-query-1.1.14.js");
 Engine.include("/engine.pooledobject.js");
+Engine.include("/engine.fnv1hash.js");
 
 Engine.initObject("StorageBase", "PooledObject", function() {
 
@@ -52,13 +54,31 @@ Engine.initObject("StorageBase", "PooledObject", function() {
 var StorageBase = PooledObject.extend(/** @scope StorageBase.prototype */{
 
    storageObject: null,
+	fnv: null,
+	schema: null,
+	trimPath: null,
 
    /**
     * @private
     */
    constructor: function(name) {
-      this.base(name);
-      this.storageObject = null;
+      this.base(name || "StorageBase");
+		this.fnv = FNV1Hash.create();
+		this.storageObject = this.initStorageObject();
+		
+		// See if a table schema exists for the given name
+		var schema = this.getSchema();
+		if (schema != null) {
+			// Load the table data
+			var tSchema = {};
+			for (var s in schema) {
+				tSchema[schema[s]] = this.getTableDef(schema[s]);
+			}
+			this.schema = tSchema;
+			
+			// We'll update this as needed
+			this.trimPath = TrimPath.makeQueryLang(this.schema);
+		}
    },
 
    /**
@@ -78,6 +98,22 @@ var StorageBase = PooledObject.extend(/** @scope StorageBase.prototype */{
       this.storageObject = null;
    },
 
+	/**
+	 * [ABSTRACT] Initialize the storage object which holds the data
+	 * @return {Object} The storage object
+	 */
+	initStorageObject: function() {
+		return null;
+	},
+
+	/**
+	 * [ABSTRACT] Get the data storage schema from the storage object.
+	 * @return {Array} An array of tables for the storage object
+	 */
+	getSchema: function() {
+		return null;
+	},
+
    /**
     * Get the storage object
     * @return {Object} The DOM object being used to store data
@@ -95,6 +131,16 @@ var StorageBase = PooledObject.extend(/** @scope StorageBase.prototype */{
       this.storageObject = storageObject;
    },
 
+	/**
+	 * A unique identifier for the table name.
+	 * @param name {String} The table name
+	 * @return {String} A unique identifier
+	 */
+	getTableUID: function(name) {
+		var uid = this.fnv.getHash(this.getName() + name);
+		return uid + "PS";			
+	},
+
    /**
     * [ABSTRACT] Finalize any pending storage requests.
     */
@@ -102,58 +148,115 @@ var StorageBase = PooledObject.extend(/** @scope StorageBase.prototype */{
    },
    
    /**
-    * [ABSTRACT] Create a new table to store data in.
-    * 
+    * Create a new table to store data in.
+    *
     * @param name {String} The name of the table
-    * @param columns {Array} An array of column names
+    * @param def {Object} Table definition object
     * @return {Boolean} <code>true</code> if the table was created.  <code>false</code> if
     *         the table already exists or couldn't be created for another reason.
     */
-   createTable: function(name, columns) {
+   createTable: function(name, def) {
+		if (this.schema == null) {
+			this.schema = {};
+		}
+		this.schema[name] = def;
+		this.trimPath = TrimPath.makeQueryLang(this.schema);
    },
    
    /**
-    * [ABSTRACT] Drop a table by its given name
+    * Drop a table by its given name
     *
     * @param name {String} The name of the table to drop
     */
    dropTable: function(name) {
+		if (this.schema == null) {
+			return;
+		}
+		delete this.schema[name];
+		this.trimPath = TrimPath.makeQueryLang(this.schema);
    },
-   
+
+	/**
+	 * Returns <tt>true</tt> if the table with the given name exists
+	 * @param name {String} The name of the table
+	 * @return {Boolean}
+	 */	
+	tableExists: function(name) {
+		return false;
+	},
+
    /**
-    * [ABSTRACT] Insert data for the given columns/values into the table.
+    * Set the data, for the given table, in the persistent storage.
     *
     * @param name {String} The name of the table
-    * @param columns {Array} An array of column names that will be inserted
-    * @param values {Array} An array of values for the columns
+    * @param data {Object} The table data to store
+    * @return {Number} 1 if the data was stored, or 0 if the table doesn't exist
     */
-   insertData: function(name, columns, values) {
+   setTableData: function(name, data) {
+		return 0;
    },
    
-   /**
-    * [ABSTRACT] Update the data in the given columns with the values for the
-    * table provided, replacing data based on the given conditions.
-    * 
-    * @param name {String} The table name
-    * @param columns {Array} An array of column names
-    * @param values {Array} An array of values for the columns
-    * @param conditions {Array} An array of conditions a row must match
-    *        to be updated.
-    */
-   updateData: function(name, columns, values, conditions) {
-   },
-   
-   /**
-    * [ABSTRACT] Query a table, with the given name, for the data which matches
-    * the conditions.
-    *
-    * @param columns {Array} The data columns to be retrieved
-    * @param name {String} The name of the table
-    * @param conditions {Array} An array of conditions a row must match
-    *        to be selected.
-    */
-   queryData: function(columns, name, conditions) {
-   }
+	/**
+	 * Get the schema object, for the given table.
+	 * @param name {String} The name of the table
+	 * @return {Object} The data object, or <tt>null</tt> if no table with the given name exists
+	 */
+	getTableDef: function(name) {
+		return null;
+	},
+	
+	/**
+	 * Get the data object, for the given table.
+	 * @param name {String} The name of the table
+	 * @return {Object} The data object, or <tt>null</tt> if no table with the given name exists
+	 */
+	getTableData: function(name) {
+		return null;
+	},
+
+	/**
+	 * Execute SQL on the storage object, which may be one of <tt>SELECT</tt>,
+	 * <tt>UPDATE</tt>, <tt>INSERT</tt>, or <tt>DELETE</tt>.
+	 * @param sqlString {String} The SQL to execute
+	 * @param bindings {Array} An optional array of bindings
+	 * @return {Object} If the SQL is a <tt>SELECT</tt>, the object will be the result of
+	 * 	the statement, otherwise the result will be a <tt>Boolean</tt> if the statement was
+	 * 	successful.
+	 */
+	execSql: function(sqlString, bindings) {
+		if (this.trimPath != null) {
+			// Compile the method
+			var stmt = this.trimPath.parseSQL(sqlString, bindings);
+			// Build an object with all of the data
+			var schema = this.getSchema();
+			var db = {};
+			for (var s in schema) {
+				db[schema[s]] = this.getTableData(schema[s]);
+			}
+			if (sqlString.indexOf("SELECT") != -1) {
+				return stmt.filter(db);	
+			} else {
+				// Determine which table was modified
+				var result = stmt.filter(db);
+				var tableName = "";
+				if (result === true) {
+					// Only update the storage if the statement was successful
+					if (sqlString.indexOf("INSERT") != -1) {
+						tableName = /INSERT INTO (\w*)/.exec(sqlString)[1];	
+					} else if (sqlString.indexOf("UPDATE") != -1) {
+						tableName = /UPDATE (\w*)/.exec(sqlString)[1];
+					} else {
+						tableName = /DELETE \w* FROM (\w*)/.exec(sqlString)[1];
+					}
+					
+					// Extract that table from the database and store it
+					var table = db[tableName];
+					this.setTableData(tableName, table);
+				}				
+				return result;
+			}
+		}
+	}
    
  }, /** @scope StorageBase.prototype */{
 
@@ -165,7 +268,7 @@ var StorageBase = PooledObject.extend(/** @scope StorageBase.prototype */{
    getClassName: function() {
       return "StorageBase";
    }
-   
+	   
 });
 
 return StorageBase;

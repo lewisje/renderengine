@@ -462,7 +462,6 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *    <li>storage:
     *       <ul><li>local - localStorage object is supported</li>
     *       <li>session - sessionStorage object is supported</li>
-    *       <li>global - gloablStorage object is supported</li>
     *       <li>database - indexedDB storage is supported</li>
     *       </ul>
     *    </li>
