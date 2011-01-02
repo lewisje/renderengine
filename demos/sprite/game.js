@@ -36,6 +36,7 @@
 // Load all required engine components
 Engine.include("/rendercontexts/context.scrollingbackground.js");
 Engine.include("/resourceloaders/loader.sound.js");
+Engine.include("/sound/sound.sm2.js");
 Engine.include("/resourceloaders/loader.sprite.js");
 Engine.include("/resourceloaders/loader.level.js");
 Engine.include("/engine.timers.js");
@@ -43,7 +44,7 @@ Engine.include("/engine.timers.js");
 Engine.include("/objects/object.spriteactor.js");
 Engine.include("/objects/object.collisionbox.js");
 
-Engine.include("/tools/level_editor/leveleditor.js");
+Engine.include("/../tools/level_editor/leveleditor.js");
 
 Engine.initObject("SpriteDemo", "Game", function() {
 
@@ -103,7 +104,7 @@ var SpriteDemo = Game.extend({
       Engine.setFPS(this.engineFPS);
 
       this.spriteLoader = SpriteLoader.create();
-      this.soundLoader = SoundLoader.create();
+      this.soundLoader = SoundLoader.create(new SoundSystemSM2());
       this.levelLoader = LevelLoader.create();
 
       // Load the music
@@ -155,7 +156,7 @@ var SpriteDemo = Game.extend({
    },
 
    play: function() {
-      //this.soundLoader.get("bgm").play();
+      this.soundLoader.get("bgm").play();
 
       var player = SpriteActor.create();
       player.setSprite(this.spriteLoader.getSprite("smbtiles", "super_walk"));

@@ -112,6 +112,14 @@ var PooledObject = Base.extend(/** @scope PooledObject.prototype */{
    getName: function() {
       return this.name;
    },
+	
+	/**
+	 * Set the name of the object.
+	 * @param name {String} The name for the object
+	 */
+	setName: function(name) {
+		this.name = name;
+	},
 
    /**
     * Returns an object that assigns getter and setter methods
