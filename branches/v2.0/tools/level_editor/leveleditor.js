@@ -37,6 +37,10 @@ Engine.include("/resourceloaders/loader.level.js");
 Engine.include("/objects/object.spriteactor.js");
 Engine.include("/objects/object.collisionbox.js");
 
+Engine.include("/../tools/level_editor/jquery.jstree.js");
+Engine.include("/../tools/level_editor/jquery.cookie.js");
+Engine.include("/../tools/level_editor/jquery.hotkeys.js");
+
 Engine.initObject("LevelEditor", null, function() {
 
 /**
@@ -138,7 +142,35 @@ var LevelEditor = Base.extend({
     * @param game {Game} The <tt>Game</tt> object being edited
     */
    edit: function(game) {
-      // Render the editor controls
+      $("body", document).append($("<div id='editPanel'>").append($("<div class='sceneGraph'>")).append($("<div class='props'>")));
+		
+		// Set up the scene graph tree
+		$("#editPanel div.sceneGraph")
+			.append($("<ul>").append($("<li id='sceneGraph'>").append($("<a href='#'>").text("Level Objects"))));
+			
+		$("#editPanel div.sceneGraph")
+			.jstree({
+				"themes": {
+					"theme": "default",
+					"dots": true,
+					"icons": false
+				},
+				"ui": {
+					"select_limit": 1	
+				},
+				"plugins": ["themes","crrm","html_data","ui"]
+			});
+		
+		// Bind to the method to catch renamed objects
+		$("#editPanel").bind("setName", function(evt, obj, value) {
+			$("#editPanel div.sceneGraph").jstree("set_text", "#" + obj.getId(), value + " [" + obj.getId() + "]");		
+		});
+		
+		$("#editPanel div.sceneGraph").bind("select_node.jstree", function(e, data) {
+			LevelEditor.selectById($(data.args[0]).parent().attr("id"));			
+		});
+		
+		// Render the editor controls
       var tbar = $("<div class='toolbar'/>");
       
       // Set the Game object which is being edited
@@ -228,6 +260,12 @@ var LevelEditor = Base.extend({
 		
       ctx.add(actor);
       this.setSelected(actor);
+		
+		// Add the actor to the tree
+		$("#editPanel div.sceneGraph").jstree("create","#sceneGraph","last",{
+	  		"attr": { "id": actor.getId() },
+	  		"data": actor.getName() + " [" + actor.getId() + "]"
+	  	},false,true);
    },
 
    createCollisionBox: function(game) {
@@ -269,33 +307,60 @@ var LevelEditor = Base.extend({
    },
 
    deselectObject: function(obj) {
+		var objId;
       if (obj == null) {
          if (this.currentSelectedObject) {
+				objId = this.currentSelectedObject.getId();
             this.currentSelectedObject.setEditing(false);
             this.currentSelectedObject = null;
          }
       } else {
          obj.setEditing(false);
+			objId = obj.getId();
       }
+
+		// Deselect node
+		$("#editPanel div.sceneGraph").jstree("deselect_node", "#" + objId);
    },
 
    deleteObject: function(obj) {
+		var objId;
       if (obj == null) {
          if (this.currentSelectedObject) {
+				objId = this.currentSelectedObject.getId();
             this.getGame().getRenderContext().remove(LevelEditor.currentSelectedObject);
             LevelEditor.currentSelectedObject.destroy();
             LevelEditor.currentSelectedObject = null;
          }
       } else {
+			objId = obj.getId()
          this.getGame().getRenderContext().remove(obj);
          obj.destroy();
       }
       LevelEditor.createPropertiesTable(null);
       LevelEditor.updateLevelData();
+		
+		// Update the scene graph tree
+		$("#editPanel div.sceneGraph").jstree("remove","#" + objId);
    },
+
+	selectById: function(objId) {
+		var objs = this.gameRenderContext.getObjects(function(el) {
+			return (el.getId() == objId);	
+		});
+		if (objs.length != 0) {
+			this.setSelected(objs[0]);
+		}
+	},
 
    setSelected: function(obj) {
       this.deselectObject();
+
+		if (obj) {
+	  		// Update the selection in the tree
+			$("#editPanel div.sceneGraph").jstree("select_node", "#" + obj.getId());
+		}
+			
       this.currentSelectedObject = obj;
       obj.setEditing(true);
       this.createPropertiesTable(obj);
@@ -339,24 +404,29 @@ var LevelEditor = Base.extend({
          if (bean[p][1]) {
             var fn = function() {
                arguments.callee.cb(this.value);
+					$("#editPanel").trigger("set" + arguments.callee.prop, [arguments.callee.obj, this.value]);
             };
             fn.cb = bean[p][1];
+				fn.prop = p;
+				fn.obj = obj;
 
-            e = $("<input type='text' size='15' value='" + bean[p][0]() + "'/>").change(fn);
+            e = $("<input type='text' size='35' value='" + bean[p][0]() + "'/>").change(fn);
          } else {
             e = $("<div>").text(bean[p][0]().toString());
          }
 
-         r.append(e);
+         r.append($("<td>").append(e));
          pTable.append(r);
       }
 
       // Append the new property table
-      $("body", document).append(pTable);
+      $("#editPanel div.props").append(pTable);
       this.updateLevelData();
    },
 
    updateLevelData: function() {
+	
+		return;
       var level = "<?xml version='1.0' encoding='UTF-8'?>\n";
       level += "<level resource='" + this.getGame().getLevel().getName() + "'>\n";
 

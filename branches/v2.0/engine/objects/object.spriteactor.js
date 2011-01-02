@@ -70,7 +70,7 @@ var SpriteActor = Object2D.extend({
       var prop = this.base(self);
       return $.extend(prop, {
          "Sprite" :     [function() { return self.sprite.getName(); },
-                         function(i) { self.setSprite(SpriteTest.spriteLoader.getSprite("smbtiles", i)); }, true]
+                         null, false]
       });
    },
 
@@ -90,7 +90,13 @@ var SpriteActor = Object2D.extend({
       if (this.editing) {
          renderContext.setLineStyle("white");
          renderContext.setLineWidth(2);
-         renderContext.drawRectangle(this.getSprite().getBoundingBox());
+			var bbox = Rectangle2D.create(this.getSprite().getBoundingBox());
+			var o = Point2D.create(this.getOrigin());
+			o.neg();
+			bbox.offset(o);
+         renderContext.drawRectangle(bbox);
+			bbox.destroy();
+			o.destroy();
       }
 
       renderContext.popTransform();
@@ -132,8 +138,17 @@ var SpriteActor = Object2D.extend({
       return this.getComponent("move").getScale();
    },
 
-   setScale: function(s) {
-      this.getComponent("move").setScale(s);
+	getScaleX: function() {
+      return this.getComponent("move").getScaleX();
+	},
+
+	getScaleY: function() {
+      return this.getComponent("move").getScaleY();
+	},
+
+   setScale: function(x,y) {
+		y = y || x;
+      this.getComponent("move").setScale(x,y);
    },
 
    getRotation: function() {

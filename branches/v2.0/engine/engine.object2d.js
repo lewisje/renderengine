@@ -395,7 +395,7 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
     * @param zIndex {Number} The z-index of this object
     */
    setZIndex: function(zIndex) {
-      if (this.getRenderContext() && this.getRenderContex().swapBins) {
+      if (this.getRenderContext() && this.getRenderContext().swapBins) {
 	  		this.getRenderContext().swapBins(this, this.zIndex, zIndex);
 		}
       this.zIndex = zIndex;
@@ -432,14 +432,16 @@ var Object2D = HostObject.extend(/** @scope Object2D.prototype */{
                            null, false],
          "Position"     : [function() { return self.getPosition(); },
                            function(i) { var p = i.split(","); self.setPosition(Point2D.create(p[0],p[1])); }, true],
+			"Origin"			: [function() { return self.getOrigin(); },
+									function(i) { var p = i.split(","); self.setOrigin(p[0],p[1]); }, true],
          "RenderPos"    : [function() { return self.getRenderPosition() },
                            null, false],
          "Rotation"     : [function() { return self.getRotation(); },
                            function(i) { self.setRotation(i); }, true],
          "ScaleX"        : [function() { return self.getScaleX(); },
-                           function(i) {self.setScaleX(i); }, true],
+                           function(i) {self.setScale(i,self.getScaleY()); }, true],
          "ScaleY"        : [function() { return self.getScaleY(); },
-                           function(i) {self.setScaleY(i); }, true]
+                           function(i) {self.setScale(self.getScaleX(),i); }, true]
       });
    }
 
