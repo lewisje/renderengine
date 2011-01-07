@@ -63,9 +63,11 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 	loadClasses: [],			// Classes which need to be loaded
 	queuedClasses: {},		// Classes which are queued to be initialized
 	
-	classLoader: null,
+	classLoaderTimer: null,
 	classTimer: null,
 	failTimer: null,
+	
+	waiting: {},
 	
 	/**
 	 * See R.Engine.define()
@@ -91,27 +93,7 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		
 		if (deps.length == 0 && incs.length == 0) {
 			// This class is ready to go already
-			
-			// Get the class object
-			var pkg = R.global, clazz = className.split(".");
-			while (clazz.length > 1) {
-				pkg = pkg[clazz.shift()];
-			}
-			var shortName = clazz.shift(), classObjDef = pkg[shortName];
-			
-			// We can initialize the class
-			if ($.isFunction(classObjDef)) {
-				pkg[shortName] = classObjDef();
-			} else {
-				pkg[shortName] = classObjDef;
-			}
-
-			if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
-				pkg[shortName].resolved();
-			}
-
-			R.debug.Console.warn("R.engine.Linker => " + className + " initialized");
-			R.engine.Linker.resolvedClasses[className] = true;
+			R.engine.Linker._initClass(className);
 			return;			
 		}
 		
@@ -166,18 +148,18 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 			}
 		}
 		
-		if (R.engine.Linker.classLoader == null && R.engine.Linker.loadClasses.length > 0) {
-			// Start the class loader
-			R.engine.Linker.classLoader = setTimeout(function() {
-				R.engine.Linker._loadClasses();
+		if (R.engine.Linker.loadClasses.length > 0) {
+			// Run the class loader
+			setTimeout(function() {
+				R.engine.Linker.classLoader();
 			}, 100);
 		}
 		
 		if (R.engine.Linker.classTimer == null) {
 			// After 10 seconds, if classes haven't been processed, fail
-			//R.engine.Linker.failTimer = setTimeout(function() {
-			//	R.engine.Linker._failure();
-			//}, 10000);
+			R.engine.Linker.failTimer = setTimeout(function() {
+				R.engine.Linker._failure();
+			}, 10000);
 			
 		  	R.engine.Linker.classTimer = setTimeout(function(){
 		  		R.engine.Linker._processClasses();
@@ -186,50 +168,71 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 	},
    
 	/**
+	 * Loads the class by converting the namespaced class to a filename and
+	 * calling the script loader.  When the file finishes loading, it is
+	 * put into the class queue to be processed.
+	 * 
 	 * @private
 	 */
-	_loadClasses: function() {
+	classLoader: function() {
 		// Load the classes
 		while (R.engine.Linker.loadClasses.length > 0) {
-			var cn = R.engine.Linker.loadClasses.shift();
-
-			// The callback for when the class file is loaded
-			var cb = function(path, result) {
-				// Convert back to a package and class
-				var cn = arguments.callee.className;	
-				if (result === R.engine.Script.SCRIPT_LOADED) {
-					// Push the class into the processing queue
-					R.debug.Console.log("R.engine.Linker => Initializing " + cn);	
-					R.engine.Linker.queuedClasses[cn] = true;
-				} else {
-					R.debug.Console.warn("R.engine.Linker => " + cn + " failed to load!");
-				}
-			};
-			cb.className = cn;
-
-			// Split the class into packages
-			cn = cn.split(".");
-
-			// Shift off the namespace
-			cn.shift();
-			
-			// Is this in the engine package?
-			if (cn[0] == "engine") {
-				// Shift off the package
-				cn.shift();
-			}
-			
-			// Convert the class to a path
-			var path = "/" + cn.join("/").toLowerCase() + ".js";
-			
-			// Load the class
-			R.engine.Script.loadNow(path, cb);
+			R.engine.Linker._doLoad(R.engine.Linker.loadClasses.shift());
 		}
-		
-		R.engine.Linker.classLoader = null;
+	},
+
+	/**
+	 * Linker uses this to load classes and track them
+	 * @private
+	 */
+	_doLoad: function(className) {
+		// Split the class into packages
+		var cn = className.split(".");
+
+		// Shift off the namespace
+		cn.shift();
+
+		// Is this in the engine package?
+		if (cn[0] == "engine") {
+			// Shift off the package
+			cn.shift();
+		}
+
+		// Convert the class to a path
+		var path = "/" + cn.join("/").toLowerCase() + ".js";
+
+		// Classes waiting for data
+		R.engine.Linker.waiting[path] = className;
+
+		// Load the class
+		R.debug.Console.log("Loading " + path);
+		R.engine.Script.loadNow(path, R.engine.Linker._loaded);
 	},
 	
 	/**
+	 * The callback for when a class file is loaded
+	 * @private
+	 */
+	_loaded: function(path, result) {
+
+		// Get the class for the path name
+		var className = R.engine.Linker.waiting[path];
+		delete R.engine.Linker.waiting[path];
+		
+		if (result === R.engine.Script.SCRIPT_LOADED) {
+			// Push the class into the processing queue
+			R.debug.Console.log("R.engine.Linker => Initializing " + className);	
+			R.engine.Linker.queuedClasses[className] = true;
+		} else {
+			R.debug.Console.error("R.engine.Linker => " + className + " failed to load!");
+		}
+			
+	},
+	
+	/**
+	 * Performs dependency and include checking for a class before
+	 * initializing it into the namespace.
+	 * 
 	 * @private
 	 */
 	_processClasses: function() {
@@ -306,28 +309,8 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 				}
 
 				if (!missIncs) {
-					// Get the class object
-					var pkg = R.global, clazz = cn.split(".");
-					while (clazz.length > 1) {
-						pkg = pkg[clazz.shift()];
-					}
-					var shortName = clazz.shift(), classObjDef = pkg[shortName];
-					
-					// We can initialize the class
-					if ($.isFunction(classObjDef)) {
-						pkg[shortName] = classObjDef();
-					} else {
-						pkg[shortName] = classObjDef;
-					}
-					
-					// If the class defines a "resolved()" class method, call that
-					if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
-						pkg[shortName].resolved();
-					}
-					
-					R.debug.Console.warn("R.engine.Linker => " + cn + " initialized");
-					R.engine.Linker.resolvedClasses[cn] = true;
-					
+					R.engine.Linker._initClass(cn);
+				
 					// No need to process it again
 					completed.push(cn);
 					processed++;				
@@ -367,12 +350,36 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		}
 	},
 	
+	_initClass: function(className) {
+		// Get the class object
+		var pkg = R.global, clazz = className.split(".");
+		while (clazz.length > 1) {
+			pkg = pkg[clazz.shift()];
+		}
+		var shortName = clazz.shift(), classObjDef = pkg[shortName];
+		
+		// We can initialize the class
+		if ($.isFunction(classObjDef)) {
+			pkg[shortName] = classObjDef();
+		} else {
+			pkg[shortName] = classObjDef;
+		}
+
+		// If the class defines a "resolved()" class method, call that
+		if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
+			pkg[shortName].resolved();
+		}
+
+		R.debug.Console.log("R.engine.Linker => " + className + " initialized");
+		R.engine.Linker.resolvedClasses[className] = true;
+	},
+	
 	_failure: function() {
 		clearTimeout(R.engine.Linker.failTimer);
 		clearTimeout(R.engine.Linker.classTimer);	
 		clearTimeout(R.engine.Linker.classLoader);	
 		
-		R.debug.Console.error("R.engine.Linker => FAILURE TO LOAD CLASSES!");
+		R.debug.Console.error("R.engine.Linker => FAILURE TO LOAD CLASSES!", "Resolved: ", R.engine.Linker.resolvedClasses, " Unprocessed: ", R.engine.Linker.queuedClasses, " ClassDefs: ", R.engine.Linker.classDefinitions);
 	}
 	
 });

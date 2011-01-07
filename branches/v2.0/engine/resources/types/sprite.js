@@ -72,35 +72,56 @@ R.resources.types.Sprite = function() {
 
    // The bounding box for the sprite
    bbox: null,
+   
+   lastTime: null,
+   sync: false,
+   finished: false,
+   toggleDir: null,
+   frameNum: 0,
+   playing: false,
 
    /**
     * @private
     */
    constructor: function(name, spriteObj, spriteResource, fileVersion) {
       this.base(name);
+		this.finished = false;
+		this.frameNum = 0;
+		this.playing = true;
 		
 		if (fileVersion == 1) {
-	  		this.type = (spriteObj["a"] ? R.resources.types.Sprite.TYPE_ANIMATION : R.resources.types.Sprite.TYPE_SINGLE);
+	  		this.type = (spriteObj["a"] ? Sprite.TYPE_ANIMATION : Sprite.TYPE_SINGLE);
 		} else if (fileVersion == 2) {
-			this.type = (spriteObj.length == 4 ? R.resources.types.Sprite.TYPE_SINGLE : R.resources.types.Sprite.TYPE_ANIMATION);
+			this.type = (spriteObj.length == 4 ? Sprite.TYPE_SINGLE : Sprite.TYPE_ANIMATION);
 		}
 
       var s;
 		if (fileVersion == 1) {
-			s = (this.type == R.resources.types.Sprite.TYPE_ANIMATION ? spriteObj["a"] : spriteObj["f"]);
+			s = (this.type == Sprite.TYPE_ANIMATION ? spriteObj["a"] : spriteObj["f"]);
 		} else if (fileVersion == 2) {
 			s = spriteObj;
 		}
 		
-      if (this.type == R.resources.types.Sprite.TYPE_ANIMATION) {
-         this.mode = (s[Sprite.INDEX_TYPE] == "loop" ? R.resources.types.Sprite.MODE_LOOP : R.resources.types.Sprite.MODE_TOGGLE);
+      if (this.type == Sprite.TYPE_ANIMATION) {
+         switch (s[Sprite.INDEX_TYPE]) {
+            case "loop" : this.mode = Sprite.MODE_LOOP; break;
+            case "toggle" : this.mode = Sprite.MODE_TOGGLE; break;
+            case "once" : this.mode = Sprite.MODE_ONCE; break;
+         }
+         if (s.length - 1 == INDEX_SYNC) {
+            this.sync = true;
+            this.lastTime = null;
+            this.toggleDir = -1;	// Trust me
+         } else {
+         	this.sync = false;
+         }
          this.count = s[Sprite.INDEX_COUNT];
          this.speed = s[Sprite.INDEX_SPEED];
       }
 
       this.image = spriteResource.image;
-      this.frame = R.math.Rectangle2D.create(s[R.resources.types.Sprite.INDEX_LEFT], s[R.resources.types.Sprite.INDEX_TOP], s[R.resources.types.Sprite.INDEX_WIDTH], s[R.resources.types.Sprite.INDEX_HEIGHT]);
-      this.bbox = R.math.Rectangle2D.create(0, 0, s[R.resources.types.Sprite.INDEX_WIDTH], s[R.resources.types.Sprite.INDEX_HEIGHT]);
+      this.frame = Rectangle2D.create(s[Sprite.INDEX_LEFT], s[Sprite.INDEX_TOP], s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
+      this.bbox = Rectangle2D.create(0, 0, s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
    },
 
 	/**
@@ -131,7 +152,7 @@ R.resources.types.Sprite = function() {
     * @return {Boolean} <tt>true</tt> if the sprite is an animation
     */
    isAnimation: function() {
-      return (this.type == R.resources.types.Sprite.TYPE_ANIMATION);
+      return (this.type == Sprite.TYPE_ANIMATION);
    },
 
    /**
@@ -139,7 +160,7 @@ R.resources.types.Sprite = function() {
     * @return {Boolean} <tt>true</tt> if the sprite is an animation and loops
     */
    isLoop: function() {
-      return (this.isAnimation() && this.mode == R.resources.types.Sprite.MODE_LOOP);
+      return (this.isAnimation() && this.mode == Sprite.MODE_LOOP);
    },
 
    /**
@@ -147,8 +168,45 @@ R.resources.types.Sprite = function() {
     * @return {Boolean} <tt>true</tt> if the sprite is an animation and toggles
     */
    isToggle: function() {
-      return (this.isAnimation() && this.mode == R.resources.types.Sprite.MODE_TOGGLE);
+      return (this.isAnimation() && this.mode == Sprite.MODE_TOGGLE);
    },
+
+   /**
+    * Returns <tt>true</tt> if the sprite is an animation and plays once.
+    * @return {Boolean} <tt>true</tt> if the sprite is an animation and plays once
+    */
+   isOnce: function() {
+      return (this.isAnimation() && this.mode == Sprite.MODE_ONCE);
+   },
+
+	/**
+	 * For animated sprites, play the animation if it is stopped.
+	 */
+	play: function() {
+		this.playing = true;
+	},
+	
+	/**
+	 * For animated sprites, stop the animation if it is playing.
+	 */
+	stop: function() {
+		this.playing = false;
+	},
+	
+	/**
+	 * For animated sprites, reset the animation to frame zero.
+	 */
+	reset: function() {
+		this.frameNum = 0;
+	},
+	
+	/**
+	 * For animated sprites, go to a particular frame number.
+	 * @param frameNum {Number} The frame number to jump to
+	 */
+	gotoFrame: function(frameNum) {
+		this.frameNum = (frameNum < 0 ? 0 : (frameNum >= this.count ? this.count - 1 : frameNum));
+	},
 
    /**
     * Get the bounding box for the sprite.
@@ -159,7 +217,7 @@ R.resources.types.Sprite = function() {
    },
 
    /**
-    * Gets the frame of the sprite. The frame is the rectangle that defining what
+    * Gets the frame of the sprite. The frame is the rectangle defining what
     * portion of the image map the sprite frame occupies, given the specified time.
     *
     * @param time {Number} Current world time (can be obtained with {@link Engine#worldTime}
@@ -168,21 +226,91 @@ R.resources.types.Sprite = function() {
     */
    getFrame: function(time) {
       if (!this.isAnimation()) {
-         return R.math.Rectangle2D.create(this.frame);
+         return Rectangle2D.create(this.frame);
       } else {
-         var f = R.math.Rectangle2D.create(this.frame);
-         var fn;
-         if (this.isLoop()) {
-            fn = Math.floor(time / this.speed) % this.count;
-         } else {
-            fn = Math.floor(time / this.speed) % (this.count * 2);
-            if (fn > this.count - 1) {
-               fn = this.count - (fn - (this.count - 1));
-            }
-         }
+         var f = Rectangle2D.create(this.frame);
+         var fn = this.calcFrameNumber(time);
          return f.offset(f.dims.x * fn, 0);
       }
    },
+
+	/**
+	 * Calculate the frame number for the type of animation
+	 * @param time {Number} The current world time
+	 * @private
+	 */
+	calcFrameNumber: function(time) {
+		if (!this.playing) {
+			return this.frameNum;
+		}
+	
+		if (this.sync) {
+			// Synchronized animations
+			
+			if (this.lastTime === null) {
+				// Note the time when the first frame is requested and just return frame zero
+				this.lastTime = time;
+				return 0;
+			}
+			
+			// How much time has elapsed since the last frame update?
+			this.frameNum += (time - this.lastTime > this.speed ? this.toggleDir : 0);
+			
+			// Modify the frame number for the animation mode
+			if (this.isOnce()) {
+				// Play animation once from beinning to end
+				if (this.frameNum == this.count) {
+					this.frameNum = this.count - 1;
+					if (!this.finished) {
+						// Call event when finished
+						this.finished = true;
+						// TRIGGER: onSpriteFinished
+					}
+				}
+			} else if (this.isLoop()) {
+				if (this.frameNum > this.count - 1) {
+					// Call event when loop restarts
+					this.frameNum = 0;
+					// TRIGGER: onSpriteLoopRestart
+				}
+			} else {
+				if (this.frameNum == this.count - 1 || this.frameNum == 0) {
+					// Call event when animation toggles
+					this.toggleDir *= -1;
+					this.frameNum += this.toggleDir;
+					// TRIGGER: onSpriteToggle
+				}
+			}
+			
+			// Remember the last time a frame was requested
+			this.lastTime = time;
+			
+		} else {
+			// Unsynchronized animations
+			var lastFrame = this.frameNum;
+			if (this.isLoop()) {
+				this.frameNum = Math.floor(time / this.speed) % this.count;
+				if (this.frameNum < lastFrame) {
+					// TRIGGER: onSpriteLoopRestart
+				}				
+			} else if (this.isOnce() && !this.finished) {
+				this.frameNum = Math.floor(time / this.speed) % this.count;
+				if (this.frameNum < lastFrame) {
+					this.finished = true;
+					this.frameNum = this.count - 1;
+					// TRIGGER: onSpriteFinished
+				}
+			} else if (this.isToggle()) {
+				this.frameNum = Math.floor(time / this.speed) % (this.count * 2);
+				if (this.frameNum > this.count - 1) {
+					this.frameNum = this.count - (this.frameNum - (this.count - 1));
+					// TRIGGER: onSpriteToggle
+				}
+			}
+		}
+		
+		return this.frameNum;
+	},
 
    /**
     * Set the speed, in milliseconds, that an animation runs at.  If the sprite is
@@ -211,15 +339,18 @@ R.resources.types.Sprite = function() {
     */
    getSourceImage: function() {
       return this.image;
+   },
+   
+   onSpriteLoopRestart: function() {
    }
 
-}, /** @scope R.resources.types.Sprite.prototype */{
+}, /** @scope Sprite.prototype */{
    /**
     * Gets the class name of this object.
-    * @return {String} The string "R.resources.types.Sprite"
+    * @return {String} The string "Sprite"
     */
    getClassName: function() {
-      return "R.resources.types.Sprite";
+      return "Sprite";
    },
 
    /** The sprite animation loops
@@ -232,6 +363,11 @@ R.resources.types.Sprite = function() {
     * @type Number
     */
    MODE_TOGGLE: 1,
+   
+   /** The sprite animation plays once from the beginning then stops at the last frame
+    * @type Number
+    */
+   MODE_ONCE: 2,
 
    /** The sprite is a single frame
     * @type Number
@@ -276,7 +412,14 @@ R.resources.types.Sprite = function() {
    /** The field in the sprite definition file for the type of sprite animation
     * @private
     */
-   INDEX_TYPE: 6
+   INDEX_TYPE: 6,
+   
+   /**
+    * Use synchronized frame starts and no skipping.
+    * @private
+    */
+   INDEX_SYNC: 7
+   
 });
 
 }
