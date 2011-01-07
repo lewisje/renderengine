@@ -1,11 +1,11 @@
 // Load the components and engine objects
-Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.keyboardinput.js");
-Engine.include("/components/component.boxcollider.js");
-Engine.include("/components/component.sprite.js");
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/components/component.transform2d.js");
+R.Engine.requires("/components/component.keyboardinput.js");
+R.Engine.requires("/components/component.boxcollider.js");
+R.Engine.requires("/components/component.sprite.js");
+R.Engine.requires("/engine.object2d.js");
 
-Engine.initObject("Player", "Object2D", function() {
+R.Engine.initObject("Player", "Object2D", function() {
 
    var Player = Object2D.extend({
 

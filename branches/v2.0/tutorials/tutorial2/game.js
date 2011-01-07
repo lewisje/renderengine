@@ -1,10 +1,10 @@
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
 
 // Load the game object
 Game.load("/gameObject.js");
 
-Engine.initObject("Tutorial2", "Game", function(){
+R.Engine.initObject("Tutorial2", "Game", function(){
 
    /**
     * @class Tutorial Two.  Generate a simple object and
@@ -31,7 +31,7 @@ Engine.initObject("Tutorial2", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
 			
 			$("#loading").remove();
 
@@ -42,7 +42,7 @@ Engine.initObject("Tutorial2", "Game", function(){
          this.renderContext.setBackgroundColor("black");
 
          // Add the new rendering context to the default engine context
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 			
 			// Create the game object and add it to the render context.
 			// It'll start animating immediately.

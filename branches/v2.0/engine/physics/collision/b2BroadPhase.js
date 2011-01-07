@@ -20,13 +20,13 @@
 */
 
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Math.js");
-Engine.include("/physics/common/math/b2Vec2.js");
-Engine.include("/physics/collision/b2PairManager.js");
-Engine.include("/physics/collision/b2Bound.js");
-Engine.include("/physics/collision/b2BoundValues.js");
-Engine.include("/physics/collision/b2Proxy.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/collision/b2PairManager.js");
+R.Engine.requires("/physics/collision/b2Bound.js");
+R.Engine.requires("/physics/collision/b2BoundValues.js");
+R.Engine.requires("/physics/collision/b2Proxy.js");
 
 
 /*
@@ -49,7 +49,7 @@ Bullet (http:/www.bulletphysics.com).
 // - no broadphase is perfect and neither is this one: it is not great for huge
 //   worlds (use a multi-SAP instead), it is not great for large objects.
 
-Engine.initObject("b2BroadPhase", null, function() {
+R.Engine.initObject("b2BroadPhase", null, function() {
    
    var b2BroadPhase = Base.extend({
 

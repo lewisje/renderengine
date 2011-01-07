@@ -19,13 +19,13 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
-Engine.include("/physics/dynamics/joints/b2Joint.js");
-Engine.include("/physics/dynamics/joints/b2JointDef.js");
+R.Engine.requires("/physics/dynamics/joints/b2Joint.js");
+R.Engine.requires("/physics/dynamics/joints/b2JointDef.js");
 
 
-Engine.initObject("b2PulleyJointDef", "b2JointDef", function() {
+R.Engine.initObject("b2PulleyJointDef", "b2JointDef", function() {
 
 	// The pulley joint is connected to two bodies and two fixed ground points.
 	// The pulley supports a ratio such that:

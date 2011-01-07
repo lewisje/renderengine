@@ -39,7 +39,7 @@
  *        read JSON.
  * @static
  */
-var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
+R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    constructor: null,
 
    /**
@@ -90,7 +90,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          return;
       }
 
-      var idx = EngineSupport.indexOf(array, obj);
+      var idx = R.engine.Support.indexOf(array, obj);
       if (idx != -1)
       {
          array.splice(idx, 1);
@@ -224,8 +224,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getQueryParams: function() {
-      if (!EngineSupport.parms) {
-         EngineSupport.parms = {};
+      if (!R.engine.Support.parms) {
+         R.engine.Support.parms = {};
          var p = window.location.toString().split("?")[1];
          if (p)
          {
@@ -233,11 +233,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             for (var x = 0; x < p.length; x++)
             {
                var v = p[x].split("=");
-               EngineSupport.parms[v[0]] = (v.length > 1 ? v[1] : "");
+               R.engine.Support.parms[v[0]] = (v.length > 1 ? v[1] : "");
             }
          }
       }
-      return EngineSupport.parms;
+      return R.engine.Support.parms;
    },
 
    /**
@@ -249,11 +249,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    checkBooleanParam: function(paramName) {
-      return (EngineSupport.getQueryParams()[paramName] &&
-              (EngineSupport.getQueryParams()[paramName] == "true" ||
-               EngineSupport.getQueryParams()[paramName] == "1" ||
-               EngineSupport.getQueryParams()[paramName].toLowerCase() == "yes" ||
-               EngineSupport.getQueryParams()[paramName].toLowerCase() == "y"));
+      return (R.engine.Support.getQueryParams()[paramName] &&
+              (R.engine.Support.getQueryParams()[paramName] == "true" ||
+               R.engine.Support.getQueryParams()[paramName] == "1" ||
+               R.engine.Support.getQueryParams()[paramName].toLowerCase() == "yes" ||
+               R.engine.Support.getQueryParams()[paramName].toLowerCase() == "y"));
    },
 
    /**
@@ -266,7 +266,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    checkStringParam: function(paramName, val) {
-      return (EngineSupport.getStringParam(paramName, null) == val);
+      return (R.engine.Support.getStringParam(paramName, null) == val);
    },
 
    /**
@@ -279,7 +279,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    checkNumericParam: function(paramName, val) {
-      return (EngineSupport.getStringParam(paramName, null) == val)
+      return (R.engine.Support.getStringParam(paramName, null) == val)
    },
 
    /**
@@ -292,7 +292,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getNumericParam: function(paramName, defaultVal) {
-      return Number(EngineSupport.getStringParam(paramName, defaultVal));
+      return Number(R.engine.Support.getStringParam(paramName, defaultVal));
    },
 
    /**
@@ -305,7 +305,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getStringParam: function(paramName, defaultVal) {
-      return (EngineSupport.getQueryParams()[paramName] || defaultVal);
+      return (R.engine.Support.getQueryParams()[paramName] || defaultVal);
    },
 
    /**
@@ -358,7 +358,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    parseJSON: function(jsonString)
    {
-      jsonString = EngineSupport.cleanSource(jsonString);
+      jsonString = R.engine.Support.cleanSource(jsonString);
       if (!(typeof JSON == "undefined")) {
          try {
             return JSON.parse(jsonString, function (key, value) {
@@ -372,11 +372,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                       return value;
                   });
          } catch (ex) {
-            Console.warn("Cannot parse JSON: " + ex.message);
+            R.debug.Console.warn("Cannot parse JSON: " + ex.message);
             return null;
          }
       } else {
-         return EngineSupport.evalJSON(jsonString);
+         return R.engine.Support.evalJSON(jsonString);
       }
    },
    
@@ -388,11 +388,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    evalJSON: function(jsonString)
    {
-      jsonString = EngineSupport.cleanSource(jsonString);
+      jsonString = R.engine.Support.cleanSource(jsonString);
       try {
          return eval("(" + jsonString + ")");   
       } catch (ex) {
-         Console.warn("Cannot eval JSON: " + ex.message);
+         R.debug.Console.warn("Cannot eval JSON: " + ex.message);
          return null;
       }
    },
@@ -484,7 +484,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    sysInfo: function() {
-      if (!EngineSupport._sysInfo) {
+      if (!R.engine.Support._sysInfo) {
       	
       	// Determine if the browser supports Canvas
       	var canvasSupport = {
@@ -530,7 +530,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 			}
       	      
       	// Build support object
-         EngineSupport._sysInfo = {
+         R.engine.Support._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
 				           ($.browser.android ? "android" :
                        ($.browser.Wii ? "wii" : 
@@ -544,7 +544,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             "agent": navigator.userAgent,
             "platform": navigator.platform,
             "cpu": navigator.cpuClass || navigator.oscpu,
-				"OS": EngineSupport.checkOS(),
+				"OS": R.engine.Support.checkOS(),
             "language": navigator.language,
             "online": navigator.onLine,
             "cookies": navigator.cookieEnabled,
@@ -565,7 +565,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          
          $(document).ready(function() {
             // When the document is ready, we'll go ahead and get the width and height added in
-            EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
+            R.engine.Support._sysInfo = $.extend(R.engine.Support._sysInfo, {
                "width": $(window).width(),
                "height": $(window).height(),
                "viewWidth": $(document).width(),
@@ -573,7 +573,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             });
          });
       }
-      return EngineSupport._sysInfo;
+      return R.engine.Support._sysInfo;
    },
    
    /**

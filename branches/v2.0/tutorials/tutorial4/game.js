@@ -1,14 +1,14 @@
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/resourceloaders/loader.image.js");
-Engine.include("/resourceloaders/loader.sound.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/resourceloaders/loader.image.js");
+R.Engine.requires("/resourceloaders/loader.sound.js");
+R.Engine.requires("/engine.timers.js");
 
 
 // Load the game object
 Game.load("/piano.js");
 
-Engine.initObject("Tutorial4", "Game", function(){
+R.Engine.initObject("Tutorial4", "Game", function(){
 
    /**
     * @class Tutorial Four.  Load sounds and bitmaps from the server
@@ -42,7 +42,7 @@ Engine.initObject("Tutorial4", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
          
          $("#loading").remove();
 
@@ -53,7 +53,7 @@ Engine.initObject("Tutorial4", "Game", function(){
          this.renderContext.setBackgroundColor("black");
 
          // Add the new rendering context to the default engine context
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
          
          // The resource loaders
          this.imageLoader = ImageLoader.create();

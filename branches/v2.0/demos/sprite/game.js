@@ -34,19 +34,19 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.scrollingbackground.js");
-Engine.include("/resourceloaders/loader.sound.js");
-Engine.include("/sound/sound.sm2.js");
-Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/resourceloaders/loader.level.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/rendercontexts/context.scrollingbackground.js");
+R.Engine.requires("/resourceloaders/loader.sound.js");
+R.Engine.requires("/sound/sound.sm2.js");
+R.Engine.requires("/resourceloaders/loader.sprite.js");
+R.Engine.requires("/resourceloaders/loader.level.js");
+R.Engine.requires("/engine.timers.js");
 
-Engine.include("/objects/object.spriteactor.js");
-Engine.include("/objects/object.collisionbox.js");
+R.Engine.requires("/objects/object.spriteactor.js");
+R.Engine.requires("/objects/object.collisionbox.js");
 
-Engine.include("/../tools/level_editor/leveleditor.js");
+R.Engine.requires("/../tools/level_editor/leveleditor.js");
 
-Engine.initObject("SpriteDemo", "Game", function() {
+R.Engine.initObject("SpriteDemo", "Game", function() {
 
 /**
  * @class The game.
@@ -101,7 +101,7 @@ var SpriteDemo = Game.extend({
    setup: function() {
 
       // Set the FPS of the game
-      Engine.setFPS(this.engineFPS);
+      R.Engine.setFPS(this.engineFPS);
 
       this.spriteLoader = SpriteLoader.create();
       this.soundLoader = SoundLoader.create(new SoundSystemSM2());
@@ -146,9 +146,9 @@ var SpriteDemo = Game.extend({
 
       this.renderContext = ScrollingBackground.create("bkg", this.level, this.fieldWidth, this.fieldHeight);
       this.renderContext.setWorldScale(this.areaScale);
-      Engine.getDefaultContext().add(this.renderContext);
+      R.Engine.getDefaultContext().add(this.renderContext);
 
-      if (EngineSupport.checkBooleanParam("edit")) {
+      if (R.engine.Support.checkBooleanParam("edit")) {
          LevelEditor.edit(this);
       } else {
          this.play();

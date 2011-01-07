@@ -31,12 +31,12 @@
  */
 
 // Load engine objects
-Engine.include("/components/component.collider.js");
-Engine.include("/components/component.wiimoteinput.js");
-Engine.include("/components/component.transform2d.js");
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/components/component.collider.js");
+R.Engine.requires("/components/component.wiimoteinput.js");
+R.Engine.requires("/components/component.transform2d.js");
+R.Engine.requires("/engine.object2d.js");
 
-Engine.initObject("Player", "Object2D", function() {
+R.Engine.initObject("Player", "Object2D", function() {
 
    /**
     * @class The player object is a simple invisible box which surrounds the
@@ -88,7 +88,7 @@ Engine.initObject("Player", "Object2D", function() {
          renderContext.popTransform();
 
          // Use the metrics to let us know if we're over a toy object
-         Engine.addMetric("overToy", this.overToy != null ? this.overToy : "");
+         R.debug.Metrics.add("overToy", this.overToy != null ? this.overToy : "");
       },
 
       /**
@@ -125,7 +125,7 @@ Engine.initObject("Player", "Object2D", function() {
          this.getComponent("move").setPosition(point);
 
          // Add a metrics value to the display for cursor position
-         Engine.addMetric("cursorPos", point);
+         R.debug.Metrics.add("cursorPos", point);
       },
 
       /**

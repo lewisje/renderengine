@@ -31,10 +31,10 @@
  *
  */
 
-Engine.include("/engine.object2d.js");
-Engine.include("/engine.container.js");
+R.Engine.requires("/engine.object2d.js");
+R.Engine.requires("/engine.container.js");
 
-Engine.initObject("SpriteLayer", "Object2D", function() {
+R.Engine.initObject("SpriteLayer", "Object2D", function() {
 
 /**
  * @class A single layer/frame within a sprite.
@@ -51,7 +51,7 @@ var SpriteLayer = Object2D.extend({
       this.pixels = [];
       this.buffSize = (SpriteEditor.editorSize / SpriteEditor.pixSize);
       this.buffSize *= this.buffSize;
-      EngineSupport.fillArray(this.pixels, this.buffSize, null);
+      R.engine.Support.fillArray(this.pixels, this.buffSize, null);
 
       //this.pixels = HashContainer.create();
       this.mirror = [false, false];
@@ -180,7 +180,7 @@ var SpriteLayer = Object2D.extend({
 	 */
    flipHorizontal: function() {
       var flip = [];
-      EngineSupport.fillArray(flip, this.buffSize, null);
+      R.engine.Support.fillArray(flip, this.buffSize, null);
       var rowSize = SpriteEditor.editorSize / SpriteEditor.pixSize;
       for (var x = 0; x < rowSize; x++) {
          for (var y = 0; y < rowSize; y++) {

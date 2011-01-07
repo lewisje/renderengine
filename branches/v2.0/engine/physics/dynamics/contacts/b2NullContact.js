@@ -19,12 +19,12 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
 
-Engine.include("/physics/dynamics/contacts/b2Contact.js");
-Engine.include("/physics/dynamics/contacts/b2ContactNode.js");
+R.Engine.requires("/physics/dynamics/contacts/b2Contact.js");
+R.Engine.requires("/physics/dynamics/contacts/b2ContactNode.js");
 
-Engine.initObject("b2NullContact", "b2Contact", function() {
+R.Engine.initObject("b2NullContact", "b2Contact", function() {
 
    var b2NullContact = b2Contact.extend({
    

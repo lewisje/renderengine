@@ -19,16 +19,16 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Math.js");
-Engine.include("/physics/common/math/b2Vec2.js");
-Engine.include("/physics/common/math/b2Mat22.js");
-Engine.include("/physics/collision/b2Pair.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Mat22.js");
+R.Engine.requires("/physics/collision/b2Pair.js");
 
-Engine.include("/physics/collision/shapes/b2CircleShape.js");
-Engine.include("/physics/collision/shapes/b2PolyShape.js");
+R.Engine.requires("/physics/collision/shapes/b2CircleShape.js");
+R.Engine.requires("/physics/collision/shapes/b2PolyShape.js");
 
 
-Engine.initObject("b2Shape", null, function() {
+R.Engine.initObject("b2Shape", null, function() {
 
    // Shapes are created automatically when a body is created.
    // Client code does not normally interact with shapes.

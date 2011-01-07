@@ -19,14 +19,14 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Math.js");
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
-Engine.include("/physics/collision/shapes/b2Shape.js");
+R.Engine.requires("/physics/collision/shapes/b2Shape.js");
 
 
-Engine.initObject("b2ShapeDef", null, function () {
+R.Engine.initObject("b2ShapeDef", null, function () {
 
    var b2ShapeDef = Base.extend({
 

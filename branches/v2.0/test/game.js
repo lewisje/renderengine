@@ -34,12 +34,12 @@
  */
 
 // Load the engine parts
-Engine.include("/engine.container.js");
+R.Engine.requires("/engine.container.js");
 
 // Load game objects
 //Game.load("/layer.js");
 
-Engine.initObject("UnitTest", "Game", function() {
+R.Engine.initObject("UnitTest", "Game", function() {
 
 /**
  * @class The game.

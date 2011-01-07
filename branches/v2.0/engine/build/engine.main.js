@@ -54,7 +54,7 @@
  *
  * @static
  */
-var Engine = Base.extend(/** @scope Engine.prototype */{
+R.Engine = Base.extend(/** @scope Engine.prototype */{
    version: "@ENGINE_VERSION",
 
    constructor: null,
@@ -131,9 +131,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		
 		// See if the OS has a key
 		var osOpts, platformDefaults, versionDefaults, platformVersions;
-		if (opts["platforms"] && opts["platforms"][EngineSupport.sysInfo().OS]) {
+		if (opts["platforms"] && opts["platforms"][R.engine.Support.sysInfo().OS]) {
 			// Yep, extract that one
-			osOpts = opts["platforms"][EngineSupport.sysInfo().OS];
+			osOpts = opts["platforms"][R.engine.Support.sysInfo().OS];
 			
 			// Check for platform defaults
 			if (osOpts && osOpts["defaults"]) {
@@ -144,7 +144,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Check for general version specific options
 		if (opts["versions"]) {
 			for (var v in opts["versions"]) {
-				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
+				if (parseFloat(R.engine.Support.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					versionDefaults = opts["versions"][v];
 				}
@@ -154,14 +154,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Finally, check the OS for version specific options
 		if (osOpts && osOpts["versions"]) {
 			for (var v in osOpts["versions"]) {
-				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
+				if (parseFloat(R.engine.Support.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					platformVersions = osOpts["versions"][v];
 				}
 			}
 		}
 		
-      $.extend(Engine.options, configOpts, platformDefaults, versionDefaults, platformVersions);
+      $.extend(R.Engine.options, configOpts, platformDefaults, versionDefaults, platformVersions);
    },
 
    /**
@@ -172,7 +172,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    setDebugMode: function(mode) {
-      this.debugMode = mode;
+      R.Engine.debugMode = mode;
    },
 
    /**
@@ -182,7 +182,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getDebugMode: function() {
-      return this.debugMode;
+      return R.Engine.debugMode;
    },
 
    /**
@@ -193,7 +193,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    isSoundEnabled: function() {
-      return this.soundsEnabled;
+      return R.Engine.soundsEnabled;
    },
 
    /**
@@ -209,7 +209,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    setFPS: function(fps) {
       Assert((fps != 0), "You cannot have a framerate of zero!");
-      this.fpsClock = Math.floor(1000 / fps);
+      R.Engine.fpsClock = Math.floor(1000 / fps);
    },
    
    /**
@@ -218,7 +218,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getFPS: function() {
-      return Math.floor((1 / this.fpsClock) * 1000)
+      return Math.floor((1 / R.Engine.fpsClock) * 1000)
    },
    
    /**
@@ -230,7 +230,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getActualFPS: function() {
-      return Math.floor((1 / Engine.frameTime) * 1000);
+      return Math.floor((1 / R.Engine.frameTime) * 1000);
    },
    
    /**
@@ -239,7 +239,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getFrameTime: function() {
-      return this.fpsClock;
+      return R.Engine.fpsClock;
    },
    
    /**
@@ -251,7 +251,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getDrawTime: function() {
-      return Engine.frameTime;
+      return R.Engine.frameTime;
    },
    
    /**
@@ -268,7 +268,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getEngineLoad: function () {
-      return (Engine.frameTime / this.fpsClock);
+      return (R.Engine.frameTime / R.Engine.fpsClock);
    },
 
    /**
@@ -279,11 +279,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getDefaultContext: function() {
-      if (this.defaultContext == null) {
-         this.defaultContext = DocumentContext.create();
+      if (R.Engine.defaultContext == null) {
+         R.Engine.defaultContext = R.rendercontexts.DocumentContext.create();
       }
 
-      return this.defaultContext;
+      return R.Engine.defaultContext;
    },
 
    /**
@@ -293,7 +293,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getEnginePath: function() {
-      if (this.engineLocation == null)
+      if (R.Engine.engineLocation == null)
       {
          // Determine the path of the "engine.js" file
          var head = document.getElementsByTagName("head")[0];
@@ -305,13 +305,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             if (src != null && m)
             {
                // Get the path
-               this.engineLocation = m[1];
+               R.Engine.engineLocation = m[1];
                break;
             }
          }
       }
 
-      return this.engineLocation;
+      return R.Engine.engineLocation;
    },
 
    //====================================================================================================
@@ -329,18 +329,18 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      if(this.shuttingDown === true) {
-      	Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
+      if(R.Engine.shuttingDown === true) {
+      	R.debug.Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
       	obj.destroy();
       	return;
       };
 
-      Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
+      Assert((R.Engine.started === true), "Creating an object when the engine is stopped!", obj);
 
-      this.idRef++;
-      var objId = obj.getName() + this.idRef;
-      Console.log("CREATED Object ", objId, "[", obj, "]");
-      this.livingObjects++;
+      R.Engine.idRef++;
+      var objId = obj.getName() + R.Engine.idRef;
+      R.debug.Console.log("CREATED Object ", objId, "[", obj, "]");
+      R.Engine.livingObjects++;
 
       return objId;
    },
@@ -353,13 +353,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    destroy: function(obj) {
    	if (obj == null) {
-   		Console.warn("NULL reference passed to Engine.destroy()!  Ignored.");
+   		R.debug.Console.warn("NULL reference passed to Engine.destroy()!  Ignored.");
    		return;
    	}
 
       var objId = obj.getId();
-      Console.log("DESTROYED Object ", objId, "[", obj, "]");
-      this.livingObjects--;
+      R.debug.Console.log("DESTROYED Object ", objId, "[", obj, "]");
+      R.Engine.livingObjects--;
    },
    
    /**
@@ -370,7 +370,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param timer {Timer} The timer to add
     */
    addTimer: function(timerName, timer) {
-      Engine.timerPool[timerName] = timer;   
+      R.Engine.timerPool[timerName] = timer;   
    },
 
    /**
@@ -378,8 +378,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param timerName {String} The timer name
     */
    removeTimer: function(timerName) {
-      Engine.timerPool[timerName] = null;
-      delete Engine.timerPool[timerName];
+      R.Engine.timerPool[timerName] = null;
+      delete R.Engine.timerPool[timerName];
    },
 
    /**
@@ -407,15 +407,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    loadEngineScripts: function() {
       // Engine stylesheet
-      this.loadStylesheet("/css/engine.css");
+      R.engine.Script.loadStylesheet("/css/engine.css");
 
       // The basics needed by the engine to get started
-      this.loadNow("/engine.game.js");
-      this.loadNow("/engine.rendercontext.js");
-      this.loadNow("/engine.pooledobject.js");
-      this.loadNow("/rendercontexts/context.render2d.js");
-      this.loadNow("/rendercontexts/context.htmlelement.js");
-      this.loadNow("/rendercontexts/context.documentcontext.js");
+      R.engine.Script.loadNow("/game.js");
+      R.engine.Script.loadNow("/pooledobject.js");
+      R.engine.Script.loadNow("/rendercontexts/abstractrendercontext.js");
+      R.engine.Script.loadNow("/rendercontexts/rendercontext2d.js");
+      R.engine.Script.loadNow("/rendercontexts/htmlelementcontext.js");
+      R.engine.Script.loadNow("/rendercontexts/documentcontext.js");
    },
 
    /**
@@ -427,19 +427,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    startup: function(debugMode) {
-      Assert((this.running == false), "An attempt was made to restart the engine!");
+      Assert((R.Engine.running == false), "An attempt was made to restart the engine!");
 
       // Check for supported browser
-      if (!this.browserSupportCheck()) {
+      if (!R.Engine.browserSupportCheck()) {
          return;
       };
 
-      this.upTime = new Date().getTime();
-      this.debugMode = debugMode ? true : false;
-      this.started = true;
+      R.Engine.upTime = now().getTime();
+      R.Engine.debugMode = debugMode ? true : false;
+      R.Engine.started = true;
 
       // Load the required scripts
-      this.loadEngineScripts();
+      R.Engine.loadEngineScripts();
    },
 
    /**
@@ -448,27 +448,29 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
-      if (Engine.shuttingDown || Engine.running) {
+      if (R.Engine.shuttingDown || R.Engine.running) {
          return;
       }
       
       // Restart all of the timers
-      for (var tm in Engine.timerPool) {
-         Engine.timerPool[tm].restart();
+      for (var tm in R.Engine.timerPool) {
+         R.Engine.timerPool[tm].restart();
       }
       
       var mode = "[";
-      mode += (this.debugMode ? "DEBUG" : "");
-      mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
+      mode += (R.Engine.debugMode ? "DEBUG" : "");
+      mode += (R.Engine.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
       mode += "]"
-      Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
-      this.running = true;
-      this.shuttingDown = false;
+      R.debug.Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
+      R.Engine.running = true;
+      R.Engine.shuttingDown = false;
 
-      Console.debug(">>> sysinfo: ", EngineSupport.sysInfo());
+      R.debug.Console.debug(">>> sysinfo: ", R.engine.Support.sysInfo());
 
       // Start world timer
-      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
+      R.Engine.globalTimer = window.setTimeout(function() { 
+			R.Engine.engineTimer(); 
+		}, this.fpsClock);
 
    },
 
@@ -477,19 +479,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    pause: function() {
-      if (Engine.shuttingDown) {
+      if (R.Engine.shuttingDown) {
          return;
       }
 
       // Pause all of the timers
-      Console.debug("Pausing all timers");
-      for (var tm in Engine.timerPool) {
-         Engine.timerPool[tm].pause();
+      R.debug.Console.debug("Pausing all timers");
+      for (var tm in R.Engine.timerPool) {
+         R.Engine.timerPool[tm].pause();
       }
       
-      Console.warn(">>> Engine paused <<<");
-      window.clearTimeout(Engine.globalTimer);
-      this.running = false;
+      R.debug.Console.warn(">>> Engine paused <<<");
+      window.clearTimeout(R.Engine.globalTimer);
+      R.Engine.running = false;
    },
 
 	/**
@@ -500,11 +502,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 	 * @param fn {Function} The callback function
 	 */
 	onShutdown: function(fn) {
-		if (Engine.shuttingDown === true) {
+		if (R.Engine.shuttingDown === true) {
 			return;
 		}
 		
-		Engine.shutdownCallbacks.push(fn);
+		R.Engine.shutdownCallbacks.push(fn);
 	},
 
    /**
@@ -513,74 +515,74 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
-      if (Engine.shuttingDown) {
+      if (R.Engine.shuttingDown) {
          // Prevent another shutdown
          return;
       }
       
-      Engine.shuttingDown = true;
+      R.Engine.shuttingDown = true;
       
-      if (!this.running && this.started)
+      if (!R.Engine.running && R.Engine.started)
       {
          // If the engine is not currently running (i.e. paused) 
          // restart it and then re-perform the shutdown
-         this.running = true;
-         setTimeout(function() { Engine.shutdown(); }, (this.fpsClock * 2));
+         R.Engine.running = true;
+         setTimeout(function() { R.Engine.shutdown(); }, (R.Engine.fpsClock * 2));
          return;
       }
 
-      this.started = false;
-      window.clearTimeout(Engine.dependencyProcessor);
+      R.Engine.started = false;
+      window.clearTimeout(R.Engine.dependencyProcessor);
 
-      Console.warn(">>> Engine shutting down...");
+      R.debug.Console.warn(">>> Engine shutting down...");
 
       // Stop world timer
-      window.clearTimeout(Engine.globalTimer);
+      window.clearTimeout(R.Engine.globalTimer);
       
       // Run through shutdown callbacks to allow objects not tracked by Engine
       // to clean up references, etc.
-      while (Engine.shutdownCallbacks.length > 0) {
-      	Engine.shutdownCallbacks.shift()();
+      while (R.Engine.shutdownCallbacks.length > 0) {
+      	R.Engine.shutdownCallbacks.shift()();
       };
 
-      if (this.metricDisplay)
+      if (R.Engine.metricDisplay)
       {
-         this.metricDisplay.remove();
-         this.metricDisplay = null;
+         R.Engine.metricDisplay.remove();
+         R.Engine.metricDisplay = null;
       }
 
       // Cancel all of the timers
-      Console.debug("Cancelling all timers");
-      for (var tm in Engine.timerPool) {
-         Engine.timerPool[tm].cancel();
+      R.debug.Console.debug("Cancelling all timers");
+      for (var tm in R.Engine.timerPool) {
+         R.Engine.timerPool[tm].cancel();
       }
-      Engine.timerPool = {};
+      R.Engine.timerPool = {};
 
-      this.downTime = new Date().getTime();
-      Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
+      R.Engine.downTime = now().getTime();
+      R.debug.Console.warn(">>> Engine stopped.  Runtime: " + (R.Engine.downTime - R.Engine.upTime) + "ms");
 
-      this.running = false;
+      R.Engine.running = false;
       
       // Kill off the default context and anything
       // that's attached to it.  We'll alert the
       // developer if there's an issue with orphaned objects
-      this.getDefaultContext().destroy();
+      R.Engine.getDefaultContext().destroy();
       
       // Dump the object pool
-      if (typeof PooledObject != "undefined") {
-         PooledObject.objectPool = null;
+      if (typeof R.engine.PooledObject != "undefined") {
+         R.engine.PooledObject.objectPool = null;
       }
 
-      AssertWarn((this.livingObjects == 0), "Object references not cleaned up!");
+      AssertWarn((R.Engine.livingObjects == 0), "Object references not cleaned up!");
       
-      this.loadedScripts = {};
-      this.scriptLoadCount = 0;
-      this.scriptsProcessed = 0;
-      this.defaultContext = null;
+      R.Engine.loadedScripts = {};
+      R.Engine.scriptLoadCount = 0;
+      R.Engine.scriptsProcessed = 0;
+      R.Engine.defaultContext = null;
 
       // Perform final cleanup
-      if (!Engine.UNIT_TESTING /* Is this a hack? */) {
-         this.cleanup();
+      if (!R.Engine.UNIT_TESTING /* Is this a hack? */) {
+         R.Engine.cleanup();
       }
    },
 
@@ -605,10 +607,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       $("head script", document).remove();
       
       // Final cleanup
-      Linker.cleanup();
+      R.engine.Linker.cleanup();
       
       // Shutdown complete
-      Engine.shuttingDown = false;
+      R.Engine.shuttingDown = false;
    },
 
 
@@ -623,8 +625,32 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param fn {Function} The function to run when the object can be initialized.
     */
    initObject: function(objectName, primaryDependency, fn) {
-      Linker.initObject(objectName, primaryDependency, fn);
+      R.engine.Linker.initObject(objectName, primaryDependency, fn);
    },
+
+	/**
+	 * Define a class to add to the namespace plus its requirements.  The format of the
+	 * object definition is:
+	 * <pre>
+	 * {
+	 *    "class": "R.[package name].[class name]",
+	 *    "requires": [
+	 *       "R.[package name].[dependency]"
+	 *    ],
+	 *    "includes": [
+	 *       "/path/to/file.js"
+	 *    ]
+	 * }
+	 * </pre>
+	 * If a class has no requirements, you can either omit the "requires" key, set it
+	 * to <tt>null</tt>, or set it to an empty array.  The "includes" key is optional.
+	 * Use this to specify additional files which must be loaded for the class to run. 
+	 *    
+	 * @param classDef {Object} The object's definition
+	 */
+	define: function(classDef) {
+		R.engine.Linker.define(classDef);
+	},
 
    /**
     * Check the current browser to see if it is supported by the
@@ -636,18 +662,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * displayed.
     */
    browserSupportCheck: function() {
-      if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
+      if (R.engine.Support.checkBooleanParam("disableBrowserCheck")) {
          return true;
       }
-      var sInfo = EngineSupport.sysInfo();
+      var sInfo = R.engine.Support.sysInfo();
       var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
-      msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
+      msg += "Please see <a href='http://www.renderengine.com' target='_blank'>the list of ";
       msg += "supported browsers</a> for more information.";
       switch (sInfo.browser) {
          case "iPhone":
 			case "android": 
-         case "msie": Engine.options.billboards = false; 
-                      return true;
+         case "msie":
          case "chrome":
          case "Wii":
          case "safari":
@@ -655,7 +680,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          case "firefox":
          case "opera": return true;
          case "unknown": $(document).ready(function() {
-                           Engine.shutdown();
+                           R.Engine.shutdown();
                            $("body", document).append($("<div class='unsupported'>")
                               .html(msg));
                         });
@@ -668,7 +693,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    toString: function() {
-      return "The Render Engine " + this.version;
+      return "The Render Engine " + R.Engine.version;
    },
 
    //====================================================================================================
@@ -687,46 +712,46 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
-      if (Engine.shuttingDown) {
+      if (R.Engine.shuttingDown) {
          return;
       }
 
-		/* pragma:DEBUG_START */
-		try {
-			Profiler.enter("Engine.engineTimer()");
-		/* pragma:DEBUG_END */
+		var nextFrame = R.Engine.fpsClock;
 
-			var nextFrame = Engine.fpsClock;
+		// Update the world
+		if (R.Engine.running && R.Engine.getDefaultContext() != null) {
+			R.Engine.vObj = 0;
 
-			// Update the world
-			if (Engine.running && Engine.getDefaultContext() != null) {
-				Engine.vObj = 0;
+			// Render a frame
+			R.Engine.worldTime = now().getTime();
+			R.Engine.getDefaultContext().update(null, R.Engine.worldTime);
+			R.Engine.frameTime = now().getTime() - R.Engine.worldTime;
+			R.Engine.liveTime = R.Engine.worldTime - R.Engine.upTime;
 
-				// Render a frame
-				Engine.worldTime = new Date().getTime();
-				Engine.getDefaultContext().update(null, Engine.worldTime);
-				Engine.frameTime = new Date().getTime() - Engine.worldTime;
-				Engine.liveTime = Engine.worldTime - Engine.upTime;
+			// Determine when the next frame should draw
+			// If we've gone over the allotted time, wait until the next available frame
+			var f = nextFrame - R.Engine.frameTime;
+			nextFrame = (R.Engine.skipFrames ? (f > 0 ? f : nextFrame) : R.Engine.fpsClock);
+			R.Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / R.Engine.fpsClock) : 0);
 
-				// Determine when the next frame should draw
-				// If we've gone over the allotted time, wait until the next available frame
-				var f = nextFrame - Engine.frameTime;
-				nextFrame = (Engine.skipFrames ? (f > 0 ? f : nextFrame) : Engine.fpsClock);
-				Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
-
-				// Update the metrics display
-				Engine.doMetrics();
-			}
-
-			// When the process is done, start all over again
-			Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, nextFrame);
-
-		/* pragma:DEBUG_START */
-		} finally {
-			Profiler.exit();
+			// Update the metrics display
+			R.Engine.doMetrics();
 		}
-		/* pragma:DEBUG_END */
+
+		// When the process is done, start all over again
+		R.Engine.globalTimer = setTimeout(function _engineTimer() { 
+			R.Engine.engineTimer(); 
+		}, nextFrame);
    },
+	
+	/**
+	 * @private
+	 */
+	doMetrics: function() {
+		if (R.debug && R.debug.Metrics) {
+			R.debug.Metrics.doMetrics();
+		}
+	},
 	
 	// ======================================================
 	// Declarations here only for documentation purposes
@@ -734,92 +759,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 	// ======================================================
 	
    /**
-    * Status message when a script is not found
-    * @type Boolean
-    * @memberOf Engine
-    * @field
-    */
-   SCRIPT_NOT_FOUND: false,
-   
-   /**
-    * Status message when a script is successfully loaded
-    * @type Boolean
-    * @memberOf Engine
-    * @field
-    */
-   SCRIPT_LOADED: true,
-
-   /**
     * Include a script file.
     *
     * @param scriptURL {String} The URL of the script file
     * @memberOf Engine
-    * @function
     */
-   include: null,
-
-   /**
-    * Queue a script to load from the server and append it to
-    * the head element of the browser.  Script names are
-    * cached so they will not be loaded again.  Each script in the
-    * queue is processed synchronously.
-    *
-    * @param scriptPath {String} The URL of a script to load.
-    * @memberOf Engine
-    * @function
-    */
-   loadScript: null,
-
-	/**
-	 * Load text from the specified path.
-	 *
-	 * @param path {String} The url to load
-	 * @param data {Object} Optional arguments to pass to server
-	 * @param callback {Function} The callback method which is passed the
-	 *		text and status code (a number) of the request.
-	 * @memberOf Engine
-    * @function
-	 */	 
-	loadText: null,
-	
-	/**
-	 * Load text from the specified path and parse it as JSON.  We're doing
-	 * a little pre-parsing of the returned data so that the JSON can include
-	 * comments which is not spec.
-	 *
-	 * @param path {String} The url to load
-	 * @param data {Object} Optional arguments to pass to server
-	 * @param callback {Function} The callback method which is passed the
-	 *		JSON object and status code (a number) of the request.
-    * @memberOf Engine
-    * @function
-	 */	 
-	loadJSON: null,
-
-   /**
-    * Put a callback into the script queue so that when a
-    * certain number of files has been loaded, we can call
-    * a method.  Allows for functionality to start with
-    * incremental loading.
-    *
-    * @param cb {Function} A callback to execute
-    * @memberOf Engine
-    * @function
-    */
-   setQueueCallback: null,
-
-   /**
-    * You can pause the queue from a callback function, then
-    * unpause it to continue processing queued scripts.  This will
-    * allow you to wait for an event to occur before continuing to
-    * to load scripts.
-    *
-    * @param state {Boolean} <tt>true</tt> to put the queue processor
-    *                        in a paused state.
-    * @memberOf Engine
-    * @function
-    */
-   pauseQueue: null,
+   include: function(scriptURL) {
+		R.engine.Script.include(scriptURL);
+	},
 
    /**
     * Loads a game's script.  This will wait until the specified
@@ -845,108 +792,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     * @function
     */
-   loadGame: null,
-
-   /**
-    * Load a script relative to the engine path.  A simple helper method which calls
-    * {@link #loadScript} and prepends the engine path to the supplied script source.
-    *
-    * @param scriptSource {String} A URL to load that is relative to the engine path.
-    * @memberOf Engine
-    * @function
-    */
-   load: null,
-
-   /**
-    * Load a stylesheet and append it to the document.  Allows for
-    * scripts to specify additional stylesheets that can be loaded
-    * as needed.  Additionally, you can use thise method to inject
-    * the engine path into the css being loaded.  Using the variable
-    * <tt>$&lt;enginePath&gt;</tt>, you can load css relative to the
-    * engine's path.  For example:
-    * <pre>
-    *    .foo {
-    *       background: url('$&lt;enginePath&gt;/myGame/images/bar.png') no-repeat 50% 50%;
-    *    }
-    * </pre>
-    *
-    * @param stylesheetPath {String} Path to the stylesheet, relative to
-    *                                the engine path.
-    * @memberOf Engine
-    * @function
-    */
-   loadStylesheet: null,
-
-	// ======================================================
-	// Declarations here only for documentation purposes
-	// See engine.metrics.js
-	// ======================================================
-
-   /**
-    * Toggle the display of the metrics window.  Any metrics
-    * that are being tracked will be reported in this window.
-    * @memberOf Engine
-    * @function
-    */
-   toggleMetrics: null,
-
-   /**
-    * Show the metrics window
-    * @memberOf Engine
-    * @function
-    */
-   showMetrics: null,
-   
-   /**
-    * Show a graph of the engine profile
-    * @memberOf Engine
-    * @function
-    */
-   showProfile: null,
-
-   /**
-    * Hide the metrics window
-    * @memberOf Engine
-    * @function
-    */
-   hideMetrics: null,
-
-   /**
-    * Set the interval at which metrics are sampled by the system.
-    * The default is for metrics to be calculated every 10 engine frames.
-    *
-    * @param sampleRate {Number} The number of ticks between samples
-    * @memberOf Engine
-    * @function
-    */
-   setMetricSampleRate: null,
-
-   /**
-    * Add a metric to the game engine that can be displayed
-    * while it is running.  If smoothing is selected, a 3 point
-    * running average will be used to smooth out jitters in the
-    * value that is shown.  For the <tt>fmt</tt> argument,
-    * you can provide a string which contains the pound sign "#"
-    * that will be used to determine where the calculated value will
-    * occur in the formatted string.
-    *
-    * @param metricName {String} The name of the metric to track
-    * @param value {String/Number} The value of the metric.
-    * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
-    * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
-    * @memberOf Engine
-    * @function
-    */
-   addMetric: null,
-
-   /**
-    * Remove a metric from the display
-    *
-    * @param metricName {String} The name of the metric to remove
-    * @memberOf Engine
-    * @function
-    */
-   removeMetric: null	
+   loadGame: function(gameSource,gameObjectName,gameDisplayName) {
+		R.engine.Script.loadGame(gameSource,gameObjectName,gameDisplayName);
+	}
 
  }, { // Interface
    globalTimer: null

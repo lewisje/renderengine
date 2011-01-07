@@ -19,15 +19,15 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/dynamics/joints/b2JointNode.js");
-Engine.include("/physics/dynamics/joints/b2DistanceJoint.js");
-Engine.include("/physics/dynamics/joints/b2MouseJoint.js");
-Engine.include("/physics/dynamics/joints/b2PrismaticJoint.js");
-Engine.include("/physics/dynamics/joints/b2RevoluteJoint.js");
-Engine.include("/physics/dynamics/joints/b2PulleyJoint.js");
-Engine.include("/physics/dynamics/joints/b2GearJoint.js");
+R.Engine.requires("/physics/dynamics/joints/b2JointNode.js");
+R.Engine.requires("/physics/dynamics/joints/b2DistanceJoint.js");
+R.Engine.requires("/physics/dynamics/joints/b2MouseJoint.js");
+R.Engine.requires("/physics/dynamics/joints/b2PrismaticJoint.js");
+R.Engine.requires("/physics/dynamics/joints/b2RevoluteJoint.js");
+R.Engine.requires("/physics/dynamics/joints/b2PulleyJoint.js");
+R.Engine.requires("/physics/dynamics/joints/b2GearJoint.js");
 
-Engine.initObject("b2Joint", null, function() {
+R.Engine.initObject("b2Joint", null, function() {
 
 	var b2Joint = Base.extend({
 

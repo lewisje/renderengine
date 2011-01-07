@@ -1,8 +1,8 @@
 
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine.math2d.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/engine.math2d.js");
 
-Engine.initObject("TestRunner", null, function() {
+R.Engine.initObject("TestRunner", null, function() {
 
 	var TestRunner = Base.extend({
 		
@@ -17,7 +17,7 @@ Engine.initObject("TestRunner", null, function() {
 			ctx.setStatic(true);
 			ctx.setFontSize(36);
 			
-			Engine.getDefaultContext().add(ctx);
+			R.Engine.getDefaultContext().add(ctx);
 			
 			// Draw some shapes
 			ctx.setLineStyle("yellow");
@@ -58,7 +58,7 @@ Engine.initObject("TestRunner", null, function() {
 		
 	});
 
-	EngineSupport.whenReady(TestRunner, function() {
+	R.engine.Support.whenReady(TestRunner, function() {
 		TestRunner.run();
 	});
 

@@ -32,12 +32,12 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine.timers.js");
-Engine.include("/engine.hostobject.js");
-Engine.include("/components/component.logic.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/engine.timers.js");
+R.Engine.requires("/engine.hostobject.js");
+R.Engine.requires("/components/component.logic.js");
 
-Engine.initObject("LifecycleTest", "Game", function(){
+R.Engine.initObject("LifecycleTest", "Game", function(){
 
    /**
     * @class Object lifycycle testing.
@@ -63,7 +63,7 @@ Engine.initObject("LifecycleTest", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
 			this.run();			
       },
 
@@ -88,7 +88,7 @@ Engine.initObject("LifecycleTest", "Game", function(){
 			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
 			
 	      this.renderContext.setBackgroundColor("#0000ff");
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 
 			var ho = HostObject.create("hostobject");
 			ho.add(LogicComponent.create("logiccomponent"));
@@ -96,7 +96,7 @@ Engine.initObject("LifecycleTest", "Game", function(){
 
 			var timeout = Timeout.create("shutdown", 5000, function() {
 				this.destroy();
-				Engine.shutdown();
+				R.Engine.shutdown();
 			});
       },
       

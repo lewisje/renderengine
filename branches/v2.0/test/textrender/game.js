@@ -32,16 +32,16 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/rendercontexts/context.htmldivcontext.js");
-Engine.include("/textrender/text.vector.js");
-Engine.include("/textrender/text.bitmap.js");
-Engine.include("/textrender/text.context.js");
-Engine.include("/textrender/text.renderer.js");
-Engine.include("/resourceloaders/loader.bitmapfont.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/rendercontexts/context.htmldivcontext.js");
+R.Engine.requires("/textrender/text.vector.js");
+R.Engine.requires("/textrender/text.bitmap.js");
+R.Engine.requires("/textrender/text.context.js");
+R.Engine.requires("/textrender/text.renderer.js");
+R.Engine.requires("/resourceloaders/loader.bitmapfont.js");
+R.Engine.requires("/engine.timers.js");
 
-Engine.initObject("FontTest", "Game", function(){
+R.Engine.initObject("FontTest", "Game", function(){
 
    /**
     * @class Wii ball bounce game.  Press the A button over a ball
@@ -69,7 +69,7 @@ Engine.initObject("FontTest", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
 			
 			FontTest.fontLoader = BitmapFontLoader.create();
 			FontTest.fontLoader.load("lucida", "lucida_sans_36.font");
@@ -115,10 +115,10 @@ Engine.initObject("FontTest", "Game", function(){
          $("#loading").remove();
          
          // Create the render context
-         this.fieldWidth = Engine.getDebugMode() ? 400 : this.fieldWidth;
+         this.fieldWidth = R.Engine.getDebugMode() ? 400 : this.fieldWidth;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
-			var ctx = EngineSupport.getNumericParam("context", 1);
+			var ctx = R.engine.Support.getNumericParam("context", 1);
 			if (ctx == 1) {
 				this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
 			} else {
@@ -126,7 +126,7 @@ Engine.initObject("FontTest", "Game", function(){
 			}
 			
 	      this.renderContext.setBackgroundColor("#000000");
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 
 		 	// Vector Text
 			var vector1 = TextRenderer.create(VectorText.create(), "ABCxyz123!@#$%^&*()", 1);

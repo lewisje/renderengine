@@ -31,9 +31,9 @@
  *
  */
 
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/engine.object2d.js");
 
-Engine.initObject("SpriteGrid", "Object2D", function() {
+R.Engine.initObject("SpriteGrid", "Object2D", function() {
 
 /**
  * @class The grid.

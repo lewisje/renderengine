@@ -19,17 +19,17 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
 
-Engine.include("/physics/collision/b2Collision.js");
-Engine.include("/physics/collision/b2Manifold.js");
-Engine.include("/physics/collision/shapes/b2Shape.js");
+R.Engine.requires("/physics/collision/b2Collision.js");
+R.Engine.requires("/physics/collision/b2Manifold.js");
+R.Engine.requires("/physics/collision/shapes/b2Shape.js");
 
-Engine.include("/physics/dynamics/contacts/b2Contact.js");
-Engine.include("/physics/dynamics/contacts/b2ContactNode.js");
+R.Engine.requires("/physics/dynamics/contacts/b2Contact.js");
+R.Engine.requires("/physics/dynamics/contacts/b2ContactNode.js");
 
-Engine.initObject("b2PolyAndCircleContact", "b2Contact", function() {
+R.Engine.initObject("b2PolyAndCircleContact", "b2Contact", function() {
 
    var b2PolyAndCircleContact = b2Contact.extend({
    

@@ -19,38 +19,31 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("R.physics.common.math.b2Vec2");
 
-Engine.include("/physics/collision/shapes/b2Shape.js");
-Engine.include("/physics/collision/shapes/b2ShapeDef.js");
+R.Engine.requires("R.physics.collision.shapes.b2Shape");
+R.Engine.requires("R.physics.collision.shapes.b2ShapeDef");
 
+var b2CircleDef = b2ShapeDef.extend({
 
-Engine.initObject("b2CircleDef", "b2ShapeDef", function() {
+   radius: null,
 
-   var b2CircleDef = b2ShapeDef.extend({
-   
-      radius: null,
-   
-      constructor: function() {
-         // The constructor for b2ShapeDef
-         this.type = b2Shape.e_unknownShape;
-         this.userData = null;
-         this.localPosition = new b2Vec2(0.0, 0.0);
-         this.localRotation = 0.0;
-         this.friction = 0.2;
-         this.restitution = 0.0;
-         this.density = 0.0;
-         this.categoryBits = 0x0001;
-         this.maskBits = 0xFFFF;
-         this.groupIndex = 0; 
-         //
+   constructor: function() {
+      // The constructor for b2ShapeDef
+      this.type = R.physics.collision.shapes.b2Shape.e_unknownShape;
+      this.userData = null;
+      this.localPosition = new R.physics.common.math.b2Vec2(0.0, 0.0);
+      this.localRotation = 0.0;
+      this.friction = 0.2;
+      this.restitution = 0.0;
+      this.density = 0.0;
+      this.categoryBits = 0x0001;
+      this.maskBits = 0xFFFF;
+      this.groupIndex = 0; 
+      //
 
-         this.type = b2Shape.e_circleShape;
-         this.radius = 1.0;
-      }
-   
-   });
-   
-   return b2CircleDef;
+      this.type = R.physics.collision.shapes.b2Shape.e_circleShape;
+      this.radius = 1.0;
+   }
 
 });

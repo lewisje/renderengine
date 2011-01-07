@@ -19,7 +19,7 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.initObject("b2WorldListener", null, function() {
+R.Engine.initObject("b2WorldListener", null, function() {
 
    var b2WorldListener = Base.extend({
    

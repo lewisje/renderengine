@@ -32,10 +32,10 @@
  */
 
 // Start the console so logging can take place immediately
-Console.startup();
+R.debug.Console.startup();
 
 // Default engine options
-Engine.defaultOptions = {
+R.Engine.defaultOptions = {
    skipFrames: true,													// Skip missed frames
    billboards: true,													// Use billboards to speed up rendering
    hardwareAccel: false,											// Hardware acceleration flag
@@ -46,16 +46,15 @@ Engine.defaultOptions = {
 
 
 // Start the engine
-Engine.options = $.extend({}, Engine.defaultOptions);
-Engine.startup();
+R.Engine.options = $.extend({}, R.Engine.defaultOptions);
+R.Engine.startup();
 
 // Set up the engine using whatever query params were passed
-Engine.setDebugMode(EngineSupport.checkBooleanParam("debug"));
+R.Engine.setDebugMode(R.engine.Support.checkBooleanParam("debug"));
 
-if (Engine.getDebugMode())
-{
-   Console.setDebugLevel(EngineSupport.getNumericParam("debugLevel", Console.DEBUGLEVEL_DEBUG));
+if (R.Engine.getDebugMode()) {
+   R.debug.Console.setDebugLevel(R.engine.Support.getNumericParam("debugLevel", R.debug.Console.DEBUGLEVEL_DEBUG));
 }
 
 // Local mode keeps loaded script source available
-Engine.localMode = EngineSupport.checkBooleanParam("local");
+R.Engine.localMode = R.engine.Support.checkBooleanParam("local");

@@ -1,14 +1,14 @@
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
 
 // Load the collision model
-Engine.include("/spatial/container.spatialgrid.js");
+R.Engine.requires("/spatial/container.spatialgrid.js");
 
 // Load the sprite resource loader
-Engine.include("/resourceloaders/loader.sprite.js");
+R.Engine.requires("/resourceloaders/loader.sprite.js");
 
 // Load the timers
-Engine.include("/engine.timers.js");
+R.Engine.requires("/engine.timers.js");
 
 
 // Load the game objects
@@ -16,7 +16,7 @@ Game.load("/player.js");
 Game.load("/bomb.js");
 Game.load("/powerup.js");
 
-Engine.initObject("Tutorial9", "Game", function(){
+R.Engine.initObject("Tutorial9", "Game", function(){
 
    /**
     * @class Tutorial Nine.  Bringing sprites together with collision and
@@ -46,7 +46,7 @@ Engine.initObject("Tutorial9", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
 			
          // Create the render context
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
@@ -55,7 +55,7 @@ Engine.initObject("Tutorial9", "Game", function(){
          this.renderContext.setBackgroundColor("black");
 
          // Add the new rendering context to the default engine context
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 			
 			// Create the collision model with 9x9 divisions
 			this.collisionModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 9);

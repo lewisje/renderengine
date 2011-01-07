@@ -19,10 +19,10 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/collision/b2ContactID.js");
+R.Engine.requires("/physics/collision/b2ContactID.js");
 
 
-Engine.initObject("b2ContactPoint", null, function() {
+R.Engine.initObject("b2ContactPoint", null, function() {
    
    var b2ContactPoint = Base.extend({
 

@@ -32,19 +32,28 @@
  *
  */
 
-Engine.include("/components/component.mover2d.js");
-Engine.include("/components/component.vector2d.js");
-Engine.include("/components/component.convexcollider.js");
-Engine.include("/engine.object2d.js");
-
-Engine.initObject("SpaceroidsBullet", "Object2D", function() {
+R.Engine.define({
+	"class": "SpaceroidsBullet",
+	"requires": [
+		"R.components.Mover2D",
+		"R.components.Vector2D",
+		"R.components.ConvexCollider",
+		"R.engine.Object2D",
+		"R.math.Point2D",
+		"R.math.Vector2D",
+		"R.math.Math2D",
+		"R.math.Rectangle2D"
+		
+	]
+});
 
 /**
  * @class The bullet object.
  *
  * @param player {Spaceroids.Player} The player object this bullet comes from,
  */
-var SpaceroidsBullet = Object2D.extend({
+var SpaceroidsBullet = function() {
+	return R.engine.Object2D.extend({
 
    player: null,
    rot: null,
@@ -57,9 +66,9 @@ var SpaceroidsBullet = Object2D.extend({
       this.rot = player.getRotation();
 
       // Add components to move and draw the bullet
-      this.add(Mover2DComponent.create("move"));
-      this.add(Vector2DComponent.create("draw"));
-      this.add(ConvexColliderComponent.create("collide", Spaceroids.collisionModel));
+      this.add(R.components.Mover2D.create("move"));
+      this.add(R.components.Vector2D.create("draw"));
+      this.add(R.components.ConvexCollider.create("collide", Spaceroids.collisionModel));
 		this.getComponent("collide").setCollisionMask(SpaceroidsBullet.COLLISION_MASK);
 
       // Get the player's position and rotation,
@@ -79,10 +88,10 @@ var SpaceroidsBullet = Object2D.extend({
 
 
       var r = p_mover.getRotation();
-      var dir = Math2D.getDirectionVector(Point2D.ZERO, Vector2D.UP, r);
+      var dir = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, R.math.Vector2D.UP, r);
 
-      var p = Point2D.create(p_mover.getPosition());
-		var dPos = Point2D.create(dir).mul(10);
+      var p = R.math.Point2D.create(p_mover.getPosition());
+		var dPos = R.math.Point2D.create(dir).mul(10);
       c_mover.setPosition(p.add(dPos));
       c_mover.setVelocity(dir.mul(8));
       c_mover.setCheckLag(false);
@@ -147,7 +156,7 @@ var SpaceroidsBullet = Object2D.extend({
 
       // Is this bullet in field any more?
       var p = c_mover.getPosition();
-      var bBox = Rectangle2D.create(p.x, p.y, 2, 2);
+      var bBox = R.math.Rectangle2D.create(p.x, p.y, 2, 2);
       if (!Spaceroids.inField(p, bBox))
       {
          this.player.removeBullet(this);
@@ -185,10 +194,10 @@ var SpaceroidsBullet = Object2D.extend({
          this.destroy();
 
          // All set
-         return ColliderComponent.STOP;
+         return R.components.Collider.STOP;
       }
 
-      return ColliderComponent.CONTINUE;
+      return R.components.Collider.CONTINUE;
    }
 
 
@@ -203,12 +212,9 @@ var SpaceroidsBullet = Object2D.extend({
    },
 
    // Why we have this, I don't know...
-   shape: [ Point2D.create(-1, -1), Point2D.create( 1, -1),
-            Point2D.create( 1,  1), Point2D.create(-1,  1)],
+   shape: [ R.math.Point2D.create(-1, -1), R.math.Point2D.create( 1, -1),
+            R.math.Point2D.create( 1,  1), R.math.Point2D.create(-1,  1)],
 
-	COLLISION_MASK: Math2.parseBin("100")
+	COLLISION_MASK: R.lang.Math2.parseBin("100")
 });
-
-return SpaceroidsBullet;
-
-});
+}

@@ -30,18 +30,18 @@
  *
  */
 
-Engine.include("/resourceloaders/loader.sound.js");
-Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/resourceloaders/loader.level.js");
+R.Engine.requires("/resourceloaders/loader.sound.js");
+R.Engine.requires("/resourceloaders/loader.sprite.js");
+R.Engine.requires("/resourceloaders/loader.level.js");
 
-Engine.include("/objects/object.spriteactor.js");
-Engine.include("/objects/object.collisionbox.js");
+R.Engine.requires("/objects/object.spriteactor.js");
+R.Engine.requires("/objects/object.collisionbox.js");
 
-Engine.include("/../tools/level_editor/jquery.jstree.js");
-Engine.include("/../tools/level_editor/jquery.cookie.js");
-Engine.include("/../tools/level_editor/jquery.hotkeys.js");
+R.Engine.include("/../tools/level_editor/jquery.jstree.js");
+R.Engine.include("/../tools/level_editor/jquery.cookie.js");
+R.Engine.include("/../tools/level_editor/jquery.hotkeys.js");
 
-Engine.initObject("LevelEditor", null, function() {
+R.Engine.initObject("LevelEditor", null, function() {
 
 /**
  * @class The 2D level editor.

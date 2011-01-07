@@ -19,12 +19,12 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Math.js");
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
-Engine.include("/physics/collision/ClipVertex.js");
+R.Engine.requires("/physics/collision/ClipVertex.js");
 
-Engine.initObject("b2Collision", null, function() {
+R.Engine.initObject("b2Collision", null, function() {
    
    var b2Collision = Base.extend({
    

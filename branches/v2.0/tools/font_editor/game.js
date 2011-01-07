@@ -34,16 +34,16 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.htmldivcontext.js");
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/resourceloaders/loader.image.js");
-Engine.include("/textrender/text.renderer.js");
-Engine.include("/textrender/text.bitmap.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/rendercontexts/context.htmldivcontext.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/resourceloaders/loader.image.js");
+R.Engine.requires("/textrender/text.renderer.js");
+R.Engine.requires("/textrender/text.bitmap.js");
+R.Engine.requires("/engine.timers.js");
 
 Game.load("fontrender.js");
 
-Engine.initObject("FontEditor", "Game", function() {
+R.Engine.initObject("FontEditor", "Game", function() {
 
 /**
  * @class Font Editor.  Fonts should be a single bitmap, 36px to 48px font,
@@ -85,13 +85,13 @@ var FontEditor = Game.extend({
 	  $("#infoForm").css("display", "block");
 
       // Set the FPS of the game
-      Engine.setFPS(5);
+      R.Engine.setFPS(5);
 		
-		$("#fontURL").val(Engine.getEnginePath() + "/fonts/century_gothic_36.png");
+		$("#fontURL").val(R.Engine.getEnginePath() + "/fonts/century_gothic_36.png");
 		$("#fontDef").val("");
 
 		// The font file can be specified as a command parameter
-		var fontFile = EngineSupport.getStringParam("fontFile");
+		var fontFile = R.engine.Support.getStringParam("fontFile");
 		
 		// Check to see if a JS file exists for the font
 		//var fontJS = Game.loadEngineScript("fonts/" + fontFile + ".js");
@@ -100,7 +100,7 @@ var FontEditor = Game.extend({
 		var div = HTMLDivContext.create("div", 800, 120);
 		div.jQ().css("overflow-x", "auto");
 
-		Engine.getDefaultContext().add(div);
+		R.Engine.getDefaultContext().add(div);
 
       // Create the editor's 2D context
       this.editorContext = CanvasContext.create("editor", this.editorWidth, this.editorHeight);
@@ -115,7 +115,7 @@ var FontEditor = Game.extend({
 		this.testContext = CanvasContext.create("testing", this.testWidth, this.testHeight);
 		this.testContext.setWorldScale(1);
 		this.testContext.setStatic(true);
-		Engine.getDefaultContext().add(this.testContext);
+		R.Engine.getDefaultContext().add(this.testContext);
 		this.testContext.setBackgroundColor("black");
 		this.testContext.jQ().css({
 			position: "absolute",
@@ -230,11 +230,11 @@ var FontEditor = Game.extend({
 		this.editorContext.cleanUp();
 		this.editorContext.add(FontRender.create("font"));
 		this.editorContext.reset();
-		this.editorContext.render(Engine.worldTime);
+		this.editorContext.render(R.Engine.worldTime);
 		$("#minAlpha").val(this.getAveragePixelDensity());
 		$("#analyze").click(function() {
 			self.editorContext.reset();
-			self.editorContext.render(Engine.worldTime);
+			self.editorContext.render(R.Engine.worldTime);
 			self.analyze();
 		});
 	},
@@ -366,7 +366,7 @@ var FontEditor = Game.extend({
 	},
 	
 	highlight: function() {
-		//this.editorContext.render(Engine.worldTime);
+		//this.editorContext.render(R.Engine.worldTime);
 	},
 	
 	buildTest: function() {
@@ -395,7 +395,7 @@ var FontEditor = Game.extend({
       this.testContext.add(bText2);
 		
 		this.testContext.reset();
-		this.testContext.render(Engine.worldTime);
+		this.testContext.render(R.Engine.worldTime);
 	}
 	
 });

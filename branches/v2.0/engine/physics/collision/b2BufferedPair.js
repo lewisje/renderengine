@@ -19,7 +19,7 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.initObject("b2BufferedPair", null, function() {
+R.Engine.initObject("b2BufferedPair", null, function() {
    
    var b2BufferedPair = Base.extend({
 

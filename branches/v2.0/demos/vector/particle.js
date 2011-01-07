@@ -31,10 +31,17 @@
  *
  */
 
-Engine.include("/engine.math2d.js");
-Engine.include("/engine.particles.js");
-
-Engine.initObject("SimpleParticle", "Particle", function() {
+R.Engine.define({
+	"class": "SimpleParticle",
+	"requires": [
+		"R.particles.AbstractParticle",
+		"R.components.Vector2D",
+		"R.math.Point2D",
+		"R.math.Vector2D",
+		"R.math.Math2D",
+		"R.math.Rectangle2D"
+	]
+});
 
 /**
  * @class A simple particle
@@ -42,7 +49,8 @@ Engine.initObject("SimpleParticle", "Particle", function() {
  * @param pos {Point2D} The starting position of the particle.  A
  *            velocity vector will be derived from this position.
  */
-var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
+var SimpleParticle = function() {
+	return R.particles.AbstractParticle.extend(/** @scope SimpleParticle.prototype */{
 
    vec: null,
    decel: 0,
@@ -53,12 +61,12 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
       var p = pos.get();
       this.setPosition(p.x, p.y);
 
-      var a = Math.floor(Math2.random() * 360);
-      this.vec = Math2D.getDirectionVector(Point2D.ZERO, SimpleParticle.ref, a);
-      var vel = 1 + (Math2.random() * 5);
+      var a = Math.floor(R.lang.Math2.random() * 360);
+      this.vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, SimpleParticle.ref, a);
+      var vel = 1 + (R.lang.Math2.random() * 5);
       this.vec.mul(vel);
       this.decel = decel;
-		this.invVel = Vector2D.create(0,0);
+		this.invVel = R.math.Vector2D.create(0,0);
    },
 
    destroy: function() {
@@ -95,8 +103,8 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
          var s = time - this.getBirth();
          var e = this.getTTL() - this.getBirth();
          colr = 255 - Math.floor(255 * (s / e));
-         colr += (-10 + (Math.floor(Math2.random() * 20)));
-         var fb = (Math2.random() * 100);
+         colr += (-10 + (Math.floor(R.lang.Math2.random() * 20)));
+         var fb = (R.lang.Math2.random() * 100);
          if (fb > 90) {
             colr = 255;
          }
@@ -114,14 +122,20 @@ var SimpleParticle = Particle.extend(/** @scope SimpleParticle.prototype */{
    },
 
    // A simple reference point for the "up" vector
-   ref: Point2D.create(0, -1)
+   ref: R.math.Point2D.create(0, -1)
 });
+}
 
-return SimpleParticle;
-
+R.Engine.define({
+	"class": "TrailParticle",
+	"requires": [
+		"R.particles.AbstractParticle",
+		"R.components.Vector2D",
+		"R.math.Point2D",
+		"R.math.Vector2D",
+		"R.math.Math2D"
+	]
 });
-
-Engine.initObject("TrailParticle", "Particle", function() {
 
 /**
  * @class A simple particle
@@ -129,94 +143,56 @@ Engine.initObject("TrailParticle", "Particle", function() {
  * @param pos {Point2D} The starting position of the particle.  A
  *            velocity vector will be derived from this position.
  */
-var TrailParticle = Particle.extend(/** @scope TrailParticle.prototype */{
-
-   vec: null,
-   clr: null,
-
-   constructor: function(pos, rot, spread, color, ttl) {
-      this.base(ttl || 2000);
-      this.clr = color;
-      var p = pos.get();
-      this.setPosition(p.x, p.y);
-      var a = rot + Math.floor((180 - (spread / 2)) + (Math2.random() * (spread * 2)));
-      this.vec = Math2D.getDirectionVector(Point2D.ZERO, TrailParticle.ref, a);
-      var vel = 1 + (Math2.random() * 2);
-      this.vec.mul(vel);
-   },
-
-   destroy: function() {
-      this.vec.destroy();
-      this.base();
-   },
-
-   release: function() {
-      this.base();
-      this.vec = null;
-   },
-   
-   setColor: function(color) {
-   	this.clr = color;
-   },
-
-   /**
-    * Called by the particle engine to draw the particle to the rendering
-    * context.
-    *
-    * @param renderContext {RenderContext} The rendering context
-    * @param time {Number} The engine time in milliseconds
-    */
-   draw: function(renderContext, time) {
-      this.getPosition().add(this.vec);
-      renderContext.setFillStyle(this.clr);
-      renderContext.drawPoint(this.getPosition());
-   }
-
-}, {
-   getClassName: function() {
-      return "TrailParticle";
-   },
-
-   // A simple reference point for the "up" vector
-   ref: Point2D.create(0, -1)
-});
-
-return TrailParticle;
-
-});
-
-Engine.initObject("BulletParticle", "TrailParticle", function() {
-
-/**
- * @class A simple particle
- *
- * @param pos {Point2D} The starting position of the particle.  A
- *            velocity vector will be derived from this position.
- */
-var BulletParticle = TrailParticle.extend(/** @scope BulletParticle.prototype */{
-
-   /**
-    * Called by the particle engine to draw the particle to the rendering
-    * context.
-    *
-    * @param renderContext {RenderContext} The rendering context
-    * @param time {Number} The engine time in milliseconds
-    */
-   draw: function(renderContext, time) {
-      var cb = 255, cg = 100;
-		cb -= Math.floor(Math2.random() * 50);
-		cg -= Math.floor(Math2.random() * 40);
-		var colr = "#88" + (cg.toString(16) + cb.toString(16));
-      this.setColor(colr);
-      this.base(renderContext, time);
-   }
-
-}, {
-   getClassName: function() {
-      return "BulletParticle";
-   }
-});
-
-	return BulletParticle;
-
-});
+var TrailParticle = function(){
+	return R.particles.AbstractParticle.extend(/** @scope TrailParticle.prototype */{
+	
+		vec: null,
+		clr: null,
+		
+		constructor: function(pos, rot, spread, color, ttl){
+			this.base(ttl || 2000);
+			this.clr = color;
+			var p = pos.get();
+			this.setPosition(p.x, p.y);
+			var a = rot + Math.floor((180 - (spread / 2)) + (R.lang.Math2.random() * (spread * 2)));
+			this.vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, TrailParticle.ref, a);
+			var vel = 1 + (R.lang.Math2.random() * 2);
+			this.vec.mul(vel);
+		},
+		
+		destroy: function(){
+			this.vec.destroy();
+			this.base();
+		},
+		
+		release: function(){
+			this.base();
+			this.vec = null;
+		},
+		
+		setColor: function(color){
+			this.clr = color;
+		},
+		
+		/**
+		 * Called by the particle engine to draw the particle to the rendering
+		 * context.
+		 *
+		 * @param renderContext {RenderContext} The rendering context
+		 * @param time {Number} The engine time in milliseconds
+		 */
+		draw: function(renderContext, time){
+			this.getPosition().add(this.vec);
+			renderContext.setFillStyle(this.clr);
+			renderContext.drawPoint(this.getPosition());
+		}
+		
+	}, {
+		getClassName: function(){
+			return "TrailParticle";
+		},
+		
+		// A simple reference point for the "up" vector
+		ref: R.math.Point2D.create(0, -1)
+	});
+}

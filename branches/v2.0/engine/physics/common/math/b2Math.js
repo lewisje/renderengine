@@ -16,10 +16,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-Engine.include("/physics/common/math/b2Vec2.js");
-Engine.include("/physics/common/math/b2Mat22.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Mat22.js");
 
-Engine.initObject("b2Math", null, function() {
+R.Engine.initObject("b2Math", null, function() {
    
    var b2Math = Base.extend({
    

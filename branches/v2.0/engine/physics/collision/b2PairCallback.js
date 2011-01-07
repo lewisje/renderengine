@@ -20,7 +20,7 @@
 */
 
 
-Engine.initObject("b2PairCallback", null, function() {
+R.Engine.initObject("b2PairCallback", null, function() {
    
    var b2PairCallback = Base.extend({
 

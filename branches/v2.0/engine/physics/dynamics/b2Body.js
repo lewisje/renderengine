@@ -19,20 +19,20 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Math.js");
-Engine.include("/physics/common/math/b2Vec2.js");
-Engine.include("/physics/common/math/b2Mat22.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Mat22.js");
 
-Engine.include("/physics/collision/b2Pair.js");
-Engine.include("/physics/collision/b2OBB.js");
-Engine.include("/physics/collision/b2AABB.js");
+R.Engine.requires("/physics/collision/b2Pair.js");
+R.Engine.requires("/physics/collision/b2OBB.js");
+R.Engine.requires("/physics/collision/b2AABB.js");
 
-Engine.include("/physics/collision/shapes/b2Shape.js");
-Engine.include("/physics/collision/shapes/b2MassData.js");
+R.Engine.requires("/physics/collision/shapes/b2Shape.js");
+R.Engine.requires("/physics/collision/shapes/b2MassData.js");
 
 
-Engine.initObject("b2Body", null, function() {
+R.Engine.initObject("b2Body", null, function() {
 
    // A rigid body. Internal computation are done in terms
    // of the center of mass position. The center of mass may

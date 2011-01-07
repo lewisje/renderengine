@@ -1,11 +1,11 @@
 
 
-Engine.include("/resourceloaders/loader.image.js");
-Engine.include("/resourceloaders/loader.object.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/resourceloaders/loader.image.js");
+R.Engine.requires("/resourceloaders/loader.object.js");
+R.Engine.requires("/engine.timers.js");
 
 
-Engine.initObject("TileSets", "PooledObject", function() {
+R.Engine.initObject("TileSets", "PooledObject", function() {
 
 /**
  * @class Loads a tilesets object file which can describe one or more tile sets.
@@ -81,7 +81,7 @@ Engine.initObject("TileSets", "PooledObject", function() {
 		loadTileImages: function() {
 			// Get the tileset descriptor
 			this.tiles = this.tileLoader.get("tiles");
-			var path = EngineSupport.getPath(this.tilesFile);
+			var path = R.engine.Support.getPath(this.tilesFile);
 			
 			// Load the images within the tileset(s)
 			for (var tileset in this.tiles) {

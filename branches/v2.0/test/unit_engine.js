@@ -42,31 +42,31 @@ var TestConsoleRef = ConsoleRef.extend({
 });
 
 var tRef = new TestConsoleRef();
-Engine.setDebugMode(true);
-Console.setConsoleRef(tRef);
+R.Engine.setDebugMode(true);
+R.debug.Console.setConsoleRef(tRef);
 
 test("Console", function() {
 	expect(5);
 
-	Console.setDebugLevel(Console.DEBUGLEVEL_NONE);
-	Console.log("foo");
-	equals(tRef.getOutputLength(), 0, "Console.DEBUGLEVEL_NONE");
+	R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_NONE);
+	R.debug.Console.log("foo");
+	equals(tRef.getOutputLength(), 0, "R.debug.Console.DEBUGLEVEL_NONE");
 
-	Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-	Console.debug("foo");
-	equals(tRef.getOutputLength(), 0, "Console.DEBUGLEVEL_ERRORS");
+	R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_ERRORS);
+	R.debug.Console.debug("foo");
+	equals(tRef.getOutputLength(), 0, "R.debug.Console.DEBUGLEVEL_ERRORS");
 
-	Console.setDebugLevel(Console.DEBUGLEVEL_VERBOSE);
-	Console.warn("foo");
-	equals(tRef.getOutputLength(), 1, "Console.DEBUGLEVEL_VERBOSE");
+	R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_VERBOSE);
+	R.debug.Console.warn("foo");
+	equals(tRef.getOutputLength(), 1, "R.debug.Console.DEBUGLEVEL_VERBOSE");
 
-	Console.setDebugLevel(Console.DEBUGLEVEL_DEBUG);
-	Console.log("foo");
-	equals(tRef.getOutputLength(), 1, "Console.DEBUGLEVEL_DEBUG");
+	R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_DEBUG);
+	R.debug.Console.log("foo");
+	equals(tRef.getOutputLength(), 1, "R.debug.Console.DEBUGLEVEL_DEBUG");
 
-	Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-	Console.warn("foo");
-	equals(tRef.getOutputLength(), 2, "Console.DEBUGLEVEL_WARNINGS");
+	R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_WARNINGS);
+	R.debug.Console.warn("foo");
+	equals(tRef.getOutputLength(), 2, "R.debug.Console.DEBUGLEVEL_WARNINGS");
 
 });
 
@@ -79,12 +79,12 @@ test("Assert", function() {
 		// We should get an exception
 		ok( ex, "Assert threw exception" );
 	}
-	ok( !Engine.started && !Engine.running, "Assert stopped engine" );
+	ok( !R.Engine.started && !R.Engine.running, "Assert stopped engine" );
 
-	Engine.startup();
-	Engine.run();
+	R.Engine.startup();
+	R.Engine.run();
 
-	ok( Engine.running, "Engine started again" );
+	ok( R.Engine.running, "Engine started again" );
 
 });
 
@@ -99,18 +99,18 @@ test("EngineSupport", function() {
 
 	var arr = ["cat", "dog", "mouse", "horse", "pig", "cow"];
 
-	equals(EngineSupport.indexOf(arr, "mouse"), 2, "indexOf");
+	equals(R.engine.Support.indexOf(arr, "mouse"), 2, "indexOf");
 
-	EngineSupport.arrayRemove(arr, "dog");
+	R.engine.Support.arrayRemove(arr, "dog");
 	equals( arr.length, 5, "arrayRemove" );
 
-	var newArr = EngineSupport.filter(arr, function(e) {
+	var newArr = R.engine.Support.filter(arr, function(e) {
 		return (e.indexOf("c") == 0);
 	});
 	equals( newArr.length, 2, "filter");
 
 	var copyArr = [];
-	EngineSupport.forEach(arr, function(e) {
+	R.engine.Support.forEach(arr, function(e) {
 		copyArr.push(e);
 	});
 	ok( copyArr.length == arr.length, "forEach");
@@ -120,7 +120,7 @@ test("EngineSupport", function() {
 	for (var x = 0; x < 10; x++) {
 		rand[x] = Math.floor(Math2.random() * 49);
 	}
-	EngineSupport.fillArray(fArr, 50, "dog");
+	R.engine.Support.fillArray(fArr, 50, "dog");
 	// Test a 10-point random sampling of the array
 	ok( (function(){
 			for (var k = 0; k < 10; k++) {
@@ -131,40 +131,40 @@ test("EngineSupport", function() {
 			return true;
 		  })(), "fillArray");
 
-	var path = EngineSupport.getPath("http://www.google.com/ip/index.html");
+	var path = R.engine.Support.getPath("http://www.google.com/ip/index.html");
 	equals( path, "http://www.google.com/ip", "getPath" );
 
-	ok( !EngineSupport.checkBooleanParam("notExist"), "checkBooleanParam" );
-	ok( !EngineSupport.checkStringParam("notExist", "STRING"), "checkStringParam" );
-	ok( !EngineSupport.checkNumericParam("notExist", "NUMBER"), "checkNumericParam" );
+	ok( !R.engine.Support.checkBooleanParam("notExist"), "checkBooleanParam" );
+	ok( !R.engine.Support.checkStringParam("notExist", "STRING"), "checkStringParam" );
+	ok( !R.engine.Support.checkNumericParam("notExist", "NUMBER"), "checkNumericParam" );
 
-	ok( EngineSupport.getStringParam("notExist", "COW") == "COW", "getStringParam" );
-	ok( EngineSupport.getNumericParam("notExist", 42) == 42, "getNumericParam" );
+	ok( R.engine.Support.getStringParam("notExist", "COW") == "COW", "getStringParam" );
+	ok( R.engine.Support.getNumericParam("notExist", 42) == 42, "getNumericParam" );
 
-	hasKey( EngineSupport.sysInfo(), "browser", "sysInfo has 'browser'" );
+	hasKey( R.engine.Support.sysInfo(), "browser", "sysInfo has 'browser'" );
 });
 
 test("Engine", function() {
 	expect(6);
 
-	Engine.setDebugMode(true);
-	ok( Engine.getDebugMode(), "set/getDebugMode" );
-	Engine.setDebugMode(false);
+	R.Engine.setDebugMode(true);
+	ok( R.Engine.getDebugMode(), "set/getDebugMode" );
+	R.Engine.setDebugMode(false);
 
-	Engine.setFPS(10);
-	equals( Engine.fpsClock, 100, "setFPS" );
+	R.Engine.setFPS(10);
+	equals( R.Engine.fpsClock, 100, "setFPS" );
 
-	var dannyId = Engine.create(PooledObject.create("Danny"));
-	ok( Engine.getObject(dannyId) != null, "create" );
+	var dannyId = R.Engine.create(PooledObject.create("Danny"));
+	ok( R.Engine.getObject(dannyId) != null, "create" );
 
-	Engine.destroy(Engine.getObject(dannyId));
-	ok( Engine.getObject(dannyId) == null, "destroy" );
+	R.Engine.destroy(R.Engine.getObject(dannyId));
+	ok( R.Engine.getObject(dannyId) == null, "destroy" );
 
-	Engine.pause();
-	ok( !Engine.running, "pause" );
+	R.Engine.pause();
+	ok( !R.Engine.running, "pause" );
 
-	Engine.run();
-	ok( Engine.running, "run" );
+	R.Engine.run();
+	ok( R.Engine.running, "run" );
 
 
 });

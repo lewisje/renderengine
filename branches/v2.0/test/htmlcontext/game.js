@@ -32,11 +32,11 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.htmldivcontext.js");
+R.Engine.requires("/rendercontexts/context.htmldivcontext.js");
 
 Game.load("box.js");
 
-Engine.initObject("HTMLContextTest", "Game", function(){
+R.Engine.initObject("HTMLContextTest", "Game", function(){
 
    /**
     * @class HTML Context testing.
@@ -62,7 +62,7 @@ Engine.initObject("HTMLContextTest", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
 
          // Create the render context
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
@@ -70,7 +70,7 @@ Engine.initObject("HTMLContextTest", "Game", function(){
 			this.renderContext = HTMLDivContext.create("Playfield", this.fieldWidth, this.fieldHeight);
 			
 	      this.renderContext.setBackgroundColor("#000000");
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 
 			for (var x = 0; x < 5; x++) {
 				this.renderContext.add(Player.create());

@@ -31,10 +31,10 @@
  */
 
 // Load engine objects
-Engine.include("/components/component.boxbody.js");
-Engine.include("/engine.math2d.js");
+R.Engine.requires("/components/component.boxbody.js");
+R.Engine.requires("/engine.math2d.js");
 
-Engine.initObject("Crate", "Toy", function() {
+R.Engine.initObject("Crate", "Toy", function() {
 
    /**
     * @class A wooden crate toy to play with.  Uses the box body to physically animate

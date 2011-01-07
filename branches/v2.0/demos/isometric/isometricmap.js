@@ -1,14 +1,14 @@
 
 
-Engine.include("/rendercontexts/context.htmldivcontext.js");
-Engine.include("/resourceloaders/loader.object.js");
-Engine.include("/engine.timers.js");
-Engine.include("/engine.math2d.js");
-Engine.include("/components/component.mouseinput.js");
-Engine.include("/engine.events.js");
+R.Engine.requires("/rendercontexts/context.htmldivcontext.js");
+R.Engine.requires("/resourceloaders/loader.object.js");
+R.Engine.requires("/engine.timers.js");
+R.Engine.requires("/engine.math2d.js");
+R.Engine.requires("/components/component.mouseinput.js");
+R.Engine.requires("/engine.events.js");
 
 
-Engine.initObject("IsometricMap", "BaseObject", function() {
+R.Engine.initObject("IsometricMap", "BaseObject", function() {
 
 /**
  * @class Loads a tileset object file which can describe one or more tile sets.

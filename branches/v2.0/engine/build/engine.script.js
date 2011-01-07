@@ -35,7 +35,7 @@
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend({
+R.engine.Script = Base.extend({
    /** @lends Engine */
    constructor: null,
 
@@ -69,7 +69,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    include: function(scriptURL) {
-      Engine.loadNow(scriptURL);
+      R.engine.Script.loadNow(scriptURL);
    },
 
    /**
@@ -85,7 +85,7 @@ var Engine = Engine.extend({
     * @private
     */
    loadNow: function(scriptPath, cb) {
-      this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
+      R.engine.Script.doLoad(R.Engine.getEnginePath() + scriptPath, scriptPath, cb);
    },
    
    /**
@@ -97,10 +97,10 @@ var Engine = Engine.extend({
     * @param scriptPath {String} The URL of a script to load.
     * @memberOf Engine
     */
-   loadScript: function(scriptPath, owner) {
+   loadScript: function(scriptPath) {
       // Put script into load queue
-      Engine.scriptQueue.push(scriptPath);
-      Engine.runScriptQueue();
+      R.engine.Script.scriptQueue.push(scriptPath);
+      R.engine.Script.runScriptQueue();
    },
 
 	/**
@@ -147,7 +147,7 @@ var Engine = Engine.extend({
 			callback = data;
 			data = null;
 		}
-		Engine.ajaxLoad(path, data, function(xhr, result) {
+		R.engine.Script.ajaxLoad(path, data, function(xhr, result) {
 			callback(xhr.responseText, xhr.status);
 		});
 	},
@@ -167,7 +167,7 @@ var Engine = Engine.extend({
 			callback = data;
 			data = null;
 		}
-		Engine.ajaxLoad(path, data, function(xhr, result) {
+		R.engine.Script.ajaxLoad(path, data, function(xhr, result) {
 			function clean(txt) {
 				var outbound = txt.replace(/(".*".*|)(\/\/.*$)/gm, function(str,t,c) {
 					return t;
@@ -182,7 +182,7 @@ var Engine = Engine.extend({
 				var inbound = xhr.responseText;
 				if (inbound) {
 					var c = clean(inbound);
-					json = EngineSupport.parseJSON(c);
+					json = R.engine.Support.parseJSON(c);
 				}
 			} catch (ex) {}
 			callback(json, xhr.status);
@@ -196,32 +196,32 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    runScriptQueue: function() {
-      if (!Engine.scriptQueueTimer) {
+      if (!R.engine.Script.scriptQueueTimer) {
          // Process any waiting scripts
-         Engine.scriptQueueTimer = setInterval(function() {
-            if (Engine.queuePaused) {
-               if (Engine.pauseReps++ > 500) {
+         R.engine.Script.scriptQueueTimer = setInterval(function() {
+            if (R.engine.Script.queuePaused) {
+               if (R.engine.Script.pauseReps++ > 500) {
                   // If after ~5 seconds the queue is still paused, unpause it and
                   // warn the user that the situation occurred
-                  Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
-                  Engine.pauseReps = 0;
-                  Engine.pauseQueue(false);
+                  R.debug.Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
+                  R.engine.Script.pauseReps = 0;
+                  R.engine.Script.pauseQueue(false);
                }
                return;
             }
 
-            Engine.pauseReps = 0;
+            R.engine.Script.pauseReps = 0;
 
-            if (Engine.scriptQueue.length > 0) {
-               Engine.processScriptQueue();
+            if (R.engine.Script.scriptQueue.length > 0) {
+               R.engine.Script.processScriptQueue();
             } else {
                // Stop the queue timer if there are no scripts
-               clearInterval(Engine.scriptQueueTimer);
-               Engine.scriptQueueTimer = null;
+               clearInterval(R.engine.Script.scriptQueueTimer);
+               R.engine.Script.scriptQueueTimer = null;
             }
          }, 10);
 
-         Engine.readyForNextScript = true;
+         R.engine.Script.readyForNextScript = true;
       }
    },
 
@@ -236,8 +236,8 @@ var Engine = Engine.extend({
     */
    setQueueCallback: function(cb) {
       // Put callback into load queue
-      Engine.scriptQueue.push(cb);
-      Engine.runScriptQueue();
+      R.engine.Script.scriptQueue.push(cb);
+      R.engine.Script.runScriptQueue();
    },
 
    /**
@@ -251,7 +251,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    pauseQueue: function(state) {
-      Engine.queuePaused = state;
+      R.engine.Script.queuePaused = state;
    },
 
    /**
@@ -260,21 +260,21 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    processScriptQueue: function() {
-      if (Engine.scriptQueue.length > 0 && Engine.readyForNextScript) {
+      if (R.engine.Script.scriptQueue.length > 0 && R.engine.Script.readyForNextScript) {
          // Hold the queue until the script is loaded
-         Engine.readyForNextScript = false;
+         R.engine.Script.readyForNextScript = false;
 
          // Get next script...
-         var scriptPath = Engine.scriptQueue.shift();
+         var scriptPath = R.engine.Script.scriptQueue.shift();
 
          // If the queue element is a function, execute it and return
          if (typeof scriptPath === "function") {
             scriptPath();
-            Engine.readyForNextScript = true;
+            R.engine.Script.readyForNextScript = true;
             return;
          }
 
-         this.doLoad(scriptPath);
+         R.engine.Script.doLoad(scriptPath);
       }
    },
 
@@ -284,36 +284,36 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    doLoad: function(scriptPath, simplePath, cb) {
-      if (!this.started) {
+      if (!R.Engine.started) {
          return;
       }
 
       var s = scriptPath.replace(/[\/\.]/g,"_");
-      if (this.loadedScripts[s] == null)
+      if (R.engine.Script.loadedScripts[s] == null)
       {
          // Store the request in the cache
-         this.loadedScripts[s] = scriptPath;
+         R.engine.Script.loadedScripts[s] = scriptPath;
 
-         Engine.scriptLoadCount++;
-         Engine.updateProgress();
+         R.engine.Script.scriptLoadCount++;
+         R.engine.Script.updateProgress();
 
          if ($.browser.Wii) {
 
             $.get(scriptPath, function(data) {
 
                // Parse script code for syntax errors
-               if (Engine.parseSyntax(data)) {
+               if (R.engine.Linker.parseSyntax(data)) {
                   var n = document.createElement("script");
                   n.type = "text/javascript";
                   $(n).text(data);
 
                   var h = document.getElementsByTagName("head")[0];
                   h.appendChild(n);
-                  Engine.readyForNextScript = true;
+                  R.engine.Script.readyForNextScript = true;
                   
-                  Engine.scriptLoadCount--;
-                  Engine.updateProgress();
-                  Console.debug("Loaded '" + scriptPath + "'");
+                  R.engine.Script.scriptLoadCount--;
+                  R.engine.Script.updateProgress();
+                  R.debug.Console.debug("Loaded '" + scriptPath + "'");
                }
                
             }, "text");
@@ -326,28 +326,36 @@ var Engine = Engine.extend({
 
             // When the file is loaded
             var fn = function() {
-               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-                  Console.debug("Loaded '" + scriptPath + "'");
-                  Engine.handleScriptDone();
-                  if (cb) {
-                     cb(simplePath, Engine.SCRIPT_LOADED);
+					var callBack = arguments.callee.cb;
+					var sNode = arguments.callee.script;
+               if (!this.readyState || 
+						  this.readyState == "loaded" || 
+						  this.readyState == "complete") {
+                  R.debug.Console.debug("Loaded '" + scriptPath + "'");
+                  R.engine.Script.handleScriptDone();
+                  if (callBack) {
+                     callBack(simplePath, R.engine.Script.SCRIPT_LOADED);
                   }
-                  if (!Engine.localMode) {
+                  if (!R.Engine.localMode) {
                      // Delete the script node
-                     $(n).remove(); 
+                     $(sNode).remove(); 
                   }
                }
-               Engine.readyForNextScript = true;
+               R.engine.Script.readyForNextScript = true;
             };
+				fn.cb = cb;
+				fn.script = n;
 
             // When an error occurs
             var eFn = function(msg) {
-               Console.error("File not found: ", scriptPath);
-               if (cb) {
-                  cb(simplePath, Engine.SCRIPT_NOT_FOUND);
+					var callBack = arguments.callee.cb;
+               R.debug.Console.error("File not found: ", scriptPath);
+               if (callBack) {
+                  callBack(simplePath, R.engine.Script.SCRIPT_NOT_FOUND);
                }
-               Engine.readyForNextScript = true;
+               R.engine.Script.readyForNextScript = true;
             };
+				eFn.cb = cb;
 
             if ($.browser.msie) {
                n.defer = true;
@@ -364,7 +372,7 @@ var Engine = Engine.extend({
 
       } else {
          // Already have this script
-         Engine.readyForNextScript = true;
+         R.engine.Script.readyForNextScript = true;
       }
    },
 
@@ -399,7 +407,7 @@ var Engine = Engine.extend({
          // Determine if the developer has provided a "loading" element of their own
          if ($("span.loading").length == 0) {
             // They haven't, so create one for them
-            $("head").append($(Engine.loadingCSS));
+            $("head").append($(R.Engine.loadingCSS));
 
             var loadingDialog = "<span id='loading' class='intrinsic'><table border='0' style='width:100%;height:100%;'><tr>";
             loadingDialog += "<td style='width:100%;height:100%;' valign='middle' align='center'><div class='loadbox'>Loading ";
@@ -411,33 +419,35 @@ var Engine = Engine.extend({
       });
 
       // We'll wait for the Engine to be ready before we load the game
-      var engine = this;
+      var engine = R.engine.Engine;
 	
 		// Load engine options for browsers
-		Engine.loadEngineOptions();
+		R.engine.Script.loadEngineOptions();
 
-      Engine.gameLoadTimer = setInterval(function() {
-         if (Engine.optionsLoaded && window["DocumentContext"] != null) {
+      R.engine.Script.gameLoadTimer = setInterval(function() {
+         if (R.engine.Script.optionsLoaded && 
+				 R.rendercontexts.DocumentContext &&
+				 R.rendercontexts.DocumentContext.started) {
 
             // Start the engine
-            Engine.run();
+            R.Engine.run();
 
             // Stop the timer
-            clearInterval(Engine.gameLoadTimer);
-            Engine.gameLoadTimer = null;
+            clearInterval(R.engine.Script.gameLoadTimer);
+            R.engine.Script.gameLoadTimer = null;
 
             // Load the game
-            Console.debug("Loading '" + gameSource + "'");
-            engine.loadScript(gameSource);
+            R.debug.Console.debug("Loading '" + gameSource + "'");
+            R.engine.Script.loadScript(gameSource);
 
             // Start the game when it's ready
             if (gameObjectName) {
-               Engine.gameRunTimer = setInterval(function() {
+               R.engine.Script.gameRunTimer = setInterval(function() {
                   if (typeof window[gameObjectName] != "undefined" &&
                         window[gameObjectName].setup) {
-                     clearInterval(Engine.gameRunTimer);
+                     clearInterval(R.engine.Script.gameRunTimer);
 
-                     Console.warn("Starting: " + gameObjectName);
+                     R.debug.Console.warn("Starting: " + gameObjectName);
                      
                      // Remove the "loading" message (if we provided it)
                      $("#loading.intrinsic").remove();
@@ -454,20 +464,20 @@ var Engine = Engine.extend({
 	loadEngineOptions: function() {
 		
 		// Load the default configuration for all browsers, then load one specific to the browser type
-		Engine.optionsLoaded = false;
+		R.engine.Script.optionsLoaded = false;
 	
 		// Load the options specific to the browser.  Whether they load, or not,
 		// the game will continue to load.
-		Engine.loadJSON(Engine.getEnginePath() + "/configs/" + EngineSupport.sysInfo().browser + ".config", function(bData, status) {
+		R.engine.Script.loadJSON(R.Engine.getEnginePath() + "/configs/" + R.engine.Support.sysInfo().browser + ".config", function(bData, status) {
 			if (status == 200) {
-				Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
-				Engine.setOptions(bData);
+				R.debug.Console.debug("Engine options loaded for: " + R.engine.Support.sysInfo().browser);
+				R.Engine.setOptions(bData);
 			} else {
 				// Log an error (most likely a 404)
-				Console.log("Engine options for: " + EngineSupport.sysInfo().browser + " responded with " + status);
+				R.debug.Console.log("Engine options for: " + R.engine.Support.sysInfo().browser + " responded with " + status);
 			}
 			
-			Engine.optionsLoaded = true;	
+			R.engine.Script.optionsLoaded = true;	
 		});
 		
 	},
@@ -480,7 +490,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    load: function(scriptSource) {
-      this.loadScript(this.getEnginePath() + scriptSource);
+      R.engine.Script.loadScript(R.Engine.getEnginePath() + scriptSource);
    },
 
    /**
@@ -489,10 +499,10 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    handleScriptDone: function() {
-      Engine.scriptsProcessed++;
-      Engine.scriptRatio = Engine.scriptsProcessed / Engine.scriptLoadCount;
-      Engine.scriptRatio = Engine.scriptRatio > 1 ? 1 : Engine.scriptRatio;
-      Engine.updateProgress();
+      R.engine.Script.scriptsProcessed++;
+      R.engine.Script.scriptRatio = R.engine.Script.scriptsProcessed / R.engine.Script.scriptLoadCount;
+      R.engine.Script.scriptRatio = R.engine.Script.scriptRatio > 1 ? 1 : R.engine.Script.scriptRatio;
+      R.engine.Script.updateProgress();
    },
 
    /**
@@ -508,14 +518,14 @@ var Engine = Engine.extend({
             pBar.css("position", "relative");
          }
          var pW = pBar.width();
-         var fill = Math.floor(pW * Engine.scriptRatio);
+         var fill = Math.floor(pW * R.engine.Script.scriptRatio);
          var fBar = jQuery("#engine-load-progress .bar");
          if (fBar.length == 0) {
             fBar = jQuery("<div class='bar' style='position: absolute; top: 0px; left: 0px; height: 100%;'></div>");
             pBar.append(fBar);
          }
          fBar.width(fill);
-         jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
+         jQuery("#engine-load-info").text(R.engine.Script.scriptsProcessed + " of " + R.engine.Script.scriptLoadCount);
       }
    },
 
@@ -537,23 +547,23 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    loadStylesheet: function(stylesheetPath, relative) {
-      stylesheetPath = (relative ? "" : this.getEnginePath()) + stylesheetPath;
+      stylesheetPath = (relative ? "" : R.Engine.getEnginePath()) + stylesheetPath;
       var f = function() {
          $.get(stylesheetPath, function(data) {
             // process the data to replace the "enginePath" variable
             var epRE = /(\$<enginePath>)/g;
-            data = data.replace(epRE, Engine.getEnginePath());
-            if (EngineSupport.sysInfo().browser == "msie") {
+            data = data.replace(epRE, R.Engine.getEnginePath());
+            if (R.engine.Support.sysInfo().browser == "msie") {
                // IE likes it this way...
-               $("head", document).append($("<style type='text/css'>" + data + "</script>"));
+               $("head", document).append($("<style type='text/css'>" + data + "</style>"));
             } else {
                $("head", document).append($("<style type='text/css'/>").text(data));
             }
-            Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
+            R.debug.Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
          }, "text");
       };
 
-      this.setQueueCallback(f);
+      R.engine.Script.setQueueCallback(f);
    },
 
    /**
@@ -563,7 +573,7 @@ var Engine = Engine.extend({
    dumpScripts: function() {
       for (var f in this.loadedScripts)
       {
-         Console.debug(this.loadedScripts[f]);
+         R.debug.Console.debug(R.engine.Script.loadedScripts[f]);
       }
    },
 
@@ -575,7 +585,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    clearScriptCache: function() {
-      this.loadedScripts = {};
+      R.engine.Script.loadedScripts = {};
    }
    
 });

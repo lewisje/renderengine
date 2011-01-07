@@ -19,7 +19,7 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.initObject("Features", null, function() {
+R.Engine.initObject("Features", null, function() {
    
    var Features = Base.extend({
    

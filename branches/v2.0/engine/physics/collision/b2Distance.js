@@ -20,7 +20,7 @@
 */
 
 
-Engine.initObject("b2Distance", null, function() {
+R.Engine.initObject("b2Distance", null, function() {
 
    // GJK using Voronoi regions (Christer Ericson) and region selection
    // optimizations (Casey Muratori).

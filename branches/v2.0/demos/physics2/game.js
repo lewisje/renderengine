@@ -33,22 +33,22 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/spatial/container.spatialgrid.js");
-Engine.include("/engine.timers.js");
-Engine.include("/physics/physics.simulation.js")
-Engine.include("/objects/object.physicsactor.js")
-Engine.include("/components/component.sprite.js")
-Engine.include("/components/component.collider.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/resourceloaders/loader.sprite.js");
+R.Engine.requires("/spatial/container.spatialgrid.js");
+R.Engine.requires("/engine.timers.js");
+R.Engine.requires("/physics/physics.simulation.js")
+R.Engine.requires("/objects/object.physicsactor.js")
+R.Engine.requires("/components/component.sprite.js")
+R.Engine.requires("/components/component.collider.js");
 
 
-Engine.include("/physics/collision/shapes/b2BoxDef.js");
+R.Engine.requires("/physics/collision/shapes/b2BoxDef.js");
 
 // Load game objects
 Game.load("/player.js");
 
-Engine.initObject("PhysicsDemo2", "Game", function(){
+R.Engine.initObject("PhysicsDemo2", "Game", function(){
 
    /**
     * @class Another physics demonstration.  This demo shows how to
@@ -87,7 +87,7 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
          
          this.spriteLoader = SpriteLoader.create();
          
@@ -124,8 +124,8 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
        */
       run: function(){
          // Set up the playfield dimensions
-         this.fieldWidth = EngineSupport.sysInfo().viewWidth;
-			this.fieldHeight = EngineSupport.sysInfo().viewHeight;
+         this.fieldWidth = R.engine.Support.sysInfo().viewWidth;
+			this.fieldHeight = R.engine.Support.sysInfo().viewHeight;
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          
          // Create the game context
@@ -150,7 +150,7 @@ Engine.initObject("PhysicsDemo2", "Game", function(){
             bottom: 0});
 
 			// Add the game context to the scene graph
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 
          // Create the collision model with 8x8 divisions
          this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);

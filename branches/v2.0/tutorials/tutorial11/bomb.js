@@ -1,13 +1,13 @@
 // Load the components and engine objects
-Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.convexcollider.js");
-Engine.include("/components/component.sprite.js");
-Engine.include("/engine.object2d.js");
-Engine.include("/engine.timers.js");
-Engine.include("/engine.container.js");
-Engine.include("/collision/collision.OBB.js");
+R.Engine.requires("/components/component.transform2d.js");
+R.Engine.requires("/components/component.convexcollider.js");
+R.Engine.requires("/components/component.sprite.js");
+R.Engine.requires("/engine.object2d.js");
+R.Engine.requires("/engine.timers.js");
+R.Engine.requires("/engine.container.js");
+R.Engine.requires("/collision/collision.OBB.js");
 
-Engine.initObject("Bomb", "Object2D", function() {
+R.Engine.initObject("Bomb", "Object2D", function() {
 
 	var Bomb = Object2D.extend({
 

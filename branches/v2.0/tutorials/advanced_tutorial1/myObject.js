@@ -1,10 +1,10 @@
 // Load the components and engine objects
-Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.host.js");
-Engine.include("/textrender/text.vector.js");
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/components/component.transform2d.js");
+R.Engine.requires("/components/component.host.js");
+R.Engine.requires("/textrender/text.vector.js");
+R.Engine.requires("/engine.object2d.js");
 
-Engine.initObject("MyObject", "Object2D", function() {
+R.Engine.initObject("MyObject", "Object2D", function() {
 
    var MyObject = Object2D.extend({
 

@@ -29,6 +29,84 @@
  * THE SOFTWARE.
  *
  */
+
+/**
+ * @namespace
+ * The Render Engine namespace
+ */
+var R = R || {};
+
+/**
+ * List of namespaces declared in R
+ * @private
+ */
+R._namespaces = {};
+
+/**
+ * The global namespace, typically the window object
+ */
+R.global = this;
+	
+/**
+ * Declare a new namespace in R.
+ * @param ns {String} The namespace to declare
+ * @exception Throws and exception if the namespace is already declared
+ */
+R.namespace = function(ns) {
+	if (R._namespaces[ns]) {
+		throw new Error("Namespace '" + ns + "' already defined!");
+	}
+	R._namespaces[ns] = 1;
+	
+	var path = ns.split("."), cur = R;
+	for (var p; path.length && (p = path.shift());) {
+		if (cur[p]) {
+			cur = cur[p];
+		} else {
+			cur = cur[p] = {};
+		}
+	}
+};
+
+R._unsupported = function(method, clazz) {
+	throw new Error(method + " is unsupported in " + clazz.getClassName());	
+};
+	
+// Define the engine's default namespaces
+R.namespace("debug");
+R.namespace("lang");
+R.namespace("struct");
+R.namespace("math");
+R.namespace("engine");
+R.namespace("collision");
+R.namespace("components");
+R.namespace("objects");
+R.namespace("particles");
+R.namespace("physics");
+R.namespace("physics.collision");
+R.namespace("physics.collision.shapes");
+R.namespace("physics.common");
+R.namespace("physics.common.math");
+R.namespace("physics.dynamics");
+R.namespace("physics.dynamics.contacts");
+R.namespace("physics.dynamics.joints");
+R.namespace("rendercontexts");
+R.namespace("resources");
+R.namespace("resources.loaders");
+R.namespace("resources.types");
+R.namespace("sound");
+R.namespace("spatial");
+R.namespace("storage");
+R.namespace("text");
+
+/**
+ * Return a new date object.
+ * @return {Date}
+ */
+function now() {
+	return new Date();
+}
+
 /**
  * The Render Engine
  * Console
@@ -36,8 +114,8 @@
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1418 $
+ * @author: $Author: $
+ * @version: $Revision: -1 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -67,7 +145,7 @@
  *        its data differently.  This class allows abstraction between the console and the
  *        browser's console object so the {@link Console} can report to it.
  */
-var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
+R.debug.ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
    constructor: function() {
    },
 
@@ -170,7 +248,7 @@ var ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  *        option is available from the browser, or when developer tools cannot be accessed.
  * @extends ConsoleRef
  */
-var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
+R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
    msgStore: null,
    
@@ -289,10 +367,10 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "HTMLConsoleRef"
+    * @return {String} The string "R.debug.HTML"
     */
    getClassName: function() {
-      return "HTMLConsoleRef";
+      return "R.debug.HTML";
    }
 });
 
@@ -300,7 +378,7 @@ var HTMLConsoleRef = ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
  * @class A debug console abstraction for Safari browsers.
  * @extends ConsoleRef
  */
-var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
+R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
    constructor: function() {
    },
@@ -336,10 +414,10 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "SafariConsoleRef"
+    * @return {String} The string "R.debug.Safari"
     */
    getClassName: function() {
-      return "SafariConsoleRef";
+      return "R.debug.Safari";
    }
 
 });
@@ -348,7 +426,7 @@ var SafariConsoleRef = ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
  * @class A debug console for Opera browsers.
  * @extends ConsoleRef
  */
-var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
+R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
 
    constructor: function() {
    },
@@ -384,10 +462,10 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "OperaConsoleRef"
+    * @return {String} The string "R.debug.Opera"
     */
    getClassName: function() {
-      return "OperaConsoleRef";
+      return "R.debug.Opera";
    }
 
 });
@@ -397,7 +475,7 @@ var OperaConsoleRef = ConsoleRef.extend(/** @OperaConsoleRef.prototype **/{
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
  * @extends ConsoleRef
  */
-var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
+R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
 
    constructor: function () {
    },
@@ -458,10 +536,10 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "FirebugConsoleRef"
+    * @return {String} The string "R.debug.Firebug"
     */
    getClassName: function() {
-      return "FirebugConsoleRef";
+      return "R.debug.Firebug";
    }
 });
 
@@ -469,7 +547,7 @@ var FirebugConsoleRef = ConsoleRef.extend(/** @FirebugConsoleRef.prototype **/{
  * @class A console reference to the MSIE console.
  * @extends ConsoleRef
  */
-var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
+R.debug.MSIE = R.debug.ConsoleRef.extend(/** @R.debug.MSIE.prototype **/{
 
    constructor: function() {
    },
@@ -505,10 +583,10 @@ var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "SafariConsoleRef"
+    * @return {String} The string "R.debug.MSIE"
     */
    getClassName: function() {
-      return "MSIEConsoleRef";
+      return "R.debug.MSIE";
    }
 });
 
@@ -522,7 +600,7 @@ var MSIEConsoleRef = ConsoleRef.extend(/** @MSIEConsoleRef.prototype **/{
  *        <li>SafariConsoleRef - logging for Apple's Safari browser</li>
  *        </ul>
  */
-var Console = Base.extend(/** @scope Console.prototype */{
+R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
    constructor: null,
 
    consoleRef: null,
@@ -564,26 +642,26 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * Starts up the console.
     */
    startup: function() {
-		Console.verbosity = this.DEBUGLEVEL_ERRORS;
+		R.debug.Console.verbosity = R.debug.Console.DEBUGLEVEL_ERRORS;
 		
-      if (EngineSupport.checkBooleanParam("debug") && (EngineSupport.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
-         this.consoleRef = new HTMLConsoleRef();
+      if (R.engine.Support.checkBooleanParam("debug") && (R.engine.Support.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
+         R.debug.Console.consoleRef = new R.debug.HTML();
       }
       else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
          // Firebug or firebug lite
-         this.consoleRef = new FirebugConsoleRef();
+         R.debug.Console.consoleRef = new R.debug.Firebug();
       }
       else if (typeof console != "undefined" && jQuery.browser.msie) {
-         this.consoleRef = new MSIEConsoleRef();
+         R.debug.Console.consoleRef = new R.debug.MSIE();
       }
       else if (jQuery.browser.chrome || jQuery.browser.safari) {
-         this.consoleRef = new SafariConsoleRef();
+         R.debug.Console.consoleRef = new R.debug.Safari();
       }
       else if (jQuery.browser.opera) {
-         this.consoleRef = new OperaConsoleRef();
+         R.debug.Console.consoleRef = new R.debug.Opera();
       }
       else {
-         this.consoleRef = new ConsoleRef(); // (null console)
+         R.debug.Console.consoleRef = new R.debug.ConsoleRef(); // (null console)
       }
    },
 
@@ -594,8 +672,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @param refObj {ConsoleRef} A descendent of the <tt>ConsoleRef</tt> class.
     */
    setConsoleRef: function(refObj) {
-      if (refObj instanceof ConsoleRef) {
-         this.consoleRef = refObj;
+      if (refObj instanceof R.debug.ConsoleRef) {
+         R.debug.Console.consoleRef = refObj;
       }
    },
 
@@ -617,7 +695,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @param level {Number} One of the debug levels.  Defaults to DEBUGLEVEL_NONE.
     */
    setDebugLevel: function(level) {
-      this.verbosity = level;
+      R.debug.Console.verbosity = level;
    },
    
    /**
@@ -625,7 +703,7 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @return {Number} The debug level
     */
    getDebugLevel: function() {
-      return this.verbosity;
+      return R.debug.Console.verbosity;
    },
 
    /**
@@ -633,9 +711,9 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * @private
     */
    checkVerbosity: function(debugLevel) {
-      return (this.verbosity != this.DEBUGLEVEL_NONE &&
-              this.verbosity == this.DEBUGLEVEL_VERBOSE ||
-              (debugLevel != this.DEBUGLEVEL_VERBOSE && debugLevel >= this.verbosity));
+      return (R.debug.Console.verbosity != R.debug.Console.DEBUGLEVEL_NONE &&
+              R.debug.Console.verbosity == R.debug.Console.DEBUGLEVEL_VERBOSE ||
+              (debugLevel != R.debug.Console.DEBUGLEVEL_VERBOSE && debugLevel >= R.debug.Console.verbosity));
    },
 
    /**
@@ -644,8 +722,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * one message to output to the console.
     */
    log: function() {
-      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_VERBOSE))
-         this.consoleRef.debug.apply(this.consoleRef, arguments);
+      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_VERBOSE))
+         R.debug.Console.consoleRef.debug.apply(R.debug.Console.consoleRef, arguments);
    },
 
    /**
@@ -654,8 +732,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * one message to output to the console.
     */
    info: function() {
-      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_INFO))
-         this.consoleRef.debug.apply(this.consoleRef, arguments);
+      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_INFO))
+         R.debug.Console.consoleRef.debug.apply(R.debug.Console.consoleRef, arguments);
    },
 
    /**
@@ -664,8 +742,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * one message to output to the console.
     */
    debug: function() {
-      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_DEBUG))
-         this.consoleRef.info.apply(this.consoleRef, arguments);
+      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_DEBUG))
+         R.debug.Console.consoleRef.info.apply(R.debug.Console.consoleRef, arguments);
    },
 
    /**
@@ -674,8 +752,8 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * one message to output to the console.
     */
    warn: function() {
-      if (Engine.debugMode && this.checkVerbosity(this.DEBUGLEVEL_WARNINGS))
-         this.consoleRef.warn.apply(this.consoleRef, arguments);
+      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_WARNINGS))
+         R.debug.Console.consoleRef.warn.apply(R.debug.Console.consoleRef, arguments);
    },
 
    /**
@@ -685,12 +763,12 @@ var Console = Base.extend(/** @scope Console.prototype */{
     * one message to output to the console.
     */
    error: function() {
-      if (this.checkVerbosity(this.DEBUGLEVEL_ERRORS))
-         this.consoleRef.error.apply(this.consoleRef, arguments);
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_ERRORS))
+         R.debug.Console.consoleRef.error.apply(R.debug.Console.consoleRef, arguments);
    },
    
    trace: function() {
-      this.consoleRef.trace();
+      R.debug.Console.consoleRef.trace();
    }
 });
 
@@ -708,22 +786,22 @@ var Assert = function(test, error) {
       if (!test)
       {
          fail = true;
-         Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
+         R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_ERRORS);
          if (arguments.length > 1) {
             for (var a = 1; a < arguments.length; a++) {
-               Console.error("*ASSERT* ", arguments[a]);
-               Console.trace();
+               R.debug.Console.error("*ASSERT* ", arguments[a]);
+               R.debug.Console.trace();
             }
          }
 
-         Engine.shutdown();
+         R.Engine.shutdown();
          
       }
    } catch (ex) {
-      var pr = Console.getDebugLevel();
-      Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-      Console.warn("*ASSERT* 'test' would result in an exception: ", ex);
-      Console.setDebugLevel(pr);
+      var pr = R.debug.Console.getDebugLevel();
+      R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_WARNINGS);
+      R.debug.Console.warn("*ASSERT* 'test' would result in an exception: ", ex);
+      R.debug.Console.setDebugLevel(pr);
    }
    
    // This will provide a stacktrace for browsers that support it
@@ -742,19 +820,19 @@ var AssertWarn = function(test, warning) {
    try {
       if (!test)
       {
-         Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
+         R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_WARNINGS);
          if (arguments.length > 1) {
             for (var a = 1; a < arguments.length; a++) {
-               Console.warn("*ASSERT-WARN* ", arguments[a]);
+               R.debug.Console.warn("*ASSERT-WARN* ", arguments[a]);
             }
          }
-         Console.warn(warning);
+         R.debug.Console.warn(warning);
       }
    } catch (ex) {
-      var pr = Console.getDebugLevel();
-      Console.setDebugLevel(Console.DEBUGLEVEL_WARNINGS);
-      Console.warn("*ASSERT-WARN* 'test' would result in an exception: ", ex);
-      Console.setDebugLevel(pr);
+      var pr = R.debug.Console.getDebugLevel();
+      R.debug.Console.setDebugLevel(R.debug.Console.DEBUGLEVEL_WARNINGS);
+      R.debug.Console.warn("*ASSERT-WARN* 'test' would result in an exception: ", ex);
+      R.debug.Console.setDebugLevel(pr);
    }
 };
 
@@ -765,8 +843,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1503 $
+ * @author: $Author: $
+ * @version: $Revision: -1 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -791,18 +869,10 @@ var AssertWarn = function(test, warning) {
  */
 
 /**
- * Return a new date object.
- * @return {Date}
- */
-function now() {
-	return new Date();
-}
-
-/**
  * @class A static JavaScript implementation of a simple profiler.
  * @static
  */
-var Profiler = {
+R.debug.Profiler = {
 	profileStack: [],
 	allProfiles: {},
 	profiles: [],
@@ -813,18 +883,18 @@ var Profiler = {
  * Start the profiler.
  * @memberOf Profiler
  */
-Profiler.start = function() {
-	Profiler.resetProfiles();
-	Profiler.running = true;
+R.debug.Profiler.start = function() {
+	R.debug.Profiler.resetProfiles();
+	R.debug.Profiler.running = true;
 };
 
 /**
  * Stop the profiler, dumping whatever was being profiled.
  * @memberOf Profiler
  */
-Profiler.stop = function() {
-	Profiler.dump();
-	Profiler.running = false;
+R.debug.Profiler.stop = function() {
+	R.debug.Profiler.dump();
+	R.debug.Profiler.running = false;
 };
 
 /**
@@ -847,12 +917,12 @@ Profiler.stop = function() {
  * @param prof {String} The name of the profile
  * @memberOf Profiler
  */
-Profiler.enter = function(prof) {
-	if (!Profiler.running) { return; }
-	var profile = Profiler.allProfiles[prof];
+R.debug.Profiler.enter = function(prof) {
+	if (!R.debug.Profiler.running) { return; }
+	var profile = R.debug.Profiler.allProfiles[prof];
 	if (profile == null) {
 		// Create a monitor
-		profile = Profiler.allProfiles[prof] = {
+		profile = R.debug.Profiler.allProfiles[prof] = {
 			name: prof,
 			startMS: now(),
 			execs: 0,
@@ -864,7 +934,7 @@ Profiler.enter = function(prof) {
 		profile.startMS = profile.instances == 0 ? now() : profile.startMS;
 		profile.instances++;
 	}
-	Profiler.profileStack.push(profile);
+	R.debug.Profiler.profileStack.push(profile);
 };
 
 /**
@@ -876,15 +946,15 @@ Profiler.enter = function(prof) {
  * result in a stack overflow.
  * @memberOf Profiler
  */
-Profiler.exit = function() {
-	if (!Profiler.running) { return; }
-	if (Profiler.profileStack.length == 0) {
+R.debug.Profiler.exit = function() {
+	if (!R.debug.Profiler.running) { return; }
+	if (R.debug.Profiler.profileStack.length == 0) {
 		var msg = "Profile stack underflow";
 		if (typeof console !== "undefined") { console.error(msg); }
 		throw(msg);
 	}
 
-	var profile = Profiler.profileStack.pop();
+	var profile = R.debug.Profiler.profileStack.pop();
 	profile.endMS = new Date();
 	profile.execs++;
 	profile.instances--;
@@ -892,7 +962,7 @@ Profiler.exit = function() {
 	if (!profile.pushed) {
 		// If we haven't remembered it, do that now
 		profile.pushed = true;
-		Profiler.profiles.push(profile);
+		R.debug.Profiler.profiles.push(profile);
 	}
 };
 
@@ -900,10 +970,10 @@ Profiler.exit = function() {
  * Reset any currently running profiles and clear the stack.
  * @memberOf Profiler
  */
-Profiler.resetProfiles = function() {
-	Profiler.profileStack = [];
-	Profiler.allProfiles = {};
-	Profiler.profiles = [];
+R.debug.Profiler.resetProfiles = function() {
+	R.debug.Profiler.profileStack = [];
+	R.debug.Profiler.allProfiles = {};
+	R.debug.Profiler.profiles = [];
 };
 
 /**
@@ -911,21 +981,21 @@ Profiler.resetProfiles = function() {
  * The profile stack will be cleared after the dump.
  * @memberOf Profiler
  */
-Profiler.dump = function() {
-	if (!Profiler.running) { return; }
-	if (Profiler.profileStack.length > 0) {
+R.debug.Profiler.dump = function() {
+	if (!R.debug.Profiler.running) { return; }
+	if (R.debug.Profiler.profileStack.length > 0) {
 		// overflow - profiles left in stack
 		var rProfs = "";
-		for (var x in Profiler.profileStack) {
+		for (var x in R.debug.Profiler.profileStack) {
 			rProfs += (rProfs.length > 0 ? "," : "") + x;
 		}
-		Console.error("Profile stack overflow.  Running profiles: ", rProfs);
+		R.debug.Console.error("Profile stack overflow.  Running profiles: ", rProfs);
 	}
 
 	var d = now();
 	d = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 
-	var rev = Profiler.profiles.reverse();
+	var rev = R.debug.Profiler.profiles.reverse();
 	var totalTime = 0;
 	var out = "";
 	for (var r in rev) {
@@ -935,17 +1005,17 @@ Profiler.dump = function() {
 	}
 	out += "# Total Time: | " + totalTime + " ms | \n";
 
-	console.warn("PROFILER RESULTS @ " + d + "\n---------------------------------------------------\n");
-	console.info(out);
+	R.debug.Console.warn("PROFILER RESULTS @ " + d + "\n---------------------------------------------------\n");
+	R.debug.Console.info(out);
 	
-	Profiler.resetProfiles();
+	R.debug.Profiler.resetProfiles();
 };
 
 /**
  * Wire the objects in the array with profiling 
  * @param objArray {Array} Object array
  */
-Profiler.wireObjects = function(objArray) {
+R.debug.Profiler.wireObjects = function(objArray) {
 	for (var obj in objArray) {
 
 		for (var o in objArray[obj].prototype) {
@@ -956,10 +1026,10 @@ Profiler.wireObjects = function(objArray) {
 					var f = objArray[obj].prototype[o];
 					var fn = function() {
 						try {
-							Profiler.enter(arguments.callee.ob + "." + arguments.callee.o + "()");
+							R.debug.Profiler.enter(arguments.callee.ob + "." + arguments.callee.o + "()");
 							return arguments.callee.f.apply(this, arguments);
 						} finally {
-							Profiler.exit();
+							R.debug.Profiler.exit();
 						}
 					};
 					fn.f = f;
@@ -1014,8 +1084,7 @@ Profiler.wireObjects = function(objArray) {
  * 
  * @static
  */
-var Math2 = Base.extend(/** @scope Math2.prototype */{
-	constructor: null,
+R.lang.Math2 = {
 	
 	state: 1,
 	m: 0x100000000, // 2**32;
@@ -1036,7 +1105,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 */
 	seed: function(seed) {
 		// LCG using GCC's constants
-		this.state = seed ? seed : Math.floor(Math.random() * (this.m-1));
+		R.lang.Math2.state = seed ? seed : Math.floor(Math.random() * (R.lang.Math2.m-1));
 	},
 	
 	/**
@@ -1044,8 +1113,8 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 * @return {Number} An integer between 0 and 2^32
 	 */
 	randomInt: function() {
-		this.state = (this.a * this.state + this.c) % this.m;
-		return this.state;
+		R.lang.Math2.state = (R.lang.Math2.a * R.lang.Math2.state + R.lang.Math2.c) % R.lang.Math2.m;
+		return R.lang.Math2.state;
 	},
 	
 	/**
@@ -1054,7 +1123,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 */
 	random: function() {
 		// returns in range [0,1]
-		return this.randomInt() / (this.m - 1);
+		return R.lang.Math2.randomInt() / (R.lang.Math2.m - 1);
 	},
 	
 	/**
@@ -1067,7 +1136,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 * @return {Number}
 	 */
 	randomRange: function(low, high, whole) {
-		var v = low + (this.random() * high);
+		var v = low + (R.lang.Math2.random() * high);
 		return (whole ? Math.floor(v) : v);
 	},
 	
@@ -1079,7 +1148,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 */
 	parseBin: function(bin) {
 		if (!isNaN(bin)) {
-			return parseInt(bin, 2);
+			return R.global.parseInt(bin, 2);
 		}
 	},
 	
@@ -1106,10 +1175,10 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 			return num.toString(2);
 		}
 	}
-});
+};
 
 // Seed the random number generator initially
-Math2.seed();
+R.lang.Math2.seed();
 
 /**
  * The Render Engine
@@ -1120,7 +1189,7 @@ Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1418 $
+ * @version: $Revision: 1512 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1151,7 +1220,7 @@ Math2.seed();
  *        read JSON.
  * @static
  */
-var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
+R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    constructor: null,
 
    /**
@@ -1202,7 +1271,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          return;
       }
 
-      var idx = EngineSupport.indexOf(array, obj);
+      var idx = R.engine.Support.indexOf(array, obj);
       if (idx != -1)
       {
          array.splice(idx, 1);
@@ -1336,8 +1405,8 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getQueryParams: function() {
-      if (!EngineSupport.parms) {
-         EngineSupport.parms = {};
+      if (!R.engine.Support.parms) {
+         R.engine.Support.parms = {};
          var p = window.location.toString().split("?")[1];
          if (p)
          {
@@ -1345,11 +1414,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             for (var x = 0; x < p.length; x++)
             {
                var v = p[x].split("=");
-               EngineSupport.parms[v[0]] = (v.length > 1 ? v[1] : "");
+               R.engine.Support.parms[v[0]] = (v.length > 1 ? v[1] : "");
             }
          }
       }
-      return EngineSupport.parms;
+      return R.engine.Support.parms;
    },
 
    /**
@@ -1361,11 +1430,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    checkBooleanParam: function(paramName) {
-      return (EngineSupport.getQueryParams()[paramName] &&
-              (EngineSupport.getQueryParams()[paramName] == "true" ||
-               EngineSupport.getQueryParams()[paramName] == "1" ||
-               EngineSupport.getQueryParams()[paramName].toLowerCase() == "yes" ||
-               EngineSupport.getQueryParams()[paramName].toLowerCase() == "y"));
+      return (R.engine.Support.getQueryParams()[paramName] &&
+              (R.engine.Support.getQueryParams()[paramName] == "true" ||
+               R.engine.Support.getQueryParams()[paramName] == "1" ||
+               R.engine.Support.getQueryParams()[paramName].toLowerCase() == "yes" ||
+               R.engine.Support.getQueryParams()[paramName].toLowerCase() == "y"));
    },
 
    /**
@@ -1378,7 +1447,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    checkStringParam: function(paramName, val) {
-      return (EngineSupport.getStringParam(paramName, null) == val);
+      return (R.engine.Support.getStringParam(paramName, null) == val);
    },
 
    /**
@@ -1391,7 +1460,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    checkNumericParam: function(paramName, val) {
-      return (EngineSupport.getStringParam(paramName, null) == val)
+      return (R.engine.Support.getStringParam(paramName, null) == val)
    },
 
    /**
@@ -1404,7 +1473,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getNumericParam: function(paramName, defaultVal) {
-      return Number(EngineSupport.getStringParam(paramName, defaultVal));
+      return Number(R.engine.Support.getStringParam(paramName, defaultVal));
    },
 
    /**
@@ -1417,7 +1486,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    getStringParam: function(paramName, defaultVal) {
-      return (EngineSupport.getQueryParams()[paramName] || defaultVal);
+      return (R.engine.Support.getQueryParams()[paramName] || defaultVal);
    },
 
    /**
@@ -1470,7 +1539,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    parseJSON: function(jsonString)
    {
-      jsonString = EngineSupport.cleanSource(jsonString);
+      jsonString = R.engine.Support.cleanSource(jsonString);
       if (!(typeof JSON == "undefined")) {
          try {
             return JSON.parse(jsonString, function (key, value) {
@@ -1484,11 +1553,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
                       return value;
                   });
          } catch (ex) {
-            Console.warn("Cannot parse JSON: " + ex.message);
+            R.debug.Console.warn("Cannot parse JSON: " + ex.message);
             return null;
          }
       } else {
-         return EngineSupport.evalJSON(jsonString);
+         return R.engine.Support.evalJSON(jsonString);
       }
    },
    
@@ -1500,11 +1569,11 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     */
    evalJSON: function(jsonString)
    {
-      jsonString = EngineSupport.cleanSource(jsonString);
+      jsonString = R.engine.Support.cleanSource(jsonString);
       try {
          return eval("(" + jsonString + ")");   
       } catch (ex) {
-         Console.warn("Cannot eval JSON: " + ex.message);
+         R.debug.Console.warn("Cannot eval JSON: " + ex.message);
          return null;
       }
    },
@@ -1574,7 +1643,6 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     *    <li>storage:
     *       <ul><li>local - localStorage object is supported</li>
     *       <li>session - sessionStorage object is supported</li>
-    *       <li>global - gloablStorage object is supported</li>
     *       <li>database - indexedDB storage is supported</li>
     *       </ul>
     *    </li>
@@ -1597,7 +1665,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
     * @memberOf EngineSupport
     */
    sysInfo: function() {
-      if (!EngineSupport._sysInfo) {
+      if (!R.engine.Support._sysInfo) {
       	
       	// Determine if the browser supports Canvas
       	var canvasSupport = {
@@ -1643,7 +1711,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
 			}
       	      
       	// Build support object
-         EngineSupport._sysInfo = {
+         R.engine.Support._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
 				           ($.browser.android ? "android" :
                        ($.browser.Wii ? "wii" : 
@@ -1657,7 +1725,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             "agent": navigator.userAgent,
             "platform": navigator.platform,
             "cpu": navigator.cpuClass || navigator.oscpu,
-				"OS": EngineSupport.checkOS(),
+				"OS": R.engine.Support.checkOS(),
             "language": navigator.language,
             "online": navigator.onLine,
             "cookies": navigator.cookieEnabled,
@@ -1678,7 +1746,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
          
          $(document).ready(function() {
             // When the document is ready, we'll go ahead and get the width and height added in
-            EngineSupport._sysInfo = $.extend(EngineSupport._sysInfo, {
+            R.engine.Support._sysInfo = $.extend(R.engine.Support._sysInfo, {
                "width": $(window).width(),
                "height": $(window).height(),
                "viewWidth": $(document).width(),
@@ -1686,7 +1754,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
             });
          });
       }
-      return EngineSupport._sysInfo;
+      return R.engine.Support._sysInfo;
    },
    
    /**
@@ -1750,7 +1818,7 @@ var EngineSupport = Base.extend(/** @scope EngineSupport.prototype */{
  *
  * @static
  */
-var Linker = Base.extend(/** @scope Linker.prototype */{ 
+R.engine.Linker = Base.extend(/** @scope Linker.prototype */{ 
 
    constructor: null,
 
@@ -1761,502 +1829,326 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    //====================================================================================================
    //====================================================================================================
 
-   dependencyList: {},
-   dependencyCount: 0,
-   dependencyProcessor: null,
-   dependencyTimer: null,
-   dependencyCheckTimeout: $.browser.Wii ? 8500 : 6500,
-   dependencyProcessTimeout: 100,
-   
-   loadedClasses: [],
-   
-   /**
-    * Cleanup all initialized classes and start fresh.
-    * @private
-    */
-   cleanup: function() {
-      for (var c in Linker.loadedClasses) {
-         var d = Linker.loadedClasses[c]
-         var parentObj = Linker.getParentClass(d);
-         if (EngineSupport.sysInfo().browser != "msie") {
-            // IE doesn't allow this
-            delete parentObj[d];
-         }
-      }
-      Linker.loadedClasses = [];
-   },
-
-   /**
-    * Initializes an object for use in the engine.  Calling this method is required to make sure
-    * that all dependencies are resolved before actually instantiating an object of the specified
-    * class.
-    *
-    * @param objectName {String} The name of the object class
-    * @param primaryDependency {String} The name of the class for which the <tt>objectName</tt> class is
-    *                                   dependent upon.  Specifying <tt>null</tt> will assume the <tt>Base</tt> class.
-    * @param fn {Function} The function to run when the object can be initialized.
-    */
-   initObject: function(objectName, primaryDependency, fn) {
-      var objDeps = Linker.findAllDependencies(objectName, fn);
-
-      // Add the known dependency to the list of object
-      // dependencies we discovered
-      if (primaryDependency) {
-         objDeps.push(primaryDependency);
-      }
-      
-      var newDeps = [];
-
-      // Check for nulls and circular references
-      for (var d in objDeps) {
-         if (objDeps[d] != null) {
-            if (objDeps[d].split(".")[0] != objectName) {
-               newDeps.push(objDeps[d]);
-            } else {
-               Console.warn("Object references itself: ", objectName);
-            }
-         }
-      }
-
-      // Store the object for intialization when all dependencies are resolved
-      Linker.dependencyList[objectName] = {deps: newDeps, objFn: fn};
-      Linker.dependencyCount++;
-      Console.info(objectName, " depends on: ", newDeps);
-
-      // Check for 1st level circular references
-      this.checkCircularRefs(objectName);
-
-      // After a period of time has passed, we'll check our dependency list.
-      // If anything remains, we'll drop the bomb that certain files didn't resolve...
-      window.clearTimeout(Linker.dependencyTimer);
-      Linker.dependencyTimer = window.setTimeout(Linker.checkDependencyList, Linker.dependencyCheckTimeout);
-
-      if (!Linker.dependencyProcessor) {
-         Linker.dependencyProcessor = window.setTimeout(Linker.processDependencies, Linker.dependencyProcessTimeout);
-      }
-   },
-
-   /**
-    * Check the object to make sure the namespace(s) are defined.
-    * @param objName {String} A dot-notation class name
-    * @private
-    */
-   checkNSDeps: function(objName) {
-      var objHr = objName.split(".");
-
-      if (objHr.length == 1) {
-         return true;
-      }
-
-      var o = window;
-      for (var i = 0; i < objHr.length - 1; i++) {
-         o = o[objHr[i]];
-         if (!o) {
-            return false;
-         }
-      }
-      return true;
-   },
-
-   /**
-    * Get the parent class of the object specified by classname string.
-    * @param classname {String} A dot-notation class name
-    * @private
-    */
-   getParentClass: function(classname) {
-      var objHr = classname.split(".");
-      var o = window;
-      for (var i = 0; i < objHr.length - 1; i++) {
-         o = o[objHr[i]];
-         if (!o) {
-            return null;
-         }
-      }
-      return o;
-   },
-
-   /**
-    * The dependency processor and link checker.
-    * @private
-    */
-   processDependencies: function() {
-      var pDeps = [];
-      var dCount = 0;
-      for (var d in Linker.dependencyList) {
-         // Check to see if the dependencies of an object are loaded
-         // We also need to make sure that it's namespace(s) are initialized
-         dCount++;
-
-         var deps = Linker.dependencyList[d].deps;
-         var resolved = [];
-         var miss = false;
-			if (deps.length > 0) {
-	         for (var dep in deps) {
-	            if (deps[dep] != null && window[deps[dep]] == null) {
-	               miss = true;
-	            } else {
-	               resolved.push(deps[dep]);
-	            }
-	         }
+	classDefinitions: {},	// These are class definitions which have been parsed
+	processed: {},				// These are the classes/files which have been processed
+	resolvedClasses: {},		// These are resolved (loaded & ready) classes
+	resolvedFiles: {},		// These are resolved (loaded) files
 	
-	         for (var x in resolved) {
-	            EngineSupport.arrayRemove(Linker.dependencyList[d].deps, resolved[x]);
-	         }
+	loadClasses: [],			// Classes which need to be loaded
+	queuedClasses: {},		// Classes which are queued to be initialized
+	
+	classLoader: null,
+	classTimer: null,
+	failTimer: null,
+	
+	/**
+	 * See R.Engine.define()
+	 * @private
+	 */
+	define: function(classDef) {
+		if (typeof classDef["class"] === "undefined") {
+			throw new SyntaxError("Missing 'class' key in class definition!");
+		}
+		var className = classDef["class"];
+		
+		if (R.engine.Linker.resolvedClasses[className] != null) {
+			throw new ReferenceError("Class '" + className + "' is already defined!");
+		}
+
+		R.debug.Console.debug("R.engine.Linker => Process definition for ", className);
+
+		R.engine.Linker.classDefinitions[className] = classDef;	
+		var deps = [];
+		if (classDef.requires && classDef.requires.length > 0) deps = deps.concat(classDef.requires);
+		var incs = [];
+		if (classDef.includes && classDef.includes.length > 0) incs = incs.concat(classDef.includes);
+		
+		if (deps.length == 0 && incs.length == 0) {
+			// This class is ready to go already
+			
+			// Get the class object
+			var pkg = R.global, clazz = className.split(".");
+			while (clazz.length > 1) {
+				pkg = pkg[clazz.shift()];
+			}
+			var shortName = clazz.shift(), classObjDef = pkg[shortName];
+			
+			// We can initialize the class
+			if ($.isFunction(classObjDef)) {
+				pkg[shortName] = classObjDef();
+			} else {
+				pkg[shortName] = classObjDef;
 			}
 
-         if (!miss && Linker.checkNSDeps(d)) {
-            // We can initialize it now
-            Console.log("Initializing '", d, "'");
-            var parentObj = Linker.getParentClass(d);
-            parentObj[d] = Linker.dependencyList[d].objFn();
-            Console.info("-> Initialized '", d, "'");
-            Linker.loadedClasses.push(d);
+			if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
+				pkg[shortName].resolved();
+			}
 
-            // Remember what we processed so we don't process them again
-            pDeps.push(d);
-            
-            // After it has been initialized, check to see if it has the
-            // resolved() class method
-            if (parentObj[d].resolved) {
-					try {
-	               parentObj[d].resolved();
-					} catch (rEx) {
-						Console.error("Error calling " + d + ".resolved() due to: " + rEx.message, rEx);
+			R.debug.Console.warn("R.engine.Linker => " + className + " initialized");
+			R.engine.Linker.resolvedClasses[className] = true;
+			return;			
+		}
+		
+		if (!R.engine.Linker.processed[className]) {
+			R.engine.Linker.processed[className] = true;
+			if (!R.engine.Linker.resolvedClasses[className]) {
+				// Queue the class to be resolved
+				R.engine.Linker.queuedClasses[className] = true;
+			}
+		}
+		
+		// Remove any dependencies which are already resolved
+		var unresDeps = [];
+		while (deps.length > 0) {
+			var dep = deps.shift();
+			if (!R.engine.Linker.resolvedClasses[dep]) {
+				unresDeps.push(dep);
+			}
+		}
+		
+		// Remove any includes which are already loaded
+		var unresIncs = [];
+		while (incs.length > 0) {
+			var inc = incs.shift();
+			if (!R.engine.Linker.resolvedFiles[inc]) {
+				unresIncs.push(inc);
+			}
+		}
+		
+		// Load the includes ASAP
+		while (unresIncs.length > 0) {
+			var inc = unresIncs.shift();
+			
+			// If the include hasn't been processed yet, do it now
+			if (!R.engine.Linker.processed[inc]) {
+				var cb = function(path, result) {
+					if (result === R.engine.Script.SCRIPT_LOADED) {
+						R.engine.Linker.resolvedFiles[path] = true;
 					}
-            }
-         }
-      }
-
-      for (var i in pDeps) {
-         delete Linker.dependencyList[pDeps[i]];
-      }
-
-      if (dCount != 0) {
-         Linker.dependencyProcessor = window.setTimeout(Linker.processDependencies, Linker.dependencyProcessTimeout);
-      } else {
-         window.clearTimeout(Linker.dependencyProcessor);
-         Linker.dependencyProcessor = null;
-      }
-   },
-
-   /*
-    * The following set of functions breaks apart a function into its
-    * components.  It is used to determine the dependencies of classes.
-    */
-
-   /**
-    * Find variables defined in a function:
-    *   var x = 10;
-    *   var y;
-    *   for (var z=3; z < 10; z++)
-    *   -- Still need to handle:  var x,y,z;
-    *
-    * @private
-    */
-   findVars: function(objectName, obj) {
-      // Find all variables explicitly defined
-      var def = obj.toString();
-      var vTable = [];
-      var nR = "([\\$_\\w\\.]*)";
-      var vR = new RegExp("(var\\s*" + nR + "\\s*)","g");
-      var m;
-      while ((m = vR.exec(def)) != null) {
-         vTable.push(m[2]); 
-      }
-      return vTable;
-   },
-
-   /**
-    * Find object dependencies in variables, arguments, and method usage.
-    * @private
-    */
-   findDependencies: function(objectName, obj) {
-      // Find all dependent objects
-      var def = obj.toString();
-      var dTable = [];
-      var nR = "([\\$_\\w\\.]*)";
-      var nwR = new RegExp("(new\\s+" + nR + ")","g");
-      var ctR = new RegExp("(" + nR + "\\.create\\()","g");
-      var fcR = new RegExp("(" + nR + ".isInstance\\()", "g");
-      var inR = new RegExp("(" + nR + "\\()", "g");
-      //var inR = new RegExp("(instanceof\\s+"+ nR + ")", "g");
-      var m;
-
-      // "new"-ing objects
-      while ((m = nwR.exec(def)) != null) {
-         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
-            dTable.push(m[2]);
-         }
-      }
-
-      // "create"-ing objects
-      while ((m = ctR.exec(def)) != null) {
-         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
-            dTable.push(m[2]);
-         }
-      }
-
-      // method dependencies
-      while ((m = fcR.exec(def)) != null) {
-         if (m[2].indexOf(".") != -1) {
-            var k = m[2].split(".")[0];
-            if (EngineSupport.indexOf(dTable, k) == -1) {
-               dTable.push(k);
-            }
-         }
-      }
-
-      // "isInstance" method dependencies
-      while ((m = fcR.exec(def)) != null) {
-         if (m[2].indexOf(".") != -1) {
-            var k = m[2].split(".")[0];
-            if (EngineSupport.indexOf(dTable, k) == -1) {
-               EngineSupport.arrayRemove(dTable, k);
-            }
-         }
-      }
-
-      // "instanceof" checks
-      /*
-      while ((m = inR.exec(def)) != null) {
-         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
-            dTable.push(m[2]);
-         }
-      }
-      */
-      return dTable;
-   },
-
-   /**
-    * Process anonymous functions, extracting the function arguments
-    * @private
-    */
-   findAnonArgs: function(objectName, str) {
-      var a = [];
-
-      var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)","g");
-      while ((m = aFnRE.exec(str)) != null) {
-         var args = m[1].split(",");
-
-         for (var x in args) {
-            a.push(args[x].replace(" ",""));
-         }
-      }
-
-      return a;
-   },
+				};
+				R.engine.Script.loadNow(inc, cb);
+				R.engine.Linker.processed[inc] = true;
+			}
+		}
+		
+		// Queue up the classes for processing
+		while (unresDeps.length > 0) {
+			var dep = unresDeps.shift();
+			if (!R.engine.Linker.processed[dep]) {
+				R.engine.Linker.processed[dep] = true;
+				R.engine.Linker.loadClasses.push(dep);
+			}
+		}
+		
+		if (R.engine.Linker.classLoader == null && R.engine.Linker.loadClasses.length > 0) {
+			// Start the class loader
+			R.engine.Linker.classLoader = setTimeout(function() {
+				R.engine.Linker._loadClasses();
+			}, 100);
+		}
+		
+		if (R.engine.Linker.classTimer == null) {
+			// After 10 seconds, if classes haven't been processed, fail
+			//R.engine.Linker.failTimer = setTimeout(function() {
+			//	R.engine.Linker._failure();
+			//}, 10000);
+			
+		  	R.engine.Linker.classTimer = setTimeout(function(){
+		  		R.engine.Linker._processClasses();
+		  	}, 100);
+		}
+	},
    
-   /**
-    * Finds all of the dependencies within an object class.
-    * @private
-    */
-   findAllDependencies: function(objectName, obj) {
-      var defs;
-      var fTable = {};
-      Console.warn("Process: " + objectName);
+	/**
+	 * @private
+	 */
+	_loadClasses: function() {
+		// Load the classes
+		while (R.engine.Linker.loadClasses.length > 0) {
+			var cn = R.engine.Linker.loadClasses.shift();
 
-      try {
-         var k = obj();
-      } catch (ex) {
-         // The class probably extends a non-existent class. Replace the parent
-         // class with a known class and evaluate as a dummy class
-         var extRE = new RegExp("(var\\s*)?([\\$_\\w\\.]*?)\\s*=\\s*([\\$_\\w\\.]*?)\\.extend\\(");
-         var classDef = obj.toString();
-         var nm = null;
-         classDef = classDef.replace(extRE, function(str, varDef, classname, parent, offs, s) {
-            nm = classname;
-            return "return Base.extend(";
-         });
-         try {
-            k = eval("(" + classDef.replace("return " + nm + ";", "") + ")();");
-         } catch (inEx) {
-            Console.error("Cannot parse class '" + nm + "'");
-         }
-      }
+			// The callback for when the class file is loaded
+			var cb = function(path, result) {
+				// Convert back to a package and class
+				var cn = arguments.callee.className;	
+				if (result === R.engine.Script.SCRIPT_LOADED) {
+					// Push the class into the processing queue
+					R.debug.Console.log("R.engine.Linker => Initializing " + cn);	
+					R.engine.Linker.queuedClasses[cn] = true;
+				} else {
+					R.debug.Console.warn("R.engine.Linker => " + cn + " failed to load!");
+				}
+			};
+			cb.className = cn;
 
-      var kInstance = null;
-      if ($.isFunction(k)) {
-         // If the class is an instance, get it's class object
-         kInstance = k;
-         k = k.prototype;
-      }
+			// Split the class into packages
+			cn = cn.split(".");
 
-      // Find the internal functions
-      for (var f in k) {
-         var def = k[f];
-         if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
-            // If it's an instance, we're looking at the constructor, and the
-            // instance has its own constructor (not inherited)
-            def = kInstance;
-         }
-         if ($.isFunction(def) && k.hasOwnProperty(f)) {
-            def = def.toString();
-            var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\s)*)","g");
-            var m = fR.exec(def);
-            if (m) {
-               // Remove strings, then comments
-               var fdef = m[2].replace(/(["|']).*?\1/g, "");
-               fdef = fdef.replace(/\/\/.*\r\n/g, "");
-               fdef = fdef.replace("\/\*(.|\s)*?\*\/", "");
-
-               // Process anonymous function arguments
-               var anonArgs = Linker.findAnonArgs(objectName, fdef);
-
-               // Process each function
-               fTable[f] = { vars: Linker.findVars(objectName, fdef),
-                             deps: Linker.findDependencies(objectName, fdef) };
-               fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
-                  return (e != "" && e != "this" && e != "arguments");
-               });
-
-               // Consider arguments as local variables
-               var args = m[1].split(",");
-               var vs = fTable[f].vars;
-               for (var a in args) {
-                  if (EngineSupport.indexOf(vs, args[a]) == -1) {
-                     vs.push(args[a].replace(" ",""));
-                  }
-               }
-
-               // Combine args with the anonymous function args
-               for (var a in anonArgs) {
-                  if (EngineSupport.indexOf(vs, anonArgs[a]) == -1) {
-                     vs.push(anonArgs[a]);
-                  }
-               }
-            }
-         }
-      }
-
-      // This is useful for debugging dependency problems...
-      Console.log("DepTable: ", objectName, fTable);
-
-      return Linker.procDeps(objectName, fTable);
-   },
-
-   /**
-    * Process dependencies and clear any that have been resolved.
-    * @private
-    */
-   procDeps: function(objectName, fTable) {
-      // Remove dependencies resolved by local variables and arguments
-      var r = [];
-      var allDeps = [];
-      for (var f in fTable) {
-         var deps = fTable[f].deps;
-         var vars = fTable[f].vars;
-
-         for (var d in deps) {
-            var dp = deps[d].split(".")[0];
-            if (EngineSupport.indexOf(vars, dp) != -1 && EngineSupport.indexOf(r, deps[d]) == -1) {
-               r.push(deps[d]);
-            }
-         }
-
-         fTable[f].deps = EngineSupport.filter(deps, function(e) {
-            return (EngineSupport.indexOf(r, e) == -1);
-         });
-
-         for (var d in fTable[f].deps) {
-            if (EngineSupport.indexOf(allDeps, fTable[f].deps[d]) == -1) {
-               allDeps.push(fTable[f].deps[d]);
-            }
-         }
-      }
-
-      return allDeps;
-   },
-
-   /**
-    * Perform resolution on first-level circular references.
-    * @private
-    */
-   checkCircularRefs: function(objectName) {
-      // Remove first-level dependencies           
-      var deps = Linker.dependencyList[objectName].deps;
-      for (var dep in deps) {
-         if (Linker.dependencyList[deps[dep]] && EngineSupport.indexOf(Linker.dependencyList[deps[dep]].deps, objectName) != -1) {
-            // Try removing the circular reference
-            EngineSupport.arrayRemove(Linker.dependencyList[objectName].deps, deps[dep]);
-         }
-      }
-      
-   },
+			// Shift off the namespace
+			cn.shift();
+			
+			// Is this in the engine package?
+			if (cn[0] == "engine") {
+				// Shift off the package
+				cn.shift();
+			}
+			
+			// Convert the class to a path
+			var path = "/" + cn.join("/").toLowerCase() + ".js";
+			
+			// Load the class
+			R.engine.Script.loadNow(path, cb);
+		}
+		
+		R.engine.Linker.classLoader = null;
+	},
 	
-   /**
-    * Check the dependency list for any unresolved dependencies.  Anything that hasn't
-    * been resolved will be dumped to the console as an error.
-    * @private
-    */
-   checkDependencyList: function() {
-      // Stop processing
-      window.clearTimeout(Linker.dependencyTimer);
-      Linker.dependencyTimer = null;
-      window.clearTimeout(Linker.dependencyProcessor);
-      Linker.dependencyProcessor = null;      
+	/**
+	 * @private
+	 */
+	_processClasses: function() {
+		var inProcess = 0, processed = 0, completed = [];
+		for (var cn in R.engine.Linker.queuedClasses) {
+			inProcess++;
+			
+			// Get the class definition
+			var def = R.engine.Linker.classDefinitions[cn];
+				
+			// Check to see if the dependencies exist
+			var missDeps = false, reqs = [], unres = [];
+			if (def.requires && def.requires.length > 0) reqs = reqs.concat(def.requires);
+			while (reqs.length > 0) {
+				var req = reqs.shift();
+				
+				if (!R.engine.Linker.resolvedClasses[req]) {
+					// Check for A => B  => A
+					// If such a circular reference exists, we can ignore the dependency
+					var depDef = R.engine.Linker.classDefinitions[req];
+					if (depDef && depDef.requires) {
+						if (R.engine.Support.indexOf(depDef.requires, cn) == -1) {
+							// Not a circular reference
+							unres.push(req);
+						}
+					} else {
+						// Class not resolved
+						unres.push(req);
+					}
+				}
+			}
+			
+			// Anything left unresolved means we cannot initialize
+			missDeps = (unres.length > 0);
+			
+			// Check for local dependencies
+			var localDeps = false, lDeps = [], lUnres = [];
+			if (def.depends && def.depends.length > 0) lDeps = lDeps.concat(def.depends);
+			while (lDeps.length > 0) {
+				var lDep = lDeps.shift();
+				
+				if (!R.engine.Linker.resolvedClasses[lDep]) {
+					// Check for A => B  => A
+					// If such a circular reference exists, we can ignore the dependency
+					var lDepDef = R.engine.Linker.classDefinitions[lDep];
+					if (lDepDef && lDepDef.requires) {
+						if (R.engine.Support.indexOf(lDepDef.requires, cn) == -1) {
+							// Not a circular reference
+							lUnres.push(lDep);
+						}
+					} else if (lDepDef && lDepDef.depends) {
+						if (R.engine.Support.indexOf(lDepDef.depends, cn) == -1) {
+							// Not a circular reference
+							lUnres.push(lDep);
+						}
+					} else {
+						// Class not resolved
+						lUnres.push(lDep);
+					}
+				}
+			}
+			
+			// Anything left unresolved means we cannot initialize
+			localDeps = (lUnres.length > 0);
+						
+			// If all requirements are loaded, check the includes
+			if (!(missDeps || localDeps)) {
+				var missIncs = false, incs = def.includes || [];
+				for (var i = 0; i < incs.length; i++) {
+					if (!R.engine.Linker.resolvedFiles[incs[i]]) {
+						missIncs = true;
+						break;	
+					}
+				}
 
-      // Build the list
-      var unresolved = [], unresDeps = "", dCount = 0;
-      for (var obj in Linker.dependencyList) {
-         dCount++;
-         unresDeps += "Object '" + obj + "' has the following unresolved dependencies: ";
-         unresDeps += "(" + Linker.dependencyList[obj].deps.length + ") ";
-         for (var d in Linker.dependencyList[obj].deps) {
-            unresDeps += Linker.dependencyList[obj].deps[d] + " ";
-         }
-         unresolved.push(unresDeps);
-         unresDeps = "";
-      }
-      
-      if (dCount != 0) {
-         // Dump the dependency list
-         Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-         for (var ud in unresolved) {
-            Console.error(unresolved[ud]);
-         }
-         Engine.shutdown();
-      }
-   },
+				if (!missIncs) {
+					// Get the class object
+					var pkg = R.global, clazz = cn.split(".");
+					while (clazz.length > 1) {
+						pkg = pkg[clazz.shift()];
+					}
+					var shortName = clazz.shift(), classObjDef = pkg[shortName];
+					
+					// We can initialize the class
+					if ($.isFunction(classObjDef)) {
+						pkg[shortName] = classObjDef();
+					} else {
+						pkg[shortName] = classObjDef;
+					}
+					
+					// If the class defines a "resolved()" class method, call that
+					if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
+						pkg[shortName].resolved();
+					}
+					
+					R.debug.Console.warn("R.engine.Linker => " + cn + " initialized");
+					R.engine.Linker.resolvedClasses[cn] = true;
+					
+					// No need to process it again
+					completed.push(cn);
+					processed++;				
+				}
+			}
+		}
 
-   /**
-    * Dump out any unresolved class dependencies to the console.
-    * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
-    */
-   dumpDependencies: function() {
-      Console.debug(Linker.dependencyList);
-   },
+		// Clean up processed classes
+		while (completed.length > 0) {
+			delete R.engine.Linker.queuedClasses[completed.shift()];
+		}
+		
+		if (processed != 0) {
+			// Something was processed, reset the fail timer
+			clearTimeout(R.engine.Linker.failTimer);
+			R.engine.Linker.failTimer = setTimeout(function() {
+				R.engine.Linker._failure();
+			}, 10000);
+		}
+		
+		var newClzz = 0;
+		for (var j in R.engine.Linker.queuedClasses) {
+			newClzz++;
+		}
+		
+		if (newClzz > 0 || inProcess > processed) {
+			// There are classes waiting for their dependencies, do this again
+			R.engine.Linker.classTimer = setTimeout(function(){
+		  		R.engine.Linker._processClasses();
+		  	}, 100);				
+		} else if (inProcess == processed) {
+			// Clear the fail timer
+			clearTimeout(R.engine.Linker.failTimer);
 
-   //====================================================================================================
-   //====================================================================================================
-   //                                         SYNTAX PARSER
-   //====================================================================================================
-   //====================================================================================================
-   
-   /**
-    * Parse a javascript file for common syntax errors which might otherwise cause a script
-    * to not load.  On platforms, such as Wii and iPhone, it might not be possible to see
-    * errors which cause the code to not compile.  By checking a known set of possible errors,
-    * it might be possible to reduce headaches on those platforms when developing.
-    * @private
-    */
-   parseSyntax: function(jsCode) {
-      
-      // Clean the source first so we only have code
-      //jsCode = EngineSupport.cleanSource(jsCode, true);
-      
-      // Check for the following:
-      // * Variable comparison in assignment statement
-      // * Extra comma after last item in Object definition
-      // * Missing comma between items in Object definition
-      // * Missing colon between name and definition
-      // * Equal sign where colon expected
-      // * Try without catch and finally
-      
-      //Console.error("Syntax errors:\n", errors);
-      
-      return true;   
-   }
-   
+			// All classes waiting to be processed have been processed
+			R.engine.Linker.classTimer = null;
+		}
+	},
+	
+	_failure: function() {
+		clearTimeout(R.engine.Linker.failTimer);
+		clearTimeout(R.engine.Linker.classTimer);	
+		clearTimeout(R.engine.Linker.classLoader);	
+		
+		R.debug.Console.error("R.engine.Linker => FAILURE TO LOAD CLASSES!");
+	}
+	
 });
 
 /**
@@ -2267,7 +2159,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1460 $
+ * @version: $Revision: 1511 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2314,7 +2206,7 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @static
  */
-var Engine = Base.extend(/** @scope Engine.prototype */{
+R.Engine = Base.extend(/** @scope Engine.prototype */{
    version: "v2.0.0.2",
 
    constructor: null,
@@ -2391,9 +2283,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		
 		// See if the OS has a key
 		var osOpts, platformDefaults, versionDefaults, platformVersions;
-		if (opts["platforms"] && opts["platforms"][EngineSupport.sysInfo().OS]) {
+		if (opts["platforms"] && opts["platforms"][R.engine.Support.sysInfo().OS]) {
 			// Yep, extract that one
-			osOpts = opts["platforms"][EngineSupport.sysInfo().OS];
+			osOpts = opts["platforms"][R.engine.Support.sysInfo().OS];
 			
 			// Check for platform defaults
 			if (osOpts && osOpts["defaults"]) {
@@ -2404,7 +2296,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Check for general version specific options
 		if (opts["versions"]) {
 			for (var v in opts["versions"]) {
-				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
+				if (parseFloat(R.engine.Support.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					versionDefaults = opts["versions"][v];
 				}
@@ -2414,14 +2306,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 		// Finally, check the OS for version specific options
 		if (osOpts && osOpts["versions"]) {
 			for (var v in osOpts["versions"]) {
-				if (parseFloat(EngineSupport.sysInfo().version) >= parseFloat(v)) {
+				if (parseFloat(R.engine.Support.sysInfo().version) >= parseFloat(v)) {
 					// Add  the version options
 					platformVersions = osOpts["versions"][v];
 				}
 			}
 		}
 		
-      $.extend(Engine.options, configOpts, platformDefaults, versionDefaults, platformVersions);
+      $.extend(R.Engine.options, configOpts, platformDefaults, versionDefaults, platformVersions);
    },
 
    /**
@@ -2432,7 +2324,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    setDebugMode: function(mode) {
-      this.debugMode = mode;
+      R.Engine.debugMode = mode;
    },
 
    /**
@@ -2442,7 +2334,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getDebugMode: function() {
-      return this.debugMode;
+      return R.Engine.debugMode;
    },
 
    /**
@@ -2453,7 +2345,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    isSoundEnabled: function() {
-      return this.soundsEnabled;
+      return R.Engine.soundsEnabled;
    },
 
    /**
@@ -2469,7 +2361,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    setFPS: function(fps) {
       Assert((fps != 0), "You cannot have a framerate of zero!");
-      this.fpsClock = Math.floor(1000 / fps);
+      R.Engine.fpsClock = Math.floor(1000 / fps);
    },
    
    /**
@@ -2478,7 +2370,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getFPS: function() {
-      return Math.floor((1 / this.fpsClock) * 1000)
+      return Math.floor((1 / R.Engine.fpsClock) * 1000)
    },
    
    /**
@@ -2490,7 +2382,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getActualFPS: function() {
-      return Math.floor((1 / Engine.frameTime) * 1000);
+      return Math.floor((1 / R.Engine.frameTime) * 1000);
    },
    
    /**
@@ -2499,7 +2391,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getFrameTime: function() {
-      return this.fpsClock;
+      return R.Engine.fpsClock;
    },
    
    /**
@@ -2511,7 +2403,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getDrawTime: function() {
-      return Engine.frameTime;
+      return R.Engine.frameTime;
    },
    
    /**
@@ -2528,7 +2420,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getEngineLoad: function () {
-      return (Engine.frameTime / this.fpsClock);
+      return (R.Engine.frameTime / R.Engine.fpsClock);
    },
 
    /**
@@ -2539,11 +2431,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getDefaultContext: function() {
-      if (this.defaultContext == null) {
-         this.defaultContext = DocumentContext.create();
+      if (R.Engine.defaultContext == null) {
+         R.Engine.defaultContext = R.rendercontexts.DocumentContext.create();
       }
 
-      return this.defaultContext;
+      return R.Engine.defaultContext;
    },
 
    /**
@@ -2553,7 +2445,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    getEnginePath: function() {
-      if (this.engineLocation == null)
+      if (R.Engine.engineLocation == null)
       {
          // Determine the path of the "engine.js" file
          var head = document.getElementsByTagName("head")[0];
@@ -2565,13 +2457,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
             if (src != null && m)
             {
                // Get the path
-               this.engineLocation = m[1];
+               R.Engine.engineLocation = m[1];
                break;
             }
          }
       }
 
-      return this.engineLocation;
+      return R.Engine.engineLocation;
    },
 
    //====================================================================================================
@@ -2589,18 +2481,18 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    create: function(obj) {
-      if(this.shuttingDown === true) {
-      	Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
+      if(R.Engine.shuttingDown === true) {
+      	R.debug.Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
       	obj.destroy();
       	return;
       };
 
-      Assert((this.started === true), "Creating an object when the engine is stopped!", obj);
+      Assert((R.Engine.started === true), "Creating an object when the engine is stopped!", obj);
 
-      this.idRef++;
-      var objId = obj.getName() + this.idRef;
-      Console.log("CREATED Object ", objId, "[", obj, "]");
-      this.livingObjects++;
+      R.Engine.idRef++;
+      var objId = obj.getName() + R.Engine.idRef;
+      R.debug.Console.log("CREATED Object ", objId, "[", obj, "]");
+      R.Engine.livingObjects++;
 
       return objId;
    },
@@ -2613,13 +2505,13 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    destroy: function(obj) {
    	if (obj == null) {
-   		Console.warn("NULL reference passed to Engine.destroy()!  Ignored.");
+   		R.debug.Console.warn("NULL reference passed to Engine.destroy()!  Ignored.");
    		return;
    	}
 
       var objId = obj.getId();
-      Console.log("DESTROYED Object ", objId, "[", obj, "]");
-      this.livingObjects--;
+      R.debug.Console.log("DESTROYED Object ", objId, "[", obj, "]");
+      R.Engine.livingObjects--;
    },
    
    /**
@@ -2630,7 +2522,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param timer {Timer} The timer to add
     */
    addTimer: function(timerName, timer) {
-      Engine.timerPool[timerName] = timer;   
+      R.Engine.timerPool[timerName] = timer;   
    },
 
    /**
@@ -2638,8 +2530,8 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param timerName {String} The timer name
     */
    removeTimer: function(timerName) {
-      Engine.timerPool[timerName] = null;
-      delete Engine.timerPool[timerName];
+      R.Engine.timerPool[timerName] = null;
+      delete R.Engine.timerPool[timerName];
    },
 
    /**
@@ -2667,15 +2559,15 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     */
    loadEngineScripts: function() {
       // Engine stylesheet
-      this.loadStylesheet("/css/engine.css");
+      R.engine.Script.loadStylesheet("/css/engine.css");
 
       // The basics needed by the engine to get started
-      this.loadNow("/engine.game.js");
-      this.loadNow("/engine.rendercontext.js");
-      this.loadNow("/engine.pooledobject.js");
-      this.loadNow("/rendercontexts/context.render2d.js");
-      this.loadNow("/rendercontexts/context.htmlelement.js");
-      this.loadNow("/rendercontexts/context.documentcontext.js");
+      R.engine.Script.loadNow("/game.js");
+      R.engine.Script.loadNow("/pooledobject.js");
+      R.engine.Script.loadNow("/rendercontexts/abstractrendercontext.js");
+      R.engine.Script.loadNow("/rendercontexts/rendercontext2d.js");
+      R.engine.Script.loadNow("/rendercontexts/htmlelementcontext.js");
+      R.engine.Script.loadNow("/rendercontexts/documentcontext.js");
    },
 
    /**
@@ -2687,19 +2579,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    startup: function(debugMode) {
-      Assert((this.running == false), "An attempt was made to restart the engine!");
+      Assert((R.Engine.running == false), "An attempt was made to restart the engine!");
 
       // Check for supported browser
-      if (!this.browserSupportCheck()) {
+      if (!R.Engine.browserSupportCheck()) {
          return;
       };
 
-      this.upTime = new Date().getTime();
-      this.debugMode = debugMode ? true : false;
-      this.started = true;
+      R.Engine.upTime = now().getTime();
+      R.Engine.debugMode = debugMode ? true : false;
+      R.Engine.started = true;
 
       // Load the required scripts
-      this.loadEngineScripts();
+      R.Engine.loadEngineScripts();
    },
 
    /**
@@ -2708,27 +2600,29 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    run: function() {
-      if (Engine.shuttingDown || Engine.running) {
+      if (R.Engine.shuttingDown || R.Engine.running) {
          return;
       }
       
       // Restart all of the timers
-      for (var tm in Engine.timerPool) {
-         Engine.timerPool[tm].restart();
+      for (var tm in R.Engine.timerPool) {
+         R.Engine.timerPool[tm].restart();
       }
       
       var mode = "[";
-      mode += (this.debugMode ? "DEBUG" : "");
-      mode += (this.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
+      mode += (R.Engine.debugMode ? "DEBUG" : "");
+      mode += (R.Engine.localMode ? (mode.length > 0 ? " LOCAL" : "LOCAL") : "");
       mode += "]"
-      Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
-      this.running = true;
-      this.shuttingDown = false;
+      R.debug.Console.warn(">>> Engine started. " + (mode != "[]" ? mode : ""));
+      R.Engine.running = true;
+      R.Engine.shuttingDown = false;
 
-      Console.debug(">>> sysinfo: ", EngineSupport.sysInfo());
+      R.debug.Console.debug(">>> sysinfo: ", R.engine.Support.sysInfo());
 
       // Start world timer
-      Engine.globalTimer = window.setTimeout(function() { Engine.engineTimer(); }, this.fpsClock);
+      R.Engine.globalTimer = window.setTimeout(function() { 
+			R.Engine.engineTimer(); 
+		}, this.fpsClock);
 
    },
 
@@ -2737,19 +2631,19 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    pause: function() {
-      if (Engine.shuttingDown) {
+      if (R.Engine.shuttingDown) {
          return;
       }
 
       // Pause all of the timers
-      Console.debug("Pausing all timers");
-      for (var tm in Engine.timerPool) {
-         Engine.timerPool[tm].pause();
+      R.debug.Console.debug("Pausing all timers");
+      for (var tm in R.Engine.timerPool) {
+         R.Engine.timerPool[tm].pause();
       }
       
-      Console.warn(">>> Engine paused <<<");
-      window.clearTimeout(Engine.globalTimer);
-      this.running = false;
+      R.debug.Console.warn(">>> Engine paused <<<");
+      window.clearTimeout(R.Engine.globalTimer);
+      R.Engine.running = false;
    },
 
 	/**
@@ -2760,11 +2654,11 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 	 * @param fn {Function} The callback function
 	 */
 	onShutdown: function(fn) {
-		if (Engine.shuttingDown === true) {
+		if (R.Engine.shuttingDown === true) {
 			return;
 		}
 		
-		Engine.shutdownCallbacks.push(fn);
+		R.Engine.shutdownCallbacks.push(fn);
 	},
 
    /**
@@ -2773,74 +2667,74 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    shutdown: function() {
-      if (Engine.shuttingDown) {
+      if (R.Engine.shuttingDown) {
          // Prevent another shutdown
          return;
       }
       
-      Engine.shuttingDown = true;
+      R.Engine.shuttingDown = true;
       
-      if (!this.running && this.started)
+      if (!R.Engine.running && R.Engine.started)
       {
          // If the engine is not currently running (i.e. paused) 
          // restart it and then re-perform the shutdown
-         this.running = true;
-         setTimeout(function() { Engine.shutdown(); }, (this.fpsClock * 2));
+         R.Engine.running = true;
+         setTimeout(function() { R.Engine.shutdown(); }, (R.Engine.fpsClock * 2));
          return;
       }
 
-      this.started = false;
-      window.clearTimeout(Engine.dependencyProcessor);
+      R.Engine.started = false;
+      window.clearTimeout(R.Engine.dependencyProcessor);
 
-      Console.warn(">>> Engine shutting down...");
+      R.debug.Console.warn(">>> Engine shutting down...");
 
       // Stop world timer
-      window.clearTimeout(Engine.globalTimer);
+      window.clearTimeout(R.Engine.globalTimer);
       
       // Run through shutdown callbacks to allow objects not tracked by Engine
       // to clean up references, etc.
-      while (Engine.shutdownCallbacks.length > 0) {
-      	Engine.shutdownCallbacks.shift()();
+      while (R.Engine.shutdownCallbacks.length > 0) {
+      	R.Engine.shutdownCallbacks.shift()();
       };
 
-      if (this.metricDisplay)
+      if (R.Engine.metricDisplay)
       {
-         this.metricDisplay.remove();
-         this.metricDisplay = null;
+         R.Engine.metricDisplay.remove();
+         R.Engine.metricDisplay = null;
       }
 
       // Cancel all of the timers
-      Console.debug("Cancelling all timers");
-      for (var tm in Engine.timerPool) {
-         Engine.timerPool[tm].cancel();
+      R.debug.Console.debug("Cancelling all timers");
+      for (var tm in R.Engine.timerPool) {
+         R.Engine.timerPool[tm].cancel();
       }
-      Engine.timerPool = {};
+      R.Engine.timerPool = {};
 
-      this.downTime = new Date().getTime();
-      Console.warn(">>> Engine stopped.  Runtime: " + (this.downTime - this.upTime) + "ms");
+      R.Engine.downTime = now().getTime();
+      R.debug.Console.warn(">>> Engine stopped.  Runtime: " + (R.Engine.downTime - R.Engine.upTime) + "ms");
 
-      this.running = false;
+      R.Engine.running = false;
       
       // Kill off the default context and anything
       // that's attached to it.  We'll alert the
       // developer if there's an issue with orphaned objects
-      this.getDefaultContext().destroy();
+      R.Engine.getDefaultContext().destroy();
       
       // Dump the object pool
-      if (typeof PooledObject != "undefined") {
-         PooledObject.objectPool = null;
+      if (typeof R.engine.PooledObject != "undefined") {
+         R.engine.PooledObject.objectPool = null;
       }
 
-      AssertWarn((this.livingObjects == 0), "Object references not cleaned up!");
+      AssertWarn((R.Engine.livingObjects == 0), "Object references not cleaned up!");
       
-      this.loadedScripts = {};
-      this.scriptLoadCount = 0;
-      this.scriptsProcessed = 0;
-      this.defaultContext = null;
+      R.Engine.loadedScripts = {};
+      R.Engine.scriptLoadCount = 0;
+      R.Engine.scriptsProcessed = 0;
+      R.Engine.defaultContext = null;
 
       // Perform final cleanup
-      if (!Engine.UNIT_TESTING /* Is this a hack? */) {
-         this.cleanup();
+      if (!R.Engine.UNIT_TESTING /* Is this a hack? */) {
+         R.Engine.cleanup();
       }
    },
 
@@ -2865,10 +2759,10 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
       $("head script", document).remove();
       
       // Final cleanup
-      Linker.cleanup();
+      R.engine.Linker.cleanup();
       
       // Shutdown complete
-      Engine.shuttingDown = false;
+      R.Engine.shuttingDown = false;
    },
 
 
@@ -2883,8 +2777,32 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @param fn {Function} The function to run when the object can be initialized.
     */
    initObject: function(objectName, primaryDependency, fn) {
-      Linker.initObject(objectName, primaryDependency, fn);
+      R.engine.Linker.initObject(objectName, primaryDependency, fn);
    },
+
+	/**
+	 * Define a class to add to the namespace plus its requirements.  The format of the
+	 * object definition is:
+	 * <pre>
+	 * {
+	 *    "class": "R.[package name].[class name]",
+	 *    "requires": [
+	 *       "R.[package name].[dependency]"
+	 *    ],
+	 *    "includes": [
+	 *       "/path/to/file.js"
+	 *    ]
+	 * }
+	 * </pre>
+	 * If a class has no requirements, you can either omit the "requires" key, set it
+	 * to <tt>null</tt>, or set it to an empty array.  The "includes" key is optional.
+	 * Use this to specify additional files which must be loaded for the class to run. 
+	 *    
+	 * @param classDef {Object} The object's definition
+	 */
+	define: function(classDef) {
+		R.engine.Linker.define(classDef);
+	},
 
    /**
     * Check the current browser to see if it is supported by the
@@ -2896,18 +2814,17 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * displayed.
     */
    browserSupportCheck: function() {
-      if (EngineSupport.checkBooleanParam("disableBrowserCheck")) {
+      if (R.engine.Support.checkBooleanParam("disableBrowserCheck")) {
          return true;
       }
-      var sInfo = EngineSupport.sysInfo();
+      var sInfo = R.engine.Support.sysInfo();
       var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
-      msg += "Please see <a href='http://www.renderengine.com/browsers.php' target='_blank'>the list of ";
+      msg += "Please see <a href='http://www.renderengine.com' target='_blank'>the list of ";
       msg += "supported browsers</a> for more information.";
       switch (sInfo.browser) {
          case "iPhone":
 			case "android": 
-         case "msie": Engine.options.billboards = false; 
-                      return true;
+         case "msie":
          case "chrome":
          case "Wii":
          case "safari":
@@ -2915,7 +2832,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
          case "firefox":
          case "opera": return true;
          case "unknown": $(document).ready(function() {
-                           Engine.shutdown();
+                           R.Engine.shutdown();
                            $("body", document).append($("<div class='unsupported'>")
                               .html(msg));
                         });
@@ -2928,7 +2845,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    toString: function() {
-      return "The Render Engine " + this.version;
+      return "The Render Engine " + R.Engine.version;
    },
 
    //====================================================================================================
@@ -2947,46 +2864,46 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     */
    engineTimer: function() {
-      if (Engine.shuttingDown) {
+      if (R.Engine.shuttingDown) {
          return;
       }
 
-		/* pragma:DEBUG_START */
-		try {
-			Profiler.enter("Engine.engineTimer()");
-		/* pragma:DEBUG_END */
+		var nextFrame = R.Engine.fpsClock;
 
-			var nextFrame = Engine.fpsClock;
+		// Update the world
+		if (R.Engine.running && R.Engine.getDefaultContext() != null) {
+			R.Engine.vObj = 0;
 
-			// Update the world
-			if (Engine.running && Engine.getDefaultContext() != null) {
-				Engine.vObj = 0;
+			// Render a frame
+			R.Engine.worldTime = now().getTime();
+			R.Engine.getDefaultContext().update(null, R.Engine.worldTime);
+			R.Engine.frameTime = now().getTime() - R.Engine.worldTime;
+			R.Engine.liveTime = R.Engine.worldTime - R.Engine.upTime;
 
-				// Render a frame
-				Engine.worldTime = new Date().getTime();
-				Engine.getDefaultContext().update(null, Engine.worldTime);
-				Engine.frameTime = new Date().getTime() - Engine.worldTime;
-				Engine.liveTime = Engine.worldTime - Engine.upTime;
+			// Determine when the next frame should draw
+			// If we've gone over the allotted time, wait until the next available frame
+			var f = nextFrame - R.Engine.frameTime;
+			nextFrame = (R.Engine.skipFrames ? (f > 0 ? f : nextFrame) : R.Engine.fpsClock);
+			R.Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / R.Engine.fpsClock) : 0);
 
-				// Determine when the next frame should draw
-				// If we've gone over the allotted time, wait until the next available frame
-				var f = nextFrame - Engine.frameTime;
-				nextFrame = (Engine.skipFrames ? (f > 0 ? f : nextFrame) : Engine.fpsClock);
-				Engine.droppedFrames += (f <= 0 ? Math.round((f * -1) / Engine.fpsClock) : 0);
-
-				// Update the metrics display
-				Engine.doMetrics();
-			}
-
-			// When the process is done, start all over again
-			Engine.globalTimer = setTimeout(function _engineTimer() { Engine.engineTimer(); }, nextFrame);
-
-		/* pragma:DEBUG_START */
-		} finally {
-			Profiler.exit();
+			// Update the metrics display
+			R.Engine.doMetrics();
 		}
-		/* pragma:DEBUG_END */
+
+		// When the process is done, start all over again
+		R.Engine.globalTimer = setTimeout(function _engineTimer() { 
+			R.Engine.engineTimer(); 
+		}, nextFrame);
    },
+	
+	/**
+	 * @private
+	 */
+	doMetrics: function() {
+		if (R.debug && R.debug.Metrics) {
+			R.debug.Metrics.doMetrics();
+		}
+	},
 	
 	// ======================================================
 	// Declarations here only for documentation purposes
@@ -2994,92 +2911,14 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 	// ======================================================
 	
    /**
-    * Status message when a script is not found
-    * @type Boolean
-    * @memberOf Engine
-    * @field
-    */
-   SCRIPT_NOT_FOUND: false,
-   
-   /**
-    * Status message when a script is successfully loaded
-    * @type Boolean
-    * @memberOf Engine
-    * @field
-    */
-   SCRIPT_LOADED: true,
-
-   /**
     * Include a script file.
     *
     * @param scriptURL {String} The URL of the script file
     * @memberOf Engine
-    * @function
     */
-   include: null,
-
-   /**
-    * Queue a script to load from the server and append it to
-    * the head element of the browser.  Script names are
-    * cached so they will not be loaded again.  Each script in the
-    * queue is processed synchronously.
-    *
-    * @param scriptPath {String} The URL of a script to load.
-    * @memberOf Engine
-    * @function
-    */
-   loadScript: null,
-
-	/**
-	 * Load text from the specified path.
-	 *
-	 * @param path {String} The url to load
-	 * @param data {Object} Optional arguments to pass to server
-	 * @param callback {Function} The callback method which is passed the
-	 *		text and status code (a number) of the request.
-	 * @memberOf Engine
-    * @function
-	 */	 
-	loadText: null,
-	
-	/**
-	 * Load text from the specified path and parse it as JSON.  We're doing
-	 * a little pre-parsing of the returned data so that the JSON can include
-	 * comments which is not spec.
-	 *
-	 * @param path {String} The url to load
-	 * @param data {Object} Optional arguments to pass to server
-	 * @param callback {Function} The callback method which is passed the
-	 *		JSON object and status code (a number) of the request.
-    * @memberOf Engine
-    * @function
-	 */	 
-	loadJSON: null,
-
-   /**
-    * Put a callback into the script queue so that when a
-    * certain number of files has been loaded, we can call
-    * a method.  Allows for functionality to start with
-    * incremental loading.
-    *
-    * @param cb {Function} A callback to execute
-    * @memberOf Engine
-    * @function
-    */
-   setQueueCallback: null,
-
-   /**
-    * You can pause the queue from a callback function, then
-    * unpause it to continue processing queued scripts.  This will
-    * allow you to wait for an event to occur before continuing to
-    * to load scripts.
-    *
-    * @param state {Boolean} <tt>true</tt> to put the queue processor
-    *                        in a paused state.
-    * @memberOf Engine
-    * @function
-    */
-   pauseQueue: null,
+   include: function(scriptURL) {
+		R.engine.Script.include(scriptURL);
+	},
 
    /**
     * Loads a game's script.  This will wait until the specified
@@ -3105,108 +2944,9 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
     * @memberOf Engine
     * @function
     */
-   loadGame: null,
-
-   /**
-    * Load a script relative to the engine path.  A simple helper method which calls
-    * {@link #loadScript} and prepends the engine path to the supplied script source.
-    *
-    * @param scriptSource {String} A URL to load that is relative to the engine path.
-    * @memberOf Engine
-    * @function
-    */
-   load: null,
-
-   /**
-    * Load a stylesheet and append it to the document.  Allows for
-    * scripts to specify additional stylesheets that can be loaded
-    * as needed.  Additionally, you can use thise method to inject
-    * the engine path into the css being loaded.  Using the variable
-    * <tt>$&lt;enginePath&gt;</tt>, you can load css relative to the
-    * engine's path.  For example:
-    * <pre>
-    *    .foo {
-    *       background: url('$&lt;enginePath&gt;/myGame/images/bar.png') no-repeat 50% 50%;
-    *    }
-    * </pre>
-    *
-    * @param stylesheetPath {String} Path to the stylesheet, relative to
-    *                                the engine path.
-    * @memberOf Engine
-    * @function
-    */
-   loadStylesheet: null,
-
-	// ======================================================
-	// Declarations here only for documentation purposes
-	// See engine.metrics.js
-	// ======================================================
-
-   /**
-    * Toggle the display of the metrics window.  Any metrics
-    * that are being tracked will be reported in this window.
-    * @memberOf Engine
-    * @function
-    */
-   toggleMetrics: null,
-
-   /**
-    * Show the metrics window
-    * @memberOf Engine
-    * @function
-    */
-   showMetrics: null,
-   
-   /**
-    * Show a graph of the engine profile
-    * @memberOf Engine
-    * @function
-    */
-   showProfile: null,
-
-   /**
-    * Hide the metrics window
-    * @memberOf Engine
-    * @function
-    */
-   hideMetrics: null,
-
-   /**
-    * Set the interval at which metrics are sampled by the system.
-    * The default is for metrics to be calculated every 10 engine frames.
-    *
-    * @param sampleRate {Number} The number of ticks between samples
-    * @memberOf Engine
-    * @function
-    */
-   setMetricSampleRate: null,
-
-   /**
-    * Add a metric to the game engine that can be displayed
-    * while it is running.  If smoothing is selected, a 3 point
-    * running average will be used to smooth out jitters in the
-    * value that is shown.  For the <tt>fmt</tt> argument,
-    * you can provide a string which contains the pound sign "#"
-    * that will be used to determine where the calculated value will
-    * occur in the formatted string.
-    *
-    * @param metricName {String} The name of the metric to track
-    * @param value {String/Number} The value of the metric.
-    * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
-    * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
-    * @memberOf Engine
-    * @function
-    */
-   addMetric: null,
-
-   /**
-    * Remove a metric from the display
-    *
-    * @param metricName {String} The name of the metric to remove
-    * @memberOf Engine
-    * @function
-    */
-   removeMetric: null	
+   loadGame: function(gameSource,gameObjectName,gameDisplayName) {
+		R.engine.Script.loadGame(gameSource,gameObjectName,gameDisplayName);
+	}
 
  }, { // Interface
    globalTimer: null
@@ -3249,7 +2989,7 @@ var Engine = Base.extend(/** @scope Engine.prototype */{
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend({
+R.engine.Script = Base.extend({
    /** @lends Engine */
    constructor: null,
 
@@ -3283,7 +3023,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    include: function(scriptURL) {
-      Engine.loadNow(scriptURL);
+      R.engine.Script.loadNow(scriptURL);
    },
 
    /**
@@ -3299,7 +3039,7 @@ var Engine = Engine.extend({
     * @private
     */
    loadNow: function(scriptPath, cb) {
-      this.doLoad(this.getEnginePath() + scriptPath, scriptPath, cb);
+      R.engine.Script.doLoad(R.Engine.getEnginePath() + scriptPath, scriptPath, cb);
    },
    
    /**
@@ -3311,10 +3051,10 @@ var Engine = Engine.extend({
     * @param scriptPath {String} The URL of a script to load.
     * @memberOf Engine
     */
-   loadScript: function(scriptPath, owner) {
+   loadScript: function(scriptPath) {
       // Put script into load queue
-      Engine.scriptQueue.push(scriptPath);
-      Engine.runScriptQueue();
+      R.engine.Script.scriptQueue.push(scriptPath);
+      R.engine.Script.runScriptQueue();
    },
 
 	/**
@@ -3361,7 +3101,7 @@ var Engine = Engine.extend({
 			callback = data;
 			data = null;
 		}
-		Engine.ajaxLoad(path, data, function(xhr, result) {
+		R.engine.Script.ajaxLoad(path, data, function(xhr, result) {
 			callback(xhr.responseText, xhr.status);
 		});
 	},
@@ -3381,7 +3121,7 @@ var Engine = Engine.extend({
 			callback = data;
 			data = null;
 		}
-		Engine.ajaxLoad(path, data, function(xhr, result) {
+		R.engine.Script.ajaxLoad(path, data, function(xhr, result) {
 			function clean(txt) {
 				var outbound = txt.replace(/(".*".*|)(\/\/.*$)/gm, function(str,t,c) {
 					return t;
@@ -3396,7 +3136,7 @@ var Engine = Engine.extend({
 				var inbound = xhr.responseText;
 				if (inbound) {
 					var c = clean(inbound);
-					json = EngineSupport.parseJSON(c);
+					json = R.engine.Support.parseJSON(c);
 				}
 			} catch (ex) {}
 			callback(json, xhr.status);
@@ -3410,32 +3150,32 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    runScriptQueue: function() {
-      if (!Engine.scriptQueueTimer) {
+      if (!R.engine.Script.scriptQueueTimer) {
          // Process any waiting scripts
-         Engine.scriptQueueTimer = setInterval(function() {
-            if (Engine.queuePaused) {
-               if (Engine.pauseReps++ > 500) {
+         R.engine.Script.scriptQueueTimer = setInterval(function() {
+            if (R.engine.Script.queuePaused) {
+               if (R.engine.Script.pauseReps++ > 500) {
                   // If after ~5 seconds the queue is still paused, unpause it and
                   // warn the user that the situation occurred
-                  Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
-                  Engine.pauseReps = 0;
-                  Engine.pauseQueue(false);
+                  R.debug.Console.error("Script queue was paused for 5 seconds and not resumed -- restarting...");
+                  R.engine.Script.pauseReps = 0;
+                  R.engine.Script.pauseQueue(false);
                }
                return;
             }
 
-            Engine.pauseReps = 0;
+            R.engine.Script.pauseReps = 0;
 
-            if (Engine.scriptQueue.length > 0) {
-               Engine.processScriptQueue();
+            if (R.engine.Script.scriptQueue.length > 0) {
+               R.engine.Script.processScriptQueue();
             } else {
                // Stop the queue timer if there are no scripts
-               clearInterval(Engine.scriptQueueTimer);
-               Engine.scriptQueueTimer = null;
+               clearInterval(R.engine.Script.scriptQueueTimer);
+               R.engine.Script.scriptQueueTimer = null;
             }
          }, 10);
 
-         Engine.readyForNextScript = true;
+         R.engine.Script.readyForNextScript = true;
       }
    },
 
@@ -3450,8 +3190,8 @@ var Engine = Engine.extend({
     */
    setQueueCallback: function(cb) {
       // Put callback into load queue
-      Engine.scriptQueue.push(cb);
-      Engine.runScriptQueue();
+      R.engine.Script.scriptQueue.push(cb);
+      R.engine.Script.runScriptQueue();
    },
 
    /**
@@ -3465,7 +3205,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    pauseQueue: function(state) {
-      Engine.queuePaused = state;
+      R.engine.Script.queuePaused = state;
    },
 
    /**
@@ -3474,21 +3214,21 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    processScriptQueue: function() {
-      if (Engine.scriptQueue.length > 0 && Engine.readyForNextScript) {
+      if (R.engine.Script.scriptQueue.length > 0 && R.engine.Script.readyForNextScript) {
          // Hold the queue until the script is loaded
-         Engine.readyForNextScript = false;
+         R.engine.Script.readyForNextScript = false;
 
          // Get next script...
-         var scriptPath = Engine.scriptQueue.shift();
+         var scriptPath = R.engine.Script.scriptQueue.shift();
 
          // If the queue element is a function, execute it and return
          if (typeof scriptPath === "function") {
             scriptPath();
-            Engine.readyForNextScript = true;
+            R.engine.Script.readyForNextScript = true;
             return;
          }
 
-         this.doLoad(scriptPath);
+         R.engine.Script.doLoad(scriptPath);
       }
    },
 
@@ -3498,36 +3238,36 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    doLoad: function(scriptPath, simplePath, cb) {
-      if (!this.started) {
+      if (!R.Engine.started) {
          return;
       }
 
       var s = scriptPath.replace(/[\/\.]/g,"_");
-      if (this.loadedScripts[s] == null)
+      if (R.engine.Script.loadedScripts[s] == null)
       {
          // Store the request in the cache
-         this.loadedScripts[s] = scriptPath;
+         R.engine.Script.loadedScripts[s] = scriptPath;
 
-         Engine.scriptLoadCount++;
-         Engine.updateProgress();
+         R.engine.Script.scriptLoadCount++;
+         R.engine.Script.updateProgress();
 
          if ($.browser.Wii) {
 
             $.get(scriptPath, function(data) {
 
                // Parse script code for syntax errors
-               if (Engine.parseSyntax(data)) {
+               if (R.engine.Linker.parseSyntax(data)) {
                   var n = document.createElement("script");
                   n.type = "text/javascript";
                   $(n).text(data);
 
                   var h = document.getElementsByTagName("head")[0];
                   h.appendChild(n);
-                  Engine.readyForNextScript = true;
+                  R.engine.Script.readyForNextScript = true;
                   
-                  Engine.scriptLoadCount--;
-                  Engine.updateProgress();
-                  Console.debug("Loaded '" + scriptPath + "'");
+                  R.engine.Script.scriptLoadCount--;
+                  R.engine.Script.updateProgress();
+                  R.debug.Console.debug("Loaded '" + scriptPath + "'");
                }
                
             }, "text");
@@ -3540,28 +3280,36 @@ var Engine = Engine.extend({
 
             // When the file is loaded
             var fn = function() {
-               if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
-                  Console.debug("Loaded '" + scriptPath + "'");
-                  Engine.handleScriptDone();
-                  if (cb) {
-                     cb(simplePath, Engine.SCRIPT_LOADED);
+					var callBack = arguments.callee.cb;
+					var sNode = arguments.callee.script;
+               if (!this.readyState || 
+						  this.readyState == "loaded" || 
+						  this.readyState == "complete") {
+                  R.debug.Console.debug("Loaded '" + scriptPath + "'");
+                  R.engine.Script.handleScriptDone();
+                  if (callBack) {
+                     callBack(simplePath, R.engine.Script.SCRIPT_LOADED);
                   }
-                  if (!Engine.localMode) {
+                  if (!R.Engine.localMode) {
                      // Delete the script node
-                     $(n).remove(); 
+                     $(sNode).remove(); 
                   }
                }
-               Engine.readyForNextScript = true;
+               R.engine.Script.readyForNextScript = true;
             };
+				fn.cb = cb;
+				fn.script = n;
 
             // When an error occurs
             var eFn = function(msg) {
-               Console.error("File not found: ", scriptPath);
-               if (cb) {
-                  cb(simplePath, Engine.SCRIPT_NOT_FOUND);
+					var callBack = arguments.callee.cb;
+               R.debug.Console.error("File not found: ", scriptPath);
+               if (callBack) {
+                  callBack(simplePath, R.engine.Script.SCRIPT_NOT_FOUND);
                }
-               Engine.readyForNextScript = true;
+               R.engine.Script.readyForNextScript = true;
             };
+				eFn.cb = cb;
 
             if ($.browser.msie) {
                n.defer = true;
@@ -3578,7 +3326,7 @@ var Engine = Engine.extend({
 
       } else {
          // Already have this script
-         Engine.readyForNextScript = true;
+         R.engine.Script.readyForNextScript = true;
       }
    },
 
@@ -3613,7 +3361,7 @@ var Engine = Engine.extend({
          // Determine if the developer has provided a "loading" element of their own
          if ($("span.loading").length == 0) {
             // They haven't, so create one for them
-            $("head").append($(Engine.loadingCSS));
+            $("head").append($(R.Engine.loadingCSS));
 
             var loadingDialog = "<span id='loading' class='intrinsic'><table border='0' style='width:100%;height:100%;'><tr>";
             loadingDialog += "<td style='width:100%;height:100%;' valign='middle' align='center'><div class='loadbox'>Loading ";
@@ -3625,33 +3373,35 @@ var Engine = Engine.extend({
       });
 
       // We'll wait for the Engine to be ready before we load the game
-      var engine = this;
+      var engine = R.engine.Engine;
 	
 		// Load engine options for browsers
-		Engine.loadEngineOptions();
+		R.engine.Script.loadEngineOptions();
 
-      Engine.gameLoadTimer = setInterval(function() {
-         if (Engine.optionsLoaded && window["DocumentContext"] != null) {
+      R.engine.Script.gameLoadTimer = setInterval(function() {
+         if (R.engine.Script.optionsLoaded && 
+				 R.rendercontexts.DocumentContext &&
+				 R.rendercontexts.DocumentContext.started) {
 
             // Start the engine
-            Engine.run();
+            R.Engine.run();
 
             // Stop the timer
-            clearInterval(Engine.gameLoadTimer);
-            Engine.gameLoadTimer = null;
+            clearInterval(R.engine.Script.gameLoadTimer);
+            R.engine.Script.gameLoadTimer = null;
 
             // Load the game
-            Console.debug("Loading '" + gameSource + "'");
-            engine.loadScript(gameSource);
+            R.debug.Console.debug("Loading '" + gameSource + "'");
+            R.engine.Script.loadScript(gameSource);
 
             // Start the game when it's ready
             if (gameObjectName) {
-               Engine.gameRunTimer = setInterval(function() {
+               R.engine.Script.gameRunTimer = setInterval(function() {
                   if (typeof window[gameObjectName] != "undefined" &&
                         window[gameObjectName].setup) {
-                     clearInterval(Engine.gameRunTimer);
+                     clearInterval(R.engine.Script.gameRunTimer);
 
-                     Console.warn("Starting: " + gameObjectName);
+                     R.debug.Console.warn("Starting: " + gameObjectName);
                      
                      // Remove the "loading" message (if we provided it)
                      $("#loading.intrinsic").remove();
@@ -3668,20 +3418,20 @@ var Engine = Engine.extend({
 	loadEngineOptions: function() {
 		
 		// Load the default configuration for all browsers, then load one specific to the browser type
-		Engine.optionsLoaded = false;
+		R.engine.Script.optionsLoaded = false;
 	
 		// Load the options specific to the browser.  Whether they load, or not,
 		// the game will continue to load.
-		Engine.loadJSON(Engine.getEnginePath() + "/configs/" + EngineSupport.sysInfo().browser + ".config", function(bData, status) {
+		R.engine.Script.loadJSON(R.Engine.getEnginePath() + "/configs/" + R.engine.Support.sysInfo().browser + ".config", function(bData, status) {
 			if (status == 200) {
-				Console.debug("Engine options loaded for: " + EngineSupport.sysInfo().browser);
-				Engine.setOptions(bData);
+				R.debug.Console.debug("Engine options loaded for: " + R.engine.Support.sysInfo().browser);
+				R.Engine.setOptions(bData);
 			} else {
 				// Log an error (most likely a 404)
-				Console.log("Engine options for: " + EngineSupport.sysInfo().browser + " responded with " + status);
+				R.debug.Console.log("Engine options for: " + R.engine.Support.sysInfo().browser + " responded with " + status);
 			}
 			
-			Engine.optionsLoaded = true;	
+			R.engine.Script.optionsLoaded = true;	
 		});
 		
 	},
@@ -3694,7 +3444,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    load: function(scriptSource) {
-      this.loadScript(this.getEnginePath() + scriptSource);
+      R.engine.Script.loadScript(R.Engine.getEnginePath() + scriptSource);
    },
 
    /**
@@ -3703,10 +3453,10 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    handleScriptDone: function() {
-      Engine.scriptsProcessed++;
-      Engine.scriptRatio = Engine.scriptsProcessed / Engine.scriptLoadCount;
-      Engine.scriptRatio = Engine.scriptRatio > 1 ? 1 : Engine.scriptRatio;
-      Engine.updateProgress();
+      R.engine.Script.scriptsProcessed++;
+      R.engine.Script.scriptRatio = R.engine.Script.scriptsProcessed / R.engine.Script.scriptLoadCount;
+      R.engine.Script.scriptRatio = R.engine.Script.scriptRatio > 1 ? 1 : R.engine.Script.scriptRatio;
+      R.engine.Script.updateProgress();
    },
 
    /**
@@ -3722,14 +3472,14 @@ var Engine = Engine.extend({
             pBar.css("position", "relative");
          }
          var pW = pBar.width();
-         var fill = Math.floor(pW * Engine.scriptRatio);
+         var fill = Math.floor(pW * R.engine.Script.scriptRatio);
          var fBar = jQuery("#engine-load-progress .bar");
          if (fBar.length == 0) {
             fBar = jQuery("<div class='bar' style='position: absolute; top: 0px; left: 0px; height: 100%;'></div>");
             pBar.append(fBar);
          }
          fBar.width(fill);
-         jQuery("#engine-load-info").text(Engine.scriptsProcessed + " of " + Engine.scriptLoadCount);
+         jQuery("#engine-load-info").text(R.engine.Script.scriptsProcessed + " of " + R.engine.Script.scriptLoadCount);
       }
    },
 
@@ -3751,23 +3501,23 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    loadStylesheet: function(stylesheetPath, relative) {
-      stylesheetPath = (relative ? "" : this.getEnginePath()) + stylesheetPath;
+      stylesheetPath = (relative ? "" : R.Engine.getEnginePath()) + stylesheetPath;
       var f = function() {
          $.get(stylesheetPath, function(data) {
             // process the data to replace the "enginePath" variable
             var epRE = /(\$<enginePath>)/g;
-            data = data.replace(epRE, Engine.getEnginePath());
-            if (EngineSupport.sysInfo().browser == "msie") {
+            data = data.replace(epRE, R.Engine.getEnginePath());
+            if (R.engine.Support.sysInfo().browser == "msie") {
                // IE likes it this way...
-               $("head", document).append($("<style type='text/css'>" + data + "</script>"));
+               $("head", document).append($("<style type='text/css'>" + data + "</style>"));
             } else {
                $("head", document).append($("<style type='text/css'/>").text(data));
             }
-            Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
+            R.debug.Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
          }, "text");
       };
 
-      this.setQueueCallback(f);
+      R.engine.Script.setQueueCallback(f);
    },
 
    /**
@@ -3777,7 +3527,7 @@ var Engine = Engine.extend({
    dumpScripts: function() {
       for (var f in this.loadedScripts)
       {
-         Console.debug(this.loadedScripts[f]);
+         R.debug.Console.debug(R.engine.Script.loadedScripts[f]);
       }
    },
 
@@ -3789,7 +3539,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    clearScriptCache: function() {
-      this.loadedScripts = {};
+      R.engine.Script.loadedScripts = {};
    }
    
 });
@@ -3800,8 +3550,8 @@ var Engine = Engine.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 1418 $
+ * @author: $Author: $
+ * @version: $Revision: -1 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3830,8 +3580,7 @@ var Engine = Engine.extend({
 //                                     METRICS MANAGEMENT
 //====================================================================================================
 //====================================================================================================
-var Engine = Engine.extend({
-   /** @lends Engine */
+R.debug.Metrics = Base.extend({
    constructor: null,
 
    /*
@@ -3856,7 +3605,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    toggleMetrics: function() {
-      this.showMetricsWindow = !this.showMetricsWindow;
+      R.debug.Metrics.showMetricsWindow = !R.debug.Metrics.showMetricsWindow;
    },
 
    /**
@@ -3864,7 +3613,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    showMetrics: function() {
-      this.showMetricsWindow = true;
+      R.debug.Metrics.showMetricsWindow = true;
    },
    
    /**
@@ -3872,7 +3621,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    showProfile: function() {
-      this.showMetricsProfile = true;
+      R.debug.Metrics.showMetricsProfile = true;
    },
 
    /**
@@ -3880,7 +3629,7 @@ var Engine = Engine.extend({
     * @memberOf Engine
     */
    hideMetrics: function() {
-      this.showMetricsWindow = false;
+      R.debug.Metrics.showMetricsWindow = false;
    },
    
    manMetrics: function() {
@@ -3907,47 +3656,47 @@ var Engine = Engine.extend({
     * Render the metrics window
     * @private
     */
-   renderMetrics: function() {
+   render: function() {
 
-      if (this.showMetricsWindow && !this.metricDisplay) {
-         this.metricDisplay = $("<div/>").addClass("metrics");
-         this.metricDisplay.append(this.metricButton("run", function() { Engine.run(); }));
-         this.metricDisplay.append(this.metricButton("pause", function() { Engine.pause(); }));
-         this.metricDisplay.append(this.metricButton("shutdown", function() { Engine.shutdown(); }));
+      if (R.debug.Metrics.showMetricsWindow && !R.debug.Metrics.metricDisplay) {
+         R.debug.Metrics.metricDisplay = $("<div/>").addClass("metrics");
+         R.debug.Metrics.metricDisplay.append(R.debug.Metrics.metricButton("run", function() { R.Engine.run(); }));
+         R.debug.Metrics.metricDisplay.append(R.debug.Metrics.metricButton("pause", function() { R.Engine.pause(); }));
+         R.debug.Metrics.metricDisplay.append(R.debug.Metrics.metricButton("shutdown", function() { R.Engine.shutdown(); }));
 
-         this.metricDisplay.append(this.metricButton("close", function() { Engine.hideMetrics(); }));
-         this.metricDisplay.append(this.metricButton("minimize", function() { Engine.manMetrics(); }));
+         R.debug.Metrics.metricDisplay.append(R.debug.Metrics.metricButton("close", function() { R.debug.Metrics.hideMetrics(); }));
+         R.debug.Metrics.metricDisplay.append(R.debug.Metrics.metricButton("minimize", function() { R.debug.Metrics.manMetrics(); }));
 
-         this.metricDisplay.append($("<div class='items'/>"));
-         this.metricDisplay.appendTo($("body"));
+         R.debug.Metrics.metricDisplay.append($("<div class='items'/>"));
+         R.debug.Metrics.metricDisplay.appendTo($("body"));
       }
       
       if ((this.showMetricsWindow || this.showMetricsProfile) && this.lastMetricSample-- == 0)
       {
-         // Add some metrics to assist the developer
-         Engine.addMetric("FPS", this.getFPS(), false, "#");
-         Engine.addMetric("aFPS", this.getActualFPS(), true, "#");
-         Engine.addMetric("availTime", this.fpsClock, false, "#ms");
-         Engine.addMetric("frameGenTime", Engine.frameTime, true, "#ms");
-         Engine.addMetric("engineLoad", Math.floor(this.getEngineLoad() * 100), true, "#%");
-         Engine.addMetric("visibleObj", Engine.vObj, false, "#");
-         Engine.addMetric("droppedFrames", Engine.droppedFrames, false, "#");
-         Engine.addMetric("upTime", Math.floor((Engine.worldTime - Engine.upTime)/1000), false, "# sec");
+         // Basic engine metrics
+         R.debug.Metrics.add("FPS", R.Engine.getFPS(), false, "#");
+         R.debug.Metrics.add("aFPS", R.Engine.getActualFPS(), true, "#");
+         R.debug.Metrics.add("availTime", R.Engine.fpsClock, false, "#ms");
+         R.debug.Metrics.add("frameGenTime", R.Engine.frameTime, true, "#ms");
+         R.debug.Metrics.add("engineLoad", Math.floor(R.Engine.getEngineLoad() * 100), true, "#%");
+         R.debug.Metrics.add("visibleObj", R.Engine.vObj, false, "#");
+         R.debug.Metrics.add("droppedFrames", R.Engine.droppedFrames, false, "#");
+         R.debug.Metrics.add("upTime", Math.floor((R.Engine.worldTime - R.Engine.upTime)/1000), false, "# sec");
 
-         this.updateMetrics();
-         this.lastMetricSample = this.metricSampleRate;
+         R.debug.Metrics.update();
+         R.debug.Metrics.lastMetricSample = R.debug.Metrics.metricSampleRate;
       }
       
-      if (this.showMetricsProfile && EngineSupport.sysInfo().browser == "msie" &&
-			 parseFloat(EngineSupport.sysInfo().version) < 9) {
+      if (R.debug.Metrics.showMetricsProfile && R.engine.Support.sysInfo().browser == "msie" &&
+			 parseFloat(R.engine.Support.sysInfo().version) < 9) {
          // Profiler not supported in IE
-         this.showMetricsProfile = false;
+         R.debug.Metrics.showMetricsProfile = false;
       }
       
-      if (this.showMetricsProfile && !this.profileDisplay) {
-         this.profileDisplay = $("<canvas width='150' height='100'/>").addClass("engine-profile");
-         this.profileDisplay.appendTo($("body"));
-         this.profileDisplay[0].getContext('2d').save();
+      if (R.debug.Metrics.showMetricsProfile && !R.debug.Metrics.profileDisplay) {
+         R.debug.Metrics.profileDisplay = $("<canvas width='150' height='100'/>").addClass("engine-profile");
+         R.debug.Metrics.profileDisplay.appendTo($("body"));
+         R.debug.Metrics.profileDisplay[0].getContext('2d').save();
       }
    },
 
@@ -3958,9 +3707,9 @@ var Engine = Engine.extend({
     * @param sampleRate {Number} The number of ticks between samples
     * @memberOf Engine
     */
-   setMetricSampleRate: function(sampleRate) {
-      this.lastMetricSample = 1;
-      this.metricSampleRate = sampleRate;
+   setSampleRate: function(sampleRate) {
+      R.debug.Metrics.lastMetricSample = 1;
+      R.debug.Metrics.metricSampleRate = sampleRate;
    },
 
    /**
@@ -3978,9 +3727,9 @@ var Engine = Engine.extend({
     * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
     * @memberOf Engine
     */
-   addMetric: function(metricName, value, smoothing, fmt) {
+   add: function(metricName, value, smoothing, fmt) {
       if (smoothing) {
-         var vals = this.metrics[metricName] ? this.metrics[metricName].values : [];
+         var vals = R.debug.Metrics.metrics[metricName] ? R.debug.Metrics.metrics[metricName].values : [];
          if (vals.length == 0) {
             // Init
             vals.push(value);
@@ -3990,9 +3739,9 @@ var Engine = Engine.extend({
          vals.shift();
          vals.push(value);
          var v = Math.floor((vals[0] + vals[1] + vals[2]) * 0.33);
-         this.metrics[metricName] = { val: (fmt ? fmt.replace("#", v) : v), values: vals, act: v };
+         R.debug.Metrics.metrics[metricName] = { val: (fmt ? fmt.replace("#", v) : v), values: vals, act: v };
       } else {
-         this.metrics[metricName] = { val: (fmt ? fmt.replace("#", value) : value), act: value };
+         R.debug.Metrics.metrics[metricName] = { val: (fmt ? fmt.replace("#", value) : value), act: value };
       }
    },
 
@@ -4002,9 +3751,9 @@ var Engine = Engine.extend({
     * @param metricName {String} The name of the metric to remove
     * @memberOf Engine
     */
-   removeMetric: function(metricName) {
-      this.metrics[metricName] = null;
-      delete this.metrics[metricName];
+   remove: function(metricName) {
+      R.debug.Metrics.metrics[metricName] = null;
+      delete R.debug.Metrics.metrics[metricName];
    },
 
    /**
@@ -4012,48 +3761,48 @@ var Engine = Engine.extend({
     * @private
     * @memberOf Engine
     */
-   updateMetrics: function() {
+   update: function() {
       var h = "", ctx;
-      if (this.showMetricsProfile) {
-         ctx = this.profileDisplay[0].getContext('2d');
+      if (R.debug.Metrics.showMetricsProfile) {
+         ctx = R.debug.Metrics.profileDisplay[0].getContext('2d');
          ctx.save();
          ctx.translate(147, 0);
       }
 
-      for (var m in this.metrics)
+      for (var m in R.debug.Metrics.metrics)
       {
-			if (this.showMetricsWindow) {
-	         h += m + ": " + this.metrics[m].val + "<br/>";
+			if (R.debug.Metrics.showMetricsWindow) {
+	         h += m + ": " + R.debug.Metrics.metrics[m].val + "<br/>";
 			}
-         if (this.showMetricsProfile) {
+         if (R.debug.Metrics.showMetricsProfile) {
             switch (m) {
-               case "engineLoad": this.drawProfilePoint("#ffff00", this.metrics[m].act); break;
+               case "engineLoad": this.drawProfilePoint("#ffff00", R.debug.Metrics.metrics[m].act); break;
                //case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
-               case "visibleObj": this.drawProfilePoint("#339933", this.metrics[m].act); break;
-               case "poolLoad" : this.drawProfilePoint("#a0a0ff", this.metrics[m].act); break;
+               case "visibleObj": this.drawProfilePoint("#339933", R.debug.Metrics.metrics[m].act); break;
+               case "poolLoad" : this.drawProfilePoint("#a0a0ff", R.debug.Metrics.metrics[m].act); break;
             }
          }
       }
-		if (this.showMetricsWindow) {
-			$(".items", this.metricDisplay).html(h);
+		if (R.debug.Metrics.showMetricsWindow) {
+			$(".items", R.debug.Metrics.metricDisplay).html(h);
 		}
-	   if (this.showMetricsProfile) {
+	   if (R.debug.Metrics.showMetricsProfile) {
          ctx.restore();
-         this.moveProfiler();
+         R.debug.Metrics.moveProfiler();
       }
    },
 
    drawProfilePoint: function(color, val) {
-      var ctx = this.profileDisplay[0].getContext('2d');
+      var ctx = R.debug.Metrics.profileDisplay[0].getContext('2d');
       ctx.strokeStyle = color
       try {
          if (!isNaN(val)) {
             ctx.beginPath();
-            ctx.moveTo(0, this.profiles[color] || 100);
+            ctx.moveTo(0, R.debug.Metrics.profiles[color] || 100);
             ctx.lineTo(1, (100 - val < 1 ? 1 : 100 - val));
             ctx.closePath();
             ctx.stroke();
-            this.profiles[color] = (100 - val < 1 ? 1 : 100 - val);
+            R.debug.Metrics.profiles[color] = (100 - val < 1 ? 1 : 100 - val);
          }
       } catch(ex) {
          
@@ -4061,7 +3810,7 @@ var Engine = Engine.extend({
    },
    
    moveProfiler: function() {
-      var ctx = this.profileDisplay[0].getContext('2d');
+      var ctx = R.debug.Metrics.profileDisplay[0].getContext('2d');
       var imgData = ctx.getImageData(1,0,149,100);
       ctx.save();
       ctx.translate(-1,0);
@@ -4076,24 +3825,22 @@ var Engine = Engine.extend({
     */
    doMetrics: function() { 
       // Output any metrics
-      if (Engine.showMetricsWindow || Engine.showMetricsProfile) {
-         Engine.renderMetrics();
-      } else if (!Engine.showMetricsWindow && Engine.metricDisplay) {
-         Engine.metricDisplay.remove();
-         Engine.metricDisplay = null;
+      if (R.debug.Metrics.showMetricsWindow || R.debug.Metrics.showMetricsProfile) {
+         R.debug.Metrics.render();
+      } else if (!R.debug.Metrics.showMetricsWindow && R.debug.Metrics.metricDisplay) {
+         R.debug.Metrics.metricDisplay.remove();
+         R.debug.Metrics.metricDisplay = null;
       }
    }
    
 });
 
-if (EngineSupport.checkBooleanParam("metrics"))
-{
-   Engine.showMetrics();
+if (R.engine.Support.checkBooleanParam("metrics")) {
+   R.debug.Metrics.showMetrics();
 }
 
-if (EngineSupport.checkBooleanParam("profile"))
-{
-   Engine.showProfile();
+if (R.engine.Support.checkBooleanParam("profile")) {
+   R.debug.Metrics.showProfile();
 }
 
 
@@ -4105,7 +3852,7 @@ if (EngineSupport.checkBooleanParam("profile"))
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1418 $
+ * @version: $Revision: 1511 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -4130,10 +3877,10 @@ if (EngineSupport.checkBooleanParam("profile"))
  */
 
 // Start the console so logging can take place immediately
-Console.startup();
+R.debug.Console.startup();
 
 // Default engine options
-Engine.defaultOptions = {
+R.Engine.defaultOptions = {
    skipFrames: true,													// Skip missed frames
    billboards: true,													// Use billboards to speed up rendering
    hardwareAccel: false,											// Hardware acceleration flag
@@ -4144,16 +3891,15 @@ Engine.defaultOptions = {
 
 
 // Start the engine
-Engine.options = $.extend({}, Engine.defaultOptions);
-Engine.startup();
+R.Engine.options = $.extend({}, R.Engine.defaultOptions);
+R.Engine.startup();
 
 // Set up the engine using whatever query params were passed
-Engine.setDebugMode(EngineSupport.checkBooleanParam("debug"));
+R.Engine.setDebugMode(R.engine.Support.checkBooleanParam("debug"));
 
-if (Engine.getDebugMode())
-{
-   Console.setDebugLevel(EngineSupport.getNumericParam("debugLevel", Console.DEBUGLEVEL_DEBUG));
+if (R.Engine.getDebugMode()) {
+   R.debug.Console.setDebugLevel(R.engine.Support.getNumericParam("debugLevel", R.debug.Console.DEBUGLEVEL_DEBUG));
 }
 
 // Local mode keeps loaded script source available
-Engine.localMode = EngineSupport.checkBooleanParam("local");
+R.Engine.localMode = R.engine.Support.checkBooleanParam("local");
