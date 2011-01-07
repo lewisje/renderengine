@@ -226,7 +226,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		 * @return {Container} A container of all objects in the container
 		 */
 		getObjects: function(){
-			return Container.create();
+			return R.struct.Container.create();
 		},
 		
 		/**

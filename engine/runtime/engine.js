@@ -114,8 +114,8 @@ function now() {
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: $
- * @version: $Revision: -1 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -843,8 +843,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: $
- * @version: $Revision: -1 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1053,7 +1053,7 @@ R.debug.Profiler.wireObjects = function(objArray) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1503 $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1189,7 +1189,7 @@ R.lang.Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1512 $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1781,7 +1781,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1426 $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
@@ -1837,9 +1837,11 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 	loadClasses: [],			// Classes which need to be loaded
 	queuedClasses: {},		// Classes which are queued to be initialized
 	
-	classLoader: null,
+	classLoaderTimer: null,
 	classTimer: null,
 	failTimer: null,
+	
+	waiting: {},
 	
 	/**
 	 * See R.Engine.define()
@@ -1865,27 +1867,7 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		
 		if (deps.length == 0 && incs.length == 0) {
 			// This class is ready to go already
-			
-			// Get the class object
-			var pkg = R.global, clazz = className.split(".");
-			while (clazz.length > 1) {
-				pkg = pkg[clazz.shift()];
-			}
-			var shortName = clazz.shift(), classObjDef = pkg[shortName];
-			
-			// We can initialize the class
-			if ($.isFunction(classObjDef)) {
-				pkg[shortName] = classObjDef();
-			} else {
-				pkg[shortName] = classObjDef;
-			}
-
-			if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
-				pkg[shortName].resolved();
-			}
-
-			R.debug.Console.warn("R.engine.Linker => " + className + " initialized");
-			R.engine.Linker.resolvedClasses[className] = true;
+			R.engine.Linker._initClass(className);
 			return;			
 		}
 		
@@ -1940,18 +1922,18 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 			}
 		}
 		
-		if (R.engine.Linker.classLoader == null && R.engine.Linker.loadClasses.length > 0) {
-			// Start the class loader
-			R.engine.Linker.classLoader = setTimeout(function() {
-				R.engine.Linker._loadClasses();
+		if (R.engine.Linker.loadClasses.length > 0) {
+			// Run the class loader
+			setTimeout(function() {
+				R.engine.Linker.classLoader();
 			}, 100);
 		}
 		
 		if (R.engine.Linker.classTimer == null) {
 			// After 10 seconds, if classes haven't been processed, fail
-			//R.engine.Linker.failTimer = setTimeout(function() {
-			//	R.engine.Linker._failure();
-			//}, 10000);
+			R.engine.Linker.failTimer = setTimeout(function() {
+				R.engine.Linker._failure();
+			}, 10000);
 			
 		  	R.engine.Linker.classTimer = setTimeout(function(){
 		  		R.engine.Linker._processClasses();
@@ -1960,50 +1942,71 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 	},
    
 	/**
+	 * Loads the class by converting the namespaced class to a filename and
+	 * calling the script loader.  When the file finishes loading, it is
+	 * put into the class queue to be processed.
+	 * 
 	 * @private
 	 */
-	_loadClasses: function() {
+	classLoader: function() {
 		// Load the classes
 		while (R.engine.Linker.loadClasses.length > 0) {
-			var cn = R.engine.Linker.loadClasses.shift();
-
-			// The callback for when the class file is loaded
-			var cb = function(path, result) {
-				// Convert back to a package and class
-				var cn = arguments.callee.className;	
-				if (result === R.engine.Script.SCRIPT_LOADED) {
-					// Push the class into the processing queue
-					R.debug.Console.log("R.engine.Linker => Initializing " + cn);	
-					R.engine.Linker.queuedClasses[cn] = true;
-				} else {
-					R.debug.Console.warn("R.engine.Linker => " + cn + " failed to load!");
-				}
-			};
-			cb.className = cn;
-
-			// Split the class into packages
-			cn = cn.split(".");
-
-			// Shift off the namespace
-			cn.shift();
-			
-			// Is this in the engine package?
-			if (cn[0] == "engine") {
-				// Shift off the package
-				cn.shift();
-			}
-			
-			// Convert the class to a path
-			var path = "/" + cn.join("/").toLowerCase() + ".js";
-			
-			// Load the class
-			R.engine.Script.loadNow(path, cb);
+			R.engine.Linker._doLoad(R.engine.Linker.loadClasses.shift());
 		}
-		
-		R.engine.Linker.classLoader = null;
+	},
+
+	/**
+	 * Linker uses this to load classes and track them
+	 * @private
+	 */
+	_doLoad: function(className) {
+		// Split the class into packages
+		var cn = className.split(".");
+
+		// Shift off the namespace
+		cn.shift();
+
+		// Is this in the engine package?
+		if (cn[0] == "engine") {
+			// Shift off the package
+			cn.shift();
+		}
+
+		// Convert the class to a path
+		var path = "/" + cn.join("/").toLowerCase() + ".js";
+
+		// Classes waiting for data
+		R.engine.Linker.waiting[path] = className;
+
+		// Load the class
+		R.debug.Console.log("Loading " + path);
+		R.engine.Script.loadNow(path, R.engine.Linker._loaded);
 	},
 	
 	/**
+	 * The callback for when a class file is loaded
+	 * @private
+	 */
+	_loaded: function(path, result) {
+
+		// Get the class for the path name
+		var className = R.engine.Linker.waiting[path];
+		delete R.engine.Linker.waiting[path];
+		
+		if (result === R.engine.Script.SCRIPT_LOADED) {
+			// Push the class into the processing queue
+			R.debug.Console.log("R.engine.Linker => Initializing " + className);	
+			R.engine.Linker.queuedClasses[className] = true;
+		} else {
+			R.debug.Console.error("R.engine.Linker => " + className + " failed to load!");
+		}
+			
+	},
+	
+	/**
+	 * Performs dependency and include checking for a class before
+	 * initializing it into the namespace.
+	 * 
 	 * @private
 	 */
 	_processClasses: function() {
@@ -2080,28 +2083,8 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 				}
 
 				if (!missIncs) {
-					// Get the class object
-					var pkg = R.global, clazz = cn.split(".");
-					while (clazz.length > 1) {
-						pkg = pkg[clazz.shift()];
-					}
-					var shortName = clazz.shift(), classObjDef = pkg[shortName];
-					
-					// We can initialize the class
-					if ($.isFunction(classObjDef)) {
-						pkg[shortName] = classObjDef();
-					} else {
-						pkg[shortName] = classObjDef;
-					}
-					
-					// If the class defines a "resolved()" class method, call that
-					if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
-						pkg[shortName].resolved();
-					}
-					
-					R.debug.Console.warn("R.engine.Linker => " + cn + " initialized");
-					R.engine.Linker.resolvedClasses[cn] = true;
-					
+					R.engine.Linker._initClass(cn);
+				
 					// No need to process it again
 					completed.push(cn);
 					processed++;				
@@ -2141,12 +2124,36 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		}
 	},
 	
+	_initClass: function(className) {
+		// Get the class object
+		var pkg = R.global, clazz = className.split(".");
+		while (clazz.length > 1) {
+			pkg = pkg[clazz.shift()];
+		}
+		var shortName = clazz.shift(), classObjDef = pkg[shortName];
+		
+		// We can initialize the class
+		if ($.isFunction(classObjDef)) {
+			pkg[shortName] = classObjDef();
+		} else {
+			pkg[shortName] = classObjDef;
+		}
+
+		// If the class defines a "resolved()" class method, call that
+		if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
+			pkg[shortName].resolved();
+		}
+
+		R.debug.Console.log("R.engine.Linker => " + className + " initialized");
+		R.engine.Linker.resolvedClasses[className] = true;
+	},
+	
 	_failure: function() {
 		clearTimeout(R.engine.Linker.failTimer);
 		clearTimeout(R.engine.Linker.classTimer);	
 		clearTimeout(R.engine.Linker.classLoader);	
 		
-		R.debug.Console.error("R.engine.Linker => FAILURE TO LOAD CLASSES!");
+		R.debug.Console.error("R.engine.Linker => FAILURE TO LOAD CLASSES!", "Resolved: ", R.engine.Linker.resolvedClasses, " Unprocessed: ", R.engine.Linker.queuedClasses, " ClassDefs: ", R.engine.Linker.classDefinitions);
 	}
 	
 });
@@ -2159,7 +2166,7 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1511 $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2562,12 +2569,12 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
       R.engine.Script.loadStylesheet("/css/engine.css");
 
       // The basics needed by the engine to get started
-      R.engine.Script.loadNow("/game.js");
-      R.engine.Script.loadNow("/pooledobject.js");
-      R.engine.Script.loadNow("/rendercontexts/abstractrendercontext.js");
-      R.engine.Script.loadNow("/rendercontexts/rendercontext2d.js");
-      R.engine.Script.loadNow("/rendercontexts/htmlelementcontext.js");
-      R.engine.Script.loadNow("/rendercontexts/documentcontext.js");
+		R.engine.Linker._doLoad("R.engine.Game");
+		R.engine.Linker._doLoad("R.engine.PooledObject");
+		R.engine.Linker._doLoad("R.rendercontexts.AbstractRenderContext");
+		R.engine.Linker._doLoad("R.rendercontexts.RenderContext2D");
+		R.engine.Linker._doLoad("R.rendercontexts.HTMLElementContext");
+		R.engine.Linker._doLoad("R.rendercontexts.DocumentContext");
    },
 
    /**
@@ -2765,7 +2772,6 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
       R.Engine.shuttingDown = false;
    },
 
-
    /**
     * Initializes an object for use in the engine.  Calling this method is required to make sure
     * that all dependencies are resolved before actually instantiating an object of the specified
@@ -2777,7 +2783,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * @param fn {Function} The function to run when the object can be initialized.
     */
    initObject: function(objectName, primaryDependency, fn) {
-      R.engine.Linker.initObject(objectName, primaryDependency, fn);
+      throw new SyntaxError("Unsupported - See R.Engine.define() instead");
    },
 
 	/**
@@ -2791,12 +2797,21 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 	 *    ],
 	 *    "includes": [
 	 *       "/path/to/file.js"
-	 *    ]
+	 *    ],
+	 *		"depends": [
+	 *			"[dependency]"
+	 *		]
 	 * }
 	 * </pre>
 	 * If a class has no requirements, you can either omit the "requires" key, set it
-	 * to <tt>null</tt>, or set it to an empty array.  The "includes" key is optional.
-	 * Use this to specify additional files which must be loaded for the class to run. 
+	 * to <tt>null</tt>, or set it to an empty array.  The "requires" key also performs
+	 * class loading for objects in the "R" namespace.  The "includes" key is optional.
+	 * Use this to specify additional files which must be loaded for the class to run.
+	 * <p/>
+	 * The "depends" key is also optional, but is essential for your game classes.  It
+	 * establishes class dependencies which are <i>not in the "R" namespace</i>.  It
+	 * doesn't perform class loading either, like "requires" does.  You will need to
+	 * load the classes with <tt>Game.load("/path/to/file.js")</tt>.
 	 *    
 	 * @param classDef {Object} The object's definition
 	 */
@@ -3003,6 +3018,8 @@ R.engine.Script = Base.extend({
    scriptRatio: 0,            // Ratio between processed/queued
    queuePaused:false,         // Script queue paused flag
    pauseReps: 0,              // Queue run repetitions while paused
+   
+   callbacks: {},					// Script callbacks
    
    /**
     * Status message when a script is not found
@@ -3250,6 +3267,12 @@ R.engine.Script = Base.extend({
 
          R.engine.Script.scriptLoadCount++;
          R.engine.Script.updateProgress();
+         
+         // If there's a callback for the script, store it
+         if (cb) {
+         	R.debug.Console.log("Push callback for ", simplePath);
+	         R.engine.Script.callbacks[simplePath] = cb;
+	      }
 
          if ($.browser.Wii) {
 
@@ -3280,16 +3303,26 @@ R.engine.Script = Base.extend({
 
             // When the file is loaded
             var fn = function() {
-					var callBack = arguments.callee.cb;
-					var sNode = arguments.callee.script;
                if (!this.readyState || 
 						  this.readyState == "loaded" || 
 						  this.readyState == "complete") {
-                  R.debug.Console.debug("Loaded '" + scriptPath + "'");
+
+						var sNode = arguments.callee.node;
+						var sPath = arguments.callee.fullPath;
+
+						// If there was a callback, get it
+						var callBack = R.engine.Script.callbacks[arguments.callee.simpPath];
+
+                  R.debug.Console.debug("Loaded '" + sPath + "'");
                   R.engine.Script.handleScriptDone();
-                  if (callBack) {
+                  if ($.isFunction(callBack)) {
+                  	R.debug.Console.debug("Callback for '" + sPath + "'");
                      callBack(simplePath, R.engine.Script.SCRIPT_LOADED);
+                     
+                     // Delete the callback
+                     delete R.engine.Script.callbacks[arguments.callee.simpPath];
                   }
+                  
                   if (!R.Engine.localMode) {
                      // Delete the script node
                      $(sNode).remove(); 
@@ -3297,8 +3330,9 @@ R.engine.Script = Base.extend({
                }
                R.engine.Script.readyForNextScript = true;
             };
-				fn.cb = cb;
-				fn.script = n;
+				fn.node = n;
+				fn.fullPath = scriptPath;
+				fn.simpPath = simplePath;
 
             // When an error occurs
             var eFn = function(msg) {
@@ -3550,8 +3584,8 @@ R.engine.Script = Base.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: $
- * @version: $Revision: -1 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3852,7 +3886,7 @@ if (R.engine.Support.checkBooleanParam("profile")) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1511 $
+ * @version: $Revision: 1516 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *

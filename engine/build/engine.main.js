@@ -410,12 +410,12 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
       R.engine.Script.loadStylesheet("/css/engine.css");
 
       // The basics needed by the engine to get started
-      R.engine.Script.loadNow("/game.js");
-      R.engine.Script.loadNow("/pooledobject.js");
-      R.engine.Script.loadNow("/rendercontexts/abstractrendercontext.js");
-      R.engine.Script.loadNow("/rendercontexts/rendercontext2d.js");
-      R.engine.Script.loadNow("/rendercontexts/htmlelementcontext.js");
-      R.engine.Script.loadNow("/rendercontexts/documentcontext.js");
+		R.engine.Linker._doLoad("R.engine.Game");
+		R.engine.Linker._doLoad("R.engine.PooledObject");
+		R.engine.Linker._doLoad("R.rendercontexts.AbstractRenderContext");
+		R.engine.Linker._doLoad("R.rendercontexts.RenderContext2D");
+		R.engine.Linker._doLoad("R.rendercontexts.HTMLElementContext");
+		R.engine.Linker._doLoad("R.rendercontexts.DocumentContext");
    },
 
    /**
@@ -613,7 +613,6 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
       R.Engine.shuttingDown = false;
    },
 
-
    /**
     * Initializes an object for use in the engine.  Calling this method is required to make sure
     * that all dependencies are resolved before actually instantiating an object of the specified
@@ -625,7 +624,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * @param fn {Function} The function to run when the object can be initialized.
     */
    initObject: function(objectName, primaryDependency, fn) {
-      R.engine.Linker.initObject(objectName, primaryDependency, fn);
+      throw new SyntaxError("Unsupported - See R.Engine.define() instead");
    },
 
 	/**
@@ -639,12 +638,21 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 	 *    ],
 	 *    "includes": [
 	 *       "/path/to/file.js"
-	 *    ]
+	 *    ],
+	 *		"depends": [
+	 *			"[dependency]"
+	 *		]
 	 * }
 	 * </pre>
 	 * If a class has no requirements, you can either omit the "requires" key, set it
-	 * to <tt>null</tt>, or set it to an empty array.  The "includes" key is optional.
-	 * Use this to specify additional files which must be loaded for the class to run. 
+	 * to <tt>null</tt>, or set it to an empty array.  The "requires" key also performs
+	 * class loading for objects in the "R" namespace.  The "includes" key is optional.
+	 * Use this to specify additional files which must be loaded for the class to run.
+	 * <p/>
+	 * The "depends" key is also optional, but is essential for your game classes.  It
+	 * establishes class dependencies which are <i>not in the "R" namespace</i>.  It
+	 * doesn't perform class loading either, like "requires" does.  You will need to
+	 * load the classes with <tt>Game.load("/path/to/file.js")</tt>.
 	 *    
 	 * @param classDef {Object} The object's definition
 	 */

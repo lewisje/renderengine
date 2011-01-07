@@ -50,6 +50,8 @@ R.engine.Script = Base.extend({
    queuePaused:false,         // Script queue paused flag
    pauseReps: 0,              // Queue run repetitions while paused
    
+   callbacks: {},					// Script callbacks
+   
    /**
     * Status message when a script is not found
     * @memberOf Engine
@@ -296,6 +298,12 @@ R.engine.Script = Base.extend({
 
          R.engine.Script.scriptLoadCount++;
          R.engine.Script.updateProgress();
+         
+         // If there's a callback for the script, store it
+         if (cb) {
+         	R.debug.Console.log("Push callback for ", simplePath);
+	         R.engine.Script.callbacks[simplePath] = cb;
+	      }
 
          if ($.browser.Wii) {
 
@@ -326,16 +334,26 @@ R.engine.Script = Base.extend({
 
             // When the file is loaded
             var fn = function() {
-					var callBack = arguments.callee.cb;
-					var sNode = arguments.callee.script;
                if (!this.readyState || 
 						  this.readyState == "loaded" || 
 						  this.readyState == "complete") {
-                  R.debug.Console.debug("Loaded '" + scriptPath + "'");
+
+						var sNode = arguments.callee.node;
+						var sPath = arguments.callee.fullPath;
+
+						// If there was a callback, get it
+						var callBack = R.engine.Script.callbacks[arguments.callee.simpPath];
+
+                  R.debug.Console.debug("Loaded '" + sPath + "'");
                   R.engine.Script.handleScriptDone();
-                  if (callBack) {
+                  if ($.isFunction(callBack)) {
+                  	R.debug.Console.debug("Callback for '" + sPath + "'");
                      callBack(simplePath, R.engine.Script.SCRIPT_LOADED);
+                     
+                     // Delete the callback
+                     delete R.engine.Script.callbacks[arguments.callee.simpPath];
                   }
+                  
                   if (!R.Engine.localMode) {
                      // Delete the script node
                      $(sNode).remove(); 
@@ -343,8 +361,9 @@ R.engine.Script = Base.extend({
                }
                R.engine.Script.readyForNextScript = true;
             };
-				fn.cb = cb;
-				fn.script = n;
+				fn.node = n;
+				fn.fullPath = scriptPath;
+				fn.simpPath = simplePath;
 
             // When an error occurs
             var eFn = function(msg) {
