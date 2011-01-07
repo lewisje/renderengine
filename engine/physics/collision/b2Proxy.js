@@ -19,10 +19,10 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/collision/b2BroadPhase.js");
+R.Engine.requires("/physics/collision/b2BroadPhase.js");
 
 
-Engine.initObject("b2Proxy", null, function() {
+R.Engine.initObject("b2Proxy", null, function() {
    
    var b2Proxy = Base.extend({
 

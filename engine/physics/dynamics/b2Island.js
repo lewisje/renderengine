@@ -19,13 +19,13 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
 
-Engine.include("/physics/dynamics/contacts/b2ContactSolver.js");
+R.Engine.requires("/physics/dynamics/contacts/b2ContactSolver.js");
 
 
-Engine.initObject("b2Island", null, function() {
+R.Engine.initObject("b2Island", null, function() {
 
    /*
    Position Correction Notes

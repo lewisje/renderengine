@@ -19,7 +19,7 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.initObject("b2BoundValues", null, function() {
+R.Engine.initObject("b2BoundValues", null, function() {
    
    var b2BoundValues = Base.extend({
    

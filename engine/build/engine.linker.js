@@ -44,7 +44,7 @@
  *
  * @static
  */
-var Linker = Base.extend(/** @scope Linker.prototype */{ 
+R.engine.Linker = Base.extend(/** @scope Linker.prototype */{ 
 
    constructor: null,
 
@@ -55,500 +55,324 @@ var Linker = Base.extend(/** @scope Linker.prototype */{
    //====================================================================================================
    //====================================================================================================
 
-   dependencyList: {},
-   dependencyCount: 0,
-   dependencyProcessor: null,
-   dependencyTimer: null,
-   dependencyCheckTimeout: $.browser.Wii ? 8500 : 6500,
-   dependencyProcessTimeout: 100,
-   
-   loadedClasses: [],
-   
-   /**
-    * Cleanup all initialized classes and start fresh.
-    * @private
-    */
-   cleanup: function() {
-      for (var c in Linker.loadedClasses) {
-         var d = Linker.loadedClasses[c]
-         var parentObj = Linker.getParentClass(d);
-         if (EngineSupport.sysInfo().browser != "msie") {
-            // IE doesn't allow this
-            delete parentObj[d];
-         }
-      }
-      Linker.loadedClasses = [];
-   },
-
-   /**
-    * Initializes an object for use in the engine.  Calling this method is required to make sure
-    * that all dependencies are resolved before actually instantiating an object of the specified
-    * class.
-    *
-    * @param objectName {String} The name of the object class
-    * @param primaryDependency {String} The name of the class for which the <tt>objectName</tt> class is
-    *                                   dependent upon.  Specifying <tt>null</tt> will assume the <tt>Base</tt> class.
-    * @param fn {Function} The function to run when the object can be initialized.
-    */
-   initObject: function(objectName, primaryDependency, fn) {
-      var objDeps = Linker.findAllDependencies(objectName, fn);
-
-      // Add the known dependency to the list of object
-      // dependencies we discovered
-      if (primaryDependency) {
-         objDeps.push(primaryDependency);
-      }
-      
-      var newDeps = [];
-
-      // Check for nulls and circular references
-      for (var d in objDeps) {
-         if (objDeps[d] != null) {
-            if (objDeps[d].split(".")[0] != objectName) {
-               newDeps.push(objDeps[d]);
-            } else {
-               Console.warn("Object references itself: ", objectName);
-            }
-         }
-      }
-
-      // Store the object for intialization when all dependencies are resolved
-      Linker.dependencyList[objectName] = {deps: newDeps, objFn: fn};
-      Linker.dependencyCount++;
-      Console.info(objectName, " depends on: ", newDeps);
-
-      // Check for 1st level circular references
-      this.checkCircularRefs(objectName);
-
-      // After a period of time has passed, we'll check our dependency list.
-      // If anything remains, we'll drop the bomb that certain files didn't resolve...
-      window.clearTimeout(Linker.dependencyTimer);
-      Linker.dependencyTimer = window.setTimeout(Linker.checkDependencyList, Linker.dependencyCheckTimeout);
-
-      if (!Linker.dependencyProcessor) {
-         Linker.dependencyProcessor = window.setTimeout(Linker.processDependencies, Linker.dependencyProcessTimeout);
-      }
-   },
-
-   /**
-    * Check the object to make sure the namespace(s) are defined.
-    * @param objName {String} A dot-notation class name
-    * @private
-    */
-   checkNSDeps: function(objName) {
-      var objHr = objName.split(".");
-
-      if (objHr.length == 1) {
-         return true;
-      }
-
-      var o = window;
-      for (var i = 0; i < objHr.length - 1; i++) {
-         o = o[objHr[i]];
-         if (!o) {
-            return false;
-         }
-      }
-      return true;
-   },
-
-   /**
-    * Get the parent class of the object specified by classname string.
-    * @param classname {String} A dot-notation class name
-    * @private
-    */
-   getParentClass: function(classname) {
-      var objHr = classname.split(".");
-      var o = window;
-      for (var i = 0; i < objHr.length - 1; i++) {
-         o = o[objHr[i]];
-         if (!o) {
-            return null;
-         }
-      }
-      return o;
-   },
-
-   /**
-    * The dependency processor and link checker.
-    * @private
-    */
-   processDependencies: function() {
-      var pDeps = [];
-      var dCount = 0;
-      for (var d in Linker.dependencyList) {
-         // Check to see if the dependencies of an object are loaded
-         // We also need to make sure that it's namespace(s) are initialized
-         dCount++;
-
-         var deps = Linker.dependencyList[d].deps;
-         var resolved = [];
-         var miss = false;
-			if (deps.length > 0) {
-	         for (var dep in deps) {
-	            if (deps[dep] != null && window[deps[dep]] == null) {
-	               miss = true;
-	            } else {
-	               resolved.push(deps[dep]);
-	            }
-	         }
+	classDefinitions: {},	// These are class definitions which have been parsed
+	processed: {},				// These are the classes/files which have been processed
+	resolvedClasses: {},		// These are resolved (loaded & ready) classes
+	resolvedFiles: {},		// These are resolved (loaded) files
 	
-	         for (var x in resolved) {
-	            EngineSupport.arrayRemove(Linker.dependencyList[d].deps, resolved[x]);
-	         }
+	loadClasses: [],			// Classes which need to be loaded
+	queuedClasses: {},		// Classes which are queued to be initialized
+	
+	classLoader: null,
+	classTimer: null,
+	failTimer: null,
+	
+	/**
+	 * See R.Engine.define()
+	 * @private
+	 */
+	define: function(classDef) {
+		if (typeof classDef["class"] === "undefined") {
+			throw new SyntaxError("Missing 'class' key in class definition!");
+		}
+		var className = classDef["class"];
+		
+		if (R.engine.Linker.resolvedClasses[className] != null) {
+			throw new ReferenceError("Class '" + className + "' is already defined!");
+		}
+
+		R.debug.Console.debug("R.engine.Linker => Process definition for ", className);
+
+		R.engine.Linker.classDefinitions[className] = classDef;	
+		var deps = [];
+		if (classDef.requires && classDef.requires.length > 0) deps = deps.concat(classDef.requires);
+		var incs = [];
+		if (classDef.includes && classDef.includes.length > 0) incs = incs.concat(classDef.includes);
+		
+		if (deps.length == 0 && incs.length == 0) {
+			// This class is ready to go already
+			
+			// Get the class object
+			var pkg = R.global, clazz = className.split(".");
+			while (clazz.length > 1) {
+				pkg = pkg[clazz.shift()];
+			}
+			var shortName = clazz.shift(), classObjDef = pkg[shortName];
+			
+			// We can initialize the class
+			if ($.isFunction(classObjDef)) {
+				pkg[shortName] = classObjDef();
+			} else {
+				pkg[shortName] = classObjDef;
 			}
 
-         if (!miss && Linker.checkNSDeps(d)) {
-            // We can initialize it now
-            Console.log("Initializing '", d, "'");
-            var parentObj = Linker.getParentClass(d);
-            parentObj[d] = Linker.dependencyList[d].objFn();
-            Console.info("-> Initialized '", d, "'");
-            Linker.loadedClasses.push(d);
+			if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
+				pkg[shortName].resolved();
+			}
 
-            // Remember what we processed so we don't process them again
-            pDeps.push(d);
-            
-            // After it has been initialized, check to see if it has the
-            // resolved() class method
-            if (parentObj[d].resolved) {
-					try {
-	               parentObj[d].resolved();
-					} catch (rEx) {
-						Console.error("Error calling " + d + ".resolved() due to: " + rEx.message, rEx);
+			R.debug.Console.warn("R.engine.Linker => " + className + " initialized");
+			R.engine.Linker.resolvedClasses[className] = true;
+			return;			
+		}
+		
+		if (!R.engine.Linker.processed[className]) {
+			R.engine.Linker.processed[className] = true;
+			if (!R.engine.Linker.resolvedClasses[className]) {
+				// Queue the class to be resolved
+				R.engine.Linker.queuedClasses[className] = true;
+			}
+		}
+		
+		// Remove any dependencies which are already resolved
+		var unresDeps = [];
+		while (deps.length > 0) {
+			var dep = deps.shift();
+			if (!R.engine.Linker.resolvedClasses[dep]) {
+				unresDeps.push(dep);
+			}
+		}
+		
+		// Remove any includes which are already loaded
+		var unresIncs = [];
+		while (incs.length > 0) {
+			var inc = incs.shift();
+			if (!R.engine.Linker.resolvedFiles[inc]) {
+				unresIncs.push(inc);
+			}
+		}
+		
+		// Load the includes ASAP
+		while (unresIncs.length > 0) {
+			var inc = unresIncs.shift();
+			
+			// If the include hasn't been processed yet, do it now
+			if (!R.engine.Linker.processed[inc]) {
+				var cb = function(path, result) {
+					if (result === R.engine.Script.SCRIPT_LOADED) {
+						R.engine.Linker.resolvedFiles[path] = true;
 					}
-            }
-         }
-      }
-
-      for (var i in pDeps) {
-         delete Linker.dependencyList[pDeps[i]];
-      }
-
-      if (dCount != 0) {
-         Linker.dependencyProcessor = window.setTimeout(Linker.processDependencies, Linker.dependencyProcessTimeout);
-      } else {
-         window.clearTimeout(Linker.dependencyProcessor);
-         Linker.dependencyProcessor = null;
-      }
-   },
-
-   /*
-    * The following set of functions breaks apart a function into its
-    * components.  It is used to determine the dependencies of classes.
-    */
-
-   /**
-    * Find variables defined in a function:
-    *   var x = 10;
-    *   var y;
-    *   for (var z=3; z < 10; z++)
-    *   -- Still need to handle:  var x,y,z;
-    *
-    * @private
-    */
-   findVars: function(objectName, obj) {
-      // Find all variables explicitly defined
-      var def = obj.toString();
-      var vTable = [];
-      var nR = "([\\$_\\w\\.]*)";
-      var vR = new RegExp("(var\\s*" + nR + "\\s*)","g");
-      var m;
-      while ((m = vR.exec(def)) != null) {
-         vTable.push(m[2]); 
-      }
-      return vTable;
-   },
-
-   /**
-    * Find object dependencies in variables, arguments, and method usage.
-    * @private
-    */
-   findDependencies: function(objectName, obj) {
-      // Find all dependent objects
-      var def = obj.toString();
-      var dTable = [];
-      var nR = "([\\$_\\w\\.]*)";
-      var nwR = new RegExp("(new\\s+" + nR + ")","g");
-      var ctR = new RegExp("(" + nR + "\\.create\\()","g");
-      var fcR = new RegExp("(" + nR + ".isInstance\\()", "g");
-      var inR = new RegExp("(" + nR + "\\()", "g");
-      //var inR = new RegExp("(instanceof\\s+"+ nR + ")", "g");
-      var m;
-
-      // "new"-ing objects
-      while ((m = nwR.exec(def)) != null) {
-         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
-            dTable.push(m[2]);
-         }
-      }
-
-      // "create"-ing objects
-      while ((m = ctR.exec(def)) != null) {
-         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
-            dTable.push(m[2]);
-         }
-      }
-
-      // method dependencies
-      while ((m = fcR.exec(def)) != null) {
-         if (m[2].indexOf(".") != -1) {
-            var k = m[2].split(".")[0];
-            if (EngineSupport.indexOf(dTable, k) == -1) {
-               dTable.push(k);
-            }
-         }
-      }
-
-      // "isInstance" method dependencies
-      while ((m = fcR.exec(def)) != null) {
-         if (m[2].indexOf(".") != -1) {
-            var k = m[2].split(".")[0];
-            if (EngineSupport.indexOf(dTable, k) == -1) {
-               EngineSupport.arrayRemove(dTable, k);
-            }
-         }
-      }
-
-      // "instanceof" checks
-      /*
-      while ((m = inR.exec(def)) != null) {
-         if (EngineSupport.indexOf(dTable, m[2]) == -1) {
-            dTable.push(m[2]);
-         }
-      }
-      */
-      return dTable;
-   },
-
-   /**
-    * Process anonymous functions, extracting the function arguments
-    * @private
-    */
-   findAnonArgs: function(objectName, str) {
-      var a = [];
-
-      var aFnRE = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)","g");
-      while ((m = aFnRE.exec(str)) != null) {
-         var args = m[1].split(",");
-
-         for (var x in args) {
-            a.push(args[x].replace(" ",""));
-         }
-      }
-
-      return a;
-   },
+				};
+				R.engine.Script.loadNow(inc, cb);
+				R.engine.Linker.processed[inc] = true;
+			}
+		}
+		
+		// Queue up the classes for processing
+		while (unresDeps.length > 0) {
+			var dep = unresDeps.shift();
+			if (!R.engine.Linker.processed[dep]) {
+				R.engine.Linker.processed[dep] = true;
+				R.engine.Linker.loadClasses.push(dep);
+			}
+		}
+		
+		if (R.engine.Linker.classLoader == null && R.engine.Linker.loadClasses.length > 0) {
+			// Start the class loader
+			R.engine.Linker.classLoader = setTimeout(function() {
+				R.engine.Linker._loadClasses();
+			}, 100);
+		}
+		
+		if (R.engine.Linker.classTimer == null) {
+			// After 10 seconds, if classes haven't been processed, fail
+			//R.engine.Linker.failTimer = setTimeout(function() {
+			//	R.engine.Linker._failure();
+			//}, 10000);
+			
+		  	R.engine.Linker.classTimer = setTimeout(function(){
+		  		R.engine.Linker._processClasses();
+		  	}, 100);
+		}
+	},
    
-   /**
-    * Finds all of the dependencies within an object class.
-    * @private
-    */
-   findAllDependencies: function(objectName, obj) {
-      var defs;
-      var fTable = {};
-      Console.warn("Process: " + objectName);
+	/**
+	 * @private
+	 */
+	_loadClasses: function() {
+		// Load the classes
+		while (R.engine.Linker.loadClasses.length > 0) {
+			var cn = R.engine.Linker.loadClasses.shift();
 
-      try {
-         var k = obj();
-      } catch (ex) {
-         // The class probably extends a non-existent class. Replace the parent
-         // class with a known class and evaluate as a dummy class
-         var extRE = new RegExp("(var\\s*)?([\\$_\\w\\.]*?)\\s*=\\s*([\\$_\\w\\.]*?)\\.extend\\(");
-         var classDef = obj.toString();
-         var nm = null;
-         classDef = classDef.replace(extRE, function(str, varDef, classname, parent, offs, s) {
-            nm = classname;
-            return "return Base.extend(";
-         });
-         try {
-            k = eval("(" + classDef.replace("return " + nm + ";", "") + ")();");
-         } catch (inEx) {
-            Console.error("Cannot parse class '" + nm + "'");
-         }
-      }
+			// The callback for when the class file is loaded
+			var cb = function(path, result) {
+				// Convert back to a package and class
+				var cn = arguments.callee.className;	
+				if (result === R.engine.Script.SCRIPT_LOADED) {
+					// Push the class into the processing queue
+					R.debug.Console.log("R.engine.Linker => Initializing " + cn);	
+					R.engine.Linker.queuedClasses[cn] = true;
+				} else {
+					R.debug.Console.warn("R.engine.Linker => " + cn + " failed to load!");
+				}
+			};
+			cb.className = cn;
 
-      var kInstance = null;
-      if ($.isFunction(k)) {
-         // If the class is an instance, get it's class object
-         kInstance = k;
-         k = k.prototype;
-      }
+			// Split the class into packages
+			cn = cn.split(".");
 
-      // Find the internal functions
-      for (var f in k) {
-         var def = k[f];
-         if (kInstance && f == "constructor" && $.isFunction(kInstance) && k.hasOwnProperty(f)){
-            // If it's an instance, we're looking at the constructor, and the
-            // instance has its own constructor (not inherited)
-            def = kInstance;
-         }
-         if ($.isFunction(def) && k.hasOwnProperty(f)) {
-            def = def.toString();
-            var fR = new RegExp("function\\s*\\(([\\$\\w_, ]*?)\\)\\s*\\{((.|\\s)*)","g");
-            var m = fR.exec(def);
-            if (m) {
-               // Remove strings, then comments
-               var fdef = m[2].replace(/(["|']).*?\1/g, "");
-               fdef = fdef.replace(/\/\/.*\r\n/g, "");
-               fdef = fdef.replace("\/\*(.|\s)*?\*\/", "");
-
-               // Process anonymous function arguments
-               var anonArgs = Linker.findAnonArgs(objectName, fdef);
-
-               // Process each function
-               fTable[f] = { vars: Linker.findVars(objectName, fdef),
-                             deps: Linker.findDependencies(objectName, fdef) };
-               fTable[f].deps = EngineSupport.filter(fTable[f].deps, function(e) {
-                  return (e != "" && e != "this" && e != "arguments");
-               });
-
-               // Consider arguments as local variables
-               var args = m[1].split(",");
-               var vs = fTable[f].vars;
-               for (var a in args) {
-                  if (EngineSupport.indexOf(vs, args[a]) == -1) {
-                     vs.push(args[a].replace(" ",""));
-                  }
-               }
-
-               // Combine args with the anonymous function args
-               for (var a in anonArgs) {
-                  if (EngineSupport.indexOf(vs, anonArgs[a]) == -1) {
-                     vs.push(anonArgs[a]);
-                  }
-               }
-            }
-         }
-      }
-
-      // This is useful for debugging dependency problems...
-      Console.log("DepTable: ", objectName, fTable);
-
-      return Linker.procDeps(objectName, fTable);
-   },
-
-   /**
-    * Process dependencies and clear any that have been resolved.
-    * @private
-    */
-   procDeps: function(objectName, fTable) {
-      // Remove dependencies resolved by local variables and arguments
-      var r = [];
-      var allDeps = [];
-      for (var f in fTable) {
-         var deps = fTable[f].deps;
-         var vars = fTable[f].vars;
-
-         for (var d in deps) {
-            var dp = deps[d].split(".")[0];
-            if (EngineSupport.indexOf(vars, dp) != -1 && EngineSupport.indexOf(r, deps[d]) == -1) {
-               r.push(deps[d]);
-            }
-         }
-
-         fTable[f].deps = EngineSupport.filter(deps, function(e) {
-            return (EngineSupport.indexOf(r, e) == -1);
-         });
-
-         for (var d in fTable[f].deps) {
-            if (EngineSupport.indexOf(allDeps, fTable[f].deps[d]) == -1) {
-               allDeps.push(fTable[f].deps[d]);
-            }
-         }
-      }
-
-      return allDeps;
-   },
-
-   /**
-    * Perform resolution on first-level circular references.
-    * @private
-    */
-   checkCircularRefs: function(objectName) {
-      // Remove first-level dependencies           
-      var deps = Linker.dependencyList[objectName].deps;
-      for (var dep in deps) {
-         if (Linker.dependencyList[deps[dep]] && EngineSupport.indexOf(Linker.dependencyList[deps[dep]].deps, objectName) != -1) {
-            // Try removing the circular reference
-            EngineSupport.arrayRemove(Linker.dependencyList[objectName].deps, deps[dep]);
-         }
-      }
-      
-   },
+			// Shift off the namespace
+			cn.shift();
+			
+			// Is this in the engine package?
+			if (cn[0] == "engine") {
+				// Shift off the package
+				cn.shift();
+			}
+			
+			// Convert the class to a path
+			var path = "/" + cn.join("/").toLowerCase() + ".js";
+			
+			// Load the class
+			R.engine.Script.loadNow(path, cb);
+		}
+		
+		R.engine.Linker.classLoader = null;
+	},
 	
-   /**
-    * Check the dependency list for any unresolved dependencies.  Anything that hasn't
-    * been resolved will be dumped to the console as an error.
-    * @private
-    */
-   checkDependencyList: function() {
-      // Stop processing
-      window.clearTimeout(Linker.dependencyTimer);
-      Linker.dependencyTimer = null;
-      window.clearTimeout(Linker.dependencyProcessor);
-      Linker.dependencyProcessor = null;      
+	/**
+	 * @private
+	 */
+	_processClasses: function() {
+		var inProcess = 0, processed = 0, completed = [];
+		for (var cn in R.engine.Linker.queuedClasses) {
+			inProcess++;
+			
+			// Get the class definition
+			var def = R.engine.Linker.classDefinitions[cn];
+				
+			// Check to see if the dependencies exist
+			var missDeps = false, reqs = [], unres = [];
+			if (def.requires && def.requires.length > 0) reqs = reqs.concat(def.requires);
+			while (reqs.length > 0) {
+				var req = reqs.shift();
+				
+				if (!R.engine.Linker.resolvedClasses[req]) {
+					// Check for A => B  => A
+					// If such a circular reference exists, we can ignore the dependency
+					var depDef = R.engine.Linker.classDefinitions[req];
+					if (depDef && depDef.requires) {
+						if (R.engine.Support.indexOf(depDef.requires, cn) == -1) {
+							// Not a circular reference
+							unres.push(req);
+						}
+					} else {
+						// Class not resolved
+						unres.push(req);
+					}
+				}
+			}
+			
+			// Anything left unresolved means we cannot initialize
+			missDeps = (unres.length > 0);
+			
+			// Check for local dependencies
+			var localDeps = false, lDeps = [], lUnres = [];
+			if (def.depends && def.depends.length > 0) lDeps = lDeps.concat(def.depends);
+			while (lDeps.length > 0) {
+				var lDep = lDeps.shift();
+				
+				if (!R.engine.Linker.resolvedClasses[lDep]) {
+					// Check for A => B  => A
+					// If such a circular reference exists, we can ignore the dependency
+					var lDepDef = R.engine.Linker.classDefinitions[lDep];
+					if (lDepDef && lDepDef.requires) {
+						if (R.engine.Support.indexOf(lDepDef.requires, cn) == -1) {
+							// Not a circular reference
+							lUnres.push(lDep);
+						}
+					} else if (lDepDef && lDepDef.depends) {
+						if (R.engine.Support.indexOf(lDepDef.depends, cn) == -1) {
+							// Not a circular reference
+							lUnres.push(lDep);
+						}
+					} else {
+						// Class not resolved
+						lUnres.push(lDep);
+					}
+				}
+			}
+			
+			// Anything left unresolved means we cannot initialize
+			localDeps = (lUnres.length > 0);
+						
+			// If all requirements are loaded, check the includes
+			if (!(missDeps || localDeps)) {
+				var missIncs = false, incs = def.includes || [];
+				for (var i = 0; i < incs.length; i++) {
+					if (!R.engine.Linker.resolvedFiles[incs[i]]) {
+						missIncs = true;
+						break;	
+					}
+				}
 
-      // Build the list
-      var unresolved = [], unresDeps = "", dCount = 0;
-      for (var obj in Linker.dependencyList) {
-         dCount++;
-         unresDeps += "Object '" + obj + "' has the following unresolved dependencies: ";
-         unresDeps += "(" + Linker.dependencyList[obj].deps.length + ") ";
-         for (var d in Linker.dependencyList[obj].deps) {
-            unresDeps += Linker.dependencyList[obj].deps[d] + " ";
-         }
-         unresolved.push(unresDeps);
-         unresDeps = "";
-      }
-      
-      if (dCount != 0) {
-         // Dump the dependency list
-         Console.setDebugLevel(Console.DEBUGLEVEL_ERRORS);
-         for (var ud in unresolved) {
-            Console.error(unresolved[ud]);
-         }
-         Engine.shutdown();
-      }
-   },
+				if (!missIncs) {
+					// Get the class object
+					var pkg = R.global, clazz = cn.split(".");
+					while (clazz.length > 1) {
+						pkg = pkg[clazz.shift()];
+					}
+					var shortName = clazz.shift(), classObjDef = pkg[shortName];
+					
+					// We can initialize the class
+					if ($.isFunction(classObjDef)) {
+						pkg[shortName] = classObjDef();
+					} else {
+						pkg[shortName] = classObjDef;
+					}
+					
+					// If the class defines a "resolved()" class method, call that
+					if ((typeof pkg[shortName] !== "undefined") && pkg[shortName].resolved) {
+						pkg[shortName].resolved();
+					}
+					
+					R.debug.Console.warn("R.engine.Linker => " + cn + " initialized");
+					R.engine.Linker.resolvedClasses[cn] = true;
+					
+					// No need to process it again
+					completed.push(cn);
+					processed++;				
+				}
+			}
+		}
 
-   /**
-    * Dump out any unresolved class dependencies to the console.
-    * @return {Object} A list of all classes that haven't been loaded due to resolution conflicts.
-    */
-   dumpDependencies: function() {
-      Console.debug(Linker.dependencyList);
-   },
+		// Clean up processed classes
+		while (completed.length > 0) {
+			delete R.engine.Linker.queuedClasses[completed.shift()];
+		}
+		
+		if (processed != 0) {
+			// Something was processed, reset the fail timer
+			clearTimeout(R.engine.Linker.failTimer);
+			R.engine.Linker.failTimer = setTimeout(function() {
+				R.engine.Linker._failure();
+			}, 10000);
+		}
+		
+		var newClzz = 0;
+		for (var j in R.engine.Linker.queuedClasses) {
+			newClzz++;
+		}
+		
+		if (newClzz > 0 || inProcess > processed) {
+			// There are classes waiting for their dependencies, do this again
+			R.engine.Linker.classTimer = setTimeout(function(){
+		  		R.engine.Linker._processClasses();
+		  	}, 100);				
+		} else if (inProcess == processed) {
+			// Clear the fail timer
+			clearTimeout(R.engine.Linker.failTimer);
 
-   //====================================================================================================
-   //====================================================================================================
-   //                                         SYNTAX PARSER
-   //====================================================================================================
-   //====================================================================================================
-   
-   /**
-    * Parse a javascript file for common syntax errors which might otherwise cause a script
-    * to not load.  On platforms, such as Wii and iPhone, it might not be possible to see
-    * errors which cause the code to not compile.  By checking a known set of possible errors,
-    * it might be possible to reduce headaches on those platforms when developing.
-    * @private
-    */
-   parseSyntax: function(jsCode) {
-      
-      // Clean the source first so we only have code
-      //jsCode = EngineSupport.cleanSource(jsCode, true);
-      
-      // Check for the following:
-      // * Variable comparison in assignment statement
-      // * Extra comma after last item in Object definition
-      // * Missing comma between items in Object definition
-      // * Missing colon between name and definition
-      // * Equal sign where colon expected
-      // * Try without catch and finally
-      
-      //Console.error("Syntax errors:\n", errors);
-      
-      return true;   
-   }
-   
+			// All classes waiting to be processed have been processed
+			R.engine.Linker.classTimer = null;
+		}
+	},
+	
+	_failure: function() {
+		clearTimeout(R.engine.Linker.failTimer);
+		clearTimeout(R.engine.Linker.classTimer);	
+		clearTimeout(R.engine.Linker.classLoader);	
+		
+		R.debug.Console.error("R.engine.Linker => FAILURE TO LOAD CLASSES!");
+	}
+	
 });

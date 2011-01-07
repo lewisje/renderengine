@@ -19,9 +19,9 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/collision/Features.js");
+R.Engine.requires("/physics/collision/Features.js");
 
-Engine.initObject("b2ContactID", null, function() {
+R.Engine.initObject("b2ContactID", null, function() {
    
    // We use contact ids to facilitate warm starting.
    var b2ContactID = Base.extend({

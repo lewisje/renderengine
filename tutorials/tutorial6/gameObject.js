@@ -1,13 +1,13 @@
 // Load the components and engine objects
-Engine.include("/components/component.transform2d.js");
-Engine.include("/components/component.keyboardinput.js");
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/components/component.transform2d.js");
+R.Engine.requires("/components/component.keyboardinput.js");
+R.Engine.requires("/engine.object2d.js");
 
 // ### ADD THIS ###
-Engine.include("/components/component.vector2d.js");
+R.Engine.requires("/components/component.vector2d.js");
 
 
-Engine.initObject("GameObject", "Object2D", function() {
+R.Engine.initObject("GameObject", "Object2D", function() {
 
    var GameObject = Object2D.extend({
 

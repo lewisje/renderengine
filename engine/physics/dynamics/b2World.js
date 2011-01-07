@@ -19,22 +19,22 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Math.js");
+R.Engine.requires("/physics/common/math/b2Math.js");
 
-Engine.include("/physics/collision/b2BroadPhase.js");
-Engine.include("/physics/collision/b2PairCallback.js");
+R.Engine.requires("/physics/collision/b2BroadPhase.js");
+R.Engine.requires("/physics/collision/b2PairCallback.js");
 
-Engine.include("/physics/dynamics/b2Body.js");
-Engine.include("/physics/dynamics/b2BodyDef.js");
-Engine.include("/physics/dynamics/b2CollisionFilter.js");
-Engine.include("/physics/dynamics/b2ContactManager.js");
-Engine.include("/physics/dynamics/b2TimeStep.js");
-Engine.include("/physics/dynamics/b2Island.js");
-Engine.include("/physics/dynamics/contacts/b2Contact.js");
-Engine.include("/physics/dynamics/contacts/b2NullContact.js");
+R.Engine.requires("/physics/dynamics/b2Body.js");
+R.Engine.requires("/physics/dynamics/b2BodyDef.js");
+R.Engine.requires("/physics/dynamics/b2CollisionFilter.js");
+R.Engine.requires("/physics/dynamics/b2ContactManager.js");
+R.Engine.requires("/physics/dynamics/b2TimeStep.js");
+R.Engine.requires("/physics/dynamics/b2Island.js");
+R.Engine.requires("/physics/dynamics/contacts/b2Contact.js");
+R.Engine.requires("/physics/dynamics/contacts/b2NullContact.js");
 
 
-Engine.initObject("b2World", null, function() {
+R.Engine.initObject("b2World", null, function() {
 
    var b2World = Base.extend({
    

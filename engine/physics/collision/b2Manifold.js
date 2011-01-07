@@ -19,11 +19,11 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Vec2.js");
-Engine.include("/physics/collision/b2ContactPoint.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/collision/b2ContactPoint.js");
 
-Engine.initObject("b2Manifold", null, function() {
+R.Engine.initObject("b2Manifold", null, function() {
    
    var b2Manifold = Base.extend({
    

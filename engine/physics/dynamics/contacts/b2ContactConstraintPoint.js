@@ -19,10 +19,10 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
 
-Engine.initObject("b2ContactConstraintPoint", null, function() {
+R.Engine.initObject("b2ContactConstraintPoint", null, function() {
 
    var b2ContactConstraintPoint = Base.extend({
 

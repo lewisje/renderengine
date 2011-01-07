@@ -19,11 +19,11 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
 
-Engine.initObject("b2BodyDef", null, function() {
+R.Engine.initObject("b2BodyDef", null, function() {
 
    var b2BodyDef = Base.extend({
    

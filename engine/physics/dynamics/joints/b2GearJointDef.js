@@ -19,11 +19,11 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/dynamics/joints/b2Joint.js");
-Engine.include("/physics/dynamics/joints/b2JointDef.js");
+R.Engine.requires("/physics/dynamics/joints/b2Joint.js");
+R.Engine.requires("/physics/dynamics/joints/b2JointDef.js");
 
 
-Engine.initObject("b2GearJointDef", "b2JointDef", function() {
+R.Engine.initObject("b2GearJointDef", "b2JointDef", function() {
 
 	// A gear joint is used to connect two joints together. Either joint
 	// can be a revolute or prismatic joint. You specify a gear ratio

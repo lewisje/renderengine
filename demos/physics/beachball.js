@@ -31,9 +31,9 @@
  */
 
 // Load engine objects
-Engine.include("/components/component.circlebody.js");
+R.Engine.requires("/components/component.circlebody.js");
 
-Engine.initObject("BeachBall", "Toy", function() {
+R.Engine.initObject("BeachBall", "Toy", function() {
 
    /**
     * @class A beachball toy to play with.  Uses the circle body to physically animate

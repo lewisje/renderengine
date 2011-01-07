@@ -1,7 +1,7 @@
-Engine.include("/engine.math2d.js");
-Engine.include("/engine.particles.js");
+R.Engine.requires("/engine.math2d.js");
+R.Engine.requires("/engine.particles.js");
 
-Engine.initObject("SimpleParticle", "Particle", function() {
+R.Engine.initObject("SimpleParticle", "Particle", function() {
 
 /**
  * @class A simple particle

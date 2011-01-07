@@ -31,12 +31,12 @@
  *
  */
 
-Engine.include("/components/component.image.js");
-Engine.include("/components/component.transform2d.js");
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/components/component.image.js");
+R.Engine.requires("/components/component.transform2d.js");
+R.Engine.requires("/engine.object2d.js");
 
 
-Engine.initObject("FontRender", "Object2D", function() {
+R.Engine.initObject("FontRender", "Object2D", function() {
 
 // http://catcam.mypets.ws/renderengine/fonts/century_gothic_36.png	
 	var FontRender = Object2D.extend({

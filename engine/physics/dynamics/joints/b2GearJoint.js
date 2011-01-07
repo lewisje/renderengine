@@ -19,15 +19,15 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
-Engine.include("/physics/dynamics/joints/b2Joint.js");
-Engine.include("/physics/dynamics/joints/b2JointNode.js");
-Engine.include("/physics/dynamics/joints/b2Jacobian.js");
+R.Engine.requires("/physics/dynamics/joints/b2Joint.js");
+R.Engine.requires("/physics/dynamics/joints/b2JointNode.js");
+R.Engine.requires("/physics/dynamics/joints/b2Jacobian.js");
 
 
-Engine.initObject("b2GearJoint", "b2Joint", function() {
+R.Engine.initObject("b2GearJoint", "b2Joint", function() {
 
 	var b2GearJoint = b2Joint.extend({
 	

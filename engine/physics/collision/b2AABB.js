@@ -19,9 +19,9 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
-Engine.initObject("b2AABB", null, function() {
+R.Engine.initObject("b2AABB", null, function() {
    
    // A manifold for two touching convex shapes.
    var b2AABB = Base.extend({

@@ -30,15 +30,15 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/textrender/text.vector.js");
-Engine.include("/textrender/text.bitmap.js");
-Engine.include("/textrender/text.context.js");
-Engine.include("/textrender/text.renderer.js");
-Engine.include("/resourceloaders/loader.bitmapfont.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/textrender/text.vector.js");
+R.Engine.requires("/textrender/text.bitmap.js");
+R.Engine.requires("/textrender/text.context.js");
+R.Engine.requires("/textrender/text.renderer.js");
+R.Engine.requires("/resourceloaders/loader.bitmapfont.js");
+R.Engine.requires("/engine.timers.js");
 
-Engine.initObject("Tutorial5", "Game", function(){
+R.Engine.initObject("Tutorial5", "Game", function(){
 
    /**
     * @class This tutorial shows how to use the text renderers.
@@ -67,7 +67,7 @@ Engine.initObject("Tutorial5", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
          
          this.fontLoader = BitmapFontLoader.create();
          this.fontLoader.load("century", "century_gothic_36.font");
@@ -118,7 +118,7 @@ Engine.initObject("Tutorial5", "Game", function(){
          this.renderContext.setBackgroundColor("#000000");
          
          // Add the render context
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 
          // Vector Text
          var vText = TextRenderer.create(VectorText.create(), 

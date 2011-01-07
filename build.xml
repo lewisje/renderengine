@@ -96,15 +96,15 @@
 	<target name="engine.build" description="Main engine build, concatenates source files and replaces some tags">
 		<echo message="Building ${engine.file}" />
 		<concat destfile="${engine.file}">
-			<fileset dir="${make.dir}" includes="intro.js" />
-			<fileset dir="${engine.src}" includes="engine.console.js" />
-			<fileset dir="${engine.src}" includes="engine.profiler.js" />
+			<fileset dir="${engine.src}" includes="engine.intro.js" />
+			<fileset dir="${engine.src}" includes="debug.console.js" />
+			<fileset dir="${engine.src}" includes="debug.profiler.js" />
 			<fileset dir="${engine.src}" includes="engine.math2.js" />
 			<fileset dir="${engine.src}" includes="engine.support.js" />
 			<fileset dir="${engine.src}" includes="engine.linker.js" />
 			<fileset dir="${engine.src}" includes="engine.main.js" />
 			<fileset dir="${engine.src}" includes="engine.script.js" />
-			<fileset dir="${engine.src}" includes="engine.metrics.js" />
+			<fileset dir="${engine.src}" includes="debug.metrics.js" />
 			<fileset dir="${engine.src}" includes="engine.init.js" />
 		</concat>
 		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
@@ -120,26 +120,26 @@
 		</antcall>
 	</target>
 
-	<!-- Strip out Console.log, Console.debug, and Console.info messages.  We'll leave in 
-		  Console.warn and Console.error for obvious reasons. -->
+	<!-- Strip out R.debug.Console.log, R.debug.Console.debug, and R.debug.Console.info messages.  We'll leave in 
+		  R.debug.Console.warn and R.debug.Console.error for obvious reasons. -->
 	<target name="engine.nodebug.full" depends="engine.full" description="Build a version of the engine with all debug messages removed">
 		
 		<!-- LOGS -->
-		<replaceregexp match="Console.log\(.*?\);" replace="" flags="g" byline="true">
+		<replaceregexp match="R.debug.Console.log\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
 		</replaceregexp>
 
 		<!-- DEBUGS -->
-		<replaceregexp match="Console.debug\(.*?\);" replace="" flags="g" byline="true">
+		<replaceregexp match="R.debug.Console.debug\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
 		</replaceregexp>
 
 		<!-- INFOS -->
-		<replaceregexp match="Console.info\(.*?\);" replace="" flags="g" byline="true">
+		<replaceregexp match="R.debug.Console.info\(.*?\);" replace="" flags="g" byline="true">
 			<fileset dir="${full.home}">
 				<include name="**/*.js"/>
 			</fileset>
@@ -446,13 +446,13 @@
   	<target name="min.nodebug" description="Remove debug, log, and info messages">
 
 		<!-- LOGS -->
-		<replaceregexp match="Console.log\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="R.debug.Console.log\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- DEBUGS -->
-		<replaceregexp match="Console.debug\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="R.debug.Console.debug\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- INFOS -->
-		<replaceregexp match="Console.info\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
+		<replaceregexp match="R.debug.Console.info\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>
 
 		<!-- ENGINE METRICS -->
 		<replaceregexp match="Engine.addMetric\(.*?\);" replace="" flags="g" byline="true" file="${input.file}"/>

@@ -19,9 +19,9 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/common/b2Settings.js");
 
-Engine.initObject("b2Pair", null, function() {
+R.Engine.initObject("b2Pair", null, function() {
 
    // The pair manager is used by the broad-phase to quickly add/remove/find pairs
    // of overlapping proxies. It is based closely on code provided by Pierre Terdiman.

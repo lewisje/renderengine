@@ -31,7 +31,7 @@
  *
  */
 
-Engine.initObject("ManualTest", "Game", function(){
+R.Engine.initObject("ManualTest", "Game", function(){
 
    /**
     * @class Simple harness to load tests into.
@@ -47,9 +47,9 @@ Engine.initObject("ManualTest", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(30);
+         R.Engine.setFPS(30);
 
-			this.testName = EngineSupport.getStringParam("test", "");
+			this.testName = R.engine.Support.getStringParam("test", "");
 			if (this.testName != "") {
 				// Load a known file
 				TestRunner = {};

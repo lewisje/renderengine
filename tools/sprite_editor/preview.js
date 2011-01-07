@@ -31,9 +31,9 @@
  *
  */
 
-Engine.include("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
 
-Engine.initObject("SpritePreview", "CanvasContext", function() {
+R.Engine.initObject("SpritePreview", "CanvasContext", function() {
 
 /**
  * @class The canvas upon which the preview sprite is displayed.

@@ -19,10 +19,10 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/dynamics/joints/b2Joint.js");
+R.Engine.requires("/physics/dynamics/joints/b2Joint.js");
 
 
-Engine.initObject("b2JointDef", null, function() {
+R.Engine.initObject("b2JointDef", null, function() {
 
 	var b2JointDef = Base.extend({
 

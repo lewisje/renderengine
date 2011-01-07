@@ -31,11 +31,11 @@
  */
 
 // Load engine objects
-Engine.include("/components/component.sprite.js");
-Engine.include("/components/component.collider.js");
-Engine.include("/objects/object.physicsactor.js");
+R.Engine.requires("/components/component.sprite.js");
+R.Engine.requires("/components/component.collider.js");
+R.Engine.requires("/objects/object.physicsactor.js");
 
-Engine.initObject("Toy", "PhysicsActor", function() {
+R.Engine.initObject("Toy", "PhysicsActor", function() {
 
    /**
     * @class Base class for toys which can be added to the playfield.  Each toy

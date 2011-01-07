@@ -38,8 +38,7 @@
  * 
  * @static
  */
-var Math2 = Base.extend(/** @scope Math2.prototype */{
-	constructor: null,
+R.lang.Math2 = {
 	
 	state: 1,
 	m: 0x100000000, // 2**32;
@@ -60,7 +59,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 */
 	seed: function(seed) {
 		// LCG using GCC's constants
-		this.state = seed ? seed : Math.floor(Math.random() * (this.m-1));
+		R.lang.Math2.state = seed ? seed : Math.floor(Math.random() * (R.lang.Math2.m-1));
 	},
 	
 	/**
@@ -68,8 +67,8 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 * @return {Number} An integer between 0 and 2^32
 	 */
 	randomInt: function() {
-		this.state = (this.a * this.state + this.c) % this.m;
-		return this.state;
+		R.lang.Math2.state = (R.lang.Math2.a * R.lang.Math2.state + R.lang.Math2.c) % R.lang.Math2.m;
+		return R.lang.Math2.state;
 	},
 	
 	/**
@@ -78,7 +77,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 */
 	random: function() {
 		// returns in range [0,1]
-		return this.randomInt() / (this.m - 1);
+		return R.lang.Math2.randomInt() / (R.lang.Math2.m - 1);
 	},
 	
 	/**
@@ -91,7 +90,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 * @return {Number}
 	 */
 	randomRange: function(low, high, whole) {
-		var v = low + (this.random() * high);
+		var v = low + (R.lang.Math2.random() * high);
 		return (whole ? Math.floor(v) : v);
 	},
 	
@@ -103,7 +102,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 	 */
 	parseBin: function(bin) {
 		if (!isNaN(bin)) {
-			return parseInt(bin, 2);
+			return R.global.parseInt(bin, 2);
 		}
 	},
 	
@@ -130,7 +129,7 @@ var Math2 = Base.extend(/** @scope Math2.prototype */{
 			return num.toString(2);
 		}
 	}
-});
+};
 
 // Seed the random number generator initially
-Math2.seed();
+R.lang.Math2.seed();

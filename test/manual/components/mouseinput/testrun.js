@@ -1,10 +1,10 @@
 
-Engine.include("/components/component.mouseinput.js");
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine.baseobject.js");
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/components/component.mouseinput.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/engine.baseobject.js");
+R.Engine.requires("/engine.object2d.js");
 
-Engine.initObject("TestObject", "Object2D", function() {
+R.Engine.initObject("TestObject", "Object2D", function() {
 	
 	var TestObject = Object2D.extend({
 		
@@ -56,7 +56,7 @@ Engine.initObject("TestObject", "Object2D", function() {
 	return TestObject;
 });
 
-Engine.initObject("TestRunner", null, function() {
+R.Engine.initObject("TestRunner", null, function() {
 
 	var TestRunner = Base.extend({
 		
@@ -71,7 +71,7 @@ Engine.initObject("TestRunner", null, function() {
 			var ctx = CanvasContext.create("context", 200, 200);
 			ctx.setBackgroundColor("black");
 			
-			Engine.getDefaultContext().add(ctx);
+			R.Engine.getDefaultContext().add(ctx);
 			
 			// Create the object and add it
 			ctx.add(TestObject.create());
@@ -79,7 +79,7 @@ Engine.initObject("TestRunner", null, function() {
 		
 	});
 
-	EngineSupport.whenReady(TestRunner, function() {
+	R.engine.Support.whenReady(TestRunner, function() {
 		TestRunner.run();
 	});
 

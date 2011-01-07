@@ -32,14 +32,14 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/resourceloaders/loader.sprite.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/resourceloaders/loader.sprite.js");
+R.Engine.requires("/engine.timers.js");
 
 // Load game objects
 //Game.load("/wiihost.js");
 
-Engine.initObject("Touchdown", "Game", function(){
+R.Engine.initObject("Touchdown", "Game", function(){
 
    /**
     * @class Jewel matching game
@@ -68,7 +68,7 @@ Engine.initObject("Touchdown", "Game", function(){
        */
       setup: function(){
          // Set the FPS of the game
-         Engine.setFPS(this.engineFPS);
+         R.Engine.setFPS(this.engineFPS);
          
          this.spriteLoader = SpriteLoader.create();
          
@@ -105,17 +105,17 @@ Engine.initObject("Touchdown", "Game", function(){
        * Run the game
        */
       run: function(){
-			EngineSupport.sysInfo();
+			R.engine.Support.sysInfo();
 			$("body").scrollTop(0);
-			this.fieldWidth = EngineSupport.sysInfo().viewWidth;
-			this.fieldHeight = EngineSupport.sysInfo().viewHeight;
+			this.fieldWidth = R.engine.Support.sysInfo().viewWidth;
+			this.fieldHeight = R.engine.Support.sysInfo().viewHeight;
          // Create the render context
          this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
          this.centerPoint = this.fieldBox.getCenter();
 			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
 	      this.renderContext.setBackgroundColor("#000000");
 
-         Engine.getDefaultContext().add(this.renderContext);
+         R.Engine.getDefaultContext().add(this.renderContext);
 			
 			this.mainScreen();
       },

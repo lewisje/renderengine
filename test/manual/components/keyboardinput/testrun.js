@@ -1,9 +1,9 @@
 
-Engine.include("/components/component.keyboardinput.js");
-Engine.include("/engine.baseobject.js");
-Engine.include("/engine.object2d.js");
+R.Engine.requires("/components/component.keyboardinput.js");
+R.Engine.requires("/engine.baseobject.js");
+R.Engine.requires("/engine.object2d.js");
 
-Engine.initObject("TestObject", "Object2D", function() {
+R.Engine.initObject("TestObject", "Object2D", function() {
 	
 	var TestObject = Object2D.extend({
 		
@@ -31,7 +31,7 @@ Engine.initObject("TestObject", "Object2D", function() {
 	return TestObject;
 });
 
-Engine.initObject("TestRunner", null, function() {
+R.Engine.initObject("TestRunner", null, function() {
 
 	var TestRunner = Base.extend({
 		
@@ -40,12 +40,12 @@ Engine.initObject("TestRunner", null, function() {
 		run: function() {
 			ManualTest.showOutput();
 			
-			Engine.getDefaultContext().add(TestObject.create());
+			R.Engine.getDefaultContext().add(TestObject.create());
 		}
 		
 	});
 
-	EngineSupport.whenReady(TestRunner, function() {
+	R.engine.Support.whenReady(TestRunner, function() {
 		TestRunner.run();
 	});
 

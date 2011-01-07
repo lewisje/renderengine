@@ -34,9 +34,9 @@
  */
 
 // Load all required engine components
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.loadStylesheet("resources/color_select.css", true);
-Engine.loadStylesheet("resources/editor.css", true);
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.loadStylesheet("resources/color_select.css", true);
+R.Engine.loadStylesheet("resources/editor.css", true);
 
 // Load objects
 Game.load("/layer.js");
@@ -44,7 +44,7 @@ Game.load("/grid.js");
 Game.load("/preview.js");
 Game.load("/color_select.js");
 
-Engine.initObject("SpriteEditor", "Game", function() {
+R.Engine.initObject("SpriteEditor", "Game", function() {
 
 /**
  * @class A sprite editor for creating sprite resources for
@@ -105,21 +105,21 @@ var SpriteEditor = Game.extend({
      $("#menuBar").css("display", "block");
 	  
       // Set the FPS so drawing speed is resonable
-      Engine.setFPS(25);
+      R.Engine.setFPS(25);
 		
 		this.recalcOffset();
 
       // Create the 2D context
       this.editorContext = CanvasContext.create("editor", this.editorSize, this.editorSize);
       this.editorContext.setWorldScale(1);
-      Engine.getDefaultContext().add(this.editorContext);
+      R.Engine.getDefaultContext().add(this.editorContext);
       this.editorContext.setBackgroundColor("black");
 
       // The place where previews will be generated
       this.previewContext = SpritePreview.create();
       this.previewContext.setWorldScale(1);
 		this.previewContext.setBackgroundColor("black");
-      Engine.getDefaultContext().add(this.previewContext);
+      R.Engine.getDefaultContext().add(this.previewContext);
 
       // Set some event handlers
       var self = this;
@@ -657,7 +657,7 @@ var SpriteEditor = Game.extend({
 	 */
 	actionExit: function() {
 		function $$doExit() {
-			Engine.shutdown();	
+			R.Engine.shutdown();	
 		}
 		
 		if (confirm("Are you sure you want to exit Sprite Editor?")) {

@@ -31,15 +31,21 @@
  *
  */
 
-Engine.include("/components/component.mover2d.js");
-Engine.include("/components/component.vector2d.js");
-Engine.include("/components/component.billboard2d.js");
-Engine.include("/components/component.convexcollider.js");
-Engine.include("/engine.object2d.js");
-Engine.include("/engine.timers.js");
-Engine.include("/engine.container.js");
-
-Engine.initObject("SpaceroidsRock", "Object2D", function() {
+R.Engine.define({
+	"class": "SpaceroidsRock",
+	"requires": [
+		"R.components.Mover2D",
+		"R.components.Vector2D",
+		"R.components.Billboard2D",
+		"R.components.ConvexCollider",
+		"R.engine.Object2D",
+		"R.lang.Timeout",
+		"R.lang.OneShotTimeout",
+		"R.struct.Container",
+		"R.math.Point2D",
+		"R.math.Vector2D"
+	]
+});
 
 /**
  * @class An asteroid
@@ -50,7 +56,8 @@ Engine.initObject("SpaceroidsRock", "Object2D", function() {
  * @param pWidth {Number} The width of the playfield in pixels
  * @param pHeight {Number} The height of the playfield in pixels
  */
-var SpaceroidsRock = Object2D.extend({
+var SpaceroidsRock = function() {
+	return R.engine.Object2D.extend({
 
    size: 10,
    speed: 0.3,
@@ -60,9 +67,9 @@ var SpaceroidsRock = Object2D.extend({
       this.base("Spaceroid");
 
       // Add components to move and draw the asteroid
-      this.add(Mover2DComponent.create("move"));
-      this.add(Billboard2DComponent.create("billboard", Vector2DComponent.create("draw")));
-      this.add(ConvexColliderComponent.create("collider", Spaceroids.collisionModel));
+      this.add(R.components.Mover2D.create("move"));
+      this.add(R.components.Billboard2D.create("billboard", R.components.Vector2D.create("draw")));
+      this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsRock.COLLISION_MASK);
 		if (Spaceroids.isAttractMode) {
 			// In attract mode, rocks can collide
@@ -75,8 +82,8 @@ var SpaceroidsRock = Object2D.extend({
       if (!position) {
          // Set the position
 			var vp = Spaceroids.renderContext.getBoundingBox();
-         position = new Point2D( Math.floor(Math2.random() * vp.w),
-                                 Math.floor(Math2.random() * vp.h));
+         position = R.math.Point2D.create( Math.floor(R.lang.Math2.random() * vp.w),
+                                 			 Math.floor(R.lang.Math2.random() * vp.h));
       }
       this.setPosition(position);
       this.getComponent("move").setCheckLag(false);
@@ -107,14 +114,14 @@ var SpaceroidsRock = Object2D.extend({
     */
    update: function(renderContext, time) {
       var c_mover = this.getComponent("move");
-      var p = Point2D.create(c_mover.getPosition());
+      var p = R.math.Point2D.create(c_mover.getPosition());
       c_mover.setPosition(Spaceroids.wrap(p, this.getBoundingBox()));
 
       // If the player is nuking, adjust our position depending on
       // how close we are to the player
       if (Spaceroids.playerObj && Spaceroids.playerObj.isNuking()) {
          var grav = 8;
-         var dVec = Vector2D.create(Spaceroids.playerObj.getPosition()).sub(this.getPosition());
+         var dVec = R.math.Vector2D.create(Spaceroids.playerObj.getPosition()).sub(this.getPosition());
          grav /= (dVec.len() * 4);
          p.add(dVec.mul(grav));
          c_mover.setPosition(p);
@@ -126,15 +133,6 @@ var SpaceroidsRock = Object2D.extend({
       this.base(renderContext, time);
       renderContext.popTransform();
 		
-		/*
-		if (!this.isDestroyed()) {
-			renderContext.pushTransform();
-			//renderContext.moveTo(Point2D.ZERO);
-			renderContext.setLineStyle("red");
-			renderContext.drawRectangle(this.getAABB());
-			renderContext.popTransform();
-		}
-		*/
    },
 
    /**
@@ -194,12 +192,12 @@ var SpaceroidsRock = Object2D.extend({
 
       // Pick one of the three shapes
       var tmp = [];
-      tmp = SpaceroidsRock.shapes[Math.floor(Math2.random() * 3)];
+      tmp = SpaceroidsRock.shapes[Math.floor(R.lang.Math2.random() * 3)];
 
       // Scale the shape
       var s = [];
       for (var p = 0; p < tmp.length; p++) {
-         var pt = Point2D.create(tmp[p][0], tmp[p][1]);
+         var pt = R.math.Point2D.create(tmp[p][0], tmp[p][1]);
          pt.mul(this.size);
          s.push(pt);
       }
@@ -225,12 +223,12 @@ var SpaceroidsRock = Object2D.extend({
       var c_mover = this.getComponent("move");
 
       // Pick a random rotation and spin speed
-      c_mover.setRotation( Math.floor(Math2.random() * 360));
-      c_mover.setAngularVelocity( Math.floor(Math2.random() * 10) > 5 ? 0.5 : -0.5);
+      c_mover.setRotation( Math.floor(R.lang.Math2.random() * 360));
+      c_mover.setAngularVelocity( Math.floor(R.lang.Math2.random() * 10) > 5 ? 0.5 : -0.5);
 
 
-      var b = Point2D.create(0,-1.2);
-      var vec = Math2D.getDirectionVector(Point2D.ZERO, b, Math.floor(Math2.random() * 360));
+      var b = R.math.Point2D.create(0,-1.2);
+      var vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, b, Math.floor(R.lang.Math2.random() * 360));
       b.destroy();
       
       c_mover.setVelocity(vec);
@@ -258,11 +256,11 @@ var SpaceroidsRock = Object2D.extend({
       // Make some particles
       var pCount = Spaceroids.isAttractMode ? 6 : 4;
 
-      var p = Container.create();
+      var p = R.struct.Container.create();
       for (var x = 0; x < pCount; x++)
       {
-         var decel = Math2.random() * 0.04;
-			var r = Math.floor(Math2.random() * 500);
+         var decel = R.lang.Math2.random() * 0.04;
+			var r = Math.floor(R.lang.Math2.random() * 500);
          p.add(SimpleParticle.create(this.getPosition(), 2000 + r, decel));
       }
       Spaceroids.pEngine.addParticles(p);
@@ -289,13 +287,13 @@ var SpaceroidsRock = Object2D.extend({
             var r_mover = rock.getComponent("move");
             r_mover.setVelocity(r_mover.getVelocity().mul(curVel + 0.5));
             if (Spaceroids.isAttractMode) {
-               rock.killTimer = Engine.worldTime + 2000;
+               rock.killTimer = R.Engine.worldTime + 2000;
             }
          }
       }
 
       if (Spaceroids.rocks == 0) {
-         OneShotTimeout.create("nextLevel", 3000, function() {
+         R.lang.OneShotTimeout.create("nextLevel", 3000, function() {
             Spaceroids.nextLevel();
          });
       }
@@ -315,19 +313,19 @@ var SpaceroidsRock = Object2D.extend({
          {
             obj.kill();
             this.kill();
-            return ColliderComponent.STOP;
+            return R.components.Collider.STOP;
          }
       }
 
-      if (Spaceroids.isAttractMode && obj.killTimer < Engine.worldTime &&
+      if (Spaceroids.isAttractMode && obj.killTimer < R.Engine.worldTime &&
             mask == SpaceroidsRock.COLLISION_MASK)
       {
          this.kill();
          obj.kill();
-         return ColliderComponent.STOP;
+         return R.components.Collider.STOP;
       }
 
-      return ColliderComponent.CONTINUE;
+      return R.components.Collider.CONTINUE;
    }
 
 }, { // Static Only
@@ -355,11 +353,7 @@ var SpaceroidsRock = Object2D.extend({
     */
    values: { "10": 10, "6": 15, "2": 20 },
 	
-	COLLISION_MASK: Math2.parseBin("110")
+	COLLISION_MASK: R.lang.Math2.parseBin("110")
 
 });
-
-return SpaceroidsRock;
-
-});
-
+}

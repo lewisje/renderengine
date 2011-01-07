@@ -19,9 +19,9 @@
 * Aug. 4, 2010 Brett Fattori
 */
 
-Engine.include("/physics/common/math/b2Vec2.js");
+R.Engine.requires("/physics/common/math/b2Vec2.js");
 
-Engine.initObject("b2Mat22", null, function() {
+R.Engine.initObject("b2Mat22", null, function() {
    
    var b2Mat22 = Base.extend({
 

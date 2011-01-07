@@ -34,13 +34,13 @@
  */
 
 // Load all required engine components
-Engine.include("/engine.math2d.js");
-Engine.include("/engine.timers.js");
+R.Engine.requires("/engine.math2d.js");
+R.Engine.requires("/engine.timers.js");
 
 Game.load("/tilesets.js");
 Game.load("/isometricmap.js");
 
-Engine.initObject("IsometricDemo", "Game", function() {
+R.Engine.initObject("IsometricDemo", "Game", function() {
 
 /**
  * @class The game.
@@ -78,7 +78,7 @@ var IsometricDemo = Game.extend({
    setup: function() {
 
       // Set the FPS of the game
-      Engine.setFPS(this.engineFPS);
+      R.Engine.setFPS(this.engineFPS);
 
       this.tileset = TileSets.create("tiles", this.getFilePath("resources/tiles.json"));
 		this.map = IsometricMap.create("countryside", this.getFilePath("resources/map.json"), Point2D.create(85, 85));
@@ -104,14 +104,14 @@ var IsometricDemo = Game.extend({
 
    run: function() {
       // Create the 2D context
-      this.fieldBox = Rectangle2D.create(0, 0, EngineSupport.sysInfo().viewWidth, EngineSupport.sysInfo().viewHeight);
+      this.fieldBox = Rectangle2D.create(0, 0, R.engine.Support.sysInfo().viewWidth, R.engine.Support.sysInfo().viewHeight);
       this.centerPoint = this.fieldBox.getCenter();
 
       this.renderContext = HTMLDivContext.create("bkg", this.fieldBox.get().w, this.fieldBox.get().h);
-      Engine.getDefaultContext().add(this.renderContext);
+      R.Engine.getDefaultContext().add(this.renderContext);
 		
 		this.map.setTileSets(this.tileset);
-		Engine.getDefaultContext().add(this.map);
+		R.Engine.getDefaultContext().add(this.map);
    },
 
    play: function() {

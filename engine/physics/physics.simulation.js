@@ -30,12 +30,12 @@
  *
  */
 
-Engine.include("/physics/common/b2Settings.js");
-Engine.include("/physics/collision/b2AABB.js");
-Engine.include("/physics/dynamics/b2World.js");
-Engine.include("/components/component.basebody.js");
+R.Engine.requires("/physics/common/b2Settings.js");
+R.Engine.requires("/physics/collision/b2AABB.js");
+R.Engine.requires("/physics/dynamics/b2World.js");
+R.Engine.requires("/components/component.basebody.js");
 
-Engine.initObject("Simulation", "BaseObject", function() {
+R.Engine.initObject("Simulation", "BaseObject", function() {
 
    /**
     * @class A representation of a physical world.  This object is used to
@@ -97,7 +97,7 @@ Engine.initObject("Simulation", "BaseObject", function() {
       },
       
       update: function(renderContext, time) {
-         this.world.Step(1/Engine.getFPS(), this.integrations);   
+         this.world.Step(1/R.Engine.getFPS(), this.integrations);   
       },
       
       /**

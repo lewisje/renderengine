@@ -1,11 +1,11 @@
 
-Engine.include("/components/component.image.js");
-Engine.include("/components/component.transform2d.js");
-Engine.include("/rendercontexts/context.canvascontext.js");
-Engine.include("/engine.object2d.js");
-Engine.include("/resourceloaders/loader.image.js");
+R.Engine.requires("/components/component.image.js");
+R.Engine.requires("/components/component.transform2d.js");
+R.Engine.requires("/rendercontexts/context.canvascontext.js");
+R.Engine.requires("/engine.object2d.js");
+R.Engine.requires("/resourceloaders/loader.image.js");
 
-Engine.initObject("TestObject", "Object2D", function() {
+R.Engine.initObject("TestObject", "Object2D", function() {
 	
 	var TestObject = Object2D.extend({
 		
@@ -23,7 +23,7 @@ Engine.initObject("TestObject", "Object2D", function() {
 	return TestObject;
 });
 
-Engine.initObject("TestRunner", null, function() {
+R.Engine.initObject("TestRunner", null, function() {
 
 	var TestRunner = Base.extend({
 		
@@ -39,7 +39,7 @@ Engine.initObject("TestRunner", null, function() {
 			this.ctx = CanvasContext.create("context", 200, 200);
 			this.ctx.setBackgroundColor("black");
 			
-			Engine.getDefaultContext().add(this.ctx);
+			R.Engine.getDefaultContext().add(this.ctx);
 			
 			this.imageLoader = ImageLoader.create();
 			this.imageLoader.load("redball", ManualTest.getTest() + "/redball.png", 120, 60);
@@ -65,7 +65,7 @@ Engine.initObject("TestRunner", null, function() {
 		
 	});
 
-	EngineSupport.whenReady(TestRunner, function() {
+	R.engine.Support.whenReady(TestRunner, function() {
 		TestRunner.run();
 	});
 

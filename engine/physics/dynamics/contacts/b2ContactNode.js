@@ -20,7 +20,7 @@
 */
 
 
-Engine.initObject("b2ContactNode", null, function() {
+R.Engine.initObject("b2ContactNode", null, function() {
 
    var b2ContactNode = Base.extend({
 
