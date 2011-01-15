@@ -71,7 +71,15 @@ R.namespace = function(ns) {
 R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
 };
-	
+
+R.isUndefined = function(obj) {
+	return (typeof obj === "undefined");
+};
+
+R.isEmpty = function(val) {
+	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && /\s*/g.test(obj) === "");
+};
+
 // Define the engine's default namespaces
 R.namespace("debug");
 R.namespace("lang");

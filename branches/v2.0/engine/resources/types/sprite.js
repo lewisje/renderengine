@@ -79,11 +79,13 @@ R.resources.types.Sprite = function() {
    toggleDir: null,
    frameNum: 0,
    playing: false,
+	resource: null,
+	loader: null,
 
    /**
     * @private
     */
-   constructor: function(name, spriteObj, spriteResource, fileVersion) {
+   constructor: function(name, spriteObj, spriteResource, fileVersion, spriteLoader) {
       this.base(name);
 		this.finished = false;
 		this.frameNum = 0;
@@ -119,6 +121,8 @@ R.resources.types.Sprite = function() {
          this.speed = s[R.resources.types.Sprite.INDEX_SPEED];
       }
 
+		this.resource = spriteResource;
+		this.loader = spriteLoader;
       this.image = spriteResource.image;
       this.frame = R.math.Rectangle2D.create(s[R.resources.types.Sprite.INDEX_LEFT], s[R.resources.types.Sprite.INDEX_TOP], s[R.resources.types.Sprite.INDEX_WIDTH], s[R.resources.types.Sprite.INDEX_HEIGHT]);
       this.bbox = R.math.Rectangle2D.create(0, 0, s[R.resources.types.Sprite.INDEX_WIDTH], s[R.resources.types.Sprite.INDEX_HEIGHT]);
@@ -145,7 +149,25 @@ R.resources.types.Sprite = function() {
       this.frame = null;
       this.image = null;
       this.bbox = null;
+		this.resource = null;
+		this.loader = null;
    },
+
+	/**
+	 * Get the resource this sprite originated from
+	 * @return {Object}
+	 */
+	getSpriteResource: function() {
+		return this.resource;
+	},
+
+	/**
+	 * Get the sprite loader this sprite originated from
+	 * @return {SpriteLoader}
+	 */
+	getSpriteLoader: function() {
+		return this.loader;
+	},
 
    /**
     * Returns <tt>true</tt> if the sprite is an animation.

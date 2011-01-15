@@ -146,6 +146,7 @@ R.resources.loaders.SpriteLoader = function(){
 		get: function(name){
 			var bitmap = this.base(name);
 			var sprite = {
+				resourceName: name,
 				image: bitmap,
 				info: this.sprites[name]
 			};
@@ -170,13 +171,13 @@ R.resources.loaders.SpriteLoader = function(){
 		/**
 		 * Creates a {@link Sprite} object representing the named sprite.
 		 *
-		 * @param resource {String} A loaded sprite resource
+		 * @param resource {String} The name of a loaded sprite resource
 		 * @param sprite {String} The name of the sprite from the resource
 		 * @return {Sprite} A {@link Sprite} instance
 		 */
 		getSprite: function(resource, sprite){
 			var info = this.get(resource).info;
-			return R.resources.types.Sprite.create(sprite, info.sprites[sprite], this.get(resource), info.version || 1);
+			return R.resources.types.Sprite.create(sprite, info.sprites[sprite], this.get(resource), info.version || 1, this);
 		},
 		
 		/**

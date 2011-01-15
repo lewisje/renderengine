@@ -71,7 +71,15 @@ R.namespace = function(ns) {
 R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
 };
-	
+
+R.isUndefined = function(obj) {
+	return (typeof obj === "undefined");
+};
+
+R.isEmpty = function(val) {
+	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && /\s*/g.test(obj) === "");
+};
+
 // Define the engine's default namespaces
 R.namespace("debug");
 R.namespace("lang");
@@ -1780,8 +1788,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  * @fileoverview A class for checking class dependencies and class intialization
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1517 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1518 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *

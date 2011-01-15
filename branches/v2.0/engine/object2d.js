@@ -435,19 +435,19 @@ R.engine.Object2D = function(){
 					return self.getWorldBox().toString();
 				}, null, false],
 				"Position": [function(){
-					return self.getPosition();
+					return self.getPosition().toString();
 				}, function(i){
 					var p = i.split(",");
 					self.setPosition(R.math.Point2D.create(p[0], p[1]));
 				}, true],
 				"Origin": [function(){
-					return self.getOrigin();
+					return self.getOrigin().toString();
 				}, function(i){
 					var p = i.split(",");
 					self.setOrigin(p[0], p[1]);
 				}, true],
 				"RenderPos": [function(){
-					return self.getRenderPosition()
+					return self.getRenderPosition().toString()
 				}, null, false],
 				"Rotation": [function(){
 					return self.getRotation();

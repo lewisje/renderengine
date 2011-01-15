@@ -90,6 +90,9 @@ var LevelEditor = function() {
    },
    gameRenderContext: null,
    nextZ: 1,
+	defaultSprite: null,
+	spriteOptions: null,
+	allSprites: null,
 
    constructor: null,
 	
@@ -136,29 +139,34 @@ var LevelEditor = function() {
       return this.game;
    },
 
+	/**
+	 * Get all of the sprites in all of the sprite resources
+	 */
    getAllSprites: function() {
-      var allSprites = [];
-      
-      // For each of the sprite loaders
-      for (var l in this.loaders.sprite) {
-         var loader = this.loaders.sprite[l];
-         
-         // Locate the resources (sprite sheets)
-         var resources = loader.getResources();
-         for (var r in resources) {
-            
-            // Get all of the sprites
-            var sprites = loader.getSpriteNames(resources[r]);
-            for (var s in sprites) {
-               allSprites.push({
-                  lookup: l + ":" + resources[r] + ":" + sprites[s],
-                  sprite: resources[r] + ": " + sprites[s]
-               });
-            }
-         }
-      }
-      
-      return allSprites;
+      if (!LevelEditor.allSprites) {
+			LevelEditor.allSprites = [];
+	      
+	      // For each of the sprite loaders
+	      for (var l in this.loaders.sprite) {
+	         var loader = this.loaders.sprite[l];
+	         
+	         // Locate the resources (sprite sheets)
+	         var resources = loader.getResources();
+	         for (var r in resources) {
+	            
+	            // Get all of the sprites
+	            var sprites = loader.getSpriteNames(resources[r]);
+	            for (var s in sprites) {
+	               LevelEditor.allSprites.push({
+	                  lookup: l + ":" + resources[r] + ":" + sprites[s],
+	                  sprite: resources[r] + ": " + sprites[s]
+	               });
+	            }
+	         }
+	      }
+		}
+
+      return LevelEditor.allSprites;
    },
 
    /**
@@ -171,6 +179,7 @@ var LevelEditor = function() {
     * @param game {Game} The <tt>Game</tt> object being edited
     */
    edit: function(game) {
+		// Create the areas for the scene graph and the object properties
       $("body", document).append($("<div id='editPanel'>").append($("<div class='sceneGraph'>")).append($("<div class='props'>")));
 		
 		// Set up the scene graph tree
@@ -187,7 +196,11 @@ var LevelEditor = function() {
 				"ui": {
 					"select_limit": 1	
 				},
-				"plugins": ["themes","crrm","html_data","ui"]
+				"contextmenu": {
+					"select_node": true,
+					"items": function(obj) { return LevelEditor.contextMenu(obj); }	
+				},
+				"plugins": ["themes","crrm","html_data","ui","contextmenu"]
 			});
 		
 		// Bind to the method to catch renamed objects
@@ -196,7 +209,11 @@ var LevelEditor = function() {
 		});
 		
 		$("#editPanel div.sceneGraph").bind("select_node.jstree", function(e, data) {
-			LevelEditor.selectById($(data.args[0]).parent().attr("id"));			
+			var id = $(data.args[0]).attr("id") || "";
+			if (id == "") {
+				id = $(data.args[0]).parent().attr("id") || "";
+			}
+			LevelEditor.selectById(id);			
 		});
 		
 		// Render the editor controls
@@ -208,7 +225,11 @@ var LevelEditor = function() {
       // Create actor
       tbar.append($("<span class='tool'>Actors:</span>"));
       var s = $("<select id='actor' class='tool'>");
-      var spr = this.getAllSprites();
+      var spr = LevelEditor.getAllSprites();
+		
+		// Set the default sprite unless otherwise specified
+		this.defaultSprite = spr[0].lookup;
+		
       $.each(spr, function() {
          s.append($("<option value='" + this.lookup + "'>" + this.sprite + "</option>"));
       });
@@ -268,24 +289,69 @@ var LevelEditor = function() {
       });
    },
 
+	contextMenu: function(node) {
+		// Determine what type of object has been selected
+		var id = node.attr("id");
+		var selObj = (id == "sceneGraph" ? null : LevelEditor.getObjectById(id));
+		return {
+			"create": {
+				"label": "Create New...",
+				"action": function() { /* noop */ },
+				"submenu": {
+					"actor": {
+						"label": "Actor",
+						"action": function() { LevelEditor.createActor(LevelEditor.defaultSprite); }
+					},
+					"collbox": {
+						"label": "Collision Block",
+						"action": function() { LevelEditor.createCollisionBox(); }
+					},
+					"trigger": {
+						"label": "Trigger Block",
+						"action": function() { LevelEditor.createTriggerBox(); }
+					}
+				}
+			},
+			"copy": {
+				"label": "Create Copy",
+				"_disabled": selObj == null,
+				"separator_after": true,
+				"action": function() { LevelEditor.copyObject(selObj); }
+			},
+			"jump": {
+				"label": "Reposition on...",
+				"_disabled": selObj == null,
+				"action": function() { LevelEditor.repositionViewport(selObj); }
+			},
+			"activate": {
+				"label": "Active",
+				"_disabled": selObj == null,
+				"action": function(){},
+				"separator_after": true
+			},
+			"delete": {
+				"label": "Delete",
+				"_disabled": selObj == null,
+				"action": function() { LevelEditor.deleteObject(selObj); }
+			}
+		};
+	},
+
 	/**
 	 * Create a sprite actor object
-	 * @param actorName {String} The name of the sprite object
+	 * @param actorName {String} The canonical name of the sprite
 	 */
    createActor: function(actorName) {
-      var ctx = this.getGame().getRenderContext();
+      var ctx = LevelEditor.getGame().getRenderContext();
       var actor = R.objects.SpriteActor.create();
 		
-		// Determine the loader, sheet, and sprite
-		var spriteIdent = actorName.split(":");
-		var loader = this.loaders.sprite[spriteIdent[0]];
-		var sprite = loader.getSprite(spriteIdent[1], spriteIdent[2]);
-      actor.setSprite(sprite);
+		// Set the sprite given the canonical name for it
+      actor.setSprite(LevelEditor.getSpriteForName(actorName));
 
       // Adjust for scroll
       var s = ctx.getHorizontalScroll();
 		
-		var vPort = this.getGame().getRenderContext().getViewport().get();
+		var vPort = LevelEditor.getGame().getRenderContext().getViewport().get();
 		var hCenter = Math.floor(vPort.w / 2), vCenter = Math.floor(vPort.h / 2); 
       var pT = R.math.Point2D.create(hCenter + s, vCenter);
       actor.setPosition(pT);
@@ -305,20 +371,80 @@ var LevelEditor = function() {
 	 * Create a simple collision box
 	 * @param {Object} game
 	 */
-   createCollisionBox: function(game) {
-      var ctx = game.getRenderContext();
+   createCollisionBox: function() {
+      var ctx = LevelEditor.getGame().getRenderContext();
       var cbox = R.objects.CollisionBox.create();
 
       // Adjust for scroll
       var s = ctx.getHorizontalScroll();
-      var pT = R.math.Point2D.create(game.centerPoint.x + s, game.centerPoint.y);
+		var vPort = ctx.getViewport();
+		var hCenter = Math.floor(vPort.w / 2), vCenter = Math.floor(vPort.h / 2); 
+      var pT = R.math.Point2D.create(hCenter + s, vCenter);
 
       cbox.setPosition(pT);
       cbox.setBoxSize(80, 80);
-      cbox.setZIndex(this.nextZ++);
+      cbox.setZIndex(LevelEditor.nextZ++);
       ctx.add(cbox);
       this.setSelected(cbox);
    },
+
+	/**
+	 * Copy an object and all of its properties into a new object of the same type
+	 * @param obj {Object2D} The object to copy
+	 */
+	copyObject: function(obj) {
+		obj = obj || this.currentSelectedObject;
+      if (obj != null) {
+		  	var original = obj;
+		  	
+		  	// What type of object is this?
+			if (obj instanceof R.objects.SpriteActor) {
+				// Create a new actor
+				var cName = LevelEditor.getSpriteCanonicalName(obj.getSprite());
+				LevelEditor.createActor(cName);
+			} else if (obj instanceof R.objects.CollisionBox) {
+				LevelEditor.createCollisionBox();	
+			} /* else if (obj instanceof TriggerBox) {
+		 
+		 	}*/
+
+			var bean = LevelEditor.currentSelectedObject.getProperties(), origProps = original.getProperties();
+			
+			for (var p in bean) {
+				if (bean[p][1]) {
+					if (bean[p][1].multi && bean[p][1].multi === true) {
+						// Multi-option
+						bean[p][1].fn(origProps[p][0]());
+					} else if (bean[p][1].checkbox && bean[p][1].checkbox === true) {
+						// Checkbox toggle
+					} else if (bean[p][1].editor && bean[p][1].editor === true) {
+						// Custom editor
+					} else {
+						// Single value
+						bean[p][1](origProps[p][0]());
+					}
+				}
+			}
+			
+			// If the object isn't in the current viewport, move it to the viewport's center
+			// otherwise, offset it by half width and height down and to the right
+			var newObj = LevelEditor.currentSelectedObject, 
+				 ctx = LevelEditor.getGame().getRenderContext(), s = ctx.getHorizontalScroll(), pT;
+
+			if (!ctx.getViewport().isIntersecting(newObj.getWorldBox())) {
+				var vPort = LevelEditor.getGame().getRenderContext().getViewport();
+				var hCenter = Math.floor(vPort.w / 2), vCenter = Math.floor(vPort.h / 2); 
+		      pT = R.math.Point2D.create(hCenter + s, vCenter);
+			} else {
+				var offs = R.math.Point2D.create(newObj.getBoundingBox().getHalfWidth() + s, newObj.getBoundingBox().getHalfHeight());
+				pT = R.math.Point2D.create(newObj.getRenderPosition()).add(offs);
+				offs.destroy();
+			}		
+
+	      newObj.setPosition(pT);
+			pT.destroy();
+		}
+	},
 
 	/**
 	 * Select the object which is at the given coordinates
@@ -395,16 +521,27 @@ var LevelEditor = function() {
    },
 
 	/**
+	 * Get a reference to the object given its Id
+	 * @param {Object} objId
+	 */
+	getObjectById: function(objId) {
+		var objs = LevelEditor.gameRenderContext.getObjects(function(el) {
+			return (el.getId() == objId);	
+		});
+		if (objs.length == 0) {
+	  		// Invalid object, so deselect the current node
+			LevelEditor.deselectObject();
+			return null;
+		}
+		return objs[0];
+	},
+
+	/**
 	 * Select an object by its Id
 	 * @param {Object} objId
 	 */
 	selectById: function(objId) {
-		var objs = this.gameRenderContext.getObjects(function(el) {
-			return (el.getId() == objId);	
-		});
-		if (objs.length != 0) {
-			this.setSelected(objs[0]);
-		}
+		LevelEditor.setSelected(LevelEditor.getObjectById(objId));
 	},
 
 	/**
@@ -420,7 +557,9 @@ var LevelEditor = function() {
 		}
 			
       this.currentSelectedObject = obj;
-      obj.setEditing(true);
+		if (obj) {
+	      obj.setEditing(true);
+		}
       this.createPropertiesTable(obj);
       this.updateLevelData();
    },
@@ -469,15 +608,54 @@ var LevelEditor = function() {
          var e;
 
          if (bean[p][1]) {
-            var fn = function() {
-               arguments.callee.cb(this.value);
-					$("#editPanel").trigger("set" + arguments.callee.prop, [arguments.callee.obj, this.value]);
-            };
-            fn.cb = bean[p][1];
-				fn.prop = p;
-				fn.obj = obj;
-
-            e = $("<input type='text' size='35' value='" + bean[p][0]() + "'/>").change(fn);
+				
+				if (bean[p][1].multi && bean[p][1].multi === true) {
+					// Multi-select dropdown
+					e = $("<select>");
+					
+					// If it's a function, call it to get the options as: [{ val: "foo", label: "Foo Label" }, ...]
+					// otherwise, treat it as already in array/object notation above
+					var opts = $.isFunction(bean[p][1].opts) ? bean[p][1].opts() : bean[p][1].opts;
+					
+					// Build options
+					$.each(opts, function() {
+						e.append($("<option value='" + this.val + "'>").text(this.label));	
+					});
+					
+					// When the option is chosen, call the setter function
+	            var fn = function() {
+	               arguments.callee.cb($(this).val());
+						$("#editPanel").trigger("set" + arguments.callee.prop, [arguments.callee.obj, this.value]);
+	            };
+					fn.cb = bean[p][1].fn;
+					fn.prop = p;
+					fn.obj = obj;
+					
+					e.change(fn).val(bean[p][0]);
+				} else if (bean[p][1].checkbox && bean[p][1].checkbox === true) {
+					// Checkbox toggle
+					
+				} else if (bean[p][1].editor && bean[p][1].editor === true) {	
+					// Custom editor
+					var fn = function() {
+						arguments.callee.cb.apply(arguments.callee.obj, arguments.callee.args);
+					};
+					fn.obj = obj;
+					fn.cb = bean[p][1].fn;
+					fn.args = bean[p][1].args;
+					e = $("<span>").text(bean[p][0]()).append($("<input type='button' value='...'>").click(bean[p][1].fn()))					
+				} else {
+					// Single value input
+	            var fn = function() {
+	               arguments.callee.cb(this.value);
+						$("#editPanel").trigger("set" + arguments.callee.prop, [arguments.callee.obj, $(this).val()]);
+	            };
+	            fn.cb = bean[p][1];
+					fn.prop = p;
+					fn.obj = obj;
+	
+	            e = $("<input type='text' size='35' value='" + bean[p][0]().toString() + "'/>").change(fn);
+				}
          } else {
             e = $("<div>").text(bean[p][0]().toString());
          }
@@ -490,6 +668,52 @@ var LevelEditor = function() {
       $("#editPanel div.props").append(pTable);
       this.updateLevelData();
    },
+
+	/**
+	 * Return an array of sprites for a select dropdown from every sprite loader found
+	 */
+	getSpriteOptions: function() {
+		if (!LevelEditor.spriteOptions) {
+	      var spr = LevelEditor.getAllSprites();
+			LevelEditor.spriteOptions = [];
+	      $.each(spr, function() {
+				LevelEditor.spriteOptions.push({ "val": this.lookup, "label": this.sprite });
+	      });
+		}
+		return LevelEditor.spriteOptions;		
+	},
+
+	/**
+	 * Get the sprite object for the given canonical name
+	 * @param {Object} spriteOpt
+	 */
+	getSpriteForName: function(spriteOpt) {
+		// Determine the loader, sheet, and sprite
+		var spriteIdent = spriteOpt.split(":");
+		var loader = LevelEditor.loaders.sprite[spriteIdent[0]];
+		return loader.getSprite(spriteIdent[1], spriteIdent[2]);
+	},
+
+	/**
+	 * Get the sprite's canonical name.
+	 * "loaderIndex:resourceName:spriteName"
+	 * 
+	 * @param sprite {Sprite}
+	 */
+	getSpriteCanonicalName: function(sprite) {
+		var loader = sprite.getSpriteLoader(), loaderIdx = 0;
+		
+		// Locate the sprite loader index
+      for (var l in this.loaders.sprite) {
+		  	if (loader === this.loaders.sprite) {
+		  		loaderIdx = l;
+		  		break;
+		  	}
+		}	         
+	   
+		// Return the canonical name which contains the loader index, resource name, and sprite name
+		return loaderIdx + ":" + sprite.getSpriteResource().resourceName + ":" + sprite.getName();
+	},
 
 	/**
 	 * Update the level data
