@@ -1780,8 +1780,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  * @fileoverview A class for checking class dependencies and class intialization
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1516 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1517 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
@@ -2016,6 +2016,10 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 			
 			// Get the class definition
 			var def = R.engine.Linker.classDefinitions[cn];
+			
+			if (!def) {
+				throw new Error("R.engine.Linker => Class '" + cn + "' doesn't have a definition!");
+			}
 				
 			// Check to see if the dependencies exist
 			var missDeps = false, reqs = [], unres = [];
@@ -2165,8 +2169,8 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1516 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1517 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *

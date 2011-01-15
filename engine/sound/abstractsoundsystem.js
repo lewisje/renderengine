@@ -36,7 +36,7 @@ R.Engine.define({
 	"class": "R.sound.AbstractSoundSystem",
 	"requires": [
 		"R.lang.Timeout",
-		"R.sound.Sound"
+		"R.resources.types.Sound"
 	]
 });
 
@@ -89,7 +89,7 @@ R.sound.AbstractSoundSystem = function(){
 					sName: name,
 					sUrl: url
 				});
-				return R.sound.Sound.create(this, null);
+				return R.resources.types.Sound.create(this, null);
 			}
 			else {
 				return this.retrieveSound(resourceLoader, name, url);

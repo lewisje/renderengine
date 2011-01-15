@@ -242,6 +242,10 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 			
 			// Get the class definition
 			var def = R.engine.Linker.classDefinitions[cn];
+			
+			if (!def) {
+				throw new Error("R.engine.Linker => Class '" + cn + "' doesn't have a definition!");
+			}
 				
 			// Check to see if the dependencies exist
 			var missDeps = false, reqs = [], unres = [];

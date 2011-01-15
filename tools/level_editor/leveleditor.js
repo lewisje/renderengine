@@ -30,23 +30,52 @@
  *
  */
 
-R.Engine.requires("/resourceloaders/loader.sound.js");
-R.Engine.requires("/resourceloaders/loader.sprite.js");
-R.Engine.requires("/resourceloaders/loader.level.js");
+R.Engine.define({
+	"class": "LevelEditor",
+	"requires": [
+		"R.engine.Game",
+		"R.lang.Timeout",
+		"R.lang.Iterator",
+		"R.engine.Events",
 
-R.Engine.requires("/objects/object.spriteactor.js");
-R.Engine.requires("/objects/object.collisionbox.js");
+		// Resource loaders and types
+		"R.resources.loaders.SoundLoader",
+		"R.resources.loaders.SpriteLoader",
+		"R.resources.loaders.LevelLoader",
+		"R.resources.types.Level",
+		"R.resources.types.Sprite",
+		"R.resources.types.Sound",
 
-R.Engine.include("/../tools/level_editor/jquery.jstree.js");
-R.Engine.include("/../tools/level_editor/jquery.cookie.js");
-R.Engine.include("/../tools/level_editor/jquery.hotkeys.js");
+		// Persistent storage to save level
+		"R.storage.PersistentStorage",
 
-R.Engine.initObject("LevelEditor", null, function() {
+		// Math objects
+		"R.math.Math2D",
+		"R.math.Point2D",
+		"R.math.Vector2D",
+		"R.math.Rectangle2D",
+		
+		// Game objects
+		"R.objects.SpriteActor",
+		"R.objects.CollisionBox"
+	],
+	
+	"includes": [
+		"/../tools/level_editor/jquery.jstree.js",
+		"/../tools/level_editor/jquery.cookie.js",
+		"/../tools/level_editor/jquery.hotkeys.js"
+	],
+	
+	// Game class dependencies
+	"depends": [
+	]
+});
 
 /**
  * @class The 2D level editor.
  */
-var LevelEditor = Base.extend({
+var LevelEditor = function() {
+	return Base.extend({
 
    nextZ: 0,
    gridSize: 16,
@@ -83,13 +112,13 @@ var LevelEditor = Base.extend({
       
       for (var o in this.game) {
          try {
-            if (SpriteLoader.isInstance(this.game[o])) {
+            if (this.game[o] instanceof R.resources.loaders.SpriteLoader) {
                this.loaders.sprite.push(this.game[o]);
-            } else if (SoundLoader.isInstance(this.game[o])) {
+            } else if (this.game[o] instanceof R.resources.loaders.SoundLoader) {
                this.loaders.sound.push(this.game[o]);
-            } else if (LevelLoader.isInstance(this.game[o])) {
+            } else if (this.game[o] instanceof R.resources.loaders.LevelLoader) {
                this.loaders.level.push(this.game[o]);
-            } else if (RenderContext.isInstance(this.game[o])) {
+            } else if (this.game[o] instanceof R.rendercontexts.AbstractRenderContext) {
                // The render context (if there's more than one, we'll need to update this)
                this.gameRenderContext = this.game[o];
             }
@@ -239,9 +268,13 @@ var LevelEditor = Base.extend({
       });
    },
 
+	/**
+	 * Create a sprite actor object
+	 * @param actorName {String} The name of the sprite object
+	 */
    createActor: function(actorName) {
       var ctx = this.getGame().getRenderContext();
-      var actor = SpriteActor.create();
+      var actor = R.objects.SpriteActor.create();
 		
 		// Determine the loader, sheet, and sprite
 		var spriteIdent = actorName.split(":");
@@ -254,7 +287,7 @@ var LevelEditor = Base.extend({
 		
 		var vPort = this.getGame().getRenderContext().getViewport().get();
 		var hCenter = Math.floor(vPort.w / 2), vCenter = Math.floor(vPort.h / 2); 
-      var pT = Point2D.create(hCenter + s, vCenter);
+      var pT = R.math.Point2D.create(hCenter + s, vCenter);
       actor.setPosition(pT);
       actor.setZIndex(LevelEditor.nextZ++);
 		
@@ -268,13 +301,17 @@ var LevelEditor = Base.extend({
 	  	},false,true);
    },
 
+	/**
+	 * Create a simple collision box
+	 * @param {Object} game
+	 */
    createCollisionBox: function(game) {
       var ctx = game.getRenderContext();
-      var cbox = CollisionBox.create();
+      var cbox = R.objects.CollisionBox.create();
 
       // Adjust for scroll
       var s = ctx.getHorizontalScroll();
-      var pT = Point2D.create(game.centerPoint.x + s, game.centerPoint.y);
+      var pT = R.math.Point2D.create(game.centerPoint.x + s, game.centerPoint.y);
 
       cbox.setPosition(pT);
       cbox.setBoxSize(80, 80);
@@ -283,6 +320,11 @@ var LevelEditor = Base.extend({
       this.setSelected(cbox);
    },
 
+	/**
+	 * Select the object which is at the given coordinates
+	 * @param {Object} x
+	 * @param {Object} y
+	 */
    selectObject: function(x, y) {
       this.deselectObject();
 
@@ -291,8 +333,8 @@ var LevelEditor = Base.extend({
       //x += ctx.getHorizontalScroll();
 
       // Check to see if this object falls on top of an object
-      var pt = Point2D.create(x,y);
-      var itr = Iterator.create(ctx);
+      var pt = R.math.Point2D.create(x,y);
+      var itr = R.lang.Iterator.create(ctx);
       itr.reverse();
       while (itr.hasNext()) {
          var obj = itr.next();
@@ -306,6 +348,10 @@ var LevelEditor = Base.extend({
       pt.destroy();
    },
 
+	/**
+	 * Deselect the given object, or the currently selected object if "obj" is null
+	 * @param {Object} obj
+	 */
    deselectObject: function(obj) {
 		var objId;
       if (obj == null) {
@@ -319,10 +365,14 @@ var LevelEditor = Base.extend({
 			objId = obj.getId();
       }
 
-		// Deselect node
+		// Deselect node in tree
 		$("#editPanel div.sceneGraph").jstree("deselect_node", "#" + objId);
    },
 
+	/**
+	 * Delete the given object, or delete the currently selected object if "obj" is null
+	 * @param {Object} obj
+	 */
    deleteObject: function(obj) {
 		var objId;
       if (obj == null) {
@@ -344,6 +394,10 @@ var LevelEditor = Base.extend({
 		$("#editPanel div.sceneGraph").jstree("remove","#" + objId);
    },
 
+	/**
+	 * Select an object by its Id
+	 * @param {Object} objId
+	 */
 	selectById: function(objId) {
 		var objs = this.gameRenderContext.getObjects(function(el) {
 			return (el.getId() == objId);	
@@ -353,6 +407,10 @@ var LevelEditor = Base.extend({
 		}
 	},
 
+	/**
+	 * Set the selected object
+	 * @param {Object} obj
+	 */
    setSelected: function(obj) {
       this.deselectObject();
 
@@ -367,6 +425,11 @@ var LevelEditor = Base.extend({
       this.updateLevelData();
    },
 
+	/**
+	 * Move the currently selected object relative to the given coordinates
+	 * @param {Object} x
+	 * @param {Object} y
+	 */
    moveSelected: function(x, y) {
       // Adjust for scroll
       x += this.getGame().getRenderContext().getHorizontalScroll();
@@ -377,12 +440,16 @@ var LevelEditor = Base.extend({
          var grid = viewWidth / this.gridSize;
          x = x - x % this.gridSize;
          y = y - y % this.gridSize;
-         var pt = Point2D.create(x, y);
+         var pt = R.math.Point2D.create(x, y);
          this.currentSelectedObject.setPosition(pt);
          pt.destroy();
       }
    },
 
+	/**
+	 * Create the table which will hold all of the given object's properties
+	 * @param {Object} obj
+	 */
    createPropertiesTable: function(obj) {
       // Remove any existing property table
       $("#propTable").remove();
@@ -424,6 +491,9 @@ var LevelEditor = Base.extend({
       this.updateLevelData();
    },
 
+	/**
+	 * Update the level data
+	 */
    updateLevelData: function() {
 	
 		return;
@@ -438,7 +508,4 @@ var LevelEditor = Base.extend({
    },
 
 });
-
-return LevelEditor;
-
-});
+}
