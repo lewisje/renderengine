@@ -60,7 +60,7 @@ R.components.Sprite = function() {
     * @private
     */
    constructor: function(name, priority, sprite) {
-      if (Sprite.isInstance(priority)) {
+      if (priority instanceof R.resources.types.Sprite) {
          sprite = priority;
          priority = 0.1;
       }

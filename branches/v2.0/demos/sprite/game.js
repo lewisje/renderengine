@@ -33,25 +33,50 @@
  *
  */
 
-// Load all required engine components
-R.Engine.requires("/rendercontexts/context.scrollingbackground.js");
-R.Engine.requires("/resourceloaders/loader.sound.js");
-R.Engine.requires("/sound/sound.sm2.js");
-R.Engine.requires("/resourceloaders/loader.sprite.js");
-R.Engine.requires("/resourceloaders/loader.level.js");
-R.Engine.requires("/engine.timers.js");
+R.Engine.define({
+	"class": "SpriteDemo",
+	"requires": [
+		"R.engine.Game",
+		"R.lang.Timeout",
+		"R.engine.Events",
 
-R.Engine.requires("/objects/object.spriteactor.js");
-R.Engine.requires("/objects/object.collisionbox.js");
+		// The render context
+		"R.rendercontexts.ScrollingBackgroundContext",
 
-R.Engine.requires("/../tools/level_editor/leveleditor.js");
+		// Resource loaders and types
+		"R.resources.loaders.SoundLoader",
+		"R.resources.loaders.SpriteLoader",
+		"R.resources.loaders.LevelLoader",
+		"R.resources.types.Level",
+		"R.resources.types.Sprite",
 
-R.Engine.initObject("SpriteDemo", "Game", function() {
+		// Sound engine
+		"R.sound.SM2",
+
+		"R.storage.PersistentStorage",
+		"R.math.Math2D",
+		"R.math.Point2D",
+		"R.math.Rectangle2D",
+		
+		// Game objects
+		"R.objects.SpriteActor",
+		"R.objects.CollisionBox"
+	],
+	
+	"includes": [
+		"/../tools/level_editor/leveleditor.js"
+	],
+	
+	// Game class dependencies
+	"depends": [
+	]
+});
 
 /**
  * @class The game.
  */
-var SpriteDemo = Game.extend({
+var SpriteDemo = function() {
+	return R.engine.Game.extend({
 
    constructor: null,
 
@@ -103,21 +128,21 @@ var SpriteDemo = Game.extend({
       // Set the FPS of the game
       R.Engine.setFPS(this.engineFPS);
 
-      this.spriteLoader = SpriteLoader.create();
-      this.soundLoader = SoundLoader.create(new SoundSystemSM2());
-      this.levelLoader = LevelLoader.create();
+      this.spriteLoader = R.resources.loaders.SpriteLoader.create();
+      this.soundLoader = R.resources.loaders.SoundLoader.create(new R.sound.SM2());
+      this.levelLoader = R.resources.loaders.LevelLoader.create();
 
       // Load the music
       this.soundLoader.load("bgm", this.getFilePath("resources/smblvl1.mp3"));
 
       // Load the level
-      this.levelLoader.load("level1", this.getFilePath("resources/smblevel1.js"));
+      this.levelLoader.load("level1", this.getFilePath("resources/smblevel1.level"));
 
       // Load the sprites
-      this.spriteLoader.load("smbtiles", this.getFilePath("resources/smbtiles.js"));
+      this.spriteLoader.load("smbtiles", this.getFilePath("resources/smbtiles.sprite"));
       
 		// Wait for resources to load
-		Timeout.create("wait", 250, function() {
+		R.lang.Timeout.create("wait", 250, function() {
 			if (SpriteDemo.spriteLoader.isReady() && 
 				 SpriteDemo.levelLoader.isReady() && 
 				 SpriteDemo.soundLoader.isReady()) {
@@ -139,12 +164,12 @@ var SpriteDemo = Game.extend({
 
    run: function() {
       // Create the 2D context
-      this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
+      this.fieldBox = R.math.Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
       this.centerPoint = this.fieldBox.getCenter();
 
       this.level = this.levelLoader.getLevel("level1");
 
-      this.renderContext = ScrollingBackground.create("bkg", this.level, this.fieldWidth, this.fieldHeight);
+      this.renderContext = R.rendercontexts.ScrollingBackgroundContext.create("bkg", this.level, this.fieldWidth, this.fieldHeight);
       this.renderContext.setWorldScale(this.areaScale);
       R.Engine.getDefaultContext().add(this.renderContext);
 
@@ -158,28 +183,15 @@ var SpriteDemo = Game.extend({
    play: function() {
       this.soundLoader.get("bgm").play();
 
-      var player = SpriteActor.create();
+      var player = R.objects.SpriteActor.create();
       player.setSprite(this.spriteLoader.getSprite("smbtiles", "super_walk"));
-      player.setPosition(Point2D.create(100, 338));
+      player.setPosition(R.math.Point2D.create(100, 338));
       this.renderContext.add(player);
 
-      var mario = SpriteActor.create();
+      var mario = R.objects.SpriteActor.create();
       mario.setSprite(this.spriteLoader.getSprite("smbtiles", "mario_walk"));
-      mario.setPosition(Point2D.create(228, 370));
+      mario.setPosition(R.math.Point2D.create(228, 370));
       this.renderContext.add(mario);
-   },
-
-   /**
-    * A simple method that determines if the position is within the supplied bounding
-    * box.
-    *
-    * @param pos {Point2D} The position to test
-    * @param bBox {Rectangle2D} The bounding box of the playfield
-    * @type Boolean
-    */
-   inField: function(pos, bBox) {
-      var newPos = this.wrap(pos, bBox);
-      return newPos.equals(pos);
    },
 
    getLevel: function() {
@@ -191,7 +203,4 @@ var SpriteDemo = Game.extend({
    }
 
 });
-
-return SpriteDemo;
-
-});
+}

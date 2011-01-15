@@ -32,7 +32,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.sound.Sound",
+	"class": "R.resources.types.Sound",
 	"requires": [
 		"R.engine.PooledObject"
 	]
@@ -45,10 +45,10 @@ R.Engine.define({
  *
  * @constructor
  * @param name {String} The name of the sound
- * @extends PooledObject
+ * @extends R.engine.PooledObject
  */
-R.sound.Sound = function(){
-	return R.engine.PooledObject.extend(/** @scope R.sound.Sound.prototype */{
+R.resources.types.Sound = function(){
+	return R.engine.PooledObject.extend(/** @scope R.resources.types.Sound.prototype */{
 	
 		volume: -1,
 		paused: false,
@@ -260,13 +260,13 @@ R.sound.Sound = function(){
 			return this.soundSystem.getSoundReadyState(this.soundObj);
 		}
 		
-	}, /** @scope R.sound.Sound.prototype */ {
+	}, /** @scope R.resources.types.Sound.prototype */ {
 		/**
 		 * Gets the class name of this object.
-		 * @return {String} The string "R.sound.Sound"
+		 * @return {String} The string "R.resources.types.Sound"
 		 */
 		getClassName: function(){
-			return "R.sound.Sound";
+			return "R.resources.types.Sound";
 		}
 	});
 	

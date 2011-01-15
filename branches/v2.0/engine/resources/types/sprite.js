@@ -90,38 +90,38 @@ R.resources.types.Sprite = function() {
 		this.playing = true;
 		
 		if (fileVersion == 1) {
-	  		this.type = (spriteObj["a"] ? Sprite.TYPE_ANIMATION : Sprite.TYPE_SINGLE);
+	  		this.type = (spriteObj["a"] ? R.resources.types.Sprite.TYPE_ANIMATION : R.resources.types.Sprite.TYPE_SINGLE);
 		} else if (fileVersion == 2) {
-			this.type = (spriteObj.length == 4 ? Sprite.TYPE_SINGLE : Sprite.TYPE_ANIMATION);
+			this.type = (spriteObj.length == 4 ? R.resources.types.Sprite.TYPE_SINGLE : R.resources.types.Sprite.TYPE_ANIMATION);
 		}
 
       var s;
 		if (fileVersion == 1) {
-			s = (this.type == Sprite.TYPE_ANIMATION ? spriteObj["a"] : spriteObj["f"]);
+			s = (this.type == R.resources.types.Sprite.TYPE_ANIMATION ? spriteObj["a"] : spriteObj["f"]);
 		} else if (fileVersion == 2) {
 			s = spriteObj;
 		}
 		
-      if (this.type == Sprite.TYPE_ANIMATION) {
-         switch (s[Sprite.INDEX_TYPE]) {
-            case "loop" : this.mode = Sprite.MODE_LOOP; break;
-            case "toggle" : this.mode = Sprite.MODE_TOGGLE; break;
-            case "once" : this.mode = Sprite.MODE_ONCE; break;
+      if (this.type == R.resources.types.Sprite.TYPE_ANIMATION) {
+         switch (s[R.resources.types.Sprite.INDEX_TYPE]) {
+            case "loop" : this.mode = R.resources.types.Sprite.MODE_LOOP; break;
+            case "toggle" : this.mode = R.resources.types.Sprite.MODE_TOGGLE; break;
+            case "once" : this.mode = R.resources.types.Sprite.MODE_ONCE; break;
          }
-         if (s.length - 1 == INDEX_SYNC) {
+         if (s.length - 1 == R.resources.types.Sprite.INDEX_SYNC) {
             this.sync = true;
             this.lastTime = null;
             this.toggleDir = -1;	// Trust me
          } else {
          	this.sync = false;
          }
-         this.count = s[Sprite.INDEX_COUNT];
-         this.speed = s[Sprite.INDEX_SPEED];
+         this.count = s[R.resources.types.Sprite.INDEX_COUNT];
+         this.speed = s[R.resources.types.Sprite.INDEX_SPEED];
       }
 
       this.image = spriteResource.image;
-      this.frame = Rectangle2D.create(s[Sprite.INDEX_LEFT], s[Sprite.INDEX_TOP], s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
-      this.bbox = Rectangle2D.create(0, 0, s[Sprite.INDEX_WIDTH], s[Sprite.INDEX_HEIGHT]);
+      this.frame = R.math.Rectangle2D.create(s[R.resources.types.Sprite.INDEX_LEFT], s[R.resources.types.Sprite.INDEX_TOP], s[R.resources.types.Sprite.INDEX_WIDTH], s[R.resources.types.Sprite.INDEX_HEIGHT]);
+      this.bbox = R.math.Rectangle2D.create(0, 0, s[R.resources.types.Sprite.INDEX_WIDTH], s[R.resources.types.Sprite.INDEX_HEIGHT]);
    },
 
 	/**
@@ -152,7 +152,7 @@ R.resources.types.Sprite = function() {
     * @return {Boolean} <tt>true</tt> if the sprite is an animation
     */
    isAnimation: function() {
-      return (this.type == Sprite.TYPE_ANIMATION);
+      return (this.type == R.resources.types.Sprite.TYPE_ANIMATION);
    },
 
    /**
@@ -160,7 +160,7 @@ R.resources.types.Sprite = function() {
     * @return {Boolean} <tt>true</tt> if the sprite is an animation and loops
     */
    isLoop: function() {
-      return (this.isAnimation() && this.mode == Sprite.MODE_LOOP);
+      return (this.isAnimation() && this.mode == R.resources.types.Sprite.MODE_LOOP);
    },
 
    /**
@@ -168,7 +168,7 @@ R.resources.types.Sprite = function() {
     * @return {Boolean} <tt>true</tt> if the sprite is an animation and toggles
     */
    isToggle: function() {
-      return (this.isAnimation() && this.mode == Sprite.MODE_TOGGLE);
+      return (this.isAnimation() && this.mode == R.resources.types.Sprite.MODE_TOGGLE);
    },
 
    /**
@@ -176,7 +176,7 @@ R.resources.types.Sprite = function() {
     * @return {Boolean} <tt>true</tt> if the sprite is an animation and plays once
     */
    isOnce: function() {
-      return (this.isAnimation() && this.mode == Sprite.MODE_ONCE);
+      return (this.isAnimation() && this.mode == R.resources.types.Sprite.MODE_ONCE);
    },
 
 	/**
@@ -226,9 +226,9 @@ R.resources.types.Sprite = function() {
     */
    getFrame: function(time) {
       if (!this.isAnimation()) {
-         return Rectangle2D.create(this.frame);
+         return R.math.Rectangle2D.create(this.frame);
       } else {
-         var f = Rectangle2D.create(this.frame);
+         var f = R.math.Rectangle2D.create(this.frame);
          var fn = this.calcFrameNumber(time);
          return f.offset(f.dims.x * fn, 0);
       }
@@ -344,13 +344,13 @@ R.resources.types.Sprite = function() {
    onSpriteLoopRestart: function() {
    }
 
-}, /** @scope Sprite.prototype */{
+}, /** @scope R.resources.types.Sprite.prototype */{
    /**
     * Gets the class name of this object.
-    * @return {String} The string "Sprite"
+    * @return {String} The string "R.resources.types.Sprite"
     */
    getClassName: function() {
-      return "Sprite";
+      return "R.resources.types.Sprite";
    },
 
    /** The sprite animation loops
