@@ -74,9 +74,11 @@ R.objects.SpriteActor = function(){
 			var self = this;
 			var prop = this.base(self);
 			return $.extend(prop, {
-				"Sprite": [function(){
-					return self.sprite.getName();
-				}, null, false]
+				"Sprite": [!R.isUndefined(LevelEditor) ? function(){ return LevelEditor.getSpriteCanonicalName(self.sprite); } : function(){ return self.sprite.getName(); }, 
+							  !R.isUndefined(LevelEditor) ? { "multi": true, 
+							  											 "opts": LevelEditor.getSpriteOptions,
+																		 "fn": function(s) { self.setSprite(LevelEditor.getSpriteForName(s)); }} : null, 
+							  !R.isUndefined(LevelEditor) ? true : false ]
 			});
 		},
 		
