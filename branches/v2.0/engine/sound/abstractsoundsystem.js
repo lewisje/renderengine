@@ -6,8 +6,8 @@
  *					  architecture for linking in different sound managers.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1307 $
+ * @author: $Author$
+ * @version: $Revision$
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
