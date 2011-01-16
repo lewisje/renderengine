@@ -132,6 +132,9 @@ R.engine.PooledObject = function() {
    getProperties: function() {
       var self = this;
       var prop = {};
+		
+		// [getter, setter, editableFlag]
+		
       return $.extend(prop, {
          "Id"     : [function() { return self.getId(); },
                            null, false],

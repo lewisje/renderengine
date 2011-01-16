@@ -563,23 +563,30 @@ R.engine.Script = Base.extend({
     *
     * @param stylesheetPath {String} Path to the stylesheet, relative to
     *                                the engine path.
+    * @param relative {Boolean} Relative to the current path, or from the engine path
+    * @param noInject {Boolean} <code>true</code> to bypass engine path injection and use
+    * 	a <tt>&lt;link /&gt; tag instead.                               
     * @memberOf Engine
     */
-   loadStylesheet: function(stylesheetPath, relative) {
+   loadStylesheet: function(stylesheetPath, relative, noInject) {
       stylesheetPath = (relative ? "" : R.Engine.getEnginePath()) + stylesheetPath;
       var f = function() {
-         $.get(stylesheetPath, function(data) {
-            // process the data to replace the "enginePath" variable
-            var epRE = /(\$<enginePath>)/g;
-            data = data.replace(epRE, R.Engine.getEnginePath());
-            if (R.engine.Support.sysInfo().browser == "msie") {
-               // IE likes it this way...
-               $("head", document).append($("<style type='text/css'>" + data + "</style>"));
-            } else {
-               $("head", document).append($("<style type='text/css'/>").text(data));
-            }
-            R.debug.Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
-         }, "text");
+			if (noInject) {
+				$("head", document).append($("<link type='text/css' rel='stylesheet' href='" + stylesheetPath + "'/>"));	
+			} else {
+	         $.get(stylesheetPath, function(data) {
+	            // process the data to replace the "enginePath" variable
+	            var epRE = /(\$<enginePath>)/g;
+	            data = data.replace(epRE, R.Engine.getEnginePath());
+	            if (R.engine.Support.sysInfo().browser == "msie") {
+	               // IE likes it this way...
+	               $("head", document).append($("<style type='text/css'>" + data + "</style>"));
+	            } else {
+	               $("head", document).append($("<style type='text/css'/>").text(data));
+	            }
+	            R.debug.Console.debug("Stylesheet loaded '" + stylesheetPath + "'");
+	         }, "text");
+			}
       };
 
       R.engine.Script.setQueueCallback(f);

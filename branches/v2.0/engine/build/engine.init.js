@@ -38,6 +38,7 @@ R.debug.Console.startup();
 R.Engine.defaultOptions = {
    skipFrames: true,													// Skip missed frames
    billboards: true,													// Use billboards to speed up rendering
+   textUseBillboards: true,										// Text will use billboards unless platform doesn't support
    hardwareAccel: false,											// Hardware acceleration flag
    pointAsArc: true,													// Draw points as arcs or rectangles
 	transientMathObject: false,									// Transient (non-pooled) MathObjects

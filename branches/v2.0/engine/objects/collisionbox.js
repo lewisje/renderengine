@@ -43,19 +43,18 @@ R.Engine.define({
 });
 
 /**
- * @class The player object.  Creates the player and assigns the
- *        components which handle collision, drawing, drawing the thrust
- *        and moving the object.
+ * @class A collision box which can be used to impede movement or trigger an action.
  */
 R.objects.CollisionBox = function(){
 	return R.engine.Object2D.extend({
 	
 		editing: false,
-		
 		boxRect: null,
+		type: null,
+		action: null,
 		
 		constructor: function(){
-			this.base("CollisionBox");
+			this.base("CollisionBlock");
 			
 			this.editing = false;
 			
@@ -64,6 +63,8 @@ R.objects.CollisionBox = function(){
 			
 			this.setPosition(R.math.Point2D.create(100, 100));
 			this.boxRect = R.math.Rectangle2D.create(0, 0, 80, 80);
+			this.type = R.objects.CollisionBox.TYPE_COLLIDER;
+			this.action = "";
 		},
 		
 		getProperties: function(){
@@ -79,7 +80,17 @@ R.objects.CollisionBox = function(){
 					return self.boxRect.get().h;
 				}, function(i){
 					self.setHeight(i);
-				}, true]
+				}, true],
+				"Type": [function() {
+					return self.type == R.objects.CollisionBox.TYPE_COLLIDER ? "TYPE_COLLIDER" : "TYPE_TRIGGER"; 
+				}, function(i) {
+					self.setType(i == "TYPE_COLLIDER" ? R.objects.CollisionBox.TYPE_COLLIDER : R.objects.CollisionBox.TYPE_TRIGGER);
+				}, false],
+				"Action": [function() {
+									return self.action.substring(0,25);
+							  }, !R.isUndefined(LevelEditor) && self.type == R.objects.CollisionBox.TYPE_TRIGGER ?
+							  { "editor": function() { LevelEditor.showScriptDialog(this, "Action", self.action); }, "fn": function(i) { self.setAction(i); } } : null, 
+							  (!R.isUndefined(LevelEditor) && self.type == R.objects.CollisionBox.TYPE_TRIGGER)]
 			});
 		},
 		
@@ -95,22 +106,61 @@ R.objects.CollisionBox = function(){
 		update: function(renderContext, time){
 			renderContext.pushTransform();
 			this.base(renderContext, time);
+			var color = "255,255,0";
+			
+			if (this.type == R.objects.CollisionBox.TYPE_TRIGGER) {
+				color = "255,0,0";	
+			}
 			
 			if (this.editing) {
-				renderContext.setFillStyle("rgba(255,255,0,0.85)");
-			}
-			else {
-				renderContext.setFillStyle("rgba(255,255,0,0.4)");
+				renderContext.setFillStyle("rgba(" + color + ",0.85)");
+			} else {
+				renderContext.setFillStyle("rgba(" + color + ",0.4)");
 			}
 			
 			renderContext.drawFilledRectangle(this.boxRect);
-			
+
+			if (this.editing) {
+				renderContext.setLineStyle("white");
+				renderContext.setLineWidth(2);
+				renderContext.drawRectangle(this.boxRect);
+			}
+
 			renderContext.popTransform();
 		},
 		
 		/**
+		 * Get the type of collision box object being represented.
+		 * @return {Number}
+		 */
+		getType: function() {
+			return this.type;
+		},
+		
+		/**
+		 * Set the type of collision box this will be.
+		 * @param type {Number} One of either: {@link #TYPE_COLLIDER} or {@link #TYPE_TRIGGER}.
+		 */
+		setType: function(type) {
+			this.type = type;
+			if (type == R.objects.CollisionBox.TYPE_TRIGGER) {
+				this.setName("TriggerBlock");
+			} else {
+				this.setName("CollisionBlock");
+			}
+		},
+		
+		/**
+		 * Sets the script which will be called when the block is triggered.
+		 * @param action {String} The action script
+		 */
+		setAction: function(action) {
+			this.action = action;
+		},
+		
+		/**
 		 * Get the position of the ship from the mover component.
-		 * @type Point2D
+		 * @return {Point2D}
 		 */
 		getPosition: function(){
 			return this.getComponent("move").getPosition();
@@ -172,7 +222,17 @@ R.objects.CollisionBox = function(){
 		 */
 		getClassName: function(){
 			return "R.objects.CollisionBox";
-		}
+		},
+		
+		/**
+		 * This type of box impedes movement through it
+		 */
+		TYPE_COLLIDER: 1,
+		
+		/**
+		 * This type of box triggers an action
+		 */
+		TYPE_TRIGGER: 2
 	});
 	
 }

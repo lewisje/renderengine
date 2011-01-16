@@ -61,9 +61,11 @@ R.Engine.define({
 	],
 	
 	"includes": [
+		"/../tools/level_editor/jquery-ui-1.8.8.js",
 		"/../tools/level_editor/jquery.jstree.js",
 		"/../tools/level_editor/jquery.cookie.js",
-		"/../tools/level_editor/jquery.hotkeys.js"
+		"/../tools/level_editor/jquery.hotkeys.js",
+		"/../tools/level_editor/jquery.jdMenu.js"
 	],
 	
 	// Game class dependencies
@@ -93,6 +95,7 @@ var LevelEditor = function() {
 	defaultSprite: null,
 	spriteOptions: null,
 	allSprites: null,
+	contextOffset: null,
 
    constructor: null,
 	
@@ -179,6 +182,13 @@ var LevelEditor = function() {
     * @param game {Game} The <tt>Game</tt> object being edited
     */
    edit: function(game) {
+		// Load the style sheet for jQueryUI
+		R.engine.Script.loadStylesheet("/../tools/level_editor/css/smoothness/jquery-ui-1.8.8.custom.css", false, true);
+
+		// Load the style sheets for jdMenu
+		R.engine.Script.loadStylesheet("/../tools/level_editor/css/jdMenu.css", false, true);
+		R.engine.Script.loadStylesheet("/../tools/level_editor/css/jdMenu.slate.css", false, true);
+
 		// Create the areas for the scene graph and the object properties
       $("body", document).append($("<div id='editPanel'>").append($("<div class='sceneGraph'>")).append($("<div class='props'>")));
 		
@@ -214,6 +224,32 @@ var LevelEditor = function() {
 				id = $(data.args[0]).parent().attr("id") || "";
 			}
 			LevelEditor.selectById(id);			
+		});
+		
+		// Dialog for script editor
+		var scriptDlg = $("<div id='ScriptDialog'>").append($("<textarea cols='60' rows='20' id='scriptVal'>"));
+		$("body", document).append(scriptDlg);
+		scriptDlg.dialog({
+			autoOpen: false,
+			width: 570,
+			modal: true,
+			draggable: true,
+			title: "Script Editor",
+			buttons: {
+				"Save Script": function() {
+					// Get the option which contains our object's Id and the one where the script is stored
+					var objId = $(this).dialog("option", "_REObjectId");
+					var propName = $(this).dialog("option", "_REPropName");
+					LevelEditor.saveScript(objId, propName, $("#scriptVal").val())
+					$(this).dialog("close");
+				},
+				"Cancel": function() {
+					$(this).dialog("close");
+				}
+			},
+			close: function() {
+				$("#scriptVal").val("");
+			}		
 		});
 		
 		// Render the editor controls
@@ -287,6 +323,47 @@ var LevelEditor = function() {
             LevelEditor.moveSelected(evt.pageX, evt.pageY);
          }
       });
+		
+		// Menu across the top
+		var mb = {
+			"File" : {
+				"New" : function() {},
+				"Open" : function() {},
+				"Save" : function() {},
+				"Save As..." : function() {}
+			},
+			"Edit" : {
+				"Copy Object": function() {},
+				"Delete Object": function() {},
+				"Freeze Object": function() {},
+				"Scroll to Object" : function() {}
+			},
+			"Tools" : {
+				"Script Editor": function() {}
+			}
+		};
+		
+		var menubar = $("<ul class='jd_menu jd_menu_slate'>");
+		
+		for (var m in mb) {
+			var topLvl = $("<li>").text(m);
+			var sub = $("<ul>");
+			for (var n in mb[m]) {
+				sub.append($("<li>").text(n).click(mb[m][n]));
+			}
+			topLvl.append(sub);
+			menubar.append(topLvl);
+		}
+		
+		// Insert the menubar before the rendercontext in the DOM
+		var mbc = $("<div style='margin-bottom:8px;'>").append(menubar);
+		ctx.jQ().before(mbc);
+		$("ul.jd_menu").jdMenu();
+		
+		// Make sure we know where the context is at so we can adjust mouse position
+		setTimeout(function() {
+			LevelEditor.contextOffset = ctx.jQ().offset();
+		}, 750);
    },
 
 	contextMenu: function(node) {
@@ -336,6 +413,32 @@ var LevelEditor = function() {
 			}
 		};
 	},
+	
+	/**
+	 * Show the script editor dialog
+	 * @param obj {Object2D} The object being edited
+	 * @param propName {String} The property of the object where the script is saved
+	 * @param script {String} The initial value
+	 */
+	showScriptDialog: function(obj, propName, script) {
+		script = script || "";
+		$("#scriptVal").val(script);
+		$("#ScriptDialog").dialog("option", {
+			"_REObjectId": obj.getId(),
+			"_REPropName": propName	
+		}).dialog("open");	
+	},
+
+	/**
+	 * Save the script onto the object, for the given property
+	 * @param objId {String} The object's Id
+	 * @param propName {String} The name of the property being modified
+	 * @param script {String} The script
+	 */
+	saveScript: function(objId, propName, script) {
+		var obj = LevelEditor.getObjectById(objId);
+		LevelEditor.storePropertyValue(obj, propName, script);
+	},
 
 	/**
 	 * Create a sprite actor object
@@ -368,7 +471,7 @@ var LevelEditor = function() {
    },
 
 	/**
-	 * Create a simple collision box
+	 * Create a collision box to impede movement
 	 * @param {Object} game
 	 */
    createCollisionBox: function() {
@@ -386,6 +489,40 @@ var LevelEditor = function() {
       cbox.setZIndex(LevelEditor.nextZ++);
       ctx.add(cbox);
       this.setSelected(cbox);
+
+		// Add the box to the tree
+		$("#editPanel div.sceneGraph").jstree("create","#sceneGraph","last",{
+	  		"attr": { "id": cbox.getId() },
+	  		"data": cbox.getName() + " [" + cbox.getId() + "]"
+	  	},false,true);
+   },
+
+	/**
+	 * Create a collision box that when touched triggers an action 
+	 * @param {Object} game
+	 */
+   createTriggerBox: function() {
+      var ctx = LevelEditor.getGame().getRenderContext();
+      var cbox = R.objects.CollisionBox.create();
+
+      // Adjust for scroll
+      var s = ctx.getHorizontalScroll();
+		var vPort = ctx.getViewport();
+		var hCenter = Math.floor(vPort.w / 2), vCenter = Math.floor(vPort.h / 2); 
+      var pT = R.math.Point2D.create(hCenter + s, vCenter);
+
+      cbox.setPosition(pT);
+      cbox.setBoxSize(80, 80);
+      cbox.setZIndex(LevelEditor.nextZ++);
+		cbox.setType(R.objects.CollisionBox.TYPE_TRIGGER);
+      ctx.add(cbox);
+      this.setSelected(cbox);
+
+		// Add the box to the tree
+		$("#editPanel div.sceneGraph").jstree("create","#sceneGraph","last",{
+	  		"attr": { "id": cbox.getId() },
+	  		"data": cbox.getName() + " [" + cbox.getId() + "]"
+	  	},false,true);
    },
 
 	/**
@@ -411,6 +548,8 @@ var LevelEditor = function() {
 			var bean = LevelEditor.currentSelectedObject.getProperties(), origProps = original.getProperties();
 			
 			for (var p in bean) {
+				// Regardless if the editable flag is true, if there is a setter, we'll
+				// call it to copy the value over.
 				if (bean[p][1]) {
 					if (bean[p][1].multi && bean[p][1].multi === true) {
 						// Multi-option
@@ -419,6 +558,7 @@ var LevelEditor = function() {
 						// Checkbox toggle
 					} else if (bean[p][1].editor && bean[p][1].editor === true) {
 						// Custom editor
+						bean[p][1].fn(origProps[p][0]());
 					} else {
 						// Single value
 						bean[p][1](origProps[p][0]());
@@ -443,6 +583,36 @@ var LevelEditor = function() {
 
 	      newObj.setPosition(pT);
 			pT.destroy();
+			
+			// Make sure the label in the tree matches the new object's name and Id
+			$("#editPanel div.sceneGraph").jstree("set_text", "#" + newObj.getId(), newObj.getName() + " [" + newObj.getId() + "]");		
+		}
+	},
+
+	/**
+	 * Store a single property value
+	 * @param obj {R.engine.Object2D}
+	 * @param propName {String}
+	 * @param value {String}
+	 */
+	storePropertyValue: function(obj, propName, value) {
+		var bean = obj.getProperties();
+
+		// Regardless if the editable flag is true, if there is a setter, we'll
+		// call it to copy the value over.
+		if (bean[propName][1]) {
+			if (bean[propName][1].multi && bean[propName][1].multi === true) {
+				// Multi-option
+				bean[propName][1].fn(value);
+			} else if (bean[propName][1].checkbox && bean[propName][1].checkbox === true) {
+				// Checkbox toggle
+			} else if (bean[propName][1].editor) {
+				// Custom editor
+				bean[propName][1].fn(value);
+			} else {
+				// Single value
+				bean[propName][1](value);
+			}
 		}
 	},
 
@@ -454,9 +624,10 @@ var LevelEditor = function() {
    selectObject: function(x, y) {
       this.deselectObject();
 
-      // Adjust for scroll
+      // Adjust for context location
       var ctx = this.getGame().getRenderContext();
-      //x += ctx.getHorizontalScroll();
+      x -= LevelEditor.contextOffset.left;
+      y -= LevelEditor.contextOffset.top;
 
       // Check to see if this object falls on top of an object
       var pt = R.math.Point2D.create(x,y);
@@ -570,8 +741,9 @@ var LevelEditor = function() {
 	 * @param {Object} y
 	 */
    moveSelected: function(x, y) {
-      // Adjust for scroll
-      x += this.getGame().getRenderContext().getHorizontalScroll();
+      // Adjust for scroll and if the context was moved in the dom
+      x += this.getGame().getRenderContext().getHorizontalScroll() - LevelEditor.contextOffset.left;
+      y -= LevelEditor.contextOffset.top;
 
 		var viewWidth = this.getGame().getRenderContext().getViewport().get().w;
 
@@ -593,7 +765,7 @@ var LevelEditor = function() {
       // Remove any existing property table
       $("#propTable").remove();
 
-      if (this.currentSelectedObject == null) {
+      if (obj == null || this.currentSelectedObject == null) {
          return;
       }
 
@@ -607,7 +779,8 @@ var LevelEditor = function() {
          r.append($("<td class='propName'>" + p + "</td>"));
          var e;
 
-         if (bean[p][1]) {
+			// As long as the editableFlag is true, we'll create the appropriate editor
+         if (bean[p][2]) {
 				
 				if (bean[p][1].multi && bean[p][1].multi === true) {
 					// Multi-select dropdown
@@ -635,15 +808,14 @@ var LevelEditor = function() {
 				} else if (bean[p][1].checkbox && bean[p][1].checkbox === true) {
 					// Checkbox toggle
 					
-				} else if (bean[p][1].editor && bean[p][1].editor === true) {	
-					// Custom editor
+				} else if (bean[p][1].editor) {	
+					// Custom editor called in the scope of the object being edited
 					var fn = function() {
-						arguments.callee.cb.apply(arguments.callee.obj, arguments.callee.args);
+						arguments.callee.cb.call(arguments.callee.obj);
 					};
 					fn.obj = obj;
-					fn.cb = bean[p][1].fn;
-					fn.args = bean[p][1].args;
-					e = $("<span>").text(bean[p][0]()).append($("<input type='button' value='...'>").click(bean[p][1].fn()))					
+					fn.cb = bean[p][1].editor;
+					e = $("<span>").text(bean[p][0]()).append($("<input type='button' value='...'>").click(fn))					
 				} else {
 					// Single value input
 	            var fn = function() {

@@ -77,7 +77,7 @@ R.text.TextRenderer = function() {
 
       // Add components to move and draw the text
       this.renderer = renderer;
-      if (!R.Engine.options.billboards || renderer.isNative()) {
+      if (!R.Engine.options.textUseBillboards || renderer.isNative()) {
          this.add(this.renderer);
       } else {
          this.add(R.components.Billboard2D.create("billboard", this.renderer));
@@ -120,7 +120,7 @@ R.text.TextRenderer = function() {
     * @private
     */
    regen: function() {
-      if (!R.Engine.options.billboards || this.renderer.isNative()) {
+      if (!R.Engine.options.textUseBillboards || this.renderer.isNative()) {
          return;
       } else {
          this.getComponent("billboard").regenerate();
