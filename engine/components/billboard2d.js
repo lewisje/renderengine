@@ -166,58 +166,53 @@ R.components.Billboard2D = function() {
          return;
       }
       
-		if (R.Engine.options.hardwareAccel && R.Engine.options.billboards) {
-		  	// Get the host objects bounding box
-			var hostBox = this.getHostObject().getBoundingBox();
-			var o = R.math.Point2D.create(this.getHostObject().getOrigin());
+	  	// Get the host objects bounding box
+		var hostBox = this.getHostObject().getBoundingBox();
+		var o = R.math.Point2D.create(this.getHostObject().getOrigin());
+		
+		if (this.mode == R.components.Billboard2D.REDRAW) {
+			// Provide a temporary context which is used to render the contents into
+			Assert((R.components.Billboard2D.tempContext != null), "R.components.Billboard2D temporary context is not defined!");
 			
-			if (this.mode == R.components.Billboard2D.REDRAW) {
-				// Provide a temporary context which is used to render the contents into
-				Assert((R.components.Billboard2D.tempContext != null), "R.components.Billboard2D temporary context is not defined!");
-				
-				// Clear the temporary context and render the associated component to it
-				R.components.Billboard2D.tempContext.getElement().width = hostBox.w + 1;
-				R.components.Billboard2D.tempContext.getElement().height = hostBox.h + 1;
-				R.components.Billboard2D.tempContext.reset();
-				var p = R.math.Point2D.create(0,0);
-				p.add(o);
-				R.components.Billboard2D.tempContext.setPosition(p);
-				p.destroy();
-				this.renderComponent.execute(R.components.Billboard2D.tempContext, time);
-				
-				// Extract the rendered image
-				this.billboard.attr("src", R.components.Billboard2D.tempContext.getDataURL()).attr("width", hostBox.w).attr("height", hostBox.h + 1);
-				this.mode = R.components.Billboard2D.NORMAL;
-			}
+			// Clear the temporary context and render the associated component to it
+			R.components.Billboard2D.tempContext.getElement().width = hostBox.w + 1;
+			R.components.Billboard2D.tempContext.getElement().height = hostBox.h + 1;
+			R.components.Billboard2D.tempContext.reset();
+			var p = R.math.Point2D.create(0,0);
+			p.add(o);
+			R.components.Billboard2D.tempContext.setPosition(p);
+			p.destroy();
+			this.renderComponent.execute(R.components.Billboard2D.tempContext, time);
 			
-			// Render the billboard.  If the bounding box's origin is negative in
-			// either X or Y, we'll need to move the transformation there before rendering the object
-			this.transformOrigin(renderContext, true);
-			try {
-				renderContext.drawImage(this.getHostObject().getBoundingBox(), this.billboard[0]);
-			} 
-			catch (ex) {
-				// TODO: Find a better way to perform this operation since try/catch is SLOW
-				// It appears that Firefox might not have a full image rendered, so calling
-				// drawImage fails with a component exception.  To abate this possible issue,
-				// we try the call and catch the failure...	
-			}
-
-	      /* pragma:DEBUG_START */
-	      // Debug the billboard image box
-	      if (R.Engine.getDebugMode())
-	      {
-	         renderContext.setLineStyle("green");
-	         renderContext.drawRectangle(this.getHostObject().getBoundingBox());
-	      }
-	      /* pragma:DEBUG_END */
-
-			this.transformOrigin(renderContext, false);
-			o.destroy();
-		} else {
-			this.renderComponent.execute(renderContext, time);
+			// Extract the rendered image
+			this.billboard.attr("src", R.components.Billboard2D.tempContext.getDataURL()).attr("width", hostBox.w).attr("height", hostBox.h + 1);
+			this.mode = R.components.Billboard2D.NORMAL;
 		}
-			
+		
+		// Render the billboard.  If the bounding box's origin is negative in
+		// either X or Y, we'll need to move the transformation there before rendering the object
+		this.transformOrigin(renderContext, true);
+		try {
+			renderContext.drawImage(this.getHostObject().getBoundingBox(), this.billboard[0]);
+		} 
+		catch (ex) {
+			// TODO: Find a better way to perform this operation since try/catch is SLOW
+			// It appears that Firefox might not have a full image rendered, so calling
+			// drawImage fails with a component exception.  To abate this possible issue,
+			// we try the call and catch the failure...	
+		}
+
+      /* pragma:DEBUG_START */
+      // Debug the billboard image box
+      if (R.Engine.getDebugMode())
+      {
+         renderContext.setLineStyle("green");
+         renderContext.drawRectangle(this.getHostObject().getBoundingBox());
+      }
+      /* pragma:DEBUG_END */
+
+		this.transformOrigin(renderContext, false);
+		o.destroy();
    }
 
 }, /** @scope R.components.Billboard2D.prototype */{ 

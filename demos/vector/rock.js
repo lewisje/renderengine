@@ -68,7 +68,12 @@ var SpaceroidsRock = function() {
 
       // Add components to move and draw the asteroid
       this.add(R.components.Mover2D.create("move"));
-      this.add(R.components.Billboard2D.create("billboard", R.components.Vector2D.create("draw")));
+		
+		if (R.Engine.options.hardwareAccel) {
+	      this.add(R.components.Billboard2D.create("billboard", R.components.Vector2D.create("draw")));
+		} else {
+			this.add(R.components.Vector2D.create("draw"));			
+		}
       this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsRock.COLLISION_MASK);
 		if (Spaceroids.isAttractMode) {
@@ -188,7 +193,7 @@ var SpaceroidsRock = function() {
     * available shapes.
     */
    setShape: function() {
-      var c_draw = this.getComponent("billboard").getComponent();
+      var c_draw = R.Engine.options.hardwareAccel ? this.getComponent("billboard").getComponent() : this.getComponent("draw");
 
       // Pick one of the three shapes
       var tmp = [];
@@ -212,7 +217,9 @@ var SpaceroidsRock = function() {
 		this.setCollisionHull(c_draw.getCircleHull(0.75));
 		this.setBoundingBox(c_draw.getBoundingBox());
 		
-		this.getComponent("billboard").regenerate();
+		if (R.Engine.options.hardwareAccel) {
+	  		this.getComponent("billboard").regenerate();
+	  	}
    },
 
    /**

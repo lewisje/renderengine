@@ -120,6 +120,22 @@
 		</antcall>
 	</target>
 
+	<target name="engine.runtime.min" description="Build a single file compilation of the engine, compressed">
+		<!-- Build the single-engine distribution -->
+		<antcall target="engine.build">
+			<param name="engine.file" value="${basedir}/engine/runtime/tempengine.js"/>
+		</antcall>
+		
+		<java jar="${compiler.jar}" fork="true" failonerror="true"
+			jvm="${compiler.jvm}">
+		   <arg line="--js ${basedir}/engine/runtime/tempengine.js --js_output_file ${basedir}/engine/runtime/engine.js"/>
+		</java>
+
+		<delete quiet="true">
+			<fileset dir="${basedir}/engine/runtime" includes="tempengine.js"/>
+		</delete>
+	</target>
+
 	<!-- Strip out R.debug.Console.log, R.debug.Console.debug, and R.debug.Console.info messages.  We'll leave in 
 		  R.debug.Console.warn and R.debug.Console.error for obvious reasons. -->
 	<target name="engine.nodebug.full" depends="engine.full" description="Build a version of the engine with all debug messages removed">
