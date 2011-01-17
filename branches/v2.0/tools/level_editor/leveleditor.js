@@ -96,6 +96,7 @@ var LevelEditor = function() {
 	spriteOptions: null,
 	allSprites: null,
 	contextOffset: null,
+	pStore: null,
 
    constructor: null,
 	
@@ -327,10 +328,10 @@ var LevelEditor = function() {
 		// Menu across the top
 		var mb = {
 			"File" : {
-				"New" : function() {},
-				"Open" : function() {},
-				"Save" : function() {},
-				"Save As..." : function() {}
+				"New" : function() { LevelEditor.newLevel(); },
+				"Open" : function() { LevelEditor.loadLevel(); return false; },
+				"Save" : function() { LevelEditor.saveLevel(); return false; },
+				"Save As..." : function() { LevelEditor.saveLevel(true); }
 			},
 			"Edit" : {
 				"Copy Object": function() {},
@@ -349,7 +350,7 @@ var LevelEditor = function() {
 			var topLvl = $("<li>").text(m);
 			var sub = $("<ul>");
 			for (var n in mb[m]) {
-				sub.append($("<li>").text(n).click(mb[m][n]));
+				sub.append($("<li>").append($("<a href='#'>").html(n).click(mb[m][n])));
 			}
 			topLvl.append(sub);
 			menubar.append(topLvl);
@@ -891,17 +892,177 @@ var LevelEditor = function() {
 	 * Update the level data
 	 */
    updateLevelData: function() {
-	
 		return;
-      var level = "<?xml version='1.0' encoding='UTF-8'?>\n";
-      level += "<level resource='" + this.getGame().getLevel().getName() + "'>\n";
+    },
 
-      level += this.getGame().getRenderContext().toXML("  ");
+	/**
+	 * Get the storage object where the information will be saved
+	 */
+	getStorage: function() {
+		if (LevelEditor.pStore == null) {
+			LevelEditor.pStore = R.storage.PersistentStorage.create("LevelEditor");
+		}
+		
+		return LevelEditor.pStore;
+	},
 
-      level += "</level>";
-      $("#levelData").remove();
-      $("body", document).append($("<textarea id='levelData'>" + level + "</textarea>"));
-   },
+	/**
+	 * Setup the initial schema if it doesn't exist
+	 */
+	setupDataSchema: function() {
+		// Check to see if the data schema exists already.  If so, early out
+		var db = LevelEditor.getStorage();
+		
+		// See if the levels table exists
+		if (!db.tableExists("Levels")) {
+			// Create the schema
+			// -- Levels
+			db.createTable("Levels", ["level_id","name"], ["Number","String"]);
+			
+			// -- Objects
+			db.createTable("Objects", ["object_id","type_id","level_id"], ["Number","Number","Number"]);
+
+			// -- ObjectProps
+			db.createTable("ObjectProps", ["object_id","name","value"], ["Number","String","String"]);
+		}
+			
+		return;
+	},
+	
+	dropDataSchema: function() {
+		var db = LevelEditor.getStorage();
+		
+		// See if the levels table exists
+		if (db.tableExists("Levels")) {
+			// Drop the schema
+			db.dropTable("Levels");
+			db.dropTable("Objects");
+			db.dropTable("ObjectProps");
+			db.dropTable("ObjectToLevel");
+			db.dropTable("ObjectType");
+		}
+	},
+	
+	saveLevel: function(saveAs) {
+		// Get the render context
+      var ctx = LevelEditor.getGame().getRenderContext(),
+			 db = LevelEditor.getStorage();
+		
+		LevelEditor.setupDataSchema();
+		
+		// Create an entry (if it doesn't already exist) for the level
+		var levelName = "Test Level", levelId = 0;
+		var sql = "SELECT * FROM Levels WHERE Levels.name == '" + levelName + "'";
+		var result = db.execSql(sql);
+		if (result.length != 0) {
+			// Get all of the object Ids in the level
+			sql = "SELECT Objects.object_id FROM Objects WHERE Objects.level_id = " + levelId;
+			var objs = db.execSql(sql);
+			
+			// Delete the properties for all of the objects
+			for (var o in objs) {
+				sql = "DELETE ObjectProps FROM ObjectProps WHERE ObjectProps.object_id == " + objs[o].object_id;
+				db.execSql(sql);
+			}
+			
+			// Delete the objects from the level (in the database)
+			sql = "DELETE Objects FROM Objects WHERE Objects.level_id == " + result[0].level_id;
+			db.execSql(sql);
+		} else {
+			// Create the level entry
+			sql = "INSERT INTO Levels (level_id, name) VALUES (" + levelId + ",'" + levelName + "')";
+			db.execSql(sql);
+		}
+		
+		// Get all of the objects of type SpriteActor or CollisionBox
+		var levelObjects = ctx.getObjects(function(obj) {
+			return (obj instanceof R.objects.SpriteActor || obj instanceof R.objects.CollisionBox);
+		});
+		
+		// Spin through the objects and store properties which have setters to an object which
+		// we'll serialize into the database
+		for (var o = 0; o < levelObjects.length; o++) {
+			var obj = levelObjects[o],
+				 props = LevelEditor.getWritablePropertiesObject(obj),
+				 oType = (obj instanceof R.objects.SpriteActor ? 1 :
+				 			 obj.getType() == R.objects.CollisionBox.TYPE_COLLIDER ? 2 : 3);
+			
+			// Storing JSON doesn't work...
+			//var s = JSON.stringify(props);
+			sql = "INSERT INTO Objects (object_id, type_id, level_id) VALUES (" + o + "," + oType + "," + levelId + ")";
+			db.execSql(sql);
+			
+			// Insert all of the properties
+			for (var p in props) {
+				sql = "INSERT INTO ObjectProps (object_id, name, value) VALUES (" + o + ",'" + p + "','" + props[p] + "')";
+				db.execSql(sql); 
+			}
+		}
+	},
+	
+	/**
+	 * Get an object of writable properties (and their values) for the given object
+	 * @param obj {R.engine.Object2D} The object to query
+	 * @return {Object}
+	 */
+	getWritablePropertiesObject: function(obj) {
+		var bean = obj.getProperties(),
+			 propObj = {};
+		
+		for (var p in bean) {
+			if (bean[p][1]) {
+				propObj[p] = bean[p][0]();
+			}
+		}
+
+		return propObj;		
+	},
+	
+	loadLevel: function(saveAs) {
+		// Get the render context
+      var ctx = LevelEditor.getGame().getRenderContext(),
+			 db = LevelEditor.getStorage();
+		
+		LevelEditor.setupDataSchema();
+		
+		// Find the level
+		var levelId = 0;
+		var sql = "SELECT * FROM Levels WHERE Levels.level_id == " + levelId;
+		var result = db.execSql(sql);
+		if (result.length != 0) {
+			// The level exists... let's load it up
+			sql = "SELECT * FROM Objects WHERE Objects.level_id == " + levelId;
+			result = db.execSql(sql);
+			
+			for (var o in result) {
+				var oType = result[o].type_id, newObj;
+				if (oType == 1) {
+					newObj = R.objects.SpriteActor.create();
+				} else {
+					newObj = R.objects.CollisionBox.create();
+					newObj.setType(oType == 2 ? R.objects.CollisionBox.TYPE_COLLIDER : R.objects.CollisionBox.TYPE_TRIGGER);
+				}
+				
+				// Get the properties for the object and set them
+				var pSql = "SELECT * FROM ObjectProps WHERE ObjectProps.object_id == " + result[o].object_id;
+				var pRes = db.execSql(pSql);
+				
+				for (var p in pRes) {
+					LevelEditor.storePropertyValue(newObj, pRes[p].name, pRes[p].value);
+				}
+				
+				// Add the object to the context
+				ctx.add(newObj);
+				
+				// Add the object to the scene graph
+				$("#editPanel div.sceneGraph").jstree("create","#sceneGraph","last",{
+			  		"attr": { "id": newObj.getId() },
+			  		"data": newObj.getName() + " [" + newObj.getId() + "]"
+			  	},false,true);
+			}
+		}
+	}
+	
 
 });
 }
