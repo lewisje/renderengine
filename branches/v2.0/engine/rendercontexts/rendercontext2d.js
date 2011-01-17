@@ -254,7 +254,15 @@ R.rendercontexts.RenderContext2D = function() {
 	 */
 	renderBin: function(bin, itr, time) {
 		while (itr.hasNext()) {
-			this.renderObject(itr.next(), time);
+			
+			// Check if the object is within the operating region of the viewport,
+			// an area which is 25% larger than the viewport, and if it isn't, 
+			// it isn't processed.  If we cannot determine if the object is visible,
+			// we'll process it.
+			var obj = itr.next();
+			if (!obj.getWorldBox || (this.getExpandedViewport().isIntersecting(obj.getWorldBox()))) {
+				this.renderObject(obj, time);
+			}
 		}
 	},
 

@@ -95,9 +95,6 @@ R.resources.loaders.ImageLoader = function(){
 				});
 				
 				this.setElement(div[0]);
-				
-				// Add it to the default context so it can be cleaned up
-				R.Engine.getDefaultContext().add(this);
 			}
 			
 			// Create an image element

@@ -60,6 +60,7 @@ R.rendercontexts.AbstractRenderContext = function() {
    surface: null,
    transformStackDepth: 0,
    viewport: null,
+	expViewport:null,
    worldPosition: null,
    worldRotation: null,
    worldScale: null,
@@ -70,15 +71,17 @@ R.rendercontexts.AbstractRenderContext = function() {
     * @private
     */
    constructor: function(contextName, surface) {
-      this.base(contextName || "RenderContext");
-      this.surface = surface;
-      this.setElement(surface);
       this.worldScale = 1;
       this.worldPosition = R.math.Point2D.create(0, 0);
       this.worldRotation = 0;
       this.viewport = R.math.Rectangle2D.create(0, 0, 100, 100);
+		this.expViewport = R.math.Rectangle2D.create(-25,-25,125,125);
       this.staticCtx = false;
 		this.safeRemoveList = [];
+
+      this.base(contextName || "RenderContext");
+      this.surface = surface;
+      this.setElement(surface);
    },
 
    /**
@@ -93,6 +96,8 @@ R.rendercontexts.AbstractRenderContext = function() {
       this.worldRotation = null;
       this.staticCtx = null;
 		this.safeRemoveList = null;
+		this.viewport = null;
+		this.expViewport = null;
    },
 
    /**
@@ -104,6 +109,9 @@ R.rendercontexts.AbstractRenderContext = function() {
       this.cleanUp();
       this.base();
       this.surface = null;
+		this.viewport.destroy();
+		this.expViewport.destroy();
+		this.worldPosition.destroy();
    },
 
    /**
@@ -212,7 +220,12 @@ R.rendercontexts.AbstractRenderContext = function() {
     * @param rect {Rectangle2D} A rectangle defining the viewport
     */
    setViewport: function(rect) {
-      this.viewport = R.math.Rectangle2D.create(rect);
+      this.viewport.set(rect);
+		
+		// Calculate the expanded viewport
+		var w = rect.getDims().x * 0.25, h = rect.getDims().y * 0.25,
+			 tl = rect.getTopLeft(), d = rect.getDims();
+		this.expViewport.set(tl.x - w, tl.y - h, tl.x + d.x + (w * 2), tl.y + d.y + (h * 2));
    },
 
    /**
@@ -222,6 +235,15 @@ R.rendercontexts.AbstractRenderContext = function() {
    getViewport: function() {
       return this.viewport;
    },
+	
+	/**
+	 * A viewport that is 25% larger than the viewport to account for
+	 * an area slightly outside the viewing area.
+	 * @return {R.math.Rectangle2D}
+	 */
+	getExpandedViewport: function() {
+		return this.expViewport;
+	},
 
    /**
     * Add an object to the context.  Only objects

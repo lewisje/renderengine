@@ -182,10 +182,9 @@ R.struct.HashContainer = function(){
 		 * @return {Object}
 		 */
 		get: function(idx){
-			if (typeof idx == 'string') {
-				return this.objHash["_" + String(idx)];
-			}
-			else {
+			if (idx.substr && idx.toLowerCase) {
+				return this.objHash["_" + idx];
+			} else {
 				return this.base(idx);
 			}
 		},

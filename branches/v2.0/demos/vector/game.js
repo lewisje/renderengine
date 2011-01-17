@@ -574,8 +574,8 @@ var Spaceroids = function() {
     */
    wrap: function(pos, bBox) {
 
-      var rX = bBox.len_x();
-      var rY = bBox.len_y();
+      var rX = bBox.len_x() * 0.5;
+      var rY = bBox.len_y() * 0.5;
 
       // Wrap if it's off the playing field
       var x = pos.x;

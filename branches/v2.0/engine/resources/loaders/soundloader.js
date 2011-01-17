@@ -114,7 +114,6 @@ R.resources.loaders.SoundLoader = function(){
 			}
 			
 			if (!this.init) {
-				R.Engine.getDefaultContext().add(this);
 				this.init = true;
 			}
 			
