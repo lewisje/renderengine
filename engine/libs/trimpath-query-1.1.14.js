@@ -145,7 +145,7 @@ if (typeof(TrimPath) == 'undefined')
         
         var data_insertion = function(table_info, field_name, data, column_ref) {
             if(table_info[field_name]) {
-                var data = eval(data);
+                //var data = eval(data);
                 if(table_info[field_name].type && table_info[field_name].type == 'Number')
                     data = Number(data, 10);
                 else if(table_info[field_name].type && table_info[field_name].type == 'Date')
@@ -950,7 +950,13 @@ if (typeof(TrimPath) == 'undefined')
             var parsed_sql = intoSplit[1].match(insertion_regex);
             var table_name = parsed_sql[1];
             var fields = strip_whitespace(parsed_sql[2]).split(',');
-            var values = parsed_sql[3].split(',');
+				
+				// Evaluate the values as an array
+				var valArr = "[" + parsed_sql[3] + "]";
+				var resultEval = new Function("var o=[], a=" + valArr + "; while(a.length>0) { o.push(a.shift().toString()); } return o;");
+				var values = resultEval();
+				
+            //var values = parsed_sql[3].split(',');
             if (fields.length != values.length)
                 err("values and fields must have same number of elements");
             
