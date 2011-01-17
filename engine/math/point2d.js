@@ -55,11 +55,13 @@ R.math.Point2D = function(){
 	return R.math.PooledMathObject.extend(/** @scope R.math.Point2D.prototype */{
 	
 		_vec: null,
+		__POINT2D:null,
 		
 		/**
 		 * @private
 		 */
 		constructor: function(x, y){
+			this.__POINT2D=true;
 			this.base("Point2D");
 			this._vec = $V([0, 0, 1]);
 			this.set(x, y);

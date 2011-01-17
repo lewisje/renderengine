@@ -79,8 +79,8 @@ R.rendercontexts.CanvasContext = function() {
       // Create the canvas element
       canvas = document.createElement("canvas");
 
-      this.setViewport(R.math.Rectangle2D.create(0, 0, this.width, this.height));
       this.base(name || "CanvasContext", canvas);
+      this.setViewport(R.math.Rectangle2D.create(0, 0, this.width, this.height));
       
       canvas.id = this.getId();
       this.setWorldScale(this.getWorldScale());
@@ -251,7 +251,8 @@ R.rendercontexts.CanvasContext = function() {
 			this.captureBin(bin, itr);
 			this.firstFrame = false;
 		}
-		this.base(bin, itr, time);
+		R.rendercontexts.RenderContext2D.prototype.renderBin.call(this, bin, itr, time);
+		//this.base(bin, itr, time);
 	},
 
    /**
