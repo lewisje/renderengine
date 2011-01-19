@@ -84,7 +84,7 @@ R.engine.Object2D = function(){
 			this.zIndex = 0;
 			this.origin = R.math.Point2D.create(0, 0);
 			this.collisionHull = null;
-			
+						
 			// Initialize the matrices
 			this.oMtx = R.math.Math2D.identityMatrix();
 			this.oMtxN = R.math.Math2D.identityMatrix();
@@ -466,7 +466,7 @@ R.engine.Object2D = function(){
 				}, true]
 			});
 		}
-		
+				
 	}, /** @scope R.engine.Object2D.prototype */ {
 		/**
 		 * Get the class name of this object

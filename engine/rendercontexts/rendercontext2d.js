@@ -85,7 +85,10 @@ R.rendercontexts.RenderContext2D = function() {
       this.wRotation = 0;
       this.wScale = 1;
 		this.zBins = {
-			"Bin0": R.struct.Container.create()
+			"Bin0": {
+				all: R.struct.Container.create(),
+				vis: []	
+			}
 		};
 		this.zBins.activeBins = [0];
    },
@@ -125,11 +128,15 @@ R.rendercontexts.RenderContext2D = function() {
 	cleanUp: function() {
 		this.base();
 		for (var b in this.zBins.activeBins) {
-			this.zBins["Bin" + b].destroy();
-			this.zBins["Bin" + b] = null;
+			this.zBins["Bin" + this.zBins.activeBins[b]].all.destroy();
+			this.zBins["Bin" + this.zBins.activeBins[b]].all = null;
+			this.zBins["Bin" + this.zBins.activeBins[b]].vis = null;
 		}
 		this.zBins = {
-			"Bin0": R.struct.Container.create()
+			"Bin0": {
+				all: R.struct.Container.create(),
+				vis: []
+			}
 		};
 		this.zBins.activeBins = [0];
 	},
@@ -178,9 +185,11 @@ R.rendercontexts.RenderContext2D = function() {
 		if (obj.getZIndex) {
 			// Remove the object from the zBins
 			var zBin = this.zBins["Bin" + obj.getZIndex()];
-			zBin.remove(obj);
+			zBin.all.remove(obj);
+			R.engine.Support.arrayRemove(zBin.vis, obj);
 		} else {
-			this.zBins["Bin0"].remove(obj);
+			this.zBins["Bin0"].all.remove(obj);
+			R.engine.Support.arrayRemove(this.zBins["Bin0"].vis, obj);
 		}
    },
 
@@ -210,11 +219,16 @@ R.rendercontexts.RenderContext2D = function() {
 		// Add to a bin
 		var zBin = this.zBins[bin];
 		if (!zBin) {
-			this.zBins[bin] = R.struct.Container.create();
+			this.zBins[bin] = {
+				all: R.struct.Container.create(),			// List of all objects in the bin
+				vis: [] 												// Optimized list of only visible objects
+			};
+				
 			zBin = this.zBins[bin];
 		}
 		
-		zBin.add(obj);
+		// Add the object to the "all objects" container
+		zBin.all.add(obj);
 	},
 
    /**
@@ -231,9 +245,13 @@ R.rendercontexts.RenderContext2D = function() {
 		// Run the objects in each bin
 		for (var zbin in this.zBins.activeBins) {
 			var bin  = this.zBins["Bin" + this.zBins.activeBins[zbin]];
-			var objs = bin.iterator();
+			
+			// Don't want to push the entire bin onto the stack
+			this.processBin(this.zBins.activeBins[zbin]);
+			R.Engine.rObjs += bin.vis.length;
+			
+			var objs = bin.vis;
 			this.renderBin(zbin, objs, time);
-			objs.destroy();   
 		}
 
 		// Restore the world transform
@@ -247,23 +265,40 @@ R.rendercontexts.RenderContext2D = function() {
    },
 
 	/**
+	 * Process all objects in a bin, optimizing the list down to only those that are visible.
+	 * TODO: Hoping to put this in a Worker thead at some point for speed
+	 * @param binId {String} The bin Id
+	 * @private
+	 */
+	processBin: function(binId) {
+		var bin  = this.zBins["Bin" + binId];
+
+		// Spin through "all" objects to determine visibility.
+		var itr = bin.all.iterator();
+		while (itr.hasNext()) {
+			// Check if the object is visible, so it'll be processed.
+			var obj = itr.next();
+			if (!obj.getWorldBox || (this.getExpandedViewport().isIntersecting(obj.getWorldBox()))) {
+				if (R.engine.Support.indexOf(bin.vis, obj) == -1) {
+					bin.vis.push(obj);
+				}
+			} else if (R.engine.Support.indexOf(bin.vis, obj) != -1) {
+				R.engine.Support.arrayRemove(bin.vis, obj);
+			}
+		}
+		itr.destroy();
+	},
+
+	/**
 	 * Render all of the objects in a single bin, grouped by z-index.
 	 * @param bin {Number} The bin number being rendered
 	 * @param itr {Iterator} The iterator over all the objects in the bin
     * @param time {Number} The current render time in milliseconds from the engine.
 	 */
 	renderBin: function(bin, itr, time) {
-		while (itr.hasNext()) {
-			
-			// Check if the object is within the operating region of the viewport,
-			// an area which is 25% larger than the viewport, and if it isn't, 
-			// it isn't processed.  If we cannot determine if the object is visible,
-			// we'll process it.
-			var obj = itr.next();
-			if (!obj.getWorldBox || (this.getExpandedViewport().isIntersecting(obj.getWorldBox()))) {
-				this.renderObject(obj, time);
-			}
-		}
+		R.engine.Support.forEach(itr, function(e) {
+			this.renderObject(e, time);
+		}, this);
 	},
 
    /**

@@ -55,19 +55,46 @@ R.objects.SpriteActor = function(){
 	return R.engine.Object2D.extend({
 	
 		editing: false,
-		
 		sprite: null,
-		
-		velocityVec: null,
+		scriptedActions: null,
+		scriptedVars: null,
 		
 		constructor: function(name){
 			this.base(name || "Actor");
 			
 			this.editing = false;
+			this.scriptedActions = {};
+			this.scriptedVars = {};
 			
 			// Add components to move and draw the player
 			this.add(R.components.Sprite.create("draw"));
 			this.add(R.components.Transform2D.create("move"));
+		},
+		
+		/**
+		 * After the actor is added to the context, allow it a chance to initialize.
+		 * @private
+		 */
+		afterAdd: function(parent) {
+			this.base(parent);
+			this.callScriptedEvent("onInit", []);	
+		},
+		
+		/**
+		 * Destroy the object
+		 */
+		destroy: function() {
+			this.callScriptedEvent("onDestroy", []);
+			this.base();
+		},
+		
+		/**
+		 * Release the object back into the pool.
+		 */
+		release: function() {
+			this.base();
+			this.scriptedActions = null;
+			this.scriptedVars = null;
 		},
 		
 		getProperties: function(){
@@ -81,6 +108,104 @@ R.objects.SpriteActor = function(){
 							  !R.isUndefined(LevelEditor) ? true : false ]
 			});
 		},
+
+		/**
+		 * Get the event associated with the action name.
+		 * @param {Object} actionName
+		 * @private
+		 */
+		getActorEvent: function(actionName) {
+			return this.scriptedActions[actionName];
+		},
+		
+		/**
+		 * Set the event handler for the action name.
+		 * @param {Object} actionName
+		 * @param {Object} script
+		 * @private
+		 */
+		setActorEvent: function(actionName, script) {
+			this.scriptedActions[actionName] = { "script": script };
+		},
+		
+		/**
+		 * Calls a scripted event.  If the event handler hasn't been compiled yet, it
+		 * will be compiled and then called in the scope of this actor.
+		 * @param eventName {String} The name of the event to call
+		 * @param args {Array} An array of arguments to pass to the event handler
+		 * @private
+		 */
+		callScriptedEvent: function(eventName, args) {
+			var evtScript = this.getActorEvent(eventName);
+			if (!evtScript) {
+				return;
+			}
+			
+			// Is it compiled already?
+			if (evtScript.compiled) {
+				evtScript = evtScript.compiled;
+			} else {
+				// Compile the script
+				evtScript = this.scriptedActions[eventName].compiled = new Function(this.scriptedActions[eventName].script);
+			}
+			
+			evtScript.apply(this, args);
+		},
+		
+		/**
+		 * Get the value of the specified variable.
+		 * @param {Object} varName
+		 * @return {Object}
+		 */
+		getVariable: function(varName) {
+			return this.scriptedVar[varName];
+		},
+		
+		/**
+		 * Set the value of the specified variable.
+		 * @param {Object} varName
+		 * @param {Object} value
+		 */
+		setVariable: function(varName, value) {
+			this.scriptedVar[varName] = value;	
+		},
+
+		/**
+		 * Get the events object for this actor.  The configuration is a
+		 * collection of variables and scripts which are used to run the actor.  When
+		 * scripts are called, the scope of the callback is the actor.  The following are
+		 * included:
+		 * <ul>
+		 * <li>id - A unique Id used to identify this actor using the "getActor(id)" method in scripts.</li>
+		 * <li>collisionMask - A bitmask which indicates what the actor will collide with.</li>
+		 * <li>onInit() - Called when the actor is added to the level</li>
+		 * <li>onDestroy() - Called when the actor is removed from the level</li>
+		 * <li>onCollide(collisionData) - Called when the actor collides with another object.  The data
+		 * 	contains information about the collision. See: {@link R.struct.CollisionData}</li>
+		 * <li>onVisibility(state) - Called when the actor enters or leaves the frame.  The state
+		 * 	will be <tt>true</tt> when visible (rendered).</li>
+		 * <li>onBeforeUpdate(time) - Called before the actor is updated, providing the world time.</li>
+		 * <li>onAfterUpdate(time) - Called after the actor is updated, providing the world time.</li>
+		 * </ul>
+		 * 
+		 * @return {Object}
+		 */
+		getConfig: function(){
+			// name : type (script|var)
+			var self = this;
+			var cfg = {};
+			return $.extend(cfg, {
+				"id": "var",
+				"collisionMask": "var",
+				"onInit": "script",
+				"onDestroy": "script",
+				"onCollide": "script",
+				"onVisibility": "script",
+				"onBeforeUpdate": "script",
+				"onAfterUpdate": "script"
+			});
+		},
+
 		
 		/**
 		 * Update the player within the rendering context.  This draws
@@ -93,7 +218,10 @@ R.objects.SpriteActor = function(){
 		 */
 		update: function(renderContext, time){
 			renderContext.pushTransform();
+
+			this.callScriptedEvent("onBeforeUpdate", [time]);
 			this.base(renderContext, time);
+			this.callScriptedEvent("onAfterUpdate", [time]);
 			
 			if (this.editing) {
 				renderContext.setLineStyle("white");
@@ -165,17 +293,6 @@ R.objects.SpriteActor = function(){
 		
 		setRotation: function(r){
 			this.getComponent("move").setRotation(r);
-		},
-		
-		/**
-		 * Set up the player object on the playfield.  The width and
-		 * heigh of the playfield are used to determine the center point
-		 * where the player starts.
-		 *
-		 * @param pWidth {Number} The width of the playfield in pixels
-		 * @param pHeight {Number} The height of the playfield in pixels
-		 */
-		setup: function(pWidth, pHeight){
 		},
 		
 		setEditing: function(state){

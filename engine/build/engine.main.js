@@ -729,6 +729,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 		// Update the world
 		if (R.Engine.running && R.Engine.getDefaultContext() != null) {
 			R.Engine.vObj = 0;
+			R.Engine.rObjs = 0;
 
 			// Render a frame
 			R.Engine.worldTime = now().getTime();
