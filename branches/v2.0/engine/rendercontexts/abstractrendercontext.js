@@ -217,7 +217,7 @@ R.rendercontexts.AbstractRenderContext = function() {
    /**
     * Set the viewport of the render context.  The viewport is a window
     * upon the world so that not all of the world is rendered at one time.
-    * @param rect {Rectangle2D} A rectangle defining the viewport
+    * @param rect {R.math.Rectangle2D} A rectangle defining the viewport
     */
    setViewport: function(rect) {
       this.viewport.set(rect);
@@ -230,15 +230,16 @@ R.rendercontexts.AbstractRenderContext = function() {
 
    /**
     * Get the viewport of the render context.
-    * @return {Rectangle2D}
+    * @return {R.math.Rectangle2D}
     */
    getViewport: function() {
       return this.viewport;
    },
 	
 	/**
-	 * A viewport that is 25% larger than the viewport to account for
-	 * an area slightly outside the viewing area.
+	 * A viewport that is 25% larger than {@link #getViewport} to account for
+	 * an area slightly outside the viewing area.  Typically used to determin
+	 * what objects are to be processed in the scenegraph.
 	 * @return {R.math.Rectangle2D}
 	 */
 	getExpandedViewport: function() {

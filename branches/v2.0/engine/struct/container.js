@@ -145,6 +145,15 @@ R.struct.Container = function() {
 		return null;
 	},
 
+	/**
+	 * Returns <tt>true</tt> if the object is in the container.
+	 * @param obj {Object} The object to find
+	 * @return {Boolean}
+	 */
+	contains: function(obj) {
+		return (this._peek(obj) !== null);	
+	},
+
    /**
     * Add an object to the container.
     *

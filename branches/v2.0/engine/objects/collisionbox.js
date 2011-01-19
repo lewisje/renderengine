@@ -63,6 +63,7 @@ R.objects.CollisionBox = function(){
 			
 			this.setPosition(R.math.Point2D.create(100, 100));
 			this.boxRect = R.math.Rectangle2D.create(0, 0, 80, 80);
+			this.setBoundingBox(this.boxRect);
 			this.type = R.objects.CollisionBox.TYPE_COLLIDER;
 			this.action = "";
 		},
@@ -193,17 +194,6 @@ R.objects.CollisionBox = function(){
 		setPosition: function(point){
 			this.base(point);
 			this.getComponent("move").setPosition(point);
-		},
-		
-		/**
-		 * Set up the player object on the playfield.  The width and
-		 * heigh of the playfield are used to determine the center point
-		 * where the player starts.
-		 *
-		 * @param pWidth {Number} The width of the playfield in pixels
-		 * @param pHeight {Number} The height of the playfield in pixels
-		 */
-		setup: function(pWidth, pHeight){
 		},
 		
 		setEditing: function(state){

@@ -134,7 +134,8 @@ R.debug.Metrics = Base.extend({
          R.debug.Metrics.add("availTime", R.Engine.fpsClock, false, "#ms");
          R.debug.Metrics.add("frameGenTime", R.Engine.frameTime, true, "#ms");
          R.debug.Metrics.add("engineLoad", Math.floor(R.Engine.getEngineLoad() * 100), true, "#%");
-         R.debug.Metrics.add("visibleObj", R.Engine.vObj, false, "#");
+         R.debug.Metrics.add("vObj", R.Engine.vObj, false, "#");
+			R.debug.Metrics.add("rObj", R.Engine.rObjs, false, "#");
          R.debug.Metrics.add("droppedFrames", R.Engine.droppedFrames, false, "#");
          R.debug.Metrics.add("upTime", Math.floor((R.Engine.worldTime - R.Engine.upTime)/1000), false, "# sec");
 
@@ -232,8 +233,8 @@ R.debug.Metrics = Base.extend({
          if (R.debug.Metrics.showMetricsProfile) {
             switch (m) {
                case "engineLoad": this.drawProfilePoint("#ffff00", R.debug.Metrics.metrics[m].act); break;
-               //case "frameGenTime": this.drawProfilePoint("#ff8888", this.metrics[m].act); break;
-               case "visibleObj": this.drawProfilePoint("#339933", R.debug.Metrics.metrics[m].act); break;
+               case "vObj": this.drawProfilePoint("#339933", R.debug.Metrics.metrics[m].act); break;
+               case "rObj": this.drawProfilePoint("#ff00ff", R.debug.Metrics.metrics[m].act); break;
                case "poolLoad" : this.drawProfilePoint("#a0a0ff", R.debug.Metrics.metrics[m].act); break;
             }
          }
