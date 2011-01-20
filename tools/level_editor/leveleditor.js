@@ -263,6 +263,31 @@ var LevelEditor = function() {
 	 * @private
 	 */
 	storePropertyValue: function(obj, propName, value) {
+		
+		// Special case
+		if (propName == "ACTOR_CONFIG" && (obj instanceof R.objects.SpriteActor)) {
+			var aCfg = value;
+			
+			// The actor configuration key is special
+			obj.setActorId(aCfg.actorId);
+			obj.setCollisionMask(aCfg.bitMask);
+			
+			// Now for the rest
+			for (var c in obj.getConfig()) {
+				if (aCfg[c]) {
+					// If there's a value in the config for it...
+					var val = aCfg[c];
+					if (obj.getConfig()[c] == "var") {
+						obj.setVariable(c, val);
+					} else {
+						obj.setActorEvent(c, val);
+					}
+				}
+			}
+		
+			return;
+		}
+
 		var bean = obj.getProperties();
 
 		// Regardless if the editable flag is true, if there is a setter, we'll
