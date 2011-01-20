@@ -56,6 +56,8 @@ R.objects.SpriteActor = function(){
 	
 		editing: false,
 		sprite: null,
+		actorId: null,
+		collisionMask: null,
 		scriptedActions: null,
 		scriptedVars: null,
 		
@@ -63,6 +65,9 @@ R.objects.SpriteActor = function(){
 			this.base(name || "Actor");
 			
 			this.editing = false;
+			
+			this.actorId = "";
+			this.collisionMask = "0";
 			this.scriptedActions = {};
 			this.scriptedVars = {};
 			
@@ -109,6 +114,22 @@ R.objects.SpriteActor = function(){
 			});
 		},
 
+		setActorId: function(actorId) {
+			this.actorId = actorId;
+		},
+		
+		getActorId: function() {
+			return this.actorId;
+		},
+		
+		setCollisionMask: function(collisionMask) {
+			this.collisionMask = collisionMask;
+		},
+		
+		getCollisionMask: function() {
+			return this.collisionMask;
+		},
+
 		/**
 		 * Get the event associated with the action name.
 		 * @param {Object} actionName
@@ -136,17 +157,17 @@ R.objects.SpriteActor = function(){
 		 * @private
 		 */
 		callScriptedEvent: function(eventName, args) {
-			var evtScript = this.getActorEvent(eventName);
-			if (!evtScript) {
+			var eScript = evtScript = this.getActorEvent(eventName);
+			if (R.isEmpty(evtScript)) {
 				return;
 			}
 			
 			// Is it compiled already?
-			if (evtScript.compiled) {
-				evtScript = evtScript.compiled;
+			if (eScript.compiled) {
+				evtScript = eScript.compiled;
 			} else {
 				// Compile the script
-				evtScript = this.scriptedActions[eventName].compiled = new Function(this.scriptedActions[eventName].script);
+				evtScript = this.scriptedActions[eventName].compiled = new Function(eScript.script);
 			}
 			
 			evtScript.apply(this, args);
@@ -176,8 +197,6 @@ R.objects.SpriteActor = function(){
 		 * scripts are called, the scope of the callback is the actor.  The following are
 		 * included:
 		 * <ul>
-		 * <li>id - A unique Id used to identify this actor using the "getActor(id)" method in scripts.</li>
-		 * <li>collisionMask - A bitmask which indicates what the actor will collide with.</li>
 		 * <li>onInit() - Called when the actor is added to the level</li>
 		 * <li>onDestroy() - Called when the actor is removed from the level</li>
 		 * <li>onCollide(collisionData) - Called when the actor collides with another object.  The data
@@ -195,8 +214,6 @@ R.objects.SpriteActor = function(){
 			var self = this;
 			var cfg = {};
 			return $.extend(cfg, {
-				"id": "var",
-				"collisionMask": "var",
 				"onInit": "script",
 				"onDestroy": "script",
 				"onCollide": "script",
