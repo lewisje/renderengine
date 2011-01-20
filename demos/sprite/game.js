@@ -173,11 +173,11 @@ var SpriteDemo = function() {
       this.renderContext.setWorldScale(this.areaScale);
       R.Engine.getDefaultContext().add(this.renderContext);
 
-      if (R.engine.Support.checkBooleanParam("edit")) {
+      //if (R.engine.Support.checkBooleanParam("edit")) {
          LevelEditor.edit(this);
-      } else {
-         this.play();
-      }
+      //} else {
+      //   this.play();
+      //}
    },
 
    play: function() {

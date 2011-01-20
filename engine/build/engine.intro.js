@@ -76,7 +76,7 @@ R.isUndefined = function(obj) {
 	return (typeof obj === "undefined");
 };
 
-R.isEmpty = function(val) {
+R.isEmpty = function(obj) {
 	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && /\s*/g.test(obj) === "");
 };
 

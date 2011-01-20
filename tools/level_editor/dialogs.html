@@ -25,7 +25,7 @@
 
 <!-- Scripting Dialog -->
 <div id='ScriptDialog'>
-	<textarea cols='60' rows='20' id='scriptVal'></textarea>
+	<textarea cols='68' rows='20' id='scriptVal'></textarea>
 </div>
 
 
@@ -46,7 +46,7 @@
 	<form>
 		<label for="sv_levelName">Level Name:</label>
 		<input type="text" size="30" value="" id="sv_levelName" class='text ui-widget-content ui-corner-all'/>
-	</form>	
+	</form>
 </div>
 
 
@@ -63,4 +63,20 @@
 		<select size="10" id="ld_levelNames" class='ui-widget-content ui-corner-all'>
 		</select>
 	</form>
+</div>
+
+<!-- Player Action Dialog -->
+<div id="ActorConfigDialog">
+	<form>
+		<fieldset class="standard">
+			<label for="ac_id">Actor Id:</label>
+			<input type="text" id="ac_id" size="20" value=""/><br/>
+			<label for="ac_bitmask">Collision Mask:</label>
+			<input type="text" id="ac_bitmask" size="20" value="0"/><br/>
+		</fieldset>
+		<br/>
+		<fieldset class="optional">
+
+		</fieldset>
+	</form
 </div>
