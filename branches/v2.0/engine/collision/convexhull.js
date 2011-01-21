@@ -149,10 +149,18 @@ R.collision.ConvexHull = function() {
 	/**
 	 * Set the object which is using this collision hull.
 	 * 
-	 * @param hostObj {Object2D} The object which is using the hull
+	 * @param hostObj {R.engine.Object2D} The object which is using the hull
 	 */
 	setHostObject: function(obj) {
 		this.hostObj = obj;
+	},
+	
+	/**
+	 * Get the object which is using this collision hull.
+	 * @return {R.engine.Object2D}
+	 */
+	getHostObject: function() {
+		return this.hostObj;
 	},
 
 	/**

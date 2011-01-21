@@ -123,8 +123,7 @@ R.components.Sprite = function() {
     */
    execute: function(renderContext, time) {
 
-      if (!this.base(renderContext, time))
-      {
+      if (!this.base(renderContext, time)) {
          return;
       }
 

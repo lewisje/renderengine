@@ -40,7 +40,17 @@ R.Engine.define({
 });
 
 /**
- * @class A simple object which contains information about a collision.
+ * @class An object which contains information about a collision.  
+ * 	The following is the data available:
+ * <ul>
+ * <li>overlap - {Number} The amount of overlap in pixels</li>
+ * <li>unitVector - {@link R.math.Vector2D} The collision normal</li>
+ * <li>shape1 - {@link R.collision.ConvexHull} The convex hull which collided (use {@link R.collision.ConvexHull#getHostObj getHostObj} to
+ * 	get the object which is using the hull)</li>
+ * <li>shape2 - {@link R.collision.ConvexHull} The convex hull that was collided with (use {@link R.collision.ConvexHull#getHostObj getHostObj} to
+ * 	get the object which is using the hull)</li>
+ * <li>impulseVector - {@link R.math.Vector2D} A vector which can be used to just separate shape1 from shape2</li>
+ * </ul>
  *
  * @extends R.engine.PooledObject
  * @constructor

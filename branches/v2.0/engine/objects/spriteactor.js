@@ -38,7 +38,9 @@ R.Engine.define({
 		"R.components.Mover2D",
 		"R.components.Sprite",
 		"R.components.KeyboardInput",
-		"R.engine.Object2D"
+		"R.engine.Object2D",
+		"R.components.ConvexCollider",
+		"R.collision.OBBHull"
 	]
 });
 
@@ -74,6 +76,7 @@ R.objects.SpriteActor = function(){
 			// Add components to move and draw the player
 			this.add(R.components.Sprite.create("draw"));
 			this.add(R.components.Transform2D.create("move"));
+			//this.add(R.components.ConvexCollider.create("collide"));
 		},
 		
 		/**
@@ -156,7 +159,7 @@ R.objects.SpriteActor = function(){
 		 * @param args {Array} An array of arguments to pass to the event handler
 		 * @private
 		 */
-		callScriptedEvent: function(eventName, args) {
+		callScriptedEvent: function(eventName, argNames, args) {
 			var eScript = evtScript = this.getActorEvent(eventName);
 			if (R.isEmpty(evtScript)) {
 				return;
@@ -166,11 +169,15 @@ R.objects.SpriteActor = function(){
 			if (eScript.compiled) {
 				evtScript = eScript.compiled;
 			} else {
-				// Compile the script
-				evtScript = this.scriptedActions[eventName].compiled = new Function(eScript.script);
+				// Compile the script, inject the variables
+				var varScript = "";
+				for (var a in argNames) {
+					varScript += "var " + argNames[a] + "=arguments[" + a + "]; ";
+				}
+				evtScript = this.scriptedActions[eventName].compiled = new Function(varScript + eScript.script);
 			}
 			
-			evtScript.apply(this, args);
+			return evtScript.apply(this, args);
 		},
 		
 		/**
@@ -199,12 +206,13 @@ R.objects.SpriteActor = function(){
 		 * <ul>
 		 * <li>onInit() - Called when the actor is added to the level</li>
 		 * <li>onDestroy() - Called when the actor is removed from the level</li>
-		 * <li>onCollide(collisionData) - Called when the actor collides with another object.  The data
-		 * 	contains information about the collision. See: {@link R.struct.CollisionData}</li>
+		 * <li>onCollide(collisionData, targetMask, worldTime) - Called when the actor collides with another object.  The data
+		 * 	contains information about the collision. See: {@link R.struct.CollisionData}  The mask is the target's
+		 * 	collision bitmask, and the time is the world time when the collision occurred.</li>
 		 * <li>onVisibility(state) - Called when the actor enters or leaves the frame.  The state
 		 * 	will be <tt>true</tt> when visible (rendered).</li>
-		 * <li>onBeforeUpdate(time) - Called before the actor is updated, providing the world time.</li>
-		 * <li>onAfterUpdate(time) - Called after the actor is updated, providing the world time.</li>
+		 * <li>onBeforeUpdate(worldTime) - Called before the actor is updated, providing the world time.</li>
+		 * <li>onAfterUpdate(worldTime) - Called after the actor is updated, providing the world time.</li>
 		 * </ul>
 		 * 
 		 * @return {Object}
@@ -236,9 +244,9 @@ R.objects.SpriteActor = function(){
 		update: function(renderContext, time){
 			renderContext.pushTransform();
 
-			this.callScriptedEvent("onBeforeUpdate", [time]);
+			this.callScriptedEvent("onBeforeUpdate", ["worldTime"], [time]);
 			this.base(renderContext, time);
-			this.callScriptedEvent("onAfterUpdate", [time]);
+			this.callScriptedEvent("onAfterUpdate", ["worldTime"], [time]);
 			
 			if (this.editing) {
 				renderContext.setLineStyle("white");
@@ -259,6 +267,9 @@ R.objects.SpriteActor = function(){
 			this.sprite = sprite;
 			this.setBoundingBox(sprite.getBoundingBox());
 			this.getComponent("draw").setSprite(sprite);
+			
+			// Set the collision hull
+			this.setCollisionHull(R.collision.OBBHull.create(sprite.getBoundingBox()));
 		},
 		
 		getSprite: function(){
@@ -318,6 +329,15 @@ R.objects.SpriteActor = function(){
 		
 		isEditable: function(){
 			return true;
+		},
+		
+		onCollide: function(collisionObj, time, targetMask) {
+			var cData = this.getComponent("collide").getCollisionData();
+			var cResult = this.callScriptedEvent("onCollide", ["collisionData", "targetMask", "worldTime"], [cData, targetMask, time]);
+			
+			// We may want to do something here...
+			
+			return cResult;
 		}
 		
 	}, { /** @scope R.objects.SpriteActor.prototype */
