@@ -56,8 +56,8 @@ R.Engine.define({
  * @extends R.components.Collider
  * @constructor
  * @description Creates a collider component for circle-circle collision testing.  Each object
- *              must implement either the {@link Object2D#getWorldBox} or
- *              {@link Object2D#getCircle} method and return a world-oriented bounding box or
+ *              must implement either the {@link R.engine.Object2D#getWorldBox} or
+ *              {@link R.engine.Object2D#getCircle} method and return a world-oriented bounding box or
  *              circle, respectively.
  */
 R.components.CircleCollider = function() {
@@ -66,7 +66,7 @@ R.components.CircleCollider = function() {
 	hasMethods: null,
 
    /**
-    * Releases the component back into the pool for reuse.  See {@link PooledObject#release}
+    * Releases the component back into the pool for reuse.  See {@link R.engine.PooledObject#release}
     * for more information.
     */
    release: function() {
@@ -80,7 +80,7 @@ R.components.CircleCollider = function() {
     * so that each component can refer to its host object, the same way
     * a host object can refer to a component with {@link HostObject#getComponent}.
     *
-    * @param hostObject {HostObject} The object which hosts this component
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
 	 */
 	setHostObject: function(hostObj) {
 		this.base(hostObj);
@@ -98,7 +98,7 @@ R.components.CircleCollider = function() {
     * A circular bounding area collision must occur to trigger the <tt>onCollide()</tt> method.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
-    * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+    * @param collisionObj {R.engine.HostObject} The host object with which the collision potentially occurs
     * @param hostMask {Number} The collision mask for the host object
     * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
     * @return {Number} A status indicating whether to continue checking, or to stop

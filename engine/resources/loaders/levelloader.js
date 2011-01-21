@@ -69,9 +69,7 @@ R.resources.loaders.LevelLoader = function(){
 	
 		levels: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.base(name || "LevelLoader");
 			this.levels = {};
@@ -130,10 +128,10 @@ R.resources.loaders.LevelLoader = function(){
 		},
 		
 		/**
-		 * Creates a {@link Level} object representing the named level.
+		 * Creates a {@link R.resources.types.Level} object representing the named level.
 		 *
 		 * @param level {String} A loaded level name
-		 * @returns {Level} A {@link Level} object
+		 * @returns {R.resources.types.Level} A {@link R.resources.types.Level} object
 		 */
 		getLevel: function(level){
 			return R.resources.types.Level.create(level, this.get(level));

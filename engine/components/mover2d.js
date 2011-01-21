@@ -90,6 +90,9 @@ R.components.Mover2D = function() {
       this.checkLag = true;
    },
 
+	/**
+	 * Destroys the component instance
+	 */
 	destroy: function() {
 		this.velocity.destroy();
 		this.acceleration.destroy();
@@ -127,7 +130,7 @@ R.components.Mover2D = function() {
     * updates so that lag between frames doesn't affect the relative
     * position or rotation.
     *
-    * @param renderContext {RenderContext} The render context for the component
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The render context for the component
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
@@ -228,7 +231,7 @@ R.components.Mover2D = function() {
    /**
     * Set the velocity vector of the component.
     *
-    * @param vector {Vector2D} The velocity vector
+    * @param vector {R.math.Vector2D} The velocity vector
     */
    setVelocity: function(vector) {
       this.velocity.set(vector);
@@ -239,7 +242,7 @@ R.components.Mover2D = function() {
 
    /**
     * Returns the velocity vector of the component
-    * @return {Vector2D}
+    * @return {R.math.Vector2D}
     */
    getVelocity: function() {
       return this.velocity;
@@ -311,7 +314,7 @@ R.components.Mover2D = function() {
     * Set the acceleration vector.  Acceleration will be constantly applied to 
     * the last position.
     *
-    * @param {Vector2D} The acceleration vector
+    * @param {R.math.Vector2D} The acceleration vector
     */
    setAcceleration: function(vector) {
       this.acceleration.set(vector);
@@ -320,7 +323,7 @@ R.components.Mover2D = function() {
    
    /**
     * Get the acceleration vector.
-    * @return {Vector2D} The acceleration vector
+    * @return {R.math.Vector2D} The acceleration vector
     */
    getAcceleration: function() {
       return this.acceleration;
@@ -328,7 +331,7 @@ R.components.Mover2D = function() {
    
    /**
     * Set the vector of gravity.
-    * @param vector {Vector2D} The gravity vector
+    * @param vector {R.math.Vector2D} The gravity vector
     */
    setGravity: function(vector) {
       this.gravity.set(vector);
@@ -337,7 +340,7 @@ R.components.Mover2D = function() {
    
    /**
     * Get the gravity vector
-    * @return {Vector2D} The gravity vector
+    * @return {R.math.Vector2D} The gravity vector
     */
    getGravity: function() {
       return this.gravity;
@@ -408,7 +411,7 @@ R.components.Mover2D = function() {
 
    /**
     * Returns the angle change per second of the component.
-    * @type Number
+    * @return {Number}
     */
    getAngularVelocity: function() {
       return this.angularVelocity;

@@ -43,6 +43,7 @@
  *        executed when dependencies are fulfilled.
  *
  * @static
+ * @private
  */
 R.engine.Linker = Base.extend(/** @scope Linker.prototype */{ 
 
@@ -354,6 +355,10 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		}
 	},
 	
+	/**
+	 * Initializes classes which have their dependencies resolved
+	 * @private
+	 */
 	_initClass: function(className) {
 		// Get the class object
 		var pkg = R.global, clazz = className.split(".");
@@ -378,6 +383,11 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		R.engine.Linker.resolvedClasses[className] = true;
 	},
 	
+	/**
+	 * Called if the linker has failed to load any classes and seems to be
+	 * stuck waiting for resolution.
+	 * @private
+	 */
 	_failure: function() {
 		clearTimeout(R.engine.Linker.failTimer);
 		clearTimeout(R.engine.Linker.classTimer);	

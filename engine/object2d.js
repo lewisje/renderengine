@@ -72,9 +72,7 @@ R.engine.Object2D = function(){
 		oMtx: null,
 		oMtxN: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.base(name);
 			this.lastPosition = R.math.Point2D.create(5, 5);
@@ -156,7 +154,7 @@ R.engine.Object2D = function(){
 		 * Set the render origin of the object.  The render origin is where the object will be
 		 * centered around when drawing position and rotation.
 		 *
-		 * @param x {Number|Point2D} The X coordinate or the render origin (default: 0,0 - top left corner)
+		 * @param x {Number|R.math.Point2D} The X coordinate or the render origin (default: 0,0 - top left corner)
 		 * @param y {Number} The Y coordinate or <code>null</code> if X is a <code>Point2D</code>
 		 */
 		setOrigin: function(x, y){
@@ -178,7 +176,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Get the render origin of the object.
-		 * @return {Point2D}
+		 * @return {R.math.Point2D}
 		 */
 		getOrigin: function(){
 			return this.origin;
@@ -187,7 +185,7 @@ R.engine.Object2D = function(){
 		/**
 		 * Set the bounding box of this object
 		 *
-		 * @param width {Number|Rectangle2D} The width, or the rectangle that completely encompasses
+		 * @param width {Number|R.math.Rectangle2D} The width, or the rectangle that completely encompasses
 		 *                           		this object.
 		 * @param height {Number} If width is a number, this is the height
 		 */
@@ -203,7 +201,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Get the bounding box of this object
-		 * @return {Rectangle2D} The object bounding rectangle
+		 * @return {R.math.Rectangle2D} The object bounding rectangle
 		 */
 		getBoundingBox: function(){
 			return this.bBox;
@@ -211,7 +209,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Get the bounding box in world coordinates.
-		 * @return {Rectangle2D} The world bounding rectangle
+		 * @return {R.math.Rectangle2D} The world bounding rectangle
 		 */
 		getWorldBox: function(){
 			this.wBox.set(this.getBoundingBox());
@@ -225,7 +223,7 @@ R.engine.Object2D = function(){
 		/**
 		 * Get the axis aligned world bounding box for the object.  This bounding box
 		 * is ensured to encompass the entire object.
-		 * @return {Rectangle2D}
+		 * @return {R.math.Rectangle2D}
 		 */
 		getAABB: function(){
 			// Start with the world bounding box and transform it
@@ -270,7 +268,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * [ABSTRACT] Get the world bounding circle.
-		 * @return {Circle2D}
+		 * @return {R.math.Circle2D}
 		 * @deprecated
 		 */
 		getCircle: function(){
@@ -279,7 +277,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Set the convex hull used for collision.
-		 * @param convexHull {ConvexHull} The convex hull object
+		 * @param convexHull {R.collision.ConvexHull} The convex hull object
 		 */
 		setCollisionHull: function(convexHull){
 			Assert(convexHull instanceof R.collision.ConvexHull, "setCollisionHull() - not ConvexHull!");
@@ -290,7 +288,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Get the convex hull used for collision.
-		 * @return {ConvexHull}
+		 * @return {R.collision.ConvexHull}
 		 */
 		getCollisionHull: function(){
 			return this.collisionHull;
@@ -298,7 +296,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * [ABSTRACT] Get the velocity of the object.
-		 * @return {Vector2D}
+		 * @return {R.math.Vector2D}
 		 * @deprecated
 		 */
 		getVelocity: function(){
@@ -307,7 +305,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * [ABSTRACT] Set the position of the object
-		 * @param point {Point2D} The position of the object
+		 * @param point {R.math.Point2D} The position of the object
 		 */
 		setPosition: function(point){
 			this.markDirty();
@@ -315,7 +313,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Get the position of the object.
-		 * @return {Point2D} The position
+		 * @return {R.math.Point2D} The position
 		 */
 		getPosition: function(){
 			return R.math.Point2D.ZERO;
@@ -323,7 +321,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Get the render position of the object.
-		 * @return {Point2D}
+		 * @return {R.math.Point2D}
 		 */
 		getRenderPosition: function(){
 			return R.math.Point2D.ZERO;
@@ -331,7 +329,7 @@ R.engine.Object2D = function(){
 		
 		/**
 		 * Get the last position the object was rendered at.
-		 * @return {Point2D}
+		 * @return {R.math.Point2D}
 		 */
 		getLastPosition: function(){
 			return R.math.Point2D.ZERO;

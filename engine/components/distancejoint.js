@@ -49,10 +49,10 @@ R.Engine.define({
  * 		 in a {@link Simulation}.  
  *
  * @param name {String} Name of the component
- * @param body1 {BaseBodyComponent} The first body for the joint
- * @param body2 {BaseBodyComponent} The second body for the joint
+ * @param body1 {R.components.BaseBody} The first body for the joint
+ * @param body2 {R.components.BaseBody} The second body for the joint
  *
- * @extends BaseJointComponent
+ * @extends R.components.BaseJoint
  * @constructor
  * @description Creates a distance joint between two physical bodies.  The distance can
  * 				 be softened by adjusting the frequency and the damping ratio of the joint.

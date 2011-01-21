@@ -44,6 +44,8 @@ R._namespaces = {};
 
 /**
  * The global namespace, typically the window object
+ * @memberOf R
+ * @type {Object}
  */
 R.global = this;
 	
@@ -51,6 +53,7 @@ R.global = this;
  * Declare a new namespace in R.
  * @param ns {String} The namespace to declare
  * @exception Throws and exception if the namespace is already declared
+ * @memberOf R
  */
 R.namespace = function(ns) {
 	if (R._namespaces[ns]) {
@@ -68,16 +71,32 @@ R.namespace = function(ns) {
 	}
 };
 
+/**
+ * Throw an "unsupported" exception
+ * @memberOf R
+ */
 R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
 };
 
+/**
+ * Check if the given object is undefined
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
 R.isUndefined = function(obj) {
 	return (typeof obj === "undefined");
 };
 
+/**
+ * Test if the object is undefined, null, or a string and is empty
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
 R.isEmpty = function(obj) {
-	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && /\s*/g.test(obj) === "");
+	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && $.trim(obj) === "");
 };
 
 // Define the engine's default namespaces
@@ -254,7 +273,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  * @class A debug console that will use a pre-defined element to display its output.  The element with the id 
  *        "debug-console" will be created an appended to the DOM for you.  This object is created when no other
  *        option is available from the browser, or when developer tools cannot be accessed.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
@@ -384,7 +403,7 @@ R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
 /**
  * @class A debug console abstraction for Safari browsers.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
@@ -432,7 +451,7 @@ R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
 /**
  * @class A debug console for Opera browsers.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
 
@@ -481,7 +500,7 @@ R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
 
 /**
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
 
@@ -553,7 +572,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
 
 /**
  * @class A console reference to the MSIE console.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.MSIE = R.debug.ConsoleRef.extend(/** @R.debug.MSIE.prototype **/{
 
@@ -889,7 +908,7 @@ R.debug.Profiler = {
 
 /**
  * Start the profiler.
- * @memberOf Profiler
+ * @memberOf R.debug.Profiler
  */
 R.debug.Profiler.start = function() {
 	R.debug.Profiler.resetProfiles();
@@ -898,7 +917,7 @@ R.debug.Profiler.start = function() {
 
 /**
  * Stop the profiler, dumping whatever was being profiled.
- * @memberOf Profiler
+ * @memberOf R.debug.Profiler
  */
 R.debug.Profiler.stop = function() {
 	R.debug.Profiler.dump();
@@ -923,7 +942,7 @@ R.debug.Profiler.stop = function() {
 </pre>
  *
  * @param prof {String} The name of the profile
- * @memberOf Profiler
+ * @memberOf R.debug.Profiler
  */
 R.debug.Profiler.enter = function(prof) {
 	if (!R.debug.Profiler.running) { return; }
@@ -952,7 +971,7 @@ R.debug.Profiler.enter = function(prof) {
  * you properly balance your profile stack.  Too many "exit" calls
  * will result in a stack underflow. Missing calls to "exit" will
  * result in a stack overflow.
- * @memberOf Profiler
+ * @memberOf R.debug.Profiler
  */
 R.debug.Profiler.exit = function() {
 	if (!R.debug.Profiler.running) { return; }
@@ -976,7 +995,7 @@ R.debug.Profiler.exit = function() {
 
 /**
  * Reset any currently running profiles and clear the stack.
- * @memberOf Profiler
+ * @memberOf R.debug.Profiler
  */
 R.debug.Profiler.resetProfiles = function() {
 	R.debug.Profiler.profileStack = [];
@@ -987,7 +1006,7 @@ R.debug.Profiler.resetProfiles = function() {
 /**
  * Dump the profiles that are currently in the stack to a debug window.
  * The profile stack will be cleared after the dump.
- * @memberOf Profiler
+ * @memberOf R.debug.Profiler
  */
 R.debug.Profiler.dump = function() {
 	if (!R.debug.Profiler.running) { return; }
@@ -1022,6 +1041,7 @@ R.debug.Profiler.dump = function() {
 /**
  * Wire the objects in the array with profiling 
  * @param objArray {Array} Object array
+ * @memberOf R.debug.Profiler
  */
 R.debug.Profiler.wireObjects = function(objArray) {
 	for (var obj in objArray) {
@@ -1102,6 +1122,7 @@ R.lang.Math2 = {
 	/**
 	 * Largest integer
 	 * @type {Number}
+	 * @memberOf R.lang.Math2
 	 */
 	MAX_INT: 0xFFFFFFFF,		// 64-bits
 	
@@ -1110,6 +1131,7 @@ R.lang.Math2 = {
 	 * ensures that random numbers occur in a known sequence.
 	 * 
 	 * @param seed {Number} An integer to seed the number generator with
+	 * @memberOf R.lang.Math2
 	 */
 	seed: function(seed) {
 		// LCG using GCC's constants
@@ -1119,6 +1141,7 @@ R.lang.Math2 = {
 	/**
 	 * Returns a random integer between 0 and 4,294,967,296.
 	 * @return {Number} An integer between 0 and 2^32
+	 * @memberOf R.lang.Math2
 	 */
 	randomInt: function() {
 		R.lang.Math2.state = (R.lang.Math2.a * R.lang.Math2.state + R.lang.Math2.c) % R.lang.Math2.m;
@@ -1128,6 +1151,7 @@ R.lang.Math2 = {
 	/**
 	 * Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
 	 * @return {Number} A number between 0 and 1
+	 * @memberOf R.lang.Math2
 	 */
 	random: function() {
 		// returns in range [0,1]
@@ -1142,6 +1166,7 @@ R.lang.Math2 = {
 	 * @param high {Number} The high part of the range
 	 * @param [whole] {Boolean} Return whole values only
 	 * @return {Number}
+	 * @memberOf R.lang.Math2
 	 */
 	randomRange: function(low, high, whole) {
 		var v = low + (R.lang.Math2.random() * high);
@@ -1153,6 +1178,7 @@ R.lang.Math2 = {
 	 * 
 	 * @param bin {String} Binary string to parse
 	 * @return {Number}
+	 * @memberOf R.lang.Math2
 	 */
 	parseBin: function(bin) {
 		if (!isNaN(bin)) {
@@ -1165,6 +1191,7 @@ R.lang.Math2 = {
 	 *
 	 * @param num {Number} The number to convert
 	 * @return {String}
+	 * @memberOf R.lang.Math2
 	 */
 	toHex: function(num) {
 		if (!isNaN(num)) {
@@ -1177,6 +1204,7 @@ R.lang.Math2 = {
 	 *
 	 * @param num {Number} The number to convert
 	 * @return {String}
+	 * @memberOf R.lang.Math2
 	 */
 	toBinary: function(num) {
 		if (!isNaN(num)) {
@@ -1185,7 +1213,7 @@ R.lang.Math2 = {
 	}
 };
 
-// Seed the random number generator initially
+// Initially seed the random number generator with a pseudo-random number
 R.lang.Math2.seed();
 
 /**
@@ -1237,7 +1265,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @param array {Array} The array to scan
     * @param obj {Object} The object to find
     * @param [from=0] {Number} The index to start at, defaults to zero.
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    indexOf: function(array, obj, from) {
       if (!array) {
@@ -1272,7 +1300,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *
     * @param array {Array} The array to modify
     * @param obj {Object} The object to remove
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    arrayRemove: function(array, obj) {
       if (!array) {
@@ -1292,6 +1320,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * 
     * @param str {String} The string to test
     * @return {Boolean} <tt>true</tt> if the string is empty or <tt>null</tt>
+    * @memberOf R.engine.Support
     */
    isEmpty: function(str) {
       return (str == null || $.trim(str) === "");     
@@ -1312,7 +1341,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *                      and the array being traversed.
     * @param [thisp=null] {Object} Used as <tt>this</tt> for each invocation of the
     *                       callback.
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    filter: function(array, fn, thisp) {
       if (!array) {
@@ -1351,7 +1380,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *                      arguments: The element value, the index of the element,
     *                      and the array being traversed.
     * @param [thisp=null] {Object} An optional "this" pointer to use in the callback
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    forEach: function(array, fn, thisp) {
       if (!array) {
@@ -1383,7 +1412,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @param {Array} arr The array to fill
     * @param {Number} size The size of the array to fill
     * @param {Object} value The value to put at each index
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    fillArray: function(arr, size, value) {
       for (var i = 0; i < size; i++) {
@@ -1397,7 +1426,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *
     * @param url {String} The URL
     * @return {String} The path
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    getPath: function(url) {
       var l = url.lastIndexOf("/");
@@ -1410,7 +1439,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * found.
     *
     * @return {Object} A generic <tt>Object</tt> with a key and value for each query argument.
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    getQueryParams: function() {
       if (!R.engine.Support.parms) {
@@ -1435,7 +1464,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *
     * @param paramName {String} The query parameter name
     * @return {Boolean} <tt>true</tt> if the query parameter exists and is one of the specified values.
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    checkBooleanParam: function(paramName) {
       return (R.engine.Support.getQueryParams()[paramName] &&
@@ -1452,7 +1481,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @param paramName {String} The query parameter name
     * @param val {String} The value to check for
     * @return {Boolean} <tt>true</tt> if the query parameter exists and is the value specified
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    checkStringParam: function(paramName, val) {
       return (R.engine.Support.getStringParam(paramName, null) == val);
@@ -1465,7 +1494,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @param paramName {String} The query parameter name
     * @param val {Number} The number to check for
     * @return {Boolean} <tt>true</tt> if the query parameter exists and is the value specified
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    checkNumericParam: function(paramName, val) {
       return (R.engine.Support.getStringParam(paramName, null) == val)
@@ -1478,7 +1507,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @param paramName {String} The name of the parameter
     * @param defaultVal {Number} The number to return if the parameter doesn't exist
     * @return {Number} The value
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    getNumericParam: function(paramName, defaultVal) {
       return Number(R.engine.Support.getStringParam(paramName, defaultVal));
@@ -1491,7 +1520,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @param paramName {String} The name of the parameter
     * @param defaultVal {String} The string to return if the parameter doesn't exist
     * @return {String} The value
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    getStringParam: function(paramName, defaultVal) {
       return (R.engine.Support.getQueryParams()[paramName] || defaultVal);
@@ -1505,7 +1534,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *
     * @param object {Object} Must not be undefined or contain undefined types and variables.
     * @return String
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    toJSON: function(o)
    {
@@ -1523,6 +1552,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * 
     * /(([\"'])(\\\2|.*:\/\/|[^\/\n\r])*\2)|(//.*$)/gm
     * @param inString {String} The source to clean
+    * @memberOf R.engine.Support
     */
    cleanSource: function(inString, keepNewLines) {
       var s = inString.replace(/((["'])[^;\n\r]*\2)|(\/\/.*$)/gm, "$1")  // Remove single line comments
@@ -1543,7 +1573,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @param jsonString
     * @return Object
     * @see http://www.json.org
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    parseJSON: function(jsonString)
    {
@@ -1570,28 +1600,11 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    },
    
    /**
-    * This method does a direct <tt>eval()</tt> on the JSON object and
-    * should be avoided since it allows for XSS and other security issues.
-    * @deprecated
-    * @see #parseJSON
-    */
-   evalJSON: function(jsonString)
-   {
-      jsonString = R.engine.Support.cleanSource(jsonString);
-      try {
-         return eval("(" + jsonString + ")");   
-      } catch (ex) {
-         R.debug.Console.warn("Cannot eval JSON: " + ex.message);
-         return null;
-      }
-   },
-
-   /**
     * Return a string, enclosed in quotes.
     *
     * @param text {String} The string to quote
     * @return {String} The string in quotes
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
     */
    quoteString: function(text)
    {
@@ -1605,7 +1618,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
 	/**
 	 * Determine the OS platform from the user agent string, if possible
 	 * @private
-    * @memberOf EngineSupport
+    * @memberOf R.engine.Support
 	 */
 	checkOS: function() {
 		// Scrape the userAgent to get the OS
@@ -1669,8 +1682,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *    </ul>
     * </li>
     * </ul>
-    * @return An object with system information
-    * @memberOf EngineSupport
+    * @return {Object} An object with system information
+    * @memberOf R.engine.Support
     */
    sysInfo: function() {
       if (!R.engine.Support._sysInfo) {
@@ -1770,6 +1783,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * be executed.
     * @param obj {Object} The object to wait for
     * @param fn {Function} The function to execute when the object is ready
+    * @memberOf R.engine.Support
     */
    whenReady: function(obj, fn) {
       if (typeof obj != "undefined") {
@@ -1825,6 +1839,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  *        executed when dependencies are fulfilled.
  *
  * @static
+ * @private
  */
 R.engine.Linker = Base.extend(/** @scope Linker.prototype */{ 
 
@@ -2136,6 +2151,10 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		}
 	},
 	
+	/**
+	 * Initializes classes which have their dependencies resolved
+	 * @private
+	 */
 	_initClass: function(className) {
 		// Get the class object
 		var pkg = R.global, clazz = className.split(".");
@@ -2160,6 +2179,11 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
 		R.engine.Linker.resolvedClasses[className] = true;
 	},
 	
+	/**
+	 * Called if the linker has failed to load any classes and seems to be
+	 * stuck waiting for resolution.
+	 * @private
+	 */
 	_failure: function() {
 		clearTimeout(R.engine.Linker.failTimer);
 		clearTimeout(R.engine.Linker.classTimer);	
@@ -2227,6 +2251,8 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
  */
 R.Engine = Base.extend(/** @scope Engine.prototype */{
    version: "v2.0.0.2",
+   HOME_URL: "http://www.renderengine.com",
+   REF_NAME: "The Render Engine",
 
    constructor: null,
 
@@ -2265,19 +2291,20 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    /**
     * The current time of the world on the client.  This time is updated
     * for each frame generated by the Engine.
-    * @type Number
-    * @memberOf Engine
+    * @type {Number}
+    * @memberOf R.Engine
     */
    worldTime: 0,              // The world time
 
    /**
     * The number of milliseconds the engine has been running.  This time is updated
     * for each frame generated by the Engine.
-    * @type Number
-    * @memberOf Engine
+    * @type {Number}
+    * @memberOf R.Engine
     */
    liveTime: 0,               // The "alive" time (worldTime-upTime)
    
+   /** @private */
    shutdownCallbacks: [],		// Methods to call when the engine is shutting down
 
    // Issue #18 - Intrinsic loading dialog
@@ -2292,6 +2319,8 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    /**
     * Set/override the engine options.
     * @param opts {Object} Configuration options for the engine
+    * @memberOf R.Engine
+    * @private
     */
    setOptions: function(opts) {
 		// Check for a "defaults" key
@@ -2340,7 +2369,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * can be queried for additional debugging operations.
     *
     * @param mode {Boolean} <tt>true</tt> to set debugging mode
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    setDebugMode: function(mode) {
       R.Engine.debugMode = mode;
@@ -2350,7 +2379,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * Query the debugging mode of the engine.
     *
     * @return {Boolean} <tt>true</tt> if the engine is in debug mode
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getDebugMode: function() {
       return R.Engine.debugMode;
@@ -2361,7 +2390,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * properly.  The resource loader and play manager will use this
     * value to execute properly.
     * @return {Boolean} <tt>true</tt> if the sound engine was loaded properly
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    isSoundEnabled: function() {
       return R.Engine.soundsEnabled;
@@ -2376,7 +2405,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     *
     * @param fps {Number} The number of frames per second to refresh
     *                     Engine objects.
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    setFPS: function(fps) {
       Assert((fps != 0), "You cannot have a framerate of zero!");
@@ -2386,7 +2415,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    /**
     * Get the FPS (frames per second) the engine is set to run at.
     * @return {Number}
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getFPS: function() {
       return Math.floor((1 / R.Engine.fpsClock) * 1000)
@@ -2398,7 +2427,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * number of objects being rendered.  A faster machine will be able
     * to handle a higher FPS setting.
     * @return {Number}
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getActualFPS: function() {
       return Math.floor((1 / R.Engine.frameTime) * 1000);
@@ -2407,7 +2436,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    /**
     * Get the amount of time allocated to draw a single frame.
     * @return {Number} Milliseconds allocated to draw a frame
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getFrameTime: function() {
       return R.Engine.fpsClock;
@@ -2419,7 +2448,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * performed, and other factors.  The draw time can be used to optimize
     * your game for performance.
     * @return {Number} Milliseconds required to draw the frame
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getDrawTime: function() {
       return R.Engine.frameTime;
@@ -2436,7 +2465,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * Faster machines will be able to handle more load.  You can use
     * this value to gauge how well your game is performing.
     * @return {Number}
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getEngineLoad: function () {
       return (R.Engine.frameTime / R.Engine.fpsClock);
@@ -2447,7 +2476,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * is the <tt>document.body</tt> element in the browser.
     *
     * @return {RenderContext} The default rendering context
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getDefaultContext: function() {
       if (R.Engine.defaultContext == null) {
@@ -2456,12 +2485,28 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 
       return R.Engine.defaultContext;
    },
+   
+   /**
+    * Override the engine's default context.  The engine will use
+    * the {@link R.rendercontexts.DocumentContext} as the default context,
+    * unless otherwise specified.
+    * @param defaultContext {R.rendercontexts.AbstracRenderContext} The context to use as the start of the
+    *		scene graph.
+    * @memberOf R.Engine
+    */
+   setDefaultContext: function(defaultContext) {
+   	Assert(defaultContext instanceof R.rendercontexts.AbstractRenderContext, "Setting default engine context to object which is not a render context!");
+   	R.Engine.defaultContext = defaultContext;
+   },
 
    /**
-    * Get the path to the engine.  Uses the location of the <tt>engine.js</tt>
-    * file that was loaded.
+    * Get the path to the engine.  Uses the location of the <tt>/runtime/engine.js</tt>
+    * file that was initially loaded to determine the URL where the engine is running from.
+    * When files are included, or classes are loaded, they are loaded relative to the engine's
+    * location on the server.
+    *
     * @return {String} The path/URL where the engine is located
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    getEnginePath: function() {
       if (R.Engine.engineLocation == null)
@@ -2492,12 +2537,12 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    //====================================================================================================
 
    /**
-    * Track an instance of an object managed by the Engine.  This is called
-    * by any object that extends from {@link PooledObject}.
+    * Create an instance of an object within the Engine and get a unique Id for it.
+    * This is called by any object that extends from {@link R.engine.PooledObject}.
     *
-    * @param obj {PooledObject} A managed object within the engine
+    * @param obj {R.engine.PooledObject} An object within the engine
     * @return {String} The global Id of the object
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    create: function(obj) {
       if(R.Engine.shuttingDown === true) {
@@ -2517,10 +2562,10 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Removes an object instance managed by the Engine.
+    * Destroys an object instance within the Engine.
     *
-    * @param obj {PooledObject} The object, managed by the engine, to destroy
-    * @memberOf Engine
+    * @param obj {R.engine.PooledObject} The object, managed by the engine, to destroy
+    * @memberOf R.Engine
     */
    destroy: function(obj) {
    	if (obj == null) {
@@ -2538,7 +2583,8 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * the engine is shutdown, or paused when the engine is
     * paused.
     * @param timerName {String} The timer name
-    * @param timer {Timer} The timer to add
+    * @param timer {R.lang.Timer} The timer to add
+    * @memberOf R.Engine
     */
    addTimer: function(timerName, timer) {
       R.Engine.timerPool[timerName] = timer;   
@@ -2547,6 +2593,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    /**
     * Remove a timer from the pool when it is destroyed.
     * @param timerName {String} The timer name
+    * @memberOf R.Engine
     */
    removeTimer: function(timerName) {
       R.Engine.timerPool[timerName] = null;
@@ -2555,14 +2602,31 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 
    /**
     * Get an object by the Id that was assigned during the call to {@link #create}.
+    * Only objects that are contained within other objects will be found.  Discreetly
+    * referenced objects cannot be located by Id.
     *
-    * @param id {String} The global Id of the object to locate
-    * @return {PooledObject} The object
-    * @memberOf Engine
-    * @deprecated This method no longer returns an object
+    * @param id {String} The Id of the object to locate
+    * @return {R.engine.PooledObject} The object
+    * @memberOf R.Engine
     */
    getObject: function(id) {
-      return null;
+   	function search(container) {
+   		var itr = container.iterator();
+   		while(itr.hasNext()) {
+   			var obj = itr.next();
+   			if (obj.getId && (obj.getId() === id)) {
+   				return obj;
+   			}
+   			if (obj instanceof R.struct.Container) {
+   				// If the object is a container, search inside of it
+   				return search(obj);
+   			}
+   		}
+   		return null;
+   	}
+   	
+   	// Start at the engine's default context
+      return search(R.Engine.getDefaultContext());
    },
 
    //====================================================================================================
@@ -2572,9 +2636,9 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    //====================================================================================================
 
    /**
-    * Load the minimal scripts required for the engine to run.
+    * Load the minimal scripts required for the engine to start.
     * @private
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    loadEngineScripts: function() {
       // Engine stylesheet
@@ -2595,7 +2659,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     *
     * @param debugMode {Boolean} <tt>true</tt> to set the engine into debug mode
     *                            which allows the output of messages to the console.
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    startup: function(debugMode) {
       Assert((R.Engine.running == false), "An attempt was made to restart the engine!");
@@ -2614,9 +2678,10 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Runs the engine.  This will be called after all scripts have been loaded.
-    * You will also need to call this if you pause the engine.
-    * @memberOf Engine
+    * Starts or resumes the engine.  This will be called after all scripts have been loaded.
+    * You will also need to call this if you {@link #pause} the engine.  Any paused timers
+    * will also be resumed.
+    * @memberOf R.Engine
     */
    run: function() {
       if (R.Engine.shuttingDown || R.Engine.running) {
@@ -2646,8 +2711,8 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
    },
 
    /**
-    * Pauses the engine.
-    * @memberOf Engine
+    * Pauses the engine and any running timers.
+    * @memberOf R.Engine
     */
    pause: function() {
       if (R.Engine.shuttingDown) {
@@ -2667,10 +2732,11 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 
 	/**
 	 * Add a method to be called when the engine is being shutdown.  Use this
-	 * method to allow an object, which is not referenced to by the engine, to
+	 * method to allow an object, which is not referenced by the engine, to
 	 * perform cleanup actions.
 	 *
 	 * @param fn {Function} The callback function
+	 * @memberOf R.Engine
 	 */
 	onShutdown: function(fn) {
 		if (R.Engine.shuttingDown === true) {
@@ -2682,8 +2748,9 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 
    /**
     * Shutdown the engine.  Stops the global timer and cleans up (destroys) all
-    * objects that have been created and added to the world.
-    * @memberOf Engine
+    * objects that have been created and added to the engine, starting at the default
+    * engine context.
+    * @memberOf R.Engine
     */
    shutdown: function() {
       if (R.Engine.shuttingDown) {
@@ -2703,27 +2770,24 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
       }
 
       R.Engine.started = false;
-      window.clearTimeout(R.Engine.dependencyProcessor);
-
       R.debug.Console.warn(">>> Engine shutting down...");
 
       // Stop world timer
-      window.clearTimeout(R.Engine.globalTimer);
+      R.global.clearTimeout(R.Engine.globalTimer);
       
-      // Run through shutdown callbacks to allow objects not tracked by Engine
+      // Run through shutdown callbacks to allow unreferenced objects
       // to clean up references, etc.
       while (R.Engine.shutdownCallbacks.length > 0) {
       	R.Engine.shutdownCallbacks.shift()();
       };
 
-      if (R.Engine.metricDisplay)
-      {
+      if (R.Engine.metricDisplay) {
          R.Engine.metricDisplay.remove();
          R.Engine.metricDisplay = null;
       }
 
       // Cancel all of the timers
-      R.debug.Console.debug("Cancelling all timers");
+      R.debug.Console.debug(">>> Cancelling all timers");
       for (var tm in R.Engine.timerPool) {
          R.Engine.timerPool[tm].cancel();
       }
@@ -2740,59 +2804,23 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
       R.Engine.getDefaultContext().destroy();
       
       // Dump the object pool
-      if (typeof R.engine.PooledObject != "undefined") {
-         R.engine.PooledObject.objectPool = null;
-      }
+		R.engine.PooledObject.objectPool = null;
 
-      AssertWarn((R.Engine.livingObjects == 0), "Object references not cleaned up!");
+      AssertWarn((R.Engine.livingObjects == 0), "Object references were not cleaned up!");
       
       R.Engine.loadedScripts = {};
       R.Engine.scriptLoadCount = 0;
       R.Engine.scriptsProcessed = 0;
       R.Engine.defaultContext = null;
 
-      // Perform final cleanup
-      if (!R.Engine.UNIT_TESTING /* Is this a hack? */) {
-         R.Engine.cleanup();
-      }
-   },
-
-   /**
-    * After a successful shutdown, the Engine needs to clean up
-    * all of the objects that were created on the window object by the engine.
-    * @memberOf Engine
-    * @private
-    */
-   cleanup: function() {
-      // Protect the HTML console, if visible
-      var hdc = $("#debug-console").remove();
-   
-      // Remove the body contents
-      $(document.body).empty();
-
-      if (hdc.length != 0) {
-         $(document.body).append(hdc);
-      }
-
-      // Remove all scripts from the <head>
-      $("head script", document).remove();
-      
-      // Final cleanup
-      R.engine.Linker.cleanup();
-      
       // Shutdown complete
       R.Engine.shuttingDown = false;
    },
 
    /**
-    * Initializes an object for use in the engine.  Calling this method is required to make sure
-    * that all dependencies are resolved before actually instantiating an object of the specified
-    * class.  This uses the {@link Linker} class to handle dependency processing and resolution.
-    *
-    * @param objectName {String} The name of the object class
-    * @param primaryDependency {String} The name of the class for which the <tt>objectName</tt> class is
-    *                                   dependent upon.  Specifying <tt>null</tt> will assume the <tt>Base</tt> class.
-    * @param fn {Function} The function to run when the object can be initialized.
+    * See {@link #define} instead.
+    * @deprecated
+    * @memberOf R.Engine
     */
    initObject: function(objectName, primaryDependency, fn) {
       throw new SyntaxError("Unsupported - See R.Engine.define() instead");
@@ -2826,6 +2854,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 	 * load the classes with <tt>Game.load("/path/to/file.js")</tt>.
 	 *    
 	 * @param classDef {Object} The object's definition
+    * @memberOf R.Engine
 	 */
 	define: function(classDef) {
 		R.engine.Linker.define(classDef);
@@ -2839,15 +2868,16 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * <p/>
     * If the browser isn't supported, the engine is shutdown and a message is
     * displayed.
+    * @memberOf R.Engine
+    * @private
     */
    browserSupportCheck: function() {
       if (R.engine.Support.checkBooleanParam("disableBrowserCheck")) {
          return true;
       }
       var sInfo = R.engine.Support.sysInfo();
-      var msg = "This browser is not currently supported by <i>The Render Engine</i>.<br/><br/>";
-      msg += "Please see <a href='http://www.renderengine.com' target='_blank'>the list of ";
-      msg += "supported browsers</a> for more information.";
+      var msg = "This browser is not currently supported by <i>" + R.Engine.REF_NAME + "</i>.<br/><br/>";
+      msg += "Please go <a href='" + R.Engine.HOME_URL + "' target='_blank'>here</a> for more information.";
       switch (sInfo.browser) {
          case "iPhone":
 			case "android": 
@@ -2869,7 +2899,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 
    /**
     * Prints the version of the engine.
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    toString: function() {
       return "The Render Engine " + R.Engine.version;
@@ -2888,7 +2918,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     * render themselves.
     *
     * @private
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    engineTimer: function() {
       if (R.Engine.shuttingDown) {
@@ -2934,15 +2964,14 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 	},
 	
 	// ======================================================
-	// Declarations here only for documentation purposes
-	// See engine.script.js
+	// References to R.engine.Script methods
 	// ======================================================
 	
    /**
     * Include a script file.
     *
     * @param scriptURL {String} The URL of the script file
-    * @memberOf Engine
+    * @memberOf R.Engine
     */
    include: function(scriptURL) {
 		R.engine.Script.include(scriptURL);
@@ -2969,14 +2998,14 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
     *                       the framework if ready, the <tt>startup()</tt> method of this
     *                       object will be called.
     * @param [gameDisplayName] {String} An optional string to display in the loading dialog
-    * @memberOf Engine
-    * @function
+    * @memberOf R.Engine
     */
    loadGame: function(gameSource,gameObjectName,gameDisplayName) {
 		R.engine.Script.loadGame(gameSource,gameObjectName,gameDisplayName);
 	}
 
  }, { // Interface
+ 	/** @private */
    globalTimer: null
  });
 
@@ -3018,7 +3047,7 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 //====================================================================================================
 //====================================================================================================
 R.engine.Script = Base.extend({
-   /** @lends Engine */
+
    constructor: null,
 
    /*
@@ -3036,13 +3065,15 @@ R.engine.Script = Base.extend({
    
    /**
     * Status message when a script is not found
-    * @memberOf Engine
+    * @memberOf R.engine.Script
+    * @type {Boolean}
     */
    SCRIPT_NOT_FOUND: false,
    
    /**
     * Status message when a script is successfully loaded
-    * @memberOf Engine
+    * @memberOf R.engine.Script
+    * @type {Boolean}
     */
    SCRIPT_LOADED: true,
 
@@ -3050,7 +3081,7 @@ R.engine.Script = Base.extend({
     * Include a script file.
     *
     * @param scriptURL {String} The URL of the script file
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    include: function(scriptURL) {
       R.engine.Script.loadNow(scriptURL);
@@ -3065,7 +3096,7 @@ R.engine.Script = Base.extend({
     * @param {Function} [cb] The function to call when the script is loaded.
     *                   the path of the script loaded and a status message
     *                   will be passed as the two parameters.
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     * @private
     */
    loadNow: function(scriptPath, cb) {
@@ -3079,7 +3110,7 @@ R.engine.Script = Base.extend({
     * queue is processed synchronously.
     *
     * @param scriptPath {String} The URL of a script to load.
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    loadScript: function(scriptPath) {
       // Put script into load queue
@@ -3095,7 +3126,7 @@ R.engine.Script = Base.extend({
 	 * @param path {String} The url to load
 	 * @param data {Object} Optional arguments to pass to server
 	 * @param callback {Function} The callback method
-	 * @private
+	 * @memberOf R.engine.Script
 	 */
 	ajaxLoad: function(path, data, callback) {
 		// Use our own internal method to load a file with the JSON
@@ -3125,6 +3156,7 @@ R.engine.Script = Base.extend({
 	 * @param data {Object} Optional arguments to pass to server
 	 * @param callback {Function} The callback method which is passed the
 	 *		text and status code (a number) of the request.
+	 * @memberOf R.engine.Script
 	 */	 
 	loadText: function(path, data, callback) {
 		if (typeof data == "function") {
@@ -3145,6 +3177,7 @@ R.engine.Script = Base.extend({
 	 * @param data {Object} Optional arguments to pass to server
 	 * @param callback {Function} The callback method which is passed the
 	 *		JSON object and status code (a number) of the request.
+	 * @memberOf R.engine.Script
 	 */	 
 	loadJSON: function(path, data, callback) {
 		if (typeof data == "function") {
@@ -3177,7 +3210,7 @@ R.engine.Script = Base.extend({
     * Internal method which runs the script queue to handle scripts and functions
     * which are queued to run sequentially.
     * @private
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    runScriptQueue: function() {
       if (!R.engine.Script.scriptQueueTimer) {
@@ -3216,7 +3249,7 @@ R.engine.Script = Base.extend({
     * incremental loading.
     *
     * @param cb {Function} A callback to execute
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    setQueueCallback: function(cb) {
       // Put callback into load queue
@@ -3232,7 +3265,7 @@ R.engine.Script = Base.extend({
     *
     * @param state {Boolean} <tt>true</tt> to put the queue processor
     *                        in a paused state.
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    pauseQueue: function(state) {
       R.engine.Script.queuePaused = state;
@@ -3241,7 +3274,7 @@ R.engine.Script = Base.extend({
    /**
     * Process any scripts that are waiting to be loaded.
     * @private
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    processScriptQueue: function() {
       if (R.engine.Script.scriptQueue.length > 0 && R.engine.Script.readyForNextScript) {
@@ -3265,7 +3298,7 @@ R.engine.Script = Base.extend({
    /**
     * This method performs the actual script loading.
     * @private
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    doLoad: function(scriptPath, simplePath, cb) {
       if (!R.Engine.started) {
@@ -3398,7 +3431,7 @@ R.engine.Script = Base.extend({
     *                       the framework if ready, the <tt>startup()</tt> method of this
     *                       object will be called.
     * @param [gameDisplayName] {String} An optional string to display in the loading dialog
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    loadGame: function(gameSource, gameObjectName/* , gameDisplayName */) {
 
@@ -3462,6 +3495,11 @@ R.engine.Script = Base.extend({
       }, 2);
    },
 
+	/**
+	 * Load the engine options object for the current browser and OS
+	 * @memberOf R.engine.Script
+	 * @private
+	 */
 	loadEngineOptions: function() {
 		
 		// Load the default configuration for all browsers, then load one specific to the browser type
@@ -3488,7 +3526,7 @@ R.engine.Script = Base.extend({
     * {@link #loadScript} and prepends the engine path to the supplied script source.
     *
     * @param scriptSource {String} A URL to load that is relative to the engine path.
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    load: function(scriptSource) {
       R.engine.Script.loadScript(R.Engine.getEnginePath() + scriptSource);
@@ -3497,7 +3535,7 @@ R.engine.Script = Base.extend({
    /**
     * After a script has been loaded, updates the progress
     * @private
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    handleScriptDone: function() {
       R.engine.Script.scriptsProcessed++;
@@ -3509,7 +3547,7 @@ R.engine.Script = Base.extend({
    /**
     * Updates the progress bar (if available)
     * @private
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    updateProgress: function() {
       var pBar = jQuery("#engine-load-progress");
@@ -3547,8 +3585,8 @@ R.engine.Script = Base.extend({
     *                                the engine path.
     * @param relative {Boolean} Relative to the current path, or from the engine path
     * @param noInject {Boolean} <code>true</code> to bypass engine path injection and use
-    * 	a <tt>&lt;link /&gt; tag instead.                               
-    * @memberOf Engine
+    * 	a <tt>&lt;link /&gt; tag to load the styles instead.                               
+    * @memberOf R.engine.Script
     */
    loadStylesheet: function(stylesheetPath, relative, noInject) {
       stylesheetPath = (relative ? "" : R.Engine.getEnginePath()) + stylesheetPath;
@@ -3576,7 +3614,7 @@ R.engine.Script = Base.extend({
 
    /**
     * Output the list of scripts loaded by the Engine to the console.
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    dumpScripts: function() {
       for (var f in this.loadedScripts)
@@ -3590,7 +3628,7 @@ R.engine.Script = Base.extend({
     * again.  Use this method with caution, as it is not recommended
     * to load a script if the object is in use.  May cause unexpected
     * results.
-    * @memberOf Engine
+    * @memberOf R.engine.Script
     */
    clearScriptCache: function() {
       R.engine.Script.loadedScripts = {};
@@ -3656,7 +3694,7 @@ R.debug.Metrics = Base.extend({
    /**
     * Toggle the display of the metrics window.  Any metrics
     * that are being tracked will be reported in this window.
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    toggleMetrics: function() {
       R.debug.Metrics.showMetricsWindow = !R.debug.Metrics.showMetricsWindow;
@@ -3664,7 +3702,7 @@ R.debug.Metrics = Base.extend({
 
    /**
     * Show the metrics window
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    showMetrics: function() {
       R.debug.Metrics.showMetricsWindow = true;
@@ -3672,7 +3710,7 @@ R.debug.Metrics = Base.extend({
    
    /**
     * Show a graph of the engine profile
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    showProfile: function() {
       R.debug.Metrics.showMetricsProfile = true;
@@ -3680,7 +3718,7 @@ R.debug.Metrics = Base.extend({
 
    /**
     * Hide the metrics window
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    hideMetrics: function() {
       R.debug.Metrics.showMetricsWindow = false;
@@ -3760,7 +3798,7 @@ R.debug.Metrics = Base.extend({
     * The default is for metrics to be calculated every 10 engine frames.
     *
     * @param sampleRate {Number} The number of ticks between samples
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    setSampleRate: function(sampleRate) {
       R.debug.Metrics.lastMetricSample = 1;
@@ -3780,7 +3818,7 @@ R.debug.Metrics = Base.extend({
     * @param value {String/Number} The value of the metric.
     * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
     * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    add: function(metricName, value, smoothing, fmt) {
       if (smoothing) {
@@ -3804,7 +3842,7 @@ R.debug.Metrics = Base.extend({
     * Remove a metric from the display
     *
     * @param metricName {String} The name of the metric to remove
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    remove: function(metricName) {
       R.debug.Metrics.metrics[metricName] = null;
@@ -3814,7 +3852,7 @@ R.debug.Metrics = Base.extend({
    /**
     * Updates the display of the metrics window.
     * @private
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    update: function() {
       var h = "", ctx;
@@ -3847,6 +3885,9 @@ R.debug.Metrics = Base.extend({
       }
    },
 
+	/**
+	 * @private
+	 */
    drawProfilePoint: function(color, val) {
       var ctx = R.debug.Metrics.profileDisplay[0].getContext('2d');
       ctx.strokeStyle = color
@@ -3864,6 +3905,9 @@ R.debug.Metrics = Base.extend({
       }
    },
    
+   /**
+    * @private
+    */
    moveProfiler: function() {
       var ctx = R.debug.Metrics.profileDisplay[0].getContext('2d');
       var imgData = ctx.getImageData(1,0,149,100);
@@ -3876,7 +3920,7 @@ R.debug.Metrics = Base.extend({
    /**
     * Run the metrics display.
     * @private
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    doMetrics: function() { 
       // Output any metrics
@@ -3902,8 +3946,6 @@ if (R.engine.Support.checkBooleanParam("profile")) {
 /**
  * The Render Engine
  * Engine initialization
- *
- * @fileoverview Initializes the console and engine
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $

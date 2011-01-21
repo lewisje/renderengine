@@ -40,14 +40,14 @@ R.Engine.define({
 });
 
 /**
- * @class Create an iterator over a {@link Container} instance. An
+ * @class Create an iterator over a {@link R.struct.Container} instance. An
  * iterator is a convenient object to traverse the list of objects
- * within the container.  If the backing <code>Container</code> is
- * modified, the <code>Iterator</code> will reflect these changes.
+ * within the container.  If the backing <code>R.struct.Container</code> is
+ * modified, the <code>R.lang.Iterator</code> will reflect these changes.
  * <p/>
  * The simplest way to traverse the list is as follows:
  * <pre>
- * for (var itr = Iterator.create(containerObj); itr.hasNext(); ) {
+ * for (var itr = R.lang.Iterator.create(containerObj); itr.hasNext(); ) {
  *    // Get the next object in the container
  *    var o = itr.next();
  *    
@@ -62,7 +62,7 @@ R.Engine.define({
  * of objects, especially if the iterator is used repeatedly.
  * Since the iterator is a pooled object, it will be reused.
  *
- * @param container {Container} The container to iterate over.
+ * @param container {R.struct.Container} The container to iterate over.
  * @constructor
  * @extends R.engine.PooledObject
  * @description Create an iterator over a collection
@@ -85,7 +85,7 @@ R.lang.Iterator = function() {
    },
 
    /**
-    * Release the object back into the object pool.
+    * Release the iterator back into the object pool.
     */
    release: function() {
       this.base();

@@ -48,16 +48,14 @@ R.Engine.define({
  * @param name {String} The name of the image object
  * @param imageName {String} The name of the image container in the resource loader
  * @param imageLoader {ImageLoader} The resource loader used to load the image
- * @extends PooledObject
+ * @extends R.engine.PooledObject
  */
 R.resources.types.Image = function(){
 	return R.engine.PooledObject.extend(/** @scope R.resources.types.Image.prototype */{
 	
 		image: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name, imageName, imageLoader){
 			this.base(name || "Image");
 			this.image = imageLoader.get(imageName);
@@ -66,7 +64,7 @@ R.resources.types.Image = function(){
 		},
 		
 		/**
-		 * @private
+		 * Release the image back into the pool for reuse
 		 */
 		release: function(){
 			this.base();
@@ -76,7 +74,7 @@ R.resources.types.Image = function(){
 		
 		/**
 		 * Get the bounding box for the image.
-		 * @return {Rectangle2D} The bounding box which contains the entire image
+		 * @return {R.math.Rectangle2D} The bounding box which contains the entire image
 		 */
 		getBoundingBox: function(){
 			return this.bbox;
@@ -90,7 +88,7 @@ R.resources.types.Image = function(){
 			return this.image;
 		}
 		
-	}, { /** @scope R.resources.types.Image.prototype */
+	}, /** @scope R.resources.types.Image.prototype */{ 
 		/**
 		 * Gets the class name of this object.
 		 * @return {String} The string "R.resources.types.Image"

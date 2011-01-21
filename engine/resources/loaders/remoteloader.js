@@ -50,9 +50,7 @@ R.Engine.define({
 R.resources.loaders.RemoteLoader = function(){
 	return R.resources.loaders.AbstractResourceLoader.extend(/** @scope R.resources.loaders.RemoteLoader.prototype */{
 	
-		/**
-		 * private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.base(name || "RemoteLoader");
 		},
@@ -98,21 +96,25 @@ R.resources.loaders.RemoteLoader = function(){
 		
 		/**
 		 * Transmit status ok
+		 * @type {Number}
 		 */
 		STATUS_OK: 200,
 		
 		/**
 		 * Transmit status - Cached
+		 * @type {Number}
 		 */
 		STATUS_CACHED: 304,
 		
 		/**
 		 * Transmit status - Not found
+		 * @type {Number}
 		 */
 		STATUS_NOT_FOUND: 404,
 		
 		/**
 		 * Transmit status - Server error
+		 * @type {Number}
 		 */
 		STATUS_SERVER_ERROR: 500
 	});

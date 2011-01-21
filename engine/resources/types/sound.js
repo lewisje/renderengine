@@ -57,9 +57,7 @@ R.resources.types.Sound = function(){
 		soundObj: null,
 		soundSystem: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(soundSystem, soundObj){
 			this.volume = 50;
 			this.paused = false;
@@ -79,7 +77,7 @@ R.resources.types.Sound = function(){
 		},
 		
 		/**
-		 * @private
+		 * Release the sound back into the pool for reuse
 		 */
 		release: function(){
 			this.base();
@@ -256,6 +254,10 @@ R.resources.types.Sound = function(){
 			return this.soundSystem.getSoundDuration(this.soundObj);
 		},
 		
+		/**
+		 * Flag to indicate if the sound ready to use.
+		 * @return {Boolean}
+		 */
 		getReadyState: function(){
 			return this.soundSystem.getSoundReadyState(this.soundObj);
 		}

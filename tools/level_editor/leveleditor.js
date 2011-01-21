@@ -293,13 +293,8 @@ var LevelEditor = function() {
 		// Regardless if the editable flag is true, if there is a setter, we'll
 		// call it to copy the value over.
 		if (bean[propName][1]) {
-			if (bean[propName][1].multi && bean[propName][1].multi === true) {
-				// Multi-option
-				bean[propName][1].fn(value);
-			} else if (bean[propName][1].checkbox && bean[propName][1].checkbox === true) {
-				// Checkbox toggle
-			} else if (bean[propName][1].editor) {
-				// Custom editor
+			if (bean[propName][1].multi || bean[propName][1].toggle || bean[propName][1].editor) {
+				// Multi-select, toggle, or custom editor
 				bean[propName][1].fn(value);
 			} else {
 				// Single value
@@ -1184,16 +1179,26 @@ var LevelEditor = function() {
 					// When the option is chosen, call the setter function
 	            var fn = function() {
 	               arguments.callee.cb($(this).val());
-						$("#editPanel").trigger("set" + arguments.callee.prop, [arguments.callee.obj, this.value]);
+						$("#editPanel").trigger("set" + arguments.callee.prop, [arguments.callee.obj, $(this).val()]);
 	            };
 					fn.cb = bean[p][1].fn;
 					fn.prop = p;
 					fn.obj = obj;
 					
 					e.change(fn).val(bean[p][0]);
-				} else if (bean[p][1].checkbox && bean[p][1].checkbox === true) {
+				} else if (bean[p][1].toggle && bean[p][1].toggle === true) {
 					// Checkbox toggle
+					e = $("<input type='checkbox'/>");
 					
+					var fn = function() {
+						arguments.callee.cb(this.checked);
+						$("#editPanel").trigger("set" + arguments.callee.prop, [arguments.callee.obj, this.checked]); 
+					};
+					fn.cb = bean[p][1].fn;
+					fn.prop = p;
+					fn.obj = obj;
+					
+					e.change(fn)[0].checked = bean[p][0]();
 				} else if (bean[p][1].editor) {	
 					// Custom editor called in the scope of the object being edited
 					var fn = function() {

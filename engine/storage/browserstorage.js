@@ -39,20 +39,18 @@ R.Engine.define({
 });
 
 /**
- * @class <tt>BrowserStorage</tt> is a generalized class for browser-based
+ * @class <tt>R.storage.BrowserStorage</tt> is a generalized class for browser-based
  * 	storage mechanisms.
  * 
  * @param name {String} The name of the object
- * @extends StorageBase
+ * @extends R.storage.AbstractStorage
  * @constructor
  * @description Generalized base storage class for browser storage objects.
  */
 R.storage.BrowserStorage = function(){
 	return R.storage.AbstractStorage.extend(/** @scope R.storage.BrowserStorage.prototype */{
 	
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.setStorageObject(this.initStorageObject());
 			this.base(name);

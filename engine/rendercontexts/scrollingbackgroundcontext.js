@@ -64,9 +64,7 @@ R.rendercontexts.ScrollingBackgroundContext = function(){
 		
 		visRect: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name, level, windowWidth, windowHeight){
 			// Create an element for us to use as our window
 			this.base(name || "ScrollingBackgroundContext", windowWidth, windowHeight);
@@ -75,10 +73,10 @@ R.rendercontexts.ScrollingBackgroundContext = function(){
 		},
 		
 		/**
-		 * Set the scroll position for the background using a {@link Point2D} to
+		 * Set the scroll position for the background using a {@link R.math.Point2D} to
 		 * define the X and Y scroll amount.
 		 *
-		 * @param point {Point2D} The scroll position along X and Y
+		 * @param point {R.math.Point2D} The scroll position along X and Y
 		 */
 		setWorldPosition: function(point){
 			this.visRect.setTopLeft(point);

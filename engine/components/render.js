@@ -40,8 +40,8 @@ R.Engine.define({
 
 /**
  * @class The base component class for components which render
- *        to a context.  Rendering consists of anything which alters the
- *        visual state of the render context.
+ *        to an {@link R.rendercontexts.AbstractRenderContext}.  Rendering 
+ *			 consists of anything which alters the visual state of the render context.
  *
  * @param name {String} The name of the component
  * @param priority {Number} The priority of the component between 0.0 and 1.0
@@ -65,6 +65,9 @@ R.components.Render = function() {
 		this.origin = R.math.Point2D.create(0,0);
    },
 
+	/**
+	 * Destroy the component instance
+	 */
 	destroy: function() {
 		this.origin.destroy();
 		this.base();
@@ -126,7 +129,7 @@ R.components.Render = function() {
     * Handles whether or not the component should draw to the
     * render context.
     *
-    * @param renderContext {RenderContext} The rendering context
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {

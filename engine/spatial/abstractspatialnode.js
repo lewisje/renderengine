@@ -53,9 +53,7 @@ R.spatial.AbstractSpatialNode = function(){
 		idx: 0,
 		objects: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(){
 			this.idx = R.spatial.AbstractSpatialNode.NODE_INDEX++;
 			this.objects = R.struct.Container.create();
@@ -71,7 +69,7 @@ R.spatial.AbstractSpatialNode = function(){
 		
 		/**
 		 * Get a Container which is all objects within this node.
-		 * @return {Container} Objects in the node
+		 * @return {R.struct.Container} Objects in the node
 		 */
 		getObjects: function(){
 			return this.objects.clone();
@@ -88,7 +86,7 @@ R.spatial.AbstractSpatialNode = function(){
 		/**
 		 * Add an object to this node.
 		 *
-		 * @param obj {BaseObject} The object to add to this node.
+		 * @param obj {R.engine.BaseObject} The object to add to this node.
 		 */
 		addObject: function(obj){
 			this.objects.add(obj);
@@ -97,7 +95,7 @@ R.spatial.AbstractSpatialNode = function(){
 		/**
 		 * Remove an object from this node
 		 *
-		 * @param obj {BaseObject} The object to remove from this node
+		 * @param obj {R.object.BaseObject} The object to remove from this node
 		 */
 		removeObject: function(obj){
 			this.objects.remove(obj);
@@ -105,7 +103,7 @@ R.spatial.AbstractSpatialNode = function(){
 		
 		/**
 		 * Returns true if the spatial node contains the point specified.
-		 * @param point {Point2D} The point to check
+		 * @param point {R.math.Point2D} The point to check
 		 * @return {Boolean}
 		 */
 		contains: function(point){
@@ -123,6 +121,12 @@ R.spatial.AbstractSpatialNode = function(){
 			return "R.spatial.AbstractSpatialNode";
 		},
 		
-		NODE_INDEX: 1
+		/** @private */
+		resolved: function() {
+			R.spatial.AbstractSpatialNode.NODE_INDEX = 1;	
+		},
+		
+		/** @private */
+		NODE_INDEX: null
 	});
 }

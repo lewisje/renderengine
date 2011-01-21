@@ -57,9 +57,7 @@ R.resources.loaders.SoundLoader = function(){
 		queueingSounds: true,
 		loadingSounds: 0,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(soundSystem){
 			this.base("SoundLoader");
 			this.init = false;
@@ -69,6 +67,9 @@ R.resources.loaders.SoundLoader = function(){
 			this.soundSystem = soundSystem;
 		},
 		
+		/**
+		 * Destroy the sound loader and shut down the sound system
+		 */
 		destroy: function(){
 			if (this.soundSystem) {
 				this.soundSystem.shutdown();
@@ -131,11 +132,11 @@ R.resources.loaders.SoundLoader = function(){
 		},
 		
 		/**
-		 * Creates a {@link Sound} object representing the named sound.
+		 * Creates a {@link R.resources.types.Sound} object representing the named sound.
 		 *
 		 * @param resource {String} A loaded sound resource
 		 * @param sound {String} The name of the sound from the resource
-		 * @return {Sound} A {@link Sound} instance
+		 * @return {R.resources.types.Sound} A {@link R.resources.types.Sound} instance
 		 */
 		getSound: function(sound){
 			return this.get(sound);
@@ -144,7 +145,7 @@ R.resources.loaders.SoundLoader = function(){
 		/**
 		 * Get the specific sound resource by name.
 		 * @param name {String} The name of the resource
-		 * @return {Sound}
+		 * @return {R.resources.types.Sound}
 		 */
 		getResourceObject: function(name){
 			return this.getSound(name);

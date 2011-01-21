@@ -59,9 +59,7 @@ R.resources.types.Level = function(){
 		// The map of all collision rects defined for the level
 		collisionMap: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name, levelResource){
 		
 			this.levelResource = levelResource;
@@ -78,7 +76,7 @@ R.resources.types.Level = function(){
 		},
 		
 		/**
-		 * @private
+		 * Release the level back into the pool for reuse
 		 */
 		release: function(){
 			this.base();
@@ -92,7 +90,7 @@ R.resources.types.Level = function(){
 		 * This routine, and the entire collision mechanism for levels, could be optimized for speed
 		 * using a BSP tree, or other structure.
 		 *
-		 * @param point {Point2D} The position to check for a collision
+		 * @param point {R.math.Point2D} The position to check for a collision
 		 * @param radius {Number} The distance from the point to check for collisions
 		 * @return {Array} An array of {@link Rectangle2D} instances which might be possible collisions
 		 */
@@ -107,6 +105,7 @@ R.resources.types.Level = function(){
 					pcl.push(this.collisionMap[r]);
 				}
 			}
+			cRect.destroy();
 			
 			return pcl;
 		},
@@ -128,8 +127,8 @@ R.resources.types.Level = function(){
 		},
 		
 		/**
-		 * Get a {@link Rectangle2D} which encloses this level.
-		 * @return {Rectangle2D} A {@link Rectangle2D} which encloses the level
+		 * Get a {@link R.math.Rectangle2D} which encloses this level.
+		 * @return {R.math.Rectangle2D} A {@link Rectangle2D} which encloses the level
 		 */
 		getFrame: function(){
 			if (!this.frame) {

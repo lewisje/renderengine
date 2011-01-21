@@ -43,17 +43,17 @@ R.Engine.define({
 });
 
 /**
- * @class <tt>BaseStorage</tt> is the base class of all storage objects.
+ * @class <tt>R.storage.AbstractStorage</tt> is the base class of all storage objects.
  *        Currently, The Render Engine supports three types of storage,
  *        all with the ability to export their data remotely
  *        and to import data from a remote source.
  * 
  * @param name {String} The name of the object
- * @extends PooledObject
+ * @extends R.engine.PooledObject
  * @constructor
  * @description This base class is considered abstract and should not be
- *              instantiated directly.  See {@link TransientStorage}, 
- *              {@link PersistentStorage}, or {@link IndexedStorage} for
+ *              instantiated directly.  See {@link R.storage.TransientStorage}, 
+ *              {@link R.storage.PersistentStorage}, or {@link R.storage.IndexedStorage} for
  *              implementations.
  */
 R.storage.AbstractStorage = function(){
@@ -64,9 +64,7 @@ R.storage.AbstractStorage = function(){
 		schema: null,
 		trimPath: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.base(name || "AbstractStorage");
 			this.fnv = R.lang.FNV1Hash.create();

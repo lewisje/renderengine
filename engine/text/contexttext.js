@@ -45,17 +45,15 @@ R.Engine.define({
 /**
  * @class A text renderer which draws text using the context's native
  *        text rendering mechansim.  This may not work on all platforms, in
- *        all browsers.  If not, see {@link BitmapText} as an alternative.
+ *        all browsers.  If not, see {@link R.text.BitmapText} as an alternative.
  *
  * @constructor
- * @extends AbstractTextRenderer
+ * @extends R.text.AbstractTextRenderer
  */
 R.text.ContextText = function(){
 	return R.text.AbstractTextRenderer.extend(/** @scope R.text.ContextText.prototype */{
 	
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(){
 			this.base();
 			this.tInit();
@@ -73,7 +71,7 @@ R.text.ContextText = function(){
 		},
 		
 		/**
-		 * @private
+		 * Release the text renderer back into the pool for reuse
 		 */
 		release: function(){
 			this.base();

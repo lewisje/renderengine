@@ -68,9 +68,7 @@ R.Engine.define({
 R.resources.loaders.ImageLoader = function(){
 	return R.resources.loaders.RemoteLoader.extend(/** @scope R.resources.loaders.ImageLoader.prototype */{
 	
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.base(name || "ImageLoader");
 		},
@@ -162,10 +160,10 @@ R.resources.loaders.ImageLoader = function(){
 		},
 		
 		/**
-		 * Get an {@link Image} object from the resource which represents the image, or <tt>null</tt>
+		 * Get an {@link R.resources.types.Image} object from the resource which represents the image, or <tt>null</tt>
 		 * if no such image exists.
 		 * @param name {String} The name of the image resource
-		 * @return {Image}
+		 * @return {R.resources.types.Image}
 		 */
 		getImage: function(name){
 			return R.resources.types.Image.create("Image", name, this);
@@ -174,7 +172,7 @@ R.resources.loaders.ImageLoader = function(){
 		/**
 		 * Get the specific image resource by name.
 		 * @param name {String} The name of the resource
-		 * @return {Image}
+		 * @return {R.resources.types.Image}
 		 */
 		getResourceObject: function(name){
 			return this.getImage(name);
@@ -185,7 +183,7 @@ R.resources.loaders.ImageLoader = function(){
 		 * the specified name, or <tt>null</tt> if no such image exists.
 		 *
 		 * @param name {String} The name of the image resource
-		 * @return {Point2D} A point which represents the width and height of the image
+		 * @return {R.math.Point2D} A point which represents the width and height of the image
 		 */
 		getDimensions: function(name){
 			var imgInfo = this.getCachedObjects()[name] ? this.getCachedObjects()[name].data : null;

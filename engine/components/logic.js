@@ -44,11 +44,11 @@ R.Engine.define({
  *        Logic components are in the middle of the importance scale, so they
  *        are processed after input and transformations, but before collision and
  *        rendering.  This makes them ideal for additional processing, such as the
- *        {@link HostComponent}.
+ *        {@link R.components.HostComponent}.
  *
  * @param name {String} The name of the component
  * @param [priority=1.0] {Number} The priority of the component
- * @extends BaseComponent
+ * @extends R.components.Base
  * @constructor
  * @description Creates a logic component.
  */

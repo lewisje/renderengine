@@ -3,8 +3,6 @@
  * The Render Engine
  * Engine initialization
  *
- * @fileoverview Initializes the console and engine
- *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
  * @version: $Revision$

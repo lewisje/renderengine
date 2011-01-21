@@ -42,7 +42,7 @@ R.Engine.define({
 /**
  * @class A 2D vector class with helpful manipulation methods.
  * 
- * @param x {Point2D|Number} If this arg is a Vector2D, its values will be
+ * @param x {R.math.Vector2D|Number} If this arg is a Vector2D, its values will be
  *                           copied into the new vector.  If a number,
  *                           the X length of the vector.
  * @param y {Number} The Y length of the vector.  Only required if X
@@ -63,7 +63,7 @@ R.math.Vector2D = function(){
 		
 		/**
 		 * A mutator method that normalizes this vector, returning a unit length vector.
-		 * @return {Vector2D} This vector, normalized
+		 * @return {R.math.Vector2D} This vector, normalized
 		 * @see #len
 		 */
 		normalize: function(){
@@ -82,7 +82,7 @@ R.math.Vector2D = function(){
 		
 		/**
 		 * Get the dot product of this vector and another.
-		 * @param vector {Vector2D} The Point to perform the operation against.
+		 * @param vector {R.math.Vector2D} The Point to perform the operation against.
 		 * @return {Number} The dot product
 		 */
 		dot: function(vector){
@@ -91,8 +91,8 @@ R.math.Vector2D = function(){
 		
 		/**
 		 * A mutator method that gets the cross product of this vector and another.
-		 * @param vector {Vector2D} The vector to perform the operation against.
-		 * @return {Vector2D} This vector
+		 * @param vector {R.math.Vector2D} The vector to perform the operation against.
+		 * @return {R.math.Vector2D} This vector
 		 */
 		cross: function(vector){
 			this._vec = this._vec.cross(vector._vec);
@@ -104,7 +104,7 @@ R.math.Vector2D = function(){
 		 * point is being used to represent a vector, and that the supplied point
 		 * is also a vector.
 		 *
-		 * @param vector {Vector2D} The vector to perform the angular determination against
+		 * @param vector {R.math.Vector2D} The vector to perform the angular determination against
 		 * @return {Number} The angle between two vectors, in degrees
 		 */
 		angleBetween: function(vector){
@@ -113,7 +113,7 @@ R.math.Vector2D = function(){
 		
 		/**
 		 * Returns <tt>true</tt> if this vector is parallel to <tt>vector</tt>.
-		 * @param vector {Vector2D} The vector to compare against
+		 * @param vector {R.math.Vector2D} The vector to compare against
 		 * @return {Boolean}
 		 */
 		isParallelTo: function(vector){
@@ -122,7 +122,7 @@ R.math.Vector2D = function(){
 		
 		/**
 		 * Returns <tt>true</tt> if this vector is anti-parallel to <tt>vector</tt>.
-		 * @param vector {Vector2D} The vector to compare against
+		 * @param vector {R.math.Vector2D} The vector to compare against
 		 * @return {Boolean}
 		 */
 		isAntiparallelTo: function(vector){
@@ -131,7 +131,7 @@ R.math.Vector2D = function(){
 		
 		/**
 		 * Returns <tt>true</tt> if this vector is perpendicular to <tt>vector</tt>.
-		 * @param vector {Vector2D} The vector to compare against
+		 * @param vector {R.math.Vector2D} The vector to compare against
 		 * @return {Boolean}
 		 */
 		isPerpendicularTo: function(vector){
@@ -143,8 +143,8 @@ R.math.Vector2D = function(){
 		 * the vector defined by <tt>axis</tt>.
 		 *
 		 * @param angle {Number} The rotation angle in degrees
-		 * @param axis {Vector2D} The axis to rotate about
-		 * @return {Vector2D} This vector
+		 * @param axis {R.math.Vector2D} The axis to rotate about
+		 * @return {R.math.Vector2D} This vector
 		 */
 		rotate: function(angle, axis){
 			this._vec = this._vec.rotate(R.math.Math2D.degToRad(angle), axis);
@@ -154,8 +154,8 @@ R.math.Vector2D = function(){
 		/**
 		 * Project this vector onto <tt>vector</tt>.
 		 *
-		 * @param vector {Vector2D} The vector to project onto
-		 * @return {Vector2D}
+		 * @param vector {R.math.Vector2D} The vector to project onto
+		 * @return {R.math.Vector2D}
 		 */
 		projectOnto: function(vector){
 			var proj = R.math.Vector2D.create(0, 0);
@@ -168,7 +168,7 @@ R.math.Vector2D = function(){
 		/**
 		 * Get the right-hand normal of this vector.  The left-hand
 		 * normal would simply be <tt>this.rightNormal().neg()</tt>.
-		 * @return {Vector2D}
+		 * @return {R.math.Vector2D}
 		 */
 		rightNormal: function(){
 			return R.math.Vector2D.create(-this.y, this.x).normalize();
@@ -176,14 +176,14 @@ R.math.Vector2D = function(){
 		
 		/**
 		 * Get the per-product of this vector and <tt>vector</tt>.
-		 * @param vector {Vector2D} The other vector
+		 * @param vector {R.math.Vector2D} The other vector
 		 * @return {Number}
 		 */
 		perProduct: function(vector){
 			return this.dot(vector.rightNormal());
 		}
 		
-	}, { /** @scope R.math.Vector2D.prototype */
+	}, /** @scope R.math.Vector2D.prototype */{ 
 		/**
 		 * Return the classname of the this object
 		 * @return {String} "R.math.Vector2D"
@@ -192,10 +192,13 @@ R.math.Vector2D = function(){
 			return "R.math.Vector2D";
 		},
 
+		/** @private */
 		resolved: function() {
 			R.math.Vector2D.ZERO = R.math.Vector2D.create(0, 0);
 			R.math.Vector2D.UP = R.math.Vector2D.create(0, -1);
 			R.math.Vector2D.LEFT = R.math.Vector2D.create(-1, 0);
+			R.math.Vector2D.DOWN = R.math.Vector2D.create(0, 1);
+			R.math.Vector2D.RIGHT = R.math.Vector2D.create(1, 0);
 		},
 
 		/**
@@ -206,18 +209,32 @@ R.math.Vector2D = function(){
 		ZERO:	null,
 
 		/**
-		 * The "up" vector. This vector should not be modified.
+		 * The normalized "up" vector. This vector should not be modified.
 		 * @type {R.math.Vector2D}
 		 * @memberOf R.math.Vector2D
 		 */
 		UP: null,
 
 		/**
-		 * The "left" vector. This vector should not be modified.
+		 * The normalized "left" vector. This vector should not be modified.
 		 * @type {R.math.Vector2D}
 		 * @memberOf R.math.Vector2D
 		 */
-		LEFT: null 	
+		LEFT: null,
+		
+		/**
+		 * The normalized "down" vector. This vector should not be modified.
+		 * @type {R.math.Vector2D}
+		 * @memberOf R.math.Vector2D
+		 */
+		DOWN: null,
+		
+		/**
+		 * The normalized "right" vector. This vector should not be modified.
+		 * @type {R.math.Vector2D}
+		 * @memberOf R.math.Vector2D
+		 */
+		RIGHT: null
 	});
 	
 }

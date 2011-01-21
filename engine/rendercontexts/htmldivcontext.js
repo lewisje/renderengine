@@ -54,9 +54,7 @@ R.Engine.define({
 R.rendercontexts.HTMLDivContext = function(){
 	return R.rendercontexts.HTMLElementContext.extend(/** @scope R.rendercontexts.HTMLDivContext.prototype */{
 	
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name, contextWidth, contextHeight){
 			var ctx = $("<div>").css({
 				width: contextWidth,

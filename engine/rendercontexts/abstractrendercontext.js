@@ -45,12 +45,11 @@ R.Engine.define({
  * during engine runtime.  A render context is a container of all of the objects
  * added to it so that each object is given the chance to render.  A render context
  * is logically a scene graph.  While each context can have multiple contexts associated
- * with it, the root of the scene graph is always located at {@link Engine#getDefaultContext}.
+ * with it, the root of the scene graph is always located at {@link R.Engine#getDefaultContext}.
  *
  * @param contextName {String} The name of this context.  Default: RenderContext
  * @param [surface] {HTMLElement} The surface node that all objects will be rendered to.
- * @see {CanvasContext}
- * @extends Container
+ * @extends R.struct.Container
  * @constructor
  * @description Creates a render context
  */
@@ -67,9 +66,7 @@ R.rendercontexts.AbstractRenderContext = function() {
    staticCtx: null,
 	safeRemoveList: null,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(contextName, surface) {
       this.worldScale = 1;
       this.worldPosition = R.math.Point2D.create(0, 0);
@@ -85,7 +82,7 @@ R.rendercontexts.AbstractRenderContext = function() {
    },
 
    /**
-    * @private
+    * Releases this context back into the pool for reuse
     */
    release: function() {
       this.base();
@@ -135,7 +132,7 @@ R.rendercontexts.AbstractRenderContext = function() {
    /**
     * Set the context to be static.  Setting a context to be static effectively removes 
     * it from the automatic update when the world is updated.  The user will need to call
-    * {@link render}, passing the world time (gotten with {@link Engine#worldTime})
+    * {@link #render}, passing the world time (gotten with {@link R.Engine#worldTime})
     * to manually render the context.  Any objects within the context will then render
     * to the context.
     * 
@@ -184,7 +181,7 @@ R.rendercontexts.AbstractRenderContext = function() {
    /**
     * Set the world position of the rendering context.  All objects
     * should be adjuest by this position when the context renders.
-    * @param point {Point2D} The world position
+    * @param point {R.math.Point2D} The world position
     */
    setWorldPosition: function(point) {
       this.worldPosition.set(point);
@@ -192,7 +189,7 @@ R.rendercontexts.AbstractRenderContext = function() {
 
    /**
     * Gets an array representing the rendering scale of the world.
-    * @return {Number[]} The first element is the X axis, the second is the Y axis
+    * @return {Array} The first element is the X axis, the second is the Y axis
     */
    getWorldScale: function() {
       return this.worldScale;
@@ -208,7 +205,7 @@ R.rendercontexts.AbstractRenderContext = function() {
 
    /**
     * Get the world render position.
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getWorldPosition: function() {
       return this.worldPosition;
@@ -252,7 +249,7 @@ R.rendercontexts.AbstractRenderContext = function() {
     * an <tt>afterAdd()</tt> method, it will be called after the object
     * has been added to the context.
     *
-    * @param obj {BaseObject} The object to add to the render list
+    * @param obj {R.engine.BaseObject} The object to add to the render list
     */
    add: function(obj) {
       this.base(obj);
@@ -324,6 +321,7 @@ R.rendercontexts.AbstractRenderContext = function() {
 
    /**
     * [ABSTRACT] Sort the render context's objects.
+    * @param sortFn {Function} A function to sort with, or <tt>null</tt> to use the default
     */
    sort: function(sortFn) {
 		this.base(sortFn);
@@ -334,7 +332,7 @@ R.rendercontexts.AbstractRenderContext = function() {
     * rectangle, only that portion of the world will be cleared.  If
     * you don't pass a rectangle, the entire context is cleared.
     *
-    * @param rect {Rectangle2D} The area to clear in the context, or
+    * @param rect {R.math.Rectangle2D} The area to clear in the context, or
     *             <tt>null</tt> to clear the entire context.
     */
    reset: function(rect) {
@@ -348,7 +346,7 @@ R.rendercontexts.AbstractRenderContext = function() {
     * render yourself.  This can be an effective way to handle redrawing the world
     * only as needed.
     *
-    * @param parentContext {RenderContext} A parent context, or <tt>null</tt>
+    * @param parentContext {R.rendercontexts.AbstractRenderContext} A parent context, or <tt>null</tt>
     * @param time {Number} The current render time in milliseconds from the engine.
     */
    update: function(parentContext, time)
@@ -363,7 +361,7 @@ R.rendercontexts.AbstractRenderContext = function() {
    /**
     * Called to render all of the objects to the context.
     *
-    * @param time {Number} The current render time in milliseconds from the engine.
+    * @param time {Number} The current world time in milliseconds from the engine.
     */
    render: function(time) {
 		// Push the world transform
@@ -391,7 +389,7 @@ R.rendercontexts.AbstractRenderContext = function() {
 
    /**
     * Render a single object into the world for the given time.
-    * @param obj {BaseObject} An object to render
+    * @param obj {R.engine.BaseObject} An object to render
     * @param time {Number} The world time, in milliseconds
     */
    renderObject: function(obj, time) {

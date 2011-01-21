@@ -55,7 +55,7 @@ R.lang.Timeout = function(){
 		 * Cancel this timeout timer.
 		 */
 		cancel: function(){
-			window.clearTimeout(this.getTimer());
+			R.global.clearTimeout(this.getTimer());
 			this.base();
 		},
 		
@@ -71,7 +71,7 @@ R.lang.Timeout = function(){
 		 * Restart this timeout timer
 		 */
 		restart: function(){
-			this.setTimer(window.setTimeout(this.getCallback(), this.getInterval()));
+			this.setTimer(R.global.setTimeout(this.getCallback(), this.getInterval()));
 		}
 	}, /** @scope R.lang.Timeout.prototype */ {
 		/**

@@ -67,7 +67,7 @@ R.Engine.define({
  *
  * @param name {String} The unique name of the component.
  * @param priority {Number} The priority of the component among other input components.
- * @extends InputComponent
+ * @extends R.components.Input
  * @constructor
  * @description Create a mouse input component.
  */
@@ -79,9 +79,6 @@ R.components.MouseInput = function() {
     */
    constructor: function(name, priority) {
       this.base(name, priority);
-
-		// Assign the global handlers
-		R.components.MouseInput.assignMouseHandlers();
    },
 
    /**
@@ -89,7 +86,7 @@ R.components.MouseInput = function() {
     * sets some readable flags on the host object and establishes (if not already set)
     * a mouse listener on the render context.
     *
-    * @param hostObject {HostObject} The object which hosts the component
+    * @param hostObject {R.engine.HostObject} The object which hosts the component
     * @private
     */
    setHostObject: function(hostObject) {
@@ -108,17 +105,21 @@ R.components.MouseInput = function() {
 			hostObject.MouseInputComponent_hasHandlers = true;	 	
 		}
 
+		// Assign the global handlers
+		R.components.MouseInput.assignMouseHandlers(hostObject.getRenderContext(), this);
+
    },
 
    /**
     * Perform the checks on the mouse info object, and also perform
     * intersection tests to be able to call mouse events.
-    * @private
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The render context
+    * @param time {Number} The current world time
     */
    execute: function(renderContext, time) {
       // Objects may be in motion.  If so, we need to call the mouse
       // methods for just such a case.
-      var mouseInfo = R.Engine.getDefaultContext().MouseInputComponent_mouseInfo;
+      var mouseInfo = this.getHostObject().getRenderContext().MouseInputComponent_mouseInfo;
       var bBox = this.getHostObject().getWorldBox();
       var mouseOver = false;
       if (this.getHostObject().MouseInputComponent_hasHandlers && mouseInfo && bBox) {
@@ -180,12 +181,13 @@ R.components.MouseInput = function() {
 	 * <li><code>moveVec</code> - {@link R.math.Vector2D} which represents the direction and distance
 	 * of the mouse movement</li>
 	 * </ul>
+	 * @param ctx {R.rendercontexts.AbstractRenderContext} The context to assign the handlers to
+	 * @param c {R.components.Base}
 	 */
-	assignMouseHandlers: function() {
-      // Assign handlers to the default context, making sure to only add
+	assignMouseHandlers: function(ctx, c) {
+      // Assign handlers to the context, making sure to only add
       // the handler once.  This way we don't have hundreds of mouse move
       // handlers taking up precious milliseconds.
-      var ctx = R.Engine.getDefaultContext();
       if (!ctx.MouseInputComponent_mouseInfo)
       {
          ctx.MouseInputComponent_mouseInfo = {
@@ -199,7 +201,7 @@ R.components.MouseInput = function() {
 				moveTimer: null
          };
 
-			ctx.addEvent(null, "mousemove", function(evt) {
+			ctx.addEvent(c, "mousemove", function(evt) {
             var mouseInfo = R.Engine.getDefaultContext().MouseInputComponent_mouseInfo;
 				if (mouseInfo.moveTimer != null) {
 					mouseInfo.moveTimer.destroy();
@@ -218,25 +220,19 @@ R.components.MouseInput = function() {
 				});
          });
 
-         ctx.addEvent(null, "mousedown", function(evt) {
+         ctx.addEvent(c, "mousedown", function(evt) {
             var mouseInfo = R.Engine.getDefaultContext().MouseInputComponent_mouseInfo;
             mouseInfo.button = evt.which;
 				mouseInfo.downPosition.set(evt.pageX, evt.pageY);
 				evt.preventDefault();
          });
 
-         ctx.addEvent(null, "mouseup", function(evt) {
+         ctx.addEvent(c, "mouseup", function(evt) {
             var mouseInfo = R.Engine.getDefaultContext().MouseInputComponent_mouseInfo;
             mouseInfo.button = R.engine.Events.MOUSE_NO_BUTTON;
 				mouseInfo.dragVec.set(0,0);
          });
 
-			// Clean up the events when the Engine is shutting down
-			R.Engine.onShutdown(function() {
-				ctx.removeEvent(null, "mousemove");
-				ctx.removeEvent(null, "mousedown");
-				ctx.removeEvent(null, "mouseup");
-			});
       }
 	}
 });

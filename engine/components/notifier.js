@@ -57,7 +57,7 @@ R.Engine.define({
  *
  * @param name {String} The name of the component
  * @param [priority=1.0] {Number} The priority of the component
- * @extends LogicComponent
+ * @extends R.components.Logic
  * @constructor
  * @description Create a notifier component
  */
@@ -77,7 +77,7 @@ R.components.Notifier = function() {
    },
 
 	/**
-	 * Destroy the notifier component.
+	 * Destroy the component instance
 	 */
 	destroy: function() {
 		this.hasher.destroy();

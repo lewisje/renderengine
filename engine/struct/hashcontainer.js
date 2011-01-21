@@ -80,7 +80,8 @@ R.struct.HashContainer = function(){
 		 * @return {Boolean}
 		 */
 		isInHash: function(key){
-			return (this.objHash["_" + String(key)] != null);
+			key = (key.charAt(0) === "_" ? key : "_" + String(key));
+			return (this.objHash[key] != null);
 		},
 		
 		/**
@@ -129,6 +130,7 @@ R.struct.HashContainer = function(){
 		 * not destroyed when it is removed from the container.
 		 *
 		 * @param obj {BaseObject} The object to remove from the container.
+		 * @return {Object} The object removed from the container
 		 */
 		remove: function(obj){
 			for (var o in this.objHash) {
@@ -138,7 +140,7 @@ R.struct.HashContainer = function(){
 				}
 			}
 			
-			this.base(obj);
+			return this.base(obj);
 		},
 		
 		/**
@@ -148,9 +150,10 @@ R.struct.HashContainer = function(){
 		 * @return {Object} The object removed
 		 */
 		removeHash: function(key){
-			var obj = this.objHash["_" + String(key)];
-			R.engine.Support.arrayRemove(this.objects, this.objHash["_" + String(key)]);
-			delete this.objHash["_" + String(key)];
+			key = (key.charAt(0) === "_" ? key : "_" + String(key));
+			var obj = this.objHash[key];
+			R.engine.Support.arrayRemove(this.objects, this.objHash[key]);
+			delete this.objHash[key];
 			return obj;
 		},
 		

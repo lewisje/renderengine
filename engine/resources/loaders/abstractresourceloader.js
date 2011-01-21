@@ -59,16 +59,14 @@ R.resources.loaders.AbstractResourceLoader = function() {
 
    length: 0,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(name) {
       this.base(name || "ResourceLoader");
       this.cache = {};
    },
 
    /**
-    * @private
+    * Releases the resource loader back into the pool
     */
    release: function() {
       this.base();
@@ -77,7 +75,7 @@ R.resources.loaders.AbstractResourceLoader = function() {
    },
 
    /**
-    * @private
+    * Destroy the resource loader and all cached resources.
     */
    destroy: function() {
       this.clear();

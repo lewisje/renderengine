@@ -47,7 +47,7 @@ R.Engine.define({
 
 /**
  * @class The base physical joint component which initializes physical joints
- * 		 for use in a {@link Simulation}.  
+ * 		 for use in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component
  * @param shapeDef {b2ShapeDef} The shape definition. Either {@link b2CircleDef}, {@link b2BoxDef}, or
@@ -111,6 +111,10 @@ R.components.BaseJoint = function() {
 		}
 	},
 	
+	/**
+	 * Get the simulation this joint is active within.
+	 * @return {R.physics.Simuation}
+	 */
 	getSimulation: function() {
 		return this.simulation;
 	},
@@ -133,7 +137,7 @@ R.components.BaseJoint = function() {
 
 	/**
 	 * Get the component which corresponds to body 1 of the joint.
-	 * @return {BaseBodyComponent}
+	 * @return {R.components.BaseBody}
 	 */
 	getBody1: function() {
 		return this.body1;
@@ -141,7 +145,7 @@ R.components.BaseJoint = function() {
 
 	/**
 	 * Get the component which corresponds to body 2 of the joint.
-	 * @return {BaseBodyComponent}
+	 * @return {R.components.BaseBody}
 	 */
 	getBody2: function() {
 		return this.body2;

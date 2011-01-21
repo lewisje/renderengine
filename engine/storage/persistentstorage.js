@@ -39,7 +39,7 @@ R.Engine.define({
 });
 
 /**
- * @class <tt>PersistentStorage</tt> is used to maintain data between browser
+ * @class <tt>R.storage.PersistentStorage</tt> is used to maintain data between browser
  * 	sessions.  The schema and data tables will persist in the user's browser
  * 	between restarts.  This is a good place to store configuration data,
  * 	high score tables, and other data which needs to be maintained.
@@ -48,7 +48,7 @@ R.Engine.define({
  * 	about the SQL syntax, see http://code.google.com/p/trimpath/wiki/TrimQuery
  * 
  * @param name {String} The name of the object
- * @extends BrowserStorage
+ * @extends R.storage.BrowserStorage
  * @constructor
  * @description This class of storage is used to persist data between browser sessions.
  */
@@ -57,9 +57,7 @@ R.storage.PersistentStorage = function(){
 	
 		enabled: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.enabled = R.engine.Support.sysInfo().support.storage.local;
 			AssertWarn(this.enabled, "PersistentStorage is not supported by browser - DISABLED");

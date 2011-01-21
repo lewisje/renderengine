@@ -39,7 +39,7 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of {@link Timeout} that will repeat the specified number of times before
+ * @class An extension of {@link R.lang.Timeout} that will repeat the specified number of times before
  *        destroying itself.  The callback will be triggered with the
  *        repetition number as the only argument.  Within the callback, <tt>this</tt>
  *        refers to the <tt>Timer</tt> object itself.
@@ -50,11 +50,12 @@ R.Engine.define({
  * @param callback {Function} The function to call when the interval is reached
  * @extends R.lang.Timeout
  * @constructor
- * @description Creat a multi-timeout triggering time
+ * @description Creat a multi-timeout triggering timer
  */
 R.lang.MultiTimeout = function(){
 	return R.lang.Timeout.extend(/** @scope R.lang.MultiTimeout.prototype */{
 	
+		/** @private */
 		constructor: function(name, reps, interval, callback){
 		
 			var cb = function(){

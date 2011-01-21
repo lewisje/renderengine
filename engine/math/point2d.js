@@ -43,7 +43,7 @@ R.Engine.define({
 /**
  * @class A 2D point class with helpful methods for manipulation
  *
- * @param x {Point2D|Number} If this arg is a Point2D, its values will be
+ * @param x {R.math.Point2D|Number} If this arg is a R.math.Point2D, its values will be
  *                           copied into the new point.
  * @param y {Number} The Y coordinate of the point.  Only required if X
  *                   was a number.
@@ -68,7 +68,7 @@ R.math.Point2D = function(){
 		},
 		
 		/**
-		 * Release this to the pool for reuse.
+		 * Release this point into the pool for reuse.
 		 */
 		release: function(){
 			this.base();
@@ -84,7 +84,7 @@ R.math.Point2D = function(){
 		},
 		
 		/**
-		 * Returns a simplified version of a Point2D.  The simplified version is
+		 * Returns a simplified version of a R.math.Point2D.  The simplified version is
 		 * an array with two elements: X, Y.
 		 * @return {Array}
 		 */
@@ -95,7 +95,7 @@ R.math.Point2D = function(){
 		/**
 		 * Returns <tt>true</tt> if this point is equal to the specified point.
 		 *
-		 * @param point {Point2D} The point to compare to
+		 * @param point {R.math.Point2D} The point to compare to
 		 * @return {Boolean} <tt>true</tt> if the two points are equal
 		 */
 		equals: function(point){
@@ -105,7 +105,7 @@ R.math.Point2D = function(){
 		/**
 		 * Set the position of a 2D point.
 		 *
-		 * @param x {Point2D|Number|Array} If this arg is a Point2D, its values will be
+		 * @param x {R.math.Point2D|Number|Array} If this arg is a R.math.Point2D, its values will be
 		 *                           copied into the new point.
 		 * @param y {Number} The Y coordinate of the point.  Only required if X
 		 *                   was a number.
@@ -129,6 +129,7 @@ R.math.Point2D = function(){
 		/**
 		 * Get the elements of this point as an object with elements X and Y.
 		 * @return {Object}
+		 * @deprecated
 		 */
 		get: function(){
 			return {
@@ -158,8 +159,8 @@ R.math.Point2D = function(){
 		/**
 		 * A method that mutates this point by adding the point to it.
 		 *
-		 * @param point {Point2D} A point
-		 * @return {Point2D} This point
+		 * @param point {R.math.Point2D} A point
+		 * @return {R.math.Point2D} This point
 		 */
 		add: function(point){
 			this.x += point.x;
@@ -170,7 +171,7 @@ R.math.Point2D = function(){
 		/**
 		 * A mutator method that adds the scalar value to each component of this point.
 		 * @param scalar {Number} A number
-		 * @return {Point2D} This point
+		 * @return {R.math.Point2D} This point
 		 */
 		addScalar: function(scalar){
 			this.x += scalar;
@@ -181,7 +182,7 @@ R.math.Point2D = function(){
 		/**
 		 * A mutator method that subtracts the specified point from this point.
 		 * @param point {Point2D} a point
-		 * @return {Point2D} This point
+		 * @return {R.math.Point2D} This point
 		 */
 		sub: function(point){
 			this.x -= point.x;
@@ -191,8 +192,8 @@ R.math.Point2D = function(){
 		
 		/**
 		 * A mutator method that multiplies the components of this point with another.
-		 * @param point {Point2D} A point
-		 * @return {Point2D} This point
+		 * @param point {R.math.Point2D} A point
+		 * @return {R.math.Point2D} This point
 		 */
 		convolve: function(point){
 			this.x *= point.x;
@@ -203,8 +204,8 @@ R.math.Point2D = function(){
 		/**
 		 * A mutator method that divides the components of this point by another.  The point
 		 * cannot contain zeros for its components.
-		 * @param point {Point2D} A point
-		 * @return {Point2D} This point
+		 * @param point {R.math.Point2D} A point
+		 * @return {R.math.Point2D} This point
 		 */
 		convolveInverse: function(point){
 			Assert((point.x != 0 && point.y != 0), "Division by zero in Point2D.convolveInverse");
@@ -216,7 +217,7 @@ R.math.Point2D = function(){
 		/**
 		 * A mutator methor that multiplies the components of this point by a scalar value.
 		 * @param scalar {Number} A number
-		 * @return {Point2D} This point
+		 * @return {R.math.Point2D} This point
 		 */
 		mul: function(scalar){
 			this.x *= scalar;
@@ -227,7 +228,7 @@ R.math.Point2D = function(){
 		/**
 		 * A mutator method that divides the components of this point by a scalar value.
 		 * @param scalar {Number} A number - cannot be zero
-		 * @return {Point2D} This point
+		 * @return {R.math.Point2D} This point
 		 */
 		div: function(scalar){
 			Assert((scalar != 0), "Division by zero in Point2D.divScalar");
@@ -238,7 +239,7 @@ R.math.Point2D = function(){
 		
 		/**
 		 * A mutator method that negates this point, inversing it's components.
-		 * @return {Point2D} This point
+		 * @return {R.math.Point2D} This point
 		 */
 		neg: function(){
 			this.x *= -1;
@@ -256,7 +257,7 @@ R.math.Point2D = function(){
 		
 		/**
 		 * Returns the distance between this and another point.
-		 * @param point {Point2D} The point to compare against
+		 * @param point {R.math.Point2D} The point to compare against
 		 * @return {Number} The distance between the two points
 		 */
 		dist: function(point){
@@ -265,15 +266,15 @@ R.math.Point2D = function(){
 		
 		/**
 		 * Project this point from 2 dimensions to 3 dimensions, using one of three projection
-		 * types: {@link Math2D.ISOMETRIC_PROJECTION}  <i>(default)</i>, {@link Math2D.DIMETRIC_SIDE_PROJECTION}, or
-		 * {@link Math2D.DIMETRIC_TOP_PROJECTION}.
+		 * types: {@link R.math.Math2D#ISOMETRIC_PROJECTION}  <i>(default)</i>, {@link R.math.Math2D#DIMETRIC_SIDE_PROJECTION}, or
+		 * {@link R.math.Math2D#DIMETRIC_TOP_PROJECTION}.
 		 * <p/>
 		 * Reference: http://www.compuphase.com/axometr.htm
 		 *
 		 * @param height {Number} The height of the ground.  We must use a particular height to
 		 * 		extrapolate our 3D coordinates from.  If the ground is considered level, this can remain zero.
-		 * @param projectionType {Number} One of the three projection types in {@link Math2D}
-		 * @return {Point3D} This point, projected into 3 dimensions
+		 * @param projectionType {Number} One of the three projection types in {@link R.math.Math2D}
+		 * @return {R.math.Point3D} This point, projected into 3 dimensions
 		 */
 		project: function(height, projectionType){
 			height = height || 0;
@@ -296,7 +297,7 @@ R.math.Point2D = function(){
 		/**
 		 * Mutator method which transforms this point by the specified matrix
 		 * @param matrix {Matrix} The matrix to transform this point by
-		 * @return {Point2D} This point
+		 * @return {R.math.Point2D} This point
 		 */
 		transform: function(matrix){
 			this._vec = matrix.multiply(this._vec);
@@ -311,7 +312,7 @@ R.math.Point2D = function(){
 			return Number(this.x).toFixed(2) + "," + Number(this.y).toFixed(2);
 		}
 		
-	}, { /** @scope R.math.Point2D.prototype */
+	}, /** @scope R.math.Point2D.prototype */{ 
 		/**
 		 * Return the classname of the this object
 		 * @return {String} "R.math.Point2D"
@@ -320,6 +321,7 @@ R.math.Point2D = function(){
 			return "R.math.Point2D";
 		},
 		
+		/** @private */
 		resolved: function() {
 			// Define setters and getters
 			var pp = R.math.Point2D.prototype;

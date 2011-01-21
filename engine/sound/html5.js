@@ -42,7 +42,7 @@ R.Engine.define({
  * @class Initializes the HTML5 sound system.
  *
  * @constructor
- * @extends SoundSystem
+ * @extends R.sound.AbstractSoundSystem
  */
 R.sound.HTML5 = function(){
 	return R.sound.AbstractSoundSystem.extend(/** @scope R.sound.HTML5.prototype */{
@@ -51,6 +51,7 @@ R.sound.HTML5 = function(){
 		types: null,
 		audioRoot: null,
 		
+		/** @private */
 		constructor: function(){
 			this.base();
 			try {

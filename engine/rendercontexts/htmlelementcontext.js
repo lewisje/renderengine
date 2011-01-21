@@ -41,16 +41,15 @@ R.Engine.define({
 
 /**
  * @class A wrapper for any HTML element to convert it into a targetable render context.
- *        The {@link DocumentContext} and {@link HTMLDivContext} use this as their base
+ *        The {@link R.rendercontexts.DocumentContext} and {@link R.rendercontexts.HTMLDivContext} use this as their base
  *        class.
  *
- * @extends RenderContext2D
+ * @extends R.rendercontexts.RenderContext2D
  * @constructor
  * @description Create an instance of an HTML element rendering context.  This context
  * represents any HTML element.
  * @param name {String} The name of the context
  * @param element {Number} The element which is the surface of the context.
- * @see DocumentContext
  */
 R.rendercontexts.HTMLElementContext = function(){
 	return R.rendercontexts.RenderContext2D.extend(/** @scope R.rendercontexts.HTMLElementContext.prototype */{
@@ -63,9 +62,7 @@ R.rendercontexts.HTMLElementContext = function(){
 		txfmOrigin: null,
 		txfm: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name, element){
 			this.base(name || "HTMLElementContext", element);
 			element.id = this.getId();
@@ -79,7 +76,7 @@ R.rendercontexts.HTMLElementContext = function(){
 		},
 		
 		/**
-		 * Eliminate the elements from container element.
+		 * Destroy the context and any objects within the context.
 		 */
 		destroy: function(){
 		
@@ -236,7 +233,7 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Set the current transform position (translation).
 		 *
-		 * @param point {Point2D} The translation
+		 * @param point {R.math.Point2D} The translation
 		 */
 		setPosition: function(point){
 			this.cursorPos.set(point);
@@ -318,8 +315,8 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Draw an un-filled rectangle on the context.
 		 *
-		 * @param rect {Rectangle2D} The rectangle to draw
-		 * @param ref {HostObject} A reference host object
+		 * @param rect {R.math.Rectangle2D} The rectangle to draw
+		 * @param ref {R.engine.HostObject} A reference host object
 		 */
 		drawRectangle: function(rect, ref){
 			var rD = rect.getDims();
@@ -341,8 +338,8 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Draw a filled rectangle on the context.
 		 *
-		 * @param rect {Rectangle2D} The rectangle to draw
-		 * @param ref {HostObject} A reference host object
+		 * @param rect {R.math.Rectangle2D} The rectangle to draw
+		 * @param ref {R.engine.HostObject} A reference host object
 		 */
 		drawFilledRectangle: function(rect, ref){
 			var rD = rect.getDims();
@@ -365,8 +362,8 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Draw a point on the context.
 		 *
-		 * @param point {Point2D} The position to draw the point
-		 * @param ref {HostObject} A reference host object
+		 * @param point {R.math.Point2D} The position to draw the point
+		 * @param ref {R.engine.HostObject} A reference host object
 		 */
 		drawPoint: function(point, ref){
 			this.drawFilledRectangle(R.math.Rectangle2D.create(point.x, point.y, 1, 1), ref);
@@ -375,9 +372,9 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Draw a sprite on the context.
 		 *
-		 * @param sprite {Sprite} The sprite to draw
+		 * @param sprite {R.resources.types.Sprite} The sprite to draw
 		 * @param time {Number} The current world time
-		 * @param ref {HostObject} A reference host object
+		 * @param ref {R.math.HostObject} A reference host object
 		 */
 		drawSprite: function(sprite, time, ref){
 			var f = sprite.getFrame(time);
@@ -400,12 +397,12 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Draw an image on the context.
 		 *
-		 * @param rect {Rectangle2D} The rectangle that specifies the position and
+		 * @param rect {R.math.Rectangle2D} The rectangle that specifies the position and
 		 *             dimensions of the image rectangle.
 		 * @param image {Object} The image to draw onto the context
-		 * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
+		 * @param [srcRect] {R.math.Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
 		 *                <tt>null</tt> the entire image is used
-		 * @param [ref] {HostObject} A reference host object
+		 * @param [ref] {R.engine.HostObject} A reference host object
 		 */
 		drawImage: function(rect, image, srcRect, ref){
 			var rD = rect.getDims();
@@ -438,9 +435,9 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Draw text on the context.
 		 *
-		 * @param point {Point2D} The top-left position to draw the image.
+		 * @param point {R.math.Point2D} The top-left position to draw the image.
 		 * @param text {String} The text to draw
-		 * @param ref {HostObject} A reference host object
+		 * @param ref {R.engine.HostObject} A reference host object
 		 */
 		drawText: function(point, text, ref){
 			this.base(point, text);
@@ -460,6 +457,10 @@ R.rendercontexts.HTMLElementContext = function(){
 			}
 		},
 		
+		/**
+		 * Draw an element on the context
+		 *
+		 */
 		drawElement: function(ref){
 			if (ref && ref.jQ()) {
 				// TODO: Can probably save cycles by checking for changes in the

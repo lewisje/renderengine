@@ -108,8 +108,8 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
     * Perform AAB (axis-aligned box) to AAB collision testing, returning <tt>true</tt>
     * if the two boxes overlap.
     *
-    * @param box1 {Rectangle2D} The collision box of object 1
-    * @param box2 {Rectangle2D} The collision box of object 2
+    * @param box1 {R.math.Rectangle2D} The collision box of object 1
+    * @param box2 {R.math.Rectangle2D} The collision box of object 2
     * @return {Boolean} <tt>true</tt> if the rectangles overlap
     */
    boxBoxCollision: function(box1, box2) {
@@ -120,8 +120,8 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
     * Perform point to AAB collision, returning <code>true</code>
     * if a collision occurs.
     *
-    * @param box {Rectangle2D} The collision box of the object
-    * @param point {Point2D} The point to test, in world coordinates
+    * @param box {R.math.Rectangle2D} The collision box of the object
+    * @param point {R.math.Point2D} The point to test, in world coordinates
     * @return {Boolean} <tt>true</tt> if the point is within the rectangle
     */
    boxPointCollision: function(box, point) {
@@ -131,10 +131,10 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
    /**
     * Check to see if a line intersects another
     *
-    * @param p1 {Point2D} Start of line 1
-    * @param p2 {Point2D} End of line 1
-    * @param p3 {Point2D} Start of line 2
-    * @param p4 {Point2D} End of line 2
+    * @param p1 {R.math.Point2D} Start of line 1
+    * @param p2 {R.math.Point2D} End of line 1
+    * @param p3 {R.math.Point2D} Start of line 2
+    * @param p4 {R.math.Point2D} End of line 2
     * @return {Boolean} <tt>true</tt> if the lines intersect
     */
    lineLineCollision: function(p1, p2, p3, p4) {
@@ -159,9 +159,9 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
    /**
     * Test to see if a line intersects a Rectangle.
     *
-    * @param p1 {Point2D} The start of the line
-    * @param p2 {Point2D} The end of the line
-    * @param rect {Rectangle} The box to test against
+    * @param p1 {R.math.Point2D} The start of the line
+    * @param p2 {R.math.Point2D} The end of the line
+    * @param rect {R.math.Rectangle} The box to test against
     * @return {Boolean} <tt>true</tt> if the line intersects the box
     */
    lineBoxCollision: function(p1, p2, rect) {
@@ -176,10 +176,10 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
     * A static method used to calculate a direction vector
     * from a heading angle.
     *
-    * @param origin {Point2D} The origin of the shape
-    * @param baseVec {Vector2D} The base vector
+    * @param origin {R.math.Point2D} The origin of the shape
+    * @param baseVec {R.math.Vector2D} The base vector
     * @param angle {Number} The rotation in degrees
-    * @return {Vector2D} The direction vector
+    * @return {R.math.Vector2D} The direction vector
     */
    getDirectionVector: function(origin, baseVec, angle) {
       var r = R.math.Math2D.degToRad(angle);
@@ -192,10 +192,10 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
    },
 
    /**
-    * Given a {@link Rectangle2D}, generate a random point within it.
+    * Given a {@link R.math.Rectangle2D}, generate a random point within it.
     *
-    * @param rect {Rectangle2D} The rectangle
-    * @return {Point2D} A random point within the rectangle
+    * @param rect {R.math.Rectangle2D} The rectangle
+    * @return {R.math.Point2D} A random point within the rectangle
     */
    randomPoint: function(rect) {
       var r = rect.get();
@@ -207,9 +207,9 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	 * Returns <tt>true</tt> if the <tt>point</tt> lies on the line defined by
 	 * <tt>anchor</tt> in the direction of the normalized <tt>vector</tt>.
 	 *
-	 * @param point {Point2D} The point to test
-	 * @param anchor {Point2D} The anchor of the line
-	 * @param vector {Vector2D} The normalized direction vector for the line
+	 * @param point {R.math.Point2D} The point to test
+	 * @param anchor {R.math.Point2D} The anchor of the line
+	 * @param vector {R.math.Vector2D} The normalized direction vector for the line
 	 * @return {Boolean}
 	 */
 	isPointOnLine: function(point, anchor, vector) {
@@ -222,9 +222,9 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	 * Tests if a point is Left|On|Right of an infinite line defined by
 	 * two endpoints.
 	 *
-	 * @param endPoint0 {Point2D} A point on the line
-	 * @param endPoint1 {Point2D} A second point on the line
-	 * @param testPoint {Point2D} The point to test
+	 * @param endPoint0 {R.math.Point2D} A point on the line
+	 * @param endPoint1 {R.math.Point2D} A second point on the line
+	 * @param testPoint {R.math.Point2D} The point to test
 	 * @return {Number} &lt;0 (to left), 0 (on), &gt;0 (to right)
 	 */
 	pointLeftOfLine: function(endPoint0, endPoint1, testPoint) {
@@ -242,9 +242,9 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	 * liable for any real or imagined damage resulting from its use.
 	 * Users of this code must verify correctness for their application.
 	 * 
-	 * @param pts {Array} An array of {@link Point2D} instances
+	 * @param pts {Array} An array of {@link R.math.Point2D} instances
 	 * @param k {Number} The approximation accuracy (larger = more accurate)
-	 * @return {Array} An array of {@link Point2D} which contains the 
+	 * @return {Array} An array of {@link R.math.Point2D} which contains the 
 	 * 	approximate hull of the given points
 	 */ 
 	convexHull: function(pts, k) {
@@ -390,9 +390,9 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	 * Determine the Minkowski Difference of two convex hulls.  Useful for
 	 * calculating collision response.
 	 * 
-	 * @param hullA {Array} An array of {@link Point2D}
-	 * @param hullB {Array} An array of {@link Point2D}
-	 * @return {Array} An array of {@link Point2D} which are the Minkowski Difference of
+	 * @param hullA {Array} An array of {@link R.math.Point2D}
+	 * @param hullB {Array} An array of {@link R.math.Point2D}
+	 * @return {Array} An array of {@link R.math.Point2D} which are the Minkowski Difference of
 	 * 	the two hulls.
 	 */
 	minkDiff: function(hullA, hullB) {
@@ -412,10 +412,10 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
     * based on its direction of movement.  The circle's centers should be in
     * world coordinates.
     * 
-    * @param circle {Circle2D} The first circle
-    * @param velocity {Vector2D} The first circle's velocity vector
-    * @param targetCircle {Circle2D} The second circle
-    * @return {Vector2D} The vector which keeps the two circles from overlapping, 
+    * @param circle {R.math.Circle2D} The first circle
+    * @param velocity {R.math.Vector2D} The first circle's velocity vector
+    * @param targetCircle {R.math.Circle2D} The second circle
+    * @return {R.math.Vector2D} The vector which keeps the two circles from overlapping, 
     * 	or <tt>null</tt> if they cannot overlap.
     */
    circleCircleCollision: function(circle, velocity, targetCircle) {
@@ -503,7 +503,7 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	 * with N sides.
 	 * @param sides {Number} The number of sides in the polygon, must be more than 2.
 	 * @param [radius] {Number} The radius for the polygon.  Default: 100
-	 * @return {Array} an array of {@link Point2D}
+	 * @return {Array} an array of {@link R.math.Point2D}
 	 */
 	regularPolygon: function(sides, radius) {
 		Assert(sides > 2, "Math2D.regularPolygon() must be called with sides > 2");
@@ -522,8 +522,8 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	/**
 	 * Get a point which represents the logical center of all of the
 	 * given points.
-	 * @param points {Array} An array of {@link Point2D}
-	 * @return {Point2D}
+	 * @param points {Array} An array of {@link R.math.Point2D}
+	 * @return {R.math.Point2D}
 	 */
 	getCenterOfPoints: function(points) {
 		var p = R.math.Point2D.create(0,0);
@@ -537,7 +537,7 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	/**
 	 * Transform all of the points by the given matrix.  This method
 	 * transforms all of the points in the array by mutating the points.
-	 * @param points {Array} An array of {@link Point2D}
+	 * @param points {Array} An array of {@link R.math.Point2D}
 	 * @param matrix {Matrix} The matrix to transform the points with
 	 */
 	transformPoints: function(points, matrix) {
@@ -562,7 +562,7 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	/**
 	 * Returns a matrix which can be used to translate points by
 	 * the given vector.
-	 * @param vector {Vector2D} The translation vector
+	 * @param vector {R.math.Vector2D} The translation vector
 	 * @return {Matrix}
 	 */
 	translationMatrix: function(vector) {
@@ -577,7 +577,7 @@ R.math.Math2D = {/** @scope R.math.Math2D.prototype */
 	 * Returns a matrix which can be used to rotate points by
 	 * the given angle.
 	 * @param angle {Number} The rotation, in degrees
-	 * @param [origin] {Point2D} Optional origin to rotate around
+	 * @param [origin] {R.math.Point2D} Optional origin to rotate around
 	 * @return {Matrix}
 	 */
 	rotationMatrix: function(angle, origin) {

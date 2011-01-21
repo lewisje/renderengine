@@ -53,11 +53,11 @@ R.Engine.define({
  *     this.base("Spaceroid");
  *
  *     // Add components to move and draw the asteroid
- *     this.add(Mover2DComponent.create("move"));
- *     this.add(Billboard2DComponent.create("draw", Vector2DComponent.create("vector")));
- *     this.add(ColliderComponent.create("collider", Spaceroids.collisionModel));
+ *     this.add(R.components.Mover2D.create("move"));
+ *     this.add(R.components.Billboard2D.create("draw", R.components.Vector2D.create("vector")));
+ *     this.add(R.components.Collider.create("collider", Spaceroids.collisionModel));
  *        </pre>
- *        Accessing the <tt>Vectory2DComponent</tt> within the <tt>Billboard2DComponent</tt>
+ *        Accessing the <tt>R.components.Vector2D</tt> within the <tt>R.components.Billboard2D</tt>
  *        is as simple as calling {@link #getComponent}.  If the contents of the linked
  *        component are updated, you will need to call {@link #regenerate} to recreate the
  *        billboard image.
@@ -100,7 +100,7 @@ R.components.Billboard2D = function() {
    },
 
 	/**
-	 * @private
+	 * Destroy the object
 	 */
 	destroy: function() {
 		this.renderComponent.destroy();
@@ -124,7 +124,7 @@ R.components.Billboard2D = function() {
     * so that each component can refer to its host object, the same way
     * a host object can refer to a component with {@link HostObject#getComponent}.
     *
-    * @param hostObject {HostObject} The object which hosts this component
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
     */
    setHostObject: function(hostObject) {
       this.renderComponent.setHostObject(hostObject);
@@ -143,7 +143,7 @@ R.components.Billboard2D = function() {
 
 	/**
 	 * Get the linked render component.
-	 * @return {RenderComponent}
+	 * @return {R.components.Render}
 	 */
    getComponent: function() {
       return this.renderComponent;
@@ -158,7 +158,7 @@ R.components.Billboard2D = function() {
     * all of the operations required to render the component.  This component
     * is only good if the contents don't change often.
     *
-    * @param renderContext {RenderContext} The rendering context
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {

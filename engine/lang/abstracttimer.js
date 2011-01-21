@@ -45,7 +45,7 @@ R.Engine.define({
  * @param interval {Number} The interval for the timer, in milliseconds
  * @param callback {Function} The function to call when the interval is reached
  *
- * @extends BaseObject
+ * @extends R.engine.BaseObject
  * @constructor
  * @description Create a timer object
  */
@@ -80,7 +80,7 @@ R.lang.AbstractTimer = function(){
 		},
 		
 		/**
-		 * @private
+		 * Releast the timer instance back into the pool
 		 */
 		release: function(){
 			this.base();
@@ -102,6 +102,7 @@ R.lang.AbstractTimer = function(){
 		
 		/**
 		 * Get the underlying system timer object.
+		 * @return {Object}
 		 */
 		getTimer: function(){
 			return this.timer;
@@ -202,13 +203,13 @@ R.lang.AbstractTimer = function(){
 		getInterval: function(){
 			return this.interval;
 		}
-	}, /** @scope Timer.prototype */ {
+	}, /** @scope R.lang.AbstractTimer.prototype */ {
 		/**
 		 * Get the class name of this object
-		 * @return {String} "Timer"
+		 * @return {String} "R.lang.AbstractTimer"
 		 */
 		getClassName: function(){
-			return "Timer";
+			return "R.lang.AbstractTimer";
 		}
 	});
 	

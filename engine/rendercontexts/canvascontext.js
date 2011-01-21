@@ -45,7 +45,7 @@ R.Engine.define({
  * is a 2D context which can render lines, images, and polygons.  Transformations
  * can be saved and restored, allowing for complex, stacked transformations.
  *
- * @extends RenderContext2D
+ * @extends R.rendercontexts.RenderContext2D
  * @constructor
  * @description Create a new instance of a canvas context.
  * @param name {String} The name of the context
@@ -62,9 +62,7 @@ R.rendercontexts.CanvasContext = function() {
 	dirtyBins: null,
 	firstFrame: null,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(name, width, height) {
    	// Make sure the browser supports the canvas and 2D context!
    	Assert((R.engine.Support.sysInfo().support.canvas.defined &&
@@ -91,6 +89,10 @@ R.rendercontexts.CanvasContext = function() {
 		this.firstFrame = true;
    },
 
+	/**
+	 * Called after the context is added to its parent
+	 * @private
+	 */
    afterAdd: function(parent) {
       // For FlashCanvas, check for emulation
       if (R.engine.Support.sysInfo().support.canvas.emulated) {
@@ -105,7 +107,7 @@ R.rendercontexts.CanvasContext = function() {
    },
 
    /**
-    * Releases the object back into the object pool.  See {@link PooledObject#release}
+    * Releases the context back into the object pool.  See {@link PooledObject#release}
     * for more information.
     */
    release: function() {
@@ -143,6 +145,7 @@ R.rendercontexts.CanvasContext = function() {
 
    /**
     * Gets the surface context upon which all objects are drawn.
+    * @return {Object}
     */
    get2DContext: function() {
       if (this.context2D == null) {
@@ -240,7 +243,7 @@ R.rendercontexts.CanvasContext = function() {
 	/**
 	 * Render all of the objects in a single bin, grouped by z-index.
 	 * @param bin {Number} The bin number being rendered
-	 * @param itr {Iterator} The iterator over all the objects in the bin
+	 * @param itr {R.lang.Iterator} The iterator over all the objects in the bin
     * @param time {Number} The current render time in milliseconds from the engine.
 	 */
 	renderBin: function(bin, itr, time) {
@@ -268,7 +271,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Set the current transform position (translation).
     *
-    * @param point {Point2D} The translation
+    * @param point {R.math.Point2D} The translation
     */
    setPosition: function(point) {
       this.get2DContext().translate(point.x, point.y);
@@ -302,7 +305,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Set the transformation using a matrix.
     *
-    * @param matrix {Matrix2D} The transformation matrix
+    * @param matrix {Matrix} The transformation matrix
     */
    setTransform: function(matrix) {
    },
@@ -340,7 +343,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw an un-filled rectangle on the context.
     *
-    * @param rect {Rectangle2D} The rectangle to draw
+    * @param rect {R.math.Rectangle2D} The rectangle to draw
     */
    drawRectangle: function(rect) {
       var rTL = rect.getTopLeft();
@@ -352,7 +355,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw a filled rectangle on the context.
     *
-    * @param rect {Rectangle2D} The rectangle to draw
+    * @param rect {R.math.Rectangle2D} The rectangle to draw
     */
    drawFilledRectangle: function(rect) {
       var rTL = rect.getTopLeft();
@@ -374,7 +377,7 @@ R.rendercontexts.CanvasContext = function() {
     * Draw an un-filled arc on the context.  Arcs are drawn in clockwise
     * order.
     *
-    * @param point {Point2D} The point around which the arc will be drawn
+    * @param point {R.math.Point2D} The point around which the arc will be drawn
     * @param radius {Number} The radius of the arc in pixels
     * @param startAngle {Number} The starting angle of the arc in degrees
     * @param endAngle {Number} The end angle of the arc in degrees
@@ -389,7 +392,7 @@ R.rendercontexts.CanvasContext = function() {
     * Draw a filled arc on the context.  Arcs are drawn in clockwise
     * order.
     *
-    * @param point {Point2D} The point around which the arc will be drawn
+    * @param point {R.math.Point2D} The point around which the arc will be drawn
     * @param radius {Number} The radius of the arc in pixels
     * @param startAngle {Number} The starting angle of the arc in degrees
     * @param endAngle {Number} The end angle of the arc in degrees
@@ -403,8 +406,8 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw a line on the context.
     *
-    * @param point1 {Point2D} The start of the line
-    * @param point2 {Point2D} The end of the line
+    * @param point1 {R.math.Point2D} The start of the line
+    * @param point2 {R.math.Point2D} The end of the line
     */
    drawLine: function(point1, point2) {
       this.startPath();
@@ -418,7 +421,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw a point on the context.
     *
-    * @param point {Point2D} The position to draw the point
+    * @param point {R.math.Point2D} The position to draw the point
     */
    drawPoint: function(point) {
 		if (R.Engine.options.pointAsArc) {
@@ -433,7 +436,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw a sprite on the context.
     *
-    * @param sprite {Sprite} The sprite to draw
+    * @param sprite {R.resources.types.Sprite} The sprite to draw
     * @param time {Number} The current world time
     */
    drawSprite: function(sprite, time) {
@@ -448,10 +451,10 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw an image on the context.
     *
-    * @param rect {Rectangle2D} The rectangle that specifies the position and
+    * @param rect {R.math.Rectangle2D} The rectangle that specifies the position and
     *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
-    * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
+    * @param [srcRect] {R.math.Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
     *                <tt>null</tt> the entire image is used
     */
    drawImage: function(rect, image, srcRect) {
@@ -469,8 +472,8 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Capture an image from the context.
     *
-    * @param rect {Rectangle2D} The area to capture
-    * @returns {ImageData} Image data capture
+    * @param rect {R.math.Rectangle2D} The area to capture
+    * @returns {Array} Image data capture
     */
    getImage: function(rect) {
       this.base();
@@ -506,8 +509,8 @@ R.rendercontexts.CanvasContext = function() {
     * Draw an image, captured with {@link #getImage}, to
     * the context.
     *
-    * @param imageData {ImageData} Image data captured
-    * @param point {Point2D} The poisition at which to draw the image
+    * @param imageData {Array} Image data captured
+    * @param point {R.math.Point2D} The poisition at which to draw the image
     */
    putImage: function(imageData, point) {
       var x = (point.x < 0 ? 0 : (point.x > this.getWidth() ? this.getWidth() - 1 : point.x));
@@ -521,7 +524,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw filled text on the context.
     *
-    * @param point {Point2D} The top-left position to draw the image.
+    * @param point {R.math.Point2D} The top-left position to draw the image.
     * @param text {String} The text to draw
     */
    drawText: function(point, text) {
@@ -537,7 +540,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Get a rectangle that will approximately enclose the text drawn by the render context.
     * @param text {String} The text to measure
-    * @return {Rectangle2D}
+    * @return {R.math.Rectangle2D}
     */
    getTextMetrics: function(text) {
       var rect = this.base(text);   
@@ -552,7 +555,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw stroked (outline) text on the context.
     * 
-    * @param point {Point2D}
+    * @param point {R.math.Point2D}
     * @param text {String} The text to draw
     */
    strokeText: function(point, text) {
@@ -599,7 +602,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Move the current path to the point sepcified.
     *
-    * @param point {Point2D} The point to move to
+    * @param point {R.math.Point2D} The point to move to
     */
    moveTo: function(point) {
       this.get2DContext().moveTo(point.x, point.y);
@@ -609,7 +612,7 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw a line from the current point to the point specified.
     *
-    * @param point {Point2D} The point to draw a line to
+    * @param point {R.math.Point2D} The point to draw a line to
     */
    lineTo: function(point) {
       this.get2DContext().lineTo(point.x, point.y);
@@ -619,8 +622,8 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw a quadratic curve from the current point to the specified point.
     *
-    * @param cPoint {Point2D} The control point
-    * @param point {Point2D} The point to draw to
+    * @param cPoint {R.math.Point2D} The control point
+    * @param point {R.math.Point2D} The point to draw to
     */
    quadraticCurveTo: function(cPoint, point) {
       this.get2DContext().quadraticCurveTo(cPoint.x, cPoint.y, point.x, point.y);
@@ -630,9 +633,9 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw a bezier curve from the current point to the specified point.
     *
-    * @param cPoint1 {Point2D} Control point 1
-    * @param cPoint2 {Point2D} Control point 2
-    * @param point {Point2D} The point to draw to
+    * @param cPoint1 {R.math.Point2D} Control point 1
+    * @param cPoint2 {R.math.Point2D} Control point 2
+    * @param point {R.math.Point2D} The point to draw to
     */
    bezierCurveTo: function(cPoint1, cPoint2, point) {
       this.get2DContext().bezierCurveTo(cPoint1.x, cPoint1.y, cPoint2.x, cPoint2.y, point.x, point.y);
@@ -642,8 +645,8 @@ R.rendercontexts.CanvasContext = function() {
    /**
     * Draw an arc from the current point to the specified point.
     *
-    * @param point1 {Point2D} Arc point 1
-    * @param point2 {Point2D} Arc point 2
+    * @param point1 {R.math.Point2D} Arc point 1
+    * @param point2 {R.math.Point2D} Arc point 2
     * @param radius {Number} The radius of the arc
     */
    arcTo: function(point1, point2, radius) {

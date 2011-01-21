@@ -42,7 +42,7 @@ R.Engine.define({
 
 /**
  * @class A component which responds to keyboard events and notifies
- * its {@link HostObject} by calling one of three methods.  The <tt>HostObject</tt>
+ * its {@link R.engine.HostObject} by calling one of three methods.  The <tt>R.engine.HostObject</tt>
  * should implement any of the following methods to receive the corresponding event:
  * <ul>
  * <li><tt>onKeyDown()</tt> - A key was pressed down</li>
@@ -75,20 +75,6 @@ R.components.KeyboardInput = function() {
     */
    constructor: function(name, priority) {
       this.base(name, priority);
-
-      var ctx = R.Engine.getDefaultContext();
-      var self = this;
-
-      // Add the event handlers
-      ctx.addEvent(this, "keydown", function(evt) {
-         return self._keyDownListener(evt);
-      });
-      ctx.addEvent(this, "keyup", function(evt) {
-         return self._keyUpListener(evt);
-      });
-      ctx.addEvent(this, "keypress", function(evt) {
-         return self._keyPressListener(evt);
-      });
       
       this.hasInputMethods = [false, false, false];
    },
@@ -125,20 +111,31 @@ R.components.KeyboardInput = function() {
 		this.hasInputMethods = [hostObj.onKeyDown != undefined, 
 										hostObj.onKeyUp != undefined, 
 										hostObj.onKeyPressed != undefined];
+										
+      var ctx = hostObj.getRenderContext();
+      var self = this;
+
+      // Add the event handlers
+      ctx.addEvent(this, "keydown", function(evt) {
+         return self._keyDownListener(evt);
+      });
+      ctx.addEvent(this, "keyup", function(evt) {
+         return self._keyUpListener(evt);
+      });
+      ctx.addEvent(this, "keypress", function(evt) {
+         return self._keyPressListener(evt);
+      });
+										
 	},
 
-   /**
-    * @private
-    */
+   /** @private */
    playEvent: function(e) {
       var evt = document.createEvent("KeyboardEvent");
       evt.initKeyEvent(e.type, true, false, null, e.ctrlKey, false, e.shiftKey, false, e.keyCode, 0);
       this.getHostObject().getRenderContext().getSurface().dispatchEvent(evt);
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _keyDownListener: function(eventObj) {
       if (this.hasInputMethods[0]) {
          this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
@@ -146,9 +143,7 @@ R.components.KeyboardInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _keyUpListener: function(eventObj) {
       if (this.hasInputMethods[1]) {
          this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
@@ -156,9 +151,7 @@ R.components.KeyboardInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _keyPressListener: function(eventObj) {
       if (this.hasInputMethods[2]) {
          this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
@@ -176,6 +169,7 @@ R.components.KeyboardInput = function() {
       return "R.components.KeyboardInput";
    },
    
+   /** @private */
    RECORD_PART: ["shiftKey","ctrlKey","altKey","keyCode"]
 });
 }

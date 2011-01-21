@@ -56,14 +56,15 @@ R.resources.loaders.RemoteFileLoader = function(){
 	
 		pending: null,
 		
-		/**
-		 * private
-		 */
+		/** private */
 		constructor: function(name){
 			this.base(name || "RemoteFileLoader");
 			this.pending = null;
 		},
 		
+		/**
+		 * Release the resource loader back into the pool for reuse
+		 */
 		release: function(){
 			this.base();
 			this.pending = null;
@@ -118,6 +119,9 @@ R.resources.loaders.RemoteFileLoader = function(){
 			return (r.status == R.resources.loaders.RemoteFileLoader.STATUS_OK);
 		},
 		
+		/**
+		 * Load the remote file
+		 */
 		load: function(name, remoteURL, remoteType, sync){
 			var cacheRec = null;
 			if (this.pending.url == remoteURL) {

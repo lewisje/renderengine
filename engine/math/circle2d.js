@@ -42,7 +42,13 @@ R.Engine.define({
 
 /**
  * @class A 2D circle class with helpful manipulation methods.
- * @extends PooledMathObject
+ * @extends R.math.PooledMathObject
+ * @constructor
+ * @param x {Number} The center X coordinate
+ * @param y {Number} The center Y coordinate
+ * @param radius {Number} The radius of the circle
+ * @description Create a circle object specifying the X and Y center position and
+ * 	the radius. 
  */
 R.math.Circle2D = function(){
 	return R.math.PooledMathObject.extend(/** @scope R.math.Circle2D.prototype */{
@@ -50,25 +56,24 @@ R.math.Circle2D = function(){
 		center: null,
 		radius: 0,
 		
-		/**
-		 * Create a circle object specifying the X and Y center position and
-		 * the radius.
-		 *
-		 * @param x {Number} The center X coordinate
-		 * @param y {Number} The center Y coordinate
-		 * @param radius {Number} The radius of the circle
-		 */
+		/** @private */
 		constructor: function(x, y, radius){
 			this.center = R.math.Point2D.create(0, 0);
 			this.radius = 0;
 			this.set(x, y, radius);
 		},
 		
+		/**
+		 * Destroy the instance of the circle
+		 */
 		destroy: function(){
 			this.center.destroy();
 			this.base();
 		},
 		
+		/**
+		 * Release the circle back into the pool for reuse.
+		 */
 		release: function(){
 			this.base();
 			this.center = null;
@@ -78,7 +83,7 @@ R.math.Circle2D = function(){
 		/**
 		 * Set the values of this circle.
 		 *
-		 * @param x {Number|Point2D|Circle2D} An optional value to initialize the X coordinate of the circle
+		 * @param x {Number|R.math.Point2D|R.math.Circle2D} An optional value to initialize the X coordinate of the circle
 		 * @param y {Number} An optional value to initialize the Y coordinate of the circle
 		 * @param radius {Number} An optional value to initialize the radius
 		 */
@@ -116,7 +121,7 @@ R.math.Circle2D = function(){
 		/**
 		 * Returns <tt>true</tt> if this circle is equal to the specified circle.
 		 *
-		 * @param circle {Circle2D} The circle to compare to
+		 * @param circle {R.math.Circle2D} The circle to compare to
 		 * @return {Boolean} <tt>true</tt> if the two circles are equal
 		 */
 		equals: function(circle){
@@ -128,7 +133,7 @@ R.math.Circle2D = function(){
 		 * can be either a {@link Point2D}, or the value for the X axis.  If the X axis is specified,
 		 * the second parameter should be the amount to offset in the Y axis.
 		 *
-		 * @param offsetPtOrX {Point/int} Either a {@link Point2D} which contains the offset in X and Y, or an integer
+		 * @param offsetPtOrX {R.math.Point2D|int} Either a {@link R.math.Point2D} which contains the offset in X and Y, or an integer
 		 *                                representing the offset in the X axis.
 		 * @param offsetY {int} If <code>offsetPtOrX</code> is an integer value for the offset in the X axis, this should be
 		 *                      the offset along the Y axis.
@@ -149,7 +154,7 @@ R.math.Circle2D = function(){
 		
 		/**
 		 * Get the center point of this circle.
-		 * @return {Point2D} The center point
+		 * @return {R.math.Point2D} The center point
 		 */
 		getCenter: function(){
 			return this.center;
@@ -166,7 +171,7 @@ R.math.Circle2D = function(){
 		/**
 		 * Determine if this circle intersects another circle.
 		 *
-		 * @param circle A {@link Circle2D} to compare against
+		 * @param circle A {@link R.math.Circle2D} to compare against
 		 * @return {Boolean} <tt>true</tt> if the two circles intersect.
 		 */
 		isIntersecting: function(circle){
@@ -186,7 +191,7 @@ R.math.Circle2D = function(){
 		/**
 		 * Determine if this circle is contained within the specified circle.
 		 *
-		 * @param circle {Circle} A circle to compare against
+		 * @param circle {R.math.Circle2D} A circle to compare against
 		 * @return {Boolean} <tt>true</tt> if the this circle is fully contained in the specified circle.
 		 */
 		isContained: function(circle){
@@ -197,7 +202,7 @@ R.math.Circle2D = function(){
 		/**
 		 * Determine if this circle contains the specified circle.
 		 *
-		 * @param circle {Circle} A circle to compare against
+		 * @param circle {R.math.Circle2D} A circle to compare against
 		 * @return {Boolean} <tt>true</tt> if the rectangle is fully contained within this rectangle.
 		 */
 		containsCircle: function(circle){
@@ -207,7 +212,7 @@ R.math.Circle2D = function(){
 		/**
 		 * Returns <tt>true</tt> if this circle contains the specified point.
 		 *
-		 * @param point {Point} The point to test
+		 * @param point {R.math.Point2D} The point to test
 		 * @return {Boolean} <tt>true</tt> if the point is within the circle
 		 */
 		containsPoint: function(point){
@@ -224,7 +229,7 @@ R.math.Circle2D = function(){
 			return this.center.toString() + " r" + Number(this.radius).toFixed(2);
 		}
 		
-	}, { /** @scope R.math.Circle2D.prototype */
+	}, /** @scope R.math.Circle2D.prototype */{ 
 		/**
 		 * Return the classname of the this object
 		 * @return {String} "R.math.Circle2D"

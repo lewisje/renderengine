@@ -96,7 +96,7 @@ R.components.Collider = function() {
     * so that each component can refer to its host object, the same way
     * a host object can refer to a component with {@link HostObject#getComponent}.
     *
-    * @param hostObject {HostObject} The object which hosts this component
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
 	 */
 	setHostObject: function(hostObj) {
 		this.base(hostObj);
@@ -104,8 +104,10 @@ R.components.Collider = function() {
 		this.hasCollideMethods = [hostObj.onCollide != undefined, hostObj.onCollideEnd != undefined];
 	},
 
+	// TODO: Should destroy() remove the object from the collision model??
+
    /**
-    * Releases the component back into the pool for reuse.  See {@link PooledObject#release}
+    * Releases the component back into the pool for reuse.  See {@link R.engine.PooledObject#release}
     * for more information.
     */
    release: function() {
@@ -118,10 +120,18 @@ R.components.Collider = function() {
 
    /**
     * Get the collision model being used by this component.
-    * @return {SpatialContainer} The collision model
+    * @return {R.spatial.AbstractSpatialContainer} The collision model
     */
    getCollisionModel: function() {
       return this.collisionModel;
+   },
+   
+   /**
+    * Set the collision model which the host object participates in.
+    * @param collisionModel {R.spatial.AbstractSpatialContainer} The collision model, or <tt>null</tt> for none
+    */
+   setCollisionModel: function(collisionModel) {
+   	this.collisionModel = collisionModel;
    },
 	
 	/**
@@ -149,7 +159,8 @@ R.components.Collider = function() {
 	 * @return {Number}
 	 */
 	getCollisionMask: function() {
-		return this.collisionModel.getObjectSpatialData(this.getHostObject(), "collisionMask");	
+		return this.collisionModel ? this.collisionModel.getObjectSpatialData(this.getHostObject(), "collisionMask") :
+				 							  0;	
 	},
    
    /**
@@ -170,7 +181,9 @@ R.components.Collider = function() {
 	 * @param collisionMask {Number} A 31-bit integer
 	 */
 	setCollisionMask: function(collisionMask) {
-		this.collisionModel.setObjectSpatialData(this.getHostObject(), "collisionMask", collisionMask);
+		if (this.collisionModel) {
+			this.collisionModel.setObjectSpatialData(this.getHostObject(), "collisionMask", collisionMask);
+		}
 	},
 	
    /**
@@ -201,7 +214,7 @@ R.components.Collider = function() {
 	/**
 	 * Get the collision node the host object is within, or <tt>null</tt> if it
 	 * is not within a node.
-	 * @return {SpatialNode}
+	 * @return {R.spatial.AbstractSpatialNode}
 	 */
    getSpatialNode: function() {
 		return this.collisionModel.getObjectSpatialData(this.getHostObject(), "lastNode");
@@ -223,10 +236,14 @@ R.components.Collider = function() {
     * otherwise, it should return {@link CollisionComponent#CONTINUE} to continue
     * checking objects from the PCL against the host object.
     *
-    * @param renderContext {RenderContext} The render context for the component
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The render context for the component
     * @param time {Number} The current engine time in milliseconds
     */
    execute: function(renderContext, time) {
+   
+   	if (!this.collisionModel) {
+   		return;
+   	}
 
       var host = this.getHostObject();
 
@@ -283,7 +300,7 @@ R.components.Collider = function() {
     * For <tt>ColliderComponent</tt> the collision test is up to the host object to determine.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
-    * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+    * @param collisionObj {R.engine.HostObject} The host object with which the collision potentially occurs
     * @param hostMask {Number} The collision mask for the host object
     * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
     * @return {Number} A status indicating whether to continue checking, or to stop

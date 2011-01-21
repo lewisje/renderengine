@@ -57,6 +57,7 @@ R.Engine.define({
 R.math.PooledMathObject = function(){
 	return R.engine.PooledObject.extend(/** @scope R.math.PooledMathObject.prototype */{
 	
+		/** @private */
 		constructor: function(name){
 			if (!R.Engine.options.transientMathObject) {
 				this.base(name);

@@ -73,6 +73,9 @@ R.components.Transform2D = function() {
       this.scale = [1.0,1.0];
    },
 	
+	/**
+	 * Destroy the component instance
+	 */
 	destroy: function() {
 		this.position.destroy();
 		this.worldPos.destroy();
@@ -98,7 +101,7 @@ R.components.Transform2D = function() {
    /**
     * Set the position of the transform.
     *
-    * @param point {Point2D} The position
+    * @param point {R.math.Point2D} The position
     */
    setPosition: function(point) {
       this.setLastPosition(this.getPosition());
@@ -108,7 +111,7 @@ R.components.Transform2D = function() {
 
    /**
     * Returns the position of the transformation relative to the world.
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getPosition: function() {
       return this.position;
@@ -118,7 +121,7 @@ R.components.Transform2D = function() {
     * Returns the position of the transformation relative to the viewport.  If the world is
     * comprised of multiple viewports (wide and/or tall) the render position
     * is relative to the current viewport's position.
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getRenderPosition: function() {
 		this.worldPos.set(this.getPosition());
@@ -129,7 +132,7 @@ R.components.Transform2D = function() {
    /**
     * Set the last position that the transformation was at.
     *
-    * @param point {Point2D} The last position
+    * @param point {R.math.Point2D} The last position
     */
    setLastPosition: function(point) {
       this.lastPosition.set(point);
@@ -137,7 +140,7 @@ R.components.Transform2D = function() {
 
    /**
     * Get the last position of the transformation relative to the world.
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getLastPosition: function() {
       return this.lastPosition;
@@ -145,7 +148,7 @@ R.components.Transform2D = function() {
 
    /**
     * Get the last position of the transformation relative to the viewport.
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getLastRenderPosition: function() {
       return this.lastRenderPosition;
@@ -251,9 +254,8 @@ R.components.Transform2D = function() {
     * Set the components of a transformation: position, rotation,
     * and scale, within the rendering context.
     *
-    * @param renderContext {RenderContext} The rendering context
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
-    * @param rendering {Boolean} <tt>true</tt> during the rendering phase
     */
    execute: function(renderContext, time) {
       renderContext.setPosition(this.getRenderPosition());

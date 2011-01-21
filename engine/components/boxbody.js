@@ -43,13 +43,13 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of the {@link BaseBodyComponent} which creates a rectangular
+ * @class An extension of the {@link R.components.BaseBody} which creates a rectangular
  * 		 rigid body.  
  *
  * @param name {String} Name of the component
- * @param extents {Point2D} The full extents of the body along X and Y
+ * @param extents {R.math.Point2D} The full extents of the body along X and Y
  *
- * @extends BaseBodyComponent
+ * @extends R.components.BaseBody
  * @constructor
  * @description A rectangular rigid body component.
  */
@@ -64,13 +64,13 @@ R.components.BoxBody = function() {
 	constructor: function(name, extents) {
 		this.base(name, new R.physics.collision.shapes.b2BoxDef());
 		this.extents = R.math.Point2D.create(extents);
-		var e = this.extents.get();
+		var e = this.extents;
 		this.getShapeDef().extents.Set(e.x / 2, e.y / 2);
 		this.setLocalOrigin(e.x / 2, e.y / 2);
 	},
 	
 	/**
-	 * @private
+	 * Destroy the object
 	 */
 	destroy: function() {
 		this.extents.destroy();
@@ -78,7 +78,7 @@ R.components.BoxBody = function() {
 	},
 	
 	/**
-	 * @private
+	 * Return the object to the pool.
 	 */
 	release: function() {
 		this.extents = null;
@@ -87,12 +87,12 @@ R.components.BoxBody = function() {
 	
 	/**
 	 * Get a box which bounds the body, local to the body.
-	 * @return {Rectangle2D}
+	 * @return {R.math.Rectangle2D}
 	 */
 	getBoundingBox: function() {
 		var box = this.base();
-		var p = this.getPosition().get();
-		var e = this.getExtents().get();
+		var p = this.getPosition();
+		var e = this.getExtents();
 		box.set(0, 0, e.x, e.y);
 		return box;
 	},
@@ -101,17 +101,17 @@ R.components.BoxBody = function() {
 	 * Set the extents of the box's body.  Calling this method after the
 	 * simulation of the body has started has no effect.
 	 * 
-	 * @param extents {Point2D} The extents of the body along X and Y
+	 * @param extents {R.math.Point2D} The extents of the body along X and Y
 	 */
 	setExtents: function(extents) {
 		this.extents = extents;
-		var e = extents.get();
+		var e = extents;
 		this.getShapeDef().extents.Set(e.x / 2, e.y / 2);
 	},
 	
 	/**
 	 * Get the extents of the box's body.
-	 * @return {Point2D}
+	 * @return {R.math.Point2D}
 	 */
 	getExtents: function() {
 		return this.extents;

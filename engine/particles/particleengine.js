@@ -53,7 +53,7 @@ R.Engine.define({
  *        It is possible to run multiple particle engines within a render context,
  *        but it might be non-productive to do so.
  *
- * @extends BaseObject
+ * @extends R.engine.BaseObject
  * @constructor
  * @description Create a particle engine
  */
@@ -66,9 +66,7 @@ R.particles.ParticleEngine = function() {
    maximum: 0,
    force: 0,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function() {
       this.base("ParticleEngine");
       this.particles = R.struct.Container.create();
@@ -77,7 +75,7 @@ R.particles.ParticleEngine = function() {
    },
 
    /**
-    * @private
+    * Destroy the particle engine and all contained particles
     */
    destroy: function() {
 		this.particles.cleanUp();
@@ -86,7 +84,7 @@ R.particles.ParticleEngine = function() {
    }, 
 
    /**
-    * Releases the object back into the pool.
+    * Releases the particle engine back into the pool.
     */
    release: function() {
       this.base();
@@ -99,7 +97,7 @@ R.particles.ParticleEngine = function() {
    /**
     * Add a group of particles at one time.  This reduces the number of calls
     * to {@link #addParticle} which resorts the array of particles each time.
-    * @param particles {Container} A container of particles to add at one time
+    * @param particles {Array|R.struct.Container} A container of particles to add at one time
     */
    addParticles: function(particles) {
 		if (!(particles instanceof R.struct.Container)) {
@@ -148,9 +146,9 @@ R.particles.ParticleEngine = function() {
    /**
     * Add a single particle to the engine.  If many particles are being
     * added at one time, use {@link #addParticles} instead to add a
-    * {@link Container} of particles.
+    * {@link R.struct.Container} of particles.
     *
-    * @param particle {Particle} A particle to animate
+    * @param particle {R.particles.AbstractParticle} A particle to animate
     */
    addParticle: function(particle) {
 		if (this.particles.size() < this.maximum) {
@@ -202,7 +200,7 @@ R.particles.ParticleEngine = function() {
    /**
     * Update the particles within the render context, and for the specified time.
     *
-    * @param renderContext {RenderContext} The context the particles will be rendered within.
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The context the particles will be rendered within.
     * @param time {Number} The global time within the engine.
     */
    update: function(renderContext, time) {

@@ -50,9 +50,7 @@ R.resources.loaders.XMLLoader = function(){
 	
 		objects: null,
 		
-		/**
-		 * private
-		 */
+		/** private */
 		constructor: function(name){
 			this.base(name || "XMLLoader");
 			this.objects = {};

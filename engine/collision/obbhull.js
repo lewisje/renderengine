@@ -46,13 +46,14 @@ R.Engine.define({
  *
  * @param boundingBox {Rectangle2D} The object's bounding box
  *
- * @extends ConvexHull
+ * @extends R.collision.ConvexHull
  * @constructor
  * @description Creates an Object Bounding Box hull.
  */
 R.collision.OBBHull = function(){
 	return R.collision.ConvexHull.extend(/** @scope R.collision.OBBHull.prototype */{
 	
+		/** @private */
 		constructor: function(rect){
 			var points = [R.math.Point2D.create(0, 0), R.math.Point2D.create(rect.w, 0), R.math.Point2D.create(rect.w, rect.h), R.math.Point2D.create(0, rect.h)];
 			this.base(points);

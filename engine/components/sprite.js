@@ -40,14 +40,14 @@ R.Engine.define({
 });
 
 /**
- * @class A render component that renders its contents from a {@link Sprite}.  Sprites
+ * @class A render component that renders its contents from a {@link R.resources.types.Sprite}.  Sprites
  *        are 2d graphics which are either a single frame (static) or multiple frames
  *        (dynamic).  The sprite's descriptor will define that for the component.
  *
  * @param name {String} The component name
  * @param [priority=0.1] {Number} The render priority
- * @param sprite {Sprite} The sprite to render
- * @extends RenderComponent
+ * @param sprite {R.resources.types.Sprite} The sprite to render
+ * @extends R.components.Render
  * @constructor
  * @description Create a sprite component.
  */
@@ -89,7 +89,7 @@ R.components.Sprite = function() {
    /**
     * Set the sprite the component will render.
     *
-    * @param sprite {Sprite} The sprite to render
+    * @param sprite {R.resources.types.Sprite} The sprite to render
     */
    setSprite: function(sprite) {
       this.currentSprite = sprite;
@@ -107,7 +107,7 @@ R.components.Sprite = function() {
    /**
     * Get the sprite the component is rendering.
     *
-    * @return {Sprite} A <tt>Sprite</tt> instance
+    * @return {R.resources.types.Sprite} A <tt>R.resources.types.Sprite</tt> instance
     */
    getSprite: function() {
       return this.currentSprite;
@@ -118,7 +118,7 @@ R.components.Sprite = function() {
     * sprites, will be automatically determined based on the current
     * time passed as the second argument.
     *
-    * @param renderContext {RenderContext} The context to render to
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The context to render to
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {

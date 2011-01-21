@@ -66,7 +66,7 @@ R.Engine.define({
  * @param width {Number} The width of the area
  * @param height {Number} The height of the area
  * @param divisions {Number} The number of divisions along both axis
- * @extends SpatialContainer
+ * @extends R.spatial.AbstractSpatialContainer
  */
 R.spatial.SpatialGrid = function() {
 	return R.spatial.AbstractSpatialContainer.extend(/** @scope R.spatial.SpatialGrid.prototype */{
@@ -78,9 +78,7 @@ R.spatial.SpatialGrid = function() {
    
    accuracy: 0,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(width, height, divisions) {
       this.base("SpatialGrid", width, height);
 
@@ -116,7 +114,7 @@ R.spatial.SpatialGrid = function() {
 
 
    /**
-    * Releases the object back into the object pool.  See {@link PooledObject#release}
+    * Releases the spatial grid back into the object pool.  See {@link PooledObject#release}
     * for more information.
     */
    release: function() {
@@ -128,8 +126,8 @@ R.spatial.SpatialGrid = function() {
    },
 
    /**
-    * Set the accuracy of the collision checks to either {@link SpatialGrid#GOOD_ACCURACY} or
-    * {@link SpatialGrid#BEST_ACCURACY}.
+    * Set the accuracy of the collision checks to either {@link #GOOD_ACCURACY} or
+    * {@link #BEST_ACCURACY}.
     * 
     * @param accuracy {Number} The level of accuracy during PCL generation
     */
@@ -150,8 +148,8 @@ R.spatial.SpatialGrid = function() {
    /**
     * Find the node that contains the specified point.
     *
-    * @param point {Point2D} The point to locate the node for
-    * @return {SpatialNode}
+    * @param point {R.math.Point2D} The point to locate the node for
+    * @return {R.spatial.SpatialGridNode}
     */
    findNodePoint: function(point) {
       return this.getRoot()[Math.floor(point.x * this.xLocator) + (Math.floor(point.y * this.yLocator) * this.divisions)];
@@ -192,8 +190,8 @@ R.spatial.SpatialGrid = function() {
     *  +---+---+---+
     * </pre>
     *
-    * @param point {Point2D} The point to begin the search at.
-    * @return {Container} A container of objects found that could be collision targets
+    * @param point {R.math.Point2D} The point to begin the search at.
+    * @return {R.struct.Container} A container of objects found that could be collision targets
     */
    getPCL: function(point) {
 		var pcl = this.base(point);
@@ -240,7 +238,7 @@ R.spatial.SpatialGrid = function() {
    
    /**
     * Returns all objects within every node of the spatial grid.
-    * @return {Container} A container with all objects in the spatial grid
+    * @return {R.struct.Container} A container with all objects in the spatial grid
     */
    getObjects: function() {
       var objs = this.base();

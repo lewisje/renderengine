@@ -39,7 +39,7 @@ R.Engine.define({
 });
 
 /**
- * @class <tt>TransientStorage</tt> is used to hold data that is used only
+ * @class <tt>R.storage.TransientStorage</tt> is used to hold data that is used only
  * 	while the game is active.  Transient data is an alternative to using
  * 	a lot of local variables or object structures to store the data.
  * 	<p/>
@@ -47,7 +47,7 @@ R.Engine.define({
  * 	about the SQL syntax, see http://code.google.com/p/trimpath/wiki/TrimQuery
  * 
  * @param name {String} The name of the object
- * @extends BrowserStorage
+ * @extends R.storage.BrowserStorage
  * @constructor
  * @description This class of storage is used to hold data during the current 
  * 	browser session only.
@@ -57,9 +57,7 @@ R.storage.TransientStorage = function(){
 	
 		enabled: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.enabled = R.engine.Support.sysInfo().support.storage.session;
 			AssertWarn(this.enabled, "TransientStorage is not supported by browser - DISABLED");

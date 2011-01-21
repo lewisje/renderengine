@@ -120,7 +120,7 @@ R.components.Base = function() {
     * so that each component can refer to its host object, the same way
     * a host object can refer to a component with {@link HostObject#getComponent}.
     *
-    * @param hostObject {HostObject} The object which hosts this component
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
     */
    setHostObject: function(hostObject) {
       this.host = hostObject;
@@ -131,7 +131,7 @@ R.components.Base = function() {
     * assigned to a host object, the host object will have set itself as the container
     * via {@link #setHostObject}.
     *
-    * @return {HostObject}
+    * @return {R.engine.HostObject}
     */
    getHostObject: function() {
       return this.host;
@@ -142,7 +142,7 @@ R.components.Base = function() {
     * {@link #TYPE_INPUT}, {@link #TYPE_TRANSFORM}, {@link #TYPE_LOGIC},
     * {@link #TYPE_COLLIDER}, or {@link #TYPE_RENDERING}
     *
-    * @type Number
+    * @return {Number} The component type Id
     */
    getType: function() {
       return this.type;
@@ -179,7 +179,7 @@ R.components.Base = function() {
     * method.  However, it is important to include one if you need to 
     * update the state of the component each engine cycle.
     *
-    * @param renderContext {RenderContext} The context the component will render within.
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The context the component will render within.
     * @param time {Number} The global engine time
     */
    execute: function(renderContext, time) {

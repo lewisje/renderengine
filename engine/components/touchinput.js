@@ -43,7 +43,7 @@ R.Engine.define({
 
 /**
  * @class A component which responds to touch events and notifies
- * its {@link HostObject} by calling one of four methods.  The <tt>HostObject</tt>
+ * its {@link R.engine.HostObject} by calling one of four methods.  The <tt>R.engine.HostObject</tt>
  * should implement any of the following methods to receive the corresponding event:
  * <ul>
  * <li><tt>onTouchStart()</tt> - A touch event started</li>
@@ -52,7 +52,7 @@ R.Engine.define({
  * <li><tt>onTouchCancel()</tt> - A touch event was cancelled</li>
  * </ul>
  * Each function should take up to two arguments.  The first argument is an array of
- * {@link Touch} objects which represent each touch that occurred in the event.  Some
+ * {@link R.struct.Touch} objects which represent each touch that occurred in the event.  Some
  * platforms support multi-touch, so each touch will be represented in the array.  The 
  * second argument is the actual event object itself.
  *
@@ -110,7 +110,6 @@ R.components.TouchInput = function() {
 
    /**
     * Destroy this instance and remove all references.
-    * @private
     */
    destroy: function() {
       var ctx = R.Engine.getDefaultContext();
@@ -123,6 +122,9 @@ R.components.TouchInput = function() {
       this.base();
    },
 
+	/**
+	 * Releases the component back into the object pool
+	 */
 	release: function() {
 		this.base();
 		this.hasTouchMethods = null;
@@ -134,7 +136,7 @@ R.components.TouchInput = function() {
     * so that each component can refer to its host object, the same way
     * a host object can refer to a component with {@link HostObject#getComponent}.
     *
-    * @param hostObject {HostObject} The object which hosts this component
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
 	 */
 	setHostObject: function(hostObj) {
 		this.base(hostObj);
@@ -159,36 +161,28 @@ R.components.TouchInput = function() {
       return touches;
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _touchStartListener: function(eventObj) {
       if (this.hasTouchMethods[0]) {
          return this.getHostObject().onTouchStart(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _touchEndListener: function(eventObj) {
       if (this.hasTouchMethods[1]) {
          return this.getHostObject().onTouchEnd(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _touchMoveListener: function(eventObj) {
       if (this.hasTouchMethods[2]) {
          return this.getHostObject().onTouchMove(this.processTouches(eventObj.originalEvent), eventObj);
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _touchCancelListener: function(eventObj) {
       if (this.hasTouchMethods[3]) {
          return this.getHostObject().onTouchCancel(this.processTouches(eventObj.originalEvent), eventObj);
@@ -205,6 +199,7 @@ R.components.TouchInput = function() {
       return "R.components.TouchInput";
    },
    
+   /** @private */
    RECORD_PART: ["shiftKey","ctrlKey","altKey","keyCode"]
 });
 }

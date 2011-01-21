@@ -49,7 +49,7 @@ R.Engine.define({
  * @param name {String} The name of the container
  * @param width {Number} The width of the container
  * @param height {Number} The height of the container
- * @extends BaseObject
+ * @extends R.engine.BaseObject
  * @constructor
  * @description Create a spatial container
  */
@@ -61,9 +61,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		height: 0,
 		pcl: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name, width, height){
 			this.base(name || "SpatialContainer");
 			this.width = width;
@@ -72,7 +70,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * @private
+		 * Release the spatial container back into the pool for reuse
 		 */
 		release: function(){
 			this.base();
@@ -118,8 +116,8 @@ R.spatial.AbstractSpatialContainer = function(){
 		/**
 		 * [ABSTRACT] Find the node that contains the specified point.
 		 *
-		 * @param point {Point2D} The point to locate the node for
-		 * @return {SpatialNode}
+		 * @param point {R.math.Point2D} The point to locate the node for
+		 * @return {R.spatial.AbstractSpatialNode}
 		 */
 		findNodePoint: function(point){
 			return null;
@@ -130,8 +128,8 @@ R.spatial.AbstractSpatialContainer = function(){
 		 * provided.  Adding an object at a specific point will remove it from whatever
 		 * node it was last in.
 		 *
-		 * @param obj {BaseObject} The object to add to the collision model
-		 * @param point {Point2D} The world position where the object is
+		 * @param obj {R.engine.BaseObject} The object to add to the collision model
+		 * @param point {R.math.Point2D} The world position where the object is
 		 */
 		addObject: function(obj, point){
 			// See if the object is already in a node and remove it
@@ -162,7 +160,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		 * data for <tt>key</tt> will be returned.  If the data has not yet been assigned,
 		 * an empty object will be created to contain the data.
 		 *
-		 * @param obj {BaseObject} The object which has the data
+		 * @param obj {R.engine.BaseObject} The object which has the data
 		 * @param [key] {String} Optional key which contains the data, or <tt>null</tt> for the
 		 * 	entire data model.
 		 */
@@ -178,7 +176,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		/**
 		 * Set a key, within the object's spatial data model, to a specific value.
 		 *
-		 * @param obj {BaseObject} The object to receive the data
+		 * @param obj {R.engine.BaseObject} The object to receive the data
 		 * @param key {String} The key to set the data for
 		 * @param value {Object} The value to assign to the key
 		 */
@@ -190,7 +188,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		/**
 		 * Clear all of the spatial container model data.
 		 *
-		 * @param obj {BaseObject} The object which has the data model
+		 * @param obj {R.engine.BaseObject} The object which has the data model
 		 */
 		clearObjectSpatialData: function(obj){
 			obj.setObjectDataMode(R.spatial.AbstractSpatialContainer.DATA_MODEL, null);
@@ -200,7 +198,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		 * Remove an object from the collision model.  This is done so collisions are
 		 * no longer checked against this object.
 		 *
-		 * @param obj {BaseObject} The object to remove
+		 * @param obj {R.engine.BaseObject} The object to remove
 		 */
 		removeObject: function(obj){
 			var oldNode = this.getObjectSpatialData(obj, "lastNode");
@@ -214,8 +212,8 @@ R.spatial.AbstractSpatialContainer = function(){
 		 * Returns a potential collision list of objects that are contained
 		 * within the defined sub-space of the container.
 		 *
-		 * @param point {Point2D} The point to build with
-		 * @return {Container} The PCL
+		 * @param point {R.math.Point2D} The point to build with
+		 * @return {R.struct.Container} The PCL
 		 */
 		getPCL: function(point){
 			return this.pcl;
@@ -223,7 +221,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		
 		/**
 		 * Returns all objects within the spatial container.
-		 * @return {Container} A container of all objects in the container
+		 * @return {R.struct.Container} A container of all objects in the container
 		 */
 		getObjects: function(){
 			return R.struct.Container.create();
@@ -250,9 +248,7 @@ R.spatial.AbstractSpatialContainer = function(){
 			return "R.spatial.AbstractSpatialContainer";
 		},
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		DATA_MODEL: "SpatialContainer"
 	
 	});

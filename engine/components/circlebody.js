@@ -43,7 +43,7 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of the {@link BaseBodyComponent} which creates a circular
+ * @class An extension of the {@link R.components.BaseBody} which creates a circular
  * 		 rigid body.  
  *
  * @param name {String} Name of the component
@@ -69,7 +69,7 @@ R.components.CircleBody = function() {
 	},
 	
 	/**
-	 * @private
+	 * Releases the component back into the object pool.
 	 */
 	release: function() {
 		this.base();
@@ -96,7 +96,7 @@ R.components.CircleBody = function() {
 
 	/**
 	 * Get a box which bounds the body.
-	 * @return {Rectangle2D}
+	 * @return {R.math.Rectangle2D}
 	 */
 	getBoundingBox: function() {
 		var box = this.base();
