@@ -57,7 +57,7 @@ R.debug.Metrics = Base.extend({
    /**
     * Toggle the display of the metrics window.  Any metrics
     * that are being tracked will be reported in this window.
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    toggleMetrics: function() {
       R.debug.Metrics.showMetricsWindow = !R.debug.Metrics.showMetricsWindow;
@@ -65,7 +65,7 @@ R.debug.Metrics = Base.extend({
 
    /**
     * Show the metrics window
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    showMetrics: function() {
       R.debug.Metrics.showMetricsWindow = true;
@@ -73,7 +73,7 @@ R.debug.Metrics = Base.extend({
    
    /**
     * Show a graph of the engine profile
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    showProfile: function() {
       R.debug.Metrics.showMetricsProfile = true;
@@ -81,7 +81,7 @@ R.debug.Metrics = Base.extend({
 
    /**
     * Hide the metrics window
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    hideMetrics: function() {
       R.debug.Metrics.showMetricsWindow = false;
@@ -161,7 +161,7 @@ R.debug.Metrics = Base.extend({
     * The default is for metrics to be calculated every 10 engine frames.
     *
     * @param sampleRate {Number} The number of ticks between samples
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    setSampleRate: function(sampleRate) {
       R.debug.Metrics.lastMetricSample = 1;
@@ -181,7 +181,7 @@ R.debug.Metrics = Base.extend({
     * @param value {String/Number} The value of the metric.
     * @param smoothing {Boolean} <tt>true</tt> to use 3 point average smoothing
     * @param fmt {String} The way the value should be formatted in the display (e.g. "#ms")
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    add: function(metricName, value, smoothing, fmt) {
       if (smoothing) {
@@ -205,7 +205,7 @@ R.debug.Metrics = Base.extend({
     * Remove a metric from the display
     *
     * @param metricName {String} The name of the metric to remove
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    remove: function(metricName) {
       R.debug.Metrics.metrics[metricName] = null;
@@ -215,7 +215,7 @@ R.debug.Metrics = Base.extend({
    /**
     * Updates the display of the metrics window.
     * @private
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    update: function() {
       var h = "", ctx;
@@ -248,6 +248,9 @@ R.debug.Metrics = Base.extend({
       }
    },
 
+	/**
+	 * @private
+	 */
    drawProfilePoint: function(color, val) {
       var ctx = R.debug.Metrics.profileDisplay[0].getContext('2d');
       ctx.strokeStyle = color
@@ -265,6 +268,9 @@ R.debug.Metrics = Base.extend({
       }
    },
    
+   /**
+    * @private
+    */
    moveProfiler: function() {
       var ctx = R.debug.Metrics.profileDisplay[0].getContext('2d');
       var imgData = ctx.getImageData(1,0,149,100);
@@ -277,7 +283,7 @@ R.debug.Metrics = Base.extend({
    /**
     * Run the metrics display.
     * @private
-    * @memberOf Engine
+    * @memberOf R.debug.Metrics
     */
    doMetrics: function() { 
       // Output any metrics

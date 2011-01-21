@@ -75,6 +75,9 @@ R.components.Vector2D = function() {
 		this.bBox = R.math.Rectangle2D.create(0,0,0,0);
    },
 
+	/**
+	 * Destroys the object instance
+	 */
 	destroy: function() {
 		this.bBox.destroy();
 		while (this.points.length > 0) {
@@ -131,7 +134,7 @@ R.components.Vector2D = function() {
     * Set the points which comprise the shape of the object to
     * be rendered to the context.
     *
-    * @param pointArray {Point2D[]} An array of <tt>Point2D</tt> instances
+    * @param pointArray {Array} An array of <tt>Point2D</tt> instances
     */
    setPoints: function(pointArray) {
 		var pc = [];
@@ -166,7 +169,7 @@ R.components.Vector2D = function() {
 
 	/**
 	 * Get the box which would enclose the shape
-	 * @return {Rectangle2D}
+	 * @return {R.math.Rectangle2D}
 	 */
 	getBoundingBox: function() {
 		return this.bBox;
@@ -174,7 +177,7 @@ R.components.Vector2D = function() {
 
 	/**
 	 * Get the center point from all of the points
-	 * @return {Point2D}
+	 * @return {R.math.Point2D}
 	 */ 
 	getCenter: function() {
 		return R.math.Math2D.getCenterOfPoints(this.points);
@@ -184,7 +187,7 @@ R.components.Vector2D = function() {
 	 * Get a convex hull that would enclose the points.  The the LOD isn't
 	 * specified, it will be assumed to be 4.
 	 * @param [lod] {Number} The level of detail for the hull.
-	 * @return {ConvexHull} A convex hull
+	 * @return {R.collision.ConvexHull} A convex hull
 	 */
 	getConvexHull: function(lod) {
 		return R.collision.ConvexHull.create(this.points, lod || this.points.length - 1);
@@ -192,7 +195,7 @@ R.components.Vector2D = function() {
 	
 	/**
 	 * Get an Object Bounding Box (OBB) convex hull.
-	 * @return {OBBHull} A convex hull
+	 * @return {R.collision.OBBHull} A convex hull
 	 */
 	getOBBHull: function() {
 		return R.collision.OBBHull.create(this.getBoundingBox());
@@ -201,7 +204,7 @@ R.components.Vector2D = function() {
 	/**
 	 * Get a circular convex hull which encloses the points.
 	 * @param radiusPct {Number} A percentage of the calculated radius of the points, or <tt>null</tt>
-	 * @return {CircleHull} A convex hull
+	 * @return {R.collision.CircleHull} A convex hull
 	 */
 	getCircleHull: function(radiusPct) {
 		return R.collision.CircleHull.create(this.points, radiusPct);
@@ -276,7 +279,7 @@ R.components.Vector2D = function() {
     * Draw the shape, defined by the points, to the rendering context
     * using the specified line style and fill style.
     *
-    * @param renderContext {RenderContext} The context to render to
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The context to render to
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {

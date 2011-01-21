@@ -141,7 +141,6 @@ R.components.WiimoteInput = function() {
 
    /**
     * Destroy this instance and remove all references.
-    * @private
     */
    destroy: function() {
       var ctx = R.Engine.getDefaultContext();
@@ -161,9 +160,9 @@ R.components.WiimoteInput = function() {
     * Establishes the link between this component and its host object.
     * When you assign components to a host object, it will call this method
     * so that each component can refer to its host object, the same way
-    * a host object can refer to a component with {@link HostObject#getComponent}.
+    * a host object can refer to a component with {@link R.engine.HostObject#getComponent}.
     *
-    * @param hostObject {HostObject} The object which hosts this component
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
 	 */
 	setHostObject: function(hostObj) {
 		this.base(hostObj);
@@ -188,30 +187,22 @@ R.components.WiimoteInput = function() {
 	},
 
 
-   /**
-    * @private
-    */
+   /** @private */
    _mouseDownListener: function(evt) {
       this._wmButtonA(evt, 0, true);   
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _mouseUpListener: function(evt) {
       this._wmButtonA(evt, 0, false);  
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _mouseMoveListener: function(evt) {
       this._wmPosition(0, evt.pageX, evt.pageY, evt.screenX, evt.screenY);
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _keyDownListener: function(event) {
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
@@ -257,9 +248,7 @@ R.components.WiimoteInput = function() {
       this.base(event);
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _keyUpListener: function(event) {
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
@@ -368,9 +357,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmLeft: function(evt, controllerNum, pressed) {
       if (this.hasMethods[0])
       {
@@ -378,9 +365,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmRight: function(evt, controllerNum, pressed) {
       if (this.hasMethods[1])
       {
@@ -388,9 +373,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmUp: function(evt, controllerNum, pressed) {
       if (this.hasMethods[2])
       {
@@ -398,9 +381,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmDown: function(evt, controllerNum, pressed) {
       if (this.hasMethods[3])
       {
@@ -408,9 +389,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmPlus: function(evt, controllerNum, pressed) {
       if (this.hasMethods[4])
       {
@@ -418,9 +397,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmMinus: function(evt, controllerNum, pressed) {
       if (this.hasMethods[5])
       {
@@ -428,9 +405,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmButton1: function(evt, controllerNum, pressed) {
       if (this.hasMethods[6])
       {
@@ -438,9 +413,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmButton2: function(evt, controllerNum, pressed) {
       if (this.hasMethods[7])
       {
@@ -448,9 +421,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmButtonA: function(evt, controllerNum, pressed) {
       if (this.hasMethods[8])
       {
@@ -458,9 +429,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmButtonB: function(evt, controllerNum, pressed) {
       if (this.hasMethods[9])
       {
@@ -468,9 +437,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmButtonC: function(evt, controllerNum, pressed) {
       if (this.hasMethods[10])
       {
@@ -478,9 +445,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmButtonZ: function(evt, controllerNum, pressed) {
       if (this.hasMethods[11])
       {
@@ -488,9 +453,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmEnabled: function(controllerNum, state) {
       // Store the Wiimote enabled state
       this.enabledRemotes[controllerNum] = state;
@@ -500,9 +463,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmDistance: function(c, d) {
       if (this.hasMethods[13])
       {
@@ -510,9 +471,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmValidity: function(c, v) {
       if (this.remoteValid[c] != v) {
          this.remoteValid[c] = v;
@@ -523,9 +482,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmPosition: function(c, sx, sy, x, y) {
       if (this.hasMethods[15]) {
          this.getHostObject().onWiimoteOffscreen(c, (!sx || !sy));
@@ -537,9 +494,7 @@ R.components.WiimoteInput = function() {
       }
    },
 
-   /**
-    * @private
-    */
+   /** @private */
    _wmRoll: function(c, x, y, z) {
       if (this.hasMethods[17])
       {

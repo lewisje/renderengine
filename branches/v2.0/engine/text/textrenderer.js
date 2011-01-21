@@ -55,9 +55,9 @@ R.Engine.define({
  * @param renderer {AbstractTextRenderer} The text renderer to use
  * @param text {String} The text to render
  * @param size {Number} The size of the text to render
- * @see VectorText
- * @see BitmapText
- * @see ContextText
+ * @see R.text.VectorText
+ * @see R.text.BitmapText
+ * @see R.text.ContextText
  */
 R.text.TextRenderer = function() {
 	return R.engine.Object2D.extend(/** @scope R.text.TextRenderer.prototype */{
@@ -66,9 +66,7 @@ R.text.TextRenderer = function() {
    
    renderer: null,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(renderer, text, size) {
 
       Assert((R.text.AbstractTextRenderer.isInstance(renderer)), "Text renderer must extend AbstractTextRenderer");
@@ -91,7 +89,7 @@ R.text.TextRenderer = function() {
    },
 
    /**
-    * @private
+    * Release the text renderer back into the pool for reuse
     */
    release: function() {
       this.base();
@@ -102,7 +100,7 @@ R.text.TextRenderer = function() {
    /**
     * Called to render the text to the context.
     *
-    * @param renderContext {RenderContext} The context to render the text upon
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The context to render the text into
     * @param time {Number} The engine time in milliseconds
     */
    update: function(renderContext, time) {
@@ -226,7 +224,7 @@ R.text.TextRenderer = function() {
 
    /**
     * Get the position where the text will render.
-    * @return {Point2D} The position of the text
+    * @return {R.math.Point2D} The position of the text
     */
    getPosition: function() {
       return this.getComponent("transform").getPosition();
@@ -235,7 +233,7 @@ R.text.TextRenderer = function() {
    /**
     * Set the position where the text will render.
     *
-    * @param point {Point2D} The position to render the text
+    * @param point {R.math.Point2D} The position to render the text
     */
    setPosition: function(point) {
       this.getComponent("transform").setPosition(point);
@@ -326,19 +324,19 @@ R.text.TextRenderer = function() {
 
    /**
     * Draw the text to the context.
-    * @type Number
+    * @type {Number}
     */
    DRAW_TEXT: 0,
 
    /**
     * Don't draw the text to the context.
-    * @type Number
+    * @type {Number}
     */
    NO_DRAW: 1,
    
    /**
     * The size of a text element, in pixels
-    * @type Number
+    * @type {Number}
     */
    BASE_TEXT_PIXELSIZE: 12
 });

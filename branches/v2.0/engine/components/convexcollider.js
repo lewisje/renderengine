@@ -49,11 +49,11 @@ R.Engine.define({
 /**
  * @class An extension of the {@link ColliderComponent} which will check the
  *        object's convex collision hulls using the Separating Axis Theorm (SAT).  Each object must
- *        have a collision hull assigned to it with {@link Object2D#setCollisionHull}.
+ *        have a collision hull assigned to it with {@link R.engine.Object2D#setCollisionHull}.
  *        <p/>
  *        The SAT states that, if an axis can be found where the two object's hull
  *        don't overlap, then the two objects cannot be colliding.  When a collision
- *        is determined, querying {@link #getImpulseVector} will return a {@link Vector2D}
+ *        is determined, querying {@link #getImpulseVector} will return a {@link R.math.Vector2D}
  *        which can be used to separate the first object from the second.  Negating the
  *        vector, you can apply it to the target object instead.
  *        <p/>
@@ -61,10 +61,10 @@ R.Engine.define({
  *        bounciness and friction.
  *
  * @param name {String} Name of the component
- * @param collisionModel {SpatialCollection} The collision model
+ * @param collisionModel {R.spatial.AbstractSpatialContainer} The collision model
  * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
  *
- * @extends ColliderComponent
+ * @extends R.components.Collider
  * @constructor
  * @description Creates a collider component for SAT collision testing.  Each object's
  *              collision will be determined using its convex collision hull.
@@ -83,7 +83,7 @@ R.components.ConvexCollider = function() {
 	},
 	
 	/**
-	 * Destroy the collider component.
+	 * Destroy the component instance.
 	 */
 	destroy: function() {
 		if (this.cData != null) {
@@ -106,7 +106,7 @@ R.components.ConvexCollider = function() {
     * and target masks.  The return value should either tell the collision tests to continue or stop.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
-    * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+    * @param collisionObj {R.engine.HostObject} The host object with which the collision potentially occurs
     * @param hostMask {Number} The collision mask for the host object
     * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
     * @return {Number} A status indicating whether to continue checking, or to stop
@@ -147,7 +147,7 @@ R.components.ConvexCollider = function() {
 	
 	/**
 	 * Returns the collision data object.
-	 * @return {R.collision.CollisionData}
+	 * @return {R.struct.CollisionData}
 	 */
 	getCollisionData: function() {
 		return this.cData;
@@ -172,7 +172,7 @@ R.components.ConvexCollider = function() {
 	}
    /* pragma:DEBUG_END */
 
-}, { /** @scope R.components.ConvexCollider.prototype */
+}, /** @scope R.components.ConvexCollider.prototype */{ 
 
    /**
     * Get the class name of this object
@@ -187,14 +187,14 @@ R.components.ConvexCollider = function() {
 	 * Each shape is either a convex hull or a circle (AABB or box is considered a polygon).
 	 * If a collision is observed, the method will return a repulsion vector for the first
 	 * shape to not collide with the second shape.  If no collision is determined, the
-	 * repulsion vector will be {@link Vector2D#ZERO}.
+	 * repulsion vector will be {@link R.math.Vector2D#ZERO}.
 	 * <p/>
 	 * The resulting tests used by this component can be found at:<br/>
 	 * http://rocketmandevelopment.com/2010/05/19/separation-of-axis-theorem-for-collision-detection/
 	 *  
-	 * @param shape1 {ConvexHull}
-	 * @param shape2 {ConvexHull}
-	 * @return {Vector2D}
+	 * @param shape1 {R.collision.ConvexHull}
+	 * @param shape2 {R.collision.ConvexHull}
+	 * @return {R.math.Vector2D}
 	 */
 	test: function(shape1, shape2) {
 		Assert(shape1 != null && shape2 != null, "R.components.ConvexCollider failed with: Object has no collision hull!");

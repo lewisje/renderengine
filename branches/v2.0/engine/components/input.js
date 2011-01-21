@@ -40,7 +40,7 @@ R.Engine.define({
 
 /**
  * @class A component which can read an input device and make those inputs
- *        available to a {@link HostObject}.
+ *        available to a {@link R.engine.HostObject}.
  *
  * @param name {String} The name of the component
  * @param [priority=1.0] {Number} The component's priority
@@ -56,18 +56,14 @@ R.components.Input = function() {
    script: null,
    lastInputTime: 0,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(name, priority) {
       this.base(name, R.components.Base.TYPE_INPUT, priority || 1.0);
       this.recording = false;
       this.playback = false;
    },
    
-   /**
-    * @private
-    */
+   /** @private */
    startRecording: function() {
       R.debug.Console.debug("RECORDING INPUT");
       this.recording = true;
@@ -75,38 +71,28 @@ R.components.Input = function() {
       this.script = [];
    },
    
-   /**
-    * @private
-    */
+   /** @private */
    stopRecording: function() {
       R.debug.Console.debug("RECORDING STOPPED");
       this.recording = false;
    },
    
-   /**
-    * @private
-    */
+   /** @private */
    getScript: function() {
       return this.script;
    },
    
-   /**
-    * @private
-    */
+   /** @private */
    setScript: function(script) {
       this.script = script;
    },
    
-   /**
-    * @private
-    */
+   /** @private */
    playEvent: function() {
       // ABSTRACT 
    },
    
-   /**
-    * @private
-    */
+   /** @private */
    playScript: function(script) {
       this.recording = false;
       this.playback = true;
@@ -130,9 +116,7 @@ R.components.Input = function() {
       popCall();
    },
    
-   /**
-    * @private
-    */
+   /** @private */
    record: function(eventObj,parts) {
       if (!this.recording) {
          return;

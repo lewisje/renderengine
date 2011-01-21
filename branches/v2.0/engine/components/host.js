@@ -44,14 +44,14 @@ R.Engine.define({
 /**
  * @class A component that can execute host objects.  Allows embedding
  *        of multiple objects into one object.  This is logically
- *        a method to embed further {@link HostObject HostObjects} within
- *        an existing <tt>HostObject</tt>.
+ *        a method to embed further {@link R.engine.HostObject HostObjects} within
+ *        an existing <tt>R.engine.HostObject</tt>.
  *
  * @param name {String} The name of the component
  * @param [priority=1.0] {Number} The priority of this component
  * @extends LogicComponent
  * @constructor
- * @description Creates a <tt>HostComponent</tt> which can contain {@link HostObject HostObjects}.
+ * @description Creates a <tt>R.components.Host</tt> which can contain {@link R.engine.HostObject HostObjects}.
  *              This allows a component to embed other hosts within it.  Each time the
  *              component is executed, each host will be given a chance to update as well.
  */
@@ -79,7 +79,6 @@ R.components.Host = function() {
 
    /**
     * Destroys all of the hosts contained within this component.
-    * @private
     */
    destroy: function() {
       this.objects.destroy();
@@ -87,12 +86,12 @@ R.components.Host = function() {
    },
 
    /**
-    * Add a {@link HostObject} to the component to be processed when
+    * Add a {@link R.engine.HostObject} to the component to be processed when
     * this component is executed.  Objects will be updated in the order in
     * which they are added.
     *
     * @param name {String} A unique name to refer to the object by
-    * @param obj {HostObject} The host object reference
+    * @param obj {R.engine.HostObject} The host object reference
     */
    add: function(name, obj) {
       Assert((obj instanceof R.engine.HostObject), "You can only add HostObjects to a HostComponent");
@@ -100,11 +99,11 @@ R.components.Host = function() {
    },
 
    /**
-    * Retrieve the {@link HostObject} that is associated with the
+    * Retrieve the {@link R.engine.HostObject} that is associated with the
     * given name from the component.
     *
     * @param name {String} The unique name of the object
-    * @return {HostObject}
+    * @return {R.engine.HostObject}
     */
    get: function(name) {
       return this.objects.get(name.toUpperCase());
@@ -113,8 +112,8 @@ R.components.Host = function() {
    /**
     * Remove the host object from the component.
     *
-    * @param obj {HostObject} The host object reference
-    * @return {HostObject} The object which was removed
+    * @param obj {R.engine.HostObject} The host object reference
+    * @return {R.engine.HostObject} The object which was removed
     */
    remove: function(obj) {
       return this.objects.remove(obj);
@@ -125,7 +124,7 @@ R.components.Host = function() {
     * in which hosts are updated is equivalent to the order in which
     * the objects were added.
     *
-    * @param renderContext {RenderContext} The rendering context
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The rendering context
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {

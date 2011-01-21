@@ -47,7 +47,7 @@ R.Engine.define({
  * @param spriteObj {Object} Passed in by a {@link SpriteLoader}.  An array which defines the
  *                  sprite frame, and parameters.
  * @param spriteResource {Object} The sprite resource loaded by the {@link SpriteLoader}
- * @extends PooledObject
+ * @extends R.engine.PooledObject
  */
 R.resources.types.Sprite = function() {
 	return R.engine.PooledObject.extend(/** @scope R.resources.types.Sprite.prototype */{
@@ -82,9 +82,7 @@ R.resources.types.Sprite = function() {
 	resource: null,
 	loader: null,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(name, spriteObj, spriteResource, fileVersion, spriteLoader) {
       this.base(name);
 		this.finished = false;
@@ -129,7 +127,7 @@ R.resources.types.Sprite = function() {
    },
 
 	/**
-	 * @private
+	 * Destroy the sprite instance
 	 */
 	destroy: function() {
 		this.bbox.destroy();
@@ -138,7 +136,7 @@ R.resources.types.Sprite = function() {
 	},
 
    /**
-    * @private
+    * Release the sprite back into the pool for reuse
     */
    release: function() {
       this.base();
@@ -163,7 +161,7 @@ R.resources.types.Sprite = function() {
 
 	/**
 	 * Get the sprite loader this sprite originated from
-	 * @return {SpriteLoader}
+	 * @return {R.resources.loaders.SpriteLoader}
 	 */
 	getSpriteLoader: function() {
 		return this.loader;
@@ -232,7 +230,7 @@ R.resources.types.Sprite = function() {
 
    /**
     * Get the bounding box for the sprite.
-    * @return {Rectangle2D} The bounding box which contains the entire sprite
+    * @return {R.math.Rectangle2D} The bounding box which contains the entire sprite
     */
    getBoundingBox: function() {
       return this.bbox;
@@ -243,7 +241,7 @@ R.resources.types.Sprite = function() {
     * portion of the image map the sprite frame occupies, given the specified time.
     *
     * @param time {Number} Current world time (can be obtained with {@link Engine#worldTime}
-    * @return {Rectangle2D} A rectangle which defines the frame of the sprite in
+    * @return {R.math.Rectangle2D} A rectangle which defines the frame of the sprite in
     *         the source image map.
     */
    getFrame: function(time) {
@@ -376,28 +374,28 @@ R.resources.types.Sprite = function() {
    },
 
    /** The sprite animation loops
-    * @type Number
+    * @type {Number}
     */
    MODE_LOOP: 0,
 
    /** The sprite animation toggles - Plays from the first to the last frame
     *  then plays backwards to the first frame and repeats.
-    * @type Number
+    * @type {Number}
     */
    MODE_TOGGLE: 1,
    
    /** The sprite animation plays once from the beginning then stops at the last frame
-    * @type Number
+    * @type {Number}
     */
    MODE_ONCE: 2,
 
    /** The sprite is a single frame
-    * @type Number
+    * @type {Number}
     */
    TYPE_SINGLE: 0,
 
    /** The sprite is an animation
-    * @type Number
+    * @type {Number}
     */
    TYPE_ANIMATION: 1,
 

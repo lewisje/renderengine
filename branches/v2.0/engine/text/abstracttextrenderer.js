@@ -61,9 +61,7 @@ R.text.AbstractTextRenderer = function() {
    style: null,
 	lineSpacing: 7,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(componentName, priority) {
       this.base(componentName || "TextRenderObject", R.components.Base.TYPE_RENDERING, priority || 0.1);
 

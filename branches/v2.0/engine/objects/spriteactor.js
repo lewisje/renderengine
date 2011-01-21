@@ -60,9 +60,11 @@ R.objects.SpriteActor = function(){
 		sprite: null,
 		actorId: null,
 		collisionMask: null,
+		collidable: null,
 		scriptedActions: null,
 		scriptedVars: null,
 		
+		/** @private */
 		constructor: function(name){
 			this.base(name || "Actor");
 			
@@ -73,10 +75,11 @@ R.objects.SpriteActor = function(){
 			this.scriptedActions = {};
 			this.scriptedVars = {};
 			
+			this.collidable = false;
+			
 			// Add components to move and draw the player
 			this.add(R.components.Sprite.create("draw"));
 			this.add(R.components.Transform2D.create("move"));
-			//this.add(R.components.ConvexCollider.create("collide"));
 		},
 		
 		/**
@@ -105,6 +108,10 @@ R.objects.SpriteActor = function(){
 			this.scriptedVars = null;
 		},
 		
+		/**
+		 * Get a properties object for this sprite actor
+		 * @return {Object}
+		 */
 		getProperties: function(){
 			var self = this;
 			var prop = this.base(self);
@@ -113,22 +120,42 @@ R.objects.SpriteActor = function(){
 							  !R.isUndefined(LevelEditor) ? { "multi": true, 
 							  											 "opts": LevelEditor.getSpriteOptions,
 																		 "fn": function(s) { self.setSprite(LevelEditor.getSpriteForName(s)); }} : null, 
-							  !R.isUndefined(LevelEditor) ? true : false ]
+							  !R.isUndefined(LevelEditor) ? true : false ],
+				"Collidable": [ function() { return self.isCollidable(); },
+									 !R.isUndefined(LevelEditor) ? { "toggle": true,
+									 											"fn": function(s) { self.setCollidable(s); }} : null,
+									 !R.isUndefined(LevelEditor) ? true : false ]
 			});
 		},
 
+		/**
+		 * Set the actor's Id which can be looked up with {@link R.objects.SpriteActor#findActor}
+		 * @param actorId {String} A unique Id to reference this object
+		 */
 		setActorId: function(actorId) {
 			this.actorId = actorId;
 		},
 		
+		/**
+		 * Get the actor's unique Id which references this object
+		 * @return {String}
+		 */
 		getActorId: function() {
 			return this.actorId;
 		},
 		
+		/**
+		 * Set the collision bitmask for this object
+		 * @param collisionMask {String} A binary string of ones and zeros
+		 */
 		setCollisionMask: function(collisionMask) {
 			this.collisionMask = collisionMask;
 		},
 		
+		/**
+		 * Get the collision bitmask for this object
+		 * @return {String}
+		 */
 		getCollisionMask: function() {
 			return this.collisionMask;
 		},
@@ -156,7 +183,8 @@ R.objects.SpriteActor = function(){
 		 * Calls a scripted event.  If the event handler hasn't been compiled yet, it
 		 * will be compiled and then called in the scope of this actor.
 		 * @param eventName {String} The name of the event to call
-		 * @param args {Array} An array of arguments to pass to the event handler
+		 * @param argNames {Array} An array of argument names to map the arguments array to (1:1)
+		 * @param args {Array} The array of arguments to pass to the event handler
 		 * @private
 		 */
 		callScriptedEvent: function(eventName, argNames, args) {
@@ -182,8 +210,8 @@ R.objects.SpriteActor = function(){
 		
 		/**
 		 * Get the value of the specified variable.
-		 * @param {Object} varName
-		 * @return {Object}
+		 * @param varName {String}
+		 * @return {Object} The value of the variable
 		 */
 		getVariable: function(varName) {
 			return this.scriptedVar[varName];
@@ -191,8 +219,8 @@ R.objects.SpriteActor = function(){
 		
 		/**
 		 * Set the value of the specified variable.
-		 * @param {Object} varName
-		 * @param {Object} value
+		 * @param varName {String} The name of the variable
+		 * @param value {Object} The value to assign to the variable
 		 */
 		setVariable: function(varName, value) {
 			this.scriptedVar[varName] = value;	
@@ -238,7 +266,7 @@ R.objects.SpriteActor = function(){
 		 * object.  If the player is thrusting, draw the thrust flame
 		 * under the ship.
 		 *
-		 * @param renderContext {RenderContext} The rendering context
+		 * @param renderContext {R.rendercontexts.AbstractRenderContext} The rendering context
 		 * @param time {Number} The engine time in milliseconds
 		 */
 		update: function(renderContext, time){
@@ -263,6 +291,33 @@ R.objects.SpriteActor = function(){
 			renderContext.popTransform();
 		},
 		
+		/**
+		 * Set a flag which will determine if the actor will collide with anything
+		 * @param state {Boolean} <tt>true</tt> to collide with other objects
+		 */
+		setCollidable: function(state) {
+			this.collidable = state;
+			if (state) {
+				// Add the collision component
+				this.add(R.components.ConvexCollider.create("collide"), null);
+			} else if (this.getComponent("collide") != null) {
+				// Remove the collision component
+				this.remove("collide").destroy();
+			}
+		},
+		
+		/**
+		 * Returns <tt>true</tt> if the actor can be collided with
+		 * @return {Boolean}
+		 */
+		isCollidable: function() {
+			return this.collidable;
+		},
+		
+		/**
+		 * Set the sprite which represents this actor
+		 * @param sprite {R.resources.types.Sprite} The sprite
+		 */
 		setSprite: function(sprite){
 			this.sprite = sprite;
 			this.setBoundingBox(sprite.getBoundingBox());
@@ -272,65 +327,114 @@ R.objects.SpriteActor = function(){
 			this.setCollisionHull(R.collision.OBBHull.create(sprite.getBoundingBox()));
 		},
 		
+		/**
+		 * Get the sprite which represents this actor
+		 * @return {R.resources.types.Sprite}
+		 */
 		getSprite: function(){
 			return this.sprite;
 		},
 		
 		/**
 		 * Get the position of the ship from the mover component.
-		 * @type Point2D
+		 * @return {R.math.Point2D}
 		 */
 		getPosition: function(){
 			return this.getComponent("move").getPosition();
 		},
 		
+		/**
+		 * Get the rendering position (world position) of the object
+		 * @return {R.math.Point2D}
+		 */
 		getRenderPosition: function(){
 			return this.getComponent("move").getRenderPosition();
 		},
 		
 		/**
-		 * Set, or initialize, the position of the mover component
-		 *
-		 * @param point {Point2D} The position to draw the ship in the playfield
+		 * Set the position of the mover component
+		 * @param point {R.math.Point2D} The position to draw the object in the playfield
 		 */
 		setPosition: function(point){
 			this.base(point);
 			this.getComponent("move").setPosition(point);
 		},
 		
+		/**
+		 * Get the uniform scale for the object
+		 * @return {Number}
+		 */
 		getScale: function(){
 			return this.getComponent("move").getScale();
 		},
 		
+		/**
+		 * Get the X scale for the object
+		 * @return {Number}
+		 */
 		getScaleX: function(){
 			return this.getComponent("move").getScaleX();
 		},
 		
+		/**
+		 * Get the Y scale for the object
+		 * @return {Number}
+		 */
 		getScaleY: function(){
 			return this.getComponent("move").getScaleY();
 		},
 		
+		/**
+		 * Set the scale for the object
+		 * @param x {Number} The X scale for the object, or if no <tt>y</tt> is provided, the uniform
+		 *		scale of the object
+		 * @param [y] {Number} Optional Y scale for the object
+		 */
 		setScale: function(x, y){
 			y = y || x;
 			this.getComponent("move").setScale(x, y);
 		},
 		
+		/**
+		 * Get the rotation of the object in degrees
+		 * @return {Number}
+		 */
 		getRotation: function(){
 			return this.getComponent("move").getRotation();
 		},
 		
+		/**
+		 * Set the rotation of the object, in degrees.
+		 * @param rotation {Number} Degrees of rotation
+		 */
 		setRotation: function(r){
-			this.getComponent("move").setRotation(r);
+			this.getComponent("move").setRotation(rotation);
 		},
 		
+		/**
+		 * Set the editing mode of the object, used by the LevelEditor
+		 * @private
+		 */
 		setEditing: function(state){
 			this.editing = state;
 		},
 		
+		/**
+		 * Queried by the LevelEditor to determine if an object is editable
+		 * @private
+		 */
 		isEditable: function(){
 			return true;
 		},
 		
+		/**
+		 * Host callback which is triggered when collision occurs between this object and
+		 * another object.  This will typically trigger an event callback for scripted events.
+		 * @param collisionObj {R.engine.Object2D} The object that this object collided with
+		 * @param time {Number} The time at which the collision occurred
+		 * @param targetMask {Number} The collision mask for the object this collided with
+		 * @return {Number} Returns a flag which tells the collision system what to do
+		 */
 		onCollide: function(collisionObj, time, targetMask) {
 			var cData = this.getComponent("collide").getCollisionData();
 			var cResult = this.callScriptedEvent("onCollide", ["collisionData", "targetMask", "worldTime"], [cData, targetMask, time]);
@@ -340,7 +444,7 @@ R.objects.SpriteActor = function(){
 			return cResult;
 		}
 		
-	}, { /** @scope R.objects.SpriteActor.prototype */
+	}, /** @scope R.objects.SpriteActor.prototype */{ 
 		/**
 		 * Get the class name of this object
 		 * @return The string <tt>R.objects.SpriteActor</tt>

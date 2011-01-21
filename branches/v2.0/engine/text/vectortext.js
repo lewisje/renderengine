@@ -57,9 +57,7 @@ R.text.VectorText = function(){
 		rText: null,
 		spacing: 0,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(componentName, priority){
 			this.base(componentName, priority);
 			this.rText = [];
@@ -67,7 +65,7 @@ R.text.VectorText = function(){
 		},
 		
 		/**
-		 * @private
+		 * Release the text renderer back into the pool for reuse
 		 */
 		release: function(){
 			this.base();

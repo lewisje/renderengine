@@ -186,10 +186,11 @@ R.lang.FNV1a32 = (function() {
  * @class A class for creating a single hash, or an evolving hash. Single hashes reset each time a new
  *        source string is provided, whereas the evolving hash will build upon previous hashes.  The
  *        hash for a string will always be the same.  Hashing a set of strings, in order, will always
- *        result in the same evolved hash.  Uses the {@link FNV1a32} hashing routine by default.
+ *        result in the same evolved hash.  Uses the {@link R.lang.FNV1a32} hashing routine by default.
  *
- * @param [hashRoutine=FNV1a32] {FNV1} The hash routine to use.
- * @extends PooledObject
+ * @constructor
+ * @param [hashRoutine=R.lang.FNV1a32] {FNV1} The hash routine to use.
+ * @extends R.engine.PooledObject
  */
 R.lang.FNV1Hash = function() {
 	return R.engine.PooledObject.extend(/** @scope R.lang.FNV1Hash.prototype */{
@@ -198,6 +199,7 @@ R.lang.FNV1Hash = function() {
    
    gotten: null,
 
+	/** @private */
    constructor: function(hashRoutine) {
       this.base("FNV1Hash");
       this.fnv132 = new R.lang.FNV1(hashRoutine || R.lang.FNV1a32);
@@ -241,7 +243,7 @@ R.lang.FNV1Hash = function() {
       }
    }
    
-}, { /** @scope R.lang.FNV1Hash.prototype */
+}, /** @scope R.lang.FNV1Hash.prototype */{ 
 
    getClassName: function() {
       return "R.lang.FNV1Hash";

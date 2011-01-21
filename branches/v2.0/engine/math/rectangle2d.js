@@ -43,6 +43,13 @@ R.Engine.define({
 /**
  * @class A 2D rectangle class with helpful manipulation methods.
  * @extends R.math.PooledMathObject
+ * @constructor
+ * @param x {R.math.Rectangle2D|Number} A rectangle to clone, or the top-left X coordinate
+ * @param y {Number} The top-left Y coordinate
+ * @param width {Number} the width of the rectangle
+ * @param height {Number} The height of the rectangle
+ * @description Create a rectangle object specifying the X and Y position and
+ * 	the width and height.
  */
 R.math.Rectangle2D = function() {
 	return R.math.PooledMathObject.extend(/** @scope R.math.Rectangle2D.prototype */{
@@ -52,15 +59,7 @@ R.math.Rectangle2D = function() {
    dims: null,
 	center: null,
 
-   /**
-    * Create a rectangle object specifying the X and Y position and
-    * the width and height.
-    *
-    * @param x {Number} The top-left X coordinate
-    * @param y {Number} The top-left Y coordinate
-    * @param width {Number} the width of the rectangle
-    * @param height {Number} The height of the rectangle
-    */
+   /** @private */
    constructor: function(x, y, width, height) {
 		this.base("Rectangle2D");
 
@@ -75,7 +74,7 @@ R.math.Rectangle2D = function() {
    },
 
 	/**
-	 * @private
+	 * Destroy the rectangle instance
 	 */
 	destroy: function() {
 		this.topLeft.destroy();
@@ -86,7 +85,7 @@ R.math.Rectangle2D = function() {
 	},
 
 	/**
-	 * @private
+	 * Release the rectangle back into the pool for reuse
 	 */
    release: function() {
       this.base();
@@ -107,7 +106,7 @@ R.math.Rectangle2D = function() {
    /**
     * Set the values of this rectangle.
     *
-    * @param x {Array|Number|Rectangle2D} An optional value to initialize the X coordinate of the rectangle, or a rectangle to clone
+    * @param x {Array|Number|R.math.Rectangle2D} An optional value to initialize the X coordinate of the rectangle, or a rectangle to clone
     * @param y {Number} An optional value to initialize the Y coordinate of the rectangle
     * @param width {Number} An optional value to initialize the width of the rectangle
     * @param height {Number} An optional value to initialize the height of the rectangle
@@ -131,6 +130,7 @@ R.math.Rectangle2D = function() {
     * and bottom as the elements x, y, w, h, r, and b. 
     *
     * @return {Object} An object with the specified elements
+    * @deprecated
     */
    get: function() {
       return {x: this.x, y: this.y, w: this.w, h: this.h, r: this.r, b: this.b};
@@ -139,7 +139,7 @@ R.math.Rectangle2D = function() {
    /**
     * Returns <tt>true</tt> if this rectangle is equal to the specified rectangle.
     *
-    * @param rect {Rectangle2D} The rectangle to compare to
+    * @param rect {R.math.Rectangle2D} The rectangle to compare to
     * @return {Boolean} <tt>true</tt> if the two rectangles are equal
     */
    equals: function(rect) {
@@ -152,11 +152,11 @@ R.math.Rectangle2D = function() {
     * The first parameter can be either a point, or the value for the X axis.  If the X axis is 
     * specified, the second parameter should be the amount to offset in the Y axis.
     *
-    * @param offsetPtOrX {Point2D|int} Either a {@link Point} which contains the offset in X and Y, or an integer
+    * @param offsetPtOrX {R.math.Point2D|int} Either a {@link R.math.Point} which contains the offset in X and Y, or an integer
     *                                representing the offset in the X axis.
     * @param offsetY {int} If <code>offsetPtOrX</code> is an integer value for the offset in the X axis, this should be
     *                      the offset along the Y axis.
-    * @return {Rectangle2D} This rectangle
+    * @return {R.math.Rectangle2D} This rectangle
     */
    offset: function(offsetPtOrX, offsetY) {
       var offs = R.math.Point2D.create(0,0);
@@ -176,7 +176,7 @@ R.math.Rectangle2D = function() {
    /**
     * Set the top left of this rectangle to the point, or coordinates specified.
     *
-    * @param ptOrX {Point2D/Number} The top left point, or the X coordinate
+    * @param ptOrX {R.math.Point2D|Number} The top left {@link R.math.Point2D}, or the X coordinate
     * @param y {Number} If the top left wasn't specified as the first argument, this is the Y coordinate
     */
    setTopLeft: function(ptOrX, y) {
@@ -192,7 +192,7 @@ R.math.Rectangle2D = function() {
 
    /**
     * Set the width and height of this rectangle using the point, or coordinates specified.
-    * @param ptOrX {Point2D/Number} The top left point, or the X coordinate
+    * @param ptOrX {Point2D|Number} A {@link R.math.Point2D}, or the X coordinate
     * @param [y] {Number} If the top left isn't a point, this is the Y coordinate
     */
    setDims: function(ptOrX, y) {
@@ -231,8 +231,8 @@ R.math.Rectangle2D = function() {
     * any axis.  If an overlap occurs, a vector is returned that will
     * resolve the overlap.
     *
-    * @param rect A {@link Rectangle} to compare against
-    * @return {Vector2D} The vector to resolve the overlap
+    * @param rect A {@link R.math.Rectangle} to compare against
+    * @return {R.math.Vector2D} The vector to resolve the overlap
     * @private
     */
    isOverlapped: function(rect) {
@@ -242,7 +242,7 @@ R.math.Rectangle2D = function() {
    /**
     * Determine if this rectangle intersects another rectangle.
     *
-    * @param rect A {@link Rectangle2D} to compare against
+    * @param rect A {@link R.math.Rectangle2D} to compare against
     * @return {Boolean} <tt>true</tt> if the two rectangles intersect.
     */
    isIntersecting: function(rect) {
@@ -255,7 +255,7 @@ R.math.Rectangle2D = function() {
    /**
     * Determine if this rectangle is contained within the specified rectangle.
     *
-    * @param rect A {@link Rectangle2D} to compare against
+    * @param rect A {@link R.math.Rectangle2D} to compare against
     * @return {Boolean} <tt>true</tt> if the this rectangle is fully contained in the specified rectangle.
     */
    isContained: function(rect) {
@@ -268,7 +268,7 @@ R.math.Rectangle2D = function() {
    /**
     * Determine if this rectangle contains the specified rectangle.
     *
-    * @param rect A {@link Rectangle2D} to compare against
+    * @param rect A {@link R.math.Rectangle2D} to compare against
     * @return {Boolean} <tt>true</tt> if the rectangle is fully contained within this rectangle.
     */
    containsRect: function(rect) {
@@ -278,7 +278,7 @@ R.math.Rectangle2D = function() {
    /**
     * Returns <tt>true</tt> if this rectangle contains the specified point.
     *
-    * @param point {Point} The point to test
+    * @param point {R.math.Point} The point to test
     * @return {Boolean} <tt>true</tt> if the point is within this rectangle
     */
    containsPoint: function(point) {
@@ -289,9 +289,9 @@ R.math.Rectangle2D = function() {
    },
 
    /**
-    * Returns a {@link Point2D} that contains the center point of this rectangle.
+    * Returns a {@link R.math.Point2D} that contains the center point of this rectangle.
     *
-    * @return {Point2D} The center point of the rectangle
+    * @return {R.math.Point2D} The center point of the rectangle
     */
    getCenter: function() {
 		return this.center;
@@ -332,24 +332,24 @@ R.math.Rectangle2D = function() {
    },
 
    /**
-    * Gets a {@link Point2D} representing the top-left corner of this rectangle.
-    * @return {Point2D}
+    * Gets a {@link R.math.Point2D} representing the top-left corner of this rectangle.
+    * @return {R.math.Point2D}
     */
    getTopLeft: function() {
       return this.topLeft;
    },
 
    /**
-    * Gets a {@link Point2D) representing the width and height of this rectangle.
-    * @return {Point2D}
+    * Gets a {@link R.math.Point2D) representing the width and height of this rectangle.
+    * @return {R.math.Point2D}
     */
    getDims: function() {
       return this.dims;
    },
 
    /**
-    * Gets a {@link Point2D} representing the bottom-right corner of this rectangle.
-    * @return {Point2D}
+    * Gets a {@link R.math.Point2D} representing the bottom-right corner of this rectangle.
+    * @return {R.math.Point2D}
     */
    getBottomRight: function() {
       return this.bottomRight;
@@ -362,8 +362,8 @@ R.math.Rectangle2D = function() {
 	 * are overlapping before joining them, since joining two disjoint
 	 * rectangles would enclose areas not contained in either.
 	 * 
-	 * @param rect {Rectangle2D} The rectangle to join with
-	 * @return {Rectangle2D} This rectangle
+	 * @param rect {R.math.Rectangle2D} The rectangle to join with
+	 * @return {R.math.Rectangle2D} This rectangle
 	 */
 	join: function(rect) {
 		var x1 = this.topLeft.x;
@@ -397,7 +397,7 @@ R.math.Rectangle2D = function() {
       return (this.topLeft + " [" + this.dims + "]");
    }
 	
-}, { /** @scope R.math.Rectangle2D.prototype */
+}, /** @scope R.math.Rectangle2D.prototype */{ 
    
    /**
     * Return the classname of the this object
@@ -407,6 +407,7 @@ R.math.Rectangle2D = function() {
       return "R.math.Rectangle2D";
    },
 	
+	/** @private */
 	resolved: function() {
 		var rp = R.math.Rectangle2D.prototype;
 		

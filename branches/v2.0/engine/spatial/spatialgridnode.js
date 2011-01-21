@@ -45,21 +45,19 @@ R.Engine.define({
  * @class A single node within a SpatialGrid.  When the collision model is
  *        updated, the nodes within the grid will be updated to reflect the
  *        objects within them.  A node defines a single rectangle within the
- *        entire {@link SpatialGrid}
+ *        entire {@link R.spatial.SpatialGrid}
  *
- * @extends SpatialNode
+ * @extends R.spatial.AbstractSpatialNode
  * @constructor
  * @description Create an instance of a SpatialNode for use within a {@link SpatialGrid}
- * @param rect {Rectangle2D} The rectangle which defines this node.
+ * @param rect {R.math.Rectangle2D} The rectangle which defines this node.
  */
 R.spatial.SpatialGridNode = function(){
 	return R.spatial.AbstractSpatialNode.extend(/** @scope R.spatial.SpatialGridNode.prototype */{
 	
 		rect: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(rect){
 			this.base();
 			this.rect = rect;
@@ -67,7 +65,7 @@ R.spatial.SpatialGridNode = function(){
 		
 		/**
 		 * Get the rectangle which defines this node.
-		 * @return {Rectangle2D}
+		 * @return {R.math.Rectangle2D}
 		 */
 		getRect: function(){
 			return this.rect
@@ -75,7 +73,7 @@ R.spatial.SpatialGridNode = function(){
 		
 		/**
 		 * Returns true if the spatial node contains the point specified.
-		 * @param point {Point2D} The point to check
+		 * @param point {R.math.Point2D} The point to check
 		 * @return {Boolean}
 		 */
 		contains: function(point){

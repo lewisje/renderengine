@@ -42,7 +42,7 @@ R.Engine.define({
 /**
  * @class A 3D vector class with helpful manipulation methods.
  * 
- * @param x {Point3D|Number} If this arg is a Vector3D, its values will be
+ * @param x {R.math.Point3D|Number} If this arg is a R.math.Vector3D, its values will be
  *                           copied into the new vector.  If a number,
  *                           the X length of the vector.
  * @param y {Number} The Y length of the vector.  Only required if X
@@ -65,7 +65,7 @@ R.math.Vector3D = function(){
 		
 		/**
 		 * A mutator method that normalizes this vector, returning a unit length vector.
-		 * @return {Vector2D} This vector, normalized
+		 * @return {R.math.Vector3D} This vector, normalized
 		 * @see #len
 		 */
 		normalize: function(){
@@ -84,7 +84,7 @@ R.math.Vector3D = function(){
 		
 		/**
 		 * Get the dot product of this vector and another.
-		 * @param vector {Vector3D} The Point to perform the operation against.
+		 * @param vector {R.math.Vector3D} The Point to perform the operation against.
 		 * @return {Number} The dot product
 		 */
 		dot: function(vector){
@@ -93,8 +93,8 @@ R.math.Vector3D = function(){
 		
 		/**
 		 * A mutator method that gets the cross product of this vector and another.
-		 * @param vector {Vector3D} The vector to perform the operation against.
-		 * @return {Vector3D} This vector
+		 * @param vector {R.math.Vector3D} The vector to perform the operation against.
+		 * @return {R.math.Vector3D} This vector
 		 */
 		cross: function(vector){
 			this._vec = this._vec.cross(vector._vec);
@@ -106,14 +106,14 @@ R.math.Vector3D = function(){
 		 * point is being used to represent a vector, and that the supplied point
 		 * is also a vector.
 		 *
-		 * @param vector {Vector3D} The vector to perform the angular determination against
+		 * @param vector {R.math.Vector3D} The vector to perform the angular determination against
 		 * @return {Number} The angle between two vectors, in degrees
 		 */
 		angleBetween: function(vector){
 			return R.math.Math2D.radToDeg(this._vec.angleFrom(vector._vec));
 		}
 		
-	}, { /** @scope R.math.Vector3D.prototype */
+	}, /** @scope R.math.Vector3D.prototype */{ 
 		/**
 		 * Return the classname of the this object
 		 * @return {String} "R.math.Vector3D"
@@ -122,6 +122,7 @@ R.math.Vector3D = function(){
 			return "R.math.Vector3D";
 		},
 		
+		/** @private */
 		resolved: function() {
 			R.math.Vector3D.ZERO = R.math.Vector3D.create(0, 0, 0);
 		},

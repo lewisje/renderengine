@@ -44,6 +44,8 @@ R._namespaces = {};
 
 /**
  * The global namespace, typically the window object
+ * @memberOf R
+ * @type {Object}
  */
 R.global = this;
 	
@@ -51,6 +53,7 @@ R.global = this;
  * Declare a new namespace in R.
  * @param ns {String} The namespace to declare
  * @exception Throws and exception if the namespace is already declared
+ * @memberOf R
  */
 R.namespace = function(ns) {
 	if (R._namespaces[ns]) {
@@ -68,16 +71,32 @@ R.namespace = function(ns) {
 	}
 };
 
+/**
+ * Throw an "unsupported" exception
+ * @memberOf R
+ */
 R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
 };
 
+/**
+ * Check if the given object is undefined
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
 R.isUndefined = function(obj) {
 	return (typeof obj === "undefined");
 };
 
+/**
+ * Test if the object is undefined, null, or a string and is empty
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
 R.isEmpty = function(obj) {
-	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && /\s*/g.test(obj) === "");
+	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && $.trim(obj) === "");
 };
 
 // Define the engine's default namespaces

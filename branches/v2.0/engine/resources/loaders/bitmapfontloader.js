@@ -51,9 +51,7 @@ R.resources.loaders.BitmapFontLoader = function(){
 	
 		fonts: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.base(name || "BitmapFontLoader");
 			this.fonts = {};
@@ -120,7 +118,7 @@ R.resources.loaders.BitmapFontLoader = function(){
 			return "bitmap font";
 		}
 		
-	}, { /** @scope R.resources.loaders.BitmapFontLoader.protoype */
+	}, /** @scope R.resources.loaders.BitmapFontLoader.protoype */{ 
 		/**
 		 * Get the class name of this object
 		 * @return {String} The string "R.resources.loaders.BitmapFontLoader"

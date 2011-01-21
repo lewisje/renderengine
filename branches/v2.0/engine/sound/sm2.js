@@ -46,7 +46,7 @@ R.Engine.define({
  * @class Initializes the SoundManager2 sound system.
  *
  * @constructor
- * @extends SoundSystem
+ * @extends R.sound.AbstractSoundSystem
  */
 R.sound.SM2 = function(){
 	return R.sound.AbstractSoundSystem.extend(/** @scope R.sound.SM2.prototype */{
@@ -54,6 +54,7 @@ R.sound.SM2 = function(){
 		init: false,
 		soundManager: null,
 		
+		/** @private */
 		constructor: function(){
 			this.base();
 			if (typeof SoundManager != "undefined") {
@@ -110,6 +111,10 @@ R.sound.SM2 = function(){
 			}
 		},
 		
+		/**
+		 * Shutdown the sound system
+		 * @private
+		 */
 		shutdown: function(){
 			this.soundManager.destruct();
 		},

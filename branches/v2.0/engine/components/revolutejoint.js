@@ -45,12 +45,12 @@ R.Engine.define({
 
 /**
  * @class A revolute joint which allows two bodies to revolve around a common
- * 		 anchor point in a {@link Simulation}.  
+ * 		 anchor point in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component
  * @param body1 {BaseBodyComponent} The first body for the joint
  * @param body2 {BaseBodyComponent} The second body for the joint
- * @param anchor {Point2D} A point, in world coordinates relative to the two 
+ * @param anchor {R.math.Point2D} A point, in world coordinates relative to the two 
  * 	bodies, to use as the joint's anchor point
  *
  * @extends R.components.BaseJoint
@@ -201,7 +201,7 @@ R.components.RevoluteJoint = function() {
 	/**
 	 * During simulation, get the reaction force vector of the joint.  Outside
 	 * of simulation, the vector will be zero.
-	 * @return {Vector2D}
+	 * @return {R.math.Vector2D}
 	 */
 	getReactionForce: function() {
 		if (this.simulation) {

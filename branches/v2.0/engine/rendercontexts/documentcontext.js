@@ -53,9 +53,7 @@ R.Engine.define({
 R.rendercontexts.DocumentContext = function(){
 	return R.rendercontexts.HTMLElementContext.extend(/** @scope R.rendercontexts.DocumentContext.prototype */{
 	
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(){
 			this.base("DocumentContext", document.body);
 		},

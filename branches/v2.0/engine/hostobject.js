@@ -58,7 +58,7 @@ R.Engine.define({
  *        components already exist in the engine, but you are only limited by your imagination
  *        when it comes to developing new components.
  *
- * @extends HashContainer
+ * @extends R.struct.HashContainer
  * @constructor
  * @description Create a host object.
  */
@@ -69,6 +69,7 @@ R.engine.HostObject = function(){
 		dirtyFlag: false,
 		oldDirty: false,
 		
+		/** @private */
 		constructor: function(name){
 			this.base(name);
 			this.dirtyFlag = true;
@@ -128,7 +129,7 @@ R.engine.HostObject = function(){
 		 * Set the rendering context this object will be drawn within.  This method is
 		 * called when a host object is added to a rendering context.
 		 *
-		 * @param renderContext {RenderContext} The context
+		 * @param renderContext {R.rendercontexts.AbstractRenderContext} The context
 		 */
 		setRenderContext: function(renderContext){
 			this.renderContext = renderContext;
@@ -138,7 +139,7 @@ R.engine.HostObject = function(){
 		/**
 		 * Get the rendering context this object will be drawn upon.
 		 *
-		 * @return {RenderContext} The render context the object belongs to
+		 * @return {R.rendercontexts.AbstractRenderContext} The render context the object belongs to
 		 */
 		getRenderContext: function(){
 			return this.renderContext;
@@ -147,7 +148,7 @@ R.engine.HostObject = function(){
 		/**
 		 * Update this object within the render context, at the specified timeslice.
 		 *
-		 * @param renderContext {RenderContext} The context the object will be rendered within.
+		 * @param renderContext {R.rendercontexts.AbstractRenderContext} The context the object will be rendered within.
 		 * @param time {Number} The global time within the engine.
 		 */
 		update: function(renderContext, time){
@@ -179,7 +180,7 @@ R.engine.HostObject = function(){
 		 * <li>Rendering</li>
 		 * </ul>
 		 *
-		 * @param component {BaseComponent} A component to add to the host
+		 * @param component {R.components.Base} A component to add to the host
 		 */
 		add: function(component){
 		
@@ -196,10 +197,25 @@ R.engine.HostObject = function(){
 		},
 		
 		/**
+		 * Remove the component from the host object
+		 * @param component {String|R.components.Base} The component to remove, or the name of the component to remove
+		 * @return {R.components.Base} The component which was removed
+		 */
+		remove: function(component) {
+			var c;
+			if (typeof component === "string") {
+				c = this.get(component.toUpperCase());
+			} else {
+				c = component;
+			}
+			return this.base(c);
+		},
+		
+		/**
 		 * Get the component with the specified name from this object.
 		 *
 		 * @param name {String} The unique name of the component to get
-		 * @return {BaseComponent}
+		 * @return {R.components.Base}
 		 */
 		getComponent: function(name){
 			return this.get(name.toUpperCase());

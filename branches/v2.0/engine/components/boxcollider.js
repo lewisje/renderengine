@@ -43,18 +43,18 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of the {@link ColliderComponent} which will check the
+ * @class An extension of the {@link R.components.Collider} which will check the
  *        object's axis-aligned bounding boxes for collision.  This type of
  *        collider can only indicate that a collision has occurred.
  *
  * @param name {String} Name of the component
- * @param collisionModel {SpatialCollection} The collision model
+ * @param collisionModel {R.spatial.AbstractSpatialContainer} The collision model
  * @param priority {Number} Between 0.0 and 1.0, with 1.0 being highest
  *
  * @extends R.components.Collider
  * @constructor
  * @description Creates a collider component for box-box collision testing.  Each object
- *              must implement the {@link Object2D#getWorldBox} method and return a
+ *              must implement the {@link R.engine.Object2D#getWorldBox} method and return a
  *              world-oriented bounding box.
  */
 R.components.BoxCollider = function() {
@@ -77,7 +77,7 @@ R.components.BoxCollider = function() {
     * so that each component can refer to its host object, the same way
     * a host object can refer to a component with {@link HostObject#getComponent}.
     *
-    * @param hostObject {HostObject} The object which hosts this component
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
 	 */
 	setHostObject: function(hostObj) {
 		this.base(hostObj);
@@ -95,7 +95,7 @@ R.components.BoxCollider = function() {
     * A world bounding box collision must occur to trigger the <tt>onCollide()</tt> method.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
-    * @param collisionObj {HostObject} The host object with which the collision potentially occurs
+    * @param collisionObj {R.engine.HostObject} The host object with which the collision potentially occurs
     * @param hostMask {Number} The collision mask for the host object
     * @param targetMask {Number} The collision mask for <tt>collisionObj</tt>
     * @return {Number} A status indicating whether to continue checking, or to stop

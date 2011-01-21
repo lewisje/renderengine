@@ -1,5 +1,8 @@
 <project name="The Render Engine" default="dist" basedir=".">
    <property file="build.properties"/>
+   
+   <property name="build.homeurl" value="http://www.renderengine.com"/>
+   <property name="build.refname" value="The Render Engine"/>
  
    <property name="app.name" value="renderengine"/>
    <property name="app.version" value=""/>
@@ -110,6 +113,8 @@
 		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
 		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${engine.file}" />
 		<replaceregexp match="@ENGINE_VERSION" replace="${build.version}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@HOME_URL" replace="${build.homeurl}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@REF_NAME" replace="${build.refname}" flags="g" byline="true" file="${engine.file}" />
 		<echo message="${engine.file} built." />
 	</target>
   
@@ -353,6 +358,7 @@
 		
 		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${build.home}/README.txt" />
 		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${build.home}/README.txt" />
+		<replaceregexp match="@HOME_URL" replace="${build.homeurl}" flags="g" byline="true" file="${engine.file}/README.txt" />
 		
 	</target>  
   
@@ -554,6 +560,8 @@
 		<replaceregexp match="@BUILD_VERSION" replace="${build.version}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
 		<replaceregexp match="@BUILD_DATE" replace="${build.date}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
 		<replaceregexp match="@ENGINE_VERSION" replace="${build.version}" flags="g" byline="true" file="${dist.home}/engine/engine.js" />
+		<replaceregexp match="@HOME_URL" replace="${build.homeurl}" flags="g" byline="true" file="${engine.file}" />
+		<replaceregexp match="@REF_NAME" replace="${build.refname}" flags="g" byline="true" file="${engine.file}" />
 
       <copy todir="${min.home}/engine/runtime">
          <fileset dir="${dist.home}/engine">

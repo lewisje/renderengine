@@ -55,7 +55,7 @@ R.Engine.define({
  * 		complex hull.  Points will not be created if the number of points availble is
  * 		less than the LOD.  Default: 4
  *
- * @extends PooledObject
+ * @extends R.engine.PooledObject
  * @constructor
  * @description Create a polygonal convex hull which has, at most, <tt>lod</tt> vertexes.
  */
@@ -71,9 +71,7 @@ R.collision.ConvexHull = function() {
 
 	radius: -1,
 	
-	/**
-	 * @private
-	 */
+	/** @private */
 	constructor: function(points, lod) {
 		this.base("ConvexHull");
 		lod = lod || 4;
@@ -116,6 +114,9 @@ R.collision.ConvexHull = function() {
 		}
 	},
 
+	/**
+	 * Destroy the object
+	 */
 	destroy: function() {
 		// Destroy the center
 		this.oCenter.destroy();
@@ -131,6 +132,9 @@ R.collision.ConvexHull = function() {
 		this.base();	
 	},
 
+	/**
+	 * Return the object to the pool
+	 */
 	release: function() {
 		this.base();
 
@@ -165,7 +169,7 @@ R.collision.ConvexHull = function() {
 
 	/**
 	 * Get the point at the center of the convex hull
-	 * @return {Point2D}
+	 * @return {R.math.Point2D}
 	 */
 	getCenter: function() {
 		var txfm = this.hostObj.getTransformationMatrix();
@@ -186,7 +190,7 @@ R.collision.ConvexHull = function() {
 	
 	/**
 	 * Get the array of vertexes in the convex hull
-	 * @return {Array} of {@link Point2D}
+	 * @return {Array} of {@link R.math.Point2D}
 	 */
 	getVertexes: function() {
 		var txfm = this.hostObj.getTransformationMatrix();
@@ -201,7 +205,7 @@ R.collision.ConvexHull = function() {
 
 	/**
 	 * Get the array of untransformed vertexes in the convex hull
-	 * @return {Array} of {@link Point2D}
+	 * @return {Array} of {@link R.math.Point2D}
 	 */
 	getUntransformedVertexes: function() {
 		return this.uVerts;	
@@ -215,7 +219,7 @@ R.collision.ConvexHull = function() {
 		return R.collision.ConvexHull.CONVEX_NGON;
 	}
 	
-}, { /** @scope ConvexHull.prototype */
+}, { /** @scope R.collision.ConvexHull.prototype */
 
    /**
     * Get the class name of this object

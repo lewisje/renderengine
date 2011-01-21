@@ -39,7 +39,7 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of {@link OneShotTimeout} which is a one-shot timer that triggers a callback, 
+ * @class An extension of {@link R.lang.OneShotTimeout} which is a one-shot timer that triggers a callback, 
  *        at regular intervals, until the timer has expired.  When the timer expires, the 
  *        trigger will automatically destroy itself.  Within the callbacks, <tt>this</tt>
  *        refers to the <tt>Timer</tt> object itself.

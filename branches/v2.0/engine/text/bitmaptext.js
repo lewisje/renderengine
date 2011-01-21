@@ -50,8 +50,8 @@ R.Engine.define({
  *
  * @constructor
  * @param font {Font} A resource obtained by calling {@link FontResourceLoader#get}
- * @extends AbstractTextRenderer
- * @see BitmapFontLoader
+ * @extends R.text.AbstractTextRenderer
+ * @see R.resources.loaders.BitmapFontLoader
  */
 R.text.BitmapText = function(){
 	return R.text.AbstractTextRenderer.extend(/** @scope R.text.BitmapText.prototype */{
@@ -60,16 +60,14 @@ R.text.BitmapText = function(){
 		
 		spacing: 0,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(font){
 			this.base();
 			this.font = font;
 		},
 		
 		/**
-		 * @private
+		 * Release the text renderer back into the pool for reuse
 		 */
 		release: function(){
 			this.base();

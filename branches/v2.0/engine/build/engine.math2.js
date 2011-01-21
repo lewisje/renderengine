@@ -48,6 +48,7 @@ R.lang.Math2 = {
 	/**
 	 * Largest integer
 	 * @type {Number}
+	 * @memberOf R.lang.Math2
 	 */
 	MAX_INT: 0xFFFFFFFF,		// 64-bits
 	
@@ -56,6 +57,7 @@ R.lang.Math2 = {
 	 * ensures that random numbers occur in a known sequence.
 	 * 
 	 * @param seed {Number} An integer to seed the number generator with
+	 * @memberOf R.lang.Math2
 	 */
 	seed: function(seed) {
 		// LCG using GCC's constants
@@ -65,6 +67,7 @@ R.lang.Math2 = {
 	/**
 	 * Returns a random integer between 0 and 4,294,967,296.
 	 * @return {Number} An integer between 0 and 2^32
+	 * @memberOf R.lang.Math2
 	 */
 	randomInt: function() {
 		R.lang.Math2.state = (R.lang.Math2.a * R.lang.Math2.state + R.lang.Math2.c) % R.lang.Math2.m;
@@ -74,6 +77,7 @@ R.lang.Math2 = {
 	/**
 	 * Returns a pseudo-random number between 0 (inclusive) and 1 (exclusive)
 	 * @return {Number} A number between 0 and 1
+	 * @memberOf R.lang.Math2
 	 */
 	random: function() {
 		// returns in range [0,1]
@@ -88,6 +92,7 @@ R.lang.Math2 = {
 	 * @param high {Number} The high part of the range
 	 * @param [whole] {Boolean} Return whole values only
 	 * @return {Number}
+	 * @memberOf R.lang.Math2
 	 */
 	randomRange: function(low, high, whole) {
 		var v = low + (R.lang.Math2.random() * high);
@@ -99,6 +104,7 @@ R.lang.Math2 = {
 	 * 
 	 * @param bin {String} Binary string to parse
 	 * @return {Number}
+	 * @memberOf R.lang.Math2
 	 */
 	parseBin: function(bin) {
 		if (!isNaN(bin)) {
@@ -111,6 +117,7 @@ R.lang.Math2 = {
 	 *
 	 * @param num {Number} The number to convert
 	 * @return {String}
+	 * @memberOf R.lang.Math2
 	 */
 	toHex: function(num) {
 		if (!isNaN(num)) {
@@ -123,6 +130,7 @@ R.lang.Math2 = {
 	 *
 	 * @param num {Number} The number to convert
 	 * @return {String}
+	 * @memberOf R.lang.Math2
 	 */
 	toBinary: function(num) {
 		if (!isNaN(num)) {
@@ -131,5 +139,5 @@ R.lang.Math2 = {
 	}
 };
 
-// Seed the random number generator initially
+// Initially seed the random number generator with a pseudo-random number
 R.lang.Math2.seed();

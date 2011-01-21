@@ -49,7 +49,7 @@ R.Engine.define({
  * @param radius {Number} The circle's radius if the first argument is a <tt>Point2D</tt>, or a
  * 		 percentage of the calculated radius if the first argument is an <tt>Array</tt>.
  *
- * @extends ConvexHull
+ * @extends R.collision.ConvexHull
  * @constructor
  * @description Creates a circular hull.
  */

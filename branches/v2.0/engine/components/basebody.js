@@ -47,7 +47,7 @@ R.Engine.define({
 
 /**
  * @class The base rigid body component which initializes rigid bodies
- * 		 for use in a {@link Simulation}.  
+ * 		 for use in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component
  * @param shapeDef {b2ShapeDef} The shape definition. Either {@link b2CircleDef}, {@link b2BoxDef}, or
@@ -86,6 +86,9 @@ R.components.BaseBody = function() {
 		this.origin = R.math.Point2D.create(0,0);
 	},
 
+	/**
+	 * Destroy the object
+	 */
 	destroy: function() {
 		if (this.renderComponent != null) {
 			this.renderComponent.destroy();
@@ -98,6 +101,9 @@ R.components.BaseBody = function() {
 		this.base();
 	},
 	
+	/**
+	 * Releases the object back into the pool
+	 */
 	release: function() {
 		this.base();
 
@@ -134,7 +140,7 @@ R.components.BaseBody = function() {
 	 * {@link PhysicsActor} to link a body to a renderer so that each body can have an
 	 * associated renderer applied.
 	 * 
-	 * @param renderComponent {RenderComponent} The render component to associate with this body
+	 * @param renderComponent {R.components.Render} The render component to associate with this body
 	 */
 	setRenderComponent: function(renderComponent) {
 		this.renderComponent = renderComponent;
@@ -145,7 +151,7 @@ R.components.BaseBody = function() {
 	
 	/**
 	 * Get the associated render component for this body.
-	 * @return {RenderComponent} or <code>null</code>
+	 * @return {R.components.Render} or <code>null</code>
 	 */
 	getRenderComponent: function() {
 		return this.renderComponent;
@@ -156,7 +162,7 @@ R.components.BaseBody = function() {
 	 * the bounding box for the body.  Most times the origin should be set to the center
 	 * of the body.
 	 * 
-	 * @param x {Number|Point2D} The X coordinate or a <tt>Point2D</tt>
+	 * @param x {Number|R.math.Point2D} The X coordinate or a <tt>Point2D</tt>
 	 * @param y {Number} The Y coordinate or <tt>null</tt> if X is a <tt>Point2D</tt>
 	 */
 	setLocalOrigin: function(x, y) {
@@ -165,7 +171,7 @@ R.components.BaseBody = function() {
 	
 	/**
 	 * Get the local origin of the body.
-	 * @return {Point2D}
+	 * @return {R.math.Point2D}
 	 */
 	getLocalOrigin: function() {
 		return this.origin;
@@ -173,7 +179,7 @@ R.components.BaseBody = function() {
 	
 	/**
 	 * Get the center of the body.
-	 * @return {Point2D}
+	 * @return {R.math.Point2D}
 	 */
 	getCenter: function() {
 		return R.math.Point2D.create(this.getPosition()).add(this.getLocalOrigin());
@@ -181,7 +187,7 @@ R.components.BaseBody = function() {
 	
 	/**
 	 * [ABSTRACT] Get a box which bounds the body.
-	 * @return {Rectangle2D}
+	 * @return {R.math.Rectangle2D}
 	 */
 	getBoundingBox: function() {
 		return R.math.Rectangle2D.create(0,0,1,1);
@@ -276,7 +282,7 @@ R.components.BaseBody = function() {
 	 * its position should be avoided since it doesn't fit with physical simulation.
 	 * To change an object's position, try applying forces or impulses to the body.
 	 * 
-	 * @param point {Point2D} The initial position of the body
+	 * @param point {R.math.Point2D} The initial position of the body
 	 */
 	setPosition: function(point) {
 		var pos = point.get();
@@ -286,7 +292,7 @@ R.components.BaseBody = function() {
 	/**
 	 * Get the position of the body during simulation.  This value is updated
 	 * as the simulation is stepped.
-	 * @return {Point2D}
+	 * @return {R.math.Point2D}
 	 */
 	getPosition: function() {
 		if (this.simulation) {
@@ -317,8 +323,8 @@ R.components.BaseBody = function() {
 	 * moving, while the position is where on the body the force is acting.
 	 * Forces act upon a body from world coordinates.
 	 * 
-	 * @param forceVector {Vector2D} The force vector
-	 * @param position {Point2D} The position where the force is acting upon the body
+	 * @param forceVector {R.math.Vector2D} The force vector
+	 * @param position {R.math.Point2D} The position where the force is acting upon the body
 	 */
 	applyForce: function(forceVector, position) {
 		this.getBody().WakeUp();
@@ -335,8 +341,8 @@ R.components.BaseBody = function() {
 	 * is where on the body the impulse will be applied.
 	 * Impulses act upon a body locally, adjusting its velocity.
 	 * 
-	 * @param impulseVector {Vector2D} The impulse vectory
-	 * @param position {Point2D} the position where the impulse is originating from in the body
+	 * @param impulseVector {R.math.Vector2D} The impulse vectory
+	 * @param position {R.math.Point2D} the position where the impulse is originating from in the body
 	 */
 	applyImpulse: function(impulseVector, position) {
 		this.getBody().WakeUp();
@@ -424,6 +430,7 @@ R.components.BaseBody = function() {
 	
 	/**
 	 * The default restitution (bounciness) of a body
+	 * @type {Number}
 	 */
 	DEFAULT_RESTITUTION: 0.48,
 	
@@ -434,6 +441,7 @@ R.components.BaseBody = function() {
 	
 	/**
 	 * The default friction of a body
+	 * @type {Number}
 	 */
 	DEFAULT_FRICTION: 0,
 	
@@ -442,6 +450,11 @@ R.components.BaseBody = function() {
 	 * @private
 	 */
 	UP_VECTOR: new Vector2D(0, -1),
+	
+	/**
+	 * A simple down (0, 1) vector to calculate rotation
+	 * @private
+	 */
 	DOWN_VECTOR: new Vector2D(0, 1)
    
 });

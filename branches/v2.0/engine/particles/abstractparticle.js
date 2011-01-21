@@ -59,9 +59,7 @@ R.particles.AbstractParticle = function(){
 		dead: false,
 		pos: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(lifetime){
 			this.base("Particle");
 			this.life = lifetime;
@@ -79,7 +77,7 @@ R.particles.AbstractParticle = function(){
 		},
 		
 		/**
-		 * Release the object back into the pool.
+		 * Release the particle back into the pool.
 		 */
 		release: function(){
 			this.base();
@@ -91,8 +89,8 @@ R.particles.AbstractParticle = function(){
 		},
 		
 		/**
-		 * Initializes the object within the <tt>ParticleEngine</tt>
-		 * @param pEngine {ParticleEngine} The particle engine which owns the particle
+		 * Initializes the particle within the <tt>R.particles.ParticleEngine</tt>
+		 * @param pEngine {R.particles.ParticleEngine} The particle engine which owns the particle
 		 * @param time {Number} The world time when the particle was created
 		 * @private
 		 */
@@ -105,7 +103,7 @@ R.particles.AbstractParticle = function(){
 		
 		/**
 		 * Get the current position of the particle
-		 * @return {Point2D}
+		 * @return {R.math.Point2D}
 		 */
 		getPosition: function(){
 			return this.pos;
@@ -113,7 +111,7 @@ R.particles.AbstractParticle = function(){
 		
 		/**
 		 * Set the X and Y world coordinates of the particle
-		 * @param x {Number} X world coordinate
+		 * @param x {R.math.Point2D|Number} A {@link R.math.Point2D}, or the X world coordinate
 		 * @param y {Number} Y world coordinate
 		 */
 		setPosition: function(x, y){
@@ -122,7 +120,7 @@ R.particles.AbstractParticle = function(){
 		
 		/**
 		 * Update the particle in the render context, calling its draw method.
-		 * @param renderContext {RenderContext} The context where the particle is drawn
+		 * @param renderContext {R.rendercontexts.AbstractRenderContext} The context where the particle is drawn
 		 * @param time {Number} The world time, in milliseconds
 		 */
 		update: function(renderContext, time){
@@ -157,7 +155,7 @@ R.particles.AbstractParticle = function(){
 		
 		/**
 		 * [ABSTRACT] Draw the particle
-		 * @param renderContext {RenderContext} The context to render the particle to
+		 * @param renderContext {R.rendercontexts.AbstractRenderContext} The context to render the particle to
 		 * @param time {Number} The world time, in milliseconds
 		 */
 		draw: function(renderContext, time){

@@ -55,7 +55,7 @@ R.components.DOMRender = function() {
     * Handles whether or not the component should draw to the
     * render context.
     *
-    * @param renderContext {RenderContext} The rendering context
+    * @param renderContext {R.rendercontexts.HTMLElementContext} The rendering context
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {

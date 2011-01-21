@@ -43,7 +43,10 @@ R.Engine.define({
 });
 
 /**
- * @class A collision box which can be used to impede movement or trigger an action.
+ * @class A collision box is a simple rectangular area used to either define
+ *			 an impassable object, or a trigger for a callback.
+ * @constructor
+ * @extends R.engine.Object2D
  */
 R.objects.CollisionBox = function(){
 	return R.engine.Object2D.extend({
@@ -53,6 +56,7 @@ R.objects.CollisionBox = function(){
 		type: null,
 		action: null,
 		
+		/** @private */
 		constructor: function(){
 			this.base("CollisionBlock");
 			
@@ -68,6 +72,10 @@ R.objects.CollisionBox = function(){
 			this.action = "";
 		},
 		
+		/**
+		 * Get the properties object for this collision box.
+		 * @return {Object}
+		 */
 		getProperties: function(){
 			var self = this;
 			var prop = this.base(self);
@@ -101,7 +109,7 @@ R.objects.CollisionBox = function(){
 		 * object.  If the player is thrusting, draw the thrust flame
 		 * under the ship.
 		 *
-		 * @param renderContext {RenderContext} The rendering context
+		 * @param renderContext {R.rendercontexts.AbstractRenderContext} The rendering context
 		 * @param time {Number} The engine time in milliseconds
 		 */
 		update: function(renderContext, time){
@@ -160,51 +168,75 @@ R.objects.CollisionBox = function(){
 		},
 		
 		/**
-		 * Get the position of the ship from the mover component.
-		 * @return {Point2D}
+		 * Get the position of the collision box
+		 * @return {R.math.Point2D}
 		 */
 		getPosition: function(){
 			return this.getComponent("move").getPosition();
 		},
 		
+		/**
+		 * Get the render position (world position) of the box
+		 * @return {R.math.Point2D}
+		 */
 		getRenderPosition: function(){
 			return this.getComponent("move").getRenderPosition();
 		},
 		
+		/**
+		 * Set the size of the collision box
+		 * @param width {Number} The width of the box in pixels
+		 * @param height {Number} The height of the box in pixels
+		 */
 		setBoxSize: function(width, height){
 			this.boxRect.setDims(R.math.Point2D.create(width, height));
 			this.setBoundingBox(this.boxRect);
 		},
 		
+		/**
+		 * Set the width of the collision box
+		 * @param width {Number} The width of the box in pixels
+		 */
 		setWidth: function(width){
 			this.boxRect.setWidth(width);
 			this.setBoundingBox(this.boxRect);
 		},
 		
+		/**
+		 * Set the height of the collision box
+		 * @param height {Number} The height of the box in pixels
+		 */
 		setHeight: function(height){
 			this.boxRect.setHeight(height);
 			this.setBoundingBox(this.boxRect);
 		},
 		
 		/**
-		 * Set, or initialize, the position of the mover component
-		 *
-		 * @param point {Point2D} The position to draw the ship in the playfield
+		 * Set the position of the collision box
+		 * @param point {R.Math.Point2D} The position of the object
 		 */
 		setPosition: function(point){
 			this.base(point);
 			this.getComponent("move").setPosition(point);
 		},
 		
+		/**
+		 * Set the editing mode of the object, used by the LevelEditor
+		 * @private
+		 */
 		setEditing: function(state){
 			this.editing = state;
 		},
 		
+		/**
+		 * Queried by the LevelEditor to determine if an object is editable
+		 * @private
+		 */
 		isEditable: function(){
 			return true;
 		}
 		
-	}, { // Static
+	}, /** @scope R.objects.CollisionBox.prototype */{ // Static
 		/**
 		 * Get the class name of this object
 		 * @return The string <tt>R.objects.CollisionBox</tt>
@@ -216,11 +248,13 @@ R.objects.CollisionBox = function(){
 		
 		/**
 		 * This type of box impedes movement through it
+		 * @type {Number}
 		 */
 		TYPE_COLLIDER: 1,
 		
 		/**
 		 * This type of box triggers an action
+		 * @type {Number}
 		 */
 		TYPE_TRIGGER: 2
 	});

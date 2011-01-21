@@ -45,7 +45,7 @@ R.Engine.define({
 /**
  * @class All 2D contexts should extend from this to inherit the
  * methods which abstract the drawing methods.
- * @extends RenderContext
+ * @extends R.rendercontexts.AbstractRenderContext
  * @constructor
  * @description Create a new instance of a 2d render context.
  * @param name {String} The name of the context
@@ -76,9 +76,7 @@ R.rendercontexts.RenderContext2D = function() {
 	fontStyle: "normal",
 	zBins: null,
 
-	/**
-	 * @private
-	 */
+	/** @private */
    constructor: function(name, surface) {
       this.base(name || "RenderContext2D", surface);
       this.wPosition = R.math.Point2D.create(0,0);
@@ -155,7 +153,7 @@ R.rendercontexts.RenderContext2D = function() {
     * an <tt>afterAdd()</tt> method, it will be called after the object
     * has been added to the context.
     *
-    * @param obj {BaseObject} The object to add to the render list
+    * @param obj {R.engine.BaseObject} The object to add to the render list
     */
 	add: function(obj) {
       this.base(obj);
@@ -195,7 +193,7 @@ R.rendercontexts.RenderContext2D = function() {
 
 	/**
 	 * Swap the zBin that the object is contained within.
-	 * @param obj {Object2D} The object to swap
+	 * @param obj {R.engine.Object2D} The object to swap
 	 * @param oldBin {Number} The old bin number, or <tt>RenderContext2D.NO_ZBIN</tt> to just
 	 * 	insert into a new bin.
 	 * @param newBin {Number} The new bin to put the object into
@@ -292,7 +290,7 @@ R.rendercontexts.RenderContext2D = function() {
 	/**
 	 * Render all of the objects in a single bin, grouped by z-index.
 	 * @param bin {Number} The bin number being rendered
-	 * @param itr {Iterator} The iterator over all the objects in the bin
+	 * @param itr {R.lang.Iterator} The iterator over all the objects in the bin
     * @param time {Number} The current render time in milliseconds from the engine.
 	 */
 	renderBin: function(bin, itr, time) {
@@ -354,7 +352,7 @@ R.rendercontexts.RenderContext2D = function() {
 
    /**
     * Get the bounding box for the rendering context.
-    * @return {Rectangle2D}
+    * @return {R.math.Rectangle2D}
     */
    getBoundingBox: function() {
       if (!this.bBox) {
@@ -366,7 +364,7 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Set the current transform position (translation).
     *
-    * @param point {Point2D} The translation
+    * @param point {R.math.Point2D} The translation
     */
    setPosition: function(point) {
       this.position = point;
@@ -374,7 +372,7 @@ R.rendercontexts.RenderContext2D = function() {
 
    /**
     * Get the current transform position (translation)
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getPosition: function() {
       return this.position;
@@ -525,7 +523,7 @@ R.rendercontexts.RenderContext2D = function() {
 	/**
 	 * Get a rectangle that will approximately enclose the text drawn by the render context.
 	 * @param text {String} The text to measure
-	 * @return {Rectangle2D}
+	 * @return {R.math.Rectangle2D}
 	 */
 	getTextMetrics: function(text) {
 		return R.math.Rectangle2D.create(0,0,1,1);	
@@ -542,7 +540,7 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Set the transformation using a matrix.
     *
-    * @param matrix {Matrix2D} The transformation matrix
+    * @param matrix {Matrix} The transformation matrix
     */
    setTransform: function(matrix) {
    },
@@ -550,7 +548,7 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Set the transformation of the world.
     *
-    * @param position {Point2D}
+    * @param position {R.math.Point2D}
     * @param rotation {Number}
     * @param scale {Number}
     */
@@ -559,7 +557,7 @@ R.rendercontexts.RenderContext2D = function() {
 
 	/**
 	 * Get the render position relative to the world
-	 * @return {Point2D}
+	 * @return {R.math.Point2D}
 	 */
    getRenderPosition: function() {
       return R.math.Point2D.ZERO;
@@ -636,8 +634,8 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw an un-filled rectangle on the context.
     *
-    * @param rect {Rectangle2D} The rectangle to draw
-    * @param [ref] {HostObject} A reference host object
+    * @param rect {R.math.Rectangle2D} The rectangle to draw
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawRectangle: function(rect /*, ref */) {
    },
@@ -645,8 +643,8 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw a filled rectangle on the context.
     *
-    * @param rect {Rectangle2D} The rectangle to draw
-    * @param [ref] {HostObject} A reference host object
+    * @param rect {R.math.Rectangle2D} The rectangle to draw
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawFilledRectangle: function(rect /*, ref */) {
    },
@@ -655,11 +653,11 @@ R.rendercontexts.RenderContext2D = function() {
     * Draw an un-filled arc on the context.  Arcs are drawn in clockwise
     * order.
     *
-    * @param point {Point2D} The point around which the arc will be drawn
+    * @param point {R.math.Point2D} The point around which the arc will be drawn
     * @param radius {Number} The radius of the arc in pixels
     * @param startAngle {Number} The starting angle of the arc in degrees
     * @param endAngle {Number} The end angle of the arc in degrees
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawArc: function(point, radius, startAngle, endAngle /*, ref */) {
    },
@@ -668,11 +666,11 @@ R.rendercontexts.RenderContext2D = function() {
     * Draw a filled arc on the context.  Arcs are drawn in clockwise
     * order.
     *
-    * @param point {Point2D} The point around which the arc will be drawn
+    * @param point {R.math.Point2D} The point around which the arc will be drawn
     * @param radius {Number} The radius of the arc in pixels
     * @param startAngle {Number} The starting angle of the arc in degrees
     * @param endAngle {Number} The end angle of the arc in degrees
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawFilledArc: function(point, radius, startAngle, endAngle /*, ref */) {
    },
@@ -681,9 +679,9 @@ R.rendercontexts.RenderContext2D = function() {
     * Helper method to draw a circle by calling the {@link #drawArc} method
     * with predefined start and end angle of zero and 6.28 radians.
     *
-    * @param point {Point2D} The point around which the circle will be drawn
+    * @param point {R.math.Point2D} The point around which the circle will be drawn
     * @param radius {Number} The radius of the circle in pixels
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawCircle: function(point, radius /*, ref */) {
       this.drawArc(point, radius, 0, R.math.Math2D.TWO_PI);
@@ -693,9 +691,9 @@ R.rendercontexts.RenderContext2D = function() {
     * Helper method to draw a filled circle by calling the {@link #drawFilledArc} method
     * with predefined start and end angle of zero and 6.28 radians.
     *
-    * @param point {Point2D} The point around which the circle will be drawn
+    * @param point {R.math.Point2D} The point around which the circle will be drawn
     * @param radius {Number} The radius of the circle in pixels
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawFilledCircle: function(point, radius /*, ref */) {
       this.drawFilledArc(point, radius, 0, R.math.Math2D.TWO_PI);
@@ -705,7 +703,7 @@ R.rendercontexts.RenderContext2D = function() {
     * Draw a polygon or polyline using a Duff's device for
     * efficiency and loop unrolling with inversion for speed.
     *
-    * @param pointArray {Array} An array of <tt>Point2D</tt> objects
+    * @param pointArray {Array} An array of <tt>R.math.Point2D</tt> objects
     * @param closedLoop {Boolean} <tt>true</tt> to close the polygon
     * @private
     */
@@ -746,7 +744,7 @@ R.rendercontexts.RenderContext2D = function() {
 	 * Draw an un-filled regular polygon with N sides.
 	 * 
 	 * @param sides {Number} The number of sides, must be more than 2
-	 * @param center {Point2D} The center of the polygon
+	 * @param center {R.math.Point2D} The center of the polygon
 	 * @param [radius] {Number} The radius of the polygon. Default: 100
 	 */
 	drawRegularPolygon: function(sides, center, radius) {
@@ -760,8 +758,8 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw an un-filled polygon on the context.
     *
-    * @param pointArray {Array} An array of {@link Point2D} objects
-    * @param [ref] {HostObject} A reference host object
+    * @param pointArray {Array} An array of {@link R.math.Point2D} objects
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawPolygon: function(pointArray /*, ref */) {
       this._poly(pointArray, true);
@@ -773,7 +771,7 @@ R.rendercontexts.RenderContext2D = function() {
     * Draw a non-closed poly line on the context.
     *
     * @param pointArray {Array} An array of {@link Point2D} objects
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawPolyline: function(pointArray /*, ref */) {
       this._poly(pointArray, false);
@@ -784,8 +782,8 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw an filled polygon on the context.
     *
-    * @param pointArray {Array} An array of {@link Point2D} objects
-    * @param [ref] {HostObject} A reference host object
+    * @param pointArray {Array} An array of {@link R.math.Point2D} objects
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawFilledPolygon: function(pointArray /*, ref */) {
       this._poly(pointArray, true);
@@ -797,7 +795,7 @@ R.rendercontexts.RenderContext2D = function() {
 	 * Draw an un-filled regular polygon with N sides.
 	 * 
 	 * @param sides {Number} The number of sides, must be more than 2
-	 * @param center {Point2D} The center of the polygon
+	 * @param center {R.math.Point2D} The center of the polygon
 	 * @param [radius] {Number} The radius of the polygon. Default: 100
 	 */
 	drawFilledRegularPolygon: function(sides, center, radius) {
@@ -811,9 +809,9 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw a line on the context.
     *
-    * @param point1 {Point2D} The start of the line
-    * @param point2 {Point2D} The end of the line
-    * @param [ref] {HostObject} A reference host object
+    * @param point1 {R.math.Point2D} The start of the line
+    * @param point2 {R.math.Point2D} The end of the line
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawLine: function(point1, point2 /*, ref */) {
    },
@@ -821,8 +819,8 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw a point on the context.
     *
-    * @param point {Point2D} The position to draw the point
-    * @param [ref] {HostObject} A reference host object
+    * @param point {R.math.Point2D} The position to draw the point
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawPoint: function(point /*, ref */) {
    },
@@ -830,9 +828,9 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw a sprite on the context.
     *
-    * @param sprite {Sprite} The sprite to draw
+    * @param sprite {R.resources.types.Sprite} The sprite to draw
     * @param time {Number} The current world time
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawSprite: function(sprite, time /*, ref */) {
    },
@@ -840,12 +838,12 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw an image on the context.
     *
-    * @param rect {Rectangle2D} The rectangle that specifies the position and
+    * @param rect {R.math.Rectangle2D} The rectangle that specifies the position and
     *             dimensions of the image rectangle.
     * @param image {Object} The image to draw onto the context
-    * @param [srcRect] {Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
+    * @param [srcRect] {R.math.Rectangle2D} <i>[optional]</i> The source rectangle within the image, if
     *                <tt>null</tt> the entire image is used
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawImage: function(rect, image, srcRect /*, ref */) {
    },
@@ -853,7 +851,7 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Capture an image from the context.
     *
-    * @param rect {Rectangle2D} The area to capture
+    * @param rect {R.math.Rectangle2D} The area to capture
     * @return {ImageData} Image data capture
     */
    getImage: function(rect) {
@@ -864,8 +862,8 @@ R.rendercontexts.RenderContext2D = function() {
     * the context.
     *
     * @param imageData {ImageData} Image data captured
-    * @param point {Point2D} The poisition at which to draw the image
-    * @param [ref] {HostObject} A reference host object
+    * @param point {R.math.Point2D} The poisition at which to draw the image
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    putImage: function(imageData, point /*, ref */) {
    },
@@ -873,9 +871,9 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw text on the context.
     *
-    * @param point {Point2D} The top-left position to draw the image.
+    * @param point {R.math.Point2D} The top-left position to draw the image.
     * @param text {String} The text to draw
-    * @param [ref] {HostObject} A reference host object
+    * @param [ref] {R.engine.HostObject} A reference host object
     */
    drawText: function(point, text /*, ref */) {
    },
@@ -907,7 +905,7 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Move the current path to the point sepcified.
     *
-    * @param point {Point2D} The point to move to
+    * @param point {R.math.Point2D} The point to move to
     */
    moveTo: function(point) {
    },
@@ -915,7 +913,7 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw a line from the current point to the point specified.
     *
-    * @param point {Point2D} The point to draw a line to
+    * @param point {R.math.Point2D} The point to draw a line to
     */
    lineTo: function(point) {
    },
@@ -925,7 +923,7 @@ R.rendercontexts.RenderContext2D = function() {
     * is <tt>null</tt>, the context will move to the next point.  Otherwise,
     * it will draw a line to the point.
     *
-    * @param point {Point2D} The point to draw a line to, or null.
+    * @param point {R.math.Point2D} The point to draw a line to, or null.
     */
    lineSeg: function(point) {
       if (point == null) {
@@ -949,8 +947,8 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw a quadratic curve from the current point to the specified point.
     *
-    * @param cPoint {Point2D} The control point
-    * @param point {Point2D} The point to draw to
+    * @param cPoint {R.math.Point2D} The control point
+    * @param point {R.math.Point2D} The point to draw to
     */
    quadraticCurveTo: function(cPoint, point) {
    },
@@ -958,9 +956,9 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw a bezier curve from the current point to the specified point.
     *
-    * @param cPoint1 {Point2D} Control point 1
-    * @param cPoint2 {Point2D} Control point 2
-    * @param point {Point2D} The point to draw to
+    * @param cPoint1 {R.math.Point2D} Control point 1
+    * @param cPoint2 {R.math.Point2D} Control point 2
+    * @param point {R.math.Point2D} The point to draw to
     */
    bezierCurveTo: function(cPoint1, cPoint2, point) {
    },
@@ -968,8 +966,8 @@ R.rendercontexts.RenderContext2D = function() {
    /**
     * Draw an arc from the current point to the specified point.
     *
-    * @param point1 {Point2D} Arc point 1
-    * @param point2 {Point2D} Arc point 2
+    * @param point1 {R.math.Point2D} Arc point 1
+    * @param point2 {R.math.Point2D} Arc point 2
     * @param radius {Number} The radius of the arc
     */
    arcTo: function(point1, point2, radius) {

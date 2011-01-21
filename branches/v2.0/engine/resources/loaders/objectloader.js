@@ -53,9 +53,7 @@ R.resources.loaders.ObjectLoader = function(){
 	
 		objects: null,
 		
-		/**
-		 * private
-		 */
+		/** private */
 		constructor: function(name){
 			this.base(name || "ObjectLoader");
 			this.objects = {};

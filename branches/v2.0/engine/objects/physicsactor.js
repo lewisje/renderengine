@@ -46,21 +46,21 @@ R.Engine.define({
 });
 
 /**
- * @class A <tt>PhysicsActor</tt> is an actor object within a game represented by
+ * @class A <tt>R.objects.PhysicsActor</tt> is an actor object within a game represented by
  * 		 a collection of components which can include rigid bodies and joints.
- * 		 Unlike {@link Object2D}, a <code>PhysicsActor</code> can associate each rigid
- * 		 body with its own {@link RenderComponent}.  When the rigid body is updated, the
+ * 		 Unlike {@link R.engine.Object2D}, a <code>R.objects.PhysicsActor</code> can associate each rigid
+ * 		 body with its own {@link R.components.Render}.  When the rigid body is updated, the
  * 		 render component is updated with it.  That way, a physics actor can be comprised
  * 		 of multiple bodies, each with their own renderer allowing for a complex object
  * 		 such as a ragdoll with many parts and joints.  A physics actor is used within a
- * 		 {@link Simulation}.
+ * 		 {@link R.physics.Simulation}.
  * 		 <p/>
- * 		 A <code>PhysicsActor</code> acts just like an {@link Object2D}, but it is special
- * 		 in that it's rigid bodies are animated via a {@link Simulation}.  Without being added to a
- * 		 {@link Simulation}, none of the physical bodies will be updated. 
+ * 		 A <code>R.objects.PhysicsActor</code> acts just like an {@link R.engine.Object2D}, but it is special
+ * 		 in that it's rigid bodies are animated via a {@link R.physics.Simulation}.  Without being added to a
+ * 		 {@link R.physics.Simulation}, none of the physical bodies will be updated. 
  * 
  * @param name {String} The name of the actor object
- * @extends Object2D
+ * @extends R.engine.Object2D
  * @constructor
  * @description Create a physics actor
  */
@@ -127,13 +127,13 @@ R.objects.PhysicsActor = function() {
 	
 	/**
 	 * Set the rigid body component which is considered to be the root
-	 * body.  When setting the position of a <tt>PhysicsActor</tt>, all positions
+	 * body.  When setting the position of a <tt>R.objects.PhysicsActor</tt>, all positions
 	 * are calculated relative to where the root body was originally set.
 	 * <p/>
 	 * It is not necessary to set the root body if there is only one rigid body
 	 * in the actor.
 	 * 
-	 * @param body {BaseBodyComponent} The body to assign as the root
+	 * @param body {R.components.BaseBody} The body to assign as the root
 	 */
 	setRootBody: function(body) {
 		Assert(body instanceof R.components.BaseBody, "Root body is not a BaseBodyComponent");
@@ -141,9 +141,9 @@ R.objects.PhysicsActor = function() {
 	},
 	
 	/**
-	 * Get the root body of the <tt>PhysicsActor</tt>.  If no root object has been assigned,
+	 * Get the root body of the <tt>R.objects.PhysicsActor</tt>.  If no root object has been assigned,
 	 * the first rigid body component will be used.
-	 * @return {BaseBodyComponent}
+	 * @return {R.components.BaseBody}
 	 */
 	getRootBody: function() {
 		if (!this.rootBody) {
@@ -155,7 +155,7 @@ R.objects.PhysicsActor = function() {
 
    /**
     * Get the position of the actor from the root body component.
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getPosition: function() {
       return this.getRootBody().getPosition();
@@ -163,7 +163,7 @@ R.objects.PhysicsActor = function() {
 	
    /**
     * Get the render position of the actor
-    * @return {Point2D}
+    * @return {R.math.Point2D}
     */
    getRenderPosition: function() {
       this.rPos.set(this.getPosition());
@@ -190,8 +190,8 @@ R.objects.PhysicsActor = function() {
 	 * Set the position of the actor.  If the actor is comprised of multiple rigid bodies,
 	 * the position will be set for all rigid bodies and joints, relative to the root body.
 	 * 
-	 * @param x {Number|Point2D} The X position, or a <tt>Point2D</tt>
-	 * @param y {Number} The Y position, or <tt>null</tt> if X is a <tt>Point2D</tt>
+	 * @param x {Number|R.math.Point2D} The X position, or a <tt>R.math.Point2D</tt>
+	 * @param y {Number} The Y position, or <tt>null</tt> if X is a <tt>R.math.Point2D</tt>
 	 */
 	setPosition: function(x, y) {
 		var pt = R.math.Point2D.create(x,y);
@@ -215,19 +215,19 @@ R.objects.PhysicsActor = function() {
 	},
 	
 	/**
-	 * Set the <code>Simulation</code> this actor participates within.  When a <code>PhysicsActor</code> 
-	 * is part of a running <code>Simulation</code>, you must set the simulation so the physics components
+	 * Set the <code>R.physics.Simulation</code> this actor participates within.  When a <code>R.objects.PhysicsActor</code> 
+	 * is part of a running <code>R.physics.Simulation</code>, you must set the simulation so the physics components
 	 * can be properly added to the simulated world.
 	 * 
-	 * @param simulation {Simulation} The simulation this object is within
+	 * @param simulation {R.physics.Simulation} The simulation this object is within
 	 */
 	setSimulation: function(simulation) {
 		this.simulation = simulation;
 	},
 	
 	/**
-	 * Get the <code>Simulation</code> this object participates within.
-	 * @return {Simulation}
+	 * Get the <code>R.physics.Simulation</code> this object participates within.
+	 * @return {R.physics.Simulation}
 	 */
 	getSimulation: function() {
 		return this.simulation;	
@@ -263,10 +263,10 @@ R.objects.PhysicsActor = function() {
     * <li>Rendering</li>
     * </ul>
     *
-    * @param component {BaseComponent} A component to add to the host.  If the component is a
-    * 	{@link BaseBodyComponent} then the render component must be specified.
-    * @param [renderComponent] {RenderComponent} The render component if the component is a
-    * 	{@link BaseBodyComponent}
+    * @param component {R.components.Base} A component to add to the host.  If the component is a
+    * 	{@link R.components.BaseBody} then the render component must be specified.
+    * @param [renderComponent] {R.components.Render} The render component if the component is a
+    * 	{@link R.components.BaseBody}
     */
 	add: function(component, renderComponent) {
 		if (component instanceof R.component.BaseBody) {
@@ -293,7 +293,7 @@ R.objects.PhysicsActor = function() {
    /**
     * Update this object within the render context, at the specified timeslice.
     *
-    * @param renderContext {RenderContext} The context the object will be rendered within.
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The context the object will be rendered within.
     * @param time {Number} The global time within the engine.
     */
    update: function(renderContext, time) {
@@ -336,9 +336,7 @@ R.objects.PhysicsActor = function() {
       R.struct.HashContainer.prototype.update.call(this, renderContext, time);
    },
 	
-	/**
-	 * @private
-	 */
+	/** @private */
 	__noop: function() {
 		// This function only serves to make sure that ObjectLoader exists
 		// for the static methods below.
@@ -377,9 +375,9 @@ R.objects.PhysicsActor = function() {
 	 * joints which are used to link the parts together.
 	 * <p/>
 	 * The actor object is loaded asynchronously which means it isn't immediately
-	 * available.  You get a reference to the object by calling {@link PhysicsActor#get}.
+	 * available.  You get a reference to the object by calling {@link R.objects.PhysicsActor#get}.
 	 * <p/>
-	 * An example <tt>PhysicsActor</tt> file can be found in the "/demos/physics2/"
+	 * An example <tt>R.objects.PhysicsActor</tt> file can be found in the "/demos/physics2/"
 	 * demo game.
 	 * 
 	 * @param name {String} The unique reference name of the actor object 
@@ -391,7 +389,7 @@ R.objects.PhysicsActor = function() {
 	},
 	
 	/**
-	 * Determine the ready state of a physics actor loaded with {@link PhysicsActor#load}.
+	 * Determine the ready state of a physics actor loaded with {@link R.objects.PhysicsActor#load}.
 	 * 
 	 * @param name {String} The unique reference name of the actor object
 	 * @return {Boolean} <code>true</code> if the object is ready for use
@@ -407,7 +405,7 @@ R.objects.PhysicsActor = function() {
 	 * 
 	 * @param name {String} The unique reference name of the actor object
 	 * @param [objName] {String} The name to assign to the instance when created
-	 * @return {PhysicsActor} A new instance of the actor defined by "name"
+	 * @return {R.objects.PhysicsActor} A new instance of the actor defined by "name"
 	 * @static
 	 */
 	get: function(name, objName) {

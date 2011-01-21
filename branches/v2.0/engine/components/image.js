@@ -40,13 +40,13 @@ R.Engine.define({
 });
 
 /**
- * @class A {@link RenderComponent} that draws an image to the render context.
- *        Images used by this component are loaded via an {@link ImageLoader}
+ * @class A {@link R.components.Render} that draws an image to the render context.
+ *        Images used by this component are loaded via an {@link R.resources.loader.ImageLoader}
  *        so that client-side caching can be implemented.
  *
  * @param name {String} The name of the component
  * @param [priority=0.1] {Number} The render priority
- * @param image {Image} The image object, acquired with {@link ImageLoader#getImage}.
+ * @param image {R.resources.types.Image} The image object, acquired with {@link R.resources.loaders.ImageLoader#getImage}.
  * @extends R.components.Render
  * @constructor
  * @description Creates a component which renders images from an {@link ImageLoader}.
@@ -96,7 +96,7 @@ R.components.Image = function() {
     * specified when creating the component.  This allows the user to change
     * the image on the fly.
     *
-    * @param image {Image} The image to render
+    * @param image {R.resources.types.Image} The image to render
     */
    setImage: function(image) {
       this.currentImage = image;
@@ -115,13 +115,12 @@ R.components.Image = function() {
    /**
     * Draw the image to the render context.
     *
-    * @param renderContext {RenderContext} The context to render to
+    * @param renderContext {R.rendercontexts.AbstractRenderContext} The context to render to
     * @param time {Number} The engine time in milliseconds
     */
    execute: function(renderContext, time) {
 
-      if (!this.base(renderContext, time))
-      {
+      if (!this.base(renderContext, time)) {
          return;
       }
 

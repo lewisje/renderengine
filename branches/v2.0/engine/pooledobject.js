@@ -61,9 +61,7 @@ R.engine.PooledObject = function() {
 	
 	_destroyed: false,
 
-   /**
-    * @private
-    */
+   /** @private */
    constructor: function(name) {
 		this._destroyed = false;
       this.name = name;
@@ -72,7 +70,7 @@ R.engine.PooledObject = function() {
 
    /**
     * When a pooled object is destroyed, its <tt>release()</tt> method will be called
-    * so it has a chance to can clean up instance variables before being put back into 
+    * so it has a chance to clean up instance variables before being put back into 
     * the pool for reuse. The variables should be returned to an "uninitialized" state.
     */
    release: function() {
@@ -81,8 +79,8 @@ R.engine.PooledObject = function() {
    },
 
    /**
-    * Destroy this object instance (remove it from the Engine).  The object's release
-    * method is called after destruction so it will be returned to the pool of objects 
+    * Destroy this object instance (remove it from the Engine).  The object's <tt>release()</tt>
+    * method is called after destruction so it can be returned to the pool of objects 
     * to be used again.
     */
    destroy: function() {
@@ -143,6 +141,10 @@ R.engine.PooledObject = function() {
       });
    },
 
+	/**
+	 * Write out the Id of the object and its class name
+	 * @return {String}
+	 */
 	toString: function() {
       return this.getId() + " [" + this.constructor.getClassName() + "]";   
 	},

@@ -39,7 +39,7 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of {@link Timeout} which is a one-shot timer that cannot 
+ * @class An extension of {@link R.lang.Timeout} which is a one-shot timer that cannot 
  *        be restarted and will self-destroy after it completes its interval.  Within
  *        the callback, <tt>this</tt> refers to the <tt>Timer</tt> object itself.
  *
@@ -47,7 +47,7 @@ R.Engine.define({
  * @param interval {Number} The interval for the timer, in milliseconds
  * @param callback {Function} The function to call when the interval is reached
  * @constructor
- * @extends R.leng.Timeout
+ * @extends R.lang.Timeout
  * @description Create a one-shot timeout
  */
 R.lang.OneShotTimeout = function(){

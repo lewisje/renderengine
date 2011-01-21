@@ -39,7 +39,7 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of {@link Timer} that wraps the <tt>window.setInterval</tt> method.
+ * @class An extension of {@link R.lang.AbstractTimer} that wraps the <tt>window.setInterval</tt> method.
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds
  * @param callback {Function} The function to call when the interval is reached
@@ -54,7 +54,7 @@ R.lang.IntervalTimer = function(){
 		 * Cancel this interval timer.
 		 */
 		cancel: function(){
-			window.clearInterval(this.getTimer());
+			R.global.clearInterval(this.getTimer());
 			this.base();
 		},
 		
@@ -70,7 +70,7 @@ R.lang.IntervalTimer = function(){
 		 * Restart this interval timer.
 		 */
 		restart: function(){
-			this.setTimer(window.setInterval(this.getCallback(), this.getInterval()));
+			this.setTimer(R.global.setInterval(this.getCallback(), this.getInterval()));
 		}
 	}, /** @scope R.lang.IntervalTimer.prototype */ {
 	

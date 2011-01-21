@@ -137,7 +137,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  * @class A debug console that will use a pre-defined element to display its output.  The element with the id 
  *        "debug-console" will be created an appended to the DOM for you.  This object is created when no other
  *        option is available from the browser, or when developer tools cannot be accessed.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
@@ -267,7 +267,7 @@ R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
 
 /**
  * @class A debug console abstraction for Safari browsers.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
@@ -315,7 +315,7 @@ R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
 
 /**
  * @class A debug console for Opera browsers.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
 
@@ -364,7 +364,7 @@ R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
 
 /**
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
 
@@ -436,7 +436,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
 
 /**
  * @class A console reference to the MSIE console.
- * @extends ConsoleRef
+ * @extends R.debug.ConsoleRef
  */
 R.debug.MSIE = R.debug.ConsoleRef.extend(/** @R.debug.MSIE.prototype **/{
 

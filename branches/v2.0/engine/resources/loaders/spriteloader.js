@@ -86,6 +86,7 @@ R.resources.loaders.SpriteLoader = function(){
 		
 		queuedSprites: 0,
 		
+		/** @private */
 		constructor: function(name){
 			this.base(name || "SpriteLoader");
 			this.sprites = {};
@@ -169,11 +170,11 @@ R.resources.loaders.SpriteLoader = function(){
 		},
 		
 		/**
-		 * Creates a {@link Sprite} object representing the named sprite.
+		 * Creates a {@link R.resources.types.Sprite} object representing the named sprite.
 		 *
 		 * @param resource {String} The name of a loaded sprite resource
 		 * @param sprite {String} The name of the sprite from the resource
-		 * @return {Sprite} A {@link Sprite} instance
+		 * @return {R.resources.types.Sprite} A {@link R.resources.types.Sprite} instance
 		 */
 		getSprite: function(resource, sprite){
 			var info = this.get(resource).info;
@@ -197,7 +198,7 @@ R.resources.loaders.SpriteLoader = function(){
 		
 		/**
 		 * Export all of the sprites in the specified resource, as a JavaScript object, with the
-		 * sprite name as the key and the corresponding {@link Sprite} as the value.
+		 * sprite name as the key and the corresponding {@link R.resources.types.Sprite} as the value.
 		 * @param resource {String} The name of the sprite resource
 		 * @param [spriteNames] {Array} An optional array of sprites to export, by name,
 		 * 		or <code>null</tt> to export all sprites

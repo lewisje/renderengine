@@ -73,9 +73,7 @@ R.engine.BaseObject = function(){
 		
 		events: null,
 		
-		/**
-		 * @private
-		 */
+		/** @private */
 		constructor: function(name){
 			this.base(name);
 			this.events = {};
@@ -154,7 +152,7 @@ R.engine.BaseObject = function(){
 		 * current engine time.  Use this method to update components and
 		 * perform housekeeping on the object.
 		 *
-		 * @param renderContext {RenderContext} The context the object exists within
+		 * @param renderContext {R.rendercontexts.AbstractRenderContext} The context the object exists within
 		 * @param time {Number} The current engine time, in milliseconds
 		 */
 		update: function(renderContext, time){
