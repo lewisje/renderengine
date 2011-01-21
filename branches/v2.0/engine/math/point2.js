@@ -46,116 +46,121 @@ R.Engine.define({
  * @constructor
  * @description Create a new 2D point.
  */
-R.math.Point2 = function(x,y){
-   this.p = [x || 0, y || 0, 1];
-};
-      
-/**
- * Returns a simplified version of a R.math.Point2D.  The simplified version is
- * an array with two elements: X, Y.
- * @return {Array}
- */
-R.math.Point2.prototype.simplify = function(){
-	return [this.x, this.y];
-};
-      
-/**
- * Returns <tt>true</tt> if this point is equal to the specified point.
- *
- * @param point {R.math.Point2} The point to compare to
- * @return {Boolean} <tt>true</tt> if the two points are equal
- */
-R.math.Point2.prototype.equals = function(point){
-	return (this.x == point.x && this.y == point.y);
-};
-      
-/**
- * A method that mutates this point by adding the point to it.
- *
- * @param point {R.math.Point2D} A point
- * @return {R.math.Point2D} This point
- */
-R.math.Point2.prototype.add = function(point){
-	this.x += point.x;
-	this.y += point.y;
-	return this;
-};
-      
-/**
- * A mutator method that adds the scalar value to each component of this point.
- * @param scalar {Number} A number
- * @return {R.math.Point2D} This point
- */
-R.math.Point2.prototype.addScalar = function(scalar){
-	this.x += scalar;
-	this.y += scalar;
-	return this;
-};
-      
-/**
- * A mutator method that subtracts the specified point from this point.
- * @param point {Point2D} a point
- * @return {R.math.Point2D} This point
- */
-R.math.Point2.prototype.sub = function(point){
-	this.x -= point.x;
-	this.y -= point.y;
-	return this;
-};
-      
-/**
- * A mutator methor that multiplies the components of this point by a scalar value.
- * @param scalar {Number} A number
- * @return {R.math.Point2D} This point
- */
-R.math.Point2.prototype.mul = function(scalar){
-	this.x *= scalar;
-	this.y *= scalar;
-	return this;
-};
-      
-/**
- * A mutator method that negates this point, inversing it's components.
- * @return {R.math.Point2D} This point
- */
-R.math.Point2.prototype.neg = function(){
-	this.x *= -1;
-	this.y *= -1;
-	return this;
-};
-      
-/**
- * Returns true if the point is the zero point.
- * @return {Boolean} <tt>true</tt> if the point's elements are both zero.
- */
-R.math.Point2.prototype.isZero = function(){
-	return this.x == 0 && this.y == 0;
-};
-      
-/**
- * Returns a printable version of this object fixed to two decimal places.
- * @return {String} Formatted as "x,y"
- */
-R.math.Point2.prototype.toString = function(){
-	return Number(this.x).toFixed(2) + "," + Number(this.y).toFixed(2);
-};
-      
-// Define setters and getters
-var pp = R.math.Point2.prototype;
-pp.__defineGetter__("x", function(){
-	return this.p[0];
-});
+R.math.Point2 = function() {
+	return function(x,y){
+   	this.p = [x || 0, y || 0, 1];
+	};
 
-pp.__defineSetter__("x", function(val){
-	this.p[0] = val;
-});
 
-pp.__defineGetter__("y", function(){
-	return this.p[1];
-});
+	/**
+	 * Returns a simplified version of a R.math.Point2D.  The simplified version is
+	 * an array with two elements: X, Y.
+	 * @return {Array}
+	 */
+	R.math.Point2.prototype.simplify = function(){
+		return [this.x, this.y];
+	};
 
-pp.__defineSetter__("y", function(val){
-	this.p[1] = val;
-});
+	/**
+	 * Returns <tt>true</tt> if this point is equal to the specified point.
+	 *
+	 * @param point {R.math.Point2} The point to compare to
+	 * @return {Boolean} <tt>true</tt> if the two points are equal
+	 */
+	R.math.Point2.prototype.equals = function(point){
+		return (this.x == point.x && this.y == point.y);
+	};
 
-R.math.Point2.ZERO = new R.math.Point2(0,0);
+	/**
+	 * A method that mutates this point by adding the point to it.
+	 *
+	 * @param point {R.math.Point2D} A point
+	 * @return {R.math.Point2D} This point
+	 */
+	R.math.Point2.prototype.add = function(point){
+		this.x += point.x;
+		this.y += point.y;
+		return this;
+	};
+
+	/**
+	 * A mutator method that adds the scalar value to each component of this point.
+	 * @param scalar {Number} A number
+	 * @return {R.math.Point2D} This point
+	 */
+	R.math.Point2.prototype.addScalar = function(scalar){
+		this.x += scalar;
+		this.y += scalar;
+		return this;
+	};
+
+	/**
+	 * A mutator method that subtracts the specified point from this point.
+	 * @param point {Point2D} a point
+	 * @return {R.math.Point2D} This point
+	 */
+	R.math.Point2.prototype.sub = function(point){
+		this.x -= point.x;
+		this.y -= point.y;
+		return this;
+	};
+
+	/**
+	 * A mutator methor that multiplies the components of this point by a scalar value.
+	 * @param scalar {Number} A number
+	 * @return {R.math.Point2D} This point
+	 */
+	R.math.Point2.prototype.mul = function(scalar){
+		this.x *= scalar;
+		this.y *= scalar;
+		return this;
+	};
+
+	/**
+	 * A mutator method that negates this point, inversing it's components.
+	 * @return {R.math.Point2D} This point
+	 */
+	R.math.Point2.prototype.neg = function(){
+		this.x *= -1;
+		this.y *= -1;
+		return this;
+	};
+
+	/**
+	 * Returns true if the point is the zero point.
+	 * @return {Boolean} <tt>true</tt> if the point's elements are both zero.
+	 */
+	R.math.Point2.prototype.isZero = function(){
+		return this.x == 0 && this.y == 0;
+	};
+
+	/**
+	 * Returns a printable version of this object fixed to two decimal places.
+	 * @return {String} Formatted as "x,y"
+	 */
+	R.math.Point2.prototype.toString = function(){
+		return Number(this.x).toFixed(2) + "," + Number(this.y).toFixed(2);
+	};
+
+	// Define setters and getters
+	var pp = R.math.Point2.prototype;
+	pp.__defineGetter__("x", function(){
+		return this.p[0];
+	});
+
+	pp.__defineSetter__("x", function(val){
+		this.p[0] = val;
+	});
+
+	pp.__defineGetter__("y", function(){
+		return this.p[1];
+	});
+
+	pp.__defineSetter__("y", function(val){
+		this.p[1] = val;
+	});
+
+	R.math.Point2.ZERO = new R.math.Point2(0,0);
+
+};
+      
