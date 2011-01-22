@@ -40,9 +40,9 @@ R.Engine.define({
 });
 
 /**
- * @class A {@link R.components.Render} that draws an image to the render context.
+ * @class A {@link R.components.Render render component} that draws an image to the render context.
  *        Images used by this component are loaded via an {@link R.resources.loader.ImageLoader}
- *        so that client-side caching can be implemented.
+ *        so that client-side caching can be used.
  *
  * @param name {String} The name of the component
  * @param [priority=0.1] {Number} The render priority

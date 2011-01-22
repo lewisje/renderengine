@@ -52,7 +52,7 @@ R.global = this;
 /**
  * Declare a new namespace in R.
  * @param ns {String} The namespace to declare
- * @exception Throws and exception if the namespace is already declared
+ * @exception Throws an exception if the namespace is already declared
  * @memberOf R
  */
 R.namespace = function(ns) {
@@ -72,8 +72,11 @@ R.namespace = function(ns) {
 };
 
 /**
- * Throw an "unsupported" exception
+ * Throw an "unsupported" exception for the given method in the class.
+ * @param method {String} The method name
+ * @param clazz {Class} The class object
  * @memberOf R
+ * @exception Throws a "[method] is unsupported in [Class]" error
  */
 R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	

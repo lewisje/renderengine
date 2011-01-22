@@ -102,9 +102,7 @@ R.particles.ParticleEngine = function() {
    addParticles: function(particles) {
 		if (!(particles instanceof R.struct.Container)) {
 			// If the particles are an Array, convert to a Container first
-			var oldP = particles;
-			particles = R.struct.Container.create();
-			particles.addAll(oldP);
+			particles = R.struct.Container.fromArray(particles);
 		}
 
       // If the new particles exceed the size of the engine's

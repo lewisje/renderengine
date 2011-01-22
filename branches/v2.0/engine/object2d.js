@@ -47,7 +47,8 @@ R.Engine.define({
 
 /**
  * @class An object for use in a 2d environment.  Methods for getting the position, rotation
- * and scale should be implemented within the extended class.
+ * and scale should be implemented within the extended class.  This class is the recommended
+ * base class for objects used within a 2d game, instead of deriving from {@link R.engine.HostObject}. 
  * 
  * @param name {String} The name of the object
  * @extends R.engine.HostObject

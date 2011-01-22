@@ -44,7 +44,7 @@ R.Engine.define({
 });
 
 /**
- * @class A mover component that adds physical transformations to an object.
+ * @class A mover component that adds simplified physical transformations to an object.
  *        Properties include velocity, acceleration, mass, and gravity.
  *
  * @param name {String} The name of the component

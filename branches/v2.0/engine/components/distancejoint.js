@@ -46,7 +46,7 @@ R.Engine.define({
 
 /**
  * @class A distance joint which maintains constant distance between two bodies
- * 		 in a {@link Simulation}.  
+ * 		 in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component
  * @param body1 {R.components.BaseBody} The first body for the joint

@@ -48,7 +48,7 @@ R.Engine.define({
  * @description Create an interval timer
  */
 R.lang.IntervalTimer = function(){
-	return R.lang.AbstractTimer.extend(/** @scope R.lang.Interval.prototype */{
+	return R.lang.AbstractTimer.extend(/** @scope R.lang.IntervalTimer.prototype */{
 	
 		/**
 		 * Cancel this interval timer.

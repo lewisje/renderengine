@@ -349,7 +349,6 @@ R.math.Point2D = function(){
 		/**
 		 * The "zero" point. This point should not be modified.
 		 * @type {Point2D}
-		 * @memberOf Point2D
 		 */
 		ZERO: null 
 	});

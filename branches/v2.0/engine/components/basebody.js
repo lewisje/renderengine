@@ -46,7 +46,7 @@ R.Engine.define({
 });
 
 /**
- * @class The base rigid body component which initializes rigid bodies
+ * @class The base component which initializes rigid bodies
  * 		 for use in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component

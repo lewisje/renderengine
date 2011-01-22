@@ -49,7 +49,7 @@ R.Engine.define({
  * @constructor
  * @param [name=RemoteFileLoader] {String} The name of the resource loader
  * @extends R.resources.loaders.AbstractResourceLoader
- * @private
+ * @deprecated
  */
 R.resources.loaders.RemoteFileLoader = function(){
 	return R.resources.loaders.AbstractResourceLoader.extend(/** @scope R.resources.loaders.RemoteFileLoader.prototype */{
@@ -167,7 +167,7 @@ R.resources.loaders.RemoteFileLoader = function(){
 			return "remote file";
 		}
 		
-	}, /** @scope R.resources.loaders.RemoteFileLoader.prototype */ {
+	}, /** @scope R.resources.loaders.RemoteFileLoader.prototype */{
 		/**
 		 * Get the class name of this object.
 		 * @return {String} The string "R.resources.loaders.RemoteFileLoader"

@@ -35,7 +35,13 @@
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-R.engine.Script = Base.extend({
+/**
+ * @class A static class which is used to load new JavaScript into the browser.  Methods are
+ * 		 also provided to use AJAX to get text and JSON data on-the-fly, load stylesheets,
+ * 		 and process script callbacks from a loader queue.
+ * @static
+ */
+R.engine.Script = Base.extend(/** @scope R.engine.Script.prototype */{
 
    constructor: null,
 

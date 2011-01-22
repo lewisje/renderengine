@@ -35,7 +35,14 @@
 //                                     METRICS MANAGEMENT
 //====================================================================================================
 //====================================================================================================
-R.debug.Metrics = Base.extend({
+/**
+ * @class A static class to be used to measure metrics of engine and game performance.  A
+ * 		 visual profiler is provided which graphs runtime values of the engine, such as
+ * 		 load and visible objects.  Additionally a metrics window is provided to show
+ * 		 sampled metric data from parts of the engine, as well as user-defined metrics.
+ * @static
+ */
+R.debug.Metrics = Base.extend(/** @scope R.debug.Metrics.prototype */{
    constructor: null,
 
    /*

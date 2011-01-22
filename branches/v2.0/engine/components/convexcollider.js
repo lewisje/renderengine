@@ -51,13 +51,13 @@ R.Engine.define({
  *        object's convex collision hulls using the Separating Axis Theorm (SAT).  Each object must
  *        have a collision hull assigned to it with {@link R.engine.Object2D#setCollisionHull}.
  *        <p/>
- *        The SAT states that, if an axis can be found where the two object's hull
+ *        The SAT states that, if an axis can be found where the two object's hulls
  *        don't overlap, then the two objects cannot be colliding.  When a collision
- *        is determined, querying {@link #getImpulseVector} will return a {@link R.math.Vector2D}
- *        which can be used to separate the first object from the second.  Negating the
- *        vector, you can apply it to the target object instead.
+ *        is determined, querying {@link #getCollisionData} will return a {@link R.struct.CollisionData}
+ *        object which can be used to determine the collision normal, what shapes collided, the amount
+ *        of overlap, and a vector to separate the objects.
  *        <p/>
- *        The vector can also be manipulated to simulate physical forces such as
+ *        The data can also be manipulated to simulate physical forces such as
  *        bounciness and friction.
  *
  * @param name {String} Name of the component

@@ -1062,7 +1062,7 @@ R.rendercontexts.RenderContext2D = function() {
 	
 	/**
 	 * Text baseline middle of em square
-	 * @memberOf RenderContext2D
+	 * @type {String}
 	 */
 	FONT_BASELINE_MIDDLE: "middle",
 	

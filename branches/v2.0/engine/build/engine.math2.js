@@ -38,7 +38,7 @@
  * 
  * @static
  */
-R.lang.Math2 = {
+R.lang.Math2 = /** @scope R.lang.Math2.prototype */{
 	
 	state: 1,
 	m: 0x100000000, // 2**32;
@@ -46,7 +46,7 @@ R.lang.Math2 = {
 	c: 12345,
 	
 	/**
-	 * Largest integer
+	 * Largest integer (4294967295)
 	 * @type {Number}
 	 * @memberOf R.lang.Math2
 	 */

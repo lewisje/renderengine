@@ -47,9 +47,9 @@ R.Engine.define({
  * @class A convex hull with which to perform collision testing.  A convex hull
  * 		 is a simplification of the points which either comprise an object, or
  * 		 the points around an object.  There are two simplified hull types which
- * 		 can also be used: {@link OBBHull} and {@link CircleHull}
+ * 		 can also be used: {@link R.collision.OBBHull} and {@link R.collision.CircleHull}
  *
- * @param points {Array} An array of {@link Point2D} which make up the shape to 
+ * @param points {Array} An array of {@link R.math.Point2D} which make up the shape to 
  * 		create the hull from.
  * @param [lod] {Number} The level of detail for the hull.  Larger numbers make for a more 
  * 		complex hull.  Points will not be created if the number of points availble is
@@ -219,7 +219,7 @@ R.collision.ConvexHull = function() {
 		return R.collision.ConvexHull.CONVEX_NGON;
 	}
 	
-}, { /** @scope R.collision.ConvexHull.prototype */
+}, /** @scope R.collision.ConvexHull.prototype */{ 
 
    /**
     * Get the class name of this object

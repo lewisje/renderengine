@@ -79,8 +79,8 @@ R.struct.Touch = Base.extend(/** @scope R.struct.Touch.prototype */{
    },
 
    /**
-    * Get a {@link Point2D} which represents the location of the touch
-    * @return {Point2D} The coordinates of the touch
+    * Get a {@link R.math.Point2D} which represents the location of the touch
+    * @return {R.math.Point2D} The coordinates of the touch
     */
    get: function() {
       return R.math.Point2D.create(this.touchX, this.touchY);
