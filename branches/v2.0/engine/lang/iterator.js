@@ -40,10 +40,10 @@ R.Engine.define({
 });
 
 /**
- * @class Create an iterator over a {@link R.struct.Container} instance. An
+ * @class Create an iterator over a {@link R.struct.Container} or <code>Array</code> instance. An
  * iterator is a convenient object to traverse the list of objects
- * within the container.  If the backing <code>R.struct.Container</code> is
- * modified, the <code>R.lang.Iterator</code> will reflect these changes.
+ * within the container.  The benefit of using an iterator with a <code>R.struct.Container</code> is
+ * that if the container is modified, the <code>R.lang.Iterator</code> will reflect these changes.
  * <p/>
  * The simplest way to traverse the list is as follows:
  * <pre>
@@ -73,6 +73,7 @@ R.lang.Iterator = function() {
    c: null,
 	p: null,
 	r: false,
+	arr: false,
 
    /**
     * @private
@@ -80,7 +81,8 @@ R.lang.Iterator = function() {
    constructor: function(container) {
       this.base("Iterator");
       this.c = container;
-		this.p = container._head;
+		this.arr = !(container instanceof R.struct.Container);
+		this.p = this.arr ? 0 : container._head;
 		this.r = false;
    },
 
@@ -90,6 +92,7 @@ R.lang.Iterator = function() {
    release: function() {
       this.base();
       this.c = null;
+		this.arr = false;
 		this.p = null;
 		this.r = false;
    },
@@ -98,17 +101,18 @@ R.lang.Iterator = function() {
 	 * Reset the iterator to the start of the collection.
 	 */
 	reset: function() {
-		this.p = this.r ? this.c._tail : this.c._head;
+		this.p = this.arr ? (this.r ? this.c.length - 1 : 0) : (this.r ? this.c._tail : this.c._head);
 	},
 
    /**
     * Reverse the order of the elements in the container (non-destructive) before
-    * iterating over them.  You cannot call this method after you have called {@link #next}.
+    * iterating over them.  You cannot call this method after you have called {@link #next},
+    * otherwise, use {@link #reset} before calling this method.
     */
    reverse: function() {
-      Assert(this.p === this.c._head, "Cannot reverse Iterator after calling next()");
+      Assert((this.arr ? this.p == 0 : this.p === this.c._head), "Cannot reverse Iterator after calling next()");
       this.r = true;
-		this.p = this.c._tail;
+		this.p = this.arr ? this.c.length - 1 : this.c._tail;
    },
 
    /**
@@ -117,18 +121,24 @@ R.lang.Iterator = function() {
     * @throws {Error} An error if called when no more elements are available
     */
    next: function() {
-		if (this.c.isDestroyed()) {
-			throw new Error("Invalid iterator over destroyed container!");
-		}
-
-		// Get the next and move the pointer
-		var o = this.p.ptr;
-		this.p = (this.r ? this.p.prev : this.p.next);
-
-		if (o != null) {
-			return o;
+		if (this.arr) {
+			// For arrays
+			this.p = (this.r ? this.p-- : this.p++);	
 		} else {
-			throw new Error("Index out of range");
+			// For containers
+			if (this.c.isDestroyed()) {
+				throw new Error("Invalid iterator over destroyed container!");
+			}
+	
+			// Get the next and move the pointer
+			var o = this.p.ptr;
+			this.p = (this.r ? this.p.prev : this.p.next);
+	
+			if (o != null) {
+				return o;
+			} else {
+				throw new Error("Index out of range");
+			}
 		}
    },
 
@@ -137,15 +147,20 @@ R.lang.Iterator = function() {
     * @return {Boolean}
     */
    hasNext: function() {
-		// If the container hasn't been destroyed
-		if (this.c && !this.c.isDestroyed()) {
-			while (this.p != null && this.p.ptr != null && this.p.ptr.isDestroyed()) {
-				// Skip destroyed objects
-				this.p = (this.r ? this.p.prev : this.p.next);
+		if (this.arr) {
+			// For arrays
+			return (this.r ? this.p > 0 : this.p < this.c.length);			
+		} else {
+			// If the container hasn't been destroyed
+			if (this.c && !this.c.isDestroyed()) {
+				while (this.p != null && this.p.ptr != null && this.p.ptr.isDestroyed()) {
+					// Skip destroyed objects
+					this.p = (this.r ? this.p.prev : this.p.next);
+				}
+				return this.p != null;
 			}
-			return this.p != null;
+	      return false;
 		}
-      return false;
    }
 
 }, /** @scope R.lang.Iterator.prototype */{ 
@@ -156,7 +171,17 @@ R.lang.Iterator = function() {
     */
    getClassName: function() {
       return "R.lang.Iterator";
-   }
+   },
+	
+	/**
+	 * Create an instance of an iterator over the given container.
+	 * @param container {R.struct.container|Array} An <code>Array</code> or {@link R.struct.Container}
+	 * @return {R.lang.Iterator} An iterator over the container
+	 * @static
+	 */
+	over: function(container) {
+		return R.lang.Iterator.create(container);	
+	}
 	
 });
 
