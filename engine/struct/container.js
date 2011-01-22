@@ -44,9 +44,7 @@ R.Engine.define({
  *        is responsible for maintaining the list of objects within it.
  *        When a container is destroyed, none of the objects within the container
  *        are destroyed with it.  If the objects must be destroyed, call
- *        {@link #cleanUp}.  A container is a doubly linked list of objects
- *        to all for objects to be added and removed without disrupting the
- *        structure of the list.
+ *        {@link #cleanUp}.  A container is a doubly linked list.
  *
  * @param containerName {String} The name of the container
  * @extends R.engine.BaseObject
@@ -187,7 +185,7 @@ R.struct.Container = function() {
 	 * elements from the container is performed.  As such, removing elements from the
 	 * new container will affect this container as well.
 	 * 
-	 * @param arr {Container|Array} A container or array of objects
+	 * @param arr {R.struct.Container|Array} A container or array of objects
 	 */
 	addAll: function(arr) {
 		if (R.struct.Container.isInstance(arr)) {
@@ -205,7 +203,7 @@ R.struct.Container = function() {
 	/**
 	 * Clone this container, returning a new container which points to all of the
 	 * objects in this container.
-	 * @return {Container} A new container with all of the objects from the current container
+	 * @return {R.struct.Container} A new container with all of the objects from the current container
 	 */
 	clone: function() {
 		var c = R.struct.Container.create();
@@ -221,8 +219,8 @@ R.struct.Container = function() {
 	 * one can be assured that modifying the array or container structure being
 	 * appended will not affect either container.
 	 *
-	 * @param arr {Container|Array} A container or array of objects
-	 * @return {Container} A new container with all objects from both
+	 * @param arr {R.struct.Container|Array} A container or array of objects
+	 * @return {R.struct.Container} A new container with all objects from both
 	 */
 	concat: function(arr) {
 		if (R.struct.Container.isInstance(arr)) {
@@ -371,7 +369,7 @@ R.struct.Container = function() {
 	 * fall after <code>length</code> are not automatically destroyed.
 	 * 
 	 * @param length {Number} The maximum number of elements
-	 * @return {Container} The subset of elements being removed
+	 * @return {R.struct.Container} The subset of elements being removed
 	 */
 	reduce: function(length) {
 		if (length > this.size()) {
@@ -398,7 +396,7 @@ R.struct.Container = function() {
 	 *  
 	 * @param start {Number} The starting index in the container
 	 * @param end {Number} The engine index in the container
-	 * @return {Container} A subset of the container.
+	 * @return {R.struct.Container} A subset of the container.
 	 */
 	subset: function(start, end, b) {
 		var a = b || this.getAll();
@@ -468,7 +466,7 @@ R.struct.Container = function() {
 	 * 
 	 * @param fn {Function} The function to execute for each object
 	 * @param [thisp] {Object} The object to use as <code>this</code> inside the function
-	 * @return {Container}
+	 * @return {R.struct.Container}
 	 */
 	filter: function(fn, thisp) {
 		var arr = R.engine.Support.filter(this.getAll(), fn, thisp || this);
@@ -607,7 +605,7 @@ R.struct.Container = function() {
    
    /**
     * Returns an iterator over the collection.
-    * @return {Iterator} An iterator
+    * @return {R.lang.Iterator} An iterator
     */
    iterator: function() {
       return R.lang.Iterator.create(this);   
@@ -621,7 +619,19 @@ R.struct.Container = function() {
     */
    getClassName: function() {
       return "R.struct.Container";
-   }
+   },
+	
+	/**
+	 * Create a new <code>R.struct.Container</code> from an <code>Array</code>.
+	 * @param array {Array} An array of objects
+	 * @return {R.struct.Container}
+	 * @static
+	 */
+	fromArray: function(array) {
+		var c = R.struct.Container.create();
+		c.addAll(array);
+		return c;
+	}
 	
 });
 

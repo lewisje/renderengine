@@ -46,7 +46,7 @@ R.Engine.define({
 });
 
 /**
- * @class The base physical joint component which initializes physical joints
+ * @class The base component which initializes physical joints
  * 		 for use in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component

@@ -328,7 +328,7 @@ R.components.Collider = function() {
 
    /**
     * When <tt>onCollide()</tt> is called on the host object, it should
-    * return this value if it hasn't handled the collision, or if the host 
+    * return this value if there was no collision and the host 
     * wishes to be notified about other potential collisions.
     * @type {Number}
     */
@@ -343,8 +343,8 @@ R.components.Collider = function() {
    
    /**
     * When <tt>onCollide()</tt> is called on the host object, it should
-    * return this value if a collision occurred but it hasn't handled the collision 
-    * or if the host wishes to be notified about other potential collisions.
+    * return this value if a collision occurred and the host wishes to be notified 
+    * about other potential collisions.
     * @type {Number}
     */
    COLLIDE_AND_CONTINUE: 2

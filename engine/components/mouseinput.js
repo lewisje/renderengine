@@ -58,9 +58,11 @@ R.Engine.define({
  * </ul>
  * Each event receives the "mouseInfo" object as its only argument which contains the following:
  * <ul>
- * <li><tt>position [Point2D]</tt> - The position of the mouse in screen coordinates</li>
- * <li><tt>lastPosition [Point2D]</tt> - The last updated position of the mouse</li>
- * <li><tt>button [Number]</tt> - One of the mouse button constants from {@link EventEngine}</li>
+ * <li><tt>position [R.math.Point2D]</tt> - The position of the mouse in screen coordinates</li>
+ * <li><tt>lastPosition [R.math.Point2D]</tt> - The last updated position of the mouse</li>
+ * <li><tt>button [Number]</tt> - One of the mouse button constants from {@link R.engine.Events}</li>
+ * <li><tt>lastOver [R.engine.PooledObject]</tt> - The last object the mouse was over</li>
+ * <li><tt>moveVec [R.math.Vector2D]</tt> - The direction and magnitude of mouse movement</li>
  * </ul>
  * Objects which wish to be notified via the <tt>onMouseOver()</tt> event handler will need
  * to define their bounding box.

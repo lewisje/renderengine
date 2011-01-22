@@ -49,7 +49,7 @@ R.Engine.define({
  *
  * @param name {String} The name of the component
  * @param [priority=1.0] {Number} The priority of this component
- * @extends LogicComponent
+ * @extends R.components.Logic
  * @constructor
  * @description Creates a <tt>R.components.Host</tt> which can contain {@link R.engine.HostObject HostObjects}.
  *              This allows a component to embed other hosts within it.  Each time the

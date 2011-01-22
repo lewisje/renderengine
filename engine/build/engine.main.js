@@ -54,7 +54,7 @@
  *
  * @static
  */
-R.Engine = Base.extend(/** @scope Engine.prototype */{
+R.Engine = Base.extend(/** @scope R.Engine.prototype */{
    version: "@ENGINE_VERSION",
    HOME_URL: "@HOME_URL",
    REF_NAME: "@REF_NAME",

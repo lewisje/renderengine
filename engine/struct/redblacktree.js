@@ -44,9 +44,8 @@ R.Engine.define({
  * to contain the data.  It is a simple container with basic structures
  * which are accessed directly.  Modification of this class should be done 
  * with care!!
- * @private
  */
-R.struct.RedBlackNode = Base.extend({
+R.struct.RedBlackNode = Base.extend(/** @scope R.struct.RedBlackNode.prototype */{
 	e: null,
 	left: null,
 	right: null,
@@ -58,7 +57,7 @@ R.struct.RedBlackNode = Base.extend({
 		this.right = right || null;
 		this.color = 1;	// Starts BLACK
 	}	
-}, {
+}, /** @scope R.struct.RedBlackNode.prototype */{
 	BLACK: 1,
 	RED: 0
 });
@@ -80,10 +79,9 @@ R.struct.RedBlackNode = Base.extend({
  * @extends R.engine.PooledObject
  * @constructor
  * @description Create a red-black tree object.
- * @private
  */
 R.struct.RedBlackTree = function(){
-	return R.engine.PooledObject.extend({
+	return R.engine.PooledObject.extend(/** @scope R.struct.RedBlackTree.prototype */{
 	
 		nullNode: null,
 		current: null,
@@ -92,6 +90,7 @@ R.struct.RedBlackTree = function(){
 		great: null,
 		header: null,
 		
+		/** @private */
 		constructor: function(name){
 			this.base(name || "RBTree");
 			this.header = new R.struct.RedBlackNode(null);
@@ -291,7 +290,7 @@ R.struct.RedBlackTree = function(){
 			}
 		}
 		
-	}, /** @scope R.struct.RedBlackTree.prototype */ {
+	}, /** @scope R.struct.RedBlackTree.prototype */{
 	
 		getClassName: function(){
 			return "R.struct.RedBlackTree";

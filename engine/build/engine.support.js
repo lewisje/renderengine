@@ -35,8 +35,9 @@
 /**
  * @class A static class with support methods the engine or games can use.  
  *        Many of the methods can be used to manipulate arrays.  Additional
- *        methods are provided to access query parameters, and generate and/or 
- *        read JSON.
+ *        methods are provided to access query parameters, and generate or 
+ *        read JSON.  A system capabilities method, {@link #sysInfo}, can be
+ *        used to query the environment for support of features.
  * @static
  */
 R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{

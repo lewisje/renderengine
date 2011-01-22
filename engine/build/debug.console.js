@@ -36,7 +36,7 @@
  *        its data differently.  This class allows abstraction between the console and the
  *        browser's console object so the {@link Console} can report to it.
  */
-R.debug.ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
+R.debug.ConsoleRef = Base.extend(/** @scope R.debug.ConsoleRef.prototype */{
    constructor: function() {
    },
 
@@ -139,7 +139,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  *        option is available from the browser, or when developer tools cannot be accessed.
  * @extends R.debug.ConsoleRef
  */
-R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
+R.debug.HTML = R.debug.ConsoleRef.extend(/** @scope R.debug.HTML.prototype **/{
 
    msgStore: null,
    
@@ -269,7 +269,7 @@ R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
  * @class A debug console abstraction for Safari browsers.
  * @extends R.debug.ConsoleRef
  */
-R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
+R.debug.Safari = R.debug.ConsoleRef.extend(/** @scope R.debug.Safari.prototype **/{
 
    constructor: function() {
    },
@@ -317,7 +317,7 @@ R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
  * @class A debug console for Opera browsers.
  * @extends R.debug.ConsoleRef
  */
-R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
+R.debug.Opera = R.debug.ConsoleRef.extend(/** @scope R.debug.Opera.prototype **/{
 
    constructor: function() {
    },
@@ -366,7 +366,7 @@ R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
  * @extends R.debug.ConsoleRef
  */
-R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
+R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype **/{
 
    constructor: function () {
    },
@@ -438,7 +438,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
  * @class A console reference to the MSIE console.
  * @extends R.debug.ConsoleRef
  */
-R.debug.MSIE = R.debug.ConsoleRef.extend(/** @R.debug.MSIE.prototype **/{
+R.debug.MSIE = R.debug.ConsoleRef.extend(/** @scope R.debug.MSIE.prototype **/{
 
    constructor: function() {
    },

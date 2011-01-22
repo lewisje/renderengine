@@ -94,7 +94,7 @@ R.collision.CircleHull = function() {
 		return R.collision.ConvexHull.CONVEX_CIRCLE;
 	}
 
-}, { /** @scope R.collision.CircleHull.prototype */
+}, /** @scope R.collision.CircleHull.prototype */{ 
 
    /**
     * Get the class name of this object

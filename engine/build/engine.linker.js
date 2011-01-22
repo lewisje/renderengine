@@ -45,7 +45,7 @@
  * @static
  * @private
  */
-R.engine.Linker = Base.extend(/** @scope Linker.prototype */{ 
+R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{ 
 
    constructor: null,
 

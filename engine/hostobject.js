@@ -50,7 +50,7 @@ R.Engine.define({
  *        <p/>
  *        A <tt>HostObject</tt> is the logical foundation for all in-game objects.  It is
  *        through this mechanism that game objects can be created without having to manipulate
- *        large, monolithic objects.  A <tt>HostObject</tt> contains {@link BaseComponent Components},
+ *        large, monolithic objects.  A <tt>HostObject</tt> contains {@link R.components.Base Components},
  *        which are the building blocks for complex functionality and ease of development.
  *        <p/>
  *        By building a <tt>HostObject</tt> from multiple components, the object gains the

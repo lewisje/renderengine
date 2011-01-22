@@ -42,7 +42,7 @@ R.Engine.define({
 /**
  * @class A render component that renders its contents from a {@link R.resources.types.Sprite}.  Sprites
  *        are 2d graphics which are either a single frame (static) or multiple frames
- *        (dynamic).  The sprite's descriptor will define that for the component.
+ *        (animation).  The sprite's descriptor will define that for the component.
  *
  * @param name {String} The component name
  * @param [priority=0.1] {Number} The render priority

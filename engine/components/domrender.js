@@ -49,7 +49,7 @@ R.Engine.define({
  * @description Creates a DOM element render component.
  */
 R.components.DOMRender = function() {
-	return R.components.Render.extend(/** @scope DOMRenderComponent.prototype */{
+	return R.components.Render.extend(/** @scope R.components.DOMRender.prototype */{
 
    /**
     * Handles whether or not the component should draw to the

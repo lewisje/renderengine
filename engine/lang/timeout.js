@@ -39,7 +39,7 @@ R.Engine.define({
 });
 
 /**
- * @class An extension of {@link Timer} that wraps the <tt>window.setTimeout</tt> method.
+ * @class An extension of {@link R.lang.AbstractTimer} that wraps the <tt>window.setTimeout</tt> method.
  *
  * @param name {String} The name of the timer
  * @param interval {Number} The interval for the timer, in milliseconds

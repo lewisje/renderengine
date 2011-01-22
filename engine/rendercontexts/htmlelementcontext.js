@@ -178,6 +178,7 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Serializes the current transformation state to an object.
 		 * @return {Object}
+		 * @private
 		 */
 		serializeTransform: function(){
 			return {
@@ -192,6 +193,7 @@ R.rendercontexts.HTMLElementContext = function(){
 		/**
 		 * Deserializes a transformation state from an object.
 		 * @param transform {Object} The object which contains the current transformation
+		 * @private
 		 */
 		deserializeTransform: function(transform){
 			this.txfm = transform.txfm;

@@ -44,7 +44,7 @@ R.Engine.define({
  *
  * @constructor
  * @param name {String=BitmapFontLoader} The name of the resource loader
- * @extends R.resourceloaders.ImageLoader
+ * @extends R.resources.loaders.ImageLoader
  */
 R.resources.loaders.BitmapFontLoader = function(){
 	return R.resources.loaders.ImageLoader.extend(/** @scope R.resources.loaders.BitmapFontLoader.prototype */{
@@ -118,7 +118,7 @@ R.resources.loaders.BitmapFontLoader = function(){
 			return "bitmap font";
 		}
 		
-	}, /** @scope R.resources.loaders.BitmapFontLoader.protoype */{ 
+	}, /** @scope R.resources.loaders.BitmapFontLoader.prototype */{ 
 		/**
 		 * Get the class name of this object
 		 * @return {String} The string "R.resources.loaders.BitmapFontLoader"

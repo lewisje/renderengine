@@ -63,28 +63,43 @@ var Bin = Base.extend({
  *
  * @static
  */
-R.math.Math2D = {/** @scope R.math.Math2D.prototype */
+R.math.Math2D = /** @scope R.math.Math2D.prototype */{
 
    /**
-    * An approximation of PI for speedier calculations.  (3.14159)
+    * An approximation of PI (3.14159)
     * @type {Number}
-    * @const
     */
    PI: 3.14159,
    
    /**
-    * An approximation of PI*2 for speedier calculations. (6.28318)
+    * An approximation of PI*2 (6.28318)
     * @type {Number}
-    * @const
     */
    TWO_PI: 6.28318, 
 
    /**
-    * An approximation of the inverse of PI. (0.31831)
+    * An approximation of the inverse of PI (0.31831)
     * @type {Number}
-    * @const
     */
    INV_PI: 0.31831,
+	
+	/**
+	 * The 30&deg; isometic projection (NEN/ISO)
+	 * @type {Number}
+	 */
+	ISOMETRIC_PROJECTION: 1,
+	
+	/**
+	 * The dimetric 1:2 top projection
+	 * @type {Number}
+	 */
+	DIMETRIC_TOP_PROJECTION: 2,
+	
+	/**
+	 * The dimetric 1:2 side projection
+	 * @type {Number}
+	 */
+	DIMETRIC_SIDE_PROJECTION: 3,
 	
    /**
     * Convert degrees to radians.

@@ -54,7 +54,7 @@ R.Engine.define({
  * @description Create a sprite actor
  */
 R.objects.SpriteActor = function(){
-	return R.engine.Object2D.extend({
+	return R.engine.Object2D.extend(/** @scope R.objects.SpriteActor.prototype */{
 	
 		editing: false,
 		sprite: null,

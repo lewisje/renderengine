@@ -249,15 +249,14 @@ R.engine.PooledObject = function() {
    /* pragma:DEBUG_END */
 
    /**
-    * Similar to a constructor, all pooled objects implement this method.
+    * Similar to a constructor, all pooled objects implement this method to create an instance of the object.
     * The <tt>create()</tt> method will either create a new instance, if no object of the object's
     * class exists within the pool, or will reuse an existing pooled instance of
     * the object.  Either way, the constructor for the object instance is called so that
     * instance creation can be maintained in the constructor.
     * <p/>
     * Usage: <tt>var obj = [ObjectClass].create(arg1, arg2, arg3...);</tt>
-    *
-    * @memberOf PooledObject
+    * @static
     */
    create: function() {
       // Check the pool for the object type

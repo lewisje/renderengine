@@ -42,7 +42,7 @@ R.Engine.define({
 });
 
 /**
- * @class A rectangular convex hull which reflects the object's current transformation.
+ * @class A rectangular convex hull.
  *
  * @param boundingBox {Rectangle2D} The object's bounding box
  *
@@ -59,7 +59,7 @@ R.collision.OBBHull = function(){
 			this.base(points);
 		}
 		
-	}, { /** @scope R.collision.OBBHull.prototype */
+	}, /** @scope R.collision.OBBHull.prototype */{ 
 		/**
 		 * Get the class name of this object
 		 * @return {String} "R.collision.OBBHull"

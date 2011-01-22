@@ -42,7 +42,7 @@ R.Engine.define({
 
 /**
  * @class All components extend from this object class.  A component is one
- *        part of an operating whole object (a {@link HostObject}) which is
+ *        part of an operating whole object (a {@link R.engine.HostObject}) which is
  *        responsible for only a portion of the overall operation of an in-
  *        game object.  Components are broken down into five major categories:
  *        <ul>

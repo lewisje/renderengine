@@ -40,7 +40,7 @@ R.Engine.define({
 
 /**
  * @class The base component class for components which render
- *        to an {@link R.rendercontexts.AbstractRenderContext}.  Rendering 
+ *        to an {@link R.rendercontexts.AbstractRenderContext render context}.  Rendering 
  *			 consists of anything which alters the visual state of the render context.
  *
  * @param name {String} The name of the component

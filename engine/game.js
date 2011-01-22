@@ -61,7 +61,7 @@ R.engine.Game = Base.extend(/** @scope R.engine.Game.prototype */{
    /**
     * [ABSTRACT] Shut down the game.  This method will be called if the engine is shut down
     * giving a game time to clean up before it is destroyed.
-    * @memberOf Game
+    * @memberOf R.engine.Game
     */
    tearDown: function() {
    },

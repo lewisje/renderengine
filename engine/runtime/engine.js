@@ -5,7 +5,7 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v2.0.0.2
+ * version: v2.0.0.5a
  * date: 11/8/2010
  *
  * Copyright (c) 2010 Brett Fattori
@@ -52,7 +52,7 @@ R.global = this;
 /**
  * Declare a new namespace in R.
  * @param ns {String} The namespace to declare
- * @exception Throws and exception if the namespace is already declared
+ * @exception Throws an exception if the namespace is already declared
  * @memberOf R
  */
 R.namespace = function(ns) {
@@ -72,8 +72,11 @@ R.namespace = function(ns) {
 };
 
 /**
- * Throw an "unsupported" exception
+ * Throw an "unsupported" exception for the given method in the class.
+ * @param method {String} The method name
+ * @param clazz {Class} The class object
  * @memberOf R
+ * @exception Throws a "[method] is unsupported in [Class]" error
  */
 R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
@@ -141,8 +144,8 @@ function now() {
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1516 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -172,7 +175,7 @@ function now() {
  *        its data differently.  This class allows abstraction between the console and the
  *        browser's console object so the {@link Console} can report to it.
  */
-R.debug.ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
+R.debug.ConsoleRef = Base.extend(/** @scope R.debug.ConsoleRef.prototype */{
    constructor: function() {
    },
 
@@ -275,7 +278,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope ConsoleRef.prototype */{
  *        option is available from the browser, or when developer tools cannot be accessed.
  * @extends R.debug.ConsoleRef
  */
-R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
+R.debug.HTML = R.debug.ConsoleRef.extend(/** @scope R.debug.HTML.prototype **/{
 
    msgStore: null,
    
@@ -405,7 +408,7 @@ R.debug.HTML = R.debug.ConsoleRef.extend(/** @DebugConsoleRef.prototype **/{
  * @class A debug console abstraction for Safari browsers.
  * @extends R.debug.ConsoleRef
  */
-R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
+R.debug.Safari = R.debug.ConsoleRef.extend(/** @scope R.debug.Safari.prototype **/{
 
    constructor: function() {
    },
@@ -453,7 +456,7 @@ R.debug.Safari = R.debug.ConsoleRef.extend(/** @SafariConsoleRef.prototype **/{
  * @class A debug console for Opera browsers.
  * @extends R.debug.ConsoleRef
  */
-R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
+R.debug.Opera = R.debug.ConsoleRef.extend(/** @scope R.debug.Opera.prototype **/{
 
    constructor: function() {
    },
@@ -502,7 +505,7 @@ R.debug.Opera = R.debug.ConsoleRef.extend(/** @R.debug.Opera.prototype **/{
  * @class A console reference to the Firebug console.  This will work with both Firebug and FirebugLite.
  * @extends R.debug.ConsoleRef
  */
-R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
+R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype **/{
 
    constructor: function () {
    },
@@ -574,7 +577,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @R.debug.Firebug.prototype **/{
  * @class A console reference to the MSIE console.
  * @extends R.debug.ConsoleRef
  */
-R.debug.MSIE = R.debug.ConsoleRef.extend(/** @R.debug.MSIE.prototype **/{
+R.debug.MSIE = R.debug.ConsoleRef.extend(/** @scope R.debug.MSIE.prototype **/{
 
    constructor: function() {
    },
@@ -870,8 +873,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1516 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1080,8 +1083,8 @@ R.debug.Profiler.wireObjects = function(objArray) {
  * 				  pseudo random numbers.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1516 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1112,7 +1115,7 @@ R.debug.Profiler.wireObjects = function(objArray) {
  * 
  * @static
  */
-R.lang.Math2 = {
+R.lang.Math2 = /** @scope R.lang.Math2.prototype */{
 	
 	state: 1,
 	m: 0x100000000, // 2**32;
@@ -1120,7 +1123,7 @@ R.lang.Math2 = {
 	c: 12345,
 	
 	/**
-	 * Largest integer
+	 * Largest integer (4294967295)
 	 * @type {Number}
 	 * @memberOf R.lang.Math2
 	 */
@@ -1224,8 +1227,8 @@ R.lang.Math2.seed();
  *               to manipulate arrays, parse JSON, and handle query parameters.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1516 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1252,8 +1255,9 @@ R.lang.Math2.seed();
 /**
  * @class A static class with support methods the engine or games can use.  
  *        Many of the methods can be used to manipulate arrays.  Additional
- *        methods are provided to access query parameters, and generate and/or 
- *        read JSON.
+ *        methods are provided to access query parameters, and generate or 
+ *        read JSON.  A system capabilities method, {@link #sysInfo}, can be
+ *        used to query the environment for support of features.
  * @static
  */
 R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
@@ -1802,8 +1806,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  * @fileoverview A class for checking class dependencies and class intialization
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1518 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
@@ -1841,7 +1845,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  * @static
  * @private
  */
-R.engine.Linker = Base.extend(/** @scope Linker.prototype */{ 
+R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{ 
 
    constructor: null,
 
@@ -2201,8 +2205,8 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1526 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2249,8 +2253,8 @@ R.engine.Linker = Base.extend(/** @scope Linker.prototype */{
  *
  * @static
  */
-R.Engine = Base.extend(/** @scope Engine.prototype */{
-   version: "v2.0.0.2",
+R.Engine = Base.extend(/** @scope R.Engine.prototype */{
+   version: "v2.0.0.5a",
    HOME_URL: "http://www.renderengine.com",
    REF_NAME: "The Render Engine",
 
@@ -3046,7 +3050,13 @@ R.Engine = Base.extend(/** @scope Engine.prototype */{
 //                                     SCRIPT PROCESSING
 //====================================================================================================
 //====================================================================================================
-R.engine.Script = Base.extend({
+/**
+ * @class A static class which is used to load new JavaScript into the browser.  Methods are
+ * 		 also provided to use AJAX to get text and JSON data on-the-fly, load stylesheets,
+ * 		 and process script callbacks from a loader queue.
+ * @static
+ */
+R.engine.Script = Base.extend(/** @scope R.engine.Script.prototype */{
 
    constructor: null,
 
@@ -3642,8 +3652,8 @@ R.engine.Script = Base.extend({
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 1526 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3672,7 +3682,14 @@ R.engine.Script = Base.extend({
 //                                     METRICS MANAGEMENT
 //====================================================================================================
 //====================================================================================================
-R.debug.Metrics = Base.extend({
+/**
+ * @class A static class to be used to measure metrics of engine and game performance.  A
+ * 		 visual profiler is provided which graphs runtime values of the engine, such as
+ * 		 load and visible objects.  Additionally a metrics window is provided to show
+ * 		 sampled metric data from parts of the engine, as well as user-defined metrics.
+ * @static
+ */
+R.debug.Metrics = Base.extend(/** @scope R.debug.Metrics.prototype */{
    constructor: null,
 
    /*
@@ -3948,8 +3965,8 @@ if (R.engine.Support.checkBooleanParam("profile")) {
  * Engine initialization
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1521 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1530 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *

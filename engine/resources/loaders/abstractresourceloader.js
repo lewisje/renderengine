@@ -45,7 +45,7 @@ R.Engine.define({
  *         loading resources (fonts, images, game data, etc...) from some
  *         location.  Additionally, objects are cached by this base class,
  *         although some classes make use of other methods to enhance the
- *         caching, such as the {@link ImageLoader} class.
+ *         caching, such as the {@link R.resources.loaders.ImageLoader} class.
  *
  * @param [name=ResourceLoader] {String} The name of the resource loader.
  * @constructor
@@ -53,7 +53,7 @@ R.Engine.define({
  * @description Create a resource loader
  */
 R.resources.loaders.AbstractResourceLoader = function() {
-	return R.engine.BaseObject.extend(/** @scope R.resourceloaders.AbstractResourceLoader.prototype */{
+	return R.engine.BaseObject.extend(/** @scope R.resources.loaders.AbstractResourceLoader.prototype */{
 
    cache: null,
 

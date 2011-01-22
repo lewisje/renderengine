@@ -43,8 +43,9 @@ R.Engine.define({
 
 /**
  * @class A text renderer which draws text with simple vectors.  This type of text
- *        renderer is only supported by the {@link CanvasContext}.  For an {@link HTMLElementContext}
- *        or a derivative, use the {@link ContextText} renderer.
+ *        renderer is only supported by the {@link R.rendercontexts.CanvasContext CanvasContext}.  
+ *        For an {@link R.rendercontexts.HTMLElementContext HTMLElementContext}
+ *        or a derivative, use the {@link R.text.ContextText} renderer.
  *
  * @constructor
  * @param componentName {String} The name of the text component

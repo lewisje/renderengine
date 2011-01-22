@@ -81,12 +81,14 @@ R.sound.SM2 = function(){
 					
 					var self = this;
 					
+					/** @private */
 					this.soundManager.onload = function(){
 						self.init = true;
 						R.debug.Console.warn("SoundManager loaded successfully");
 						self.makeReady();
 					};
 					
+					/** @private */
 					this.soundManager.onerror = function(){
 						self.init = false;
 						R.debug.Console.warn("SoundManager not loaded");

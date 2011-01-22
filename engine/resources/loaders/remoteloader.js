@@ -85,7 +85,7 @@ R.resources.loaders.RemoteLoader = function(){
 			return "remote";
 		}
 		
-	}, /** @scope R.resources.loaders.RemoteLoader.prototype */ {
+	}, /** @scope R.resources.loaders.RemoteLoader.prototype */{
 		/**
 		 * Get the class name of this object.
 		 * @return {String} The string "R.resources.loaders.RemoteLoader"
