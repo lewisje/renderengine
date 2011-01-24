@@ -170,10 +170,21 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
    },
 
    /**
-    * Set the debug mode of the engine.  Affects message ouput and
-    * can be queried for additional debugging operations.
+    * Set the debug mode of the engine.  Engine debugging enables helper objects
+    * which visually assist in debugging game objects.  To specify the console debug
+    * message output level, see {@link R.debug.Console@setDebuglevel}.
+    * <p/>
+    * Engine debug helper objects include:
+    * <ul>
+    * <li>A left/up glyph at the origin of objects using the {@link R.components.Transform2D} component</li>
+    * <li>Yellow outline in the shape of the collision hull of {@link R.engine.Object2D}, if assigned</li>
+    * <li>Yellow outline around objects using box or circle collider components</li>
+    * <li>Green outline around objects which are rendered with the {@link R.components.Billboard2D} component</li>
+    * <li>Blue outline around box and circle rigid body objects</li>
+    * <li>Red lines from anchor points in jointed {@link R.objects.PhysicsActor} objects</li>
+    * </ul>
     *
-    * @param mode {Boolean} <tt>true</tt> to set debugging mode
+    * @param mode {Boolean} <tt>true</tt> to enable debug mode
     * @memberOf R.Engine
     */
    setDebugMode: function(mode) {

@@ -144,8 +144,8 @@ function now() {
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1534 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -632,8 +632,8 @@ R.debug.MSIE = R.debug.ConsoleRef.extend(/** @scope R.debug.MSIE.prototype **/{
  */
 R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
    constructor: null,
-
    consoleRef: null,
+   enableDebugOutput: null,
 
    /**
     * Output only errors to the console.
@@ -673,6 +673,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     */
    startup: function() {
 		R.debug.Console.verbosity = R.debug.Console.DEBUGLEVEL_ERRORS;
+		R.debug.Console.enableDebugOutput = false;
 		
       if (R.engine.Support.checkBooleanParam("debug") && (R.engine.Support.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          R.debug.Console.consoleRef = new R.debug.HTML();
@@ -721,11 +722,22 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * For instance, if you set the level to <tt>DEBUGLEVEL_DEBUG</tt>, errors and warnings
     * will also be logged.  The engine must also be in debug mode for warnings,
     * debug, and log messages to be output.
+    * <p/>
+    * Console messages have been decoupled from engine debugging mode so that messages
+    * can be output without the need to enter engine debug mode.  To enable engine
+    * debugging, see {@link R.Engine#setDebugMode}.
     *
     * @param level {Number} One of the debug levels.  Defaults to DEBUGLEVEL_NONE.
     */
    setDebugLevel: function(level) {
       R.debug.Console.verbosity = level;
+      
+      // Automatically enable output, unless no debugging is specified
+      if (level != R.debug.Console.DEBUGLEVEL_NONE) {
+      	R.debug.Console.enableDebugOutput = true;
+      } else {
+      	R.debug.Console.enableDebugOutput = false;
+      }
    },
    
    /**
@@ -741,7 +753,8 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * @private
     */
    checkVerbosity: function(debugLevel) {
-      return (R.debug.Console.verbosity != R.debug.Console.DEBUGLEVEL_NONE &&
+      return (R.debug.Console.enableDebugOutput && 
+      		  R.debug.Console.verbosity != R.debug.Console.DEBUGLEVEL_NONE &&
               R.debug.Console.verbosity == R.debug.Console.DEBUGLEVEL_VERBOSE ||
               (debugLevel != R.debug.Console.DEBUGLEVEL_VERBOSE && debugLevel >= R.debug.Console.verbosity));
    },
@@ -752,7 +765,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    log: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_VERBOSE))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_VERBOSE))
          R.debug.Console.consoleRef.debug.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -762,7 +775,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    info: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_INFO))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_INFO))
          R.debug.Console.consoleRef.debug.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -772,7 +785,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    debug: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_DEBUG))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_DEBUG))
          R.debug.Console.consoleRef.info.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -782,7 +795,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    warn: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_WARNINGS))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_WARNINGS))
          R.debug.Console.consoleRef.warn.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -797,6 +810,9 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
          R.debug.Console.consoleRef.error.apply(R.debug.Console.consoleRef, arguments);
    },
    
+   /**
+    * @private
+    */
    trace: function() {
       R.debug.Console.consoleRef.trace();
    }
@@ -1083,8 +1099,8 @@ R.debug.Profiler.wireObjects = function(objArray) {
  * 				  pseudo random numbers.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @author: $Author: $
+ * @version: $Revision: -1 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1227,8 +1243,8 @@ R.lang.Math2.seed();
  *               to manipulate arrays, parse JSON, and handle query parameters.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1534 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1806,8 +1822,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  * @fileoverview A class for checking class dependencies and class intialization
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1534 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
  *
@@ -2205,8 +2221,8 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1534 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2369,10 +2385,21 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
    },
 
    /**
-    * Set the debug mode of the engine.  Affects message ouput and
-    * can be queried for additional debugging operations.
+    * Set the debug mode of the engine.  Engine debugging enables helper objects
+    * which visually assist in debugging game objects.  To specify the console debug
+    * message output level, see {@link R.debug.Console@setDebuglevel}.
+    * <p/>
+    * Engine debug helper objects include:
+    * <ul>
+    * <li>A left/up glyph at the origin of objects using the {@link R.components.Transform2D} component</li>
+    * <li>Yellow outline in the shape of the collision hull of {@link R.engine.Object2D}, if assigned</li>
+    * <li>Yellow outline around objects using box or circle collider components</li>
+    * <li>Green outline around objects which are rendered with the {@link R.components.Billboard2D} component</li>
+    * <li>Blue outline around box and circle rigid body objects</li>
+    * <li>Red lines from anchor points in jointed {@link R.objects.PhysicsActor} objects</li>
+    * </ul>
     *
-    * @param mode {Boolean} <tt>true</tt> to set debugging mode
+    * @param mode {Boolean} <tt>true</tt> to enable debug mode
     * @memberOf R.Engine
     */
    setDebugMode: function(mode) {
@@ -3652,8 +3679,8 @@ R.engine.Script = Base.extend(/** @scope R.engine.Script.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1534 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 

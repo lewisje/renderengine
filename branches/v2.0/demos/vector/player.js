@@ -38,7 +38,7 @@ R.Engine.define({
 		"R.components.Mover2D",
 		"R.components.Vector2D",
 		"R.components.KeyboardInput",
-		"R.components.ConvexCollider",
+		"R.components.BoxCollider",
 		"R.engine.Object2D",
 		"R.lang.Timeout",
 		"R.lang.OneShotTimeout",
@@ -88,7 +88,8 @@ var SpaceroidsPlayer = function() {
       this.add(R.components.Mover2D.create("move"));
       this.add(R.components.Vector2D.create("draw"));
       this.add(R.components.Vector2D.create("thrust"));
-      this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
+      //this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
+      this.add(R.components.BoxCollider.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsPlayer.COLLISION_MASK);
 
       this.players--;
@@ -147,7 +148,7 @@ var SpaceroidsPlayer = function() {
          // Particle trail
 			var inv = R.math.Point2D.create(this.getPosition()).add(dir.neg().mul(1.5));
 			var colr = SpaceroidsPlayer.TRAIL_COLORS[Math.floor(R.lang.Math2.random() * 3)];
-			Spaceroids.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 5000));
+			Spaceroids.pEngine.addParticle(TrailParticle.create(inv, this.getRotation(), 20, colr, 600));
 			inv.destroy();
          dir.destroy();
       } else {
@@ -275,7 +276,7 @@ var SpaceroidsPlayer = function() {
       c_draw.setLineStyle("white");
 
 		this.setOrigin(c_draw.getCenter());
-		this.setCollisionHull(c_draw.getCircleHull());
+		//this.setCollisionHull(c_draw.getCircleHull());
 		this.setBoundingBox(c_draw.getBoundingBox());
 
       // Save the shape so we can draw lives remaining

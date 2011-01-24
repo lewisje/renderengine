@@ -68,12 +68,17 @@ R.engine.HostObject = function(){
 		renderContext: null,
 		dirtyFlag: false,
 		oldDirty: false,
+		deferredEvents: null,
+		
+		prePostComponents: null,
 		
 		/** @private */
 		constructor: function(name){
 			this.base(name);
 			this.dirtyFlag = true;
 			this.oldDirty = false;
+			this.deferredEvents = [];
+			this.prePostComponents = [];
 		},
 		
 		/**
@@ -84,6 +89,8 @@ R.engine.HostObject = function(){
 			this.renderContext = null;
 			this.dirtyFlag = false;
 			this.oldDirty = false;
+			this.deferredEvents = null;
+			this.prePostComponents = null;
 		},
 		
 		/**
@@ -94,6 +101,11 @@ R.engine.HostObject = function(){
 			if (this.getRenderContext()) {
 				this.getRenderContext().remove(this);
 			}
+			
+			while (this.prePostComponents.length > 0) {
+				this.prePostComponents.shift().destroy();
+			}
+			
 			this.cleanUp();
 			this.base();
 		},
@@ -126,6 +138,34 @@ R.engine.HostObject = function(){
 		},
 		
 		/**
+		 * Adds an event to the host object.  If the host object has a representative DOM element,
+		 * the event will be added to the element.  Otherwise, the event will be assigned to the
+		 * host's render context.
+		 * 
+		 * @param ref {Object} The object reference which is assigning the event
+		 * @param type {String} The event type to respond to
+		 * @param [data] {Array} Optional data to pass to the handler when it is invoked.
+		 * @param fn {Function} The function to trigger when the event fires
+		 */
+		addEvent: function(ref, type, data, fn) {
+			var target = this.getElement() ? this.getElement() : this.getRenderContext();
+			if (!target) {
+				this.deferredEvents.push({
+					dRef: ref,
+					dType: type,
+					dData: data,
+					dFn: fn
+				});
+			} else {
+				if (target == this.getElement()) {
+					this.base(ref, type, data, fn);
+				} else {
+					this.getRenderContext().addEvent(ref, type, data, fn);
+				}
+			}
+		},
+		
+		/**
 		 * Set the rendering context this object will be drawn within.  This method is
 		 * called when a host object is added to a rendering context.
 		 *
@@ -133,6 +173,13 @@ R.engine.HostObject = function(){
 		 */
 		setRenderContext: function(renderContext){
 			this.renderContext = renderContext;
+			
+			while(this.deferredEvents.length > 0) {
+				// Assign any deferred events
+				var e = this.deferredEvents.shift();
+				this.addEvent(e.dRef, e.dType, e.dData, e.dFn);
+			}
+			
 			this.markDirty();
 		},
 		
@@ -187,6 +234,16 @@ R.engine.HostObject = function(){
 			Assert((R.components.Base.isInstance(component)), "Cannot add a non-component to a HostObject");
 			Assert(!this.isInHash(component.getName()), "Components must have a unique name within the host");
 			
+			// Special handling for pre and post processing components
+			if (component.getType() == R.components.Base.TYPE_PRE ||
+				 component.getType() == R.components.Base.TYPE_POST) {
+				 
+				 // Only one of each can be added
+				 this.setPreOrPostComponent(component);
+				 component.setHostObject(this);
+				 return;
+			}
+			
 			this.base(component.getName(), component);
 			
 			component.setHostObject(this);
@@ -209,6 +266,20 @@ R.engine.HostObject = function(){
 				c = component;
 			}
 			return this.base(c);
+		},
+		
+		/**
+		 * Setting up pre- or post-process components.  Only one of each can be assigned.
+		 * This is intended to be used internally as the components are processed externally
+		 * to the normal component handling.
+		 * @private
+		 */
+		setPreOrPostComponent: function(component) {
+			if (component.getType() == R.components.Base.TYPE_PRE) {
+				this.prePostComponents[0] = component;
+			} else {
+				this.prePostComponents[1] = component;
+			}
 		},
 		
 		/**

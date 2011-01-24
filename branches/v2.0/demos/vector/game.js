@@ -455,6 +455,15 @@ var Spaceroids = function() {
     * the game to its running state.
     */
    setup: function() {
+   	// Need info level to get profiles
+   	R.debug.Console.setDebugLevel(1);
+   	
+   	// Wire up the canvas for profiling
+   	//R.debug.Profiler.wireObjects([R.rendercontexts.CanvasContext]);
+   	//R.debug.Profiler.start();
+   	
+   	//R.Engine.setDebugMode(true);
+   	
       R.Engine.setFPS(this.engineFPS);
 
       // Create the 2D context

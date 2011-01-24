@@ -493,8 +493,8 @@ R.debug.MSIE = R.debug.ConsoleRef.extend(/** @scope R.debug.MSIE.prototype **/{
  */
 R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
    constructor: null,
-
    consoleRef: null,
+   enableDebugOutput: null,
 
    /**
     * Output only errors to the console.
@@ -534,6 +534,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     */
    startup: function() {
 		R.debug.Console.verbosity = R.debug.Console.DEBUGLEVEL_ERRORS;
+		R.debug.Console.enableDebugOutput = false;
 		
       if (R.engine.Support.checkBooleanParam("debug") && (R.engine.Support.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          R.debug.Console.consoleRef = new R.debug.HTML();
@@ -582,11 +583,22 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * For instance, if you set the level to <tt>DEBUGLEVEL_DEBUG</tt>, errors and warnings
     * will also be logged.  The engine must also be in debug mode for warnings,
     * debug, and log messages to be output.
+    * <p/>
+    * Console messages have been decoupled from engine debugging mode so that messages
+    * can be output without the need to enter engine debug mode.  To enable engine
+    * debugging, see {@link R.Engine#setDebugMode}.
     *
     * @param level {Number} One of the debug levels.  Defaults to DEBUGLEVEL_NONE.
     */
    setDebugLevel: function(level) {
       R.debug.Console.verbosity = level;
+      
+      // Automatically enable output, unless no debugging is specified
+      if (level != R.debug.Console.DEBUGLEVEL_NONE) {
+      	R.debug.Console.enableDebugOutput = true;
+      } else {
+      	R.debug.Console.enableDebugOutput = false;
+      }
    },
    
    /**
@@ -602,7 +614,8 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * @private
     */
    checkVerbosity: function(debugLevel) {
-      return (R.debug.Console.verbosity != R.debug.Console.DEBUGLEVEL_NONE &&
+      return (R.debug.Console.enableDebugOutput && 
+      		  R.debug.Console.verbosity != R.debug.Console.DEBUGLEVEL_NONE &&
               R.debug.Console.verbosity == R.debug.Console.DEBUGLEVEL_VERBOSE ||
               (debugLevel != R.debug.Console.DEBUGLEVEL_VERBOSE && debugLevel >= R.debug.Console.verbosity));
    },
@@ -613,7 +626,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    log: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_VERBOSE))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_VERBOSE))
          R.debug.Console.consoleRef.debug.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -623,7 +636,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    info: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_INFO))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_INFO))
          R.debug.Console.consoleRef.debug.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -633,7 +646,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    debug: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_DEBUG))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_DEBUG))
          R.debug.Console.consoleRef.info.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -643,7 +656,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
     * one message to output to the console.
     */
    warn: function() {
-      if (R.Engine.debugMode && R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_WARNINGS))
+      if (R.debug.Console.checkVerbosity(R.debug.Console.DEBUGLEVEL_WARNINGS))
          R.debug.Console.consoleRef.warn.apply(R.debug.Console.consoleRef, arguments);
    },
 
@@ -658,6 +671,9 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
          R.debug.Console.consoleRef.error.apply(R.debug.Console.consoleRef, arguments);
    },
    
+   /**
+    * @private
+    */
    trace: function() {
       R.debug.Console.consoleRef.trace();
    }

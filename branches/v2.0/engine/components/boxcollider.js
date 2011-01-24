@@ -44,8 +44,13 @@ R.Engine.define({
 
 /**
  * @class An extension of the {@link R.components.Collider} which will check the
- *        object's axis-aligned bounding boxes for collision.  This type of
- *        collider can only indicate that a collision has occurred.
+ *        object's axis-aligned bounding boxes for collision.
+ *			 <p/>
+ *			 By default, this component will perform a simple intersection test which results
+ *			 in a simple <code>true</code> or <code>false</code> test.  A more detailed test
+ *			 can be made by setting the component to perform a longest axis circle-to-circle collision 
+ *			 test which will result in a collision data structure if a collision occurs.  Setting 
+ *			 the testing mode is done by calling the {@link #setTestMode} method.
  *
  * @param name {String} Name of the component
  * @param collisionModel {R.spatial.AbstractSpatialContainer} The collision model
@@ -83,6 +88,7 @@ R.components.BoxCollider = function() {
 		this.base(hostObj);
 		this.hasMethod = (hostObj.getWorldBox != undefined);
 		/* pragma:DEBUG_START */
+		// Test if the host has getWorldBox
 		AssertWarn(this.hasMethod, "Object " + hostObj.toString() + " does not have getWorldBox() method");
 		/* pragma:DEBUG_END */
 	},
@@ -91,8 +97,6 @@ R.components.BoxCollider = function() {
     * If a collision occurs, calls the host object's <tt>onCollide()</tt> method, 
     * passing the time of the collision, the potential collision object, and the host 
     * and target masks.  The return value should either tell the collision tests to continue or stop.
-    * <p/>
-    * A world bounding box collision must occur to trigger the <tt>onCollide()</tt> method.
     *
     * @param time {Number} The engine time (in milliseconds) when the potential collision occurred
     * @param collisionObj {R.engine.HostObject} The host object with which the collision potentially occurs
@@ -101,13 +105,53 @@ R.components.BoxCollider = function() {
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-      if (this.hasMethod && collisionObj.getWorldBox &&
-          this.getHostObject().getWorldBox().isIntersecting(collisionObj.getWorldBox())) {
+		if (this.getCollisionData() != null) {
+			// Clean up old data first
+			this.getCollisionData().destroy();
+			this.setCollisionData(null);
+		}
 
-         return this.base(time, collisionObj, hostMask, targetMask);
+		// Early out if no method(s)
+		if (!this.hasMethods && !collisionObj.getWorldBox) {
+			return R.components.Collider.CONTINUE;	// Can't perform test
+		}
+
+      // See if a collision will occur
+      var host = this.getHostObject(),
+      	 box1 = host.getWorldBox(), 
+      	 box2 = collisionObj.getWorldBox();
+      
+      if (this.getTestMode() == R.components.Collider.SIMPLE_TEST) {
+      	if (box1.isIntersecting(box2)) {
+      		// Intersection test passed
+      		return this.base(time, collisionObj, hostMask, targetMask);
+      	}
+      } else {
+      	// We'll approximate using the separating circles method, using the
+      	// longest axis between width & height
+			var tRad = Math.max(box1.getHalfWidth(), box1.getHalfHeight()) + Math.max(box2.getHalfWidth(), box2.getHalfHeight()),
+				 c1 = box1.getCenter(), c2 = box2.getCenter();
+
+			var distSqr = (c1.x - c2.x) * (c1.x - c2.x) +
+							  (c1.y - c2.y) * (c1.y - c2.y);
+
+			if (distSqr < (tRad * tRad)) {
+				// Collision occurred, how much to separate box1 from box2
+				var diff = tRad - Math.sqrt(distSqr);
+
+				// If we got here, there is a collision
+				var sep = R.math.Vector2D.create((c2.x - c1.x)*diff, (c2.y - c1.y)*diff);
+				this.setCollisionData(R.struct.CollisionData.create(sep.len(),
+																					 R.math.Vector2D.create(c2.x - c1.x, c2.y - c1.y).normalize(),
+																					 null,
+																					 null,
+																					 sep));
+
+				return this.base(time, collisionObj, hostMask, targetMask);
+			}
       }
       
-      return ColliderComponent.CONTINUE;
+      return R.components.Collider.CONTINUE;
    }
 	
    /* pragma:DEBUG_START */
@@ -120,7 +164,7 @@ R.components.BoxCollider = function() {
 			var origin = R.math.Point2D.create(this.getHostObject().getOrigin());
 			var rect = R.math.Rectangle2D.create(this.getHostObject().getBoundingBox());
 			rect.offset(origin.neg());
-         renderContext.setLineStyle("blue");
+         renderContext.setLineStyle("yellow");
          renderContext.drawRectangle(rect);
 			renderContext.popTransform();
 			origin.destroy();

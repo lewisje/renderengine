@@ -72,24 +72,18 @@ R.Engine.define({
 R.components.ConvexCollider = function() {
 	return R.components.Collider.extend(/** @scope R.components.ConvexCollider.prototype */{
 
-	cData: null,
+	hasMethods: null,
+
 	
 	/**
 	 * @private
 	 */
 	constructor: function(name, collisionModel, priority) {
 		this.base(name, collisionModel, priority);
-		this.cData = null;
-	},
-	
-	/**
-	 * Destroy the component instance.
-	 */
-	destroy: function() {
-		if (this.cData != null) {
-			this.cData.destroy();
-		}
-		this.base();
+		this.hasMethods = [];
+		
+		// Convex hull colliders can only produce detailed tests
+		this.setTestMode(R.components.Collider.DETAILED_TEST);
 	},
 	
 	/**
@@ -97,7 +91,23 @@ R.components.ConvexCollider = function() {
 	 */
 	release: function() {
 		this.base();
-		this.cData = null;
+	},
+
+	/**
+    * Establishes the link between this component and its host object.
+    * When you assign components to a host object, it will call this method
+    * so that each component can refer to its host object, the same way
+    * a host object can refer to a component with {@link HostObject#getComponent}.
+    *
+    * @param hostObject {R.engine.HostObject} The object which hosts this component
+	 */
+	setHostObject: function(hostObj) {
+		this.base(hostObj);
+		this.hasMethods = [hostObj.getCollisionHull != undefined];
+		/* pragma:DEBUG_START */
+		// Test if the host has getCollisionHull
+		AssertWarn(this.hasMethods[0], "Object " + hostObj.toString() + " does not have getCollisionHull() method");
+		/* pragma:DEBUG_END */
 	},
 
    /**
@@ -112,18 +122,28 @@ R.components.ConvexCollider = function() {
     * @return {Number} A status indicating whether to continue checking, or to stop
     */
    testCollision: function(time, collisionObj, hostMask, targetMask) {
-		if (this.cData != null) {
+		if (this.getCollisionData() != null) {
 			// Clean up old data first
-			this.cData.destroy();
-			this.cData = null;
+			this.getCollisionData().destroy();
+			this.setCollisionData(null);
 		}
 		
-		// Perform an early out test
-		var hull1 = this.getHostObject().getCollisionHull();
+		// Fast-out test if no method(s)
+		var host = this.getHostObject();
+		if (!this.hasMethods[0] && !collisionObj.getCollisionHull) {
+			return R.components.Collider.CONTINUE;		// Can't perform test
+		}
+		
+		// Use distance of bounding circle's to perform an early out test
+		// if the objects are too far apart
+		var hull1 = host.getCollisionHull();
 		var hull2 = collisionObj.getCollisionHull();
 		
-		// We use the bounding circles to determine if the
-		// two objects could even potentially collide
+		if (!hull1 || !hull2) {
+			return R.components.Collider.CONTINUE;		// No collision hull defined!
+		}
+		
+		// Look for potential for collision before doing full test
 		var tRad = hull1.getRadius() + hull2.getRadius();
 		var c1 = hull1.getCenter();
 		var c2 = hull2.getCenter();
@@ -134,25 +154,17 @@ R.components.ConvexCollider = function() {
 			return R.components.Collider.CONTINUE;
 		}		
 		
-		// Perform the test
-		this.cData = R.components.ConvexCollider.test(hull1, hull2); 
+		// Perform the test, passing along the circle data so we don't recalc
+		this.setCollisionData(R.components.ConvexCollider.test(hull1, hull2, distSqr, tRad)); 
 		
 		// If a collision occurred, there will be a data structure describing it	
-      if (this.cData != null) {
+      if (this.getCollisionData() != null) {
          return this.base(time, collisionObj, hostMask, targetMask);
       }
       
       return R.components.Collider.CONTINUE;
-   },
-	
-	/**
-	 * Returns the collision data object.
-	 * @return {R.struct.CollisionData}
-	 */
-	getCollisionData: function() {
-		return this.cData;
-	}
-	
+   }
+		
    /* pragma:DEBUG_START */
 	,execute: function(renderContext, time) {
 		this.base(renderContext, time);
@@ -160,7 +172,7 @@ R.components.ConvexCollider = function() {
       if (R.Engine.getDebugMode() && !this.isDestroyed())
       {
 			renderContext.pushTransform();
-         renderContext.setLineStyle("blue");
+         renderContext.setLineStyle("yellow");
 			var cHull = this.getHostObject().getCollisionHull();
 			if (cHull.getType() == R.collision.ConvexHull.CONVEX_NGON) {
 				renderContext.drawPolygon(cHull.getUntransformedVertexes());
@@ -196,13 +208,13 @@ R.components.ConvexCollider = function() {
 	 * @param shape2 {R.collision.ConvexHull}
 	 * @return {R.math.Vector2D}
 	 */
-	test: function(shape1, shape2) {
-		Assert(shape1 != null && shape2 != null, "R.components.ConvexCollider failed with: Object has no collision hull!");
-			
+	test: function(shape1, shape2 /*, distSqr, tRad */) {
 		if (shape1.getType() == R.collision.ConvexHull.CONVEX_CIRCLE &&
 			 shape2.getType() == R.collision.ConvexHull.CONVEX_CIRCLE) {
 			// Perform circle-circle test if both shapes are circles
-			return R.components.ConvexCollider.ccTest(shape1, shape2);	 	
+			// We've passed in the distSqr and tRad from the early-out test, pass it along
+			// so we're not re-running the calculations
+			return R.components.ConvexCollider.ccTest(shape1, shape2, arguments[2], arguments[3]);	 	
 		} else if (shape1.getType() != R.collision.ConvexHull.CONVEX_CIRCLE &&
 					  shape2.getType() != R.collision.ConvexHull.CONVEX_CIRCLE) {
 			// Perform polygon test if both shapes are NOT circles
@@ -217,30 +229,23 @@ R.components.ConvexCollider = function() {
 	 * Circle-circle test
 	 * @private
 	 */
-	ccTest: function(shape1, shape2) {
-		var tRad = shape1.getRadius() + shape2.getRadius();
-		var c1 = shape1.getCenter();
-		var c2 = shape2.getCenter();
-		var distSqr = (c1.x - c2.x) * (c1.x - c2.x) +
-						  (c1.y - c2.y) * (c1.y - c2.y);
-		if (distSqr < tRad * tRad) {
-			// Collision, how much to separate shape1 from shape2
-			var diff = tRad - Math.sqrt(distSqr);
+	ccTest: function(shape1, shape2, distSqr, tRad) {
+		// If we got here, we've already done 95% of the work in the early-out test above
+		var c1 = shape1.getCenter(), c2 = shape2.getCenter();
 
-			// If we got here, there is a collision
-			var sep = R.math.Vector2D.create((c2.x - c1.x)*diff, (c2.y - c1.y)*diff);
-			var cData = R.struct.CollisionData.create(sep.len(),
-																	R.math.Vector2D.create(c2.x - c1.x, c2.y - c1.y).normalize(),
-																	shape1,
-																	shape2,
-																	sep);
+		// How much to separate shape1 from shape2
+		var diff = tRad - Math.sqrt(distSqr);
+
+		// If we got here, there is a collision
+		var sep = R.math.Vector2D.create((c2.x - c1.x)*diff, (c2.y - c1.y)*diff);
+		var cData = R.struct.CollisionData.create(sep.len(),
+																R.math.Vector2D.create(c2.x - c1.x, c2.y - c1.y).normalize(),
+																shape1,
+																shape2,
+																sep);
 			
-			// Return the collision data
-			return cData;
-		}
-		
-		// No collision
-		return null;	
+		// Return the collision data
+		return cData;
 	},
 	
 	/**
