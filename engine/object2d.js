@@ -38,6 +38,7 @@ R.Engine.define({
 		"R.engine.HostObject",
 		"R.collision.ConvexHull",
 		"R.math.Rectangle2D",
+		"R.math.Circle2D",
 		"R.math.Point2D",
 		"R.math.Vector2D",
 		"R.math.Math2D",
@@ -65,6 +66,7 @@ R.engine.Object2D = function(){
 		bBox: null,
 		AABB: null,
 		wBox: null,
+		wCircle: null,
 		lastPosition: null,
 		origin: null,
 		collisionHull: null,
@@ -80,6 +82,7 @@ R.engine.Object2D = function(){
 			this.bBox = R.math.Rectangle2D.create(0, 0, 1, 1);
 			this.AABB = R.math.Rectangle2D.create(0, 0, 1, 1);
 			this.wBox = R.math.Rectangle2D.create(0, 0, 1, 1);
+			this.wCircle = R.math.Circle2D.create(0, 0, 1);
 			this.zIndex = 0;
 			this.origin = R.math.Point2D.create(0, 0);
 			this.collisionHull = null;
@@ -95,6 +98,7 @@ R.engine.Object2D = function(){
 		destroy: function(){
 			this.bBox.destroy();
 			this.wBox.destroy();
+			this.wCircle.destroy();
 			this.lastPosition.destroy();
 			if (this.collisionHull) {
 				this.collisionHull.destroy();
@@ -109,6 +113,8 @@ R.engine.Object2D = function(){
 			this.base();
 			this.zIndex = 1;
 			this.bBox = null;
+			this.wBox = null;
+			this.wCircle = null;
 			this.lastPosition = null;
 			this.collisionHull = null;
 			
@@ -209,6 +215,14 @@ R.engine.Object2D = function(){
 		},
 		
 		/**
+		 * [ABSTRACT] Get the bounding circle for the object.
+		 * @return {R.math.Circle2D} The object bounding circle
+		 */
+		getBoundingCircle: function(){
+			return null;
+		},
+		
+		/**
 		 * Get the bounding box in world coordinates.
 		 * @return {R.math.Rectangle2D} The world bounding rectangle
 		 */
@@ -219,6 +233,30 @@ R.engine.Object2D = function(){
 			this.wBox.offset(rPos);
 			rPos.destroy();
 			return this.wBox;
+		},
+		
+		/**
+		 * Get the bounding circle in world coordinates.  If {@link #getBoundingCircle} returns
+		 * null, the bounding circle will be approximated using {@link #getBoundingBox}.
+		 *
+		 * @return {R.math.Circle2D} The world bounding circle
+		 */
+		getWorldCircle: function(){
+			var c = this.getBoundingCircle();
+			
+			if (c === null) {
+				c = R.math.Circle2D.approximateFromRectangle(this.getBoundingBox());
+				this.wCircle.set(c);
+				c.destroy();
+			} else {
+				this.wCircle.set(c);
+			}
+			
+			var rPos = R.math.Point2D.create(this.getRenderPosition());
+			rPos.sub(this.origin);
+			this.wCircle.offset(rPos);
+			rPos.destroy();
+			return this.wCircle;
 		},
 		
 		/**

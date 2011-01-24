@@ -35,7 +35,8 @@
 R.Engine.define({
 	"class": "R.components.Collider",
 	"requires": [
-		"R.components.Base"
+		"R.components.Base",
+		"R.struct.CollisionData"
 	]
 });
 
@@ -78,6 +79,8 @@ R.components.Collider = function() {
 	collideSame: false,
 	hasCollideMethods: null,
 	didCollide: false,
+	testMode: null,
+	cData: null,
 
    /**
     * @private
@@ -88,7 +91,19 @@ R.components.Collider = function() {
 		this.collideSame = false;
 		this.hasCollideMethods = [false,false];	// onCollide, onCollideEnd
 		this.didCollide = false;
+		this.testMode = R.components.Collider.SIMPLE_TEST;
+		this.cData = null;
    },
+
+	/**
+	 * Destroy the component instance.
+	 */
+	destroy: function() {
+		if (this.cData != null) {
+			this.cData.destroy();
+		}
+		this.base();
+	},
 
 	/**
     * Establishes the link between this component and its host object.
@@ -116,7 +131,44 @@ R.components.Collider = function() {
 		this.collideSame = false;
 		this.hasCollideMethods = null;
 		this.didCollide = false;
+		this.testMode = null;
+		this.cData = null;
    },
+
+	/**
+	 * Set the type of testing to perform when determining collisions.  You can specify
+	 * either {@link R.components.Collider#SIMPLE_TEST} or {@link R.components.Collider#DETAILED_TEST}.
+	 *
+	 * @param mode {Number} The testing mode to use
+	 */
+	setTestMode: function(mode) {
+		this.testMode = mode;
+	},
+
+	/**
+	 * Determine the type of testing this component will perform. either {@link #SIMPLE_TEST} 
+	 * or {@link #DETAILED_TEST}
+	 * @return {Number}
+	 */
+	getTestMode: function() {
+		return this.testMode;
+	},
+
+	/**
+	 * Returns the collision data object, or <code>null</code>.
+	 * @return {R.struct.CollisionData}
+	 */
+	getCollisionData: function() {
+		return this.cData;
+	},
+	
+	/**
+	 * Set the collision data object
+	 * @param cData {R.struct.CollisionData} The collision data, or <code>null</code> to clear it
+	 */
+	setCollisionData: function(cData) {
+		this.cData = cData;
+	},
 
    /**
     * Get the collision model being used by this component.
@@ -347,7 +399,21 @@ R.components.Collider = function() {
     * about other potential collisions.
     * @type {Number}
     */
-   COLLIDE_AND_CONTINUE: 2
+   COLLIDE_AND_CONTINUE: 2,
+   
+   /**
+    * For box and circle collider components, this will perform a simple
+    * intersection test.
+    * @type {Number}
+    */
+   SIMPLE_TEST: 1,
+   
+   /**
+    * For box and circle collider components, this will perform a more complex
+    * test which will result in a {@link R.struct.CollisionData} structure.
+    * @type {Number}
+    */
+   DETAILED_TEST: 2
 
 });
 }

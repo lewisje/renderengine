@@ -76,8 +76,7 @@ R.engine.Events = Base.extend(/** @scope R.engine.Events.prototype */{
     * @memberOf R.engine.Events
     */
    setHandler: function(target, data, name, handler) {
-      if (typeof data == "string")
-      {
+      if (typeof data == "string") {
          handler = name;
          name = data;
          data = null;

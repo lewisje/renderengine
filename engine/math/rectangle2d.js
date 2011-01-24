@@ -227,19 +227,6 @@ R.math.Rectangle2D = function() {
    },
 
    /**
-    * Determine if this rectangle overlaps another rectangle along
-    * any axis.  If an overlap occurs, a vector is returned that will
-    * resolve the overlap.
-    *
-    * @param rect A {@link R.math.Rectangle} to compare against
-    * @return {R.math.Vector2D} The vector to resolve the overlap
-    * @private
-    */
-   isOverlapped: function(rect) {
-      R._unsupported("isOverlapped()", this);
-   },
-
-   /**
     * Determine if this rectangle intersects another rectangle.
     *
     * @param rect A {@link R.math.Rectangle2D} to compare against

@@ -75,7 +75,6 @@ R.components.KeyboardInput = function() {
     */
    constructor: function(name, priority) {
       this.base(name, priority);
-      
       this.hasInputMethods = [false, false, false];
    },
 
@@ -87,9 +86,18 @@ R.components.KeyboardInput = function() {
       var ctx = R.Engine.getDefaultContext();
 
       // Clean up event handlers
-      ctx.removeEvent(this, "keydown");
-      ctx.removeEvent(this, "keyup");
-      ctx.removeEvent(this, "keypress");
+      if (this.hasInputMethods[0]) {
+	      ctx.removeEvent(this, "keydown");
+		}
+		
+		if (this.hasInputMethods[1]) {
+			ctx.removeEvent(this, "keyup");
+		}
+		
+		if (this.hasInputMethods[2]) {
+	      ctx.removeEvent(this, "keypress");
+		}	
+
       this.base();
    },
 
@@ -111,21 +119,28 @@ R.components.KeyboardInput = function() {
 		this.hasInputMethods = [hostObj.onKeyDown != undefined, 
 										hostObj.onKeyUp != undefined, 
 										hostObj.onKeyPressed != undefined];
-										
-      var ctx = hostObj.getRenderContext();
+
+      var ctx = R.Engine.getDefaultContext();
       var self = this;
 
       // Add the event handlers
-      ctx.addEvent(this, "keydown", function(evt) {
-         return self._keyDownListener(evt);
-      });
-      ctx.addEvent(this, "keyup", function(evt) {
-         return self._keyUpListener(evt);
-      });
-      ctx.addEvent(this, "keypress", function(evt) {
-         return self._keyPressListener(evt);
-      });
-										
+      if (this.hasInputMethods[0]) {
+			ctx.addEvent(this, "keydown", function(evt) {
+				return self._keyDownListener(evt);
+			});
+		}
+		
+		if (this.hasInputMethods[1]) {
+			ctx.addEvent(this, "keyup", function(evt) {
+				return self._keyUpListener(evt);
+			});
+		}
+		
+		if (this.hasInputMethods[2]) {
+			ctx.addEvent(this, "keypress", function(evt) {
+				return self._keyPressListener(evt);
+			});
+		}	
 	},
 
    /** @private */
@@ -137,26 +152,20 @@ R.components.KeyboardInput = function() {
 
    /** @private */
    _keyDownListener: function(eventObj) {
-      if (this.hasInputMethods[0]) {
-         this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
-         return this.getHostObject().onKeyDown(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
-      }
+		this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
+		return this.getHostObject().onKeyDown(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
    },
 
    /** @private */
    _keyUpListener: function(eventObj) {
-      if (this.hasInputMethods[1]) {
-         this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
-         return this.getHostObject().onKeyUp(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
-      }
+		this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
+		return this.getHostObject().onKeyUp(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
    },
 
    /** @private */
    _keyPressListener: function(eventObj) {
-      if (this.hasInputMethods[2]) {
-         this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
-         return this.getHostObject().onKeyPress(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
-      }
+		this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
+		return this.getHostObject().onKeyPress(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
    }
 
 }, /** @scope R.components.KeyboardInput.prototype */{

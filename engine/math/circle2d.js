@@ -36,6 +36,7 @@ R.Engine.define({
 	"requires": [
 		"R.math.PooledMathObject",
 		"R.math.Point2D",
+		"R.math.Rectangle2D",
 		"R.math.Math2D"
 	]
 });
@@ -236,6 +237,18 @@ R.math.Circle2D = function(){
 		 */
 		getClassName: function(){
 			return "R.math.Circle2D";
+		},
+		
+		/**
+		 * Approximate a circle from the given rectangle
+		 * @param rect {R.math.Rectangle2D} The rectangle to use
+		 * @return {R.math.Circle2D}
+		 */
+		approximateFromRectangle: function(rect) {
+			// Determine the center & radius
+			var r = Math.max(rect.getHalfWidth(), rect.getHalfHeight()),
+				 c = rect.getCenter();
+			return R.math.Circle2D.create(c.x,c.y,r);
 		}
 		
 	});

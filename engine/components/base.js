@@ -52,7 +52,7 @@ R.Engine.define({
  *              input and collision</li>
  *          <li><b>TYPE_COLLIDER</b> - Determines what this object is possibly colliding
  *              with, and reports those collisions via callbacks to the host.</li>
- *          <li><b>TYPE_RENDER</b> - Performs some sort of rendering operation to the context</li>
+ *          <li><b>TYPE_RENDERING</b> - Performs some sort of rendering operation to the context</li>
  *        </ul>
  *        Components are executed in the order listed.  First, all inputs are
  *        checked, then logic is performed.  Logic may be internal to a host object
@@ -91,7 +91,7 @@ R.components.Base = function() {
       Assert((name != null), "You must assign a name to every Component.");
       name = name.toUpperCase();
 
-      Assert((type != null && (type >= R.components.Base.TYPE_INPUT && type <= R.components.Base.TYPE_RENDERING)),
+      Assert((type != null && (type >= R.components.Base.TYPE_PRE && type <= R.components.Base.TYPE_POST)),
              "You must specify a type for component");
 
       this.type = type;
@@ -193,11 +193,13 @@ R.components.Base = function() {
    getTypeString: function() {
       var ts = "";
       switch (this.getType()) {
+         case R.components.Base.TYPE_PRE: ts = "TYPE_PRE"; break;
          case R.components.Base.TYPE_INPUT: ts = "TYPE_INPUT"; break;
          case R.components.Base.TYPE_TRANSFORM: ts = "TYPE_TRANSFORM"; break;
          case R.components.Base.TYPE_LOGIC: ts = "TYPE_LOGIC"; break;
          case R.components.Base.TYPE_COLLIDER: ts = "TYPE_COLLIDER"; break;
          case R.components.Base.TYPE_RENDERING: ts = "TYPE_RENDERING"; break;
+         case R.components.Base.TYPE_POST: ts = "TYPE_POST"; break;
          default: ts = "TYPE_UNKNOWN";
       }
 
@@ -215,6 +217,13 @@ R.components.Base = function() {
    getClassName: function() {
       return "R.components.Base";
    },
+
+   /**
+    * The constant value for PRE process components.  Reserved for internal use.
+    * @type {Number}
+    * @private
+    */
+   TYPE_PRE:				0,
 
    /**
     * The constant value for INPUT components.
@@ -244,7 +253,14 @@ R.components.Base = function() {
     * The constant value for RENDERING components.
     * @type {Number}
     */
-   TYPE_RENDERING:      5
+   TYPE_RENDERING:      5,
+   
+   /**
+    * The constant value for POST process components.  Reserved for internal use.
+    * @type {Number}
+    * @private
+    */
+   TYPE_POST:				6
 });
 
 }

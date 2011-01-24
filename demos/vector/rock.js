@@ -37,7 +37,7 @@ R.Engine.define({
 		"R.components.Mover2D",
 		"R.components.Vector2D",
 		"R.components.Billboard2D",
-		"R.components.ConvexCollider",
+		"R.components.BoxCollider",
 		"R.engine.Object2D",
 		"R.lang.Timeout",
 		"R.lang.OneShotTimeout",
@@ -74,7 +74,8 @@ var SpaceroidsRock = function() {
 		} else {
 			this.add(R.components.Vector2D.create("draw"));			
 		}
-      this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
+      //this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
+      this.add(R.components.BoxCollider.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsRock.COLLISION_MASK);
 		if (Spaceroids.isAttractMode) {
 			// In attract mode, rocks can collide
@@ -214,7 +215,7 @@ var SpaceroidsRock = function() {
 
 		// Set the bounding box, collision hull, and origin
 		this.setOrigin(c_draw.getCenter());
-		this.setCollisionHull(c_draw.getCircleHull(0.75));
+		//this.setCollisionHull(c_draw.getCircleHull(0.75));
 		this.setBoundingBox(c_draw.getBoundingBox());
 		
 		if (R.Engine.options.hardwareAccel) {
