@@ -59,14 +59,13 @@ var SpaceroidsBullet = function() {
    rot: null,
 
    constructor: function(player) {
-      this.base("Bullet");
+      this.base("Bullet", R.components.Mover2D.create("move"));
 
       // Track the player that created us
       this.player = player;
       this.rot = player.getRotation();
 
-      // Add components to move and draw the bullet
-      this.add(R.components.Mover2D.create("move"));
+      // Add components to draw the bullet
       this.add(R.components.Vector2D.create("draw"));
       //this.add(R.components.ConvexCollider.create("collide", Spaceroids.collisionModel));
       this.add(R.components.BoxCollider.create("collide", Spaceroids.collisionModel));
@@ -114,36 +113,6 @@ var SpaceroidsBullet = function() {
    destroy: function() {
    	Spaceroids.collisionModel.removeObject(this);
       this.base();
-   },
-
-   /**
-    * Returns the bullet position
-    * @type Point2D
-    */
-   getPosition: function() {
-      return this.getComponent("move").getPosition();
-   },
-
-   getRenderPosition: function() {
-      return this.getComponent("move").getRenderPosition();
-   },
-
-   /**
-    * Returns the last position of the bullet
-    * @type Point2D
-    */
-   getLastPosition: function() {
-      return this.getComponent("move").getLastPosition();
-   },
-
-   /**
-    * Set the position of the bullet.
-    *
-    * @param point {Point2D} The position of the bullet.
-    */
-   setPosition: function(point) {
-      this.base(point);
-      this.getComponent("move").setPosition(point);
    },
 
    /**

@@ -64,11 +64,8 @@ var SpaceroidsRock = function() {
    scoreValue: 10,
 
    constructor: function(size, position) {
-      this.base("Spaceroid");
+      this.base("Spaceroid", R.components.Mover2D.create("move"));
 
-      // Add components to move and draw the asteroid
-      this.add(R.components.Mover2D.create("move"));
-		
 		if (R.Engine.options.hardwareAccel) {
 	      this.add(R.components.Billboard2D.create("billboard", R.components.Vector2D.create("draw")));
 		} else {
@@ -139,54 +136,6 @@ var SpaceroidsRock = function() {
       this.base(renderContext, time);
       renderContext.popTransform();
 		
-   },
-
-   /**
-    * Returns the position of the rock
-    * @type Point2D
-    */
-   getPosition: function() {
-      return this.getComponent("move").getPosition();
-   },
-
-   getRenderPosition: function() {
-      return this.getComponent("move").getRenderPosition();
-   },
-
-   /**
-    * Returns the last position of the rock.
-    * @type Point2D
-    */
-   getLastPosition: function() {
-      return this.getComponent("move").getLastPosition();
-   },
-
-   /**
-    * Set the position of the rock.
-    *
-    * @param point {Point2D} The position of the rock
-    */
-   setPosition: function(point) {
-      this.base(point);
-      this.getComponent("move").setPosition(point);
-   },
-
-   /**
-    * Get the rotation of the rock.
-    * @type Number
-    */
-   getRotation: function() {
-      return this.getComponent("move").getRotation();
-   },
-
-   /**
-    * Set the rotation of the rock.
-    *
-    * @param angle {Number} The rotation of the asteroid
-    */
-   setRotation: function(angle) {
-      this.base(angle);
-      this.getComponent("move").setRotation(angle);
    },
 
    /**

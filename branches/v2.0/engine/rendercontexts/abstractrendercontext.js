@@ -181,10 +181,11 @@ R.rendercontexts.AbstractRenderContext = function() {
    /**
     * Set the world position of the rendering context.  All objects
     * should be adjuest by this position when the context renders.
-    * @param point {R.math.Point2D} The world position
+    * @param point {R.math.Point2D|Number} The world position or X coordinate
+    * @param [y] {Number} If <tt>point</tt> is a number, this is the Y coordinate
     */
-   setWorldPosition: function(point) {
-      this.worldPosition.set(point);
+   setWorldPosition: function(point, y) {
+      this.worldPosition.set(point, y);
    },
 
    /**
@@ -253,7 +254,7 @@ R.rendercontexts.AbstractRenderContext = function() {
     */
    add: function(obj) {
       this.base(obj);
-      if (obj instanceof R.engine.HostObject)
+      if (obj instanceof R.engine.GameObject)
       {
          obj.setRenderContext(this);
          this.sort();

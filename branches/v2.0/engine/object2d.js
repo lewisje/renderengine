@@ -35,29 +35,33 @@
 R.Engine.define({
 	"class": "R.engine.Object2D",
 	"requires": [
-		"R.engine.HostObject",
-		"R.collision.ConvexHull",
+		"R.engine.GameObject",
+		"R.collision.OBBHull",
 		"R.math.Rectangle2D",
 		"R.math.Circle2D",
 		"R.math.Point2D",
 		"R.math.Vector2D",
 		"R.math.Math2D",
-		"R.collision.ConvexHull"
+		"R.components.Transform2D"
 	]
 });
 
 /**
- * @class An object for use in a 2d environment.  Methods for getting the position, rotation
- * and scale should be implemented within the extended class.  This class is the recommended
- * base class for objects used within a 2d game, instead of deriving from {@link R.engine.HostObject}. 
+ * @class An object for use in a 2d game environment.  If no <tt>transformComponent</tt> is provided,
+ * the object will be assigned a {@link R.components.Transform2D Transform2D} component.  This class is the recommended
+ * base class for objects used within a 2d game environment, instead of deriving from the base 
+ * {@link R.engine.GameObject} class. 
  * 
  * @param name {String} The name of the object
- * @extends R.engine.HostObject
+ * @param [transformComponent] {R.components.Transform2D} The transform component to use, or
+ *		<code>null</code>.  If the value is <code>null</code>, the object will be assigned a default
+ *		{@link R.components.Transform2D Transform2D} component.
+ * @extends R.engine.GameObject
  * @constructor
- * @description Create a 2d host object
+ * @description Create a game object with methods for operating in a 2D context.
  */
 R.engine.Object2D = function(){
-	return R.engine.HostObject.extend(/** @scope R.engine.Object2D.prototype */{
+	return R.engine.GameObject.extend(/** @scope R.engine.Object2D.prototype */{
 	
 		/** @private */
 		zIndex: 1,
@@ -70,13 +74,15 @@ R.engine.Object2D = function(){
 		lastPosition: null,
 		origin: null,
 		collisionHull: null,
+		genHull: null,
+		defaultTxfmComponent: null,
 		
 		// Current origin/negative-origin matrices
 		oMtx: null,
 		oMtxN: null,
 		
 		/** @private */
-		constructor: function(name){
+		constructor: function(name, transformComponent){
 			this.base(name);
 			this.lastPosition = R.math.Point2D.create(5, 5);
 			this.bBox = R.math.Rectangle2D.create(0, 0, 1, 1);
@@ -86,6 +92,11 @@ R.engine.Object2D = function(){
 			this.zIndex = 0;
 			this.origin = R.math.Point2D.create(0, 0);
 			this.collisionHull = null;
+			this.genHull = false;
+			
+			// Assign a default 2d transformation component to store position information
+			this.defaultTxfmComponent = transformComponent != null ? transformComponent : R.components.Transform2D.create("dTxfm__");
+			this.add(this.defaultTxfmComponent);
 						
 			// Initialize the matrices
 			this.oMtx = R.math.Math2D.identityMatrix();
@@ -117,6 +128,7 @@ R.engine.Object2D = function(){
 			this.wCircle = null;
 			this.lastPosition = null;
 			this.collisionHull = null;
+			this.genHull = null;
 			
 			// Free the matrices
 			this.oMtx = null;
@@ -203,11 +215,18 @@ R.engine.Object2D = function(){
 			else {
 				this.bBox.set(0, 0, width, height);
 			}
+			
+			if (this.genHull) {
+				// Do this so a new collision hull is generated
+				this.collisionHull = null;
+				this.genHull = false;
+			}
+			
 			this.markDirty();
 		},
 		
 		/**
-		 * Get the bounding box of this object
+		 * Get the object's local bounding box.
 		 * @return {R.math.Rectangle2D} The object bounding rectangle
 		 */
 		getBoundingBox: function(){
@@ -215,7 +234,7 @@ R.engine.Object2D = function(){
 		},
 		
 		/**
-		 * [ABSTRACT] Get the bounding circle for the object.
+		 * [ABSTRACT] Get the object's local bounding circle.
 		 * @return {R.math.Circle2D} The object bounding circle
 		 */
 		getBoundingCircle: function(){
@@ -223,7 +242,7 @@ R.engine.Object2D = function(){
 		},
 		
 		/**
-		 * Get the bounding box in world coordinates.
+		 * Get the object's bounding box in world coordinates.
 		 * @return {R.math.Rectangle2D} The world bounding rectangle
 		 */
 		getWorldBox: function(){
@@ -236,7 +255,7 @@ R.engine.Object2D = function(){
 		},
 		
 		/**
-		 * Get the bounding circle in world coordinates.  If {@link #getBoundingCircle} returns
+		 * Get the object's bounding circle in world coordinates.  If {@link #getBoundingCircle} returns
 		 * null, the bounding circle will be approximated using {@link #getBoundingBox}.
 		 *
 		 * @return {R.math.Circle2D} The world bounding circle
@@ -260,7 +279,7 @@ R.engine.Object2D = function(){
 		},
 		
 		/**
-		 * Get the axis aligned world bounding box for the object.  This bounding box
+		 * Get an axis aligned world bounding box for the object.  This bounding box
 		 * is ensured to encompass the entire object.
 		 * @return {R.math.Rectangle2D}
 		 */
@@ -306,47 +325,49 @@ R.engine.Object2D = function(){
 		},
 		
 		/**
-		 * [ABSTRACT] Get the world bounding circle.
-		 * @return {R.math.Circle2D}
-		 * @deprecated
-		 */
-		getCircle: function(){
-			// ABSTRACT METHOD
-		},
-		
-		/**
-		 * Set the convex hull used for collision.
+		 * Set the convex hull used for collision.  The {@link R.components.ConvexCollider ConvexCollider} component
+		 * uses the collision hull to perform the collision testing.
 		 * @param convexHull {R.collision.ConvexHull} The convex hull object
 		 */
 		setCollisionHull: function(convexHull){
 			Assert(convexHull instanceof R.collision.ConvexHull, "setCollisionHull() - not ConvexHull!");
 			this.collisionHull = convexHull;
 			this.collisionHull.setHostObject(this);
+			this.genHull = false;
 			this.markDirty();
 		},
 		
 		/**
-		 * Get the convex hull used for collision.
+		 * Get the convex hull used for collision testing with a {@link R.components.ConvexCollider ConvexCollider}
+		 * component.  If no collision hull has been assigned, a simple {@link R.collision.OBBHull OBBHull} will
+		 * be created and returned.
+		 *
 		 * @return {R.collision.ConvexHull}
 		 */
 		getCollisionHull: function(){
+			if (this.collisionHull == null) {
+				this.collisionHull = R.collision.OBBHull.create(this.getBoundingBox());
+				this.genHull = true;
+			}
+			
 			return this.collisionHull;
 		},
 		
 		/**
-		 * [ABSTRACT] Get the velocity of the object.
-		 * @return {R.math.Vector2D}
-		 * @deprecated
+		 * Get the default transform component.
+		 * @return {R.components.Transform2D}
 		 */
-		getVelocity: function(){
-			// ABSTRACT METHOD
+		getDefaultTransformComponent: function() {
+			return this.defaultTxfmComponent;
 		},
 		
 		/**
-		 * [ABSTRACT] Set the position of the object
-		 * @param point {R.math.Point2D} The position of the object
+		 * Set the position of the object
+		 * @param point {R.math.Point2D|Number} The position of the object, or a simple X coordinate
+		 * @param [y] {Number} A Y coordinate if <tt>point</tt> is a number
 		 */
-		setPosition: function(point){
+		setPosition: function(point, y){
+			this.getDefaultTransformComponent().getPosition().set(point, y);
 			this.markDirty();
 		},
 		
@@ -355,7 +376,7 @@ R.engine.Object2D = function(){
 		 * @return {R.math.Point2D} The position
 		 */
 		getPosition: function(){
-			return R.math.Point2D.ZERO;
+			return this.getDefaultTransformComponent().getPosition();
 		},
 		
 		/**
@@ -363,7 +384,7 @@ R.engine.Object2D = function(){
 		 * @return {R.math.Point2D}
 		 */
 		getRenderPosition: function(){
-			return R.math.Point2D.ZERO;
+			return this.getDefaultTransformComponent().getRenderPosition();
 		},
 		
 		/**
@@ -371,40 +392,52 @@ R.engine.Object2D = function(){
 		 * @return {R.math.Point2D}
 		 */
 		getLastPosition: function(){
-			return R.math.Point2D.ZERO;
+			return this.getDefaultTransformComponent().getLastPosition();
 		},
 		
 		/**
-		 * [ABSTRACT] Set the rotation of the object
+		 * Set the rotation of the object
 		 * @param angle {Number} The rotation angle
 		 */
 		setRotation: function(angle){
+			this.getDefaultTransformComponent().setRotation(angle)
 			this.markDirty();
 		},
 		
 		/**
 		 * Get the rotation of the object
-		 * @return {Number}
+		 * @return {Number} Angle in degrees
 		 */
 		getRotation: function(){
-			return 0;
+			return this.getDefaultTransformComponent().getRotation();
 		},
 		
 		/**
-		 * Store the scale of the object along the X and Y axis in the scaling matrix
+		 * Get the world adjusted rotation of the object
+		 * @return {Number} Angle in degrees
+		 */
+		getRenderRotation: function() {
+			return this.getDefaultTransformComponent().getRenderRotation();
+		},
+		
+		/**
+		 * Set the scale of the object along the X and Y axis in the scaling matrix
 		 * @param scaleX {Number} The scale along the X axis
-		 * @param scaleY {Number} The scale along the Y axis
+		 * @param [scaleY] {Number} Optional scale along the Y axis.  If no value is provided
+		 *		<tt>scaleX</tt> will be used to perform a uniform scale.
 		 */
 		setScale: function(scaleX, scaleY){
+			this.getDefaultTransformComponent().setScale(scaleX, scaleY);
 			this.markDirty();
 		},
 		
 		/**
-		 * Get the uniform scale of the object.
+		 * Get the uniform scale of the object.  If the object is using a non-uniform
+		 * scale, only the X scale is returned.
 		 * @return {Number}
 		 */
 		getScale: function(){
-			return 1;
+			return this.getScaleX();
 		},
 		
 		/**
@@ -412,7 +445,7 @@ R.engine.Object2D = function(){
 		 * @return {Number}
 		 */
 		getScaleX: function(){
-			return 1;
+			return this.getDefaultTransformComponent().getScaleX();
 		},
 		
 		/**
@@ -420,7 +453,7 @@ R.engine.Object2D = function(){
 		 * @return {Number}
 		 */
 		getScaleY: function(){
-			return 1;
+			return this.getDefaultTransformComponent().getScaleY();
 		},
 		
 		/**
