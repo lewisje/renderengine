@@ -410,7 +410,7 @@ R.rendercontexts.HTMLElementContext = function(){
 			var rD = rect.getDims();
 			srcRect = (srcRect instanceof R.math.Rectangle2D ? srcRect : null);
 			var sD = srcRect ? srcRect.getDims() : rect.getDims();
-			ref = (srcRect instanceof R.engine.HostObject ? srcRect : ref);
+			ref = (srcRect instanceof R.engine.GameObject ? srcRect : ref);
 			
 			// The reference object is a host object it
 			// will give us a reference to the HTML element which we can then

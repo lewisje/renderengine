@@ -94,7 +94,7 @@ R.components.Host = function() {
     * @param obj {R.engine.HostObject} The host object reference
     */
    add: function(name, obj) {
-      Assert((obj instanceof R.engine.HostObject), "You can only add HostObjects to a HostComponent");
+      Assert((obj instanceof R.engine.GameObject), "You can only add GameObject to a HostComponent");
       this.objects.add(name.toUpperCase(), obj);
    },
 

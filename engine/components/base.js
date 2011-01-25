@@ -118,20 +118,20 @@ R.components.Base = function() {
     * Establishes the link between this component and its host object.
     * When you assign components to a host object, it will call this method
     * so that each component can refer to its host object, the same way
-    * a host object can refer to a component with {@link HostObject#getComponent}.
+    * a host object can refer to a component with {@link GameObject#getComponent}.
     *
-    * @param hostObject {R.engine.HostObject} The object which hosts this component
+    * @param hostObject {R.engine.GameObject} The object which hosts this component
     */
    setHostObject: function(hostObject) {
       this.host = hostObject;
    },
 
    /**
-    * Gets the host object this component is a part of.  When the component was
-    * assigned to a host object, the host object will have set itself as the container
+    * Gets the game object this component is a part of.  When the component was
+    * assigned to a game object, the game object will have set itself as the container
     * via {@link #setHostObject}.
     *
-    * @return {R.engine.HostObject}
+    * @return {R.engine.GameObject}
     */
    getHostObject: function() {
       return this.host;

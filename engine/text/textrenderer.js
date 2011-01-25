@@ -81,8 +81,6 @@ R.text.TextRenderer = function() {
          this.add(R.components.Billboard2D.create("billboard", this.renderer));
       }
 
-      this.add(R.components.Transform2D.create("transform"));
-
       renderer.setText(text || "");
       renderer.setSize(size || 1);
       this.drawMode = R.text.TextRenderer.DRAW_TEXT;
@@ -220,24 +218,6 @@ R.text.TextRenderer = function() {
     */   
    getTextStyle: function() {
       return this.renderer.getTextStyle();
-   },
-
-   /**
-    * Get the position where the text will render.
-    * @return {R.math.Point2D} The position of the text
-    */
-   getPosition: function() {
-      return this.getComponent("transform").getPosition();
-   },
-
-   /**
-    * Set the position where the text will render.
-    *
-    * @param point {R.math.Point2D} The position to render the text
-    */
-   setPosition: function(point) {
-      this.getComponent("transform").setPosition(point);
-      point.destroy();
    },
 
    /**

@@ -74,10 +74,10 @@ var SpaceroidsPlayer = function() {
    rec: false,
 
    constructor: function() {
-      this.base("Player");
+      this.base("Player", R.components.Mover2D.create("move"));
       this.rec = false;
 
-      // Add components to move and draw the player
+      // Add components to draw the player and perform input
 		this.add(R.components.KeyboardInput.create("input"));
 
       if (Spaceroids.rec) {
@@ -85,7 +85,6 @@ var SpaceroidsPlayer = function() {
       }
 
 
-      this.add(R.components.Mover2D.create("move"));
       this.add(R.components.Vector2D.create("draw"));
       this.add(R.components.Vector2D.create("thrust"));
       //this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
@@ -185,63 +184,6 @@ var SpaceroidsPlayer = function() {
 			renderContext.popTransform();
 			dr.destroy();
 		}
-   },
-
-   /**
-    * Get the position of the ship from the mover component.
-    * @type Point2D
-    */
-   getPosition: function() {
-      return this.getComponent("move").getPosition();
-   },
-
-   getRenderPosition: function() {
-      return this.getComponent("move").getRenderPosition();
-   },
-
-   /**
-    * Get the last position the ship was at before the current move.
-    * @type Point2D
-    */
-   getLastPosition: function() {
-      return this.getComponent("move").getLastPosition();
-   },
-
-   /**
-    * Set, or initialize, the position of the mover component
-    *
-    * @param point {Point2D} The position to draw the ship in the playfield
-    */
-   setPosition: function(point) {
-      this.base(point);
-      this.getComponent("move").setPosition(point);
-   },
-
-   /**
-    * Get the rotation of the ship from the mover component.
-    * @type Number
-    */
-   getRotation: function() {
-      return this.getComponent("move").getRotation();
-   },
-
-   /**
-    * Set the rotation of the ship on the mover component.
-    *
-    * @param angle {Number} The rotation angle of the ship
-    */
-   setRotation: function(angle) {
-      this.base(angle);
-      this.getComponent("move").setRotation(angle);
-   },
-
-   getScale: function() {
-      return this.getComponent("move").getScale();
-   },
-
-   setScale: function(scale) {
-      this.base(scale);
-      this.getComponent("move").setScale(scale);
    },
 
    /**
