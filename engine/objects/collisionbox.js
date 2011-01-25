@@ -34,9 +34,8 @@
 R.Engine.define({
 	"class": "R.objects.CollisionBox",
 	"requires": [
-		"R.components.Transform2D",
-		"R.components.Render",
 		"R.engine.Object2D",
+		"R.components.Render",
 		"R.math.Point2D",
 		"R.math.Rectangle2D"
 	]
@@ -62,7 +61,6 @@ R.objects.CollisionBox = function(){
 			
 			this.editing = false;
 			
-			this.add(R.components.Transform2D.create("move"));
 			this.add(R.components.Render.create("draw"));
 			
 			this.setPosition(R.math.Point2D.create(100, 100));
@@ -168,22 +166,6 @@ R.objects.CollisionBox = function(){
 		},
 		
 		/**
-		 * Get the position of the collision box
-		 * @return {R.math.Point2D}
-		 */
-		getPosition: function(){
-			return this.getComponent("move").getPosition();
-		},
-		
-		/**
-		 * Get the render position (world position) of the box
-		 * @return {R.math.Point2D}
-		 */
-		getRenderPosition: function(){
-			return this.getComponent("move").getRenderPosition();
-		},
-		
-		/**
 		 * Set the size of the collision box
 		 * @param width {Number} The width of the box in pixels
 		 * @param height {Number} The height of the box in pixels
@@ -209,15 +191,6 @@ R.objects.CollisionBox = function(){
 		setHeight: function(height){
 			this.boxRect.setHeight(height);
 			this.setBoundingBox(this.boxRect);
-		},
-		
-		/**
-		 * Set the position of the collision box
-		 * @param point {R.Math.Point2D} The position of the object
-		 */
-		setPosition: function(point){
-			this.base(point);
-			this.getComponent("move").setPosition(point);
 		},
 		
 		/**
