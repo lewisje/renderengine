@@ -46,7 +46,7 @@
       <title>The Render Engine - Manual Tests</title>
 
       <!-- Supporting Libraries -->
-      <script type="text/javascript" src="../../engine/libs/base.js"></script>
+      <script type="text/javascript" src="../../engine/libs/base.src.js"></script>
       <script type="text/javascript" src="../../engine/libs/jquery.js"></script>
       <script type="text/javascript" src="../../engine/libs/jquery.ext.engine.js"></script>
       <script type="text/javascript" src="../../engine/libs/sylvester.js"></script>
@@ -69,8 +69,11 @@
    </head>
    <body>
       <script type="text/javascript">
-         // Load the game script
-         R.Engine.loadGame('game.js','TypesTest');
+      	$(document).ready(function() {
+      		 R.debug.Console.setDebugLevel(1);
+			 // Load the game script
+			 R.Engine.loadGame('game.js','TypesTest');
+		});
       </script>
 		<div class="output">
 

@@ -30,6 +30,7 @@
  * THE SOFTWARE.
  *
  */
+R.debug.Console.setDebugLevel(1);
 
 R.Engine.define({
 	"class": "TypesTest",
@@ -63,10 +64,14 @@ var TypesTest = function() {
 		var p2a = new R.math.Point2(1, 5);
 		var p2b = new R.math.Point2(250, 7);
 				
-		TypesTest.log("p2a: " + p2a.toString());				
-		TypesTest.log("p2b: " + p2b.toString());				
+		TypesTest.log("p2a: " + p2a);				
+		TypesTest.log("p2b: " + p2b);				
 
-		
+		TypesTest.log("p2a(add): " + p2a.add(p2b));				
+		TypesTest.log("p2a(sub): " + p2a.sub(p2b));				
+		TypesTest.log("p2b(mul): " + p2b.mul(2));				
+		TypesTest.log("p2b.castTo(R.math.Point2D).convole(p2a): " + p2b.castTo(R.math.Point2D).convolve(p2a));
+		TypesTest.log("p2b.castTo(R.math.Vector2D).len(): " + p2b.castTo(R.math.Vector2D).len());				
 
 	},
 

@@ -102,6 +102,41 @@ R.isEmpty = function(obj) {
 	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && $.trim(obj) === "");
 };
 
+/**
+ * Make a simplified class object.
+ * @param clazz {Object} Methods and fields to assign to the class prototype.  A special method, <tt>constructor</tt>
+ *		will be used as the constructor function for the class, or an empty constructor will be assigned.
+ * @param props {Object} Properties which are available on the object class.  The format is [getterFn, setterFn].  If
+ *		either is null, the corresponding property accessor method will not be assigned.
+ * @return {Function} A new 
+ */
+R.make = function(clazz, props) {
+	// Get the constructor (if it exists)
+	var c = clazz["constructor"] || function(){};
+	if (clazz["constructor"]) {
+		delete clazz["constructor"];
+	}
+	
+	// Assign prototype fields and methods
+	for (var fm in clazz) {
+		c.prototype[fm] = clazz[fm];
+	}
+	
+	// Set up properties
+	if (props) {
+		for (var p in props) {
+			if (props[p][0]) {
+				c.prototype.__defineGetter__(p, props[p][0]);
+			}
+			if (props[p][1]) {
+				c.prototype.__defineSetter__(p, props[p][1]);
+			}
+		}
+	}
+	
+	return c;
+};
+
 // Define the engine's default namespaces
 R.namespace("debug");
 R.namespace("lang");
@@ -145,7 +180,7 @@ function now() {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1535 $
+ * @version: $Revision: 1539 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *

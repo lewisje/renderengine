@@ -116,7 +116,7 @@ R.math.Point2D = function(){
 				this._vec.setElements([x[0], x[1], 1]);
 			}
 			else 
-				if (x instanceof R.math.Point2D) {
+				if (x.__POINT2D) {
 					this._vec.setElements([x.x, x.y, 1]);
 				}
 				else {

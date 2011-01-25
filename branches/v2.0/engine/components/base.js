@@ -36,7 +36,7 @@ R.Engine.define({
 	"class": "R.components.Base",
 	"requires": [
 		"R.engine.BaseObject",
-		"R.engine.HostObject"
+		"R.engine.GameObject"
 	]
 });
 

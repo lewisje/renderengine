@@ -36,7 +36,7 @@ R.Engine.define({
 	"requires": [
 		"R.struct.Container",
 		"R.math.Math2D",
-		"R.engine.HostObject"
+		"R.engine.GameObject"
 	]
 });
 
