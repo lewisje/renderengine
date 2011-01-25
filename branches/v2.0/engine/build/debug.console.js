@@ -266,10 +266,10 @@ R.debug.HTML = R.debug.ConsoleRef.extend(/** @scope R.debug.HTML.prototype **/{
 });
 
 /**
- * @class A debug console abstraction for Safari browsers.
+ * @class A debug console abstraction for Webkit browsers.
  * @extends R.debug.ConsoleRef
  */
-R.debug.Safari = R.debug.ConsoleRef.extend(/** @scope R.debug.Safari.prototype **/{
+R.debug.Webkit = R.debug.ConsoleRef.extend(/** @scope R.debug.Webkit.prototype **/{
 
    constructor: function() {
    },
@@ -305,7 +305,7 @@ R.debug.Safari = R.debug.ConsoleRef.extend(/** @scope R.debug.Safari.prototype *
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "R.debug.Safari"
+    * @return {String} The string "R.debug.Webkit"
     */
    getClassName: function() {
       return "R.debug.Safari";
@@ -547,7 +547,7 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
          R.debug.Console.consoleRef = new R.debug.MSIE();
       }
       else if (jQuery.browser.chrome || jQuery.browser.safari) {
-         R.debug.Console.consoleRef = new R.debug.Safari();
+         R.debug.Console.consoleRef = new R.debug.Webkit();
       }
       else if (jQuery.browser.opera) {
          R.debug.Console.consoleRef = new R.debug.Opera();
