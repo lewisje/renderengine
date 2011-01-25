@@ -58,8 +58,7 @@ var SimpleParticle = function() {
 
    constructor: function(pos, ttl, decel) {
       this.base(ttl || 2000);
-      var p = pos.get();
-      this.setPosition(p.x, p.y);
+      this.setPosition(pos.x, pos.y);
 
       var a = Math.floor(R.lang.Math2.random() * 360);
       this.vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, SimpleParticle.ref, a);
@@ -152,8 +151,7 @@ var TrailParticle = function(){
 		constructor: function(pos, rot, spread, color, ttl){
 			this.base(ttl || 2000);
 			this.clr = color;
-			var p = pos.get();
-			this.setPosition(p.x, p.y);
+			this.setPosition(pos.x, pos.y);
 			var a = rot + Math.floor((180 - (spread / 2)) + (R.lang.Math2.random() * (spread * 2)));
 			this.vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, TrailParticle.ref, a);
 			var vel = 1 + (R.lang.Math2.random() * 2);

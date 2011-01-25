@@ -36,7 +36,7 @@ R.Engine.define({
 	"requires": [
 		"R.components.Base",
 		"R.math.Math2D",
-		"R.math.Point2D",
+		"R.math.Point2",
 		"R.math.Vector2D"
 	]
 });
@@ -65,10 +65,10 @@ R.components.Transform2D = function() {
     */
    constructor: function(name, priority) {
       this.base(name, R.components.Base.TYPE_TRANSFORM, priority || 1.0);
-      this.position = R.math.Point2D.create(0,0);
-		this.worldPos = R.math.Point2D.create(0,0);
-      this.lastPosition = R.math.Point2D.create(0,0);
-      this.lastRenderPosition = R.math.Point2D.create(0,0);
+      this.position = new R.math.Point2(0,0);
+		this.worldPos = new R.math.Point2(0,0);
+      this.lastPosition = new R.math.Point2(0,0);
+      this.lastRenderPosition = new R.math.Point2(0,0);
       this.rotation = 0;
       this.scale = [1.0,1.0];
    },
@@ -77,10 +77,10 @@ R.components.Transform2D = function() {
 	 * Destroy the component instance
 	 */
 	destroy: function() {
-		this.position.destroy();
-		this.worldPos.destroy();
-		this.lastPosition.destroy();
-		this.lastRenderPosition.destroy();
+		//this.position.destroy();
+		//this.worldPos.destroy();
+		//this.lastPosition.destroy();
+		//this.lastRenderPosition.destroy();
 		this.base();
 	},
 

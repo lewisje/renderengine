@@ -38,7 +38,7 @@ R.Engine.define({
 		"R.components.Input",
 		"R.engine.Events",
 		"R.lang.Timeout",
-		"R.math.Point2D",
+		"R.math.Point2",
 		"R.math.Vector2D"
 	]
 });
@@ -78,7 +78,7 @@ R.components.Mover2D = function() {
       this.base(name, priority || 1.0);
       this.velocity = R.math.Vector2D.create(0,0);
       this.acceleration = R.math.Vector2D.create(0,0);
-      this.lPos = R.math.Point2D.create(0,0);
+      this.lPos = new R.math.Point2(0,0);
       this.vDecay = 0;
       this.maxVelocity = -1;
       this.gravity = R.math.Vector2D.create(0,0);
@@ -96,7 +96,7 @@ R.components.Mover2D = function() {
 	destroy: function() {
 		this.velocity.destroy();
 		this.acceleration.destroy();
-		this.lPos.destroy();
+		//this.lPos.destroy();
 		this.gravity.destroy();
 		this.base();
 	},
@@ -140,12 +140,9 @@ R.components.Mover2D = function() {
    
          // If we've just come into the world, we can short circuit with a
          // quick addition of the velocity.
-         if (this.lastTime == -1)
-         {
-            this.setPosition(this.lPos.add(this.velocity).add(this.getAcceleration()).add(this.getGravity()));
-         }
-         else
-         {
+         if (this.lastTime == -1) {
+            this.setPosition(this.lPos.add(this.velocity).add(this.acceleration).add(this.gravity));
+         } else {
             if (this.getVelocityDecay() != 0 && this.velocity.len() > 0) {
                // We need to decay the velocity by the amount
                // specified until velocity is zero, or less than zero
@@ -157,8 +154,8 @@ R.components.Mover2D = function() {
             }
    
             var oldVel = R.math.Vector2D.create(this.velocity);
-            this.velocity.add(this.getAcceleration());
-            this.velocity.add(this.getGravity());
+            this.velocity.add(this.acceleration);
+            this.velocity.add(this.gravity);
             if (this.maxVelocity != -1 && this.velocity.len() > this.maxVelocity) {
                this.velocity.set(oldVel);
             }

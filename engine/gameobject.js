@@ -36,8 +36,7 @@ R.Engine.define({
 	"class": "R.engine.GameObject",
 	"requires": [
 		"R.struct.HashContainer",
-		"R.components.Base",
-		"R.components.Host"
+		"R.components.Base"
 	]
 });
 
