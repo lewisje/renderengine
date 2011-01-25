@@ -35,10 +35,9 @@
 R.Engine.define({
 	"class": "R.objects.SpriteActor",
 	"requires": [
-		"R.components.Mover2D",
+		"R.engine.Object2D",
 		"R.components.Sprite",
 		"R.components.KeyboardInput",
-		"R.engine.Object2D",
 		"R.components.ConvexCollider",
 		"R.collision.OBBHull"
 	]
@@ -77,9 +76,8 @@ R.objects.SpriteActor = function(){
 			
 			this.collidable = false;
 			
-			// Add components to move and draw the player
+			// Add sprite component to draw the player
 			this.add(R.components.Sprite.create("draw"));
-			this.add(R.components.Transform2D.create("move"));
 		},
 		
 		/**
@@ -333,82 +331,6 @@ R.objects.SpriteActor = function(){
 		 */
 		getSprite: function(){
 			return this.sprite;
-		},
-		
-		/**
-		 * Get the position of the ship from the mover component.
-		 * @return {R.math.Point2D}
-		 */
-		getPosition: function(){
-			return this.getComponent("move").getPosition();
-		},
-		
-		/**
-		 * Get the rendering position (world position) of the object
-		 * @return {R.math.Point2D}
-		 */
-		getRenderPosition: function(){
-			return this.getComponent("move").getRenderPosition();
-		},
-		
-		/**
-		 * Set the position of the mover component
-		 * @param point {R.math.Point2D} The position to draw the object in the playfield
-		 */
-		setPosition: function(point){
-			this.base(point);
-			this.getComponent("move").setPosition(point);
-		},
-		
-		/**
-		 * Get the uniform scale for the object
-		 * @return {Number}
-		 */
-		getScale: function(){
-			return this.getComponent("move").getScale();
-		},
-		
-		/**
-		 * Get the X scale for the object
-		 * @return {Number}
-		 */
-		getScaleX: function(){
-			return this.getComponent("move").getScaleX();
-		},
-		
-		/**
-		 * Get the Y scale for the object
-		 * @return {Number}
-		 */
-		getScaleY: function(){
-			return this.getComponent("move").getScaleY();
-		},
-		
-		/**
-		 * Set the scale for the object
-		 * @param x {Number} The X scale for the object, or if no <tt>y</tt> is provided, the uniform
-		 *		scale of the object
-		 * @param [y] {Number} Optional Y scale for the object
-		 */
-		setScale: function(x, y){
-			y = y || x;
-			this.getComponent("move").setScale(x, y);
-		},
-		
-		/**
-		 * Get the rotation of the object in degrees
-		 * @return {Number}
-		 */
-		getRotation: function(){
-			return this.getComponent("move").getRotation();
-		},
-		
-		/**
-		 * Set the rotation of the object, in degrees.
-		 * @param rotation {Number} Degrees of rotation
-		 */
-		setRotation: function(r){
-			this.getComponent("move").setRotation(rotation);
 		},
 		
 		/**
