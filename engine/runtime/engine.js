@@ -5,7 +5,7 @@
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v2.0.0.5a
+ * version: v2.0.0.6a
  * date: 11/8/2010
  *
  * Copyright (c) 2010 Brett Fattori
@@ -144,8 +144,8 @@ function now() {
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1534 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1535 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -1099,8 +1099,8 @@ R.debug.Profiler.wireObjects = function(objArray) {
  * 				  pseudo random numbers.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: $
- * @version: $Revision: -1 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1535 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2221,8 +2221,8 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1534 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1535 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2270,7 +2270,7 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @static
  */
 R.Engine = Base.extend(/** @scope R.Engine.prototype */{
-   version: "v2.0.0.5a",
+   version: "v2.0.0.6a",
    HOME_URL: "http://www.renderengine.com",
    REF_NAME: "The Render Engine",
 
