@@ -139,37 +139,7 @@ var SpaceroidsBullet = function() {
       this.base(renderContext, time);
       renderContext.popTransform();
 		bBox.destroy();
-   },
-
-   /**
-    * Called whenever an object is located in the PCL which might
-    * be in a collision state with this bullet.  Checks for collisions
-    * with rocks and UFO's.
-    *
-    * @param obj {HostObject} The object that the bullet might be in a
-    *            collision state with.
-    *
-    * @returns <tt>ColliderComponent.STOP</tt> if the collision was handled,
-    *          otherwise <tt>ColliderComponent.CONTINUE</tt> if the other
-    *          objects in the PCL should be tested.
-    */
-   onCollide: function(obj, time, mask) {
-      if (mask == SpaceroidsRock.COLLISION_MASK)
-      {
-         // Kill the rock
-         obj.kill();
-
-         // Remove the bullet
-         this.player.removeBullet(this);
-         this.destroy();
-
-         // All set
-         return R.components.Collider.STOP;
-      }
-
-      return R.components.Collider.CONTINUE;
    }
-
 
 }, {
    /**

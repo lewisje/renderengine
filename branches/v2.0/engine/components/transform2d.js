@@ -36,7 +36,7 @@ R.Engine.define({
 	"requires": [
 		"R.components.Base",
 		"R.math.Math2D",
-		"R.math.Point2",
+		"R.math.Point2D",
 		"R.math.Vector2D"
 	]
 });
@@ -59,28 +59,45 @@ R.components.Transform2D = function() {
    lastPosition: null,
    lastRenderPosition: null,
 	worldPos: null,
+	
+	/* pragma:DEBUG_START */
+	_up: null,
+	_left: null,
+   /* pragma:DEBUG_END */
 
    /**
     * @private
     */
    constructor: function(name, priority) {
       this.base(name, R.components.Base.TYPE_TRANSFORM, priority || 1.0);
-      this.position = new R.math.Point2(0,0);
-		this.worldPos = new R.math.Point2(0,0);
-      this.lastPosition = new R.math.Point2(0,0);
-      this.lastRenderPosition = new R.math.Point2(0,0);
+      this.position = R.math.Point2D.create(0,0);
+		this.worldPos = R.math.Point2D.create(0,0);
+      this.lastPosition = R.math.Point2D.create(0,0);
+      this.lastRenderPosition = R.math.Point2D.create(0,0);
       this.rotation = 0;
-      this.scale = [1.0,1.0];
+      this.scale = [1.0, 1.0];
+
+		/* pragma:DEBUG_START */
+		this._up = R.math.Vector2D.create(R.math.Vector2D.UP).mul(10);
+		this._left = R.math.Vector2D.create(R.math.Vector2D.LEFT).mul(10);
+		/* pragma:DEBUG_END */
+
    },
 	
 	/**
 	 * Destroy the component instance
 	 */
 	destroy: function() {
-		//this.position.destroy();
-		//this.worldPos.destroy();
-		//this.lastPosition.destroy();
-		//this.lastRenderPosition.destroy();
+		this.position.destroy();
+		this.worldPos.destroy();
+		this.lastPosition.destroy();
+		this.lastRenderPosition.destroy();
+
+		/* pragma:DEBUG_START */
+		this._up.destroy();
+		this._left.destroy();
+		/* pragma:DEBUG_END */
+
 		this.base();
 	},
 
@@ -267,14 +284,10 @@ R.components.Transform2D = function() {
       if (R.Engine.getDebugMode())
       {
 			renderContext.setLineWidth(1);
-			var up = R.math.Vector2D.create(R.math.Vector2D.UP).mul(10);
-			var left = R.math.Vector2D.create(R.math.Vector2D.LEFT).mul(10);
          renderContext.setLineStyle("red");
-         renderContext.drawLine(R.math.Point2D.ZERO, up);
+         renderContext.drawLine(R.math.Point2D.ZERO, this._up);
          renderContext.setLineStyle("blue");
-         renderContext.drawLine(R.math.Point2D.ZERO, left);
-			up.destroy();
-			left.destroy();
+         renderContext.drawLine(R.math.Point2D.ZERO, this._left);
       }
       /* pragma:DEBUG_END */
    }

@@ -99,7 +99,7 @@ R.math.Point2D = function(){
 		 * @return {Boolean} <tt>true</tt> if the two points are equal
 		 */
 		equals: function(point){
-			return this._vec.eql(point._vec);
+			return (this.x == point.x && this.y == point.y);
 		},
 		
 		/**
@@ -124,18 +124,6 @@ R.math.Point2D = function(){
 					this._vec.setElements([x, y || 0, 1]);
 				}
 			return this;
-		},
-		
-		/**
-		 * Get the elements of this point as an object with elements X and Y.
-		 * @return {Object}
-		 * @deprecated
-		 */
-		get: function(){
-			return {
-				x: this.x,
-				y: this.y
-			};
 		},
 		
 		/**

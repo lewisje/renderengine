@@ -90,7 +90,7 @@ var Spaceroids = function() {
    centerPoint: null,
    areaScale: $.browser.Wii ? 0.7 : 1,
 
-   engineFPS: 30,
+   engineFPS: 25,
 
    collisionModel: null,
 
@@ -463,6 +463,7 @@ var Spaceroids = function() {
    	//R.debug.Profiler.start();
    	
    	//R.Engine.setDebugMode(true);
+   	R.debug.Metrics.showProfile();
    	
       R.Engine.setFPS(this.engineFPS);
 

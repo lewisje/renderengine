@@ -59,14 +59,14 @@ R.spatial.AbstractSpatialContainer = function(){
 		root: null,
 		width: 0,
 		height: 0,
-		pcl: null,
+		pclCache: null,
 		
 		/** @private */
 		constructor: function(name, width, height){
 			this.base(name || "SpatialContainer");
 			this.width = width;
 			this.height = height;
-			this.pcl = R.struct.Container.create();
+			this.pclCache = {};
 		},
 		
 		/**
@@ -77,7 +77,7 @@ R.spatial.AbstractSpatialContainer = function(){
 			this.root = null;
 			this.width = 0;
 			this.height = 0;
-			this.pcl = null;
+			this.pclCache = null;
 		},
 		
 		/**
@@ -136,7 +136,7 @@ R.spatial.AbstractSpatialContainer = function(){
 			var oldNode = this.getObjectSpatialData(obj, "lastNode");
 			if (oldNode != null) {
 				if (!oldNode.contains(point)) {
-					// The node is no longer in the same node
+					// The object is no longer in the same node
 					oldNode.removeObject(obj);
 				}
 				else {
@@ -210,13 +210,23 @@ R.spatial.AbstractSpatialContainer = function(){
 		
 		/**
 		 * Returns a potential collision list of objects that are contained
-		 * within the defined sub-space of the container.
+		 * within the defined sub-space of the container.  PCLs are timestamped
+		 * so that a cached PCL will be returned for the same time slice.
 		 *
-		 * @param point {R.math.Point2D} The point to build with
+		 * @param key {Object} A key used to cache PCL objects
+		 * @param time {Number} The timestamp for the PCL.  If the key's timestamp differs from the
+		 *		timestamp provided, an empty PCL is returned.  Otherwise, the cached PCL is returned.
 		 * @return {R.struct.Container} The PCL
 		 */
-		getPCL: function(point){
-			return this.pcl;
+		getPCL: function(key){
+			if (this.pclCache[key] == null) {
+				this.pclCache[key] = {
+					dirty: false,
+					pcl: R.struct.Container.create()
+				};
+			}
+			
+			return this.pclCache[key];
 		},
 		
 		/**

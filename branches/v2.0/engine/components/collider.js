@@ -311,7 +311,7 @@ R.components.Collider = function() {
 			var hostMask = this.collisionModel.getObjectSpatialData(host, "collisionMask");
       
          // Get the PCL and check for collisions
-         pcl = this.getCollisionModel().getPCL(host.getPosition());
+         pcl = this.getCollisionModel().getPCL(host.getPosition(), time);
          var status = R.components.Collider.CONTINUE;
          var collisionsReported = 0;
          this.didCollide = false;

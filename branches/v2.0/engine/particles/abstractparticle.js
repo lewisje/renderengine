@@ -36,7 +36,7 @@ R.Engine.define({
 	"class": "R.particles.AbstractParticle",
 	"requires": [
 		"R.engine.PooledObject",
-		"R.math.Point2"
+		"R.math.Point2D"
 	]
 });
 
@@ -65,8 +65,12 @@ R.particles.AbstractParticle = function(){
 			this.life = lifetime;
 			this.birth = 0;
 			this.dead = false;
+			
 			if (this.pos == null) {
-				this.pos = new R.math.Point2(0, 0);
+				// Once a particle has been created, then returned to the pool,
+				// this point will still exist.  Instead of creating a new point
+				// we'll reuse it for the life of the engine.
+				this.pos = R.math.Point2D.create(0, 0);
 			}
 		},
 		
@@ -74,7 +78,6 @@ R.particles.AbstractParticle = function(){
 		 * Destroy the particle
 		 */
 		destroy: function(){
-			//this.pos.destroy();
 			this.base();
 		},
 		
@@ -87,7 +90,6 @@ R.particles.AbstractParticle = function(){
 			this.engine = null;
 			this.birth = 0;
 			this.dead = true;
-			//this.pos = null;
 		},
 		
 		/**
