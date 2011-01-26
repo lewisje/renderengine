@@ -264,10 +264,8 @@ var SpaceroidsRock = function() {
     * object.
     */
    onCollide: function(obj, time, mask) {
-      if (mask == SpaceroidsPlayer.COLLISION_MASK && !Spaceroids.playerObj.isNuking())
-      {
-         if (obj.isAlive())
-         {
+      if (mask == SpaceroidsPlayer.COLLISION_MASK && !Spaceroids.playerObj.isNuking()) {
+         if (obj.isAlive()) {
             obj.kill();
             this.kill();
             return R.components.Collider.STOP;
@@ -275,10 +273,21 @@ var SpaceroidsRock = function() {
       }
 
       if (Spaceroids.isAttractMode && obj.killTimer < R.Engine.worldTime &&
-            mask == SpaceroidsRock.COLLISION_MASK)
-      {
+            mask == SpaceroidsRock.COLLISION_MASK) {
          this.kill();
          obj.kill();
+         return R.components.Collider.STOP;
+      }
+
+      if (mask == SpaceroidsBullet.COLLISION_MASK) {
+         // Kill the rock
+         this.kill();
+
+         // Remove the bullet
+         obj.player.removeBullet(this);
+         obj.destroy();
+
+         // All set
          return R.components.Collider.STOP;
       }
 

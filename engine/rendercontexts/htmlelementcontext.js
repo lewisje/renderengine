@@ -62,6 +62,10 @@ R.rendercontexts.HTMLElementContext = function(){
 		txfmOrigin: null,
 		txfm: null,
 		
+		tmpP1: null,
+		tmpP2: null,
+		tmpP3: null,
+		
 		/** @private */
 		constructor: function(name, element){
 			this.base(name || "HTMLElementContext", element);
@@ -73,6 +77,11 @@ R.rendercontexts.HTMLElementContext = function(){
 			this.jQObj = null;
 			this.setViewport(R.math.Rectangle2D.create(0, 0, this.jQ().width(), this.jQ().height()));
 			this.checkTransformSupport();
+			
+			// Temporary points to use in calculations so we don't have to create and destroy them
+			this.tmpP1 = R.math.Point2D.create(0,0);
+			this.tmpP2 = R.math.Point2D.create(0,0);
+			this.tmpP3 = R.math.Point2D.create(0,0);
 		},
 		
 		/**
@@ -93,6 +102,11 @@ R.rendercontexts.HTMLElementContext = function(){
 			this.cursorPos.destroy();
 			this.getViewport().destroy();
 			this.txfm = null;
+
+			this.tmpP1.destroy();
+			this.tmpP2.destroy();
+			this.tmpP3.destroy();
+
 			this.base();
 		},
 		
@@ -240,8 +254,7 @@ R.rendercontexts.HTMLElementContext = function(){
 		setPosition: function(point){
 			this.cursorPos.set(point);
 			if (this.hasTxfm) {
-				var p = point.get();
-				this.txfm[0] = "translate(" + p.x + "px," + p.y + "px)";
+				this.txfm[0] = "translate(" + point.x + "px," + point.y + "px)";
 			}
 			this.base(point);
 		},
@@ -473,15 +486,13 @@ R.rendercontexts.HTMLElementContext = function(){
 						css[this.txfmOrigin] = "top left";
 					}
 					else {
-						var offs = R.math.Point2D.create(ref.getOrigin());
-						offs.neg();
-						var pos = R.math.Point2D.create(this.getPosition());
-						pos.add(offs);
-						this.setPosition(pos);
-						var o = ref.getOrigin().get();
+						this.tmpP1.set(ref.getOrigin());
+						this.tmpP1.neg();
+						this.tmpP2.set(this.getPosition());
+						this.tmpP2.add(offs);
+						this.setPosition(this.tmpP2);
+						var o = ref.getOrigin();
 						css[this.txfmOrigin] = o.x + "px " + o.y + "px";
-						offs.destroy();
-						pos.destroy();
 					}
 				}
 				css = this._mergeTransform(ref, css);

@@ -52,11 +52,13 @@ R.spatial.AbstractSpatialNode = function(){
 	
 		idx: 0,
 		objects: null,
+		dirty: null,
 		
 		/** @private */
 		constructor: function(){
 			this.idx = R.spatial.AbstractSpatialNode.NODE_INDEX++;
 			this.objects = R.struct.Container.create();
+			this.dirty = true;
 		},
 		
 		/**
@@ -65,6 +67,21 @@ R.spatial.AbstractSpatialNode = function(){
 		 */
 		getIndex: function(){
 			return this.idx;
+		},
+		
+		/**
+		 * Returns <code>true</code> if the node is dirty (has been modified)
+		 * @return {Boolean}
+		 */
+		isDirty: function() {
+			return this.dirty;
+		},
+		
+		/**
+		 * Clear the dirty flag after the node has been processed.
+		 */
+		clearDirty: function() {
+			this.dirty = false;
 		},
 		
 		/**
@@ -90,6 +107,7 @@ R.spatial.AbstractSpatialNode = function(){
 		 */
 		addObject: function(obj){
 			this.objects.add(obj);
+			this.dirty = true;
 		},
 		
 		/**
@@ -99,6 +117,7 @@ R.spatial.AbstractSpatialNode = function(){
 		 */
 		removeObject: function(obj){
 			this.objects.remove(obj);
+			this.dirty = true;
 		},
 		
 		/**

@@ -38,7 +38,7 @@ R.Engine.define({
 		"R.components.Input",
 		"R.engine.Events",
 		"R.lang.Timeout",
-		"R.math.Point2",
+		"R.math.Point2D",
 		"R.math.Vector2D"
 	]
 });
@@ -70,6 +70,7 @@ R.components.Mover2D = function() {
    restingVelocity: null,
    lagAdjustment: null,
    checkLag: null,
+   _vec: null,
    
    /**
     * @private
@@ -78,7 +79,7 @@ R.components.Mover2D = function() {
       this.base(name, priority || 1.0);
       this.velocity = R.math.Vector2D.create(0,0);
       this.acceleration = R.math.Vector2D.create(0,0);
-      this.lPos = new R.math.Point2(0,0);
+      this.lPos = R.math.Point2D.create(0,0);
       this.vDecay = 0;
       this.maxVelocity = -1;
       this.gravity = R.math.Vector2D.create(0,0);
@@ -88,6 +89,9 @@ R.components.Mover2D = function() {
       this.restingVelocity = R.components.Mover2D.DEFAULT_RESTING_VELOCITY;
       this.lagAdjustment = R.components.Mover2D.DEFAULT_LAG_ADJUSTMENT;
       this.checkLag = true;
+      
+      // Temp vector to use in calcs
+		this._vec = R.math.Vector2D.create(0,0);
    },
 
 	/**
@@ -96,8 +100,9 @@ R.components.Mover2D = function() {
 	destroy: function() {
 		this.velocity.destroy();
 		this.acceleration.destroy();
-		//this.lPos.destroy();
+		this.lPos.destroy();
 		this.gravity.destroy();
+		this._vec.destroy();
 		this.base();
 	},
 
@@ -121,6 +126,7 @@ R.components.Mover2D = function() {
       this.restingVelocity = null;
       this.lagAdjustment = null;
       this.checkLag = null;
+      this._vec = null;
    },
 
    /**
@@ -146,20 +152,17 @@ R.components.Mover2D = function() {
             if (this.getVelocityDecay() != 0 && this.velocity.len() > 0) {
                // We need to decay the velocity by the amount
                // specified until velocity is zero, or less than zero
-               var invVelocity = R.math.Vector2D.create(this.velocity).neg();
-               invVelocity.mul(this.getVelocityDecay());
-   
-               this.velocity.add(invVelocity);
-					invVelocity.destroy();
+               this._vec.set(this.velocity).neg();
+               this._vec.mul(this.getVelocityDecay());
+               this.velocity.add(this._vec);
             }
    
-            var oldVel = R.math.Vector2D.create(this.velocity);
+            this._vec.set(this.velocity);
             this.velocity.add(this.acceleration);
             this.velocity.add(this.gravity);
             if (this.maxVelocity != -1 && this.velocity.len() > this.maxVelocity) {
-               this.velocity.set(oldVel);
+               this.velocity.set(this._vec);
             }
-				oldVel.destroy();
 
             // Calculate lag?
             var lag;
@@ -169,10 +172,9 @@ R.components.Mover2D = function() {
                lag = 1;
             }
 
-            var vz = R.math.Vector2D.create(this.velocity).mul(lag);
-            this.setPosition(this.lPos.add(vz));
+            this._vec.set(this.velocity).mul(lag);
+            this.setPosition(this.lPos.add(this._vec));
             this.setRotation(rot + this.angularVelocity * (lag));
-				vz.destroy();
          }
          
          // Check rest state  

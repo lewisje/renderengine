@@ -194,16 +194,18 @@ R.math.Math2D = /** @scope R.math.Math2D.prototype */{
     * @param origin {R.math.Point2D} The origin of the shape
     * @param baseVec {R.math.Vector2D} The base vector
     * @param angle {Number} The rotation in degrees
+    * @param [vec] {R.math.Vector2D} <i>optional</i>. If provided, the result will be stored in
+    *		this vector rather than creating a new one.
     * @return {R.math.Vector2D} The direction vector
     */
-   getDirectionVector: function(origin, baseVec, angle) {
+   getDirectionVector: function(origin, baseVec, angle, vec) {
       var r = R.math.Math2D.degToRad(angle);
 
       var x = Math.cos(r) * baseVec.x - Math.sin(r) * baseVec.y;
       var y = Math.sin(r) * baseVec.x + Math.cos(r) * baseVec.y;
 
-      var v = R.math.Vector2D.create(x, y).sub(origin);
-      return v.normalize();
+      var v = vec != null ? vec.set(x, y) : R.math.Vector2D.create(x, y);
+      return v.sub(origin).normalize();
    },
 
    /**

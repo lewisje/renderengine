@@ -61,23 +61,27 @@ var SimpleParticle = function() {
       this.setPosition(pos.x, pos.y);
 
       var a = Math.floor(R.lang.Math2.random() * 360);
-      this.vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, SimpleParticle.ref, a);
+      
+      if (this.invVel == null) {
+      	// Another situation where it's better to keep this value, rather than destroying
+      	// it after use.  Since particles are short-lived, it's better to do this than
+      	// create/destroy over and over.
+			this.invVel = R.math.Vector2D.create(0,0);
+		}
+
+      if (this.vec == null) {
+      	// Same as above to save cycles...
+      	this.vec = R.math.Vector2D.create(0,0);
+      }
+      
+      R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, R.math.Vector2D.UP, a, this.vec);
       var vel = 1 + (R.lang.Math2.random() * 5);
       this.vec.mul(vel);
       this.decel = decel;
-		this.invVel = R.math.Vector2D.create(0,0);
    },
 
-   destroy: function() {
-      this.vec.destroy();
-		this.invVel.destroy();
-      this.base();
-   },
-   
    release: function() {
       this.base();
-      this.vec = null;
-		this.invVel = null;
       this.decel = 0;
    },
 
@@ -118,10 +122,7 @@ var SimpleParticle = function() {
 }, {
    getClassName: function() {
       return "SimpleParticle";
-   },
-
-   // A simple reference point for the "up" vector
-   ref: R.math.Point2D.create(0, -1)
+   }
 });
 }
 
@@ -153,19 +154,20 @@ var TrailParticle = function(){
 			this.clr = color;
 			this.setPosition(pos.x, pos.y);
 			var a = rot + Math.floor((180 - (spread / 2)) + (R.lang.Math2.random() * (spread * 2)));
-			this.vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, TrailParticle.ref, a);
+			
+			if (this.vec == null) {
+	      	// Same as SimpleParticle to save cycles...
+				this.vec = R.math.Vector2D.create(0,0);
+			}
+			
+			R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, R.math.Vector2D.UP, a, this.vec);
 			var vel = 1 + (R.lang.Math2.random() * 2);
 			this.vec.mul(vel);
 		},
 		
-		destroy: function(){
-			this.vec.destroy();
-			this.base();
-		},
-		
 		release: function(){
 			this.base();
-			this.vec = null;
+			this.clr = null;
 		},
 		
 		setColor: function(color){
@@ -188,9 +190,6 @@ var TrailParticle = function(){
 	}, {
 		getClassName: function(){
 			return "TrailParticle";
-		},
-		
-		// A simple reference point for the "up" vector
-		ref: R.math.Point2D.create(0, -1)
+		}
 	});
 }

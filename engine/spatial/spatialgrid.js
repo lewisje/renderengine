@@ -155,6 +155,14 @@ R.spatial.SpatialGrid = function() {
       return this.getRoot()[Math.floor(point.x * this.xLocator) + (Math.floor(point.y * this.yLocator) * this.divisions)];
    },
 
+	/**
+	 * Get the normalized node Id for the root node of a PCL
+	 * @private
+	 */
+	getNodeId: function(point) {
+		return Math.floor(point.x * this.xLocator) + (Math.floor(point.y * this.yLocator) * this.divisions);	
+	},
+
    /**
     * Get the node within the grid.
     * @param x {Number} The virtual X coordinate in our grid
@@ -193,28 +201,27 @@ R.spatial.SpatialGrid = function() {
     * @param point {R.math.Point2D} The point to begin the search at.
     * @return {R.struct.Container} A container of objects found that could be collision targets
     */
-   getPCL: function(point) {
-		var pcl = this.base(point);
-		pcl.clear();
+   getPCL: function(point, time) {
+		var pclCache = this.base(this.getNodeId(point));
 
-      // The origin node
-      var x = Math.floor(point.x * this.xLocator);
-      var y = Math.floor(point.y * this.yLocator);
+		// Get the root node
+		var x = Math.floor(point.x * this.xLocator);
+		var y = Math.floor(point.y * this.yLocator);
 
-      // build the node set
-      var nodes = [], n;
-		
+		// build the node set
+		var nodes = [], n;
+
 		// Start with GOOD_ACCURACY
-      nodes.push(this.getNode(x, y));
-     
-      // if our borders cross the margin, we can drop up to two nodes
-      if (this.accuracy >= R.spatial.SpatialGrid.BEST_ACCURACY) {
-         if (x > 0) { n = this.getNode(x - 1, y); if (n.getCount() != 0) nodes.push(n); }
-         if (x < this.divisions) { n = this.getNode(x + 1, y); if (n.getCount() != 0) nodes.push(n); }
-         if (y > 0) { n = this.getNode(x, y - 1); if (n.getCount() != 0) nodes.push(n); }
-         if (y < this.divisions) { n = this.getNode(x, y + 1); if (n.getCount() != 0) nodes.push(n); }
-      }
-		
+		nodes.push(this.getNode(x, y));
+
+		// if our borders cross the margin, we can drop up to two nodes
+		if (this.accuracy >= R.spatial.SpatialGrid.BEST_ACCURACY) {
+			if (x > 0) { n = this.getNode(x - 1, y); if (n.getCount() != 0) nodes.push(n); }
+			if (x < this.divisions) { n = this.getNode(x + 1, y); if (n.getCount() != 0) nodes.push(n); }
+			if (y > 0) { n = this.getNode(x, y - 1); if (n.getCount() != 0) nodes.push(n); }
+			if (y < this.divisions) { n = this.getNode(x, y + 1); if (n.getCount() != 0) nodes.push(n); }
+		}
+
 		// For highest number of checks, we'll include all eight surrounding nodes
 		if (this.accuracy == R.spatial.SpatialGrid.HIGH_ACCURACY) {
 			if (x > 0 && y > 0) { n = this.getNode(x - 1, y - 1); if (n.getCount() != 0) nodes.push(n); }
@@ -223,17 +230,33 @@ R.spatial.SpatialGrid = function() {
 			if (x < this.divisions && y > 0) { n = this.getNode(x + 1, y - 1); if (n.getCount() != 0) nodes.push(n); }
 		}
 
-      for (var d = 0; d < nodes.length; d++) {
-			/* pragma:DEBUG_START */
-			if (!nodes[d]) {
-				debugger;
+		// First check if any of the nodes are dirty
+		for (var d = 0; d < nodes.length; d++) {
+			if (nodes[d].isDirty()) {
+				// We can stop here... we need to rebuild the PCL
+				pclCache.dirty = true;
+				break;
 			}
-			/* pragma:DEBUG_END */
-			var objs = nodes[d].getObjects();
-         pcl.addAll(objs);
-			objs.destroy();
-      }
-      return pcl;
+		}
+
+		// If the pclCache is dirty, that means one of the nodes has become
+		// dirty so we need to update the pclCache
+		if (pclCache.dirty) {
+			R.Engine.pclRebuilds++;
+			
+			pclCache.dirty = false;
+			pclCache.pcl.clear();
+			
+			for (var d = 0; d < nodes.length; d++) {
+				nodes[d].clearDirty();
+				var objs = nodes[d].getObjects();
+				pclCache.pcl.addAll(objs);
+				objs.destroy();
+			}
+			
+		}
+		
+      return pclCache.pcl;
    },
    
    /**

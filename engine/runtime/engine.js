@@ -104,11 +104,12 @@ R.isEmpty = function(obj) {
 
 /**
  * Make a simplified class object.
- * @param clazz {Object} Methods and fields to assign to the class prototype.  A special method, <tt>constructor</tt>
+ * @param clazz {Object} Methods and fields to assign to the class prototype.  A special method, "<tt>constructor</tt>"
  *		will be used as the constructor function for the class, or an empty constructor will be assigned.
  * @param props {Object} Properties which are available on the object class.  The format is [getterFn, setterFn].  If
  *		either is null, the corresponding property accessor method will not be assigned.
- * @return {Function} A new 
+ * @return {Function} A new
+ * @memberOf R
  */
 R.make = function(clazz, props) {
 	// Get the constructor (if it exists)
@@ -2997,6 +2998,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
 		if (R.Engine.running && R.Engine.getDefaultContext() != null) {
 			R.Engine.vObj = 0;
 			R.Engine.rObjs = 0;
+			R.Engine.pclRebuilds = 0;
 
 			// Render a frame
 			R.Engine.worldTime = now().getTime();
@@ -3854,6 +3856,7 @@ R.debug.Metrics = Base.extend(/** @scope R.debug.Metrics.prototype */{
 			R.debug.Metrics.add("rObj", R.Engine.rObjs, false, "#");
          R.debug.Metrics.add("droppedFrames", R.Engine.droppedFrames, false, "#");
          R.debug.Metrics.add("upTime", Math.floor((R.Engine.worldTime - R.Engine.upTime)/1000), false, "# sec");
+         R.debug.Metrics.add("pclRebuilds", R.Engine.pclRebuilds, false, "#");
 
          R.debug.Metrics.update();
          R.debug.Metrics.lastMetricSample = R.debug.Metrics.metricSampleRate;

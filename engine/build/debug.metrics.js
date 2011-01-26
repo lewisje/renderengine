@@ -145,6 +145,7 @@ R.debug.Metrics = Base.extend(/** @scope R.debug.Metrics.prototype */{
 			R.debug.Metrics.add("rObj", R.Engine.rObjs, false, "#");
          R.debug.Metrics.add("droppedFrames", R.Engine.droppedFrames, false, "#");
          R.debug.Metrics.add("upTime", Math.floor((R.Engine.worldTime - R.Engine.upTime)/1000), false, "# sec");
+         R.debug.Metrics.add("pclRebuilds", R.Engine.pclRebuilds, false, "#");
 
          R.debug.Metrics.update();
          R.debug.Metrics.lastMetricSample = R.debug.Metrics.metricSampleRate;
