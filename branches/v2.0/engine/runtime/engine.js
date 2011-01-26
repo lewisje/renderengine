@@ -958,7 +958,9 @@ R.debug.Profiler = {
 	profileStack: [],
 	allProfiles: {},
 	profiles: [],
-	running: false
+	running: false,
+	engineStartTime: 0,
+	engineFrameStart: 0
 };
 
 /**
@@ -968,6 +970,9 @@ R.debug.Profiler = {
 R.debug.Profiler.start = function() {
 	R.debug.Profiler.resetProfiles();
 	R.debug.Profiler.running = true;
+	
+	R.debug.Profiler.engineStartTime = R.Engine.worldTime;
+	R.debug.Profiler.engineFrameStart = R.Engine.totalFrames;
 };
 
 /**
@@ -1088,6 +1093,10 @@ R.debug.Profiler.dump = function() {
 	out += "# Total Time: | " + totalTime + " ms | \n";
 
 	R.debug.Console.warn("PROFILER RESULTS @ " + d + "\n---------------------------------------------------\n");
+	R.debug.Console.warn("   Runtime: " + (R.Engine.worldTime - R.debug.Profiler.engineStartTime) + "ms\n" +
+								"   Frames: " + (R.Engine.totalFrames - R.debug.Profiler.engineFrameStart) +
+								"\n---------------------------------------------------\n");
+
 	R.debug.Console.info(out);
 	
 	R.debug.Profiler.resetProfiles();
@@ -2258,7 +2267,7 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1535 $
+ * @version: $Revision: 1541 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2338,6 +2347,9 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
    upTime: 0,                 // The startup time
    downTime: 0,               // The shutdown time
    skipFrames: true,          // Skip missed frames
+   totalFrames: 0,
+   droppedFrames: 0,
+   pclRebuilds: 0,
 
    /*
     * Sound engine info
@@ -2739,6 +2751,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
       R.Engine.upTime = now().getTime();
       R.Engine.debugMode = debugMode ? true : false;
       R.Engine.started = true;
+      R.Engine.totalFrames = 0;
 
       // Load the required scripts
       R.Engine.loadEngineScripts();
@@ -2862,6 +2875,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
 
       R.Engine.downTime = now().getTime();
       R.debug.Console.warn(">>> Engine stopped.  Runtime: " + (R.Engine.downTime - R.Engine.upTime) + "ms");
+      R.debug.Console.warn(">>>   frames generated: ", R.Engine.totalFrames);
 
       R.Engine.running = false;
       
@@ -2998,13 +3012,16 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
 		if (R.Engine.running && R.Engine.getDefaultContext() != null) {
 			R.Engine.vObj = 0;
 			R.Engine.rObjs = 0;
-			R.Engine.pclRebuilds = 0;
+			//R.Engine.pclRebuilds = 0;
 
 			// Render a frame
 			R.Engine.worldTime = now().getTime();
 			R.Engine.getDefaultContext().update(null, R.Engine.worldTime);
 			R.Engine.frameTime = now().getTime() - R.Engine.worldTime;
 			R.Engine.liveTime = R.Engine.worldTime - R.Engine.upTime;
+			
+			// Count the number of frames generated
+			R.Engine.totalFrames++;
 
 			// Determine when the next frame should draw
 			// If we've gone over the allotted time, wait until the next available frame
@@ -3716,8 +3733,8 @@ R.engine.Script = Base.extend(/** @scope R.engine.Script.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori $
- * @version: $Revision: 1534 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1541 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
@@ -3850,6 +3867,7 @@ R.debug.Metrics = Base.extend(/** @scope R.debug.Metrics.prototype */{
          R.debug.Metrics.add("FPS", R.Engine.getFPS(), false, "#");
          R.debug.Metrics.add("aFPS", R.Engine.getActualFPS(), true, "#");
          R.debug.Metrics.add("availTime", R.Engine.fpsClock, false, "#ms");
+         R.debug.Metrics.add("frames", R.Engine.totalFrames, false, "#");
          R.debug.Metrics.add("frameGenTime", R.Engine.frameTime, true, "#ms");
          R.debug.Metrics.add("engineLoad", Math.floor(R.Engine.getEngineLoad() * 100), true, "#%");
          R.debug.Metrics.add("vObj", R.Engine.vObj, false, "#");

@@ -89,7 +89,7 @@ R.spatial.AbstractSpatialNode = function(){
 		 * @return {R.struct.Container} Objects in the node
 		 */
 		getObjects: function(){
-			return this.objects.clone();
+			return this.objects;
 		},
 		
 		/**

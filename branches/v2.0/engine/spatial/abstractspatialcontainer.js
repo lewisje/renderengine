@@ -59,14 +59,14 @@ R.spatial.AbstractSpatialContainer = function(){
 		root: null,
 		width: 0,
 		height: 0,
-		pclCache: null,
+		pcl: null,
 		
 		/** @private */
 		constructor: function(name, width, height){
 			this.base(name || "SpatialContainer");
 			this.width = width;
 			this.height = height;
-			this.pclCache = {};
+			this.pcl = R.struct.Container.create();
 		},
 		
 		/**
@@ -77,7 +77,7 @@ R.spatial.AbstractSpatialContainer = function(){
 			this.root = null;
 			this.width = 0;
 			this.height = 0;
-			this.pclCache = null;
+			this.pcl = null;
 		},
 		
 		/**
@@ -213,20 +213,11 @@ R.spatial.AbstractSpatialContainer = function(){
 		 * within the defined sub-space of the container.  PCLs are timestamped
 		 * so that a cached PCL will be returned for the same time slice.
 		 *
-		 * @param key {Object} A key used to cache PCL objects
-		 * @param time {Number} The timestamp for the PCL.  If the key's timestamp differs from the
-		 *		timestamp provided, an empty PCL is returned.  Otherwise, the cached PCL is returned.
-		 * @return {R.struct.Container} The PCL
+	    * @param point {R.math.Point2D} The point to begin the search at.
+		 * @return {R.struct.Container} An empty PCL
 		 */
-		getPCL: function(key){
-			if (this.pclCache[key] == null) {
-				this.pclCache[key] = {
-					dirty: false,
-					pcl: R.struct.Container.create()
-				};
-			}
-			
-			return this.pclCache[key];
+		getPCL: function(point){
+			return this.pcl;
 		},
 		
 		/**

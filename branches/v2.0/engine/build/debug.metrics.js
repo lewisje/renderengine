@@ -139,6 +139,7 @@ R.debug.Metrics = Base.extend(/** @scope R.debug.Metrics.prototype */{
          R.debug.Metrics.add("FPS", R.Engine.getFPS(), false, "#");
          R.debug.Metrics.add("aFPS", R.Engine.getActualFPS(), true, "#");
          R.debug.Metrics.add("availTime", R.Engine.fpsClock, false, "#ms");
+         R.debug.Metrics.add("frames", R.Engine.totalFrames, false, "#");
          R.debug.Metrics.add("frameGenTime", R.Engine.frameTime, true, "#ms");
          R.debug.Metrics.add("engineLoad", Math.floor(R.Engine.getEngineLoad() * 100), true, "#%");
          R.debug.Metrics.add("vObj", R.Engine.vObj, false, "#");

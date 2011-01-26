@@ -77,6 +77,7 @@ R.spatial.SpatialGrid = function() {
    yLocator: 1,
    
    accuracy: 0,
+   pclCache: null,
 
    /** @private */
    constructor: function(width, height, divisions) {
@@ -101,6 +102,8 @@ R.spatial.SpatialGrid = function() {
             grid[x + (y * this.divisions)] = new R.spatial.SpatialGridNode(rect);
          }
       }
+      
+      this.pclCache = {};
    },
 
       // Debug the collision node
@@ -201,8 +204,18 @@ R.spatial.SpatialGrid = function() {
     * @param point {R.math.Point2D} The point to begin the search at.
     * @return {R.struct.Container} A container of objects found that could be collision targets
     */
-   getPCL: function(point, time) {
-		var pclCache = this.base(this.getNodeId(point));
+   getPCL: function(point) {
+   
+   	// Create cache nodes for each normalized point in the grid
+   	var id = this.getNodeId(point);
+		if (this.pclCache[id] == null) {
+			this.pclCache[id] = {
+				dirty: false,
+				pcl: R.struct.Container.create()
+			};
+		}
+   
+		var cachedPCL = this.pclCache[id];
 
 		// Get the root node
 		var x = Math.floor(point.x * this.xLocator);
@@ -233,30 +246,29 @@ R.spatial.SpatialGrid = function() {
 		// First check if any of the nodes are dirty
 		for (var d = 0; d < nodes.length; d++) {
 			if (nodes[d].isDirty()) {
-				// We can stop here... we need to rebuild the PCL
-				pclCache.dirty = true;
+				// We need to rebuild the PCL
+				cachedPCL.dirty = true;
 				break;
 			}
 		}
 
 		// If the pclCache is dirty, that means one of the nodes has become
 		// dirty so we need to update the pclCache
-		if (pclCache.dirty) {
+		if (cachedPCL.dirty) {
 			R.Engine.pclRebuilds++;
 			
-			pclCache.dirty = false;
-			pclCache.pcl.clear();
+			cachedPCL.dirty = false;
+			cachedPCL.pcl.clear();
 			
 			for (var d = 0; d < nodes.length; d++) {
 				nodes[d].clearDirty();
 				var objs = nodes[d].getObjects();
-				pclCache.pcl.addAll(objs);
-				objs.destroy();
+				cachedPCL.pcl.addAll(objs);
 			}
 			
 		}
 		
-      return pclCache.pcl;
+      return cachedPCL.pcl;
    },
    
    /**
