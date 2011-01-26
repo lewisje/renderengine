@@ -87,6 +87,9 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
    upTime: 0,                 // The startup time
    downTime: 0,               // The shutdown time
    skipFrames: true,          // Skip missed frames
+   totalFrames: 0,
+   droppedFrames: 0,
+   pclRebuilds: 0,
 
    /*
     * Sound engine info
@@ -488,6 +491,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
       R.Engine.upTime = now().getTime();
       R.Engine.debugMode = debugMode ? true : false;
       R.Engine.started = true;
+      R.Engine.totalFrames = 0;
 
       // Load the required scripts
       R.Engine.loadEngineScripts();
@@ -611,6 +615,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
 
       R.Engine.downTime = now().getTime();
       R.debug.Console.warn(">>> Engine stopped.  Runtime: " + (R.Engine.downTime - R.Engine.upTime) + "ms");
+      R.debug.Console.warn(">>>   frames generated: ", R.Engine.totalFrames);
 
       R.Engine.running = false;
       
@@ -747,13 +752,16 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
 		if (R.Engine.running && R.Engine.getDefaultContext() != null) {
 			R.Engine.vObj = 0;
 			R.Engine.rObjs = 0;
-			R.Engine.pclRebuilds = 0;
+			//R.Engine.pclRebuilds = 0;
 
 			// Render a frame
 			R.Engine.worldTime = now().getTime();
 			R.Engine.getDefaultContext().update(null, R.Engine.worldTime);
 			R.Engine.frameTime = now().getTime() - R.Engine.worldTime;
 			R.Engine.liveTime = R.Engine.worldTime - R.Engine.upTime;
+			
+			// Count the number of frames generated
+			R.Engine.totalFrames++;
 
 			// Determine when the next frame should draw
 			// If we've gone over the allotted time, wait until the next available frame

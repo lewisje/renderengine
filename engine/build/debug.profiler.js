@@ -38,7 +38,9 @@ R.debug.Profiler = {
 	profileStack: [],
 	allProfiles: {},
 	profiles: [],
-	running: false
+	running: false,
+	engineStartTime: 0,
+	engineFrameStart: 0
 };
 
 /**
@@ -48,6 +50,9 @@ R.debug.Profiler = {
 R.debug.Profiler.start = function() {
 	R.debug.Profiler.resetProfiles();
 	R.debug.Profiler.running = true;
+	
+	R.debug.Profiler.engineStartTime = R.Engine.worldTime;
+	R.debug.Profiler.engineFrameStart = R.Engine.totalFrames;
 };
 
 /**
@@ -168,6 +173,10 @@ R.debug.Profiler.dump = function() {
 	out += "# Total Time: | " + totalTime + " ms | \n";
 
 	R.debug.Console.warn("PROFILER RESULTS @ " + d + "\n---------------------------------------------------\n");
+	R.debug.Console.warn("   Runtime: " + (R.Engine.worldTime - R.debug.Profiler.engineStartTime) + "ms\n" +
+								"   Frames: " + (R.Engine.totalFrames - R.debug.Profiler.engineFrameStart) +
+								"\n---------------------------------------------------\n");
+
 	R.debug.Console.info(out);
 	
 	R.debug.Profiler.resetProfiles();
