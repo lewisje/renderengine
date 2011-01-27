@@ -104,11 +104,11 @@ R.rendercontexts.AbstractRenderContext = function() {
    destroy: function() {
       // Destroy all of the objects
       this.cleanUp();
-      this.base();
       this.surface = null;
 		this.viewport.destroy();
 		this.expViewport.destroy();
 		this.worldPosition.destroy();
+      this.base();
    },
 
    /**
