@@ -35,25 +35,25 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.spatial.SpatialGridNode",
+	"class": "R.collision.broadphase.SpatialGridNode",
 	"requires": [
-		"R.spatial.AbstractSpatialNode"
+		"R.collision.broadphase.AbstractCollisionNode"
 	]
 });
 
 /**
- * @class A single node within a SpatialGrid.  When the collision model is
+ * @class A single node within a <tt>R.collision.broadphase.SpatialGrid</tt>.  When the collision model is
  *        updated, the nodes within the grid will be updated to reflect the
  *        objects within them.  A node defines a single rectangle within the
- *        entire {@link R.spatial.SpatialGrid}
+ *        entire {@link R.collision.broadphase.SpatialGrid}
  *
- * @extends R.spatial.AbstractSpatialNode
+ * @extends R.collision.broadphase.AbstractCollisionNode
  * @constructor
- * @description Create an instance of a SpatialNode for use within a {@link SpatialGrid}
+ * @description Create an instance of an <tt>R.collision.broadphase.SpatialNode</tt> for use within a {@link R.collision.broadphase.SpatialGrid}
  * @param rect {R.math.Rectangle2D} The rectangle which defines this node.
  */
-R.spatial.SpatialGridNode = function(){
-	return R.spatial.AbstractSpatialNode.extend(/** @scope R.spatial.SpatialGridNode.prototype */{
+R.collision.broadphase.SpatialGridNode = function(){
+	return R.collision.broadphase.AbstractCollisionNode.extend(/** @scope R.collision.broadphase.SpatialGridNode.prototype */{
 	
 		rect: null,
 		
@@ -80,15 +80,15 @@ R.spatial.SpatialGridNode = function(){
 			return this.getRect().containsPoint(point);
 		}
 		
-	}, /** @scope R.spatial.SpatialGridNode.prototype */ {
+	}, /** @scope R.collision.broadphase.SpatialGridNode.prototype */ {
 	
 		/**
 		 * Get the class name of this object
 		 *
-		 * @return {String} "R.spatial.SpatialGridNode"
+		 * @return {String} "R.collision.broadphase.SpatialGridNode"
 		 */
 		getClassName: function(){
-			return "R.spatial.SpatialGridNode";
+			return "R.collision.broadphase.SpatialGridNode";
 		}
 		
 	});

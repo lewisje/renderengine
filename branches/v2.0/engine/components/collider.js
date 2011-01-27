@@ -172,7 +172,7 @@ R.components.Collider = function() {
 
    /**
     * Get the collision model being used by this component.
-    * @return {R.spatial.AbstractSpatialContainer} The collision model
+    * @return {R.collision.broadphase.AbstractCollisionModel} The collision model
     */
    getCollisionModel: function() {
       return this.collisionModel;
@@ -180,7 +180,7 @@ R.components.Collider = function() {
    
    /**
     * Set the collision model which the host object participates in.
-    * @param collisionModel {R.spatial.AbstractSpatialContainer} The collision model, or <tt>null</tt> for none
+    * @param collisionModel {R.collision.broadphase.AbstractCollisionModel} The collision model, or <tt>null</tt> for none
     */
    setCollisionModel: function(collisionModel) {
    	this.collisionModel = collisionModel;

@@ -145,6 +145,7 @@ R.namespace("struct");
 R.namespace("math");
 R.namespace("engine");
 R.namespace("collision");
+R.namespace("collision.broadphase");
 R.namespace("components");
 R.namespace("objects");
 R.namespace("particles");
@@ -161,7 +162,6 @@ R.namespace("resources");
 R.namespace("resources.loaders");
 R.namespace("resources.types");
 R.namespace("sound");
-R.namespace("spatial");
 R.namespace("storage");
 R.namespace("text");
 
@@ -926,7 +926,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @version: $Revision: 1542 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -2267,7 +2267,7 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1541 $
+ * @version: $Revision: 1542 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  *
@@ -3734,7 +3734,7 @@ R.engine.Script = Base.extend(/** @scope R.engine.Script.prototype */{
  * @author: Brett Fattori (brettf@renderengine.com)
  *
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1541 $
+ * @version: $Revision: 1542 $
  *
  * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
  * 
