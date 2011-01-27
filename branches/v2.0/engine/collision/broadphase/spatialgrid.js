@@ -129,15 +129,16 @@ R.collision.broadphase.SpatialGrid = function() {
    },
 
    /**
-    * Set the accuracy of the collision checks to either {@link #GOOD_ACCURACY} or
-    * {@link #BEST_ACCURACY}.
+    * Set the accuracy of the collision checks to either {@link #GOOD_ACCURACY},
+    * {@link #BETTER_ACCURACY}, or {@link #HIGH_ACCURACY}.  See {@link #getPCL} for
+    * an explanation of the levels of accuracy.
     * 
     * @param accuracy {Number} The level of accuracy during PCL generation
     */
    setAccuracy: function(accuracy) {
-      this.accuracy = (accuracy > R.collision.broadphase.SpatialGrid.BEST_ACCURACY || 
+      this.accuracy = (accuracy > R.collision.broadphase.SpatialGrid.BETTER_ACCURACY || 
 							  accuracy < R.collision.broadphase.SpatialGrid.GOOD_ACCURACY) ? 
-         						R.collision.broadphase.SpatialGrid.BEST_ACCURACY : accuracy;
+         						R.collision.broadphase.SpatialGrid.BETTER_ACCURACY : accuracy;
    },
    
    /**
@@ -196,7 +197,7 @@ R.collision.broadphase.SpatialGrid = function() {
     * the point, and the following adjacent nodes:
     * <ul>
     * <li><b>Good Accuracy</b> - Just the node containing the point (G)</li>
-    * <li><b>Best Accuracy</b> - The four polar nodes around the center (G, B)</li>
+    * <li><b>Better Accuracy</b> - The four polar nodes around the center (G, B)</li>
     * <li><b>High Accuracy</b> - The eight nodes around the center (G, B, H)</li>
     * </ul>
     * For example, if you had a 3x3 grid with the object in the center node, the nodes 
@@ -235,7 +236,7 @@ R.collision.broadphase.SpatialGrid = function() {
 		this.checkNode(nodes, x, y);
 
 		// if our borders cross the margin, we can drop up to two nodes
-		if (this.accuracy >= R.collision.broadphase.SpatialGrid.BEST_ACCURACY) {
+		if (this.accuracy >= R.collision.broadphase.SpatialGrid.BETTER_ACCURACY) {
 			// -- Polar nodes
 			if (x > 0) { this.checkNode(nodes, x - 1, y); }
 			if (x < this.divisions - 2) { this.checkNode(nodes, x + 1, y); }
