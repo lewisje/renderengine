@@ -180,6 +180,16 @@ R.collision.broadphase.SpatialGrid = function() {
       return this.getRoot()[x + (y * this.divisions)];
    },
 
+	/**
+	 * @private
+	 */
+	checkNode: function(nodeList, x, y) {
+		var node = this.getNode(x, y);
+		if (node.isDirty() && node.getCount() != 0) {
+			nodeList.push(node);
+		}
+	},
+
    /**
     * Get the list of objects with respect to the point given.  Objects will
     * be returned from the nodes that make up the grid node containing
@@ -209,10 +219,7 @@ R.collision.broadphase.SpatialGrid = function() {
    	// Create cache nodes for each normalized point in the grid
    	var id = this.getNodeId(point);
 		if (this.pclCache[id] == null) {
-			this.pclCache[id] = {
-				dirty: false,
-				pcl: R.struct.Container.create()
-			};
+			this.pclCache[id] = R.struct.Container.create();
 		}
    
 		var cachedPCL = this.pclCache[id];
@@ -221,54 +228,44 @@ R.collision.broadphase.SpatialGrid = function() {
 		var x = Math.floor(point.x * this.xLocator);
 		var y = Math.floor(point.y * this.yLocator);
 
-		// build the node set
+		// Build the node set
 		var nodes = [], n;
 
 		// Start with GOOD_ACCURACY
-		nodes.push(this.getNode(x, y));
+		this.checkNode(nodes, x, y);
 
 		// if our borders cross the margin, we can drop up to two nodes
 		if (this.accuracy >= R.collision.broadphase.SpatialGrid.BEST_ACCURACY) {
-			if (x > 0) { n = this.getNode(x - 1, y); if (n.getCount() != 0) nodes.push(n); }
-			if (x < this.divisions) { n = this.getNode(x + 1, y); if (n.getCount() != 0) nodes.push(n); }
-			if (y > 0) { n = this.getNode(x, y - 1); if (n.getCount() != 0) nodes.push(n); }
-			if (y < this.divisions) { n = this.getNode(x, y + 1); if (n.getCount() != 0) nodes.push(n); }
+			// -- Polar nodes
+			if (x > 0) { this.checkNode(nodes, x - 1, y); }
+			if (x < this.divisions - 2) { this.checkNode(nodes, x + 1, y); }
+			if (y > 0) { this.checkNode(nodes, x, y - 1); }
+			if (y < this.divisions - 2) { this.checkNode(nodes, x, y + 1); }
 		}
 
 		// For highest number of checks, we'll include all eight surrounding nodes
 		if (this.accuracy == R.collision.broadphase.SpatialGrid.HIGH_ACCURACY) {
-			if (x > 0 && y > 0) { n = this.getNode(x - 1, y - 1); if (n.getCount() != 0) nodes.push(n); }
-			if (x < this.divisions && y < this.divisions) { n = this.getNode(x + 1, y + 1); if (n.getCount() != 0) nodes.push(n); }
-			if (x > 0 && y < this.divisions) { n = this.getNode(x - 1, y + 1); if (n.getCount() != 0) nodes.push(n); }
-			if (x < this.divisions && y > 0) { n = this.getNode(x + 1, y - 1); if (n.getCount() != 0) nodes.push(n); }
+			// -- Corner nodes
+			if (x > 0 && y > 0) { this.checkNode(nodes, x - 1, y - 1); }
+			if (x < this.divisions - 2 && y < this.divisions - 2) { this.checkNode(nodes, x + 1, y + 1); }
+			if (x > 0 && y < this.divisions - 2) { this.checkNode(nodes, x - 1, y + 1); }
+			if (x < this.divisions - 2 && y > 0) { this.checkNode(nodes, x + 1, y - 1); }
 		}
 
-		// First check if any of the nodes are dirty
-		for (var d = 0; d < nodes.length; d++) {
-			if (nodes[d].isDirty()) {
-				// We need to rebuild the PCL
-				cachedPCL.dirty = true;
-				break;
-			}
-		}
-
-		// If the pclCache is dirty, that means one of the nodes has become
-		// dirty so we need to update the pclCache
-		if (cachedPCL.dirty) {
+		// If there are any nodes which changed, update the PCL cache
+		if (nodes.length != 0) {
 			R.Engine.pclRebuilds++;
 			
-			cachedPCL.dirty = false;
-			cachedPCL.pcl.clear();
+			cachedPCL.clear();
 			
 			for (var d = 0; d < nodes.length; d++) {
 				nodes[d].clearDirty();
-				var objs = nodes[d].getObjects();
-				cachedPCL.pcl.addAll(objs);
+				cachedPCL.append(nodes[d].getObjects());
 			}
 			
 		}
 		
-      return cachedPCL.pcl;
+      return cachedPCL;
    },
    
    /**

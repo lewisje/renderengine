@@ -1,8 +1,7 @@
 /**
  * The Render Engine
  *
- * @fileoverview A set of objects which can be used to create a collection
- *               of objects, and to iterate over a container.
+ * @fileoverview A doubly linked list.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -214,21 +213,52 @@ R.struct.Container = function() {
 	/**
 	 * Concatenate a container or array to the end of this container, 
 	 * returning a new container with all of the elements.  The
-	 * array or container will be <i>deep copied</i> and appended to this
+	 * array or container will be copied and appended to this
 	 * container.  While the actual pointers to the objects aren't deep copied,
 	 * one can be assured that modifying the array or container structure being
-	 * appended will not affect either container.
+	 * appended will not affect either container.  Note, however, that modifying 
+	 * the objects within the container will modify the objects in the original
+	 * containers as well.
 	 *
 	 * @param arr {R.struct.Container|Array} A container or array of objects
 	 * @return {R.struct.Container} A new container with all objects from both
 	 */
 	concat: function(arr) {
-		if (R.struct.Container.isInstance(arr)) {
+		if (arr instanceof R.struct.Container) {
 			arr = arr.getAll();
 		}
 		var c = this.clone();
 		c.addAll(arr);
 		return c;
+	},
+
+	/**
+	 * Append a container to the end of this container.  When you append a 
+	 * container, its head will now point to the tail of this container and
+	 * the tail of this container will become the tail of the appended container.
+	 * The appended container will still exist, but navigating the container in
+	 * reverse past the head of the container will navigate into the container
+	 * which was appended to.  If you need the containers to remain independent
+	 * of eachother, see the {@link #concat} method.
+	 * 
+	 * @param c {R.struct.Container} The container to append.
+	 */
+	append: function(c) {
+		if (!(c instanceof R.struct.Container)) {
+			R.debug.Console.error("Can only append R.struct.Container, or subclasses, to an R.struct.Container");
+			return;
+		}
+
+		// Create the linkage and update the tail
+		if (this._head == null && this._tail == null &&
+			 c._head != null && c._tail != null) {
+			// If the container is empty, but the one to append is not
+			this._head = c._head;
+			this._tail = c._tail;
+		} else if (this._head != c._head && this._tail != c._tail) {
+			c._head.prev = this._tail;
+			this._tail = c._tail;
+		}
 	},
 
    /**
