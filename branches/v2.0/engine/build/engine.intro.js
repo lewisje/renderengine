@@ -145,6 +145,7 @@ R.namespace("struct");
 R.namespace("math");
 R.namespace("engine");
 R.namespace("collision");
+R.namespace("collision.broadphase");
 R.namespace("components");
 R.namespace("objects");
 R.namespace("particles");
@@ -161,7 +162,6 @@ R.namespace("resources");
 R.namespace("resources.loaders");
 R.namespace("resources.types");
 R.namespace("sound");
-R.namespace("spatial");
 R.namespace("storage");
 R.namespace("text");
 
