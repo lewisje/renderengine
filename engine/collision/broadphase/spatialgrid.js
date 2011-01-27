@@ -35,10 +35,10 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.spatial.SpatialGrid",
+	"class": "R.collision.broadphase.SpatialGrid",
 	"requires": [
-		"R.spatial.AbstractSpatialContainer",
-		"R.spatial.SpatialGridNode",
+		"R.collision.broadphase.AbstractCollisionModel",
+		"R.collision.broadphase.SpatialGridNode",
 		"R.math.Math2D",
 		"R.math.Rectangle2D",
 		"R.math.Point2D"
@@ -68,8 +68,8 @@ R.Engine.define({
  * @param divisions {Number} The number of divisions along both axis
  * @extends R.spatial.AbstractSpatialContainer
  */
-R.spatial.SpatialGrid = function() {
-	return R.spatial.AbstractSpatialContainer.extend(/** @scope R.spatial.SpatialGrid.prototype */{
+R.collision.broadphase.SpatialGrid = function() {
+	return R.collision.broadphase.AbstractCollisionModel.extend(/** @scope R.collision.broadphase.SpatialGrid.prototype */{
 
    divisions: 1,
 
@@ -89,7 +89,7 @@ R.spatial.SpatialGrid = function() {
       this.divisions = divisions;
       this.xLocator = 1 / gX;
       this.yLocator = 1 / gY;
-		this.accuracy = R.spatial.SpatialGrid.HIGH_ACCURACY;
+		this.accuracy = R.collision.broadphase.SpatialGrid.HIGH_ACCURACY;
 
       var grid = [];
       this.setRoot(grid);
@@ -99,7 +99,7 @@ R.spatial.SpatialGrid = function() {
          for (var x = 0; x < this.divisions; x++)
          {
             var rect = R.math.Rectangle2D.create(x * gX, y * gY, gX, gY);
-            grid[x + (y * this.divisions)] = new R.spatial.SpatialGridNode(rect);
+            grid[x + (y * this.divisions)] = new R.collision.broadphase.SpatialGridNode(rect);
          }
       }
       
@@ -135,9 +135,9 @@ R.spatial.SpatialGrid = function() {
     * @param accuracy {Number} The level of accuracy during PCL generation
     */
    setAccuracy: function(accuracy) {
-      this.accuracy = (accuracy > R.spatial.SpatialGrid.BEST_ACCURACY || 
-							  accuracy < R.spatial.SpatialGrid.GOOD_ACCURACY) ? 
-         						R.spatial.SpatialGrid.BEST_ACCURACY : accuracy;
+      this.accuracy = (accuracy > R.collision.broadphase.SpatialGrid.BEST_ACCURACY || 
+							  accuracy < R.collision.broadphase.SpatialGrid.GOOD_ACCURACY) ? 
+         						R.collision.broadphase.SpatialGrid.BEST_ACCURACY : accuracy;
    },
    
    /**
@@ -228,7 +228,7 @@ R.spatial.SpatialGrid = function() {
 		nodes.push(this.getNode(x, y));
 
 		// if our borders cross the margin, we can drop up to two nodes
-		if (this.accuracy >= R.spatial.SpatialGrid.BEST_ACCURACY) {
+		if (this.accuracy >= R.collision.broadphase.SpatialGrid.BEST_ACCURACY) {
 			if (x > 0) { n = this.getNode(x - 1, y); if (n.getCount() != 0) nodes.push(n); }
 			if (x < this.divisions) { n = this.getNode(x + 1, y); if (n.getCount() != 0) nodes.push(n); }
 			if (y > 0) { n = this.getNode(x, y - 1); if (n.getCount() != 0) nodes.push(n); }
@@ -236,7 +236,7 @@ R.spatial.SpatialGrid = function() {
 		}
 
 		// For highest number of checks, we'll include all eight surrounding nodes
-		if (this.accuracy == R.spatial.SpatialGrid.HIGH_ACCURACY) {
+		if (this.accuracy == R.collision.broadphase.SpatialGrid.HIGH_ACCURACY) {
 			if (x > 0 && y > 0) { n = this.getNode(x - 1, y - 1); if (n.getCount() != 0) nodes.push(n); }
 			if (x < this.divisions && y < this.divisions) { n = this.getNode(x + 1, y + 1); if (n.getCount() != 0) nodes.push(n); }
 			if (x > 0 && y < this.divisions) { n = this.getNode(x - 1, y + 1); if (n.getCount() != 0) nodes.push(n); }
@@ -283,14 +283,14 @@ R.spatial.SpatialGrid = function() {
       return objs;
    }
 
-}, /** @scope R.spatial.SpatialGrid.prototype */{
+}, /** @scope R.collision.broadphase.SpatialGrid.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.spatial.SpatialGrid"
+    * @return {String} "R.collision.broadphase.SpatialGrid"
     */
    getClassName: function() {
-      return "R.spatial.SpatialGrid";
+      return "R.collision.broadphase.SpatialGrid";
    },
    
    /**

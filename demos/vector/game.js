@@ -40,7 +40,7 @@ R.Engine.define({
 	"requires": [
 		"R.engine.Game",
 		"R.rendercontexts.CanvasContext",
-		"R.spatial.SpatialGrid",
+		"R.collision.broadphase.SpatialGrid",
 		"R.lang.Timeout",
 		"R.lang.OneShotTimeout",
 		"R.lang.MultiTimeout",
@@ -475,9 +475,9 @@ var Spaceroids = function() {
       R.Engine.getDefaultContext().add(this.renderContext);
       this.renderContext.setBackgroundColor("#000000");
 
-      // We'll need something to detect collisions
-      this.collisionModel = R.spatial.SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
-      this.collisionModel.setAccuracy(R.spatial.SpatialGrid.BEST_ACCURACY);
+      // We'll need a broad-phase collision model
+      this.collisionModel = R.collision.broadphase.SpatialGrid.create(this.fieldWidth, this.fieldHeight, 5);
+      this.collisionModel.setAccuracy(R.collision.broadphase.SpatialGrid.BEST_ACCURACY);
 
       // Prepare for keyboard input to start the game
       R.engine.Events.setHandler(document, "keypress", Spaceroids.onKeyPress);

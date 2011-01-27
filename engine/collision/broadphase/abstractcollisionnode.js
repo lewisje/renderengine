@@ -2,8 +2,7 @@
  * The Render Engine
  * AbstractSpatialNode
  *
- * @fileoverview Spatial containers maintain a collection of objects and can report
- *               on potential objects within a defined space of that container.
+ * @fileoverview Abstract node class within a broad-phase collision model.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -34,21 +33,21 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.spatial.AbstractSpatialNode",
+	"class": "R.collision.broadphase.AbstractCollisionNode",
 	"requires": [
 		"R.struct.Container"
 	]
 });
 
 /**
- * @class A single node within a spatial container.  Has an index for fast node
- *        comparisons, and a list of objects contained within the node.
+ * @class A node within a broad-phase collision model which contains a list of 
+ *		game objects within it.
  *
  * @constructor
- * @description Creates a spatial node
+ * @description Abstract class from which broad-phase collision model nodes are derived
  */
-R.spatial.AbstractSpatialNode = function(){
-	return Base.extend(/** @scope R.spatial.AbstractSpatialNode.prototype */{
+R.collision.broadphase.AbstractCollisionNode = function(){
+	return Base.extend(/** @scope R.collision.broadphase.AbstractCollisionNode.prototype */{
 	
 		idx: 0,
 		objects: null,
@@ -56,7 +55,7 @@ R.spatial.AbstractSpatialNode = function(){
 		
 		/** @private */
 		constructor: function(){
-			this.idx = R.spatial.AbstractSpatialNode.NODE_INDEX++;
+			this.idx = R.collision.broadphase.AbstractCollisionNode.NODE_INDEX++;
 			this.objects = R.struct.Container.create();
 			this.dirty = true;
 		},
@@ -129,20 +128,20 @@ R.spatial.AbstractSpatialNode = function(){
 			return false;
 		}
 		
-	}, /** @scope R.spatial.AbstractSpatialNode.prototype */ {
+	}, /** @scope R.collision.broadphase.AbstractCollisionNode.prototype */ {
 	
 		/**
 		 * Get the class name of this object
 		 *
-		 * @return {String} "R.spatial.AbstractSpatialNode"
+		 * @return {String} "R.collision.broadphase.AbstractCollisionNode"
 		 */
 		getClassName: function(){
-			return "R.spatial.AbstractSpatialNode";
+			return "R.collision.broadphase.AbstractCollisionNode";
 		},
 		
 		/** @private */
 		resolved: function() {
-			R.spatial.AbstractSpatialNode.NODE_INDEX = 1;	
+			R.collision.broadphase.AbstractCollisionNode.NODE_INDEX = 1;	
 		},
 		
 		/** @private */

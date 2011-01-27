@@ -2,8 +2,7 @@
  * The Render Engine
  * AbstractSpatialContainer
  *
- * @fileoverview Spatial containers maintain a collection of objects and can report
- *               on potential objects within a defined space of that container.
+ * @fileoverview An abstract broad-phase collision model.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
@@ -34,7 +33,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.spatial.AbstractSpatialContainer",
+	"class": "R.collision.broadphase.AbstractCollisionModel",
 	"requires": [
 		"R.engine.BaseObject",
 		"R.struct.Container"
@@ -42,19 +41,19 @@ R.Engine.define({
 });
 
 /**
- * @class An abstract class to represent spatial containers.  Spatial containers
+ * @class An abstract class to represent broad-phase collision models.  Broad-phase models
  *        contain game-world objects and can report on potential objects within a defined
  *        space of that container.
  *
- * @param name {String} The name of the container
- * @param width {Number} The width of the container
- * @param height {Number} The height of the container
+ * @param name {String} The name of the model
+ * @param width {Number} The total width of the model's space
+ * @param height {Number} The total height of the model's space
  * @extends R.engine.BaseObject
  * @constructor
- * @description Create a spatial container
+ * @description Abstract class for all broad-phase collision models
  */
-R.spatial.AbstractSpatialContainer = function(){
-	return R.engine.BaseObject.extend(/** @scope R.spatial.AbstractSpatialContainer.prototype */{
+R.collision.broadphase.AbstractCollisionModel = function(){
+	return R.engine.BaseObject.extend(/** @scope R.collision.broadphase.AbstractCollisionModel.prototype */{
 	
 		root: null,
 		width: 0,
@@ -63,7 +62,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		
 		/** @private */
 		constructor: function(name, width, height){
-			this.base(name || "SpatialContainer");
+			this.base(name || "BroadPhaseCollisionModel");
 			this.width = width;
 			this.height = height;
 			this.pcl = R.struct.Container.create();
@@ -81,7 +80,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Get the width of the container.
+		 * Get the width of the model's world space.
 		 * @return {Number} The width
 		 */
 		getWidth: function(){
@@ -89,7 +88,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Get the height of the container.
+		 * Get the height of the model's world space.
 		 * @return {Number} The height
 		 */
 		getHeight: function(){
@@ -97,7 +96,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Get the root of the container.
+		 * Get the root object of the model.
 		 * @return {Object} The root
 		 */
 		getRoot: function(){
@@ -105,9 +104,9 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Set the root of the container.
+		 * Set the root object of the model.
 		 *
-		 * @param root {Object} The root object of this container
+		 * @param root {Object} The root object of this model
 		 */
 		setRoot: function(root){
 			this.root = root;
@@ -124,7 +123,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Add an object to the node which corresponds to the position
+		 * Add an object to the node which corresponds to the position of the object provided
 		 * provided.  Adding an object at a specific point will remove it from whatever
 		 * node it was last in.
 		 *
@@ -156,7 +155,7 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Get the spatial model data for the object.  If <tt>key</tt> is provided, only the
+		 * Get the spatial data for the game object.  If <tt>key</tt> is provided, only the
 		 * data for <tt>key</tt> will be returned.  If the data has not yet been assigned,
 		 * an empty object will be created to contain the data.
 		 *
@@ -165,16 +164,18 @@ R.spatial.AbstractSpatialContainer = function(){
 		 * 	entire data model.
 		 */
 		getObjectSpatialData: function(obj, key){
-			var mData = obj.getObjectDataModel(R.spatial.AbstractSpatialContainer.DATA_MODEL);
+			var mData = obj.getObjectDataModel(R.collision.broadphase.AbstractCollisionModel.DATA_MODEL);
 			if (mData == null) {
-				obj.setObjectDataModel(R.spatial.AbstractSpatialContainer.DATA_MODEL, {});
-				mData = obj.getObjectDataModel(R.spatial.AbstractSpatialContainer.DATA_MODEL);
+				obj.setObjectDataModel(R.collision.broadphase.AbstractCollisionModel.DATA_MODEL, {});
+				mData = obj.getObjectDataModel(R.collision.broadphase.AbstractCollisionModel.DATA_MODEL);
 			}
 			return key ? mData[key] : mData;
 		},
 		
 		/**
-		 * Set a key, within the object's spatial data model, to a specific value.
+		 * Set a key, within the game object's spatial data, to a specific value.  This allows a
+		 * collision system, or model, to store related information directly on a game object.
+		 * The data can be retrieved, as needed, from within the collision system or model.
 		 *
 		 * @param obj {R.engine.BaseObject} The object to receive the data
 		 * @param key {String} The key to set the data for
@@ -186,17 +187,16 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Clear all of the spatial container model data.
+		 * Clear all of the spatial data on the given game object.
 		 *
 		 * @param obj {R.engine.BaseObject} The object which has the data model
 		 */
 		clearObjectSpatialData: function(obj){
-			obj.setObjectDataMode(R.spatial.AbstractSpatialContainer.DATA_MODEL, null);
+			obj.setObjectDataMode(R.collision.broadphase.AbstractCollisionModel.DATA_MODEL, null);
 		},
 		
 		/**
-		 * Remove an object from the collision model.  This is done so collisions are
-		 * no longer checked against this object.
+		 * Remove an object from the collision model.
 		 *
 		 * @param obj {R.engine.BaseObject} The object to remove
 		 */
@@ -205,13 +205,12 @@ R.spatial.AbstractSpatialContainer = function(){
 			if (oldNode != null) {
 				oldNode.removeObject(obj);
 			}
-			obj[R.spatial.AbstractSpatialContainer.DATA_MODEL] = null;
+			obj[R.collision.broadphase.AbstractCollisionModel.DATA_MODEL] = null;
 		},
 		
 		/**
-		 * Returns a potential collision list of objects that are contained
-		 * within the defined sub-space of the container.  PCLs are timestamped
-		 * so that a cached PCL will be returned for the same time slice.
+		 * Returns a potential collision list (PCL) of objects that are contained
+		 * within the defined sub-space of the container.
 		 *
 	    * @param point {R.math.Point2D} The point to begin the search at.
 		 * @return {R.struct.Container} An empty PCL
@@ -221,36 +220,39 @@ R.spatial.AbstractSpatialContainer = function(){
 		},
 		
 		/**
-		 * Returns all objects within the spatial container.
-		 * @return {R.struct.Container} A container of all objects in the container
+		 * Returns all objects within the collision model.
+		 * 
+		 * @return {R.struct.Container} A container of all objects in the model
 		 */
-		getObjects: function(){
+		getObjects: function(clazz){
 			return R.struct.Container.create();
 		},
 		
 		/**
 		 * Returns all objects within the spatial container of a particular
 		 * class type.
+		 * 
+		 * @param clazz {Object} A class type to restrict the collection to
 		 * @return {Array} An array of objects in the container, filtered by class
 		 */
 		getObjectsOfType: function(clazz){
 			return this.getObjects().filter(function(obj){
-				return clazz.isInstance(obj);
+				return (obj instanceof clazz);
 			}, this);
 		}
 		
-	}, /** @scope R.spatial.AbstractSpatialContainer.prototype */ {
+	}, /** @scope R.collision.broadphase.AbstractCollisionModel.prototype */ {
 		/**
 		 * Get the class name of this object
 		 *
-		 * @return {String} "R.spatial.AbstractSpatialContainer"
+		 * @return {String} "R.collision.broadphase.AbstractCollisionModel"
 		 */
 		getClassName: function(){
-			return "R.spatial.AbstractSpatialContainer";
+			return "R.collision.broadphase.AbstractCollisionModel";
 		},
 		
 		/** @private */
-		DATA_MODEL: "SpatialContainer"
+		DATA_MODEL: "BroadPhaseCollisionData"
 	
 	});
 	
