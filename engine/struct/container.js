@@ -257,6 +257,7 @@ R.struct.Container = function() {
 			this._tail = c._tail;
 		} else if (this._head != c._head && this._tail != c._tail) {
 			c._head.prev = this._tail;
+			this._tail.next = c._head;
 			this._tail = c._tail;
 		}
 	},
