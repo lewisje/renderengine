@@ -37,11 +37,9 @@ R.Engine.define({
 	"class": "R.components.BaseBody",
 	"requires": [
 		"R.components.Transform2D",
-		"R.physics.dynamics.b2BodyDef",
 		"R.math.Point2D",
 		"R.math.Vector2D",
-		"R.math.Rectangle2D",
-		"R.physics.common.math.b2Vec"
+		"R.math.Rectangle2D"
 	]
 });
 
@@ -50,8 +48,7 @@ R.Engine.define({
  * 		 for use in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component
- * @param shapeDef {b2ShapeDef} The shape definition. Either {@link b2CircleDef}, {@link b2BoxDef}, or
- * 			{@link b2PolyDef}.
+ * @param fixtureDef {Box2D.Dynamics.b2FixtureDef} The fixture definition.
  *
  * @extends R.components.Transform2D
  * @constructor
@@ -62,7 +59,7 @@ R.components.BaseBody = function() {
 	return R.components.Transform2D.extend(/** @scope R.components.BaseBody.prototype */{
 
 	bodyDef: null,
-	shapeDef: null,
+	fixtureDef: null,
 	simulation: null,
 	body: null,
 	rotVec: null,
@@ -73,13 +70,16 @@ R.components.BaseBody = function() {
    /**
     * @private
     */
-	constructor: function(name, shapeDef) {
+	constructor: function(name, fixtureDef) {
 		this.base(name || "BaseBody");	
 
-		this.shapeDef = shapeDef;
-		this.shapeDef.restitution = R.components.BaseBody.DEFAULT_RESTITUTION;
-		this.shapeDef.density = R.components.BaseBody.DEFAULT_DENSITY;
-		this.shapeDef.friction = R.components.BaseBody.DEFAULT_FRICTION;
+		this.bodyDef = new Box2D.Dynamics.b2BodyDef();
+		this.bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+		
+		this.fixtureDef = fixtureDef;
+		this.fixtureDef.restitution = R.components.BaseBody.DEFAULT_RESTITUTION;
+		this.fixtureDef.density = R.components.BaseBody.DEFAULT_DENSITY;
+		this.fixtureDef.friction = R.components.BaseBody.DEFAULT_FRICTION;
 		this.simulation = null;
 		this.rotVec = R.math.Vector2D.create(0,0);
 		this.bodyPos = R.math.Point2D.create(0,0);
@@ -119,7 +119,7 @@ R.components.BaseBody = function() {
 	startSimulation: function() {
 		if (!this.simulation) {
 			this.simulation = this.getHostObject().getSimulation();
-			this.body = this.simulation.addBody(this.getBodyDef());
+			this.body = this.simulation.addBody(this.getBodyDef(), this.getFixtureDef());
 		}
 	},
 	
@@ -194,11 +194,11 @@ R.components.BaseBody = function() {
 	},
 	
 	/**
-	 * Get the Box2d shape definition object.
-	 * @return {b2ShapeDef}
+	 * Get the Box2d fixture definition object.
+	 * @return {Box2D.Dynamics.b2FixtureDef}
 	 */
-	getShapeDef: function() {
-		return this.shapeDef;
+	getFixtureDef: function() {
+		return this.fixtureDef;
 	},
 	
 	/**
@@ -206,10 +206,6 @@ R.components.BaseBody = function() {
 	 * @return {b2BodyDef}
 	 */
 	getBodyDef: function() {
-		if (this.bodyDef == null) {
-			this.bodyDef = new R.physics.dynamics.b2BodyDef();
-			this.bodyDef.AddShape(this.shapeDef);
-		}
 		return this.bodyDef;
 	},
 	
@@ -222,6 +218,18 @@ R.components.BaseBody = function() {
 	},
 	
 	/**
+	 * Update the fixture on a simulated body. Doing so may cause a hiccup in simulation
+	 * @protected
+	 */
+	updateFixture: function() {
+		if (this.simulation) {
+			// Destroy the current fixture, then recreate it ()
+			this.getBody().DestroyFixture(this.fixtureDef);
+			this.getBody().CreateFixture(this.fixtureDef);
+		}
+	},
+	
+	/**
 	 * Set the resitution (bounciness) of the body.  The value should be between
 	 * zero and one.  Values higher than one are accepted, but produce objects which
 	 * are unrealistically bouncy.
@@ -229,7 +237,8 @@ R.components.BaseBody = function() {
 	 * @param restitution {Number} A value between 0.0 and 1.0
 	 */
 	setRestitution: function(restitution) {
-		this.shapeDef.resitution = restitution
+		this.fixtureDef.restitution = restitution
+		this.updateFixture();
 	},
 	
 	/**
@@ -237,7 +246,7 @@ R.components.BaseBody = function() {
 	 * @return {Number}
 	 */
 	getRestitution: function() {
-		return this.shapeDef.resitution;
+		return this.fixtureDef.restitution;
 	},
 	
 	/**
@@ -246,7 +255,8 @@ R.components.BaseBody = function() {
 	 * @param density {Number} The density of the body
 	 */
 	setDensity: function(density) {
-		this.shapeDef.density = density;
+		this.fixtureDef.density = density;
+		this.updateFixture();
 	},
 	
 	/**
@@ -254,7 +264,7 @@ R.components.BaseBody = function() {
 	 * @return {Number}
 	 */
 	getDensity: function() {
-		return this.shapeDef.density;
+		return this.fixtureDef.density;
 	},
 	
 	/**
@@ -266,7 +276,8 @@ R.components.BaseBody = function() {
 	 * @param friction {Number} The friction of the body
 	 */
 	setFriction: function(friction) {
-		this.shapeDef.friction = friction;
+		this.fixtureDef.friction = friction;
+		this.updateFixture();
 	},
 	
 	/**
@@ -274,7 +285,7 @@ R.components.BaseBody = function() {
 	 * @return {Number}
 	 */
 	getFriction: function() {
-		return this.shapeDef.friction;
+		return this.fixtureDef.friction;
 	},
 	
 	/**
@@ -285,8 +296,13 @@ R.components.BaseBody = function() {
 	 * @param point {R.math.Point2D} The initial position of the body
 	 */
 	setPosition: function(point) {
-		var pos = point.get();
-		this.getBodyDef().position.Set(pos.x, pos.y);
+		if (!this.simulation) {
+			this.getBodyDef().position.x = point.x;
+			this.getBodyDef().position.y = point.y;
+		} else {
+			var bv = new Box2D.Common.Math.b2Vec2(point.x, point.y);
+			this.getBody().SetPosition(bv);
+		}
 	},
 	
 	/**
@@ -296,7 +312,8 @@ R.components.BaseBody = function() {
 	 */
 	getPosition: function() {
 		if (this.simulation) {
-			this.bodyPos.set(this.body.m_position.x, this.body.m_position.y);
+			var bp = this.getBody().GetPosition();
+			this.bodyPos.set(bp.x, bp.y);
 		} else {
 			this.bodyPos.set(this.getBodyDef().position.x, this.getBodyDef().position.y);
 		}
@@ -304,21 +321,33 @@ R.components.BaseBody = function() {
 	},
 	
 	/**
-	 * Get the rotation of the body during simulation.  This value is updated
-	 * as the simulation is stepped.
+	 * Get the rotation of the body.  This value is updated as the simulation is stepped.
 	 * @return {Number}
 	 */
 	getRotation: function() {
-		var rC = this.getBody().GetRotationMatrix().col1;
-		this.rotVec.set(rC.x, rC.y);
-		var cV = rC.x > 0 ? R.components.BaseBody.UP_VECTOR : R.components.BaseBody.DOWN_VECTOR;
-		var md = rC.x > 0 ? 0 : 180;
-		var ab = this.rotVec.angleBetween(cV) - md;
-		return ab - 90;
+		if (this.simulation) {
+			return R.math.Math2D.radToDeg(this.getBody().GetAngle());
+		} else {
+			return this.getBodyDef().angle;
+		}
 	},
 	
 	/**
-	 * Apply a force to the body.  Forces are comprised of a force vector and
+	 * Set the angle of rotation for the body, in degrees.
+	 * @param angle {Number} The rotation angle in degrees
+	 */
+	setRotation: function(angle) {
+		if (this.simulation) {
+			this.getBody().setAngle(R.math.Math2D.degToRad(angle));		
+		} else {
+			this.getBodyDef().angle = R.math.Math2D.degToRad(angle);	
+		}
+	},
+	
+	/**
+	 * Apply a force at a world point. If the force is not applied at the center of mass, 
+	 * it will generate a torque and affect the angular velocity. This wakes up the body.  
+	 * Forces are comprised of a force vector and
 	 * a position.  The force vector is the direction in which the force is
 	 * moving, while the position is where on the body the force is acting.
 	 * Forces act upon a body from world coordinates.
@@ -327,16 +356,16 @@ R.components.BaseBody = function() {
 	 * @param position {R.math.Point2D} The position where the force is acting upon the body
 	 */
 	applyForce: function(forceVector, position) {
-		this.getBody().WakeUp();
-		var f = forceVector.get();
-		var d = position.get();
-		var fv = new R.physics.common.math.b2Vec2(f.x, f.y);
-		var dv = new R.physics.common.math.b2Vec2(d.x, d.y);
+		var f = forceVector, d = position;
+		var fv = new Box2D.Common.Math.b2Vec2(f.x, f.y);
+		var dv = new Box2D.Common.Math.b2Vec2(d.x, d.y);
 		this.getBody().ApplyForce(fv, dv);	
 	},
 	
 	/**
-	 * Apply an impulse to the body.  Impulses are comprised of a force vector and
+	 * Apply an impulse at a point. This immediately modifies the velocity. It also modifies 
+	 * the angular velocity if the point of application is not at the center of mass. This wakes 
+	 * up the body.  Impulses are comprised of an impulse vector and
 	 * a position.  The impulse vector is the direction of the impulse, while the position
 	 * is where on the body the impulse will be applied.
 	 * Impulses act upon a body locally, adjusting its velocity.
@@ -345,30 +374,34 @@ R.components.BaseBody = function() {
 	 * @param position {R.math.Point2D} the position where the impulse is originating from in the body
 	 */
 	applyImpulse: function(impulseVector, position) {
-		this.getBody().WakeUp();
-		var i = impulseVector.get();
-		var d = position.get();
-		var iv = new b2Vec2(i.x, i.y);
-		var dv = new b2Vec2(d.x, d.y);
+		var i = impulseVector, d = position;
+		var iv = new Box2D.Common.Math.b2Vec2(i.x, i.y);
+		var dv = new Box2D.Common.Math.b2Vec2(d.x, d.y);
 		this.getBody().ApplyImpulse(iv, dv);
 	},
 	
 	/**
-	 * Apply torque to the body.
+	 * Apply torque to the body. This affects the angular velocity without affecting the 
+	 * linear velocity of the center of mass.
 	 * 
 	 * @param torque {Number} The amount of torque to apply to the body
 	 */
 	applyTorque: function(torque) {
-		this.getBody().WakeUp();
 		this.getBody().ApplyTorque(torque);
 	},
 	
 	/**
-	 * Get the computed mass of the body.
-	 * @return {Number} The mass of the body
+	 * Get the total mass of the body.  If the body is not simulating, this
+	 * returns <code>Infinity</code>.
+	 * 
+	 * @return {Number} The mass of the body, or <code>Infinity</code>
 	 */
 	getMass: function() {
-		return this.getBody().getMass();
+		if (this.simulation) {
+			return this.getBody().getMass();
+		} else {
+			return Infinity;
+		}
 	},
 	
 	/**
@@ -377,7 +410,11 @@ R.components.BaseBody = function() {
 	 * @return {Boolean}
 	 */
 	isStatic: function() {
-		return this.getBody().IsStatic();	
+		if (this.simulation) {
+			return this.getBody().GetType() == Box2D.Dynamics.b2Body.b2_staticBody;	
+		} else {
+			return this.getBodyDef().type == Box2D.Dynamics.b2Body.b2_staticBody;	
+		}
 	},
 	
 	/**
@@ -388,34 +425,49 @@ R.components.BaseBody = function() {
 	 * @return {Boolean}
 	 */
 	isSleeping: function() {
-		return this.getBody().IsSleeping();	
+		if (this.simulation) {
+			return !this.getBody().IsAwake();	
+		} else {
+			return !this.getBodyDef().awake;
+		}
 	},
 	
 	/**
-	 * Returns <code>true</code> if the body is frozen.  A frozen body can still be
-	 * collided with, but will not, itself, be updated.  Once a body is frozen, it cannot
-	 * be moved again.  See {@link #freeze}.
+	 * Returns <code>true</code> if the body is active.  An active body is updated during
+	 * the simulation and can be collided with.  
 	 * @return {Boolean}
 	 */
-	isFrozen: function() {
-		return this.getBody().IsFrozen();	
+	isActive: function() {
+		if (this.simulation) {
+			return this.getBody().IsActive();	
+		} else {
+			return this.getBodyDef().active;
+		}
 	},
 	
 	/**
 	 * Wake up a body, adding it back into the collection of bodies being simulated.
-	 * Acting upon a body without first waking it up will do nothing.
+	 * If the body is not being simulated, this does nothing.
 	 */
 	wakeUp: function() {
-		this.getBody().WakeUp();
+		if (this.simulation) {
+			this.getBody().SetAwake(true);
+		}
 	},
 	
 	/**
-	 * Freeze a body, permanently taking it out of simulation, except for collisions.
+	 * Sets the active state of a body.  Setting the active flag to <tt>false</tt> will
+	 * remove the object from simulation.  Setting it to true will add it back into the
+	 * simulation.
+	 * @param active {Boolean} The activity flag
 	 */
-	freeze: function() {
-		this.getBody().Freeze();	
+	setActive: function(active) {
+		if (this.simulation) {
+			this.getBody().SetActive(active);	
+		} else {
+			this.getBodyDef().active = active;
+		}
 	}
-	
 	
 }, { /** @scope R.components.BaseBody.prototype */
 
@@ -443,19 +495,7 @@ R.components.BaseBody = function() {
 	 * The default friction of a body
 	 * @type {Number}
 	 */
-	DEFAULT_FRICTION: 0,
-	
-	/**
-	 * A simple up (0, -1) vector to calculate rotation
-	 * @private
-	 */
-	UP_VECTOR: new Vector2D(0, -1),
-	
-	/**
-	 * A simple down (0, 1) vector to calculate rotation
-	 * @private
-	 */
-	DOWN_VECTOR: new Vector2D(0, 1)
+	DEFAULT_FRICTION: 0.5
    
 });
 }

@@ -30,59 +30,63 @@
  *
  */
 
-// Load engine objects
-R.Engine.requires("/components/component.circlebody.js");
+R.Engine.define({
+	"class": "BeachBall",
+	"requires": [
+		"R.components.CircleBody"
+	],
+	
+	"depends": [
+		"Toy"
+	]
+});
 
-R.Engine.initObject("BeachBall", "Toy", function() {
+/**
+ * @class A beachball toy to play with.  Uses the circle body to physically animate
+ *			 the toy object.
+ *
+ * @constructor
+ * @extends Toy
+ * @description Create a beachball toy
+ */
+var BeachBall = function() {
+	return Toy.extend(/** @scope BeachBall.prototype */{
+
+	size: 30,
+
+	/**
+	 * @private
+	 */
+	constructor: function() {
+		this.base("beachball", "ball", "over");
+	},
+
+	/**
+	 * Create the physical body component and assign it to the
+	 * toy.
+	 *
+	 * @param componentName {String} The name to assign to the component.
+	 * @param scale {Number} A scalar scaling value for the toy
+	 */
+	createPhysicalBody: function(componentName, scale) {
+		this.size = 30;
+		this.size *= scale;
+		this.add(R.components.CircleBody.create(componentName, this.size));
+		
+		// Set the friction and bounciness of the beachball
+		this.getComponent(componentName).setFriction(0.2);
+		this.getComponent(componentName).setRestitution(10);
+		this.getComponent(componentName).setDensity(0.4);
+	}
+
+}, /** @scope BeachBall.prototype */{ // Static
 
    /**
-    * @class A beachball toy to play with.  Uses the circle body to physically animate
-    *			 the toy object.
-    *
-    * @constructor
-    * @extends Toy
-    * @description Create a beachball toy
+    * Get the class name of this object
+    * @return {String} The string <tt>BeachBall</tt>
     */
-   var BeachBall = Toy.extend(/** @scope BeachBall.prototype */{
-
-		size: 30,
-
-		/**
-		 * @private
-		 */
-		constructor: function() {
-			this.base("beachball", "ball", "over");
-		},
-
-		/**
-		 * Create the physical body component and assign it to the
-		 * toy.
-		 *
-		 * @param componentName {String} The name to assign to the component.
-		 * @param scale {Number} A scalar scaling value for the toy
-		 */
-		createPhysicalBody: function(componentName, scale) {
-			this.size = 30;
-			this.size *= scale;
-			this.add(CircleBodyComponent.create(componentName, this.size));
-			
-			// Set the friction and bounciness of the beachball
-			this.getComponent(componentName).setFriction(0.08);
-			this.getComponent(componentName).setRestitution(10);
-			this.getComponent(componentName).setDensity(0.3);
-		}
-
-   }, /** @scope BeachBall.prototype */{ // Static
-
-      /**
-       * Get the class name of this object
-       * @return {String} The string <tt>BeachBall</tt>
-       */
-      getClassName: function() {
-         return "BeachBall";
-      }
-   });
-
-return BeachBall;
-
+   getClassName: function() {
+      return "BeachBall";
+   }
 });
+};

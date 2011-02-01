@@ -37,11 +37,9 @@ R.Engine.define({
 	"class": "R.components.BaseJoint",
 	"requires": [
 		"R.components.Logic",
-		"R.physics.dynamics.joints.b2JointDef",
 		"R.math.Math2D",
 		"R.math.Vector2D",
-		"R.math.Rectangle2D",
-		"R.physics.common.math.b2Vec"
+		"R.math.Rectangle2D"
 	]
 });
 

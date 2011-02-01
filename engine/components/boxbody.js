@@ -36,8 +36,8 @@ R.Engine.define({
 	"class": "R.components.BoxBody",
 	"requires": [
 		"R.components.BaseBody",
-		"R.physics.collision.shapes.b2BoxDef",
 		"R.math.Point2D",
+		"R.math.Vector2D",
 		"R.math.Rectangle2D"
 	]
 });
@@ -47,7 +47,7 @@ R.Engine.define({
  * 		 rigid body.  
  *
  * @param name {String} Name of the component
- * @param extents {R.math.Point2D} The full extents of the body along X and Y
+ * @param extents {R.math.Vector2D} The full extents of the body along X and Y
  *
  * @extends R.components.BaseBody
  * @constructor
@@ -62,11 +62,13 @@ R.components.BoxBody = function() {
 	 * @private
 	 */
 	constructor: function(name, extents) {
-		this.base(name, new R.physics.collision.shapes.b2BoxDef());
-		this.extents = R.math.Point2D.create(extents);
-		var e = this.extents;
-		this.getShapeDef().extents.Set(e.x / 2, e.y / 2);
-		this.setLocalOrigin(e.x / 2, e.y / 2);
+		var fixDef = new Box2D.Dynamics.b2FixtureDef();
+		fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape();
+		fixDef.shape.SetAsBox(extents.x / 2, extents.y / 2);
+		
+		this.base(name, fixDef);
+		this.extents = extents;
+		this.setLocalOrigin(extents.x / 2, extents.y / 2);
 	},
 	
 	/**
@@ -105,8 +107,10 @@ R.components.BoxBody = function() {
 	 */
 	setExtents: function(extents) {
 		this.extents = extents;
-		var e = extents;
-		this.getShapeDef().extents.Set(e.x / 2, e.y / 2);
+		this.getFixtureDef().SetAsBox(extents.x / 2, extents.y / 2);
+		if (this.simulation) {
+			this.updateFixture();
+		}
 	},
 	
 	/**
@@ -129,8 +133,8 @@ R.components.BoxBody = function() {
 			renderContext.setLineStyle("blue");
 			var ext = R.math.Point2D.create(this.extents);
 			//ext.mul(this.getScale());
-			var hx = ext.get().x / 2;
-			var hy = ext.get().y / 2;
+			var hx = ext.x / 2;
+			var hy = ext.y / 2;
 			var rect = R.math.Rectangle2D.create(-hx, -hy, hx * 2, hy * 2);
 			renderContext.setScale(1/this.getScale());
 			renderContext.drawRectangle(rect);

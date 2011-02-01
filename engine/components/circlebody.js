@@ -36,7 +36,6 @@ R.Engine.define({
 	"class": "R.components.CircleBody",
 	"requires": [
 		"R.components.BaseBody",
-		"R.physics.collision.shapes.b2CircleDef",
 		"R.math.Point2D",
 		"R.math.Rectangle2D"
 	]
@@ -62,9 +61,11 @@ R.components.CircleBody = function() {
 	 * @private
 	 */
 	constructor: function(name, radius) {
-		this.base(name, new R.physics.collision.shapes.b2CircleDef());
+		var fixDef = new Box2D.Dynamics.b2FixtureDef();
+		fixDef.shape = new Box2D.Collision.Shapes.b2CircleShape(radius);
+
+		this.base(name, fixDef);
 		this.radius = radius;
-		this.getShapeDef().radius = radius;
 		this.setLocalOrigin(radius, radius);
 	},
 	
@@ -83,7 +84,11 @@ R.components.CircleBody = function() {
 	 * @param radius {Number} The radius of the body
 	 */
 	setRadius: function(radius) {
-		this.getShapeDef().radius = radius;
+		this.radius = radius;
+		this.getFixtureDef().shape.SetRadius(radius);
+		if (this.simulation) {
+			this.updateFixture();
+		}
 	},
 	
 	/**
@@ -100,7 +105,7 @@ R.components.CircleBody = function() {
 	 */
 	getBoundingBox: function() {
 		var box = this.base();
-		var r = this.getRadius();
+		var r = this.radius;
 		box.set(0, 0, r * 2, r * 2);
 		return box;
 	}

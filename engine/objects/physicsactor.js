@@ -41,7 +41,7 @@ R.Engine.define({
 		
 		"R.math.Math2D",
 		"R.engine.Object2D",
-		"R.resources.loaders.Object"
+		"R.resources.loaders.ObjectLoader"
 	]
 });
 
@@ -81,6 +81,7 @@ R.objects.PhysicsActor = function() {
 		this.rootBody = null;
 		this.rigidBodies = null;
 		this.rPos = R.math.Point2D.create(0,0);
+		this.simulation = null;
 	},
 
    /**
@@ -269,7 +270,7 @@ R.objects.PhysicsActor = function() {
     * 	{@link R.components.BaseBody}
     */
 	add: function(component, renderComponent) {
-		if (component instanceof R.component.BaseBody) {
+		if (component instanceof R.components.BaseBody) {
 			
 			// Reset the list of rigid bodies so the list will be rebuilt
 			this.rigidBodies = null;
@@ -364,7 +365,7 @@ R.objects.PhysicsActor = function() {
 	 * @private
 	 */
 	resolved: function() {
-		R.objects.PhysicsActor.actorLoader = R.resourceloaders.Object.create("ActorLoader");
+		R.objects.PhysicsActor.actorLoader = R.resources.loaders.ObjectLoader.create("ActorLoader");
 	},
 	
 	/**

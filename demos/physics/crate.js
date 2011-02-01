@@ -30,60 +30,65 @@
  *
  */
 
-// Load engine objects
-R.Engine.requires("/components/component.boxbody.js");
-R.Engine.requires("/engine.math2d.js");
+R.Engine.define({
+	"class": "Crate",
+	"requires": [
+		"R.components.BoxBody",
+		"R.math.Math2D",
+		"R.math.Point2D"
+	],
+	
+	"depends": [
+		"Toy"
+	]
+});
 
-R.Engine.initObject("Crate", "Toy", function() {
+/**
+ * @class A wooden crate toy to play with.  Uses the box body to physically animate
+ *			 the toy object.
+ *
+ * @constructor
+ * @extends Toy
+ * @description Create a wooden crate toy
+ */
+var Crate = function() {
+	return Toy.extend(/** @scope Crate.prototype */{
+
+	boxSize: null,
+
+	/**
+	 * @private
+	 */
+	constructor: function() {
+		this.base("crate", "crate", "over");
+	},
+
+	/**
+	 * Create the physical body component and assign it to the
+	 * toy.
+	 *
+	 * @param componentName {String} The name to assign to the component.
+	 * @param scale {Number} A scalar scaling value for the toy
+	 */
+	createPhysicalBody: function(componentName, scale) {
+		this.boxSize = R.math.Point2D.create(60, 60);
+		this.boxSize.mul(scale);
+		this.add(R.components.BoxBody.create(componentName, this.boxSize));
+		
+		// Set the friction and bounciness of the crate
+		this.getComponent(componentName).setFriction(0.8);
+		this.getComponent(componentName).setRestitution(0);
+		this.getComponent(componentName).setDensity(2);
+	}
+
+}, /** @scope Crate.prototype */{ // Static
 
    /**
-    * @class A wooden crate toy to play with.  Uses the box body to physically animate
-    *			 the toy object.
-    *
-    * @constructor
-    * @extends Toy
-    * @description Create a wooden crate toy
+    * Get the class name of this object
+    * @return {String} The string <tt>Crate</tt>
     */
-   var Crate = Toy.extend(/** @scope Crate.prototype */{
-
-		boxSize: null,
-
-		/**
-		 * @private
-		 */
-		constructor: function() {
-			this.base("crate", "crate", "over");
-		},
-
-		/**
-		 * Create the physical body component and assign it to the
-		 * toy.
-		 *
-		 * @param componentName {String} The name to assign to the component.
-		 * @param scale {Number} A scalar scaling value for the toy
-		 */
-		createPhysicalBody: function(componentName, scale) {
-			this.boxSize = Point2D.create(60, 60);
-			this.boxSize.mul(scale);
-			this.add(BoxBodyComponent.create(componentName, this.boxSize));
-			
-			// Set the friction and bounciness of the crate
-			this.getComponent(componentName).setFriction(0.3);
-			this.getComponent(componentName).setRestitution(0);
-			this.getComponent(componentName).setDensity(2);
-		}
-
-   }, /** @scope Crate.prototype */{ // Static
-
-      /**
-       * Get the class name of this object
-       * @return {String} The string <tt>Crate</tt>
-       */
-      getClassName: function() {
-         return "Crate";
-      }
-   });
-
-return Crate;
-
+   getClassName: function() {
+      return "Crate";
+   }
 });
+};
