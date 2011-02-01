@@ -40,7 +40,7 @@ R.Engine.define({
 		"R.components.BaseBody"
 	],
 	"includes": [
-		"/libs/Box2dWeb-2.1a.2.js"
+		"/libs/Box2dWeb-2.1a.2.min.js"
 	]
 });
 
