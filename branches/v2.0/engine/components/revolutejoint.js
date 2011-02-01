@@ -36,7 +36,6 @@ R.Engine.define({
 	"class": "R.components.RevoluteJoint",
 	"requires": [
 		"R.components.BaseJoint",
-		"R.physics.dynamics.joints.b2RevoluteJointDef",
 		"R.math.Point2D",
 		"R.math.Math2D",
 		"R.math.Vector2D"

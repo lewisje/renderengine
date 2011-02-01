@@ -1,6 +1,6 @@
 /**
  * The Render Engine
- * Physics Demo
+ * Simple Physics Demo
  *
  * A simple game of bouncing balls
  *
@@ -31,233 +31,246 @@
  *
  */
 
-// Load all required engine components
-R.Engine.requires("/rendercontexts/context.canvascontext.js");
-R.Engine.requires("/rendercontexts/context.htmldivcontext.js");
-R.Engine.requires("/resourceloaders/loader.sprite.js");
-R.Engine.requires("/spatial/container.spatialgrid.js");
-R.Engine.requires("/engine.timers.js");
-R.Engine.requires("/physics/physics.simulation.js")
-
-R.Engine.requires("/physics/collision/shapes/b2BoxDef.js");
+R.Engine.define({
+	"class": "PhysicsDemo",
+	"requires": [
+		"R.engine.Game",
+		"R.rendercontexts.CanvasContext",
+		"R.rendercontexts.HTMLDivContext",
+		"R.collision.broadphase.SpatialGrid",
+		"R.lang.Timeout",
+		"R.lang.MultiTimeout",
+		"R.physics.Simulation",
+		"R.resources.loaders.SpriteLoader",
+		"R.resources.types.Sprite",
+		"R.engine.Events",
+		"R.math.Math2D",
+		"R.math.Point2D",
+		"R.math.Rectangle2D"
+	],
+	
+	// Game class dependencies
+	"depends": [
+		"Player",
+		"Toy",
+		"Crate",
+		"BeachBall"
+	]
+});
 
 // Load game objects
-Game.load("/player.js");
-Game.load("/toy.js");
-Game.load("/beachball.js");
-Game.load("/crate.js");
+R.engine.Game.load("/player.js");
+R.engine.Game.load("/toy.js");
+R.engine.Game.load("/beachball.js");
+R.engine.Game.load("/crate.js");
 
-R.Engine.initObject("PhysicsDemo", "Game", function(){
+/**
+ * @class A physics demonstration to show off Box2D-JS integration.  Creates
+ *			 a set of "toys" and drops them into the simulation.  The "player"
+ *			 can drag objects around and watch them interact.
+ *
+ * @extends Game
+ */
+var PhysicsDemo =  function() {
+	return R.engine.Game.extend({
+   
+   constructor: null,
+   
+   // The rendering context
+   renderContext: null,
+   
+   // Engine frames per second
+   engineFPS: 30,
+   
+   // The play field
+   fieldBox: null,
+   fieldWidth: 800,
+   fieldHeight: 460,
 
+   // Sprite resource loader
+   spriteLoader: null,
+   
+   // The collision model
+   cModel: null,
+   
+   // The physical world simulation
+   simulation: null,
+   
    /**
-    * @class A physics demonstration to show off Box2D-JS integration.  Creates
-    *			 a set of "toys" and drops them into the simulation.  The "player"
-    *			 can drag objects around and watch them interact.
-    *
-    * @extends Game
+    * Called to set up the game, download any resources, and initialize
+    * the game to its running state.
     */
-   var PhysicsDemo = Game.extend({
-   
-      constructor: null,
+   setup: function(){
+      // Set the FPS of the game
+      R.Engine.setFPS(this.engineFPS);
       
-      // The rendering context
-      renderContext: null,
+      PhysicsDemo.spriteLoader = R.resources.loaders.SpriteLoader.create();
       
-      // Engine frames per second
-      engineFPS: 30,
+      // Load the sprites
+      PhysicsDemo.spriteLoader.load("beachball", PhysicsDemo.getFilePath("resources/beachball.sprite"));
+      PhysicsDemo.spriteLoader.load("crate", PhysicsDemo.getFilePath("resources/crate.sprite"));
       
-      // The play field
-      fieldBox: null,
-      fieldWidth: 800,
-      fieldHeight: 460,
-
-      // Sprite resource loader
-      spriteLoader: null,
-      
-      // The collision model
-      cModel: null,
-      
-      // The physical world simulation
-      simulation: null,
-      
-      /**
-       * Called to set up the game, download any resources, and initialize
-       * the game to its running state.
-       */
-      setup: function(){
-         // Set the FPS of the game
-         R.Engine.setFPS(this.engineFPS);
-         
-         this.spriteLoader = SpriteLoader.create();
-         
-         // Load the sprites
-         this.spriteLoader.load("beachball", this.getFilePath("resources/beachball.sprite"));
-         this.spriteLoader.load("crate", this.getFilePath("resources/crate.sprite"));
-         
-         // Don't start until all of the resources are loaded
-         Timeout.create("wait", 250, function() {
-				if (PhysicsDemo.spriteLoader.isReady()) {
-						this.destroy();
-						PhysicsDemo.run();
-				}
-				else {
-					// Continue waiting
-					this.restart();
-				}
-         });
-      },
-      
-      /**
-       * Called when a game is being shut down to allow it to clean up
-       * any objects, remove event handlers, destroy the rendering context, etc.
-       */
-      teardown: function(){
-         this.fieldBox.destroy();
-         this.renderContext.destroy();
-      },
-      
-      /**
-       * Run the game
-       * @private
-       */
-      run: function(){
-         // Set up the playfield dimensions
-         this.fieldWidth = R.engine.Support.sysInfo().viewWidth;
-			this.fieldHeight = R.engine.Support.sysInfo().viewHeight;
-         this.fieldBox = Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
-         
-         // Create the game context
-			this.renderContext = CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
-         this.renderContext.setBackgroundColor("#FFFFFF");
-
-			// Set up the physics simulation
-         this.simulation = Simulation.create("simulation", this.fieldBox);
-			this.simulation.setIntegrations(3);
-         this.setupWorld();
-         
-         // Add the simulation to the scene graph so the physical
-         // world is stepped (updated) in sync with each frame generated
-         this.renderContext.add(this.simulation);
-
-         // Draw an outline around the context
-         this.renderContext.jQ().css({
-            border: "1px solid red",
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0});
-
-			// Add the game context to the scene graph
-         R.Engine.getDefaultContext().add(this.renderContext);
-
-         // Create the collision model with 8x8 divisions
-         this.cModel = SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);
-
-         // Add some toys to play around with
-			MultiTimeout.create("ballmaker", 6, 150, function() {
-	         PhysicsDemo.createToy(BeachBall.create());
-			});
-
-			MultiTimeout.create("boxmaker", 8, 150, function() {
-	         PhysicsDemo.createToy(Crate.create());
-			});
-         
-         // Add the player object
-         var player = Player.create();
-         this.getRenderContext().add(player);
-      },
-      
-      /**
-       * Set up the physical world.  Creates the bounds of the world by establishing
-       * walls and a floor.  The actual objects have no visual respresentation but they
-       * will exist in the simulation and prevent the toys from leaving the playfield.
-       * @private
-       */
-      setupWorld: function() {
-      	var pos = Point2D.create(0,0), ext = Point2D.create(0,0);
-      	
-      	// Ground
-      	pos.set(0, this.fieldBox.get().h);
-      	ext.set(2000, 30);
-      	this.simulation.addSimpleBoxBody(pos, ext, {
-      		restitution: 0.2,
-      		friction: 3.0
-      	});
-			
-			// Left wall
-			pos.set(-10, 100);
-			ext.set(20, this.fieldBox.get().h + 150);
-			this.simulation.addSimpleBoxBody(pos, ext);
-
-			// Right wall
-			pos.set(this.fieldBox.get().w, 100);
-			ext.set(20, this.fieldBox.get().h + 150);
-			this.simulation.addSimpleBoxBody(pos, ext);
-			
-         // Clean up temporary objects
-			pos.destroy();
-			ext.destroy();
-      },
-      
-      /**
-       * Create a toy and apply a force to give it some random motion.
-       * @param toyObject {Toy} A toy object to add to the playfield and simulation
-       * @private
-       */
-      createToy: function(toyObject) {
-			// Before we create a toy, check the engine load.  If it's close to 100%
-			// just return.  We want this demo to stay interactive.
-			if (R.Engine.getEngineLoad() > 0.8) {
-				return;
+      // Don't start until all of the resources are loaded
+      R.lang.Timeout.create("wait", 250, function() {
+			if (PhysicsDemo.spriteLoader.isReady()) {
+					this.destroy();
+					PhysicsDemo.run();
 			}
-			
-			// Set a random location
-			var x = Math.floor(Math2.random() * 300);
-			var p = Point2D.create(x, 15);
-			toyObject.setPosition(p);
-			
-			// The simulation is used to update the position and rotation
-			// of the physical body.  Whereas the render context is used to 
-			// represent (draw) the shape.
-         toyObject.setSimulation(this.simulation);
-         this.getRenderContext().add(toyObject);
-         
-         // Start the simulation of the object so we can apply a force
-         toyObject.simulate();
-         var v = Vector2D.create((1000 + (Math2.random() * 5000)) * 2000, 10);
-         toyObject.applyForce(v, p);
-         
-         // Clean up temporary objects
-         v.destroy();
-         p.destroy();
-      },
-      
-      /**
-       * Returns a reference to the render context
-       * @return {RenderContext}
-       */
-      getRenderContext: function(){
-         return this.renderContext;
-      },
-      
-      /**
-       * Returns a reference to the playfield box
-       * @return {Rectangle2D}
-       */
-      getFieldBox: function() {
-         return this.fieldBox;
-      },
-      
-      /**
-       * Returns a reference to the collision model
-       * @return {SpatialContainer}
-       */
-      getCModel: function() {
-         return this.cModel;
-      }
-      
-   });
+			else {
+				// Continue waiting
+				this.restart();
+			}
+      });
+   },
    
-   return PhysicsDemo;
+   /**
+    * Called when a game is being shut down to allow it to clean up
+    * any objects, remove event handlers, destroy the rendering context, etc.
+    */
+   teardown: function(){
+      this.fieldBox.destroy();
+      this.renderContext.destroy();
+   },
+   
+   /**
+    * Run the game
+    * @private
+    */
+   run: function(){
+      // Set up the playfield dimensions
+      this.fieldWidth = R.engine.Support.sysInfo().viewWidth;
+		this.fieldHeight = R.engine.Support.sysInfo().viewHeight;
+      this.fieldBox = R.math.Rectangle2D.create(0, 0, this.fieldWidth, this.fieldHeight);
+      
+      // Create the game context
+		this.renderContext = R.rendercontexts.CanvasContext.create("Playfield", this.fieldWidth, this.fieldHeight);
+      this.renderContext.setBackgroundColor("#FFFFFF");
+
+		// Set up the physics simulation
+      this.simulation = R.physics.Simulation.create("simulation", this.fieldBox);
+		this.simulation.setIntegrations(3);
+      this.setupWorld();
+      
+      // Add the simulation to the scene graph so the physical
+      // world is stepped (updated) in sync with each frame generated
+      this.renderContext.add(this.simulation);
+
+      // Draw an outline around the context
+      this.renderContext.jQ().css({
+         border: "1px solid red",
+         left: 0,
+         top: 0,
+         right: 0,
+         bottom: 0});
+
+		// Add the game context to the scene graph
+      R.Engine.getDefaultContext().add(this.renderContext);
+
+      // Create the collision model with 8x8 divisions
+      this.cModel = R.collision.broadphase.SpatialGrid.create(this.fieldWidth, this.fieldHeight, 8);
+
+      // Add some toys to play around with
+		R.lang.MultiTimeout.create("ballmaker", 6, 150, function() {
+         PhysicsDemo.createToy(BeachBall.create());
+		});
+
+		R.lang.MultiTimeout.create("boxmaker", 8, 150, function() {
+         PhysicsDemo.createToy(Crate.create());
+		});
+      
+      // Add the player object
+      var player = Player.create();
+      this.getRenderContext().add(player);
+   },
+   
+   /**
+    * Set up the physical world.  Creates the bounds of the world by establishing
+    * walls and a floor.  The actual objects have no visual respresentation but they
+    * will exist in the simulation and prevent the toys from leaving the playfield.
+    * @private
+    */
+   setupWorld: function() {
+   	var pos = R.math.Point2D.create(0,0), ext = R.math.Point2D.create(0,0);
+   	
+   	// Ground
+   	pos.set(0, this.fieldBox.get().h);
+   	ext.set(2000, 30);
+   	this.simulation.addSimpleBoxBody(pos, ext, {
+   		restitution: 0.2,
+   		friction: 3.0
+   	});
+		
+		// Left wall
+		pos.set(-10, 100);
+		ext.set(20, this.fieldBox.get().h + 150);
+		this.simulation.addSimpleBoxBody(pos, ext);
+
+		// Right wall
+		pos.set(this.fieldBox.get().w, 100);
+		ext.set(20, this.fieldBox.get().h + 150);
+		this.simulation.addSimpleBoxBody(pos, ext);
+		
+      // Clean up temporary objects
+		pos.destroy();
+		ext.destroy();
+   },
+   
+   /**
+    * Create a toy and apply a force to give it some random motion.
+    * @param toyObject {Toy} A toy object to add to the playfield and simulation
+    * @private
+    */
+   createToy: function(toyObject) {
+		// Before we create a toy, check the engine load.  If it's close to 100%
+		// just return.  We want this demo to stay interactive.
+		if (R.Engine.getEngineLoad() > 0.8) {
+			return;
+		}
+		
+		// Set a random location
+		var x = Math.floor(R.lang.Math2.random() * 300);
+		var p = R.math.Point2D.create(x, 15);
+		toyObject.setPosition(p);
+		
+		// The simulation is used to update the position and rotation
+		// of the physical body.  Whereas the render context is used to 
+		// represent (draw) the shape.
+      toyObject.setSimulation(this.simulation);
+      this.getRenderContext().add(toyObject);
+      
+      // Start the simulation of the object so we can apply a force
+      toyObject.simulate();
+      var v = R.math.Vector2D.create((1000 + (R.lang.Math2.random() * 5000)) * 2000, 10);
+      toyObject.applyForce(v, p);
+      
+      // Clean up temporary objects
+      v.destroy();
+      p.destroy();
+   },
+   
+   /**
+    * Returns a reference to the render context
+    * @return {RenderContext}
+    */
+   getRenderContext: function(){
+      return this.renderContext;
+   },
+   
+   /**
+    * Returns a reference to the playfield box
+    * @return {Rectangle2D}
+    */
+   getFieldBox: function() {
+      return this.fieldBox;
+   },
+   
+   /**
+    * Returns a reference to the collision model
+    * @return {SpatialContainer}
+    */
+   getCModel: function() {
+      return this.cModel;
+   }
    
 });
+};

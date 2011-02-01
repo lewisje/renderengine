@@ -39,8 +39,7 @@ R.Engine.define({
 		"R.math.Point2D",
 		"R.math.Vector2D",
 		"R.math.Rectangle2D",
-		"R.math.Math2D",
-		"R.physics.dynamics.joints.b2DistanceJointDef"
+		"R.math.Math2D"
 	]
 });
 
