@@ -64,7 +64,6 @@ R.components.BoxBody = function() {
 	constructor: function(name, extents) {
 		var fixDef = new Box2D.Dynamics.b2FixtureDef();
 		fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape();
-		fixDef.shape.SetAsBox(extents.x / 2, extents.y / 2);
 		
 		this.base(name, fixDef);
 		this.extents = extents;
@@ -87,6 +86,14 @@ R.components.BoxBody = function() {
 		this.base();
 	},
 	
+	setHostObject: function(hostObj) {
+		this.base(hostObj);
+		
+		var scaled = R.math.Point2D.create(this.extents).div(hostObj.getSimulation().getScale());
+		this.getFixtureDef().shape.SetAsBox(scaled.x / 2, scaled.y / 2);	// Half width and height
+		scaled.destroy();
+	},
+	
 	/**
 	 * Get a box which bounds the body, local to the body.
 	 * @return {R.math.Rectangle2D}
@@ -107,7 +114,8 @@ R.components.BoxBody = function() {
 	 */
 	setExtents: function(extents) {
 		this.extents = extents;
-		this.getFixtureDef().SetAsBox(extents.x / 2, extents.y / 2);
+		var scaled = R.math.Point2D.create(extents).div(this.getHostObject().getSimulation().getScale());
+		this.getFixtureDef().SetAsBox(scaled.x / 2, scaled.y / 2);
 		if (this.simulation) {
 			this.updateFixture();
 		}

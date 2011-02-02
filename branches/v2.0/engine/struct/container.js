@@ -652,6 +652,11 @@ R.struct.Container = function() {
       return "R.struct.Container";
    },
 	
+	/** @private */
+	resolved: function() {
+		R.struct.Container.EMPTY = new R.struct.Container("EMPTY");		
+	},
+	
 	/**
 	 * Create a new <code>R.struct.Container</code> from an <code>Array</code>.
 	 * @param array {Array} An array of objects
@@ -662,7 +667,13 @@ R.struct.Container = function() {
 		var c = R.struct.Container.create();
 		c.addAll(array);
 		return c;
-	}
+	},
+	
+	/**
+	 * An empty container - DO NOT MODIFY!!
+	 * @type {R.struct.Container}
+	 */
+	EMPTY: null
 	
 });
 

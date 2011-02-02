@@ -147,7 +147,7 @@ var PhysicsDemo =  function() {
       this.renderContext.setBackgroundColor("#FFFFFF");
 
 		// Set up the physics simulation
-      this.simulation = R.physics.Simulation.create("simulation", this.fieldBox);
+      this.simulation = R.physics.Simulation.create("simulation", this.fieldBox, R.math.Point2D.create(0,40));
 		this.simulation.setIntegrations(3);
       this.setupWorld();
       
@@ -194,7 +194,7 @@ var PhysicsDemo =  function() {
    	
    	// Ground
    	pos.set(0, this.fieldBox.get().h);
-   	ext.set(2000, 30);
+   	ext.set(3000, 30);
    	this.simulation.addSimpleBoxBody(pos, ext, {
    		restitution: 0.2,
    		friction: 3.0
@@ -202,12 +202,12 @@ var PhysicsDemo =  function() {
 		
 		// Left wall
 		pos.set(-10, 100);
-		ext.set(20, this.fieldBox.get().h + 150);
+		ext.set(20, this.fieldBox.get().h + 850);
 		this.simulation.addSimpleBoxBody(pos, ext);
 
 		// Right wall
 		pos.set(this.fieldBox.get().w, 100);
-		ext.set(20, this.fieldBox.get().h + 150);
+		ext.set(20, this.fieldBox.get().h + 850);
 		this.simulation.addSimpleBoxBody(pos, ext);
 		
       // Clean up temporary objects
@@ -229,19 +229,15 @@ var PhysicsDemo =  function() {
 		
 		// Set a random location
 		var x = Math.floor(R.lang.Math2.random() * 300);
-		var p = R.math.Point2D.create(x, 15);
+		var p = R.math.Point2D.create(x, 80);
 		toyObject.setPosition(p);
-		
-		// The simulation is used to update the position and rotation
-		// of the physical body.  Whereas the render context is used to 
-		// represent (draw) the shape.
-      toyObject.setSimulation(this.simulation);
-      this.getRenderContext().add(toyObject);
       
       // Start the simulation of the object so we can apply a force
       toyObject.simulate();
-      var v = R.math.Vector2D.create((1000 + (R.lang.Math2.random() * 5000)) * 2000, 10);
+      var v = R.math.Vector2D.create(1 + (R.lang.Math2.random() * 80), 2);
       toyObject.applyForce(v, p);
+
+      this.getRenderContext().add(toyObject);
       
       // Clean up temporary objects
       v.destroy();

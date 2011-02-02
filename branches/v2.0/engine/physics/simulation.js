@@ -55,7 +55,7 @@ R.Engine.define({
  *        of utilizing the <tt>R.physics.Simulation</tt> object with rigid body components.
  *         
  * @param name {String} The name of the object
- * @param worldBoundary {R.math.Rectangle2D} The physical world boundary
+ * @param viewport {R.math.Rectangle2D} Your rendering context's viewport
  * @param [gravity] {R.math.Vector2D} The world's gravity vector. default: [0, 650]
  * @extends R.engine.BaseObject
  * @constructor
@@ -70,20 +70,23 @@ R.physics.Simulation = function() {
    doSleep: true,
    worldBoundary: null,
    integrations: 0,
+	scale: 0,
 
 	/** @private */
-   constructor: function(name, worldBoundary, gravity) {
+   constructor: function(name, viewport, gravity) {
       this.base(name);
-      this.gravity = gravity || R.math.Vector2D.create(0, 650);
+      this.gravity = gravity || R.math.Vector2D.create(0, 10);
       this.worldAABB = new Box2D.Collision.b2AABB();
       
-      this.worldBoundary = worldBoundary;
+		// Get the maximum dimension for the viewport and determine the number of pixels per meter
+		this.scale = Math.max(viewport.w, viewport.h) / R.physics.Simulation.WORLD_METERS;
+		
       this.doSleep = true;
       this.integrations = R.physics.Simulation.DEFAULT_INTEGRATIONS;
       var grav = new Box2D.Common.Math.b2Vec2(this.gravity.x, this.gravity.y);
 
       // Create the world
-      this.world = new Box2D.Dynamics.b2World(grav, this.doSleep);     
+      this.world = new Box2D.Dynamics.b2World(grav, this.doSleep);
    },
    
    destroy: function() {
@@ -114,6 +117,31 @@ R.physics.Simulation = function() {
       return this.world.GetGroundBody();
    },
    
+	/**
+	 * Get the scale, which represents the number of pixels per meter given that
+	 * the physical world is a 10 by 10 meter rectangle.
+	 * @return {Number}
+	 */
+	getScale: function() {
+		return this.scale;
+	},
+	
+	/**
+	 * Set the scaling parameter for your world.  Since a game's environment is
+	 * represented in pixels, and the physical world is represented in meters, it
+	 * becomes appropriate to use a scaling amount to adjust your game's world
+	 * to match the physical world.
+	 * <p/>
+	 * Typically, the physical world would be represented by a 100 by 100 meter rectangle.
+	 * Thus, your game's environment should be scaled to match.  Thus, if you have a
+	 * 600 pixel wide viewport, every 6 pixels would be about 1 meter.
+	 *  
+	 * @param scale {Number} The number of pixels per meter
+	 */
+	setScale: function(scale) {
+		this.scale = scale;
+	},
+	
    /**
     * Support method to add a body to the simulation.  The body must be one of the
     * box2d-js body types.  This method is intended to be used by {@link R.components.BaseBody}.
@@ -202,15 +230,19 @@ R.physics.Simulation = function() {
 		bodyDef.type = properties.isStatic ? Box2D.Dynamics.b2Body.b2_staticBody : Box2D.Dynamics.b2Body.b2_dynamicBody;
 		
 		fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape();
-		fixDef.shape.SetAsBox(extents.x, extents.y);
+		extents.div(this.scale);
+		fixDef.shape.SetAsBox(extents.x / 2, extents.y / 2);	// Half-width and height
 
 		// Set the properties
       fixDef.restitution = properties.restitution || R.components.BaseBody.DEFAULT_RESTITUTION;
 		fixDef.friction = properties.friction || R.components.BaseBody.DEFAULT_FRICTION;
-		fixDef.density = properties.density || 0;
+		fixDef.density = properties.density || 1.0;
 
-      bodyDef.position.x = pos.x;
-		bodyDef.position.y = pos.y;
+		var scaled = R.math.Point2D.create(pos.x, pos.y).div(this.scale);
+
+      bodyDef.position.x = scaled.x;
+		bodyDef.position.y = scaled.y;
+		scaled.destroy();
       return this.addBody(bodyDef, fixDef);
    },
    
@@ -236,15 +268,20 @@ R.physics.Simulation = function() {
       
 		bodyDef.type = properties.isStatic ? Box2D.Dynamics.b2Body.b2_staticBody : Box2D.Dynamics.b2Body.b2_dynamicBody;
 		
+		radius /= this.scale;
+		
 		fixDef.shape = new Box2D.Collision.Shapes.b2CircleShape(radius);
 
 		// Set the properties
       fixDef.restitution = properties.restitution || R.components.BaseBody.DEFAULT_RESTITUTION;
 		fixDef.friction = properties.friction || R.components.BaseBody.DEFAULT_FRICTION;
-		fixDef.density = properties.density || 0;
+		fixDef.density = properties.density || 1.0;
 
-      bodyDef.position.x = pos.x;
-		bodyDef.position.y = pos.y;
+		var scaled = R.math.Point2D.create(pos.x, pos.y).div(this.scale);
+
+      bodyDef.position.x = scaled.x;
+		bodyDef.position.y = scaled.y;
+		scaled.destroy();
       return this.addBody(bodyDef, fixDef);
    }
    
@@ -281,8 +318,15 @@ R.physics.Simulation = function() {
    
    /**
     * The default number of integrations per frame
+    * @type {Number}
     */
-   DEFAULT_INTEGRATIONS: 10
+   DEFAULT_INTEGRATIONS: 10,
+	
+	/**
+	 * The number of meters across the world in either dimension.
+	 * @type {Number}
+	 */
+	WORLD_METERS: 100
    
 });
 };

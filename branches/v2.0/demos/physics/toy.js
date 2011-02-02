@@ -67,6 +67,11 @@ var Toy = function() {
       this.sprite = null;
 		this.renderScale = (R.lang.Math2.random() * 1) + 0.8;
 		
+		// The simulation is used to update the position and rotation
+		// of the physical body.  Whereas the render context is used to 
+		// represent (draw) the shape.
+      this.setSimulation(PhysicsDemo.simulation);
+
       // Add components to draw and collide with the player
       this.add(R.components.Collider.create("collide", PhysicsDemo.cModel));
       
