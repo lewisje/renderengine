@@ -456,14 +456,14 @@ var Spaceroids = function() {
     */
    setup: function() {
    	// Need info level to get profiles
-   	R.debug.Console.setDebugLevel(1);
+   	//R.debug.Console.setDebugLevel(1);
    	
    	// Wire up the canvas for profiling
-   	R.debug.Profiler.wireObjects([SpaceroidsRock]);
-   	R.debug.Profiler.start();
+   	//R.debug.Profiler.wireObjects([SpaceroidsRock]);
+   	//R.debug.Profiler.start();
    	
    	//R.Engine.setDebugMode(true);
-   	R.debug.Metrics.showMetrics();
+   	//R.debug.Metrics.showMetrics();
    	
       R.Engine.setFPS(this.engineFPS);
 
