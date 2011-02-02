@@ -296,13 +296,17 @@ R.components.BaseBody = function() {
 	 * @param point {R.math.Point2D} The initial position of the body
 	 */
 	setPosition: function(point) {
+		var scaled = R.math.Point2D.create(0,0);
 		if (!this.simulation) {
-			this.getBodyDef().position.x = point.x;
-			this.getBodyDef().position.y = point.y;
+			scaled.set(point).div(this.getHostObject().getSimulation().getScale());
+			this.getBodyDef().position.x = scaled.x;
+			this.getBodyDef().position.y = scaled.y;
 		} else {
-			var bv = new Box2D.Common.Math.b2Vec2(point.x, point.y);
+			scaled.set(point).div(this.getHostObject().getSimulation().getScale());
+			var bv = new Box2D.Common.Math.b2Vec2(scaled.x, scaled.y);
 			this.getBody().SetPosition(bv);
 		}
+		scaled.destroy();
 	},
 	
 	/**
@@ -311,12 +315,16 @@ R.components.BaseBody = function() {
 	 * @return {R.math.Point2D}
 	 */
 	getPosition: function() {
+		var scaled = R.math.Point2D.create(0,0);
 		if (this.simulation) {
 			var bp = this.getBody().GetPosition();
-			this.bodyPos.set(bp.x, bp.y);
+			scaled.set(bp.x, bp.y).mul(this.getHostObject().getSimulation().getScale());
+			this.bodyPos.set(scaled.x, scaled.y);
 		} else {
-			this.bodyPos.set(this.getBodyDef().position.x, this.getBodyDef().position.y);
+			scaled.set(this.getBodyDef().position.x, this.getBodyDef().position.y).mul(this.getHostObject().getSimulation().getScale());
+			this.bodyPos.set(scaled);
 		}
+		scaled.destroy();
 		return this.bodyPos;	
 	},
 	

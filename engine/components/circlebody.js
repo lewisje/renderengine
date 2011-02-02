@@ -62,7 +62,7 @@ R.components.CircleBody = function() {
 	 */
 	constructor: function(name, radius) {
 		var fixDef = new Box2D.Dynamics.b2FixtureDef();
-		fixDef.shape = new Box2D.Collision.Shapes.b2CircleShape(radius);
+		fixDef.shape = new Box2D.Collision.Shapes.b2CircleShape(1);
 
 		this.base(name, fixDef);
 		this.radius = radius;
@@ -77,6 +77,13 @@ R.components.CircleBody = function() {
 		this.radius = 0;
 	},
 	
+	setHostObject: function(hostObj) {
+		this.base(hostObj);
+		
+		var scaled = this.getRadius() / hostObj.getSimulation().getScale();
+		this.getFixtureDef().shape.SetRadius(scaled);
+	},
+	
 	/**
 	 * Set the radius of the circle's body.  Calling this method after
 	 * simulation has started on the body has no effect.
@@ -85,7 +92,9 @@ R.components.CircleBody = function() {
 	 */
 	setRadius: function(radius) {
 		this.radius = radius;
-		this.getFixtureDef().shape.SetRadius(radius);
+		
+		var scaled = radius / this.getHostObject().getSimulation().getScale();
+		this.getFixtureDef().shape.SetRadius(scaled);
 		if (this.simulation) {
 			this.updateFixture();
 		}

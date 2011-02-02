@@ -75,7 +75,7 @@ var BeachBall = function() {
 		
 		// Set the friction and bounciness of the beachball
 		this.getComponent(componentName).setFriction(0.2);
-		this.getComponent(componentName).setRestitution(10);
+		this.getComponent(componentName).setRestitution(0.8);
 		this.getComponent(componentName).setDensity(0.4);
 	}
 
