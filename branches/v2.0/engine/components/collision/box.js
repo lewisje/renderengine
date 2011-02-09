@@ -34,7 +34,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.BoxCollider",
+	"class": "R.components.collision.Box",
 	"requires": [
 		"R.components.Collider",
 		"R.math.Point2D",
@@ -62,8 +62,8 @@ R.Engine.define({
  *              must implement the {@link R.engine.Object2D#getWorldBox} method and return a
  *              world-oriented bounding box.
  */
-R.components.BoxCollider = function() {
-	return R.components.Collider.extend(/** @scope R.components.BoxCollider.prototype */{
+R.components.collision.Box = function() {
+	return R.components.Collider.extend(/** @scope R.components.collision.Box.prototype */{
 
 	hasMethod: false,
 
@@ -174,14 +174,14 @@ R.components.BoxCollider = function() {
    /* pragma:DEBUG_END */
 
 
-}, { /** @scope R.components.BoxCollider.prototype */
+}, { /** @scope R.components.collision.Box.prototype */
 
    /**
     * Get the class name of this object
-    * @return {String} "R.components.BoxCollider"
+    * @return {String} "R.components.collision.Box"
     */
    getClassName: function() {
-      return "R.components.BoxCollider";
+      return "R.components.collision.Box";
    }
    
 });

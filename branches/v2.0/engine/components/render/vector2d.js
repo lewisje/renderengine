@@ -33,7 +33,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.Vector2D",
+	"class": "R.components.render.Vector2D",
 	"requires": [
 		"R.components.Render",
 		"R.collision.ConvexHull",
@@ -55,8 +55,8 @@ R.Engine.define({
  * @constructor
  * @description Creates a 2d vector drawing component
  */
-R.components.Vector2D = function() {
-	return R.components.Render.extend(/** @scope R.components.Vector2D.prototype */{
+R.components.render.Vector2D = function() {
+	return R.components.Render.extend(/** @scope R.components.render.Vector2D.prototype */{
 
    strokeStyle: "#ffffff",     // Default to white lines
    lineWidth: 1,
@@ -314,14 +314,14 @@ R.components.Vector2D = function() {
 		this.transformOrigin(renderContext, false);
 
    }
-}, /** @scope R.components.Vector2D.prototype */{
+}, /** @scope R.components.render.Vector2D.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.Vector2D"
+    * @return {String} "R.components.render.Vector2D"
     */
    getClassName: function() {
-      return "R.components.Vector2D";
+      return "R.components.render.Vector2D";
    }
 });
 }

@@ -32,7 +32,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.DOMRender",
+	"class": "R.components.render.DOM",
 	"requires": [
 		"R.components.Render"
 	]
@@ -48,8 +48,8 @@ R.Engine.define({
  * @extends R.components.Render
  * @description Creates a DOM element render component.
  */
-R.components.DOMRender = function() {
-	return R.components.Render.extend(/** @scope R.components.DOMRender.prototype */{
+R.components.render.DOM = function() {
+	return R.components.Render.extend(/** @scope R.components.render.DOM.prototype */{
 
    /**
     * Handles whether or not the component should draw to the
@@ -64,15 +64,15 @@ R.components.DOMRender = function() {
 		}
    }
 
-}, /** @scope R.components.DOMRender.prototype */{ 
+}, /** @scope R.components.render.DOM.prototype */{ 
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.DOMRender"
+    * @return {String} "R.components.render.DOM"
     */
    getClassName: function() {
-      return "R.components.DOMRender";
+      return "R.components.render.DOM";
    }
 });
 }

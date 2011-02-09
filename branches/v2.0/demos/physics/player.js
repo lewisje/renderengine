@@ -33,7 +33,7 @@
 R.Engine.define({
 	"class": "Player",
 	"requires": [
-		"R.components.WiimoteInput",
+		"R.components.input.Wiimote",
 		"R.components.Collider",
 		"R.engine.Object2D",
 		"R.math.Rectangle2D"
@@ -65,7 +65,7 @@ var Player = function() {
 
       // Add components to move and collide the player.  Movement is controlled
       // with either the mouse, or with the Wii remote
-      this.add(R.components.WiimoteInput.create("input"));
+      this.add(R.components.input.Wiimote.create("input"));
       this.add(R.components.Collider.create("collide", PhysicsDemo.cModel));
       
       // The player's bounding box

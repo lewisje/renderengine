@@ -33,9 +33,9 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.DistanceJoint",
+	"class": "R.components.physics.DistanceJoint",
 	"requires": [
-		"R.components.BaseJoint",
+		"R.components.physics.BaseJoint",
 		"R.math.Point2D",
 		"R.math.Vector2D",
 		"R.math.Rectangle2D",
@@ -48,18 +48,18 @@ R.Engine.define({
  * 		 in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component
- * @param body1 {R.components.BaseBody} The first body for the joint
- * @param body2 {R.components.BaseBody} The second body for the joint
+ * @param body1 {R.components.physics.BaseBody} The first body for the joint
+ * @param body2 {R.components.physics.BaseBody} The second body for the joint
  *
- * @extends R.components.BaseJoint
+ * @extends R.components.physics.BaseJoint
  * @constructor
  * @description Creates a distance joint between two physical bodies.  The distance can
  * 				 be softened by adjusting the frequency and the damping ratio of the joint.
  * 				 Rotation is not limited by this joint.  The anchors for the joint are the
  * 				 rigid body center's.
  */
-R.components.DistanceJoint = function() {
-	return R.components.BaseJoint.extend(/** @scope R.components.DistanceJoint.prototype */{
+R.components.physics.DistanceJoint = function() {
+	return R.components.physics.BaseJoint.extend(/** @scope R.components.physics.DistanceJoint.prototype */{
 
    /**
     * @private
@@ -127,15 +127,15 @@ R.components.DistanceJoint = function() {
 		return this.getJointDef().dampingRatio;
 	}
 		
-}, { /** @scope R.components.DistanceJoint.prototype */
+}, { /** @scope R.components.physics.DistanceJoint.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.DistanceJoint"
+    * @return {String} "R.components.physics.DistanceJoint"
     */
    getClassName: function() {
-      return "R.components.DistanceJoint";
+      return "R.components.physics.DistanceJoint";
    }   
 });
 }

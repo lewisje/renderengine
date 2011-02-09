@@ -33,7 +33,7 @@
 R.Engine.define({
 	"class": "Toy",
 	"requires": [
-		"R.components.Sprite",
+		"R.components.render.Sprite",
 		"R.components.Collider",
 		"R.objects.PhysicsActor",
 		"R.math.Point2D",
@@ -78,7 +78,7 @@ var Toy = function() {
 		// Create the physical body object which will move the toy object
 		this.createPhysicalBody("physics", this.renderScale);
 		this.getComponent("physics").setScale(this.renderScale);
-		this.getComponent("physics").setRenderComponent(R.components.Sprite.create("draw"));
+		this.getComponent("physics").setRenderComponent(R.components.render.Sprite.create("draw"));
 
       // The sprites
       this.sprites = [];

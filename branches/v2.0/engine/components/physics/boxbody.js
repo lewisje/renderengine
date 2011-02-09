@@ -33,9 +33,9 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.BoxBody",
+	"class": "R.components.physics.BoxBody",
 	"requires": [
-		"R.components.BaseBody",
+		"R.components.physics.BaseBody",
 		"R.math.Point2D",
 		"R.math.Vector2D",
 		"R.math.Rectangle2D"
@@ -49,12 +49,12 @@ R.Engine.define({
  * @param name {String} Name of the component
  * @param extents {R.math.Vector2D} The full extents of the body along X and Y
  *
- * @extends R.components.BaseBody
+ * @extends R.components.physics.BaseBody
  * @constructor
  * @description A rectangular rigid body component.
  */
-R.components.BoxBody = function() {
-	return R.components.BaseBody.extend(/** @scope R.components.BoxBody.prototype */{
+R.components.physics.BoxBody = function() {
+	return R.components.physics.BaseBody.extend(/** @scope R.components.physics.BoxBody.prototype */{
 
 	extents: null,
 
@@ -153,15 +153,15 @@ R.components.BoxBody = function() {
 	/* pragma:DEBUG_END */
 	
 
-}, { /** @scope R.components.BoxBody.prototype */
+}, { /** @scope R.components.physics.BoxBody.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.BoxBody"
+    * @return {String} "R.components.physics.BoxBody"
     */
    getClassName: function() {
-      return "R.components.BoxBody";
+      return "R.components.physics.BoxBody";
    }
    
 });

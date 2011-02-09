@@ -33,7 +33,7 @@
 R.Engine.define({
 	"class": "BeachBall",
 	"requires": [
-		"R.components.CircleBody"
+		"R.components.physics.CircleBody"
 	],
 	
 	"depends": [
@@ -71,7 +71,7 @@ var BeachBall = function() {
 	createPhysicalBody: function(componentName, scale) {
 		this.size = 30;
 		this.size *= scale;
-		this.add(R.components.CircleBody.create(componentName, this.size));
+		this.add(R.components.physics.CircleBody.create(componentName, this.size));
 		
 		// Set the friction and bounciness of the beachball
 		this.getComponent(componentName).setFriction(0.2);

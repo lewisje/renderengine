@@ -34,7 +34,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.CircleCollider",
+	"class": "R.components.collision.Circle",
 	"requires": [
 		"R.components.Collider",
 		"R.math.Point2D",
@@ -68,8 +68,8 @@ R.Engine.define({
  *              {@link R.engine.Object2D#getCircle} method and return a world-oriented bounding box or
  *              circle, respectively.
  */
-R.components.CircleCollider = function() {
-	return R.components.Collider.extend(/** @scope R.components.CircleCollider.prototype */{
+R.components.collision.Circle = function() {
+	return R.components.Collider.extend(/** @scope R.components.collision.Circle.prototype */{
 
 	hasMethods: null,
 	cData: null,
@@ -181,15 +181,15 @@ R.components.CircleCollider = function() {
 	}
    /* pragma:DEBUG_END */
 	
-}, { /** @scope R.components.CircleCollider.prototype */
+}, { /** @scope R.components.collision.Circle.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} The string "R.components.CircleCollider"
+    * @return {String} The string "R.components.collision.Circle"
     */
    getClassName: function() {
-      return "R.components.CircleCollider";
+      return "R.components.collision.Circle";
    }
    
 });

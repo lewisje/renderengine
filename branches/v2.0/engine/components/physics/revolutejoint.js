@@ -33,9 +33,9 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.RevoluteJoint",
+	"class": "R.components.physics.RevoluteJoint",
 	"requires": [
-		"R.components.BaseJoint",
+		"R.components.physics.BaseJoint",
 		"R.math.Point2D",
 		"R.math.Math2D",
 		"R.math.Vector2D"
@@ -47,17 +47,17 @@ R.Engine.define({
  * 		 anchor point in a {@link R.physics.Simulation}.  
  *
  * @param name {String} Name of the component
- * @param body1 {BaseBodyComponent} The first body for the joint
- * @param body2 {BaseBodyComponent} The second body for the joint
+ * @param body1 {R.components.physics.BaseBody} The first body for the joint
+ * @param body2 {R.components.physics.BaseBody} The second body for the joint
  * @param anchor {R.math.Point2D} A point, in world coordinates relative to the two 
  * 	bodies, to use as the joint's anchor point
  *
- * @extends R.components.BaseJoint
+ * @extends R.components.physics.BaseJoint
  * @constructor
  * @description Creates a revolute joint between two physical bodies.
  */
-R.components.RevoluteJoint = function() {
-	return R.components.BaseJoint.extend(/** @scope R.components.RevoluteJoint.prototype */{
+R.components.physics.RevoluteJoint = function() {
+	return R.components.physics.BaseJoint.extend(/** @scope R.components.physics.RevoluteJoint.prototype */{
 
 	anchor: null,
 
@@ -224,15 +224,15 @@ R.components.RevoluteJoint = function() {
 		}
 	}
 	
-}, { /** @scope R.components.RevoluteJoint.prototype */
+}, { /** @scope R.components.physics.RevoluteJoint.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.RevoluteJoint"
+    * @return {String} "R.components.physics.RevoluteJoint"
     */
    getClassName: function() {
-      return "R.components.RevoluteJoint";
+      return "R.components.physics.RevoluteJoint";
    }   
 });
 }

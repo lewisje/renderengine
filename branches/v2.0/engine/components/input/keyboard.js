@@ -33,7 +33,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.KeyboardInput",
+	"class": "R.components.input.Keyboard",
 	"requires": [
 		"R.components.Input",
 		"R.engine.Events"
@@ -65,8 +65,8 @@ R.Engine.define({
  * @constructor
  * @description Create an instance of a keyboard input component. 
  */
-R.components.KeyboardInput = function() {
-	return R.components.Input.extend(/** @scope R.components.KeyboardInput.prototype */{
+R.components.input.Keyboard = function() {
+	return R.components.Input.extend(/** @scope R.components.input.Keyboard.prototype */{
 
 	hasInputMethods: null,
 
@@ -152,30 +152,30 @@ R.components.KeyboardInput = function() {
 
    /** @private */
    _keyDownListener: function(eventObj) {
-		this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
+		this.record(eventObj,R.components.input.Keyboard.RECORD_PART);
 		return this.getHostObject().onKeyDown(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
    },
 
    /** @private */
    _keyUpListener: function(eventObj) {
-		this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
+		this.record(eventObj,R.components.input.Keyboard.RECORD_PART);
 		return this.getHostObject().onKeyUp(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
    },
 
    /** @private */
    _keyPressListener: function(eventObj) {
-		this.record(eventObj,R.components.KeyboardInput.RECORD_PART);
+		this.record(eventObj,R.components.input.Keyboard.RECORD_PART);
 		return this.getHostObject().onKeyPress(eventObj.which, eventObj.keyCode, eventObj.ctrlKey, eventObj.altKey, eventObj.shiftKey, eventObj);
    }
 
-}, /** @scope R.components.KeyboardInput.prototype */{
+}, /** @scope R.components.input.Keyboard.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.KeyboardInput"
+    * @return {String} "R.components.input.Keyboard"
     */
    getClassName: function() {
-      return "R.components.KeyboardInput";
+      return "R.components.input.Keyboard";
    },
    
    /** @private */

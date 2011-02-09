@@ -33,7 +33,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.MouseInput",
+	"class": "R.components.input.Mouse",
 	"requires": [
 		"R.components.Input",
 		"R.engine.Events",
@@ -73,8 +73,8 @@ R.Engine.define({
  * @constructor
  * @description Create a mouse input component.
  */
-R.components.MouseInput = function() {
-	return R.components.Input.extend(/** @scope R.components.MouseInput.prototype */{
+R.components.input.Mouse = function() {
+	return R.components.Input.extend(/** @scope R.components.input.Mouse.prototype */{
 
    /**
     * @private
@@ -108,7 +108,7 @@ R.components.MouseInput = function() {
 		}
 
 		// Assign the global handlers
-		R.components.MouseInput.assignMouseHandlers(hostObject.getRenderContext(), this);
+		R.components.input.Mouse.assignMouseHandlers(hostObject.getRenderContext(), this);
 
    },
 
@@ -160,14 +160,14 @@ R.components.MouseInput = function() {
          this.getHostObject().onMouseUp(mouseInfo);
       }
    }
-}, /** @scope R.components.MouseInput.prototype */{
+}, /** @scope R.components.input.Mouse.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.MouseInput"
+    * @return {String} "R.components.input.Mouse"
     */
    getClassName: function() {
-      return "R.components.MouseInput";
+      return "R.components.input.Mouse";
    },
 	
 	/**
