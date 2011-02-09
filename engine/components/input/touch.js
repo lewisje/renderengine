@@ -33,7 +33,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.TouchInput",
+	"class": "R.components.input.Touch",
 	"requires": [
 		"R.components.Input",
 		"R.engine.Events",
@@ -63,8 +63,8 @@ R.Engine.define({
  * @constructor
  * @description Create an instance of a touch input component. 
  */
-R.components.TouchInput = function() {
-	return R.components.Input.extend(/** @scope R.components.TouchInput.prototype */{
+R.components.input.Touch = function() {
+	return R.components.Input.extend(/** @scope R.components.input.Touch.prototype */{
 
 	hasTouchMethods: null,
 
@@ -134,9 +134,9 @@ R.components.TouchInput = function() {
     * Establishes the link between this component and its host object.
     * When you assign components to a host object, it will call this method
     * so that each component can refer to its host object, the same way
-    * a host object can refer to a component with {@link HostObject#getComponent}.
+    * a host object can refer to a component with {@link R.engine.GameObject#getComponent}.
     *
-    * @param hostObject {R.engine.HostObject} The object which hosts this component
+    * @param hostObject {R.engine.GameObject} The object which hosts this component
 	 */
 	setHostObject: function(hostObj) {
 		this.base(hostObj);
@@ -189,14 +189,14 @@ R.components.TouchInput = function() {
       }
    }
 
-}, /** @scope R.components.TouchInput.prototype */{
+}, /** @scope R.components.input.Touch.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.TouchInput"
+    * @return {String} "R.components.input.Touch"
     */
    getClassName: function() {
-      return "R.components.TouchInput";
+      return "R.components.input.Touch";
    },
    
    /** @private */

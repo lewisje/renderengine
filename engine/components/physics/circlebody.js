@@ -33,27 +33,27 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.CircleBody",
+	"class": "R.components.physics.CircleBody",
 	"requires": [
-		"R.components.BaseBody",
+		"R.components.physics.BaseBody",
 		"R.math.Point2D",
 		"R.math.Rectangle2D"
 	]
 });
 
 /**
- * @class An extension of the {@link R.components.BaseBody} which creates a circular
+ * @class An extension of the {@link R.components.physics.BaseBody} which creates a circular
  * 		 rigid body.  
  *
  * @param name {String} Name of the component
  * @param radius {Number} The radius of the circle
  *
- * @extends R.components.BaseBody
+ * @extends R.components.physics.BaseBody
  * @constructor
  * @description A circular rigid body component.
  */
-R.components.CircleBody = function() {
-	return R.components.BaseBody.extend(/** @scope R.components.CircleBody.prototype */{
+R.components.physics.CircleBody = function() {
+	return R.components.physics.BaseBody.extend(/** @scope R.components.physics.CircleBody.prototype */{
 
 	radius: 0,
 
@@ -136,15 +136,15 @@ R.components.CircleBody = function() {
 	}
 	/* pragma:DEBUG_END */
 
-}, { /** @scope R.components.CircleBody.prototype */
+}, { /** @scope R.components.physics.CircleBody.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.CircleBody"
+    * @return {String} "R.components.physics.CircleBody"
     */
    getClassName: function() {
-      return "R.components.CircleBody";
+      return "R.components.physics.CircleBody";
    }
    
 });

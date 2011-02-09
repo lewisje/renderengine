@@ -40,7 +40,7 @@ R.Engine.define({
 		"R.engine.Object2D",
 		"R.components.Transform2D",
 		"R.rendercontexts.RenderContext2D",
-		"R.components.Billboard2D"
+		"R.components.render.Billboard2D"
 	]
 });
 
@@ -78,7 +78,7 @@ R.text.TextRenderer = function() {
       if (!R.Engine.options.textUseBillboards || renderer.isNative()) {
          this.add(this.renderer);
       } else {
-         this.add(R.components.Billboard2D.create("billboard", this.renderer));
+         this.add(R.components.render.Billboard2D.create("billboard", this.renderer));
       }
 
       renderer.setText(text || "");

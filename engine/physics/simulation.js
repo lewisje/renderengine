@@ -37,7 +37,7 @@ R.Engine.define({
 		"R.engine.BaseObject",
 		"R.math.Vector2D",
 		"R.math.Rectangle2D",
-		"R.components.BaseBody"
+		"R.components.physics.BaseBody"
 	],
 	"includes": [
 		"/libs/Box2dWeb-2.1a.2.min.js"
@@ -234,8 +234,8 @@ R.physics.Simulation = function() {
 		fixDef.shape.SetAsBox(extents.x / 2, extents.y / 2);	// Half-width and height
 
 		// Set the properties
-      fixDef.restitution = properties.restitution || R.components.BaseBody.DEFAULT_RESTITUTION;
-		fixDef.friction = properties.friction || R.components.BaseBody.DEFAULT_FRICTION;
+      fixDef.restitution = properties.restitution || R.components.physics.BaseBody.DEFAULT_RESTITUTION;
+		fixDef.friction = properties.friction || R.components.physics.BaseBody.DEFAULT_FRICTION;
 		fixDef.density = properties.density || 1.0;
 
 		var scaled = R.math.Point2D.create(pos.x, pos.y).div(this.scale);
@@ -273,8 +273,8 @@ R.physics.Simulation = function() {
 		fixDef.shape = new Box2D.Collision.Shapes.b2CircleShape(radius);
 
 		// Set the properties
-      fixDef.restitution = properties.restitution || R.components.BaseBody.DEFAULT_RESTITUTION;
-		fixDef.friction = properties.friction || R.components.BaseBody.DEFAULT_FRICTION;
+      fixDef.restitution = properties.restitution || R.components.physics.BaseBody.DEFAULT_RESTITUTION;
+		fixDef.friction = properties.friction || R.components.physics.BaseBody.DEFAULT_FRICTION;
 		fixDef.density = properties.density || 1.0;
 
 		var scaled = R.math.Point2D.create(pos.x, pos.y).div(this.scale);

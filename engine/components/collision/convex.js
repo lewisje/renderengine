@@ -34,7 +34,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.ConvexCollider",
+	"class": "R.components.collision.Convex",
 	"requires": [
 		"R.components.Collider",
 		"R.math.Point2D",
@@ -69,8 +69,8 @@ R.Engine.define({
  * @description Creates a collider component for SAT collision testing.  Each object's
  *              collision will be determined using its convex collision hull.
  */
-R.components.ConvexCollider = function() {
-	return R.components.Collider.extend(/** @scope R.components.ConvexCollider.prototype */{
+R.components.collision.Convex = function() {
+	return R.components.Collider.extend(/** @scope R.components.collision.Convex.prototype */{
 
 	hasMethods: null,
 
@@ -184,14 +184,14 @@ R.components.ConvexCollider = function() {
 	}
    /* pragma:DEBUG_END */
 
-}, /** @scope R.components.ConvexCollider.prototype */{ 
+}, /** @scope R.components.collision.Convex.prototype */{ 
 
    /**
     * Get the class name of this object
-    * @return {String} "R.components.ConvexCollider"
+    * @return {String} "R.components.collision.Convex"
     */
    getClassName: function() {
-      return "R.components.ConvexCollider";
+      return "R.components.collision.Convex";
    },
 	
 	/**
@@ -214,14 +214,14 @@ R.components.ConvexCollider = function() {
 			// Perform circle-circle test if both shapes are circles
 			// We've passed in the distSqr and tRad from the early-out test, pass it along
 			// so we're not re-running the calculations
-			return R.components.ConvexCollider.ccTest(shape1, shape2, arguments[2], arguments[3]);	 	
+			return R.components.collision.Convex.ccTest(shape1, shape2, arguments[2], arguments[3]);	 	
 		} else if (shape1.getType() != R.collision.ConvexHull.CONVEX_CIRCLE &&
 					  shape2.getType() != R.collision.ConvexHull.CONVEX_CIRCLE) {
 			// Perform polygon test if both shapes are NOT circles
-			return R.components.ConvexCollider.ppTest(shape1, shape2);			  	
+			return R.components.collision.Convex.ppTest(shape1, shape2);			  	
 		} else {
 			// One shape is a circle, the other is an polygon, do that test
-			return R.components.ConvexCollider.cpTest(shape1, shape2);
+			return R.components.collision.Convex.cpTest(shape1, shape2);
 		}		
 	},
 	
@@ -283,7 +283,7 @@ R.components.ConvexCollider = function() {
 		
 		// Loop to begin projection
 		for (var i = 0; i < vectors1.length; i++) {
-			R.components.ConvexCollider.findNormalAxis(axis, vectors1, i);
+			R.components.collision.Convex.findNormalAxis(axis, vectors1, i);
 			
 			// project polygon 1
 			min1 = axis.dot(vectors1[0]);
@@ -450,7 +450,7 @@ R.components.ConvexCollider = function() {
 
 		// Now project the circle against the polygon
 		for (i = 0; i < vectors.length; i++) {
-			R.components.ConvexCollider.findNormalAxis(normalAxis, vectors, i);
+			R.components.collision.Convex.findNormalAxis(normalAxis, vectors, i);
 			min1 = normalAxis.dot(vectors[0]);
 			max1 = min1;
 			

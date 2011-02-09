@@ -33,7 +33,7 @@
 R.Engine.define({
 	"class": "Crate",
 	"requires": [
-		"R.components.BoxBody",
+		"R.components.physics.BoxBody",
 		"R.math.Math2D",
 		"R.math.Point2D"
 	],
@@ -73,7 +73,7 @@ var Crate = function() {
 	createPhysicalBody: function(componentName, scale) {
 		this.boxSize = R.math.Point2D.create(60, 60);
 		this.boxSize.mul(scale);
-		this.add(R.components.BoxBody.create(componentName, this.boxSize));
+		this.add(R.components.physics.BoxBody.create(componentName, this.boxSize));
 		
 		// Set the friction and bounciness of the crate
 		this.getComponent(componentName).setFriction(1);

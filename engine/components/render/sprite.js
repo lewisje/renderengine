@@ -1,9 +1,9 @@
 /**
  * The Render Engine
- * ImageComponent
+ * SpriteComponent
  *
- * @fileoverview An extension of the render component which handles 
- *               image resource rendering.
+ * @fileoverview An extension of the render component which handles sprite
+ *               resource rendering.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author$
@@ -33,87 +33,90 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.Image",
+	"class": "R.components.render.Sprite",
 	"requires": [
 		"R.components.Render"
 	]
 });
 
 /**
- * @class A {@link R.components.Render render component} that draws an image to the render context.
- *        Images used by this component are loaded via an {@link R.resources.loader.ImageLoader}
- *        so that client-side caching can be used.
+ * @class A render component that renders its contents from a {@link R.resources.types.Sprite}.  Sprites
+ *        are 2d graphics which are either a single frame (static) or multiple frames
+ *        (animation).  The sprite's descriptor will define that for the component.
  *
- * @param name {String} The name of the component
+ * @param name {String} The component name
  * @param [priority=0.1] {Number} The render priority
- * @param image {R.resources.types.Image} The image object, acquired with {@link R.resources.loaders.ImageLoader#getImage}.
+ * @param sprite {R.resources.types.Sprite} The sprite to render
  * @extends R.components.Render
  * @constructor
- * @description Creates a component which renders images from an {@link ImageLoader}.
+ * @description Create a sprite component.
  */
-R.components.Image = function() {
-	return R.components.Render.extend(/** @scope R.components.Image.prototype */{
+R.components.render.Sprite = function() {
+	return R.components.Render.extend(/** @scope R.components.render.Sprite.prototype */{
 
-   currentImage: null,
-   bbox: null,
-   imageLoader: null,
+   currentSprite: null,
 
    /**
     * @private
     */
-   constructor: function(name, priority, image) {
-      if (Image.isInstance(priority)) {
-         image = priority;
+   constructor: function(name, priority, sprite) {
+      if (priority instanceof R.resources.types.Sprite) {
+         sprite = priority;
          priority = 0.1;
       }
       this.base(name, priority);
-      if (image != null) {
-         this.currentImage = image;
-         this.bbox = this.currentImage.getBoundingBox();
-      }
+      this.currentSprite = sprite;
    },
 
    /**
-    * Releases the component back into the object pool. See {@link PooledObject#release}
-    * for more information.
+    * Releases the component back into the object pool. See {@link R.engine.PooledObject#release} for
+    * more information.
     */
    release: function() {
       this.base();
-      this.currentImage = null;
-      this.bbox = null;
+      this.currentSprite = null;
    },
 
    /**
-    * Calculates the bounding box which encloses the image.
+    * Calculate the bounding box from the set of
+    * points which comprise the shape to be rendered.
     * @private
     */
    calculateBoundingBox: function() {
-      return this.bbox;
+      return this.currentSprite.getBoundingBox();
     },
 
    /**
-    * Set the image the component will render from the {@link ImageLoader}
-    * specified when creating the component.  This allows the user to change
-    * the image on the fly.
+    * Set the sprite the component will render.
     *
-    * @param image {R.resources.types.Image} The image to render
+    * @param sprite {R.resources.types.Sprite} The sprite to render
     */
-   setImage: function(image) {
-      this.currentImage = image;
-      this.bbox = image.getBoundingBox();
+   setSprite: function(sprite) {
+      this.currentSprite = sprite;
+      
+      if (this.getHostObject().jQ()) {
+         this.getHostObject().jQ().css({
+            width: sprite.getBoundingBox().len_x(),
+            height: sprite.getBoundingBox().len_y(),
+            background: "url('" + sprite.getSourceImage().src + "') no-repeat"
+         });
+      }
 		this.getHostObject().markDirty();
    },
 
    /**
-    * Get the image the component is rendering.
-    * @return {HTMLImage}
+    * Get the sprite the component is rendering.
+    *
+    * @return {R.resources.types.Sprite} A <tt>R.resources.types.Sprite</tt> instance
     */
-   getImage: function() {
-      return this.currentImage;
+   getSprite: function() {
+      return this.currentSprite;
    },
 
    /**
-    * Draw the image to the render context.
+    * Draw the sprite to the render context.  The frame, for animated
+    * sprites, will be automatically determined based on the current
+    * time passed as the second argument.
     *
     * @param renderContext {R.rendercontexts.AbstractRenderContext} The context to render to
     * @param time {Number} The engine time in milliseconds
@@ -124,19 +127,20 @@ R.components.Image = function() {
          return;
       }
 
-      if (this.currentImage) {
+      if (this.currentSprite) {
 			this.transformOrigin(renderContext, true);
-         renderContext.drawImage(this.bbox, this.currentImage.getImage(), null, this.getHostObject());
+         renderContext.drawSprite(this.currentSprite, time, this.getHostObject());
 			this.transformOrigin(renderContext, false);
       }
    }
-}, /** @scope R.components.Image.prototype */{ 
+}, /** @scope R.components.render.Sprite.prototype */{ 
    /**
     * Get the class name of this object
-    * @return {String} "R.components.Image"
+    *
+    * @return {String} "R.components.render.Sprite"
     */
    getClassName: function() {
-      return "R.components.Image";
+      return "R.components.render.Sprite";
    }
 });
 }

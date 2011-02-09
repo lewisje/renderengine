@@ -43,8 +43,6 @@ R.Engine.define({
 		"R.collision.broadphase.SpatialGrid",
 		"R.lang.Timeout",
 		"R.lang.OneShotTimeout",
-		"R.lang.MultiTimeout",
-		"R.lang.OneShotTrigger",
 		"R.lang.IntervalTimer",
 		"R.text.TextRenderer",
 		"R.text.AbstractTextRenderer",

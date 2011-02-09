@@ -33,9 +33,9 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.WiimoteInput",
+	"class": "R.components.input.Wiimote",
 	"requires": [
-		"R.components.KeyboardInput",
+		"R.components.input.Keyboard",
 		"R.math.Math2D",
 		"R.math.Point2D",
 		"R.math.Vector2D",
@@ -83,12 +83,12 @@ R.Engine.define({
  *
  * @param name {String} The name of the component
  * @param [priority=0.1] {Number} The priority of the component
- * @extends R.components.KeyboardInput
+ * @extends R.components.input.Keyboard
  * @constructor
  * @description Create a Wii remote input component.
  */
-R.components.WiimoteInput = function() {
-	return R.components.KeyboardInput.extend(/** @scope R.components.WiimoteInput.prototype */{
+R.components.input.Wiimote = function() {
+	return R.components.input.Keyboard.extend(/** @scope R.components.input.Wiimote.prototype */{
 
    enabledRemotes: null,
 
@@ -150,7 +150,7 @@ R.components.WiimoteInput = function() {
       ctx.removeEvent(this, "mouseup");
 
       if (!$.browser.Wii) {
-         // In the absense of the WiiMote, remove the mouse move handler
+         // In the absence of the WiiMote, remove the mouse move handler
          ctx.removeEvent(this, "mousemove");
       }
       this.base();
@@ -206,40 +206,40 @@ R.components.WiimoteInput = function() {
    _keyDownListener: function(event) {
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
-         case R.components.WiimoteInput.KEYCODE_LEFT:
+         case R.components.input.Wiimote.KEYCODE_LEFT:
             this._wmLeft(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_RIGHT:
+         case R.components.input.Wiimote.KEYCODE_RIGHT:
             this._wmRight(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_UP:
+         case R.components.input.Wiimote.KEYCODE_UP:
             this._wmUp(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_DOWN:
+         case R.components.input.Wiimote.KEYCODE_DOWN:
             this._wmDown(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_PLUS:
+         case R.components.input.Wiimote.KEYCODE_PLUS:
             this._wmPlus(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_MINUS:
+         case R.components.input.Wiimote.KEYCODE_MINUS:
             this._wmMinus(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_1:
+         case R.components.input.Wiimote.KEYCODE_1:
             this._wmButton1(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_2:
+         case R.components.input.Wiimote.KEYCODE_2:
             this._wmButton2(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_A:
+         case R.components.input.Wiimote.KEYCODE_A:
             this._wmButtonA(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_B:
+         case R.components.input.Wiimote.KEYCODE_B:
             this._wmButtonB(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_C:
+         case R.components.input.Wiimote.KEYCODE_C:
             return this._wmButtonC(event, 0, true);
             break;
-         case R.components.WiimoteInput.KEYCODE_Z:
+         case R.components.input.Wiimote.KEYCODE_Z:
             this._wmButtonZ(event, 0, true);
             break;
       }
@@ -252,40 +252,40 @@ R.components.WiimoteInput = function() {
    _keyUpListener: function(event) {
       // This is for handling the Primary Wiimote
       switch (event.keyCode) {
-         case R.components.WiimoteInput.KEYCODE_LEFT:
+         case R.components.input.Wiimote.KEYCODE_LEFT:
             this._wmLeft(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_RIGHT:
+         case R.components.input.Wiimote.KEYCODE_RIGHT:
             this._wmRight(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_UP:
+         case R.components.input.Wiimote.KEYCODE_UP:
             this._wmUp(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_DOWN:
+         case R.components.input.Wiimote.KEYCODE_DOWN:
             this._wmDown(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_PLUS:
+         case R.components.input.Wiimote.KEYCODE_PLUS:
             this._wmPlus(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_MINUS:
+         case R.components.input.Wiimote.KEYCODE_MINUS:
             this._wmMinus(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_1:
+         case R.components.input.Wiimote.KEYCODE_1:
             this._wmButton1(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_2:
+         case R.components.input.Wiimote.KEYCODE_2:
             this._wmButton2(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_A:
+         case R.components.input.Wiimote.KEYCODE_A:
             this._wmButtonA(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_B:
+         case R.components.input.Wiimote.KEYCODE_B:
             this._wmButtonB(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_C:
+         case R.components.input.Wiimote.KEYCODE_C:
             this._wmButtonC(event, 0, false);
             break;
-         case R.components.WiimoteInput.KEYCODE_Z:
+         case R.components.input.Wiimote.KEYCODE_Z:
             this._wmButtonZ(event, 0, false);
             break;
       }
@@ -502,15 +502,15 @@ R.components.WiimoteInput = function() {
          this.getHostObject().onWiimoteRoll(c, x, y, z);
       }
    }
-}, /** @scope R.components.WiimoteInput.prototype */{ 
+}, /** @scope R.components.input.Wiimote.prototype */{ 
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.WiimoteInput"
+    * @return {String} "R.components.input.Wiimote"
     */
    getClassName: function() {
-      return "R.components.WiimoteInput";
+      return "R.components.input.Wiimote";
    },
 
    /**

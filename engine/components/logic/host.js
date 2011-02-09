@@ -33,10 +33,10 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.Host",
+	"class": "R.components.logic.Host",
 	"requires": [
 		"R.components.Logic",
-		"R.engine.HostObject",
+		"R.engine.GameObject",
 		"R.struct.HashContainer"
 	]
 });
@@ -55,8 +55,8 @@ R.Engine.define({
  *              This allows a component to embed other hosts within it.  Each time the
  *              component is executed, each host will be given a chance to update as well.
  */
-R.components.Host = function() {
-	return R.components.Logic.extend(/** @scope R.components.Host.prototype */{
+R.components.logic.Host = function() {
+	return R.components.Logic.extend(/** @scope R.components.logic.Host.prototype */{
 
    objects: null,
 
@@ -69,7 +69,7 @@ R.components.Host = function() {
    },
 
    /**
-    * Releases the component back into the object pool.  See {@link PooledObject#release}
+    * Releases the component back into the object pool.  See {@link R.engine.PooledObject#release}
     * for more information.
     */
    release: function() {
@@ -86,12 +86,12 @@ R.components.Host = function() {
    },
 
    /**
-    * Add a {@link R.engine.HostObject} to the component to be processed when
+    * Add a {@link R.engine.GameObject} to the component to be processed when
     * this component is executed.  Objects will be updated in the order in
     * which they are added.
     *
     * @param name {String} A unique name to refer to the object by
-    * @param obj {R.engine.HostObject} The host object reference
+    * @param obj {R.engine.GameObject} The host object reference
     */
    add: function(name, obj) {
       Assert((obj instanceof R.engine.GameObject), "You can only add GameObject to a HostComponent");
@@ -112,8 +112,8 @@ R.components.Host = function() {
    /**
     * Remove the host object from the component.
     *
-    * @param obj {R.engine.HostObject} The host object reference
-    * @return {R.engine.HostObject} The object which was removed
+    * @param obj {R.engine.GameObject} The host object reference
+    * @return {R.engine.GameObject} The object which was removed
     */
    remove: function(obj) {
       return this.objects.remove(obj);
@@ -141,14 +141,14 @@ R.components.Host = function() {
          objs[c].update(renderContext, time);
       }
    }
-}, /** @scope R.components.Host.prototype */{
+}, /** @scope R.components.logic.Host.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.Host"
+    * @return {String} "R.components.logic.Host"
     */
    getClassName: function() {
-      return "R.components.Host";
+      return "R.components.logic.Host";
    }
 });
 }

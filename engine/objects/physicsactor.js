@@ -34,10 +34,10 @@
 R.Engine.define({
 	"class": "R.objects.PhysicsActor",
 	"requires": [
-		"R.components.CircleBody",
-		"R.components.BoxBody",
-		"R.components.DistanceJoint",
-		"R.components.RevoluteJoint",
+		"R.components.physics.CircleBody",
+		"R.components.physics.BoxBody",
+		"R.components.physics.DistanceJoint",
+		"R.components.physics.RevoluteJoint",
 		
 		"R.math.Math2D",
 		"R.engine.Object2D",
@@ -107,7 +107,7 @@ R.objects.PhysicsActor = function() {
 	getRigidBodies: function() {
 		if (!this.rigidBodies) {
 			this.rigidBodies = this.getObjects(function(el) {
-				return (el instanceof R.components.BaseBody);
+				return (el instanceof R.components.physics.BaseBody);
 			});			
 		}
 		return this.rigidBodies;
@@ -120,7 +120,7 @@ R.objects.PhysicsActor = function() {
 	getJoints: function() {
 		if (!this.joints) {
 			this.joints = this.getObjects(function(el) {
-				return (el instanceof R.components.BaseJoint);
+				return (el instanceof R.components.physics.BaseJoint);
 			});			
 		}
 		return this.joints;			
@@ -134,17 +134,17 @@ R.objects.PhysicsActor = function() {
 	 * It is not necessary to set the root body if there is only one rigid body
 	 * in the actor.
 	 * 
-	 * @param body {R.components.BaseBody} The body to assign as the root
+	 * @param body {R.components.physics.BaseBody} The body to assign as the root
 	 */
 	setRootBody: function(body) {
-		Assert(body instanceof R.components.BaseBody, "Root body is not a BaseBodyComponent");
+		Assert(body instanceof R.components.physics.BaseBody, "Root body is not a BaseBodyComponent");
 		this.rootBody = body;
 	},
 	
 	/**
 	 * Get the root body of the <tt>R.objects.PhysicsActor</tt>.  If no root object has been assigned,
 	 * the first rigid body component will be used.
-	 * @return {R.components.BaseBody}
+	 * @return {R.components.physics.BaseBody}
 	 */
 	getRootBody: function() {
 		if (!this.rootBody) {
@@ -265,12 +265,12 @@ R.objects.PhysicsActor = function() {
     * </ul>
     *
     * @param component {R.components.Base} A component to add to the host.  If the component is a
-    * 	{@link R.components.BaseBody} then the render component must be specified.
+    * 	{@link R.components.physics.BaseBody} then the render component must be specified.
     * @param [renderComponent] {R.components.Render} The render component if the component is a
-    * 	{@link R.components.BaseBody}
+    * 	{@link R.components.physics.BaseBody}
     */
 	add: function(component, renderComponent) {
-		if (component instanceof R.components.BaseBody) {
+		if (component instanceof R.components.physics.BaseBody) {
 			
 			// Reset the list of rigid bodies so the list will be rebuilt
 			this.rigidBodies = null;
@@ -282,7 +282,7 @@ R.objects.PhysicsActor = function() {
 			component.setRenderComponent(renderComponent);
 		}	
 
-		if (component instanceof R.components.BaseJoint) {
+		if (component instanceof R.components.physics.BaseJoint) {
 			// Reset the list of joints so the list will be rebuilt
 			this.joints = null;
 		}
@@ -304,7 +304,7 @@ R.objects.PhysicsActor = function() {
 
       while (components.hasNext()) {
 			var nextComponent = components.next();
-			var isPhysicsComponent = (nextComponent instanceof R.components.BaseBody);
+			var isPhysicsComponent = (nextComponent instanceof R.components.physics.BaseBody);
 			if (isPhysicsComponent) {
 				renderContext.pushTransform();
 			}
@@ -456,13 +456,13 @@ R.objects.PhysicsActor = function() {
 			var part = def.parts[p], bc;
 			if (part.type == "circle") {
 				part.radius *= (def.scale ? def.scale : 1);
-				bc = R.components.CircleBody.create(part.name, part.radius);
+				bc = R.components.physics.CircleBody.create(part.name, part.radius);
 			} else {
 				var ext = toP2d(part.extents);
 				if (def.scale) {
 					ext.mul(def.scale);
 				}
-				bc = R.components.BoxBody.create(part.name, ext);
+				bc = R.components.physics.BoxBody.create(part.name, ext);
 				ext.destroy();
 			}
 			
@@ -531,7 +531,7 @@ R.objects.PhysicsActor = function() {
 				 jointName = fromPart + "_" + toPart;
 			
 			if (part.joint.type == "distance") {
-				jc = R.components.DistanceJoint.create(jointName,
+				jc = R.components.physics.DistanceJoint.create(jointName,
 												  actor.getComponent(fromPart),
 												  actor.getComponent(toPart));
 			} else {
@@ -540,7 +540,7 @@ R.objects.PhysicsActor = function() {
 					anchor.mul(def.scale);
 				}
 
-				jc = R.components.RevoluteJoint.create(jointName,
+				jc = R.components.physics.RevoluteJoint.create(jointName,
 												  actor.getComponent(fromPart),
 												  actor.getComponent(toPart),
 												  anchor);

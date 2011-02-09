@@ -33,7 +33,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.Notifier",
+	"class": "R.components.logic.Notifier",
 	"requires": [
 		"R.components.Logic",
 		"R.lang.FNV1Hash",
@@ -61,8 +61,8 @@ R.Engine.define({
  * @constructor
  * @description Create a notifier component
  */
-R.components.Notifier = function() {
-	return R.components.Logic.extend(/** @scope R.components.Notifier.prototype */{
+R.components.logic.Notifier = function() {
+	return R.components.Logic.extend(/** @scope R.components.logic.Notifier.prototype */{
 
    notifyLists: null,
    hasher: null,
@@ -88,7 +88,7 @@ R.components.Notifier = function() {
 	},
 
    /**
-    * Releases the component back into the object pool. See {@link PooledObject#release}
+    * Releases the component back into the object pool. See {@link R.engine.PooledObject#release}
     * for more information.
     */
    release: function() {
@@ -177,14 +177,14 @@ R.components.Notifier = function() {
 			s.func.call(scopeObj, eventObj);
 		}
    }
-}, /** @scope R.components.Notifier.prototype */{
+}, /** @scope R.components.logic.Notifier.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.Notifier"
+    * @return {String} "R.components.logic.Notifier"
     */
    getClassName: function() {
-      return "R.components.Notifier";
+      return "R.components.logic.Notifier";
    }
 });
 }

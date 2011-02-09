@@ -33,9 +33,9 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.Mover2D",
+	"class": "R.components.transform.Mover2D",
 	"requires": [
-		"R.components.Input",
+		"R.components.Transform2D",
 		"R.engine.Events",
 		"R.lang.Timeout",
 		"R.math.Point2D",
@@ -53,8 +53,8 @@ R.Engine.define({
  * @constructor
  * @description Creates a 2d mover component
  */
-R.components.Mover2D = function() {
-	return R.components.Transform2D.extend(/** @scope R.components.Mover2D.prototype */{
+R.components.transform.Mover2D = function() {
+	return R.components.Transform2D.extend(/** @scope R.components.transform.Mover2D.prototype */{
 
    lastTime: -1,
    velocity: null,
@@ -86,8 +86,8 @@ R.components.Mover2D = function() {
       this.atRest = false;
       this.checkRest = true;
       this.mass = 1;
-      this.restingVelocity = R.components.Mover2D.DEFAULT_RESTING_VELOCITY;
-      this.lagAdjustment = R.components.Mover2D.DEFAULT_LAG_ADJUSTMENT;
+      this.restingVelocity = R.components.transform.Mover2D.DEFAULT_RESTING_VELOCITY;
+      this.lagAdjustment = R.components.transform.Mover2D.DEFAULT_LAG_ADJUSTMENT;
       this.checkLag = true;
       
       // Temp vector to use in calcs
@@ -107,7 +107,7 @@ R.components.Mover2D = function() {
 	},
 
    /**
-    * Releases the component back into the object pool. See {@link PooledObject#release}
+    * Releases the component back into the object pool. See {@link R.engine.PooledObject#release}
     * for more information.
     */
    release: function() {
@@ -415,13 +415,13 @@ R.components.Mover2D = function() {
    getAngularVelocity: function() {
       return this.angularVelocity;
    }
-}, /** @scope R.components.Mover2D.prototype */{ 
+}, /** @scope R.components.transform.Mover2D.prototype */{ 
    /**
     * Get the class name of this object
-    * @return {String} "R.components.Mover2D"
+    * @return {String} "R.components.transform.Mover2D"
     */
    getClassName: function() {
-      return "R.components.Mover2D";
+      return "R.components.transform.Mover2D";
    },
    
    /**

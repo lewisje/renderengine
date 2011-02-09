@@ -34,7 +34,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.BaseJoint",
+	"class": "R.components.physics.BaseJoint",
 	"requires": [
 		"R.components.Logic",
 		"R.math.Math2D",
@@ -55,8 +55,8 @@ R.Engine.define({
  * @constructor
  * @description All physical joint components should extend from this component type.
  */
-R.components.BaseJoint = function() {
-	return R.components.Logic.extend(/** @scope R.components.BaseJoint.prototype */{
+R.components.physics.BaseJoint = function() {
+	return R.components.Logic.extend(/** @scope R.components.physics.BaseJoint.prototype */{
 
 	jointDef: null,
 	simulation: null,
@@ -69,8 +69,8 @@ R.components.BaseJoint = function() {
     * @private
     */
 	constructor: function(name, body1, body2, jointDef) {
-		Assert(R.components.BaseBody.isInstance(body1), "Body 1 for joint is not a R.components.BaseJoint");
-		Assert(R.components.BaseBody.isInstance(body2), "Body 2 for joint is not a R.components.BaseJoint");
+		Assert(body1 instanceof R.components.physics.BaseBody, "Body 1 for joint is not a R.components.BaseBody");
+		Assert(body2 instanceof R.components.physics.BaseBody, "Body 2 for joint is not a R.components.BaseBody");
 
 		this.base(name || "BaseJoint");	
 
@@ -190,15 +190,15 @@ R.components.BaseJoint = function() {
 	}
 	/* pragma:DEBUG_END */
 	
-}, { /** @scope R.components.BaseJoint.prototype */
+}, { /** @scope R.components.physics.BaseJoint.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.BaseJoint"
+    * @return {String} "R.components.physics.BaseJoint"
     */
    getClassName: function() {
-      return "R.components.BaseJoint";
+      return "R.components.physics.BaseJoint";
    }   
 });
 }

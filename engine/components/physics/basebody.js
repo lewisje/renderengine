@@ -34,7 +34,7 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.components.BaseBody",
+	"class": "R.components.physics.BaseBody",
 	"requires": [
 		"R.components.Transform2D",
 		"R.math.Point2D",
@@ -55,8 +55,8 @@ R.Engine.define({
  * @description All physical body components should extend from this component type
  * 				 to inherit such values as density and friction, and gain access to position and rotation.
  */
-R.components.BaseBody = function() {
-	return R.components.Transform2D.extend(/** @scope R.components.BaseBody.prototype */{
+R.components.physics.BaseBody = function() {
+	return R.components.Transform2D.extend(/** @scope R.components.physics.BaseBody.prototype */{
 
 	bodyDef: null,
 	fixtureDef: null,
@@ -77,9 +77,9 @@ R.components.BaseBody = function() {
 		this.bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
 		
 		this.fixtureDef = fixtureDef;
-		this.fixtureDef.restitution = R.components.BaseBody.DEFAULT_RESTITUTION;
-		this.fixtureDef.density = R.components.BaseBody.DEFAULT_DENSITY;
-		this.fixtureDef.friction = R.components.BaseBody.DEFAULT_FRICTION;
+		this.fixtureDef.restitution = R.components.physics.BaseBody.DEFAULT_RESTITUTION;
+		this.fixtureDef.density = R.components.physics.BaseBody.DEFAULT_DENSITY;
+		this.fixtureDef.friction = R.components.physics.BaseBody.DEFAULT_FRICTION;
 		this.simulation = null;
 		this.rotVec = R.math.Vector2D.create(0,0);
 		this.bodyPos = R.math.Point2D.create(0,0);
@@ -477,15 +477,15 @@ R.components.BaseBody = function() {
 		}
 	}
 	
-}, { /** @scope R.components.BaseBody.prototype */
+}, { /** @scope R.components.physics.BaseBody.prototype */
 
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.components.BaseBody"
+    * @return {String} "R.components.physics.BaseBody"
     */
    getClassName: function() {
-      return "R.components.BaseBody";
+      return "R.components.physics.BaseBody";
    },
 	
 	/**

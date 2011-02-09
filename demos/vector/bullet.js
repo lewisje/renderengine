@@ -35,9 +35,9 @@
 R.Engine.define({
 	"class": "SpaceroidsBullet",
 	"requires": [
-		"R.components.Mover2D",
-		"R.components.Vector2D",
-		"R.components.BoxCollider",
+		"R.components.transform.Mover2D",
+		"R.components.render.Vector2D",
+		"R.components.collision.Box",
 		"R.engine.Object2D",
 		"R.math.Point2D",
 		"R.math.Vector2D",
@@ -59,16 +59,16 @@ var SpaceroidsBullet = function() {
    rot: null,
 
    constructor: function(player) {
-      this.base("Bullet", R.components.Mover2D.create("move"));
+      this.base("Bullet", R.components.transform.Mover2D.create("move"));
 
       // Track the player that created us
       this.player = player;
       this.rot = player.getRotation();
 
       // Add components to draw the bullet
-      this.add(R.components.Vector2D.create("draw"));
-      //this.add(R.components.ConvexCollider.create("collide", Spaceroids.collisionModel));
-      this.add(R.components.BoxCollider.create("collide", Spaceroids.collisionModel));
+      this.add(R.components.render.Vector2D.create("draw"));
+      //this.add(R.components.collision.Convex.create("collide", Spaceroids.collisionModel));
+      this.add(R.components.collision.Box.create("collide", Spaceroids.collisionModel));
 		this.getComponent("collide").setCollisionMask(SpaceroidsBullet.COLLISION_MASK);
 
       // Get the player's position and rotation,

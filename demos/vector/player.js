@@ -35,10 +35,10 @@
 R.Engine.define({
 	"class": "SpaceroidsPlayer",
 	"requires": [
-		"R.components.Mover2D",
-		"R.components.Vector2D",
-		"R.components.KeyboardInput",
-		"R.components.BoxCollider",
+		"R.components.transform.Mover2D",
+		"R.components.render.Vector2D",
+		"R.components.input.Keyboard",
+		"R.components.collision.Box",
 		"R.engine.Object2D",
 		"R.lang.Timeout",
 		"R.lang.OneShotTimeout",
@@ -74,21 +74,21 @@ var SpaceroidsPlayer = function() {
    rec: false,
 
    constructor: function() {
-      this.base("Player", R.components.Mover2D.create("move"));
+      this.base("Player", R.components.transform.Mover2D.create("move"));
       this.rec = false;
 
       // Add components to draw the player and perform input
-		this.add(R.components.KeyboardInput.create("input"));
+		this.add(R.components.input.Keyboard.create("input"));
 
       if (Spaceroids.rec) {
          this.getComponent("input").startRecording();
       }
 
 
-      this.add(R.components.Vector2D.create("draw"));
-      this.add(R.components.Vector2D.create("thrust"));
-      //this.add(R.components.ConvexCollider.create("collider", Spaceroids.collisionModel));
-      this.add(R.components.BoxCollider.create("collider", Spaceroids.collisionModel));
+      this.add(R.components.render.Vector2D.create("draw"));
+      this.add(R.components.render.Vector2D.create("thrust"));
+      //this.add(R.components.collision.Convex.create("collider", Spaceroids.collisionModel));
+      this.add(R.components.collision.Box.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsPlayer.COLLISION_MASK);
 
       this.players--;
@@ -362,7 +362,7 @@ var SpaceroidsPlayer = function() {
 		});
 
       // Give it some time and move the player somewhere random
-      OneShotTimeout.create("hyperspace", 800, function() {
+      R.lang.OneShotTimeout.create("hyperspace", 800, function() {
          self.getComponent("move").setVelocity(Point2D.ZERO);
          var randPt = R.math.Math2D.randomPoint(Spaceroids.renderContext.getBoundingBox());
          self.getComponent("move").setPosition(randPt);
