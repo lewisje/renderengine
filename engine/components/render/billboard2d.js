@@ -9,7 +9,7 @@
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ R.Engine.define({
 	"class": "R.components.render.Billboard2D",
 	"requires": [
 		"R.components.Render",
-		"R.rendercontexts.CanvasContext",
+		"R.util.RenderUtil",
 		"R.text.AbstractTextRenderer",
 		"R.math.Point2D"
 	]
@@ -84,19 +84,13 @@ R.components.render.Billboard2D = function() {
 		Assert(renderComponent instanceof R.components.Render ||
 				 renderComponent instanceof R.text.AbstractTextRenderer, "Attempt to assign a non-render component to a billboard component");
       this.base(name, priority || 0.1);
-      this.billboard = $("<img src='' width='1' height='1'/>");
+		if (!this.billboard) {
+			// Due to pooling, we don't need to recreate this each time
+	      this.billboard = $("<img src='' width='1' height='1'/>");
+		}
       this.mode = R.components.render.Billboard2D.REDRAW;
       this.renderComponent = renderComponent;
 		
-      // All billboard components share the same temporary context
-      if (R.components.render.Billboard2D.tempContext == null) {
-         // TODO: At some point it would be good to mimic the
-         // context to which the component is rendering 
-         R.components.render.Billboard2D.tempContext = R.rendercontexts.CanvasContext.create("billboardTemp", 800, 800);
-         if (typeof FlashCanvas != "undefined") {
-            FlashCanvas.initElement(R.components.render.Billboard2D.tempContext.getSurface());
-         }
-      }
    },
 
 	/**
@@ -113,7 +107,6 @@ R.components.render.Billboard2D = function() {
     */
    release: function() {
       this.base();
-      this.billboard = null;
       this.mode = null;
       this.renderComponent = null;
    },
@@ -171,21 +164,13 @@ R.components.render.Billboard2D = function() {
 		var o = R.math.Point2D.create(this.getHostObject().getOrigin());
 		
 		if (this.mode == R.components.render.Billboard2D.REDRAW) {
-			// Provide a temporary context which is used to render the contents into
-			Assert((R.components.render.Billboard2D.tempContext != null), "R.components.render.Billboard2D temporary context is not defined!");
+
+			this.billboard.attr({
+				"src": R.util.RenderUtil.renderComponentToImage(this.renderComponent, hostBox.w, hostBox.h, o),
+				"width": hostBox.w,
+				"height": hostBox.h
+			});
 			
-			// Clear the temporary context and render the associated component to it
-			R.components.render.Billboard2D.tempContext.getElement().width = hostBox.w + 1;
-			R.components.render.Billboard2D.tempContext.getElement().height = hostBox.h + 1;
-			R.components.render.Billboard2D.tempContext.reset();
-			var p = R.math.Point2D.create(0,0);
-			p.add(o);
-			R.components.render.Billboard2D.tempContext.setPosition(p);
-			p.destroy();
-			this.renderComponent.execute(R.components.render.Billboard2D.tempContext, time);
-			
-			// Extract the rendered image
-			this.billboard.attr("src", R.components.render.Billboard2D.tempContext.getDataURL()).attr("width", hostBox.w).attr("height", hostBox.h + 1);
 			this.mode = R.components.render.Billboard2D.NORMAL;
 		}
 		
