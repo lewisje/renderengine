@@ -8,7 +8,7 @@
  * version: v2.0.0.7a
  * date: 2/8/2011
  *
- * Copyright (c) 2010 Brett Fattori
+ * Copyright (c) 2011 Brett Fattori
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -182,7 +182,7 @@ function now() {
  * @author: $Author: bfattori@gmail.com $
  * @version: $Revision: 1539 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -927,7 +927,7 @@ var AssertWarn = function(test, warning) {
  * @author: $Author: bfattori@gmail.com $
  * @version: $Revision: 1542 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1146,7 +1146,7 @@ R.debug.Profiler.wireObjects = function(objArray) {
  * @author: $Author: bfattori@gmail.com $
  * @version: $Revision: 1535 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1290,7 +1290,7 @@ R.lang.Math2.seed();
  * @author: $Author: bfattori $
  * @version: $Revision: 1534 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1869,7 +1869,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  * @author: $Author: bfattori $
  * @version: $Revision: 1534 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com) 
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com) 
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -2268,7 +2268,7 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @author: $Author: bfattori@gmail.com $
  * @version: $Revision: 1542 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -3103,7 +3103,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
  * @author: $Author$
  * @version: $Revision$
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -3735,7 +3735,7 @@ R.engine.Script = Base.extend(/** @scope R.engine.Script.prototype */{
  * @author: $Author: bfattori@gmail.com $
  * @version: $Revision: 1542 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -4050,7 +4050,7 @@ if (R.engine.Support.checkBooleanParam("profile")) {
  * @author: $Author: bfattori@gmail.com $
  * @version: $Revision: 1530 $
  *
- * Copyright (c) 2010 Brett Fattori (brettf@renderengine.com)
+ * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

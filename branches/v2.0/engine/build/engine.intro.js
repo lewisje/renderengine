@@ -8,7 +8,7 @@
  * version: @BUILD_VERSION
  * date: @BUILD_DATE
  *
- * Copyright (c) 2010 Brett Fattori
+ * Copyright (c) 2011 Brett Fattori
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -163,12 +163,13 @@ R.namespace("resources.types");
 R.namespace("sound");
 R.namespace("storage");
 R.namespace("text");
+R.namespace("util");
 
 /**
  * Return a new date object.
  * @return {Date}
  */
-function now() {
+window["now"] = function() {
 	return new Date();
-}
+};
 
