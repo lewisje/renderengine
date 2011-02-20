@@ -84,10 +84,6 @@ R.components.render.Billboard2D = function() {
 		Assert(renderComponent instanceof R.components.Render ||
 				 renderComponent instanceof R.text.AbstractTextRenderer, "Attempt to assign a non-render component to a billboard component");
       this.base(name, priority || 0.1);
-		if (!this.billboard) {
-			// Due to pooling, we don't need to recreate this each time
-	      this.billboard = $("<img src='' width='1' height='1'/>");
-		}
       this.mode = R.components.render.Billboard2D.REDRAW;
       this.renderComponent = renderComponent;
 		
@@ -164,9 +160,16 @@ R.components.render.Billboard2D = function() {
 		var o = R.math.Point2D.create(this.getHostObject().getOrigin());
 		
 		if (this.mode == R.components.render.Billboard2D.REDRAW) {
-
+			// We'll match the type of context the component is rendering to
+			var ctx = this.getHostObject().getRenderContext().constructor;
+			
+			if (!this.billboard) {
+				// Due to pooling, we don't need to recreate this each time
+		      this.billboard = $("<img/>");
+			}
+			
 			this.billboard.attr({
-				"src": R.util.RenderUtil.renderComponentToImage(this.renderComponent, hostBox.w, hostBox.h, o),
+				"src": R.util.RenderUtil.renderComponentToImage(ctx, this.renderComponent, hostBox.w, hostBox.h, null, o),
 				"width": hostBox.w,
 				"height": hostBox.h
 			});

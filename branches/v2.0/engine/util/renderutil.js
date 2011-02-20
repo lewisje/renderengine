@@ -41,44 +41,123 @@ R.Engine.define({
 });
 
 /**
- * @class A static class rendering utilities.
+ * @class A static class of rendering utilities.  Most of the methods are intended
+ * 	for bitmap contexts, such as canvas, but may apply to others.  The methods
+ * 	have been designed with canvas in mind.
  *
  * @static
  */
 R.util.RenderUtil = /** @scope R.util.RenderUtil.prototype */ {
 	
-	tempContext: null,
-	
-	renderComponentToImage: function(renderComponent, width, height, offset) {
-      // Create the temporary context to render to
-      if (R.util.RenderUtil.tempContext == null) {
-         R.util.RenderUtil.tempContext = R.rendercontexts.CanvasContext.create("renderUtilTemp", 800, 800);
-         if (typeof FlashCanvas != "undefined") {
-            FlashCanvas.initElement(R.util.RenderUtil.tempContext.getSurface());
-         }
+	// Private cache of temporary contexts
+	tempContexts: {},
+
+	/**
+	 * Get a temporary context for rendering to.
+	 * @param type {R.rendercontexts.RenderContext2D} The type of context desired
+	 * @param width {Number} The width of the temporary context
+	 * @param height {Number} The height of the temporary context
+	 * @return {R.rendercontexts.RenderContext2D}
+	 */
+	getTempContext: function(type, width, height) {
+      if (R.util.RenderUtil.tempContexts[type.getClassName()] == null) {
+	      // Create the temporary context to render to
+         R.util.RenderUtil.tempContexts[type.getClassName()] = type.create("tempCtx", 800, 800);
+         
+			if (type == R.rendercontexts.CanvasContext) {
+				// Special handling for the canvas context
+				if (typeof FlashCanvas != "undefined") {
+	            FlashCanvas.initElement(R.util.RenderUtil.tempContexts[type.getClassName()].getSurface());
+	         }
+			}
 			
-			// When the engine shuts down, clean up the context
+			// When the engine shuts down, clean up the contexts
 			R.Engine.onShutdown(function() {
-				R.util.RenderUtil.tempContext.destroy();
-				R.util.RenderUtil.tempContext = null;
+				for (var c in R.util.RenderUtil.tempContexts) {
+					R.util.RenderUtil.tempContexts[c].destroy();
+					R.util.RenderUtil.tempContexts = {};
+				}
 			})
       }
-
-		// The position and origin to render to in the context
+		
+		// Prepare the temporary context
+		var ctx = R.util.RenderUtil.tempContexts[type.getClassName()];
+		ctx.getElement().width = width + 1;		// Add one pixel to account for clipping
+		ctx.getElement().height = height + 1;	// ...
+		ctx.reset();
+		
+		return ctx;
+	},
+	
+	/**
+	 * Perform a single execution of a rendering component.
+	 * @param contextType {R.rendercontexts.RenderContext2D} The type of context to render to
+	 * @param renderComponent {R.components.Render} The component to render
+	 * @param width {Number} The width of the temporary context
+	 * @param height {Number} The height of the temporary context
+	 * @param time {Number} The time in milliseconds, or <code>null</code> to use the current engine time
+	 * @param offset {R.math.Point2D} The offset for the rendering position
+	 * @return {String} The data URL of the rendered image
+	 */
+	renderComponentToImage: function(contextType, renderComponent, width, height, time, offset) {
+		// Get the temporary context
+		var ctx = R.util.RenderUtil.getTempContext(contextType, width, height);
+		
+		time = time || R.Engine.worldTime;
+		
+		// The position to render to in the context
 		offset = offset || Point2D.ZERO;
 		
-		// Clear the temporary context and render to it
-		R.util.RenderUtil.tempContext.getElement().width = width + 1;
-		R.util.RenderUtil.tempContext.getElement().height = height + 1;
-		R.util.RenderUtil.tempContext.reset();
+		// Render the component
 		var p = R.math.Point2D.create(0,0);
 		p.add(offset);
-		R.util.RenderUtil.tempContext.setPosition(p);
+		ctx.setPosition(p);
 		p.destroy();
-		renderComponent.execute(R.util.RenderUtil.tempContext, R.Engine.worldTime);
+		renderComponent.execute(ctx, time);
 		
 		// Extract the rendered image
-		return R.util.RenderUtil.tempContext.getDataURL();
+		return ctx.getDataURL();
+	},
+	
+	/**
+	 * Takes a screen shot of the context provided, optionally cropped to specific dimensions.
+	 * @param renderContext {R.rendercontexts.RenderContext2D} The context to get a screenshot of
+	 * @param [cropRect] {R.math.Rectangle2D} Optional rectangle to crop to, or <code>null</code> for the
+	 * 	entire context.
+	 * @return {String} The data URL of the screen shot
+	 */
+	screenShot: function(renderContext, cropRect) {
+		cropRect = cropRect || renderContext.getViewport();
+		
+		// Render the screenshot to the temp context
+		var ctx = R.util.RenderUtil.getTempContext(renderContext.constructor, renderContext.getViewport().w, renderContext.getViewport().h);
+		ctx.drawImage(renderContext.getViewport(), renderContext.getElement(), cropRect);
+		
+		// Return the image data
+		return ctx.getDataURL();
+	},
+	
+	/**
+	 * Extract the image data from the provided image.  The image can either be an HTML &lt;img&gt; element,
+	 * or it can be another render context.  This method typically only works with the canvas context.
+	 * @param image {Object} Image or context
+	 * @param [cropRect] {R.math.Rectangle2D} A rectangle to crop to, or <code>null</code> to use the entire image 
+	 * @param [contextType] {R.rendercontexts.RenderContext2D} Optional render context class, or <code>null</code> to
+	 * 	assume a canvas context.
+	 * @return {Object} Image data object with "width", "height", and an Array of each pixel, represented as
+	 * 	RGBA data where each element is represented by an integer 0-255.
+	 */
+	extractImageData: function(image, cropRect, contextType) {
+		contextType = contextType || R.rendercontexts.CanvasContext;
+		var w = image.attr("width"), h = image.attr("height");
+		var imgRect = R.math.Rectangle2D.create(0,0,w,h);
+		
+		// Get the temporary context
+		var ctx = R.util.RenderUtil.getTempContext(contextType, w, h);
+		ctx.drawImage(imgRect, image);
+		
+		// Return the image data from the temp context
+		return ctx.getImage(cropRect);
 	}
 	
 };

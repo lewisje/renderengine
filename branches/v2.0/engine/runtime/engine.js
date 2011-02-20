@@ -1,12 +1,14 @@
 /*!
- * The Render Engine is a Javascript game engine written from the ground
- * up to be easy to use and fully expandable.  It runs on a number of
- * browser platforms, including Gecko, Webkit, Chrome, and Opera.  Visit
+ * The Render Engine is a cross-browser, open source game engine written entirely
+ * in JavaScript. Designed from the ground up to be extremely flexible, it boasts
+ * an extensive API and uses the newest features of today's modern browsers.  
+ * 
+ * Visit
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)
- * version: v2.0.0.7a
- * date: 2/8/2011
+ * version: v2.0.0.8a
+ * date: 2/19/2011
  *
  * Copyright (c) 2011 Brett Fattori
  *
@@ -163,14 +165,15 @@ R.namespace("resources.types");
 R.namespace("sound");
 R.namespace("storage");
 R.namespace("text");
+R.namespace("util");
 
 /**
  * Return a new date object.
  * @return {Date}
  */
-function now() {
+window["now"] = function() {
 	return new Date();
-}
+};
 
 /**
  * The Render Engine
@@ -179,8 +182,8 @@ function now() {
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1539 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -924,8 +927,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1542 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1143,8 +1146,8 @@ R.debug.Profiler.wireObjects = function(objArray) {
  * 				  pseudo random numbers.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1535 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1288,7 +1291,7 @@ R.lang.Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1534 $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1867,7 +1870,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori $
- * @version: $Revision: 1534 $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com) 
  *
@@ -2265,8 +2268,8 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1542 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -2314,7 +2317,7 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @static
  */
 R.Engine = Base.extend(/** @scope R.Engine.prototype */{
-   version: "v2.0.0.7a",
+   version: "v2.0.0.8a",
    HOME_URL: "http://www.renderengine.com",
    REF_NAME: "The Render Engine",
 
@@ -3732,8 +3735,8 @@ R.engine.Script = Base.extend(/** @scope R.engine.Script.prototype */{
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  *
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1542 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  * 
@@ -4047,8 +4050,8 @@ if (R.engine.Support.checkBooleanParam("profile")) {
  * Engine initialization
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1530 $
+ * @author: $Author: bfattori $
+ * @version: $Revision: 1555 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
