@@ -115,6 +115,7 @@ R.resources.loaders.SpriteLoader = function(){
 					// get the path to the resource file
 					var path = url.substring(0, url.lastIndexOf("/"));
 					thisObj.load(name, null, spriteInfo, path + "/");
+					thisObj.afterLoad(name, spriteInfo, path + "/");
 				});
 			}
 			else {
@@ -124,16 +125,23 @@ R.resources.loaders.SpriteLoader = function(){
 				// Load the sprite image file
 				if (!info.version || info.version == 1) {
 					this.base(name, info.bitmapImage, info.bitmapWidth, info.bitmapHeight);
+				} else if (info.version == 2) {
+					this.base(name, info.bitmapImage, info.bitmapSize[0], info.bitmapSize[1]);
 				}
-				else 
-					if (info.version == 2) {
-						this.base(name, info.bitmapImage, info.bitmapSize[0], info.bitmapSize[1]);
-					}
 				
 				// Store the sprite info
 				this.sprites[name] = info;
 				this.queuedSprites--;
 			}
+		},
+		
+		/**
+		 * Called after the data has been loaded, passing along the info object and name
+		 * of the sprite resource.
+		 * @param name {String} The name of the sprite resource
+		 * @param info {Object} The sprite resource definition
+		 */
+		afterLoad: function(name, info) {
 		},
 		
 		/**

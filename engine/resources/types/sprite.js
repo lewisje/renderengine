@@ -117,7 +117,10 @@ R.resources.types.Sprite = function() {
          }
          this.count = s[R.resources.types.Sprite.INDEX_COUNT];
          this.speed = s[R.resources.types.Sprite.INDEX_SPEED];
-      }
+      } else {
+			this.count = 1;
+			this.speed = -1;
+		}
 
 		this.resource = spriteResource;
 		this.loader = spriteLoader;
@@ -198,6 +201,22 @@ R.resources.types.Sprite = function() {
    isOnce: function() {
       return (this.isAnimation() && this.mode == R.resources.types.Sprite.MODE_ONCE);
    },
+
+	/**
+	 * Get the number of frames in the sprite.
+	 * @return {Number} 
+	 */
+	getFrameCount: function() {
+		return this.count;
+	},
+	
+	/**
+	 * Get the frame speed of the animation in milliseconds, or -1 if it's a single frame.
+	 * @return {Number}
+	 */
+	getFrameSpeed: function() {
+		return this.speed;
+	},
 
 	/**
 	 * For animated sprites, play the animation if it is stopped.

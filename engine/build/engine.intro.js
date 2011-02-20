@@ -1,7 +1,9 @@
 /*!
- * The Render Engine is a Javascript game engine written from the ground
- * up to be easy to use and fully expandable.  It runs on a number of
- * browser platforms, including Gecko, Webkit, Chrome, and Opera.  Visit
+ * The Render Engine is a cross-browser, open source game engine written entirely
+ * in JavaScript. Designed from the ground up to be extremely flexible, it boasts
+ * an extensive API and uses the newest features of today's modern browsers.  
+ * 
+ * Visit
  * http://www.renderengine.com for more information.
  *
  * author: Brett Fattori (brettf@renderengine.com)

@@ -49,7 +49,6 @@ R.Engine.define({
 		"R.text.VectorText",
 		"R.resources.loaders.SoundLoader",
 		"R.sound.SM2",
-		"R.collision.CircleHull",
 		"R.storage.PersistentStorage",
 		"R.engine.Events",
 		"R.math.Math2D",
