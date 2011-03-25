@@ -1,8 +1,8 @@
 /**
  * The Render Engine
- * CookieStorage
+ * WindowStorage
  *
- * @fileoverview A storage object where data is maintained in a cookie that stores data
+ * @fileoverview A storage object where data is maintained on "window.name" that stores data
  *               as a JSON object.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
@@ -33,45 +33,30 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.storage.CookieStorage",
+	"class": "R.storage.WindowStorage",
 	"requires": [
 		"R.storage.AbstractStorage"
 	]
 });
 
 /**
- * @class <tt>R.storage.CookieStorage</tt> is used to maintain data in a
- *    cookie using a JSON object.  If cookies are not supported, the methods
- *    will have no effect.
+ * @class <tt>R.storage.WindowStorage</tt> is used to maintain data in "window.name"
+ *    using a JSON object.  This type of storage is transient.
  *
- * @param name {String} The name of the cookie
- * @param options {Object} An object which contains any of the following: path, domain, secure (boolean),
- *    and expires (number).  Any of the values can be left off, in which case defaults will be used.
  * @extends R.storage.AbstractStorage
  * @constructor
  * @description This class of storage is used to persist data in a cookie.
  */
-R.storage.CookieStorage = function(){
-	return R.storage.AbstractStorage.extend(/** @scope R.storage.CookieStorage.prototype */{
+R.storage.WindowStorage = function(){
+	return R.storage.AbstractStorage.extend(/** @scope R.storage.WindowStorage.prototype */{
 
-		enabled: null,
-      cookieName: null,
-      options: null,
       hash: null,
 
 		/** @private */
 		constructor: function(name, options){
-			this.enabled = R.engine.Support.sysInfo().support.storage.cookie;
-			AssertWarn(this.enabled, "CookieStorage is not supported by browser - DISABLED");
 			this.base(name);
-         this.cookieName = name;
-         this.options = $.extend({
-            path: "/",
-            domain: null,
-            secure: null,
-            expires: null
-         }, options);
-         this.hash = this.loadData() || {};
+         this.hash = {};
+         this.loadData();
 		},
 
       destroy: function() {
@@ -84,8 +69,6 @@ R.storage.CookieStorage = function(){
 		 */
 		release: function(){
 			this.base();
-			this.cookieName = null;
-         this.options = null;
          this.hash = null;
 		},
 
@@ -94,7 +77,7 @@ R.storage.CookieStorage = function(){
 		 * @return {Object} The <tt>localStorage</tt> object
 		 */
 		initStorageObject: function(){
-			return window.document.cookie;
+			return window.name;
 		},
 
       set: function(key, value) {
@@ -127,14 +110,7 @@ R.storage.CookieStorage = function(){
             return;
          }
 
-         var oldExpires = this.options.expires;
-         $.extend(this.options, {
-            expires: -1
-         });
          this.saveData("");
-         $.extend(this.options, {
-            expires: oldExpires
-         });
       },
 
       clear: function() {
@@ -146,45 +122,23 @@ R.storage.CookieStorage = function(){
       },
 
       saveData: function(data) {
-         AssertWarn(data.length < R.engine.Support.sysInfo().support.storage.cookie.maxLength,
-               "Data to save to cookie is larger than supported size - will be truncated");
-
-         var p = "";
-         $.each(this.options, function(k,v) {
-            if (v) {
-               p += (p.length > 0 ? ";" : "") + k + (function(o) {
-                  switch (o) {
-                     case "secure": return "";
-                     case "expires": return "=" + new Date(now() + v).toGMTString();
-                     default: return "=" + v;
-                  }
-               })(k);
-            }
-         });
-
          // Save the cookie
-         this.getStorageObject() = this.cookieName + "=" + data + ";" + p;
+         this.getStorageObject() = data;
       },
 
       loadData: function() {
-         if (!this.enabled) {
-            return null;
-         }
-
-         var va = this.getStorageObject().match('(?:^|;)\\s*' + this.cookieName + '=([^;]*)');
-         var value = (va) ? va[1] : null;
-         return JSON.parse(value);
+         return JSON.parse(this.getStorageObject());
       }
 
-	}, /** @scope R.storage.CookieStorage.prototype */ {
+	}, /** @scope R.storage.WindowStorage.prototype */ {
 
 		/**
 		 * Get the class name of this object
 		 *
-		 * @return {String} "R.storage.CookieStorage"
+		 * @return {String} "R.storage.WindowStorage"
 		 */
 		getClassName: function(){
-			return "R.storage.CookieStorage";
+			return "R.storage.WindowStorage";
 		}
 
 	});

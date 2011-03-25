@@ -1324,7 +1324,7 @@ R.lang.Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1563 $
+ * @version: $Revision: 1566 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
