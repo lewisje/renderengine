@@ -34,7 +34,7 @@
 R.Engine.define({
 	"class": "R.storage.AbstractDBStorage",
 	"requires": [
-		"R.engine.AbstractStorage"
+		"R.storage.AbstractStorage"
 	]
 });
 
