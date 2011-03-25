@@ -1837,14 +1837,14 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
          // Check storage support
          try {
             try {
-               // Drop a cookie, then look for it
-               for (var i = 0, j = []; i < 8000; i++) { j.push("x"); }
+               // Drop a cookie, then look for it (3kb max)
+               for (var i = 0, j = []; i < 3072; i++) { j.push("x"); }
                window.document.cookie = "tre.test=" + j.join("") + ";path=/";
                var va = window.document.cookie.match('(?:^|;)\\s*tre.test=([^;]*)'),
                    supported = !!va;
                if (supported) {
                   // expire the cookie before returning
-                  window.document.cookie = "tre.test=;path=/;expires=" + (now() - 1);
+                  window.document.cookie = "tre.test=;path=/;expires=" + new Date(now() - 1).toGMTString();
                }
                storageSupport.cookie = supported ? { "maxLength": va[1].length } : false;
             } catch (ex) { /* ignored */ }
