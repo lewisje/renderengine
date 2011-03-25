@@ -523,7 +523,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
             try {
                // Drop a cookie, then look for it
                for (var i = 0, j = []; i < 8000; i++) { j.push("x"); }
-               window.document.cookie = "tre.test=" + j.join() + ";path=/";
+               window.document.cookie = "tre.test=" + j.join("") + ";path=/";
                var va = window.document.cookie.match('(?:^|;)\\s*tre.test=([^;]*)'),
                    supported = !!va;
                if (supported) {
@@ -533,10 +533,11 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
                storageSupport.cookie = supported ? { "maxLength": va[1].length } : false;
             } catch (ex) { /* ignored */ }
 
-            // Firefox bug (https://bugzilla.mozilla.org/show_bug.cgi?id=389002)
-            if (storageSupport.cookie) {
+            try {
                storageSupport.local = (typeof localStorage !== "undefined");
                storageSupport.session = (typeof sessionStorage !== "undefined");
+            } catch (ex) {
+               // Firefox bug (https://bugzilla.mozilla.org/show_bug.cgi?id=389002)
             }
 
             try {
