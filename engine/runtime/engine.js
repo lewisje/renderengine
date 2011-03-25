@@ -84,6 +84,9 @@ R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
 };
 
+/** @private **/
+R.str = Object.toString;
+
 /**
  * Check if the given object is a function
  * @param obj {Object} The object to test
@@ -91,7 +94,7 @@ R._unsupported = function(method, clazz) {
  * @memberOf R
  */
 R.isFunction = function(obj) {
-   return (obj.toString === "[object Function]");
+   return (R.str.call(obj) === "[object Function]");
 };
 
 /**
@@ -101,7 +104,7 @@ R.isFunction = function(obj) {
  * @memberOf R
  */
 R.isArray = function(obj) {
-   return (obj.toString === "[object Array]");
+   return (R.str.call(obj) === "[object Array]");
 };
 
 /**
@@ -111,7 +114,7 @@ R.isArray = function(obj) {
  * @memberOf R
  */
 R.isString = function(obj) {
-   return (typeof obj === "string");
+   return (R.str.call(obj) === "[object String]");
 };
 
 /**
@@ -121,7 +124,7 @@ R.isString = function(obj) {
  * @memberOf R
  */
 R.isNumber = function(obj) {
-   return (typeof obj === "number");
+   return (R.str.call(obj) === "[object Number]");
 };
 
 /**
@@ -213,7 +216,7 @@ window["now"] = function() {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1561 $
+ * @version: $Revision: 1562 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -958,7 +961,7 @@ var AssertWarn = function(test, warning) {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1557 $
+ * @version: $Revision: 1562 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1321,7 +1324,7 @@ R.lang.Math2.seed();
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1557 $
+ * @version: $Revision: 1562 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1762,13 +1765,14 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *       <ul><li>cookie - Cookie support. Reports an object with "maxLength", or <code>false</code></li>
     *       <li>local - localStorage support</li>
     *       <li>session - sessionStorage support</li>
-    *       <li>indexedDB - indexedDB support</li>
-    *       <li>SQLlite - SQL lite support</li>
+    *       <li>indexeddb - indexedDB support</li>
+    *       <li>sqllite - SQL lite support</li>
+    *       <li>audio - HTML5 Audio support</li>
+    *       <li>video - HTML5 Video support</li>
     *       </ul>
     *    </li>
     *    <li>canvas:
-    *       <ul><li>emulated - Canvas support emulated by FlashCanvas</li>
-    *       <li>defined - Canvas is either native or emulated</li>
+    *       <ul><li>defined - Canvas is either native or emulated</li>
     *       <li>text - Supports text</li>
     *       <li>textMetrics - Supports text measurement</li>
     *			<li>contexts:
