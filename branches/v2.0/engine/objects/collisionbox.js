@@ -95,9 +95,9 @@ R.objects.CollisionBox = function(){
 				}, false],
 				"Action": [function() {
 									return self.action.substring(0,25);
-							  }, !R.isUndefined(LevelEditor) && self.type == R.objects.CollisionBox.TYPE_TRIGGER ?
+							  }, typeof LevelEditor !== "undefined" && self.type == R.objects.CollisionBox.TYPE_TRIGGER ?
 							  { "editor": function() { LevelEditor.showScriptDialog(this, "Action", self.action); }, "fn": function(i) { self.setAction(i); } } : null, 
-							  (!R.isUndefined(LevelEditor) && self.type == R.objects.CollisionBox.TYPE_TRIGGER)]
+							  (typeof LevelEditor !== "undefined" && self.type == R.objects.CollisionBox.TYPE_TRIGGER)]
 			});
 		},
 		

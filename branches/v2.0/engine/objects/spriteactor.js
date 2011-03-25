@@ -114,15 +114,15 @@ R.objects.SpriteActor = function(){
 			var self = this;
 			var prop = this.base(self);
 			return $.extend(prop, {
-				"Sprite": [!R.isUndefined(LevelEditor) ? function(){ return LevelEditor.getSpriteCanonicalName(self.sprite); } : function(){ return self.sprite.getName(); }, 
-							  !R.isUndefined(LevelEditor) ? { "multi": true, 
+				"Sprite": [typeof LevelEditor !== "undefined" ? function(){ return LevelEditor.getSpriteCanonicalName(self.sprite); } : function(){ return self.sprite.getName(); },
+							  typeof LevelEditor !== "undefined" ? { "multi": true,
 							  											 "opts": LevelEditor.getSpriteOptions,
 																		 "fn": function(s) { self.setSprite(LevelEditor.getSpriteForName(s)); }} : null, 
-							  !R.isUndefined(LevelEditor) ? true : false ],
+							  typeof LevelEditor !== "undefined" ? true : false ],
 				"Collidable": [ function() { return self.isCollidable(); },
-									 !R.isUndefined(LevelEditor) ? { "toggle": true,
+									 typeof LevelEditor !== "undefined" ? { "toggle": true,
 									 											"fn": function(s) { self.setCollidable(s); }} : null,
-									 !R.isUndefined(LevelEditor) ? true : false ]
+									 typeof LevelEditor !== "undefined" ? true : false ]
 			});
 		},
 

@@ -117,7 +117,7 @@ R.debug.Profiler.exit = function() {
 	if (!R.debug.Profiler.running) { return; }
 	if (R.debug.Profiler.profileStack.length == 0) {
 		var msg = "Profile stack underflow";
-		if (!R.isUndefined(console)) { console.error(msg); }
+		if (typeof console !== "undefined") { console.error(msg); }
 		throw(msg);
 	}
 

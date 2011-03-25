@@ -52,7 +52,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope R.debug.ConsoleRef.prototype */{
    },
 
    cleanup: function(o) {
-      if (R.isUndefined(o)) {
+      if (typeof o === "undefined") {
          return "";
       } else if (o === null) {
          return "null";
@@ -375,7 +375,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    info: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.info.apply(console, arguments);
@@ -386,7 +386,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    debug: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.debug.apply(console, arguments);
@@ -397,7 +397,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a warning message to the console
     */
    warn: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.warn.apply(console, arguments);
@@ -408,7 +408,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write an error message to the console
     */
    error: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.error.apply(console, arguments);
@@ -419,7 +419,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a stack trace to the console
     */
    trace: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          console.trace.apply(arguments);
       }
    },
@@ -539,11 +539,11 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
       if (R.engine.Support.checkBooleanParam("debug") && (R.engine.Support.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          R.debug.Console.consoleRef = new R.debug.HTML();
       }
-      else if (!R.isUndefined(firebug) || (!R.isUndefined(console) && console.firebug)) {
+      else if (typeof firebug !== "undefined" || (typeof console !== "undefined" && console.firebug)) {
          // Firebug or firebug lite
          R.debug.Console.consoleRef = new R.debug.Firebug();
       }
-      else if (!R.isUndefined(console) && jQuery.browser.msie) {
+      else if (typeof console !== "undefined" && jQuery.browser.msie) {
          R.debug.Console.consoleRef = new R.debug.MSIE();
       }
       else if (jQuery.browser.chrome || jQuery.browser.safari) {
