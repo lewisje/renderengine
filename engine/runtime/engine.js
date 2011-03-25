@@ -269,7 +269,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope R.debug.ConsoleRef.prototype */{
    },
 
    cleanup: function(o) {
-      if (R.isUndefined(o) {
+      if (R.isUndefined(o)) {
          return "";
       } else if (o === null) {
          return "null";
