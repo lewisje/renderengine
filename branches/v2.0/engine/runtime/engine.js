@@ -95,6 +95,46 @@ R.isUndefined = function(obj) {
 };
 
 /**
+ * Check if the given object is a function
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isFunction = function(obj) {
+   return (obj.toString === "[object Function]");
+};
+
+/**
+ * Check if the given object is an array
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isArray = function(obj) {
+   return (obj.toString === "[object Array]");
+};
+
+/**
+ * Check if the given object is a string
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isString = function(obj) {
+   return (typeof obj === "string");
+};
+
+/**
+ * Check if the given object is a number
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isNumber = function(obj) {
+   return (typeof obj === "number");
+};
+
+/**
  * Test if the object is undefined, null, or a string and is empty
  * @param obj {Object} The object to test
  * @return {Boolean}
@@ -182,8 +222,8 @@ window["now"] = function() {
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1557 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -229,7 +269,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope R.debug.ConsoleRef.prototype */{
    },
 
    cleanup: function(o) {
-      if (typeof o === "undefined") {
+      if (R.isUndefined(o) {
          return "";
       } else if (o === null) {
          return "null";
@@ -552,7 +592,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    info: function() {
-      if (typeof firebug != "undefined") {
+      if (!R.isUndefined(firebug)) {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.info.apply(console, arguments);
@@ -563,7 +603,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    debug: function() {
-      if (typeof firebug != "undefined") {
+      if (!R.isUndefined(firebug)) {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.debug.apply(console, arguments);
@@ -574,7 +614,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a warning message to the console
     */
    warn: function() {
-      if (typeof firebug != "undefined") {
+      if (!R.isUndefined(firebug)) {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.warn.apply(console, arguments);
@@ -585,7 +625,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write an error message to the console
     */
    error: function() {
-      if (typeof firebug != "undefined") {
+      if (!R.isUndefined(firebug)) {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.error.apply(console, arguments);
@@ -596,7 +636,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a stack trace to the console
     */
    trace: function() {
-      if (typeof console != "undefined") {
+      if (!R.isUndefined(firebug)) {
          console.trace.apply(arguments);
       }
    },
@@ -716,11 +756,11 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
       if (R.engine.Support.checkBooleanParam("debug") && (R.engine.Support.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          R.debug.Console.consoleRef = new R.debug.HTML();
       }
-      else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
+      else if (!R.isUndefined(firebug) || (!R.isUndefined(console) && console.firebug)) {
          // Firebug or firebug lite
          R.debug.Console.consoleRef = new R.debug.Firebug();
       }
-      else if (typeof console != "undefined" && jQuery.browser.msie) {
+      else if (!R.isUndefined(console) && jQuery.browser.msie) {
          R.debug.Console.consoleRef = new R.debug.MSIE();
       }
       else if (jQuery.browser.chrome || jQuery.browser.safari) {
@@ -927,8 +967,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1557 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1039,7 +1079,7 @@ R.debug.Profiler.exit = function() {
 	if (!R.debug.Profiler.running) { return; }
 	if (R.debug.Profiler.profileStack.length == 0) {
 		var msg = "Profile stack underflow";
-		if (typeof console !== "undefined") { console.error(msg); }
+		if (!R.isUndefined(console)) { console.error(msg); }
 		throw(msg);
 	}
 
@@ -1290,8 +1330,8 @@ R.lang.Math2.seed();
  *               to manipulate arrays, parse JSON, and handle query parameters.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1557 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1605,8 +1645,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    toJSON: function(o)
    {
-      if (!typeof JSON == "undefined") {
-         return JSON.stringify(o);
+      if (!R.isUndefined(window.JSON)) {
+         return window.JSON.stringify(o);
       } else {
          return null;
       }
@@ -1645,9 +1685,9 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    parseJSON: function(jsonString)
    {
       jsonString = R.engine.Support.cleanSource(jsonString);
-      if (!(typeof JSON == "undefined")) {
+      if (!R.isUndefined(window.JSON)) {
          try {
-            return JSON.parse(jsonString, function (key, value) {
+            return window.JSON.parse(jsonString, function (key, value) {
                       var a;
                       if (typeof value === 'string') {
                           a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
@@ -1675,8 +1715,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    quoteString: function(text)
    {
-      if (!typeof JSON == "undefined") {
-         return JSON.quote(text);
+      if (!R.isUndefined(window.JSON)) {
+         return window.JSON.quote(text);
       } else {
          return null;
       }
@@ -1729,9 +1769,11 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *    <li>threads - Browser supports Worker threads</li>
     *    <li>sockets - Browser supports WebSocket object</li>
     *    <li>storage:
-    *       <ul><li>local - localStorage object is supported</li>
-    *       <li>session - sessionStorage object is supported</li>
-    *       <li>database - indexedDB storage is supported</li>
+    *       <ul><li>cookie - Cookie support. Reports an object with "maxLength", or <code>false</code></li>
+    *       <li>local - localStorage support</li>
+    *       <li>session - sessionStorage support</li>
+    *       <li>indexedDB - indexedDB support</li>
+    *       <li>SQLlite - SQL lite support</li>
     *       </ul>
     *    </li>
     *    <li>canvas:
@@ -1767,37 +1809,30 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
       		}
       	};
       	if (document.addEventListener) {
-      		// Standards browsers
+      		// Check for canvas support
       		var canvas = document.createElement("canvas");
-      		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
+      		if (!R.isUndefined(canvas) && R.isFunction(canvas.getContext)) {
       			canvasSupport.defined = true;
 	      		var c2d = canvas.getContext("2d");
-	      		if (typeof c2d != "undefined") {
-	      			canvasSupport.contexts.ctx2D = true;
+	      		if (!R.isUndefined(c2d)) {
+	      			canvasSupport.contexts["2D"] = true;
 	      			
 						// Does it support native text
 						canvasSupport.text = (typeof c2d.fillText == "function");
 						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
-					}
+					} else {
+                  canvasSupport.contexts["2D"] = false;
+               }
 	      		
 					try {
-		      		var webGL = canvas.getContext("glcanvas");
-		      		if (typeof webGL != "undefined") {
-		      			canvasSupport.contexts.ctxGL = true;
+		      		var webGL = canvas.getContext("webgl");
+		      		if (!R.isUndefined(webGL)) {
+		      			canvasSupport.contexts["GL"] = true;
 		      		}
-					} catch (ex) { /* no webgl */ }
+					} catch (ex) { canvasSupport.contexts["GL"] = false; }
 	      	}
       	}
-			
-			if (typeof FlashCanvas != "undefined") {
-				// If FlashCanvas is loaded, setup for emulation
-      		canvasSupport.emulated = true;
-      		canvasSupport.defined = true;
-      		canvasSupport.contexts.ctx2D = true;
-      		canvasSupport.text = true;
-				canvasSupport.textMetrics = true;
-			}
-      	      
+
       	// Build support object
          R.engine.Support._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
@@ -1819,14 +1854,38 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
             "cookies": navigator.cookieEnabled,
             "fullscreen": window.fullScreen || false,
             "support": {
-               "xhr": (typeof XMLHttpRequest !== "undefined"),
-               "threads": (typeof Worker !== "undefined"),
-               "sockets": (typeof WebSocket !== "undefined"),
-               "storage": (typeof Storage !== "undefined" ? {
-                  "local" : (typeof localStorage !== "undefined"),
-                  "session" : (typeof sessionStorage !== "undefined"),
-                  "database": (typeof indexedDB !== "undefined")
-               } : null),
+               "xhr": (!R.isUndefined(XMLHttpRequest)),
+               "threads": (!R.isUndefined(Worker)),
+               "sockets": (!R.isUndefined(WebSocket)),
+               "storage": {
+                  "cookie": (function() {
+                              try {
+                                 // Drop a cookie, then look for it
+                                 for (var i = 0, j = []; i < 8000; i++) { j.push("x"); }
+                                 window.document.cookie = "tre.test=" + j.join() + ";path=/";
+                                 var va = window.document.cookie.match('(?:^|;)\\s*tre.test=([^;]*)'),
+                                     supported = !!va;
+                                 if (supported) {
+                                    // expire the cookie before returning
+                                    window.document.cookie = "tre.test=;path=/;expires=" + (now() - 1);
+                                 }
+                                 return supported ? { "maxLength": va[1].length } : false;
+                              } catch (ex) {
+                                 return false;
+                              }
+                            })(),
+                  // Firefox bug (https://bugzilla.mozilla.org/show_bug.cgi?id=389002)
+                  "local" : (R.engine.Support._sysInfo.storage.cookies && !R.isUndefined(localStorage)),
+                  "session" : (R.engine.Support._sysInfo.storage.cookies && !R.isUndefined(sessionStorage)),
+                  "indexedDB": (function() {
+                     try {
+                        return !R.isUndefined(mozIndexedDB);
+                     } catch (ex) {
+                        return false;
+                     }
+                  })(),
+                  "SQLlite": (R.isFunction(window.openDatabase))
+               },
                "geo": (typeof navigator.geolocation !== "undefined"),
                "canvas" : canvasSupport
             }
@@ -1853,7 +1912,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @memberOf R.engine.Support
     */
    whenReady: function(obj, fn) {
-      if (typeof obj != "undefined") {
+      if (!R.isUndefined(obj)) {
          fn();
       } else {
          setTimeout(arguments.callee, 50);
@@ -2268,8 +2327,8 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1557 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -2629,7 +2688,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
       if(R.Engine.shuttingDown === true) {
       	R.debug.Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
       	obj.destroy();
-      	return;
+      	return null;
       };
 
       Assert((R.Engine.started === true), "Creating an object when the engine is stopped!", obj);
