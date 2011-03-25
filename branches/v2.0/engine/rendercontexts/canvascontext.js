@@ -66,7 +66,7 @@ R.rendercontexts.CanvasContext = function() {
    constructor: function(name, width, height) {
    	// Make sure the browser supports the canvas and 2D context!
    	Assert((R.engine.Support.sysInfo().support.canvas.defined &&
-   			  R.engine.Support.sysInfo().support.canvas.contexts.ctx2D), "Browser does not support Canvas. Cannot construct CanvasContext!");
+   			  R.engine.Support.sysInfo().support.canvas.contexts["2D"]), "Browser does not support Canvas. Cannot construct CanvasContext!");
       
       Assert((width != null && height != null), "Width and height must be specified in CanvasContext");
 
@@ -87,23 +87,6 @@ R.rendercontexts.CanvasContext = function() {
 		this.divisions = 5;
 		this.dirtyBins = {};
 		this.firstFrame = true;
-   },
-
-	/**
-	 * Called after the context is added to its parent
-	 * @private
-	 */
-   afterAdd: function(parent) {
-      // For FlashCanvas, check for emulation
-      if (R.engine.Support.sysInfo().support.canvas.emulated) {
-         FlashCanvas.setOptions({
-            disableContextMenu: false,
-            turbo: true,
-            delay: 1
-         });
-         FlashCanvas.initElement(this.getSurface());
-			R.debug.Console.info("FlashCanvas initialized for ", this.toString());
-      }
    },
 
    /**

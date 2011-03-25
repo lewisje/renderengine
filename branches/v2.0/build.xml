@@ -274,9 +274,6 @@
          <fileset dir="${basedir}/libs">
             <include name="AC_OETags.js"/>
             <include name="base.js"/>
-            <include name="flash10canvas.swf"/>
-            <include name="flash9canvas.swf"/>
-            <include name="flashcanvas.js"/>
             <include name="json2.js"/>
             <include name="jquery.js"/>
             <include name="jquery.ext.engine.js"/>

@@ -367,7 +367,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
       if(R.Engine.shuttingDown === true) {
       	R.debug.Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
       	obj.destroy();
-      	return;
+      	return null;
       };
 
       Assert((R.Engine.started === true), "Creating an object when the engine is stopped!", obj);

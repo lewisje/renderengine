@@ -322,8 +322,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    toJSON: function(o)
    {
-      if (!typeof JSON == "undefined") {
-         return JSON.stringify(o);
+      if (!R.isUndefined(window.JSON)) {
+         return window.JSON.stringify(o);
       } else {
          return null;
       }
@@ -362,9 +362,9 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    parseJSON: function(jsonString)
    {
       jsonString = R.engine.Support.cleanSource(jsonString);
-      if (!(typeof JSON == "undefined")) {
+      if (!R.isUndefined(window.JSON)) {
          try {
-            return JSON.parse(jsonString, function (key, value) {
+            return window.JSON.parse(jsonString, function (key, value) {
                       var a;
                       if (typeof value === 'string') {
                           a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
@@ -392,8 +392,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    quoteString: function(text)
    {
-      if (!typeof JSON == "undefined") {
-         return JSON.quote(text);
+      if (!R.isUndefined(window.JSON)) {
+         return window.JSON.quote(text);
       } else {
          return null;
       }
@@ -446,9 +446,11 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *    <li>threads - Browser supports Worker threads</li>
     *    <li>sockets - Browser supports WebSocket object</li>
     *    <li>storage:
-    *       <ul><li>local - localStorage object is supported</li>
-    *       <li>session - sessionStorage object is supported</li>
-    *       <li>database - indexedDB storage is supported</li>
+    *       <ul><li>cookie - Cookie support. Reports an object with "maxLength", or <code>false</code></li>
+    *       <li>local - localStorage support</li>
+    *       <li>session - sessionStorage support</li>
+    *       <li>indexedDB - indexedDB support</li>
+    *       <li>SQLlite - SQL lite support</li>
     *       </ul>
     *    </li>
     *    <li>canvas:
@@ -484,37 +486,30 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
       		}
       	};
       	if (document.addEventListener) {
-      		// Standards browsers
+      		// Check for canvas support
       		var canvas = document.createElement("canvas");
-      		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
+      		if (!R.isUndefined(canvas) && R.isFunction(canvas.getContext)) {
       			canvasSupport.defined = true;
 	      		var c2d = canvas.getContext("2d");
-	      		if (typeof c2d != "undefined") {
-	      			canvasSupport.contexts.ctx2D = true;
+	      		if (!R.isUndefined(c2d)) {
+	      			canvasSupport.contexts["2D"] = true;
 	      			
 						// Does it support native text
 						canvasSupport.text = (typeof c2d.fillText == "function");
 						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
-					}
+					} else {
+                  canvasSupport.contexts["2D"] = false;
+               }
 	      		
 					try {
-		      		var webGL = canvas.getContext("glcanvas");
-		      		if (typeof webGL != "undefined") {
-		      			canvasSupport.contexts.ctxGL = true;
+		      		var webGL = canvas.getContext("webgl");
+		      		if (!R.isUndefined(webGL)) {
+		      			canvasSupport.contexts["GL"] = true;
 		      		}
-					} catch (ex) { /* no webgl */ }
+					} catch (ex) { canvasSupport.contexts["GL"] = false; }
 	      	}
       	}
-			
-			if (typeof FlashCanvas != "undefined") {
-				// If FlashCanvas is loaded, setup for emulation
-      		canvasSupport.emulated = true;
-      		canvasSupport.defined = true;
-      		canvasSupport.contexts.ctx2D = true;
-      		canvasSupport.text = true;
-				canvasSupport.textMetrics = true;
-			}
-      	      
+
       	// Build support object
          R.engine.Support._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
@@ -536,14 +531,38 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
             "cookies": navigator.cookieEnabled,
             "fullscreen": window.fullScreen || false,
             "support": {
-               "xhr": (typeof XMLHttpRequest !== "undefined"),
-               "threads": (typeof Worker !== "undefined"),
-               "sockets": (typeof WebSocket !== "undefined"),
-               "storage": (typeof Storage !== "undefined" ? {
-                  "local" : (typeof localStorage !== "undefined"),
-                  "session" : (typeof sessionStorage !== "undefined"),
-                  "database": (typeof indexedDB !== "undefined")
-               } : null),
+               "xhr": (!R.isUndefined(XMLHttpRequest)),
+               "threads": (!R.isUndefined(Worker)),
+               "sockets": (!R.isUndefined(WebSocket)),
+               "storage": {
+                  "cookie": (function() {
+                              try {
+                                 // Drop a cookie, then look for it
+                                 for (var i = 0, j = []; i < 8000; i++) { j.push("x"); }
+                                 window.document.cookie = "tre.test=" + j.join() + ";path=/";
+                                 var va = window.document.cookie.match('(?:^|;)\\s*tre.test=([^;]*)'),
+                                     supported = !!va;
+                                 if (supported) {
+                                    // expire the cookie before returning
+                                    window.document.cookie = "tre.test=;path=/;expires=" + (now() - 1);
+                                 }
+                                 return supported ? { "maxLength": va[1].length } : false;
+                              } catch (ex) {
+                                 return false;
+                              }
+                            })(),
+                  // Firefox bug (https://bugzilla.mozilla.org/show_bug.cgi?id=389002)
+                  "local" : (R.engine.Support._sysInfo.storage.cookies && !R.isUndefined(localStorage)),
+                  "session" : (R.engine.Support._sysInfo.storage.cookies && !R.isUndefined(sessionStorage)),
+                  "indexedDB": (function() {
+                     try {
+                        return !R.isUndefined(mozIndexedDB);
+                     } catch (ex) {
+                        return false;
+                     }
+                  })(),
+                  "SQLlite": (R.isFunction(window.openDatabase))
+               },
                "geo": (typeof navigator.geolocation !== "undefined"),
                "canvas" : canvasSupport
             }
@@ -570,7 +589,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @memberOf R.engine.Support
     */
    whenReady: function(obj, fn) {
-      if (typeof obj != "undefined") {
+      if (!R.isUndefined(obj)) {
          fn();
       } else {
          setTimeout(arguments.callee, 50);

@@ -34,7 +34,11 @@
 R.Engine.define({
 	"class": "R.storage.BrowserStorage",
 	"requires": [
-		"R.storage.AbstractStorage"
+		"R.storage.AbstractDBStorage",
+		"R.lang.FNV1Hash"
+	],
+	"includes": [
+		"/libs/trimpath-query-1.1.14.js"
 	]
 });
 
@@ -43,31 +47,48 @@ R.Engine.define({
  * 	storage mechanisms.
  * 
  * @param name {String} The name of the object
- * @extends R.storage.AbstractStorage
+ * @extends R.storage.AbstractDBStorage
  * @constructor
  * @description Generalized base storage class for browser storage objects.
  */
 R.storage.BrowserStorage = function(){
-	return R.storage.AbstractStorage.extend(/** @scope R.storage.BrowserStorage.prototype */{
-	
+	return R.storage.AbstractDBStorage.extend(/** @scope R.storage.BrowserStorage.prototype */{
+
+      trimPath: null,
+      schema: null,
+      fnv: null,
+
 		/** @private */
 		constructor: function(name){
 			this.setStorageObject(this.initStorageObject());
+         this.fnv = R.lang.FNV1Hash.create();
 			this.base(name);
-		},
-		
-		/**
-		 * Get the overall schema for the tables in persistent storage.
-		 * @return {Array} The tables in the schema
-		 */
-		getSchema: function(){
-			var schema = this.getStorageObject().getItem(this.getName() + ":schema");
-			if (schema) {
-				return JSON.parse(schema);
+
+			// See if a table schema exists for the given name
+			var schema = JSON.parse(this.getStorageObject().getItem(this.getName() + ":schema"));
+			if (schema != null) {
+				// Load the table data
+				var tSchema = {};
+				for (var s in schema) {
+					tSchema[schema[s]] = this.getTableDef(schema[s]);
+				}
+				this.setSchema(tSchema);
+
+				// We'll update this as needed
+				this.trimPath = TrimPath.makeQueryLang(this.getSchema());
 			}
-			return null;
 		},
-		
+
+      /**
+       * A unique identifier for the table name.
+       * @param name {String} The table name
+       * @return {String} A unique identifier
+       */
+      getTableUID: function(name){
+         var uid = this.fnv.getHash(this.getName() + name);
+         return uid + "PS";
+      },
+
 		/**
 		 * Create a new table to store data in.
 		 *
@@ -80,7 +101,7 @@ R.storage.BrowserStorage = function(){
 		 */
 		createTable: function(name, columns, types){
 			if (!this.enabled) {
-				return;
+				return false;
 			}
 			
 			try {
@@ -107,8 +128,15 @@ R.storage.BrowserStorage = function(){
 					}
 					this.getStorageObject().setItem(this.getName() + ":schema", JSON.stringify(schema));
 					
+               if (!this.getSchema()) {
+                  this.setSchema({});
+               }
+               this.getSchema()[name] = def;
+               this.trimPath = TrimPath.makeQueryLang(this.getSchema());
+
 					// Make sure the underlying system is updated
-					return this.base(name, def);
+					this.base(name, def);
+               return true;
 				}
 				else {
 					return false;
@@ -149,6 +177,7 @@ R.storage.BrowserStorage = function(){
 			}
 			
 			this.base(name);
+         this.trimPath = TrimPath.makeQueryLang(this.getSchema());
 		},
 		
 		/**
@@ -175,7 +204,7 @@ R.storage.BrowserStorage = function(){
 		 */
 		setTableData: function(name, data){
 			if (!this.enabled) {
-				return;
+				return 0;
 			}
 			
 			// See if the table exists		
@@ -196,7 +225,7 @@ R.storage.BrowserStorage = function(){
 		 */
 		getTableDef: function(name){
 			if (!this.enabled) {
-				return;
+				return null;
 			}
 			
 			// See if the table exists		
@@ -216,7 +245,7 @@ R.storage.BrowserStorage = function(){
 		 */
 		getTableData: function(name){
 			if (!this.enabled) {
-				return;
+				return null;
 			}
 			
 			// See if the table exists		
@@ -227,8 +256,56 @@ R.storage.BrowserStorage = function(){
 			else {
 				return null;
 			}
-		}
-		
+		},
+
+      /**
+       * Execute SQL on the storage object, which may be one of <tt>SELECT</tt>,
+       * <tt>UPDATE</tt>, <tt>INSERT</tt>, or <tt>DELETE</tt>.
+       * @param sqlString {String} The SQL to execute
+       * @param bindings {Array} An optional array of bindings
+       * @return {Object} If the SQL is a <tt>SELECT</tt>, the object will be the result of
+       * 	the statement, otherwise the result will be a <tt>Boolean</tt> if the statement was
+       * 	successful.
+       */
+      execSql: function(sqlString, bindings){
+         if (this.trimPath != null) {
+            // Compile the method
+            var stmt = this.trimPath.parseSQL(sqlString, bindings);
+            // Build an object with all of the data
+            var schema = this.getSchema();
+            var db = {};
+            for (var s in schema) {
+               db[schema[s]] = this.getTableData(schema[s]);
+            }
+            if (sqlString.indexOf("SELECT") != -1) {
+               return stmt.filter(db);
+            }
+            else {
+               // Determine which table was modified
+               var result = stmt.filter(db);
+               var tableName = "";
+               if (result === true) {
+                  // Only update the storage if the statement was successful
+                  if (sqlString.indexOf("INSERT") != -1) {
+                     tableName = /INSERT INTO (\w*)/.exec(sqlString)[1];
+                  }
+                  else
+                     if (sqlString.indexOf("UPDATE") != -1) {
+                        tableName = /UPDATE (\w*)/.exec(sqlString)[1];
+                     }
+                     else {
+                        tableName = /DELETE \w* FROM (\w*)/.exec(sqlString)[1];
+                     }
+
+                  // Extract that table from the database and store it
+                  var table = db[tableName];
+                  this.setTableData(tableName, table);
+               }
+               return result;
+            }
+         }
+      }
+
 	}, /** @scope R.storage.BrowserStorage.prototype */ {
 	
 		/**
