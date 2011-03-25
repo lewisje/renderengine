@@ -87,7 +87,7 @@ var Spaceroids = function() {
    centerPoint: null,
    areaScale: $.browser.Wii ? 0.7 : 1,
 
-   engineFPS: 25,
+   engineFPS: 30,
 
    collisionModel: null,
 
