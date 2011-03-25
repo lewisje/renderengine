@@ -85,16 +85,6 @@ R._unsupported = function(method, clazz) {
 };
 
 /**
- * Check if the given object is undefined
- * @param obj {Object} The object to test
- * @return {Boolean}
- * @memberOf R
- */
-R.isUndefined = function(obj) {
-	return (typeof obj === "undefined");
-};
-
-/**
  * Check if the given object is a function
  * @param obj {Object} The object to test
  * @return {Boolean}
@@ -141,7 +131,7 @@ R.isNumber = function(obj) {
  * @memberOf R
  */
 R.isEmpty = function(obj) {
-	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && $.trim(obj) === "");
+	return typeof obj === "undefined" || obj === null || (typeof obj === "string" && $.trim(obj) === "");
 };
 
 /**
@@ -223,7 +213,7 @@ window["now"] = function() {
  *
  * @author: Brett Fattori (brettf@renderengine.com)
  * @author: $Author: bfattori@gmail.com $
- * @version: $Revision: 1557 $
+ * @version: $Revision: 1561 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -269,7 +259,7 @@ R.debug.ConsoleRef = Base.extend(/** @scope R.debug.ConsoleRef.prototype */{
    },
 
    cleanup: function(o) {
-      if (R.isUndefined(o)) {
+      if (typeof o === "undefined") {
          return "";
       } else if (o === null) {
          return "null";
@@ -592,7 +582,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    info: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.info.apply(console, arguments);
@@ -603,7 +593,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    debug: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.debug.apply(console, arguments);
@@ -614,7 +604,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a warning message to the console
     */
    warn: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.warn.apply(console, arguments);
@@ -625,7 +615,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write an error message to the console
     */
    error: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.error.apply(console, arguments);
@@ -636,7 +626,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a stack trace to the console
     */
    trace: function() {
-      if (!R.isUndefined(firebug)) {
+      if (typeof firebug !== "undefined") {
          console.trace.apply(arguments);
       }
    },
@@ -756,11 +746,11 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
       if (R.engine.Support.checkBooleanParam("debug") && (R.engine.Support.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          R.debug.Console.consoleRef = new R.debug.HTML();
       }
-      else if (!R.isUndefined(firebug) || (!R.isUndefined(console) && console.firebug)) {
+      else if (typeof firebug !== "undefined" || (typeof console !== "undefined" && console.firebug)) {
          // Firebug or firebug lite
          R.debug.Console.consoleRef = new R.debug.Firebug();
       }
-      else if (!R.isUndefined(console) && jQuery.browser.msie) {
+      else if (typeof console !== "undefined" && jQuery.browser.msie) {
          R.debug.Console.consoleRef = new R.debug.MSIE();
       }
       else if (jQuery.browser.chrome || jQuery.browser.safari) {
@@ -1079,7 +1069,7 @@ R.debug.Profiler.exit = function() {
 	if (!R.debug.Profiler.running) { return; }
 	if (R.debug.Profiler.profileStack.length == 0) {
 		var msg = "Profile stack underflow";
-		if (!R.isUndefined(console)) { console.error(msg); }
+		if (typeof console !== "undefined") { console.error(msg); }
 		throw(msg);
 	}
 
@@ -1645,7 +1635,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    toJSON: function(o)
    {
-      if (!R.isUndefined(window.JSON)) {
+      if (typeof window.JSON !== "undefined") {
          return window.JSON.stringify(o);
       } else {
          return null;
@@ -1685,7 +1675,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    parseJSON: function(jsonString)
    {
       jsonString = R.engine.Support.cleanSource(jsonString);
-      if (!R.isUndefined(window.JSON)) {
+      if (typeof window.JSON !== "undefined") {
          try {
             return window.JSON.parse(jsonString, function (key, value) {
                       var a;
@@ -1715,7 +1705,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    quoteString: function(text)
    {
-      if (!R.isUndefined(window.JSON)) {
+      if (typeof window.JSON !== "undefined") {
          return window.JSON.quote(text);
       } else {
          return null;
@@ -1797,41 +1787,76 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    sysInfo: function() {
       if (!R.engine.Support._sysInfo) {
       	
-      	// Determine if the browser supports Canvas
+      	// Canvas and Storage support defaults
       	var canvasSupport = {
-      		emulated: false,
       		defined: false,
       		text: false,
       		textMetrics: false,
       		contexts: {
-      			ctx2D: false,
-      			ctxGL: false
+      			"2D": false,
+      			"GL": false
       		}
-      	};
-      	if (document.addEventListener) {
-      		// Check for canvas support
-      		var canvas = document.createElement("canvas");
-      		if (!R.isUndefined(canvas) && R.isFunction(canvas.getContext)) {
-      			canvasSupport.defined = true;
-	      		var c2d = canvas.getContext("2d");
-	      		if (!R.isUndefined(c2d)) {
-	      			canvasSupport.contexts["2D"] = true;
-	      			
-						// Does it support native text
-						canvasSupport.text = (typeof c2d.fillText == "function");
-						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
-					} else {
+      	},
+         storageSupport = {
+            cookie: false,
+            local: false,
+            session: false,
+            indexeddb: false,
+            sqllite: false
+         };
+
+         // Check for canvas support
+         try {
+            var canvas = document.createElement("canvas");
+            if (typeof canvas !== "undefined" && R.isFunction(canvas.getContext)) {
+               canvasSupport.defined = true;
+               var c2d = canvas.getContext("2d");
+               if (typeof c2d !== "undefined") {
+                  canvasSupport.contexts["2D"] = true;
+
+                  // Does it support native text
+                  canvasSupport.text = (R.isFunction(c2d.fillText));
+                  canvasSupport.textMetrics = (R.isFunction(c2d.measureText));
+               } else {
                   canvasSupport.contexts["2D"] = false;
                }
-	      		
-					try {
-		      		var webGL = canvas.getContext("webgl");
-		      		if (!R.isUndefined(webGL)) {
-		      			canvasSupport.contexts["GL"] = true;
-		      		}
-					} catch (ex) { canvasSupport.contexts["GL"] = false; }
-	      	}
-      	}
+
+               try {
+                  var webGL = canvas.getContext("webgl");
+                  if (typeof webGL !== "undefined") {
+                     canvasSupport.contexts["GL"] = true;
+                  }
+               } catch (ex) { canvasSupport.contexts["GL"] = false; }
+            }
+         } catch (ex) { /* ignore */ }
+
+         // Check storage support
+         try {
+            try {
+               // Drop a cookie, then look for it
+               for (var i = 0, j = []; i < 8000; i++) { j.push("x"); }
+               window.document.cookie = "tre.test=" + j.join() + ";path=/";
+               var va = window.document.cookie.match('(?:^|;)\\s*tre.test=([^;]*)'),
+                   supported = !!va;
+               if (supported) {
+                  // expire the cookie before returning
+                  window.document.cookie = "tre.test=;path=/;expires=" + (now() - 1);
+               }
+               storageSupport.cookie = supported ? { "maxLength": va[1].length } : false;
+            } catch (ex) { /* ignored */ }
+
+            // Firefox bug (https://bugzilla.mozilla.org/show_bug.cgi?id=389002)
+            if (storageSupport.cookie) {
+               storageSupport.local = (typeof localStorage !== "undefined");
+               storageSupport.session = (typeof sessionStorage !== "undefined");
+            }
+
+            try {
+               storageSupport.indexeddb = (typeof mozIndexedDB !== "undefined");
+            } catch (ex) { /* ignored */ }
+
+            storageSupport.sqllite = R.isFunction(window.openDatabase);
+         } catch (ex) { /* ignored */ }
 
       	// Build support object
          R.engine.Support._sysInfo = {
@@ -1851,41 +1876,14 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
 				"OS": R.engine.Support.checkOS(),
             "language": navigator.language,
             "online": navigator.onLine,
-            "cookies": navigator.cookieEnabled,
             "fullscreen": window.fullScreen || false,
             "support": {
-               "xhr": (!R.isUndefined(XMLHttpRequest)),
-               "threads": (!R.isUndefined(Worker)),
-               "sockets": (!R.isUndefined(WebSocket)),
-               "storage": {
-                  "cookie": (function() {
-                              try {
-                                 // Drop a cookie, then look for it
-                                 for (var i = 0, j = []; i < 8000; i++) { j.push("x"); }
-                                 window.document.cookie = "tre.test=" + j.join() + ";path=/";
-                                 var va = window.document.cookie.match('(?:^|;)\\s*tre.test=([^;]*)'),
-                                     supported = !!va;
-                                 if (supported) {
-                                    // expire the cookie before returning
-                                    window.document.cookie = "tre.test=;path=/;expires=" + (now() - 1);
-                                 }
-                                 return supported ? { "maxLength": va[1].length } : false;
-                              } catch (ex) {
-                                 return false;
-                              }
-                            })(),
-                  // Firefox bug (https://bugzilla.mozilla.org/show_bug.cgi?id=389002)
-                  "local" : (R.engine.Support._sysInfo.storage.cookies && !R.isUndefined(localStorage)),
-                  "session" : (R.engine.Support._sysInfo.storage.cookies && !R.isUndefined(sessionStorage)),
-                  "indexedDB": (function() {
-                     try {
-                        return !R.isUndefined(mozIndexedDB);
-                     } catch (ex) {
-                        return false;
-                     }
-                  })(),
-                  "SQLlite": (R.isFunction(window.openDatabase))
-               },
+               "audio": (typeof Audio !== "undefined"),
+               "video": (typeof Video !== "undefined"),
+               "xhr": (typeof XMLHttpRequest !== "undefined"),
+               "threads": (typeof Worker !== "undefined"),
+               "sockets": (typeof WebSocket !== "undefined"),
+               "storage": storageSupport,
                "geo": (typeof navigator.geolocation !== "undefined"),
                "canvas" : canvasSupport
             }
@@ -1912,7 +1910,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @memberOf R.engine.Support
     */
    whenReady: function(obj, fn) {
-      if (!R.isUndefined(obj)) {
+      if (typeof obj !== "undefined") {
          fn();
       } else {
          setTimeout(arguments.callee, 50);

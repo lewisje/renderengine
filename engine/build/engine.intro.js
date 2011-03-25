@@ -85,16 +85,6 @@ R._unsupported = function(method, clazz) {
 };
 
 /**
- * Check if the given object is undefined
- * @param obj {Object} The object to test
- * @return {Boolean}
- * @memberOf R
- */
-R.isUndefined = function(obj) {
-	return (typeof obj === "undefined");
-};
-
-/**
  * Check if the given object is a function
  * @param obj {Object} The object to test
  * @return {Boolean}
@@ -141,7 +131,7 @@ R.isNumber = function(obj) {
  * @memberOf R
  */
 R.isEmpty = function(obj) {
-	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && $.trim(obj) === "");
+	return typeof obj === "undefined" || obj === null || (typeof obj === "string" && $.trim(obj) === "");
 };
 
 /**
