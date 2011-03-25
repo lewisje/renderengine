@@ -57,7 +57,7 @@ R.sound.SM2 = function(){
 		/** @private */
 		constructor: function(){
 			this.base();
-			if (typeof SoundManager != "undefined") {
+			if (!R.isUndefined(SoundManager)) {
 			
 				// Create a link to the object
 				this.soundManager = window.soundManager;

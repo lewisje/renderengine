@@ -64,13 +64,6 @@ R.util.RenderUtil = /** @scope R.util.RenderUtil.prototype */ {
 	      // Create the temporary context to render to
          R.util.RenderUtil.tempContexts[type.getClassName()] = type.create("tempCtx", 800, 800);
          
-			if (type == R.rendercontexts.CanvasContext) {
-				// Special handling for the canvas context
-				if (typeof FlashCanvas != "undefined") {
-	            FlashCanvas.initElement(R.util.RenderUtil.tempContexts[type.getClassName()].getSurface());
-	         }
-			}
-			
 			// When the engine shuts down, clean up the contexts
 			R.Engine.onShutdown(function() {
 				for (var c in R.util.RenderUtil.tempContexts) {

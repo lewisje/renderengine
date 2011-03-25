@@ -95,6 +95,46 @@ R.isUndefined = function(obj) {
 };
 
 /**
+ * Check if the given object is a function
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isFunction = function(obj) {
+   return (obj.toString === "[object Function]");
+};
+
+/**
+ * Check if the given object is an array
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isArray = function(obj) {
+   return (obj.toString === "[object Array]");
+};
+
+/**
+ * Check if the given object is a string
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isString = function(obj) {
+   return (typeof obj === "string");
+};
+
+/**
+ * Check if the given object is a number
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isNumber = function(obj) {
+   return (typeof obj === "number");
+};
+
+/**
  * Test if the object is undefined, null, or a string and is empty
  * @param obj {Object} The object to test
  * @return {Boolean}
