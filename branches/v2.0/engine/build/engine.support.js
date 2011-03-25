@@ -449,13 +449,14 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *       <ul><li>cookie - Cookie support. Reports an object with "maxLength", or <code>false</code></li>
     *       <li>local - localStorage support</li>
     *       <li>session - sessionStorage support</li>
-    *       <li>indexedDB - indexedDB support</li>
-    *       <li>SQLlite - SQL lite support</li>
+    *       <li>indexeddb - indexedDB support</li>
+    *       <li>sqllite - SQL lite support</li>
+    *       <li>audio - HTML5 Audio support</li>
+    *       <li>video - HTML5 Video support</li>
     *       </ul>
     *    </li>
     *    <li>canvas:
-    *       <ul><li>emulated - Canvas support emulated by FlashCanvas</li>
-    *       <li>defined - Canvas is either native or emulated</li>
+    *       <ul><li>defined - Canvas is either native or emulated</li>
     *       <li>text - Supports text</li>
     *       <li>textMetrics - Supports text measurement</li>
     *			<li>contexts:

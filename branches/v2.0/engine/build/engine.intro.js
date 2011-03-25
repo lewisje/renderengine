@@ -84,6 +84,9 @@ R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
 };
 
+/** @private **/
+R.str = Object.toString;
+
 /**
  * Check if the given object is a function
  * @param obj {Object} The object to test
@@ -91,7 +94,7 @@ R._unsupported = function(method, clazz) {
  * @memberOf R
  */
 R.isFunction = function(obj) {
-   return (obj.toString === "[object Function]");
+   return (R.str.call(obj) === "[object Function]");
 };
 
 /**
@@ -101,7 +104,7 @@ R.isFunction = function(obj) {
  * @memberOf R
  */
 R.isArray = function(obj) {
-   return (obj.toString === "[object Array]");
+   return (R.str.call(obj) === "[object Array]");
 };
 
 /**
@@ -111,7 +114,7 @@ R.isArray = function(obj) {
  * @memberOf R
  */
 R.isString = function(obj) {
-   return (typeof obj === "string");
+   return (R.str.call(obj) === "[object String]");
 };
 
 /**
@@ -121,7 +124,7 @@ R.isString = function(obj) {
  * @memberOf R
  */
 R.isNumber = function(obj) {
-   return (typeof obj === "number");
+   return (R.str.call(obj) === "[object Number]");
 };
 
 /**
