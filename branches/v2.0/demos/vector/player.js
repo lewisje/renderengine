@@ -38,7 +38,7 @@ R.Engine.define({
 		"R.components.transform.Mover2D",
 		"R.components.render.Vector2D",
 		"R.components.input.Keyboard",
-		"R.components.collision.Box",
+		"R.components.collision.Convex",
 		"R.engine.Object2D",
 		"R.lang.Timeout",
 		"R.lang.OneShotTimeout",
@@ -84,11 +84,12 @@ var SpaceroidsPlayer = function() {
          this.getComponent("input").startRecording();
       }
 
-
+      // Add the drawing components for ship and thrust
       this.add(R.components.render.Vector2D.create("draw"));
       this.add(R.components.render.Vector2D.create("thrust"));
-      //this.add(R.components.collision.Convex.create("collider", Spaceroids.collisionModel));
-      this.add(R.components.collision.Box.create("collider", Spaceroids.collisionModel));
+
+      // Set up collision component (convex hull [SAT])
+      this.add(R.components.collision.ConvexHull.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsPlayer.COLLISION_MASK);
 
       this.players--;
@@ -218,7 +219,7 @@ var SpaceroidsPlayer = function() {
       c_draw.setLineStyle("white");
 
 		this.setOrigin(c_draw.getCenter());
-		//this.setCollisionHull(c_draw.getCircleHull());
+		this.setCollisionHull(c_draw.getConvexHull());
 		this.setBoundingBox(c_draw.getBoundingBox());
 
       // Save the shape so we can draw lives remaining
@@ -270,17 +271,16 @@ var SpaceroidsPlayer = function() {
     */
    respawn: function() {
       // Are there rocks in our area?
-      if (this.getComponent("collider").getSpatialNode())
-      {
-         if (this.getComponent("collider").getSpatialNode().getObjects().size() > 1)
-         {
+      if (this.getComponent("collider").getSpatialNode()) {
+         if (this.getComponent("collider").getSpatialNode().getObjects().size() > 1) {
+            // There's something around us, hold off...
             var pl = this;
             R.lang.OneShotTimeout.create("respawn", 250, function() { pl.respawn(); });
             return;
          }
       }
 
-      // Nope, respawn
+      // Nothing in the vicinity, go ahead...
       this.getComponent("draw").setDrawMode(R.components.Render.DRAW);
       this.alive = true;
    },
@@ -315,23 +315,23 @@ var SpaceroidsPlayer = function() {
       }
       Spaceroids.pEngine.addParticles(p);
 
+      // Reset the player so we can respawn
       this.getComponent("move").setVelocity(R.math.Point2D.ZERO);
       this.getComponent("move").setPosition(Spaceroids.renderContext.getBoundingBox().getCenter());
       this.getComponent("move").setRotation(0);
       this.rotDir = 0;
       this.thrusting = false;
 
+      // Play the explosion sound
       Spaceroids.soundLoader.get("death").play({volume: 80});
 
       // Remove one of the players
-      if (this.players-- > 0)
-      {
+      if (this.players-- > 0) {
          // Set a timer to spawn another player
          var pl = this;
          R.lang.OneShotTimeout.create("respawn", 3000, function() { pl.respawn(); });
-      }
-      else
-      {
+      } else {
+         // No more players, game over
          Spaceroids.gameOver();
       }
 
@@ -344,6 +344,7 @@ var SpaceroidsPlayer = function() {
    hyperSpace: function() {
 
       if (this.hyperjump) {
+         // Prevent hyperjumping while already hyperjumping (duh)
          return;
       }
 
@@ -408,6 +409,7 @@ var SpaceroidsPlayer = function() {
          Spaceroids.pEngine.addParticles(n);
       });
 
+      // Timing is everything
       var t = R.lang.Timeout.create("nukerocks", 850, function() {
          this.destroy();
 
@@ -490,40 +492,7 @@ var SpaceroidsPlayer = function() {
       }
       
       return false;
-   },
-
-   /*
-    * WiiMote support -------------------------------------------------------------------------------------
-    */
-
-   onWiimoteLeft: function(controller, pressed) {
-      this.rotDir = pressed ? -10 : 0;;
-   },
-
-   onWiimoteRight: function(controller, pressed) {
-      this.rotDir = pressed ? 10 : 0;;
-   },
-
-   onWiimoteUp: function(controller, pressed) {
-      this.getComponent("thrust").setDrawMode(pressed ? R.components.Render.DRAW : R.components.Render.NO_DRAW);
-      this.thrusting = pressed;
-      if (pressed) {
-         Spaceroids.soundLoader.get("thrust").play({volume: 30});
-      } else {
-         Spaceroids.soundLoader.get("thrust").stop();
-      }
-   },
-
-   onWiimoteButtonB: function(controller, pressed) {
-      if (pressed && this.bullets < 5) {
-         this.shoot();
-      }
    }
-
-   /*
-    * WiiMote support -------------------------------------------------------------------------------------
-    */
-
 
 }, { // Static
 

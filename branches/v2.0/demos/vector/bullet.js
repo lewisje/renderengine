@@ -37,7 +37,7 @@ R.Engine.define({
 	"requires": [
 		"R.components.transform.Mover2D",
 		"R.components.render.Vector2D",
-		"R.components.collision.Box",
+		"R.components.collision.Convex",
 		"R.engine.Object2D",
 		"R.math.Point2D",
 		"R.math.Vector2D",
@@ -67,8 +67,9 @@ var SpaceroidsBullet = function() {
 
       // Add components to draw the bullet
       this.add(R.components.render.Vector2D.create("draw"));
-      //this.add(R.components.collision.Convex.create("collide", Spaceroids.collisionModel));
-      this.add(R.components.collision.Box.create("collide", Spaceroids.collisionModel));
+
+      // Set up collision component (OBB hull [SAT])
+      this.add(R.components.collision.OBBHull.create("collide", Spaceroids.collisionModel));
 		this.getComponent("collide").setCollisionMask(SpaceroidsBullet.COLLISION_MASK);
 
       // Get the player's position and rotation,
@@ -83,7 +84,8 @@ var SpaceroidsBullet = function() {
       c_draw.setFillStyle("white");
 
 		this.setOrigin(c_draw.getCenter());
-		//this.setCollisionHull(c_draw.getCircleHull());
+		
+      this.setCollisionHull(c_draw.getOBBHull());
 		this.setBoundingBox(c_draw.getBoundingBox());
 
 

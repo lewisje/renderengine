@@ -31,43 +31,46 @@
 
 // The class this file defines and its required classes
 R.Engine.define({
-	"class": "R.struct.Container",
+	"class": "R.struct.LinkedList",
 	"requires": [
-		"R.engine.BaseObject",
+		"R.struct.Container",
 		"R.lang.Iterator"
 	]
 });
 
 /**
- * @class A container is a logical collection of objects.  A container
- *        is responsible for maintaining the list of objects within it.
- *        When a container is destroyed, none of the objects within the container
+ * @class A linked list is a logical collection of objects.
+ *        When a linked list is destroyed, none of the objects within it
  *        are destroyed with it.  If the objects must be destroyed, call
- *        {@link #cleanUp}.  A container is a doubly linked list.
+ *        {@link #cleanUp}.  This type of list is doubly-linked, which means
+ *        you can traverse it both forward and backward.
  *
  * @param containerName {String} The name of the container
- * @extends R.engine.BaseObject
+ * @extends R.struct.Container
  * @constructor
- * @description Create a container.
+ * @description Create a linked list container.
  */
-R.struct.Container = function() {
-	return R.engine.BaseObject.extend(/** @scope R.struct.Container.prototype */{
+R.struct.LinkedList = function() {
+	return R.struct.Container.extend(/** @scope R.struct.LinkedList.prototype */{
 
-   objects: null,
+   _head: null,
+	_tail: null,
+	sz: 0,
 
    /**
     * @private
     */
    constructor: function(containerName) {
-      this.base(containerName || "Container");
-      this.objects = [];
+      this.base(containerName || "LinkedList");
+      this._head = null;
+		this._tail = null;
+		this.sz = 0;
    },
 
    /**
     * Release the object back into the object pool.
     */
    release: function() {
-      this.objects = null;
       this.base();
       this.clear();
    },
@@ -88,8 +91,56 @@ R.struct.Container = function() {
     * @return {Number} The number of objects in the container
     */
    size: function() {
-      return this.objects.length;
+      return this.sz;
    },
+
+	/**
+	 * Create a new node for the list
+	 * @param obj {Object} The object
+	 * @private
+	 */
+	_new: function(obj) {
+		var o = {
+			prev: null,
+			next: null,
+			ptr: obj
+		};
+		return o;
+	},
+
+	/**
+	 * Find the list node at the given index.  No bounds checking
+	 * is performed with this function.
+	 * @param idx {Number} The index where the item exists
+	 * @param offset {Object} The object to start at, "head" if null
+	 * @private
+	 */
+	_find: function(idx, offset) {
+		var n = offset || this._head, c = idx;
+		while ( n != null && c-- > 0) {
+			n = n.next;
+		}
+		return (c > 0 ? null : n);
+	},
+
+	/**
+	 * Look through the list to find the given object.  If the object is
+	 * found, the  list node is returned.  If no object is found, the method
+	 * returns <code>null</code>.
+	 *
+	 * @param obj {Object} The object to find
+	 * @private
+	 */
+	_peek: function(obj) {
+		var n = this._head;
+		while (n != null) {
+			if (n.ptr === obj) {
+				return n;
+			}
+			n = n.next;
+		}
+		return null;
+	},
 
 	/**
 	 * Returns <tt>true</tt> if the object is in the container.
@@ -97,7 +148,7 @@ R.struct.Container = function() {
 	 * @return {Boolean}
 	 */
 	contains: function(obj) {
-		return (R.engine.Support.indexOf(this.objects, obj) != -1);
+		return (this._peek(obj) !== null);
 	},
 
    /**
@@ -106,93 +157,75 @@ R.struct.Container = function() {
     * @param obj {Object} The object to add to the container.
     */
    add: function(obj) {
-      this.objects.push(obj);
+		var n = this._new(obj);
+		if (this._head == null && this._tail == null) {
+			this._head = n;
+			this._tail = n;
+		} else {
+			this._tail.next = n;
+			n.prev = this._tail;
+			this._tail = n;
+		}
 
       if (obj.getId) {
          R.debug.Console.log("Added ", obj.getId(), "[", obj, "] to ", this.getId(), "[", this, "]");
       }
+		this.sz++;
 
-		// Return the index of the added object
-		return (this.objects.length - 1);
+		// Return the list node that was added
+		return n;
    },
-	
+
    /**
-    * Add all of the objects in the container or array to this container, at the end
-    * of this container.  If "arr" is a container, the head of "arr" is joined to the
-    * tail of this, resulting in a very fast operation.  Because this method, when
-    * performed on a container, is just joining the two lists, no duplication of
-    * elements from the container is performed.  As such, removing elements from the
-    * new container will affect this container as well.
+    * Concatenate a container or array to the end of this container,
+    * returning a new container with all of the elements.  The
+    * array or container will be copied and appended to this
+    * container.  While the actual pointers to the objects aren't deep copied,
+    * one can be assured that modifying the array or container structure being
+    * appended will not affect either container.  Note, however, that modifying
+    * the objects within the container will modify the objects in the original
+    * containers as well.
     *
     * @param arr {R.struct.Container|Array} A container or array of objects
+    * @return {R.struct.Container} A new container with all objects from both
     */
-   addAll: function(arr) {
-      var i;
+   concat: function(arr) {
       if (arr instanceof R.struct.Container) {
-         for (i = arr.iterator(); i.hasNext(); ) {
-            this.add(i.next());
-         }
-         i.destroy();
-      } else if ($.isArray(arr)) {
-         for (i in arr) {
-            this.add(arr[i]);
-         }
-      } else {
-         Assert(false, "R.struct.Container.addAll() - invalid object!")
+         arr = arr.getAll();
       }
+      var c = this.clone();
+      c.addAll(arr);
+      return c;
    },
 
 	/**
-	 * Clone this container, returning a new container which points to all of the
-	 * objects in this container.
-	 * @return {R.struct.Container} A new container with all of the objects from the current container
-	 */
-	clone: function() {
-		var c = this.constructor.create();
-		c.addAll(this.getAll());
-		return c;
-	},
-	
-	/**
-	 * Concatenate a container or array to the end of this container, 
-	 * returning a new container with all of the elements.  The
-	 * array or container will be copied and appended to this
-	 * container.  While the actual pointers to the objects aren't deep copied,
-	 * one can be assured that modifying the array or container structure being
-	 * appended will not affect either container.  Note, however, that modifying 
-	 * the objects within the container will modify the objects in the original
-	 * containers as well.
-	 *
-	 * @param arr {R.struct.Container|Array} A container or array of objects
-	 * @return {R.struct.Container} A new container with all objects from both
-	 */
-	concat: function(arr) {
-		if (arr instanceof R.struct.Container) {
-			arr = arr.getAll();
-		}
-		var c = this.clone();
-		c.objects = c.objects.concat(arr);
-		return c;
-	},
-
-	/**
-	 * Append a container to the end of this container.  When you append a 
+	 * Append a container to the end of this container.  When you append a
 	 * container, its head will now point to the tail of this container and
 	 * the tail of this container will become the tail of the appended container.
 	 * The appended container will still exist, but navigating the container in
 	 * reverse past the head of the container will navigate into the container
 	 * which was appended to.  If you need the containers to remain independent
 	 * of eachother, see the {@link #concat} method.
-	 * 
+	 *
 	 * @param c {R.struct.Container} The container to append.
 	 */
 	append: function(c) {
-		if (!(c instanceof R.struct.Container)) {
-			R.debug.Console.error("Can only append R.struct.Container, or subclasses, to an R.struct.Container");
+		if (!(c instanceof R.struct.LinkedList)) {
+			R.debug.Console.error("Can only append R.struct.LinkedList, or subclasses, to an R.struct.LinkedList");
 			return;
 		}
 
-      this.objects = this.objects.concat(c.getAll());
+		// Create the linkage and update the tail
+		if (this._head == null && this._tail == null &&
+			 c._head != null && c._tail != null) {
+			// If the container is empty, but the one to append is not
+			this._head = c._head;
+			this._tail = c._tail;
+		} else if (this._head != c._head && this._tail != c._tail) {
+			c._head.prev = this._tail;
+			this._tail.next = c._head;
+			this._tail = c._tail;
+		}
 	},
 
    /**
@@ -200,50 +233,60 @@ R.struct.Container = function() {
     * index is out of bounds for the container.  The index must be greater than
     * or equal to zero, and less than or equal to the size of the container minus one.
     * The effect is to extend the length of the container by one.
-    * 
+    *
     * @param index {Number} The index to insert the object at.
     * @param obj {Object} The object to insert into the container
     */
    insert: function(index, obj) {
       Assert(!(index < 0 || index > this.size()), "Index out of range when inserting object!");
+		var o = this._find(index);
+		var n = this._new(obj);
 
-      this.objects.splice(index, 0, obj);
+		n.prev = o.prev;
+		n.prev.next = n;
+		n.next = o;
+		o.prev = n;
+		this.sz++;
 
 		// Return the list node that was inserted
-		return index;
+		return n;
    },
-   
+
    /**
     * Replaces the given object with the new object.  If the old object is
     * not found, no action is performed.
-    * 
+    *
     * @param oldObj {Object} The object to replace
     * @param newObj {Object} The object to put in place
     * @return {Object} The object which was replaced
     */
    replace: function(oldObj, newObj) {
-		var i = R.engine.Support.indexOf(this.objects, oldObj);
-      this.objects(i) = newObj;
-      return oldObj;
+		var o = this._peek(oldObj), r = null;
+		if (o.ptr != null) {
+			r = o.ptr;
+			o.ptr = newObj;
+		}
+      return r;
    },
-   
+
    /**
     * Replaces the object at the given index, returning the object that was there
-    * previously. Asserts if the index is out of bounds for the container.  The index 
-    * must be greater than or equal to zero, and less than or equal to the size of the 
+    * previously. Asserts if the index is out of bounds for the container.  The index
+    * must be greater than or equal to zero, and less than or equal to the size of the
     * container minus one.
-    * 
+    *
     * @param index {Number} The index at which to replace the object
     * @param obj {Object} The object to put in place
     * @return {Object} The object which was replaced
     */
    replaceAt: function(index, obj) {
       Assert(!(index < 0 || index > this.size()), "Index out of range when inserting object!");
-		var r = this.objects[index];
-		this.objects[index] = obj;
-      return r;      
+		var o = this._find(index);
+		var r = o.ptr;
+		o.ptr = obj;
+      return r;
    },
-   
+
    /**
     * Remove an object from the container.  The object is
     * not destroyed when it is removed from the container.
@@ -252,11 +295,41 @@ R.struct.Container = function() {
     * @return {Object} The object that was removed
     */
    remove: function(obj) {
-      var r = this.objects.splice(R.engine.Support.indexOf(this.objects, obj), 1);
-      if (obj.getId) {
-         R.debug.Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
-      }
-		return obj;
+		var o = this._peek(obj);
+		//AssertWarn(o != null, "Removing object from collection which is not in collection");
+
+		if (o != null) {
+			if (o === this._head && o === this._tail) {
+				this.clear();
+				this.sz = 0;
+				return null;
+			}
+
+			if (o === this._head) {
+				this._head = o.next;
+				if (this._head == null) {
+					this.clear();
+					this.sz = 0;
+					return null;
+				}
+			}
+
+			if (o === this._tail) {
+				this._tail = o.prev;
+			}
+
+			if (o.next) o.next.prev = o.prev;
+			if (o.prev) o.prev.next = o.next;
+			o.prev = o.next = null;
+			this.sz--;
+
+	      if (obj.getId) {
+	         R.debug.Console.log("Removed ", obj.getId(), "[", obj, "] from ", this.getId(), "[", this, "]");
+	      }
+
+			return o.ptr;
+		}
+		return null;
    },
 
    /**
@@ -268,8 +341,21 @@ R.struct.Container = function() {
     */
    removeAtIndex: function(idx) {
       Assert((idx >= 0 && idx < this.size()), "Index of out range in Container");
-      var r = this.objects.splice(idx, 1);
+
+		var o = this._find(idx);
+		if (o === this._head) {
+			this._head = o.next;
+		}
+		if (o === this.tail) {
+			this._tail = o.prev;
+		}
+		if (o.next) o.next.prev = o.prev;
+		if (o.prev) o.prev.next = o.next;
+		o.prev = o.next = null;
+		var r = o.ptr;
+
       R.debug.Console.log("Removed ", r.getId(), "[", r, "] from ", this.getId(), "[", this, "]");
+		this.sz--;
       return r;
    },
 
@@ -278,7 +364,7 @@ R.struct.Container = function() {
 	 * is larger than the size of this container, no operation is performed.  Setting <code>length</code>
 	 * to zero is effectively the same as calling {@link #clear}.  Objects which would logically
 	 * fall after <code>length</code> are not automatically destroyed.
-	 * 
+	 *
 	 * @param length {Number} The maximum number of elements
 	 * @return {R.struct.Container} The subset of elements being removed
 	 */
@@ -293,25 +379,11 @@ R.struct.Container = function() {
 		}
 
 		a.length = length;
-		return sub;
-	},
-
-	/**
-	 * A new <code>Container</code> which is a subset of the current container
-	 * from the starting index (inclusive) to the ending index (exclusive).  Modifications
-	 * made to the objects in the subset will affect this container's objects.
-	 *  
-	 * @param start {Number} The starting index in the container
-	 * @param end {Number} The engine index in the container
-	 * @return {R.struct.Container} A subset of the container.
-	 */
-	subset: function(start, end, b) {
-		var a = b || this.getAll();
-		var c = this.constructor.create();
-		for (var i = start; i < end; i++) {
-			c.add(a[i]);
+		this.clear();
+		for (var i in a) {
+			this.add(a[i]);
 		}
-		return c;			
+		return sub;
 	},
 
    /**
@@ -326,78 +398,48 @@ R.struct.Container = function() {
       if (idx < 0 || idx > this.size()) {
          throw new Error("Index out of bounds");
       }
-		return this.objects[idx];
+		return this._find(idx).ptr;
    },
-	
-	/**
-	 * Get an array of all of the objects in this container.
-	 * @return {Array} An array of all of the objects in the container
-	 */
-	getAll: function() {
-		return this.objects;
-	},
 
    /**
-    * For each object in the container, the function will be executed.
-    * The function takes one argument: the object being processed.
-    * Unless otherwise specified, <code>this</code> refers to the container.
-    * <p/>
-    * Returning <tt>false</tt> from <tt>fn</tt> will immediately halt any
-    * further iteration over the container.
-    *
-    * @param fn {Function} The function to execute for each object
-    * @param [thisp] {Object} The object to use as <code>this</code> inside the function
+    * Get an array of all of the objects in this container.
+    * @return {Array} An array of all of the objects in the container
     */
-   forEach: function(fn, thisp) {
-      var itr = this.iterator();
-      var result = true;
-      var hasMethod = thisp && thisp.isDestroyed;
-      while (itr.hasNext() && (hasMethod ? !thisp.isDestroyed() && result : result)) {
-         result = fn.call(thisp || this, itr.next());
-         result = (result == undefined ? true : result);
+   getAll: function() {
+      var a = [], i = this.iterator();
+      while (i.hasNext()) {
+         a.push(i.next());
       }
-      itr.destroy();
+      i.destroy();
+      return a;
    },
-	
+
 	/**
 	 * Filters the container with the function, returning a new <code>Container</code>
 	 * with the objects that pass the test in the function.  If the object should be
 	 * included in the new <code>Container</code>, the function should return <code>true</code>.
 	 * The function takes one argument: the object being processed.
 	 * Unless otherwise specified, <code>this</code> refers to the container.
-	 * 
+	 *
 	 * @param fn {Function} The function to execute for each object
 	 * @param [thisp] {Object} The object to use as <code>this</code> inside the function
 	 * @return {R.struct.Container}
 	 */
 	filter: function(fn, thisp) {
-      var arr = R.engine.Support.filter(this.getAll(), fn, thisp || this);
-		var c = this.constructor.create();
-		c.objects = arr;
-		return c;		
+		var arr = R.engine.Support.filter(this.getAll(), fn, thisp || this);
+		var c = R.struct.Container.create();
+		c.addAll(arr);
+		return c;
 	},
-	
+
    /**
     * Remove all references to objects in the container.  None of the objects are
     * actually destroyed.  Use {@link #cleanUp} to remove and destroy all objects.
     */
    clear: function() {
-      this.objects = [];
-      this.length = 0;
-   },
-
-   /**
-    * Remove and destroy all objects in the container.
-    */
-   cleanUp: function() {
-		var a = this.getAll(), h;
-		while (a.length > 0) {
-			h = a.shift();
-			if (h.destroy) {
-				h.destroy();
-			}
-		}
-      this.clear();
+		this._head = null;
+		this._tail = null;
+		this.sz = 0;
    },
 
    /**
@@ -449,7 +491,19 @@ R.struct.Container = function() {
     */
    sort: function(fn) {
       R.debug.Console.log("Sorting ", this.getName(), "[" + this.getId() + "]");
-		this.objects.sort(fn);
+		var a = this.getAll().sort(fn);
+
+		// Relink
+		this._head = this._new(a[0]);
+		var p=this._head;
+		for (var i = 1; i < a.length; i++) {
+			var n = this._new(a[i]);
+			p.next = n;
+			n.prev = p;
+			p = n;
+		}
+		this._tail = p;
+		this.sz = a.length;
    },
 
    /**
@@ -490,49 +544,41 @@ R.struct.Container = function() {
       // Closing tag
       xml += indent + "</" + this.constructor.getClassName() + ">\n";
       return xml;
-   },
-   
-   /**
-    * Returns an iterator over the collection.
-    * @return {R.lang.Iterator} An iterator
-    */
-   iterator: function() {
-      return R.lang.Iterator.create(this.objects, this);
    }
 
-}, /** @scope R.struct.Container.prototype */{
+}, /** @scope R.struct.LinkedList.prototype */{
    /**
     * Get the class name of this object
     *
-    * @return {String} "R.struct.Container"
+    * @return {String} "R.struct.LinkedList"
     */
    getClassName: function() {
-      return "R.struct.Container";
+      return "R.struct.LinkedList";
    },
-	
+
 	/** @private */
 	resolved: function() {
-		R.struct.Container.EMPTY = new R.struct.Container("EMPTY");		
+		R.struct.LinkedList.EMPTY = new R.struct.LinkedList("EMPTY");
 	},
-	
+
 	/**
-	 * Create a new <code>R.struct.Container</code> from an <code>Array</code>.
+	 * Create a new <code>R.struct.LinkedList</code> from an <code>Array</code>.
 	 * @param array {Array} An array of objects
-	 * @return {R.struct.Container}
+	 * @return {R.struct.LinkedList}
 	 * @static
 	 */
 	fromArray: function(array) {
-		var c = R.struct.Container.create();
+		var c = R.struct.LinkedList.create();
 		c.addAll(array);
 		return c;
 	},
-	
+
 	/**
 	 * An empty container - DO NOT MODIFY!!
-	 * @type {R.struct.Container}
+	 * @type {R.struct.LinkedList}
 	 */
 	EMPTY: null
-	
+
 });
 
 }
