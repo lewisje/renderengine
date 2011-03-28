@@ -36,7 +36,7 @@ R.Engine.define({
 	"class": "R.particles.ParticleEngine",
 	"requires": [
 		"R.engine.BaseObject",
-		"R.struct.Container"
+		"R.struct.LinkedList"
 	]
 });
 
@@ -69,7 +69,7 @@ R.particles.ParticleEngine = function() {
    /** @private */
    constructor: function() {
       this.base("ParticleEngine");
-      this.particles = R.struct.Container.create();
+      this.particles = R.struct.LinkedList.create();
       this.maximum = R.particles.ParticleEngine.MAX_PARTICLES;
       this.liveParticles = 0;
    },
@@ -100,9 +100,9 @@ R.particles.ParticleEngine = function() {
     * @param particles {Array|R.struct.Container} A container of particles to add at one time
     */
    addParticles: function(particles) {
-		if (!(particles instanceof R.struct.Container)) {
-			// If the particles are an Array, convert to a Container first
-			particles = R.struct.Container.fromArray(particles);
+		if ($.isArray(particles)) {
+			// If the particles are an Array, convert to a LinkedList first
+			particles = R.struct.LinkedList.fromArray(particles);
 		}
 
       // If the new particles exceed the size of the engine's
@@ -256,4 +256,4 @@ R.particles.ParticleEngine = function() {
 
 });
 
-}
+};
