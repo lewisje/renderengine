@@ -71,6 +71,7 @@ R.lang.Iterator = function() {
 	return R.engine.PooledObject.extend(/** @scope R.lang.Iterator.prototype */{
 
    c: null,
+   aO: null,
 	p: null,
 	r: false,
 	arr: false,
@@ -78,10 +79,11 @@ R.lang.Iterator = function() {
    /**
     * @private
     */
-   constructor: function(container) {
+   constructor: function(container /*, actualContainerObj */) {
       this.base("Iterator");
       this.c = container;
-		this.arr = !(container instanceof R.struct.Container);
+      this.aO = (arguments.length == 2 ? arguments[1] : null);
+		this.arr = $.isArray(container);    // Handle plain Arrays too
 		this.p = this.arr ? 0 : container._head;
 		this.r = false;
    },
@@ -92,6 +94,7 @@ R.lang.Iterator = function() {
    release: function() {
       this.base();
       this.c = null;
+      this.aO = null;
 		this.arr = false;
 		this.p = null;
 		this.r = false;
@@ -121,17 +124,24 @@ R.lang.Iterator = function() {
     * @throws {Error} An error if called when no more elements are available
     */
    next: function() {
+      // Make sure the container wasn't destroyed
+      if (this.arr ? (this.aO != null ? this.aO.isDestroyed() : false) : this.c.isDestroyed()) {
+         throw new Error("Invalid iterator over destroyed container!");
+      }
+
+      var o = null;
 		if (this.arr) {
 			// For arrays
-			this.p = (this.r ? this.p-- : this.p++);	
+         o = this.c[this.p];
+			this.p += (this.r ? -1 : 1);
+         if (this.p < 0 || this.p > this.c.length) {
+            throw new Error("Index out of range");
+         }
+         return o;
 		} else {
-			// For containers
-			if (this.c.isDestroyed()) {
-				throw new Error("Invalid iterator over destroyed container!");
-			}
-	
+         // For containers
 			// Get the next and move the pointer
-			var o = this.p.ptr;
+			o = this.p.ptr;
 			this.p = (this.r ? this.p.prev : this.p.next);
 	
 			if (o != null) {
@@ -147,20 +157,27 @@ R.lang.Iterator = function() {
     * @return {Boolean}
     */
    hasNext: function() {
-		if (this.arr) {
-			// For arrays
-			return (this.r ? this.p > 0 : this.p < this.c.length);			
-		} else {
-			// If the container hasn't been destroyed
-			if (this.c && !this.c.isDestroyed()) {
-				while (this.p != null && this.p.ptr != null && this.p.ptr.isDestroyed()) {
-					// Skip destroyed objects
-					this.p = (this.r ? this.p.prev : this.p.next);
-				}
-				return this.p != null;
-			}
-	      return false;
-		}
+      // As long as the container hasn't been destroyed
+      if (this.arr ? (this.aO != null ? !this.aO.isDestroyed() : true) : !this.c.isDestroyed()) {
+         if (this.arr) {
+            // For arrays (and R.struct.Container)
+            var nxt = this.r ? -1 : 1, n = this.p;
+            n += nxt;
+            while ((n > -1 && n < this.c.length) && this.c[n].isDestroyed()) {
+               this.p += nxt;
+               n = this.p;
+            }
+            return (n > -1 && n <= this.c.length);
+         } else {
+            // If the container hasn't been destroyed
+            while (this.p != null && this.p.ptr != null && this.p.ptr.isDestroyed()) {
+               // Skip destroyed objects
+               this.p = (this.r ? this.p.prev : this.p.next);
+            }
+            return this.p != null;
+         }
+      }
+      return false;
    }
 
 }, /** @scope R.lang.Iterator.prototype */{ 
@@ -175,7 +192,7 @@ R.lang.Iterator = function() {
 	
 	/**
 	 * Create an instance of an iterator over the given container.
-	 * @param container {R.struct.container|Array} An <code>Array</code> or {@link R.struct.Container}
+	 * @param container {R.struct.Container|Array} An <code>Array</code> or {@link R.struct.Container}
 	 * @return {R.lang.Iterator} An iterator over the container
 	 * @static
 	 */

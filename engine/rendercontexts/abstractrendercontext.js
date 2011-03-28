@@ -254,8 +254,7 @@ R.rendercontexts.AbstractRenderContext = function() {
     */
    add: function(obj) {
       this.base(obj);
-      if (obj instanceof R.engine.GameObject)
-      {
+      if (obj instanceof R.engine.GameObject) {
          obj.setRenderContext(this);
          this.sort();
 
@@ -294,7 +293,7 @@ R.rendercontexts.AbstractRenderContext = function() {
     * @return {Object} The object removed from the container.
     */
    removeAtIndex: function(idx) {
-		this.safeRemoveList.push(this._find(idx));
+		this.safeRemoveList.push(this.get(idx));
 	},
 
 	/**

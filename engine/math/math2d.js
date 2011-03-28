@@ -332,7 +332,7 @@ R.math.Math2D = /** @scope R.math.Math2D.prototype */{
 				b = Math.floor((k * (cP.x - xmin) / (xmax - xmin) ) + 1);  // bin #
 				if (bin.B[b].min == NONE)       // no min point in this range
 					bin.B[b].min = i;           // first min
-				else if (cP.y < points[bin.B[b].min].get().y)
+				else if (cP.y < points[bin.B[b].min].y)
 					bin.B[b].min = i;           // new min
 				continue;
 			}
@@ -341,7 +341,7 @@ R.math.Math2D = /** @scope R.math.Math2D.prototype */{
 				b = Math.floor((k * (cP.x - xmin) / (xmax - xmin) ) + 1);  // bin #
 				if (bin.B[b].max == NONE)       // no max point in this range
 					bin.B[b].max = i;           // first max
-				else if (cP.y > points[bin.B[b].max].get().y)
+				else if (cP.y > points[bin.B[b].max].y)
 					bin.B[b].max = i;           // new max
 				continue;
 			}
@@ -377,7 +377,7 @@ R.math.Math2D = /** @scope R.math.Math2D.prototype */{
 				continue;
 			
 			var cPP = points[bin.B[i].max];   // select the current max point
-			cP = cPP.get();
+			cP = cPP;
 			
 			while (top > bot) {      // at least 2 points on the upper stack
 				// test if current point is left of the line at the stack top

@@ -37,7 +37,7 @@ R.Engine.define({
 		"R.components.transform.Mover2D",
 		"R.components.render.Vector2D",
 		"R.components.render.Billboard2D",
-		"R.components.collision.Box",
+		"R.components.collision.Convex",
 		"R.engine.Object2D",
 		"R.lang.OneShotTimeout",
 		"R.struct.Container",
@@ -65,13 +65,11 @@ var SpaceroidsRock = function() {
    constructor: function(size, position) {
       this.base("Spaceroid", R.components.transform.Mover2D.create("move"));
 
-		if (R.Engine.options.hardwareAccel) {
-	      this.add(R.components.render.Billboard2D.create("billboard", R.components.render.Vector2D.create("draw")));
-		} else {
-			this.add(R.components.render.Vector2D.create("draw"));			
-		}
-      //this.add(R.components.collision.Convex.create("collider", Spaceroids.collisionModel));
-      this.add(R.components.collision.Box.create("collider", Spaceroids.collisionModel));
+      // Vector drawing
+      this.add(R.components.render.Vector2D.create("draw"));
+
+      // Set up collision component (convex hull [SAT])
+      this.add(R.components.collision.Convex.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsRock.COLLISION_MASK);
 		if (Spaceroids.isAttractMode) {
 			// In attract mode, rocks can collide
@@ -119,8 +117,8 @@ var SpaceroidsRock = function() {
       var p = R.math.Point2D.create(c_mover.getPosition());
       c_mover.setPosition(Spaceroids.wrap(p, this.getBoundingBox()));
 
-      // If the player is nuking, adjust our position depending on
-      // how close we are to the player
+      // If the player is nuking, adjust the rock's position depending on
+      // how close it is to the player
       if (Spaceroids.playerObj && Spaceroids.playerObj.isNuking()) {
          var grav = 8;
          var dVec = R.math.Vector2D.create(Spaceroids.playerObj.getPosition()).sub(this.getPosition());
@@ -142,7 +140,7 @@ var SpaceroidsRock = function() {
     * available shapes.
     */
    setShape: function() {
-      var c_draw = R.Engine.options.hardwareAccel ? this.getComponent("billboard").getComponent() : this.getComponent("draw");
+      var c_draw = this.getComponent("draw");
 
       // Pick one of the three shapes
       var tmp = [];
@@ -163,12 +161,8 @@ var SpaceroidsRock = function() {
 
 		// Set the bounding box, collision hull, and origin
 		this.setOrigin(c_draw.getCenter());
-		//this.setCollisionHull(c_draw.getCircleHull(0.75));
+		this.setCollisionHull(c_draw.getConvexHull());
 		this.setBoundingBox(c_draw.getBoundingBox());
-		
-		if (R.Engine.options.hardwareAccel) {
-	  		this.getComponent("billboard").regenerate();
-	  	}
    },
 
    /**
@@ -182,7 +176,7 @@ var SpaceroidsRock = function() {
       c_mover.setRotation( Math.floor(R.lang.Math2.random() * 360));
       c_mover.setAngularVelocity( Math.floor(R.lang.Math2.random() * 10) > 5 ? 0.5 : -0.5);
 
-
+      // Select a random direction
       var b = R.math.Point2D.create(0,-1.2);
       var vec = R.math.Math2D.getDirectionVector(R.math.Point2D.ZERO, b, Math.floor(R.lang.Math2.random() * 360));
       b.destroy();
@@ -194,10 +188,8 @@ var SpaceroidsRock = function() {
     * Initialize an asteroid
     */
    setup: function() {
-
       this.setShape();
       this.setMotion();
-
       Spaceroids.rocks++;
    },
 

@@ -137,6 +137,11 @@ R.components.collision.Convex = function() {
 		// Use distance of bounding circle's to perform an early out test
 		// if the objects are too far apart
 		var hull1 = host.getCollisionHull();
+      if (collisionObj.isDestroyed()) {
+         // The collision object has already been destroyed, skip it
+         return R.components.Collider.CONTINUE;
+      }
+      
 		var hull2 = collisionObj.getCollisionHull();
 		
 		if (!hull1 || !hull2) {
@@ -155,7 +160,7 @@ R.components.collision.Convex = function() {
 		}		
 		
 		// Perform the test, passing along the circle data so we don't recalc
-		this.setCollisionData(R.components.ConvexCollider.test(hull1, hull2, distSqr, tRad)); 
+		this.setCollisionData(R.components.collision.Convex.test(hull1, hull2, distSqr, tRad));
 		
 		// If a collision occurred, there will be a data structure describing it	
       if (this.getCollisionData() != null) {
