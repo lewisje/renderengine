@@ -89,7 +89,7 @@ var SpaceroidsPlayer = function() {
       this.add(R.components.render.Vector2D.create("thrust"));
 
       // Set up collision component (convex hull [SAT])
-      this.add(R.components.collision.ConvexHull.create("collider", Spaceroids.collisionModel));
+      this.add(R.components.collision.Convex.create("collider", Spaceroids.collisionModel));
 		this.getComponent("collider").setCollisionMask(SpaceroidsPlayer.COLLISION_MASK);
 
       this.players--;

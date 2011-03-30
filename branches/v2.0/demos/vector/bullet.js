@@ -69,7 +69,7 @@ var SpaceroidsBullet = function() {
       this.add(R.components.render.Vector2D.create("draw"));
 
       // Set up collision component (OBB hull [SAT])
-      this.add(R.components.collision.OBBHull.create("collide", Spaceroids.collisionModel));
+      this.add(R.components.collision.Convex.create("collide", Spaceroids.collisionModel));
 		this.getComponent("collide").setCollisionMask(SpaceroidsBullet.COLLISION_MASK);
 
       // Get the player's position and rotation,

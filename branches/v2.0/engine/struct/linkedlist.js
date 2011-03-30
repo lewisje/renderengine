@@ -544,6 +544,10 @@ R.struct.LinkedList = function() {
       // Closing tag
       xml += indent + "</" + this.constructor.getClassName() + ">\n";
       return xml;
+   },
+
+   iterator: function() {
+      return R.lang.Iterator.create(this);
    }
 
 }, /** @scope R.struct.LinkedList.prototype */{

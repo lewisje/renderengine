@@ -70,7 +70,7 @@ While every effort is made to support as many browsers as possible, each browser
 Internet Explorer 6, 7, & 8 Support
 -----------------------------------------
 
-For those who are using Internet Explorer 6, 7, or 8, and prefer to keep their browser intact, we recommend downloading the ChromeFrame plug-in for the browser.  The Render Engine has emulation support for the canvas element via FlashCanvas, but this has a relatively large imact on framerate.  If you would like to try ChromeFrame, please visit:
+For those who are using Internet Explorer 6, 7, or 8, and prefer to keep their browser intact, we recommend downloading the ChromeFrame plug-in for the browser.  The Render Engine has emulation support for the canvas element via FlashCanvas, but this has a relatively large impact on frame rate.  If you would like to try ChromeFrame, please visit:
 
 http://code.google.com/chrome/chromeframe/
 
