@@ -132,24 +132,21 @@ R.lang.Iterator = function() {
       var o = null;
 		if (this.arr) {
 			// For arrays
+         Assert(this.p > -1 && this.p < this.c.length, "Iterator[" + this.getId() + "] - next() is out of range");
          o = this.c[this.p];
-			this.p += (this.r ? -1 : 1);
-         if (this.p < 0 || this.p > this.c.length) {
-            throw new Error("Index out of range");
-         }
-         return o;
+         this.p += (this.r ? -1 : 1);
 		} else {
          // For containers
 			// Get the next and move the pointer
 			o = this.p.ptr;
 			this.p = (this.r ? this.p.prev : this.p.next);
 	
-			if (o != null) {
-				return o;
-			} else {
-				throw new Error("Index out of range");
+			if (o == null) {
+            Assert(false, "Iterator[" + this.getId() + "] - next() is out of range");
 			}
 		}
+
+      return o;
    },
 
    /**
@@ -162,12 +159,12 @@ R.lang.Iterator = function() {
          if (this.arr) {
             // For arrays (and R.struct.Container)
             var nxt = this.r ? -1 : 1, n = this.p;
-            n += nxt;
             while ((n > -1 && n < this.c.length) && this.c[n].isDestroyed()) {
-               this.p += nxt;
-               n = this.p;
+               // Skip destroyed objects
+               n += nxt;
+               this.p = n;
             }
-            return (n > -1 && n <= this.c.length);
+            return (n > -1 && n < this.c.length);
          } else {
             // If the container hasn't been destroyed
             while (this.p != null && this.p.ptr != null && this.p.ptr.isDestroyed()) {
