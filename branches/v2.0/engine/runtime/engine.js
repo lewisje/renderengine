@@ -84,14 +84,47 @@ R._unsupported = function(method, clazz) {
 	throw new Error(method + " is unsupported in " + clazz.getClassName());	
 };
 
+/** private **/
+R.str = Object.prototype.toString;
+
 /**
- * Check if the given object is undefined
+ * Check if the given object is a function
  * @param obj {Object} The object to test
  * @return {Boolean}
  * @memberOf R
  */
-R.isUndefined = function(obj) {
-	return (typeof obj === "undefined");
+R.isFunction = function(obj) {
+   return (R.str.call(obj) === "[object Function]");
+};
+
+/**
+ * Check if the given object is an array
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isArray = function(obj) {
+   return (R.str.call(obj) === "[object Array]");
+};
+
+/**
+ * Check if the given object is a string
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isString = function(obj) {
+   return (R.str.call(obj) === "[object String]");
+};
+
+/**
+ * Check if the given object is a number
+ * @param obj {Object} The object to test
+ * @return {Boolean}
+ * @memberOf R
+ */
+R.isNumber = function(obj) {
+   return (R.str.call(obj) === "[object Number]");
 };
 
 /**
@@ -101,7 +134,7 @@ R.isUndefined = function(obj) {
  * @memberOf R
  */
 R.isEmpty = function(obj) {
-	return R.isUndefined(obj) || obj === null || (typeof obj === "string" && $.trim(obj) === "");
+	return typeof obj === "undefined" || obj === null || (typeof obj === "string" && $.trim(obj) === "");
 };
 
 /**
@@ -182,8 +215,8 @@ window["now"] = function() {
  * @fileoverview A debug console abstraction
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1562 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -552,7 +585,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    info: function() {
-      if (typeof firebug != "undefined") {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.info.apply(console, arguments);
@@ -563,7 +596,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a debug message to the console
     */
    debug: function() {
-      if (typeof firebug != "undefined") {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.debug.apply(console, arguments);
@@ -574,7 +607,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a warning message to the console
     */
    warn: function() {
-      if (typeof firebug != "undefined") {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.warn.apply(console, arguments);
@@ -585,7 +618,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write an error message to the console
     */
    error: function() {
-      if (typeof firebug != "undefined") {
+      if (typeof firebug !== "undefined") {
          firebug.d.console.log.apply(firebug.d.console, arguments);
       } else {
          console.error.apply(console, arguments);
@@ -596,7 +629,7 @@ R.debug.Firebug = R.debug.ConsoleRef.extend(/** @scope R.debug.Firebug.prototype
     * Write a stack trace to the console
     */
    trace: function() {
-      if (typeof console != "undefined") {
+      if (typeof firebug !== "undefined") {
          console.trace.apply(arguments);
       }
    },
@@ -716,11 +749,11 @@ R.debug.Console = Base.extend(/** @scope R.debug.Console.prototype */{
       if (R.engine.Support.checkBooleanParam("debug") && (R.engine.Support.checkBooleanParam("simWii") || jQuery.browser.Wii)) {
          R.debug.Console.consoleRef = new R.debug.HTML();
       }
-      else if (typeof firebug != "undefined" || (typeof console != "undefined" && console.firebug)) {
+      else if (typeof firebug !== "undefined" || (typeof console !== "undefined" && console.firebug)) {
          // Firebug or firebug lite
          R.debug.Console.consoleRef = new R.debug.Firebug();
       }
-      else if (typeof console != "undefined" && jQuery.browser.msie) {
+      else if (typeof console !== "undefined" && jQuery.browser.msie) {
          R.debug.Console.consoleRef = new R.debug.MSIE();
       }
       else if (jQuery.browser.chrome || jQuery.browser.safari) {
@@ -927,8 +960,8 @@ var AssertWarn = function(test, warning) {
  * @fileoverview Profiler Object
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1562 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1290,8 +1323,8 @@ R.lang.Math2.seed();
  *               to manipulate arrays, parse JSON, and handle query parameters.
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1569 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -1605,8 +1638,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    toJSON: function(o)
    {
-      if (!typeof JSON == "undefined") {
-         return JSON.stringify(o);
+      if (typeof window.JSON !== "undefined") {
+         return window.JSON.stringify(o);
       } else {
          return null;
       }
@@ -1645,9 +1678,9 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    parseJSON: function(jsonString)
    {
       jsonString = R.engine.Support.cleanSource(jsonString);
-      if (!(typeof JSON == "undefined")) {
+      if (typeof window.JSON !== "undefined") {
          try {
-            return JSON.parse(jsonString, function (key, value) {
+            return window.JSON.parse(jsonString, function (key, value) {
                       var a;
                       if (typeof value === 'string') {
                           a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
@@ -1675,8 +1708,8 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     */
    quoteString: function(text)
    {
-      if (!typeof JSON == "undefined") {
-         return JSON.quote(text);
+      if (typeof window.JSON !== "undefined") {
+         return window.JSON.quote(text);
       } else {
          return null;
       }
@@ -1729,14 +1762,17 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     *    <li>threads - Browser supports Worker threads</li>
     *    <li>sockets - Browser supports WebSocket object</li>
     *    <li>storage:
-    *       <ul><li>local - localStorage object is supported</li>
-    *       <li>session - sessionStorage object is supported</li>
-    *       <li>database - indexedDB storage is supported</li>
+    *       <ul><li>cookie - Cookie support. Reports an object with "maxLength", or <code>false</code></li>
+    *       <li>local - localStorage support</li>
+    *       <li>session - sessionStorage support</li>
+    *       <li>indexeddb - indexedDB support</li>
+    *       <li>sqllite - SQL lite support</li>
+    *       <li>audio - HTML5 Audio support</li>
+    *       <li>video - HTML5 Video support</li>
     *       </ul>
     *    </li>
     *    <li>canvas:
-    *       <ul><li>emulated - Canvas support emulated by FlashCanvas</li>
-    *       <li>defined - Canvas is either native or emulated</li>
+    *       <ul><li>defined - Canvas is either native or emulated</li>
     *       <li>text - Supports text</li>
     *       <li>textMetrics - Supports text measurement</li>
     *			<li>contexts:
@@ -1755,49 +1791,78 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
    sysInfo: function() {
       if (!R.engine.Support._sysInfo) {
       	
-      	// Determine if the browser supports Canvas
+      	// Canvas and Storage support defaults
       	var canvasSupport = {
-      		emulated: false,
       		defined: false,
       		text: false,
       		textMetrics: false,
       		contexts: {
-      			ctx2D: false,
-      			ctxGL: false
+      			"2D": false,
+      			"GL": false
       		}
-      	};
-      	if (document.addEventListener) {
-      		// Standards browsers
-      		var canvas = document.createElement("canvas");
-      		if (typeof canvas != "undefined" && (typeof canvas.getContext == "function")) {
-      			canvasSupport.defined = true;
-	      		var c2d = canvas.getContext("2d");
-	      		if (typeof c2d != "undefined") {
-	      			canvasSupport.contexts.ctx2D = true;
-	      			
-						// Does it support native text
-						canvasSupport.text = (typeof c2d.fillText == "function");
-						canvasSupport.textMetrics = (typeof c2d.measureText == "function");
-					}
-	      		
-					try {
-		      		var webGL = canvas.getContext("glcanvas");
-		      		if (typeof webGL != "undefined") {
-		      			canvasSupport.contexts.ctxGL = true;
-		      		}
-					} catch (ex) { /* no webgl */ }
-	      	}
-      	}
-			
-			if (typeof FlashCanvas != "undefined") {
-				// If FlashCanvas is loaded, setup for emulation
-      		canvasSupport.emulated = true;
-      		canvasSupport.defined = true;
-      		canvasSupport.contexts.ctx2D = true;
-      		canvasSupport.text = true;
-				canvasSupport.textMetrics = true;
-			}
-      	      
+      	},
+         storageSupport = {
+            cookie: false,
+            local: false,
+            session: false,
+            indexeddb: false,
+            sqllite: false
+         };
+
+         // Check for canvas support
+         try {
+            var canvas = document.createElement("canvas");
+            if (typeof canvas !== "undefined" && R.isFunction(canvas.getContext)) {
+               canvasSupport.defined = true;
+               var c2d = canvas.getContext("2d");
+               if (typeof c2d !== "undefined") {
+                  canvasSupport.contexts["2D"] = true;
+
+                  // Does it support native text
+                  canvasSupport.text = (R.isFunction(c2d.fillText));
+                  canvasSupport.textMetrics = (R.isFunction(c2d.measureText));
+               } else {
+                  canvasSupport.contexts["2D"] = false;
+               }
+
+               try {
+                  var webGL = canvas.getContext("webgl");
+                  if (typeof webGL !== "undefined") {
+                     canvasSupport.contexts["GL"] = true;
+                  }
+               } catch (ex) { canvasSupport.contexts["GL"] = false; }
+            }
+         } catch (ex) { /* ignore */ }
+
+         // Check storage support
+         try {
+            try {
+               // Drop a cookie, then look for it (3kb max)
+               for (var i = 0, j = []; i < 3072; i++) { j.push("x"); }
+               window.document.cookie = "tre.test=" + j.join("") + ";path=/";
+               var va = window.document.cookie.match('(?:^|;)\\s*tre.test=([^;]*)'),
+                   supported = !!va;
+               if (supported) {
+                  // expire the cookie before returning
+                  window.document.cookie = "tre.test=;path=/;expires=" + new Date(now() - 1).toGMTString();
+               }
+               storageSupport.cookie = supported ? { "maxLength": va[1].length } : false;
+            } catch (ex) { /* ignored */ }
+
+            try {
+               storageSupport.local = (typeof localStorage !== "undefined");
+               storageSupport.session = (typeof sessionStorage !== "undefined");
+            } catch (ex) {
+               // Firefox bug (https://bugzilla.mozilla.org/show_bug.cgi?id=389002)
+            }
+
+            try {
+               storageSupport.indexeddb = (typeof mozIndexedDB !== "undefined");
+            } catch (ex) { /* ignored */ }
+
+            storageSupport.sqllite = R.isFunction(window.openDatabase);
+         } catch (ex) { /* ignored */ }
+
       	// Build support object
          R.engine.Support._sysInfo = {
             "browser" : $.browser.chrome ? "chrome" :
@@ -1816,17 +1881,14 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
 				"OS": R.engine.Support.checkOS(),
             "language": navigator.language,
             "online": navigator.onLine,
-            "cookies": navigator.cookieEnabled,
             "fullscreen": window.fullScreen || false,
             "support": {
+               "audio": (typeof Audio !== "undefined"),
+               "video": (typeof Video !== "undefined"),
                "xhr": (typeof XMLHttpRequest !== "undefined"),
                "threads": (typeof Worker !== "undefined"),
                "sockets": (typeof WebSocket !== "undefined"),
-               "storage": (typeof Storage !== "undefined" ? {
-                  "local" : (typeof localStorage !== "undefined"),
-                  "session" : (function() { try { return (typeof sessionStorage !== "undefined") } catch (ex) { return false; }})(),
-                  "database": (typeof indexedDB !== "undefined")
-               } : null),
+               "storage": storageSupport,
                "geo": (typeof navigator.geolocation !== "undefined"),
                "canvas" : canvasSupport
             }
@@ -1853,7 +1915,7 @@ R.engine.Support = Base.extend(/** @scope R.engine.Support.prototype */{
     * @memberOf R.engine.Support
     */
    whenReady: function(obj, fn) {
-      if (typeof obj != "undefined") {
+      if (typeof obj !== "undefined") {
          fn();
       } else {
          setTimeout(arguments.callee, 50);
@@ -2268,8 +2330,8 @@ R.engine.Linker = Base.extend(/** @scope R.engine.Linker.prototype */{
  * @fileoverview The main engine class
  *
  * @author: Brett Fattori (brettf@renderengine.com)
- * @author: $Author: bfattori $
- * @version: $Revision: 1555 $
+ * @author: $Author: bfattori@gmail.com $
+ * @version: $Revision: 1557 $
  *
  * Copyright (c) 2011 Brett Fattori (brettf@renderengine.com)
  *
@@ -2629,7 +2691,7 @@ R.Engine = Base.extend(/** @scope R.Engine.prototype */{
       if(R.Engine.shuttingDown === true) {
       	R.debug.Console.warn("Engine shutting down, '" + obj + "' destroyed because it would create an orphaned reference");
       	obj.destroy();
-      	return;
+      	return null;
       };
 
       Assert((R.Engine.started === true), "Creating an object when the engine is stopped!", obj);
