@@ -329,4 +329,4 @@ R.engine.GameObject = function(){
 		
 	});
 	
-}
+};

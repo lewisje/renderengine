@@ -224,4 +224,4 @@ R.engine.BaseObject = function(){
 		
 	});
 	
-}
+};
