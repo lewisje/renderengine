@@ -1,0 +1,15 @@
+# Game Development with The Render Engine #
+
+I realize that some people will question my motives, considering that Adobe Flash is available and offers more capability than Javascript does (at this point), however, the entry fee is fairly steep for most individuals.  The Render Engine is targeted at those individuals who would like to create games but who don't have access to Flash, don't want to pirate Flash and risk their future, or don't have the skills necessary to create games with it.
+
+Additionally, a number of companies have recently thrown their hats into the ring of HTML5 development.  Current browsers are extremely capable of doing much of the same rendering as Flash can do, using HTML5, and it doesn't require specialized knowledge.  Apple refuses to add Flash to their iPhone and iPad devices, and Virgin Atlantic has announced it is dropping support for Flash.  This isn't exactly a bad omen for Flash, but it is an endorsement of the technology that _The Render Engine_ is built upon.
+
+That being said, _game programming isn't easy_!  While The Render Engine's goal is to relieve you of some of the burden of engine development, it will take some hard work to build an understanding and begin to use it efficiently.  A friend once said to me that "not every game idea is a great idea," which is very true.  However, there are some ideas that turn out to be the next great game.  With the engine being open source, and anything created with it as well, you will be provided with the tools and examples that might help you to make the next Tetris, Pac Man, or Super Mario Brothers.
+
+The Render Engine includes an ever growing [library of examples](EngineExamples.md) that use the engine, from simple vector graphics, to 2D sprite demos.  The examples aren't meant to be full games, but will hopefully be a place where you can get started.  The concepts and structure will give you an understanding of the engine and how it works.
+
+The HostObjects system in the game simplifies the overall development of game objects.  And since it is possible to reuse HostComponents again and again, you're able to interact with these components using a common set of interface calls.  Most of the work is handled for you, leaving you free to work on your game's logic.
+
+Ideally, you can develop for one RenderContext, and then swap it with another and things should still mostly work.  This is because a render context will only support what it can handle.  Operations not supported by a particular render context will do nothing -- not break the game.
+
+Many of the concepts in the engine, such as ObjectPooling and the DependencyProcessor, will keep things running smoothly while you focus on making a great game.  If you follow [good coding styles](EngineCodingStyle.md), maintenance of your code and code reuse becomes a lot easier.
